@@ -8,7 +8,7 @@
 |-----|------|-----------|---------|
 | [huifu-preorder](./huifu-preorder) | 预下单 - 创建支付预订单，返回支付页面URL | 预下单、支付预下单、托管支付、/hfpay/preOrder | `/hfpay/preOrder` |
 | [huifu-order-query](./huifu-order-query) | 订单查询 - 查询订单支付状态和详细信息 | 订单查询、支付查询、查询订单、/hfpay/queryorderinfo | `/hfpay/queryorderinfo` |
-| [huifu-refund](./huifu-refund) | 退款 - 对已支付订单发起退款申请 | 退款、支付退款、订单退款、refund、htRefund | `/hfpay/htRefund` |
+| [huifu-refund](./huifu-htRefund) | 退款 - 对已支付订单发起退款申请 | 退款、支付退款、订单退款、refund、htRefund | `/hfpay/htRefund` |
 
 ## 通用前置检查
 
@@ -30,7 +30,7 @@
 |-----|---------|
 | 用户发起支付，创建预订单 | huifu-preorder |
 | 查询订单支付状态 | huifu-order-query |
-| 支付成功后需要退款 | huifu-refund |
+| 支付成功后需要退款 | huifu-htRefund |
 
 ## 技能详情
 

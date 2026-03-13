@@ -1,5 +1,5 @@
 ---
-name: huifu-refund
+name: huifu-htRefund
 description: "[后端项目使用]汇付托管交易退款接口技能。用于对已支付订单发起退款申请。当用户提到退款、支付退款、refund、htRefund时调用"
 ---
 
