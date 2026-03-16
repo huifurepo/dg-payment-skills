@@ -45,7 +45,8 @@ mvn clean install
 确认以下类可以正常导入：
 - `com.huifu.bspay.sdk.opps.core.BasePay`
 - `com.huifu.bspay.sdk.opps.core.config.MerConfig`
-- `com.huifu.bspay.sdk.opps.core.net.BasePayRequest`
+- `com.huifu.bspay.sdk.opps.client.BasePayClient`
+- `com.huifu.bspay.sdk.opps.core.request.V2TradeHostingPaymentHtrefundRequest`
 - `com.huifu.bspay.sdk.opps.core.utils.DateTools`
 - `com.huifu.bspay.sdk.opps.core.utils.SequenceTools`
 
@@ -69,16 +70,34 @@ mvn clean install
 | 参数名 | 类型 | 必填 | 说明 |
 |-------|------|-----|------|
 | huifuId | String | 是 | 商户号 |
-| ord_amt | String | 是 | 申请退款金额 |
-| org_req_date | String | 是 | 原交易请求日期（格式：yyyyMMdd） |
-| org_req_seq_id | String | 是 | 原交易请求流水号 |
+| ordAmt | String | 是 | 申请退款金额 |
+| orgReqDate | String | 是 | 原交易请求日期（格式：yyyyMMdd） |
+| orgReqSeqId | String | 是 | 原交易请求流水号 |
+
+## 架构设计
+
+采用分层架构实现：
+
+```
+Controller层 (HFPayController)
+    ├── 初始化商户配置 (MerConfig)
+    ├── 调用Service层方法
+    └── 返回统一响应结果
+
+Service层 (HostingpayService)
+    ├── 组装SDK Request对象
+    ├── 调用汇付API (BasePayClient.request)
+    └── 异常处理与业务逻辑
+
+DTO层
+    └── HostingpayHtRefundReq: 请求参数封装
+```
 
 ## 实现步骤
 
-1. 初始化商户配置（MerConfig）
-2. 组装请求参数（包含原交易信息）
-3. 调用汇付API
-4. 返回结果
+1. 创建请求DTO类 `HostingpayHtRefundReq`
+2. 在Service层实现 `htRefund` 方法
+3. 在Controller层注入Service并调用
 
 ## 代码示例
 
@@ -90,3 +109,5 @@ mvn clean install
 2. 退款金额不能超过原交易金额
 3. terminal_device_data 为设备信息，线上交易退款必填
 4. 需要正确配置 notify_url 以接收退款结果异步通知
+5. 使用 `V2TradeHostingPaymentHtrefundRequest` 对象组装请求参数
+6. 通过 `BasePayClient.request()` 方法发起API调用

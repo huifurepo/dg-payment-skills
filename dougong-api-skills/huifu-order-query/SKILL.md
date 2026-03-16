@@ -45,7 +45,8 @@ mvn clean install
 确认以下类可以正常导入：
 - `com.huifu.bspay.sdk.opps.core.BasePay`
 - `com.huifu.bspay.sdk.opps.core.config.MerConfig`
-- `com.huifu.bspay.sdk.opps.core.net.BasePayRequest`
+- `com.huifu.bspay.sdk.opps.client.BasePayClient`
+- `com.huifu.bspay.sdk.opps.core.request.V2TradeHostingPaymentQueryorderinfoRequest`
 - `com.huifu.bspay.sdk.opps.core.utils.DateTools`
 - `com.huifu.bspay.sdk.opps.core.utils.SequenceTools`
 
@@ -69,15 +70,33 @@ mvn clean install
 | 参数名 | 类型 | 必填 | 说明 |
 |-------|------|-----|------|
 | huifuId | String | 是 | 商户号 |
-| org_req_date | String | 是 | 原交易请求日期（格式：yyyyMMdd） |
-| org_req_seq_id | String | 是 | 原交易请求流水号 |
+| orgReqDate | String | 是 | 原交易请求日期（格式：yyyyMMdd） |
+| orgReqSeqId | String | 是 | 原交易请求流水号 |
+
+## 架构设计
+
+采用分层架构实现：
+
+```
+Controller层 (HFPayController)
+    ├── 初始化商户配置 (MerConfig)
+    ├── 调用Service层方法
+    └── 返回统一响应结果
+
+Service层 (HostingpayService)
+    ├── 组装SDK Request对象
+    ├── 调用汇付API (BasePayClient.request)
+    └── 异常处理与业务逻辑
+
+DTO层
+    └── HostingPayQueryOrderReq: 请求参数封装
+```
 
 ## 实现步骤
 
-1. 初始化商户配置（MerConfig）
-2. 组装请求参数（包含原交易信息）
-3. 调用汇付API
-4. 返回结果
+1. 创建请求DTO类 `HostingPayQueryOrderReq`
+2. 在Service层实现 `queryOrderInfo` 方法
+3. 在Controller层注入Service并调用
 
 ## 代码示例
 
@@ -88,3 +107,5 @@ mvn clean install
 1. 需要传入原交易的请求日期和请求流水号
 2. 可用于确认支付状态后再进行业务处理
 3. 建议在异步通知处理时同步调用查询接口进行二次确认
+4. 使用 `V2TradeHostingPaymentQueryorderinfoRequest` 对象组装请求参数
+5. 通过 `BasePayClient.request()` 方法发起API调用

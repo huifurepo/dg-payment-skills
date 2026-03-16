@@ -45,7 +45,8 @@ mvn clean install
 确认以下类可以正常导入：
 - `com.huifu.bspay.sdk.opps.core.BasePay`
 - `com.huifu.bspay.sdk.opps.core.config.MerConfig`
-- `com.huifu.bspay.sdk.opps.core.net.BasePayRequest`
+- `com.huifu.bspay.sdk.opps.client.BasePayClient`
+- `com.huifu.bspay.sdk.opps.core.request.V2TradeHostingPaymentPreorderH5Request`
 - `com.huifu.bspay.sdk.opps.core.utils.DateTools`
 - `com.huifu.bspay.sdk.opps.core.utils.SequenceTools`
 
@@ -72,12 +73,30 @@ mvn clean install
 | transAmt | String | 是 | 交易金额（单位：元） |
 | goodsDesc | String | 是 | 商品描述 |
 
+## 架构设计
+
+采用分层架构实现：
+
+```
+Controller层 (HFPayController)
+    ├── 初始化商户配置 (MerConfig)
+    ├── 调用Service层方法
+    └── 返回统一响应结果
+
+Service层 (HostingpayService)
+    ├── 组装SDK Request对象
+    ├── 调用汇付API (BasePayClient.request)
+    └── 异常处理与业务逻辑
+
+DTO层
+    └── HostingpayPreOrderReq: 请求参数封装
+```
+
 ## 实现步骤
 
-1. 初始化商户配置（MerConfig）
-2. 组装请求参数
-3. 调用汇付API
-4. 返回结果
+1. 创建请求DTO类 `HostingpayPreOrderReq`
+2. 在Service层实现 `preOrder` 方法
+3. 在Controller层注入Service并调用
 
 ## 代码示例
 
@@ -91,3 +110,5 @@ mvn clean install
    - 3：微信小程序
 2. 需要正确配置 notify_url 以接收支付结果异步通知
 3. hosting_data 为半支付托管扩展参数，需根据实际项目配置
+4. 使用 `V2TradeHostingPaymentPreorderH5Request` 对象组装请求参数
+5. 通过 `BasePayClient.request()` 方法发起API调用

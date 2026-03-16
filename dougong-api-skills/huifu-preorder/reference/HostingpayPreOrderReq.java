@@ -1,8 +1,8 @@
 package hf.java.test1.ser.biz.dto.hostingpay;
 
+import hf.java.test1.ser.biz.dto.BaseRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import hf.java.test1.ser.biz.dto.BaseRequest;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
