@@ -144,7 +144,6 @@ AI 会自动使用 `huifu-prepay-api` 技能生成对应的 Vue3/React/JavaS
     
 3.  使用明确的触发关键词（见技能清单）
     
-
 ### Q2: 生成的代码报依赖错误？
 
 后端 Skills 使用前需要确认项目已安装汇付 SDK：
