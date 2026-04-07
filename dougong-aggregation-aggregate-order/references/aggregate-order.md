@@ -24,7 +24,7 @@
 说明：
 
 - 聚合支付将微信、支付宝、银联等多种支付方式统一到一个下单 API。
-- 请求和响应整体都需要签名，验签规则见 `donggong-aggregation-pay-base/references/tech-spec.md`。
+- 请求和响应整体都需要签名，验签规则见 `dougong-aggregation-pay-base/references/tech-spec.md`。
 - `method_expand`、`tx_metadata`、异步 `resp_data` 里的多个字段，外层通常是 `String`，值内容是 JSON 字符串。
 - 下单结果不能只看 `resp_code`；官方特别强调最终交易状态以 `trans_stat` 为准。
 - 交易完成后除标准异步通知外，还支持额外发送 Webhook 事件。

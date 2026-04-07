@@ -18,10 +18,10 @@
 
 | Skill | 功能 | 前置依赖 |
 |-------|------|---------|
-| [donggong-aggregation-pay-base](donggong-aggregation-pay-base/) | 公共基座：SDK 初始化、Factory 模式、支付类型、公共参数 | 无 |
-| [donggong-aggregation-aggregate-order](donggong-aggregation-aggregate-order/) | 聚合支付下单：微信/支付宝/银联 全场景 | donggong-aggregation-pay-base |
-| [donggong-aggregation-aggregate-query](donggong-aggregation-aggregate-query/) | 交易查询 + 关单 + 关单查询 + 对账单 | donggong-aggregation-pay-base |
-| [donggong-aggregation-aggregate-refund](donggong-aggregation-aggregate-refund/) | 退款申请 + 退款结果查询 | donggong-aggregation-pay-base |
+| [dougong-aggregation-pay-base](dougong-aggregation-pay-base/) | 公共基座：SDK 初始化、Factory 模式、支付类型、公共参数 | 无 |
+| [dougong-aggregation-aggregate-order](dougong-aggregation-aggregate-order/) | 聚合支付下单：微信/支付宝/银联 全场景 | dougong-aggregation-pay-base |
+| [dougong-aggregation-aggregate-query](dougong-aggregation-aggregate-query/) | 交易查询 + 关单 + 关单查询 + 对账单 | dougong-aggregation-pay-base |
+| [dougong-aggregation-aggregate-refund](dougong-aggregation-aggregate-refund/) | 退款申请 + 退款结果查询 | dougong-aggregation-pay-base |
 
 ### 托管支付（dg-java-sdk）
 
@@ -49,7 +49,7 @@
 ```
 ├── README.md                          # 本文件
 │
-├── donggong-aggregation-pay-base/                # 聚合支付 - 公共基座
+├── dougong-aggregation-pay-base/                # 聚合支付 - 公共基座
 │   ├── SKILL.md
 │   └── references/
 │       ├── quickstart.md              # 快速接入指南
@@ -61,7 +61,7 @@
 │       ├── tech-spec.md               # 技术规范
 │       ├── async-webhook.md           # notify_url 回调与 Webhook
 │       └── faq.md                     # 各渠道常见问题
-├── donggong-aggregation-aggregate-order/         # 聚合支付 - 下单
+├── dougong-aggregation-aggregate-order/         # 聚合支付 - 下单
 │   ├── SKILL.md
 │   └── references/
 │       ├── quickstart.md              # 快速接入指南
@@ -73,7 +73,7 @@
 │       ├── aggregate-order-tx-metadata.md
 │       ├── aggregate-order-response.md
 │       └── aggregate-order-errors.md
-├── donggong-aggregation-aggregate-query/         # 聚合支付 - 查询与关单
+├── dougong-aggregation-aggregate-query/         # 聚合支付 - 查询与关单
 │   ├── SKILL.md
 │   └── references/
 │       ├── quickstart.md              # 快速接入指南
@@ -81,7 +81,7 @@
 │       ├── trade-close.md             # 交易关单
 │       ├── close-query.md             # 关单查询
 │       └── reconciliation.md          # 对账单查询
-├── donggong-aggregation-aggregate-refund/        # 聚合支付 - 退款
+├── dougong-aggregation-aggregate-refund/        # 聚合支付 - 退款
 │   ├── SKILL.md
 │   └── references/
 │       ├── quickstart.md              # 快速接入指南
@@ -142,7 +142,7 @@
 
 | 接入路径 | 第 1 份 | 第 2 份 | 第 3 份 | 解决的问题 |
 |---------|--------|--------|--------|-----------|
-| 聚合支付 | `donggong-aggregation-pay-base/SKILL.md` | `donggong-aggregation-pay-base/references/quickstart.md` | `donggong-aggregation-pay-base/references/customer-preparation.md` | 先确认选型、SDK 初始化方式、客户必须预先准备的真实参数 |
+| 聚合支付 | `dougong-aggregation-pay-base/SKILL.md` | `dougong-aggregation-pay-base/references/quickstart.md` | `dougong-aggregation-pay-base/references/customer-preparation.md` | 先确认选型、SDK 初始化方式、客户必须预先准备的真实参数 |
 | 托管支付 | `dougong-hostingpay-pay-base/SKILL.md` | `dougong-hostingpay-pay-base/references/quickstart.md` | `dougong-hostingpay-pay-base/references/customer-preparation.md` | 先确认 SDK 初始化、项目号/授权/回调地址等前置条件 |
 
 如果已经进入编码阶段，再补读两份基础文档：
@@ -155,13 +155,13 @@
 ### 聚合支付（推荐）
 
 ```
-① donggong-aggregation-pay-base       获取商户配置 → 安装 SDK → 初始化 Factory
+① dougong-aggregation-pay-base       获取商户配置 → 安装 SDK → 初始化 Factory
        ↓
-② donggong-aggregation-aggregate-order 调用下单接口 → 获取 qr_code/pay_info → 用户支付
+② dougong-aggregation-aggregate-order 调用下单接口 → 获取 qr_code/pay_info → 用户支付
        ↓
-③ donggong-aggregation-aggregate-query 查询支付结果 / 关闭超时订单 / 查询对账单
+③ dougong-aggregation-aggregate-query 查询支付结果 / 关闭超时订单 / 查询对账单
        ↓
-④ donggong-aggregation-aggregate-refund（可选）发起退款 → 查询退款结果
+④ dougong-aggregation-aggregate-refund（可选）发起退款 → 查询退款结果
 ```
 
 ### 托管支付
@@ -200,7 +200,7 @@
 
 | 接入路径 | 客户前置准备 | 参数校验与构造 |
 |---------|-------------|---------------|
-| 聚合支付 | [donggong-aggregation-pay-base/references/customer-preparation.md](donggong-aggregation-pay-base/references/customer-preparation.md) | [donggong-aggregation-pay-base/references/payload-construction.md](donggong-aggregation-pay-base/references/payload-construction.md) |
+| 聚合支付 | [dougong-aggregation-pay-base/references/customer-preparation.md](dougong-aggregation-pay-base/references/customer-preparation.md) | [dougong-aggregation-pay-base/references/payload-construction.md](dougong-aggregation-pay-base/references/payload-construction.md) |
 | 托管支付 | [dougong-hostingpay-pay-base/references/customer-preparation.md](dougong-hostingpay-pay-base/references/customer-preparation.md) | [dougong-hostingpay-pay-base/references/payload-construction.md](dougong-hostingpay-pay-base/references/payload-construction.md) |
 
 统一要求：
@@ -214,7 +214,7 @@
 
 ## 快速开始
 
-1. **聚合支付**：阅读 [donggong-aggregation-pay-base/SKILL.md](donggong-aggregation-pay-base/SKILL.md) 完成 SDK 初始化
+1. **聚合支付**：阅读 [dougong-aggregation-pay-base/SKILL.md](dougong-aggregation-pay-base/SKILL.md) 完成 SDK 初始化
 2. **托管支付**：阅读 [dougong-hostingpay-pay-base/SKILL.md](dougong-hostingpay-pay-base/SKILL.md) 完成 SDK 初始化
 3. 根据业务场景选择对应 Skill 的 SKILL.md 开始接入
 

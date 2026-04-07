@@ -9,7 +9,7 @@ dependencies:
 env:
   - HUIFU_REFUND_NOTIFY_URL
 metadata:
-  author: jiaxiang.li
+  author: codecodeing
   version: 1.0.0
   bins: java, mvn
 ---

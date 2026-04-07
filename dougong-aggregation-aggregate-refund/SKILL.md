@@ -1,15 +1,15 @@
 ---
-name: donggong-aggregation-aggregate-refund
+name: dougong-aggregation-aggregate-refund
 description: "汇付聚合支付（dg-lightning-sdk）退款 Skill：聚合交易退款和退款结果查询。当开发者需要对聚合支付订单发起退款或查询退款状态时使用。触发词：聚合退款、聚合退款申请、聚合退款查询、聚合退款状态。"
 license: MIT
 compatibility: "Java 8+, Maven, Spring Boot 2.x/3.x"
 source: "https://github.com/niceforbear/huifu-hosting-payment"
 dependencies:
-  - donggong-aggregation-pay-base
+  - dougong-aggregation-pay-base
 env:
   - HUIFU_REFUND_NOTIFY_URL
 metadata:
-  author: jiaxiang.li
+  author: codecodeing
   version: 1.0.0
   bins: java, mvn
 ---
@@ -18,9 +18,9 @@ metadata:
 
 交易退款 + 退款结果查询。
 
-> **前置依赖**：首次接入请先阅读 [donggong-aggregation-pay-base](../donggong-aggregation-pay-base/SKILL.md) 完成 SDK 初始化。
+> **前置依赖**：首次接入请先阅读 [dougong-aggregation-pay-base](../dougong-aggregation-pay-base/SKILL.md) 完成 SDK 初始化。
 
-> **进入本 Skill 前先确认**：原交易定位键已经在订单侧沉淀，退款请求也按 [payload-construction.md](../donggong-aggregation-pay-base/references/payload-construction.md) 做过必填 / 条件必填校验，避免把缺少原交易标识的请求直接打到汇付。
+> **进入本 Skill 前先确认**：原交易定位键已经在订单侧沉淀，退款请求也按 [payload-construction.md](../dougong-aggregation-pay-base/references/payload-construction.md) 做过必填 / 条件必填校验，避免把缺少原交易标识的请求直接打到汇付。
 
 ## 触发词
 

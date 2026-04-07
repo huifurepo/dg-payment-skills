@@ -10,7 +10,7 @@ env:
   - HUIFU_RSA_PRIVATE_KEY
   - HUIFU_RSA_PUBLIC_KEY
 metadata:
-  author: jiaxiang.li
+  author: codecodeing
   version: 1.0.0
   bins: java, mvn
 ---

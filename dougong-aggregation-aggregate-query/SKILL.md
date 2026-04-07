@@ -1,13 +1,13 @@
 ---
-name: donggong-aggregation-aggregate-query
+name: dougong-aggregation-aggregate-query
 description: "汇付聚合支付（dg-lightning-sdk）查询与关单 Skill：聚合交易查询、聚合交易关单、关单查询、对账单查询。当开发者需要查询聚合支付订单状态或关闭未支付的聚合订单时使用。触发词：聚合交易查询、聚合订单查询、聚合关单、聚合交易关闭、对账单。"
 license: MIT
 compatibility: "Java 8+, Maven, Spring Boot 2.x/3.x"
 source: "https://github.com/niceforbear/huifu-hosting-payment"
 dependencies:
-  - donggong-aggregation-pay-base
+  - dougong-aggregation-pay-base
 metadata:
-  author: jiaxiang.li
+  author: codecodeing
   version: 1.0.0
   bins: java, mvn
 ---
@@ -16,9 +16,9 @@ metadata:
 
 交易查询 + 交易关单 + 关单查询 + 对账单查询。
 
-> **前置依赖**：首次接入请先阅读 [donggong-aggregation-pay-base](../donggong-aggregation-pay-base/SKILL.md) 完成 SDK 初始化。
+> **前置依赖**：首次接入请先阅读 [dougong-aggregation-pay-base](../dougong-aggregation-pay-base/SKILL.md) 完成 SDK 初始化。
 
-> **进入本 Skill 前先确认**：上游下单侧已经保存 `req_date`、`req_seq_id`、`hf_seq_id`、`party_order_id` 等查询键；具体来源和客户准备项见 [customer-preparation.md](../donggong-aggregation-pay-base/references/customer-preparation.md)。
+> **进入本 Skill 前先确认**：上游下单侧已经保存 `req_date`、`req_seq_id`、`hf_seq_id`、`party_order_id` 等查询键；具体来源和客户准备项见 [customer-preparation.md](../dougong-aggregation-pay-base/references/customer-preparation.md)。
 
 > **官方开发指引补充约束**：微信 / 支付宝 / 银联多个渠道文档都明确要求，用户前端页面收到支付完成回调后，后端仍需调用查询订单 API 确认最终状态。
 

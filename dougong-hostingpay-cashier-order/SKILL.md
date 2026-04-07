@@ -12,7 +12,7 @@ env:
   - HUIFU_PROJECT_TITLE
   - HUIFU_CALLBACK_URL
 metadata:
-  author: jiaxiang.li
+  author: codecodeing
   version: 1.0.0
   bins: java, mvn
 ---

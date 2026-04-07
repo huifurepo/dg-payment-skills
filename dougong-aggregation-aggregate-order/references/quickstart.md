@@ -19,8 +19,8 @@
 | 文件 | 内容 |
 |-----|------|
 | [SKILL.md](../SKILL.md) | Skill 定义（Agent 加载入口） |
-| [../../donggong-aggregation-pay-base/references/customer-preparation.md](../../donggong-aggregation-pay-base/references/customer-preparation.md) | 客户前置准备清单、场景参数来源 |
-| [../../donggong-aggregation-pay-base/references/payload-construction.md](../../donggong-aggregation-pay-base/references/payload-construction.md) | `method_expand` / `tx_metadata` 参数校验与序列化规范 |
+| [../../dougong-aggregation-pay-base/references/customer-preparation.md](../../dougong-aggregation-pay-base/references/customer-preparation.md) | 客户前置准备清单、场景参数来源 |
+| [../../dougong-aggregation-pay-base/references/payload-construction.md](../../dougong-aggregation-pay-base/references/payload-construction.md) | `method_expand` / `tx_metadata` 参数校验与序列化规范 |
 | [aggregate-order.md](aggregate-order.md) | 总览与阅读导航 |
 | [aggregate-order-request.md](aggregate-order-request.md) | 公共请求参数与顶层字段 |
 | [aggregate-order-method-wechat.md](aggregate-order-method-wechat.md) | 微信请求与回调字段 |

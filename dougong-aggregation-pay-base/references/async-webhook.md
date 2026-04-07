@@ -1,6 +1,6 @@
 # 异步通知与 Webhook
 
-> 本文面向 `donggong-aggregation-pay-base` 依赖的聚合支付 Skill，重点把交易通知的真实报文形态、验签方式、幂等和终态判断说明清楚。
+> 本文面向 `dougong-aggregation-pay-base` 依赖的聚合支付 Skill，重点把交易通知的真实报文形态、验签方式、幂等和终态判断说明清楚。
 
 ## 两种异步机制
 

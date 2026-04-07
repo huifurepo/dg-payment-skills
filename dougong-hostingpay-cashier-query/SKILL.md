@@ -7,7 +7,7 @@ source: "https://github.com/niceforbear/huifu-hosting-payment"
 dependencies:
   - dougong-hostingpay-pay-base
 metadata:
-  author: jiaxiang.li
+  author: codecodeing
   version: 1.0.0
   bins: java, mvn
 ---

@@ -1,5 +1,5 @@
 ---
-name: donggong-aggregation-pay-base
+name: dougong-aggregation-pay-base
 description: "汇付聚合支付（dg-lightning-sdk）基础 Skill：SDK 初始化、Factory 模式调用、支付类型枚举、公共参数、签名规则、错误码。当开发者首次接入汇付聚合支付或需要了解公共配置时使用。所有聚合支付 Skill 的前置依赖。触发词：聚合支付接入、Lightning SDK、dg-lightning-sdk、聚合支付初始化、支付类型。"
 license: MIT
 compatibility: "Java 8+, Maven, Spring Boot 2.x/3.x"
@@ -10,7 +10,7 @@ env:
   - HUIFU_RSA_PRIVATE_KEY
   - HUIFU_RSA_PUBLIC_KEY
 metadata:
-  author: jiaxiang.li
+  author: codecodeing
   version: 1.0.0
   bins: java, mvn
 ---
@@ -52,13 +52,13 @@ metadata:
 汇付聚合支付采用「基础 Skill + 业务 Skill」分层架构：
 
 ```
-donggong-aggregation-pay-base/              ← 当前（公共基座，管理凭据和 SDK 初始化）
-donggong-aggregation-aggregate-order/       ← 聚合支付 - 下单（微信/支付宝/银联 多场景）
-donggong-aggregation-aggregate-query/       ← 聚合支付 - 交易查询、关单、关单查询、对账
-donggong-aggregation-aggregate-refund/      ← 聚合支付 - 退款与退款查询
+dougong-aggregation-pay-base/              ← 当前（公共基座，管理凭据和 SDK 初始化）
+dougong-aggregation-aggregate-order/       ← 聚合支付 - 下单（微信/支付宝/银联 多场景）
+dougong-aggregation-aggregate-query/       ← 聚合支付 - 交易查询、关单、关单查询、对账
+dougong-aggregation-aggregate-refund/      ← 聚合支付 - 退款与退款查询
 ```
 
-业务 Skill 通过 `dependencies: [donggong-aggregation-pay-base]` 声明依赖，不直接管理凭据。
+业务 Skill 通过 `dependencies: [dougong-aggregation-pay-base]` 声明依赖，不直接管理凭据。
 
 ## 接入流程
 

@@ -1,15 +1,15 @@
 ---
-name: donggong-aggregation-aggregate-order
+name: dougong-aggregation-aggregate-order
 description: "汇付聚合支付（dg-lightning-sdk）下单 Skill：覆盖微信公众号/小程序/APP、支付宝JS/正扫、银联JS/正扫、微信/支付宝/银联付款码等全场景聚合支付下单。当开发者需要通过聚合支付方式创建支付订单时使用。触发词：聚合支付下单、微信支付下单、支付宝下单、银联下单、二维码支付、付款码支付。"
 license: MIT
 compatibility: "Java 8+, Maven, Spring Boot 2.x/3.x"
 source: "https://github.com/niceforbear/huifu-hosting-payment"
 dependencies:
-  - donggong-aggregation-pay-base
+  - dougong-aggregation-pay-base
 env:
   - HUIFU_NOTIFY_URL
 metadata:
-  author: jiaxiang.li
+  author: codecodeing
   version: 1.0.0
   bins: java, mvn
 ---
@@ -18,9 +18,9 @@ metadata:
 
 覆盖微信/支付宝/银联全场景聚合支付下单。
 
-> **前置依赖**：首次接入请先阅读 [donggong-aggregation-pay-base](../donggong-aggregation-pay-base/SKILL.md) 完成 SDK 初始化。
+> **前置依赖**：首次接入请先阅读 [dougong-aggregation-pay-base](../dougong-aggregation-pay-base/SKILL.md) 完成 SDK 初始化。
 
-> **开发前先补两步**：先核对 [客户前置准备清单](../donggong-aggregation-pay-base/references/customer-preparation.md)，再按 [参数校验与 JSON 构造规范](../donggong-aggregation-pay-base/references/payload-construction.md) 建模。`sub_openid`、`buyer_id`、`auth_code`、`devs_id`、`customer_ip` 这些值都不能让模型自行猜测。
+> **开发前先补两步**：先核对 [客户前置准备清单](../dougong-aggregation-pay-base/references/customer-preparation.md)，再按 [参数校验与 JSON 构造规范](../dougong-aggregation-pay-base/references/payload-construction.md) 建模。`sub_openid`、`buyer_id`、`auth_code`、`devs_id`、`customer_ip` 这些值都不能让模型自行猜测。
 
 > **官方开发指引补充约束**：接入前还要完成渠道业务开通、应用配置或授权绑定。微信公众号 / 小程序场景的 `sub_openid`、支付宝 JS 的 `buyer_id`、银联 JS 的 `user_id`、各类反扫的 `auth_code`，都必须来自真实获取链路；前端支付完成回调也不等于最终交易成功。
 
@@ -53,15 +53,15 @@ metadata:
 汇付将交易结果 POST 到 `notify_url`：
 - 返回 `RECV_ORD_ID_` + req_seq_id（5 秒内）
 - 以 `hf_seq_id` 为幂等键
-- 详见 [tech-spec.md](../donggong-aggregation-pay-base/references/tech-spec.md)
+- 详见 [tech-spec.md](../dougong-aggregation-pay-base/references/tech-spec.md)
 
 ### ④ 二次查询确认
 
-见 [donggong-aggregation-aggregate-query](../donggong-aggregation-aggregate-query/SKILL.md)。官方微信 / 支付宝 / 银联开发指引都明确要求：用户前端页面收到支付完成回调后，后端仍需调用查询订单 API 确认最终状态。
+见 [dougong-aggregation-aggregate-query](../dougong-aggregation-aggregate-query/SKILL.md)。官方微信 / 支付宝 / 银联开发指引都明确要求：用户前端页面收到支付完成回调后，后端仍需调用查询订单 API 确认最终状态。
 
 ### ⑤ 退款（可选）
 
-见 [donggong-aggregation-aggregate-refund](../donggong-aggregation-aggregate-refund/SKILL.md)
+见 [dougong-aggregation-aggregate-refund](../dougong-aggregation-aggregate-refund/SKILL.md)
 
 ---
 
