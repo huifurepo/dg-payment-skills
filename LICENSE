@@ -1,0 +1,21 @@
+Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
+
+本仓库的 Skill 组织结构、文档编排和工程化内容由 jiaxiang.li 创建。
+
+本仓库涉及的支付接口规范、参数表、错误码、SDK 使用说明等技术内容，
+来源于上海汇付支付有限公司官方开放平台文档，原始内容版权归属上海汇付支付有限公司。
+
+使用限制：
+
+1. 本仓库仅供技术学习和交流使用
+2. 不得将本仓库内容用于商业再分发
+3. 如需商业使用，请直接联系汇付支付官方（400-820-2819 / cs@huifu.com）
+4. 转载或引用时需保留原始版权声明
+
+完整许可证文本：
+https://creativecommons.org/licenses/by-nc/4.0/legalcode
+
+---
+
+Copyright (c) 2026 jiaxiang.li (Skill 编排)
+Content Copyright: Shanghai Huifu Payment Co., Ltd. (技术内容)
