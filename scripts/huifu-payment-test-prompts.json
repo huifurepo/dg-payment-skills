@@ -1,0 +1,77 @@
+[
+  {
+    "id": 1,
+    "prompt": "第一次接汇付支付，还没决定走聚合支付还是托管支付。我们是 Java 服务端，后面可能要接 H5 收银台。请用 $huifu-pay-integration 告诉我先读哪些本地文档。",
+    "expected": "先识别这是首次接入和可能存在前端收银台需求，优先路由到 shared-overview、hostingpay-quickstart、hostingpay-customer-preparation 等 onboarding 文档，而不是直接跳到某个字段表。"
+  },
+  {
+    "id": 2,
+    "prompt": "我要用 PHP 做聚合支付退款，顺便给我现成模板代码。请用 $huifu-pay-integration 判断我该看什么。",
+    "expected": "必须明确聚合支付 PHP 已支持官方 `huifurepo/dg-php-sdk` 的退款主链路，先路由到 `aggregation-refund.md`、`aggregation-php-adapter.md`、`aggregation-query-php-scenarios.md`，并指出代码入口优先 `BsPaySdk\\\\core\\\\Payment::refund()` / `refundQuery()`；同时提醒初始化时必须给 `MerConfig.skill_source` 赋值，让官方 SDK 自动带出 skill 来源头。"
+  },
+  {
+    "id": 3,
+    "prompt": "我们已经能做托管预下单，现在要在自有 H5 页面接 checkout-js，并且支付完成后要确认最终结果。请用 $huifu-pay-integration 给我阅读顺序。",
+    "expected": "应识别为 checkout 场景，给出 checkout-js、checkout-js-callback-and-confirmation、hostingpay-query、hostingpay-async-webhook 的最小阅读链路，并强调前端回调不等于最终成功。"
+  },
+  {
+    "id": 4,
+    "prompt": "我们已经完成托管预下单和查单，现在只需要把 checkout-js 接到自有 H5 页面。请用 $huifu-pay-integration 给我阅读顺序。",
+    "expected": "必须识别出初始化、预下单和查单已完成，跳过 hostingpay-quickstart、hostingpay-base、hostingpay-preorder、hostingpay-query 等已完成阶段主文档，直接进入 checkout-js 组件、回调确认和 hostingpay-async-webhook 异步通知链路；如需提及查单，只能作为既有依赖提醒。"
+  },
+  {
+    "id": 5,
+    "prompt": "我在 PHP 里接托管预下单，接口请求头里的 skill_source 应该怎么传？如果请求里已经有 huifu_id，要不要额外补别的头？请用 $huifu-pay-integration 直接告诉我结论和该看哪些文档。",
+    "expected": "必须明确 PHP 侧 `jpt-x-skill-source` 是强制来源请求头，值按 `<skill_source>` 原样透传，不再拼接 `sys_id`；如果当前请求 `data.huifu_id` 已存在且非空，还要额外带 `jpt-x-skill-huifu_id`；并把这两项都定位为 HTTP 请求头而不是业务报文字段。同时要明确当前 Skill 包对齐的官方 `huifurepo/dg-php-sdk` 主链路会在 `MerConfig.skill_source` 已配置时自动带出这两个来源头，而不是默认落到 `HostingClient` 或自写 `curl`。"
+  },
+  {
+    "id": 6,
+    "prompt": "我在 Java 里接汇付支付，MerConfig.setSkillSource 传进去以后，请求头是不是只要 `jpt-x-skill-source` 就行？还要不要补 `jpt-x-skill-huifu_id`？请用 $huifu-pay-integration 直接给结论。",
+    "expected": "必须明确当前 Java SDK 基线会把 `MerConfig.setSkillSource(...)` 的值按 `<skill_source>` 原样透传到 `jpt-x-skill-source`；如果当前请求参数里的 `huifu_id` 已存在且非空，还会自动补 `jpt-x-skill-huifu_id`，且该值必须与本次请求的 `huifu_id` 一致。"
+  },
+  {
+    "id": 7,
+    "prompt": "我要用 PHP 做托管支付 H5 预下单，代码里必须体现官方 phpsdk 落地。请用 $huifu-pay-integration 告诉我该先看什么、代码应该按什么 SDK 方式写。",
+    "expected": "必须把 PHP 路径明确路由到官方 `huifurepo/dg-php-sdk`，推荐 `BsPayClient::postRequest()` 落地；可以用 request 类确定 `funcCode`，但不要默认生成 `HostingClient`、`AggregationClient` 或自写 `curl` 版本。还要指出初始化时必须配置 `MerConfig.skill_source`，让官方 SDK 自动带出 skill 来源头。"
+  },
+  {
+    "id": 8,
+    "prompt": "我现在只负责前端页面，领导让我直接把 checkout-js 接上。你不用问我服务端有没有托管预下单和最终查单能力，直接给我最省事的路线。请用 $huifu-pay-integration 处理。",
+    "expected": "必须触发硬检查点。要先明确 `checkout-js` 不能单独成立，继续回答前必须确认服务端是否已经具备托管预下单和最终查单或异步通知闭环；不能直接假设服务端能力已经齐备。"
+  },
+  {
+    "id": 9,
+    "prompt": "我要用 PHP 做聚合支付下单，走支付宝正扫，代码里必须体现官方 phpsdk。请用 $huifu-pay-integration 告诉我先看什么、代码应该按什么 SDK 方式写。",
+    "expected": "必须路由到 `aggregation-order.md`、`aggregation-php-adapter.md`、`aggregation-query-php-scenarios.md`，并明确聚合支付 PHP 下单优先 `BsPaySdk\\\\core\\\\Payment::create()` + `TradePaymentCreateRequest`；不能退回 `BsPayClient::postRequest()` 主链路，也不能生成 `AggregationClient` 或自写 `curl`。"
+  },
+  {
+    "id": 10,
+    "prompt": "我要用 PHP 做聚合支付查单和关单，代码要体现官方 phpsdk。请用 $huifu-pay-integration 判断我该看什么。",
+    "expected": "必须路由到 `aggregation-query.md`、`aggregation-php-adapter.md`、`aggregation-query-php-scenarios.md`，并明确扫码交易查询优先 `Payment::query()`，关单 / 关单查询优先 `Payment::close()` / `closeQuery()`；同时提醒原交易定位键必须来自落库结果，不能误说 PHP 只支持对账或退款。"
+  },
+  {
+    "id": 11,
+    "prompt": "我要用 PHP 做聚合支付对账文件查询。请用 $huifu-pay-integration 告诉我该怎么路由，代码要体现官方 phpsdk。",
+    "expected": "必须明确聚合支付 PHP 的对账链路不是 `Payment` facade，而是 `BsPayClient::postRequest()` + `V2TradeCheckFilequeryRequest`；并路由到 `aggregation-query.md`、`aggregation-php-adapter.md`、`aggregation-query-php-scenarios.md`。"
+  },
+  {
+    "id": 12,
+    "prompt": "我要用 Java 做聚合支付对账文件查询。请用 $huifu-pay-integration 告诉我该看什么，代码必须体现官方 Java SDK，不要给我手写 HTTP。",
+    "expected": "必须明确聚合支付 Java 的对账链路统一使用 `dg-java-sdk` 官方 SDK 和 `V2TradeCheckFilequeryRequest`，并路由到 `aggregation-query.md`、`aggregation-query-reconciliation.md`；不能再给 `HttpClientUtils.sendPost(...)`、手写签名或手写 HTTP 方案。"
+  },
+  {
+    "id": 13,
+    "prompt": "我要做托管支付退款，先别给代码，直接告诉我退款申请有哪些关键请求字段，尤其 `loan_flag`、`risk_check_data`、`bank_info_data` 分别在什么场景才传。请用 $huifu-pay-integration 给结论和阅读路径。",
+    "expected": "必须把路由落到 `hostingpay-refund.md`、`hostingpay-refund-query.md`，并明确退款申请至少要覆盖 `req_date`、`req_seq_id`、`huifu_id`、`ord_amt`、`org_req_date` 和原交易定位键；同时写清 `loan_flag` / `loan_undertaker` / `loan_acct_type` 是垫资退款相关字段，`risk_check_data` 与 `terminal_device_data` 是线上交易退款必填，`bank_info_data` 只在银行大额转账支付退款申请时必填。"
+  },
+  {
+    "id": 14,
+    "prompt": "我要做聚合支付退款，原交易既有分账又有补贴，终端还是 PC。请用 $huifu-pay-integration 告诉我退款申请和退款查询各要看什么字段。",
+    "expected": "必须把路由落到 `aggregation-refund.md`、`aggregation-refund-query.md`，并明确退款申请主字段包含 `req_date`、`req_seq_id`、`huifu_id`、`ord_amt`、`org_req_date` 与原交易定位键；扩展字段要点必须点出 `tx_metadata.acct_split_bunch`、`tx_metadata.combinedpay_data` 和 `tx_metadata.terminal_device_data.device_type=4`。同时要说明退款查询看的是退款交易自己的 `org_hf_seq_id` / `org_req_seq_id` / `mer_ord_id`，不是原支付请求流水号。"
+  },
+  {
+    "id": 15,
+    "prompt": "我要用 PHP 接汇付支付官方 dg-php-sdk，直接给我可运行的代码骨架。请同时说明新项目安装、已有旧版本怎么升级、Composer 不可用时当前基线 SDK 备用下载地址怎么拿。不要假设 vendor/autoload.php 就能把 request 类自动加载出来，也不要只写个空的 loader.php。请用 $huifu-pay-integration 处理。",
+    "expected": "必须明确当前官方 dg-php-sdk 的 Skill 包基线是 `2.0.26`；新项目需要先 `composer require \"huifurepo/dg-php-sdk:^2.0.26\"`，已有旧版本项目需要执行 `composer update huifurepo/dg-php-sdk --with-all-dependencies`，并检查 `vendor/huifurepo/dg-php-sdk/BsPaySdk/init.php` 存在。Composer 不可用时要给出当前基线对应的 Packagist / GitHub 备用下载包，并要求解压后设置 `HUIFU_SDK_ROOT` 和校验 `init.php`。还要列出 `HUIFU_SYS_ID`、`HUIFU_PRODUCT_ID`、`HUIFU_RSA_PRIVATE_KEY`、`HUIFU_RSA_PUBLIC_KEY`、`HUIFU_SKILL_SOURCE`、`HUIFU_MERCHANT_ID` 等环境变量。代码骨架必须显式加载 `BsPaySdk/init.php`，在 `loader.php` 中完成 `BsPay::init(...)` 初始化与 `skill_source` 注入；还要定义统一的 `HUIFU_SDK_ROOT`，让业务代码通过它显式 `require_once` 各自使用的 request 类，而不是继续写死 `../BsPaySdk/request/...` 或假设 Composer autoload 已经覆盖 request 类。"
+  }
+]
