@@ -25,7 +25,7 @@
 
 - `trade_type` 负责选择微信场景。
 - `method_expand` 的 JSON 内容直接就是微信对象本身。
-- 不要再写成 `{ "T_JSAPI": {...} }`、`{ "T_MINIAPP": {...} }` 这种带场景 key 的包装结构。
+- 不要再写成带 `T_JSAPI`、`T_MINIAPP` 等场景 key 的包装结构。
 
 ## 官方接入前准备
 

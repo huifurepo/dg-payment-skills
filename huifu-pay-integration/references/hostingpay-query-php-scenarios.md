@@ -18,6 +18,8 @@ use BsPaySdk\core\BsPayClient;
 $client = new BsPayClient();
 ```
 
+字段保留规则：外部 DTO / Controller 已接收 `req_date`、`req_seq_id`、`huifu_id`、原交易定位键或对账日期时，必须保留入参，缺失或非法时显式报错。下面示例里的 `date('Ymd')` 和随机流水号只适用于服务端自主管理这些字段的独立 demo，不得覆盖上游传入值。
+
 ## 交易查询
 
 ```php
@@ -116,3 +118,4 @@ $downloadUrl = $fileDetails[0]['download_url'] ?? '';
 3. 对账单字段固定使用 `file_date`、`bill_type`，其中交易对账单常用值是 `TRADE_BILL`；`file_date` 是文件生成日期，补生成时按交易日期 `+1` 天计算。
 4. 交易查询也支持账单商户单号回查；如果业务链路里有 `party_order_id`，不要强行依赖原交易三元组。
 5. `loader.php` 只负责 SDK 初始化和定义 `HUIFU_SDK_ROOT`；每个业务文件仍要显式加载自己用到的 request 类。
+6. 生成真实业务代码时，先判断外部 DTO / Controller 是否已经接收字段；已经接收就必须保留入参，缺失或非法时显式报错，不要在 SDK Request 组装层重新生成并覆盖。

@@ -6,7 +6,7 @@
 
 - 第一次接聚合支付
 - 需要确认 `trade_type`、公共环境变量、初始化顺序
-- 需要判断当前应该走 Java 还是 PHP
+- 需要判断当前应该走 Java、PHP 还是 Python
 
 ## 推荐阅读顺序
 
@@ -73,14 +73,15 @@ shared-overview
 
 - Java 是聚合支付完整基线
 - PHP 已覆盖聚合支付核心主链路与对账；默认入口先读 `references/aggregation-php-adapter.md` 与 `references/aggregation-query-php-scenarios.md`
+- Python 已覆盖聚合支付核心主链路与对账；默认入口先读 `references/aggregation-python-adapter.md` 与 `references/aggregation-python-scenarios.md`
 - 当前 Skill 包不再内置 PHP 模板资产；PHP 默认走官方 `huifurepo/dg-php-sdk`
-- C#、Python、Go 当前只保留统一入口说明，不提供现成业务模板
+- C#、Go 当前只保留统一入口说明，不提供现成业务模板
 
 ## 公共字段提醒
 
 - `req_seq_id` 必须保证当日唯一
 - `req_date` 建议始终保存，后续查询、关单、退款都要回用
-- `method_expand`、`acct_split_bunch`、`terminal_device_data`、`tx_metadata` 应先建模再序列化
+- `method_expand`、`acct_split_bunch`、`terminal_device_data`、`combinedpay_data`、`combinedpay_data_fee_info`、`trans_fee_allowance_info` 应先建模再序列化；`tx_metadata` 本身不作为请求字段上送
 
 ## 下一步怎么走
 

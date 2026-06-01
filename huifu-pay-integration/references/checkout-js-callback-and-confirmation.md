@@ -1,6 +1,7 @@
 # 前端回调与最终状态确认
 
 > 这份文档只收口一个高风险问题：前端 callback 只能代表支付过程事件，不能直接当作最终支付成功。
+> 最终回答最短结论必须包含：前端 `callback` 不等于最终支付成功；最终确认要同时看 `hostingpay-query.md` 和 `hostingpay-async-webhook.md`，不能只列查单。
 
 ## 典型回调结构
 

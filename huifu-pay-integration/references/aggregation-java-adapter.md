@@ -26,9 +26,11 @@
    3.x 常见是 `jakarta.annotation.PostConstruct`
 3. 当前仓库的异步通知示例使用了 `fastjson`。
    这是 Java 示例选型，不是协议层要求。
-4. `method_expand`、`acct_split_bunch`、`terminal_device_data`、`tx_metadata` 这类字段，仍然建议先在业务层建对象，再在 SDK 边界统一序列化。
-5. `MerConfig.setSkillSource(...)` 直接传 `<skill_source>` 即可；聚合支付要求的 `sys_id` 仍通过独立请求头 `sys_id` / `jpt-sys_id` 传递，`jpt-x-skill-source` 只透传来源值。
-6. 当前 Java SDK 基线如果请求参数里的 `huifu_id` 存在且非空，还会自动补 `jpt-x-skill-huifu_id`；该值必须与本次请求的 `huifu_id` 一致，不要手工写成固定常量。
+4. `method_expand`、`acct_split_bunch`、`terminal_device_data`、`combinedpay_data`、`combinedpay_data_fee_info`、`trans_fee_allowance_info` 这类字段，仍然建议先在业务层建对象，再在 SDK 边界统一序列化。
+5. `T_JSAPI`、`T_MINIAPP`、`T_APP`、`T_MICROPAY`、`A_JSAPI`、`A_NATIVE`、`A_MICROPAY`、`U_JSAPI`、`U_NATIVE`、`U_MICROPAY` 这些值不是 `method_expand` 的 key；`method_expand` 的 JSON 内容直接是当前场景对象本身。
+6. `tx_metadata` 本身不作为请求字段上送；交易能力扩展按能力名直接传 `acct_split_bunch`、`terminal_device_data`、`combinedpay_data`、`combinedpay_data_fee_info`、`trans_fee_allowance_info`。
+7. `MerConfig.setSkillSource(...)` 直接传 `<skill_source>` 即可；聚合支付要求的 `sys_id` 仍通过独立请求头 `sys_id` / `jpt-sys_id` 传递，`jpt-x-skill-source` 只透传来源值。
+8. 当前 Java SDK 基线如果请求参数里的 `huifu_id` 存在且非空，还会自动补 `jpt-x-skill-huifu_id`；该值必须与本次请求的 `huifu_id` 一致，不要手工写成固定常量。
 
 ## 不属于这里的内容
 

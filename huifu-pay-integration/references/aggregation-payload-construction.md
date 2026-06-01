@@ -1,6 +1,6 @@
 # 聚合支付参数校验与 JSON 构造规范
 
-> 聚合支付最容易被大模型写坏的地方有三个：一是 `trade_type` 驱动的条件必填没有校验，二是把 `method_expand` 错写成带 `T_JSAPI` / `A_JSAPI` / `U_MICROPAY` 包装 key 的对象，三是把 `acct_split_bunch`、`terminal_device_data` 和补贴类顶层扩展字段放错层级，误塞进 `tx_metadata`。这里统一约束接入方式。
+> 聚合支付最容易被大模型写坏的地方有三个：一是 `trade_type` 驱动的条件必填没有校验，二是把 `method_expand` 错写成带支付类型包装 key 的对象，三是把交易能力扩展字段错包进 `tx_metadata`。这里统一约束接入方式。
 
 
 ## 目录
@@ -25,7 +25,7 @@
         ↓
 参数校验层（必填 / 条件必填 / 场景组合）
         ↓
-Payload Builder（序列化 method_expand / acct_split_bunch / terminal_device_data / combinedpay_data / combinedpay_data_fee_info / trans_fee_allowance_info / tx_metadata）
+Payload Builder（序列化 method_expand / acct_split_bunch / terminal_device_data / combinedpay_data / combinedpay_data_fee_info / trans_fee_allowance_info）
         ↓
 dg-lightning-sdk Request
 ```
@@ -60,7 +60,7 @@ dg-lightning-sdk Request
 ```java
 public class CreateOrderCommand {
     private String methodExpand;
-    private String txMetadata;
+    private String terminalDeviceData;
 }
 ```
 
@@ -85,10 +85,9 @@ public class CreateOrderCommand {
 不推荐：
 
 ```java
-request.setMethodExpand("{\"T_MINIAPP\":{\"sub_openid\":\"...\"}}");
+request.setMethodExpand("{\"<trade_type>\":{\"sub_openid\":\"...\"}}");
 request.setTerminalDeviceData("{\"device_ip\":\"10.0.0.1\"}");
-// 不要把真实顶层补贴字段错包进 tx_metadata
-request.optional("tx_metadata", "{\"trans_fee_allowance_info\":{\"allowance_fee_amt\":\"0.01\"}}");
+// 不要再构造 tx_metadata 包装层承载补贴、分账或设备字段
 ```
 
 推荐：
@@ -116,7 +115,8 @@ request.addExtendInfo("trans_fee_allowance_info", objectMapper.writeValueAsStrin
 | `combinedpay_data` | 顶层扩展字段 | 通过 `request.addExtendInfo(...)` / `client.optional(...)` 注入 |
 | `combinedpay_data_fee_info` | 顶层扩展字段 | 通过 `request.addExtendInfo(...)` / `client.optional(...)` 注入 |
 | `trans_fee_allowance_info` | 顶层扩展字段 | 通过 `request.addExtendInfo(...)` / `client.optional(...)` 注入 |
-| `tx_metadata` | 顶层扩展 key | 仍作为收单扩展入口保留，但补贴类请求字段不要想当然塞进去 |
+
+`tx_metadata` 本身不作为请求字段上送。API 文档把它写成“交易能力扩展”时，按实际扩展能力直接传它下面的字段：`acct_split_bunch`、`terminal_device_data`、`combinedpay_data`、`combinedpay_data_fee_info`、`trans_fee_allowance_info`。
 
 ## 推荐代码形态
 
@@ -151,9 +151,6 @@ public TradePaymentCreateRequest buildRequest(
     }
     if (cmd.getTransFeeAllowanceInfo() != null) {
         request.addExtendInfo("trans_fee_allowance_info", objectMapper.writeValueAsString(cmd.getTransFeeAllowanceInfo()));
-    }
-    if (cmd.getTxMetadata() != null) {
-        request.optional("tx_metadata", objectMapper.writeValueAsString(cmd.getTxMetadata()));
     }
     return request;
 }
@@ -192,7 +189,7 @@ public TradePaymentCreateRequest buildRequest(
 
 | 规则 | 说明 |
 |------|------|
-| `trade_type` 只做场景选择 | `T_JSAPI`、`A_JSAPI`、`U_MICROPAY` 这些值不是 `method_expand` 的 key |
+| `trade_type` 只做场景选择 | `T_JSAPI`、`T_MINIAPP`、`T_APP`、`T_MICROPAY`、`A_JSAPI`、`A_NATIVE`、`A_MICROPAY`、`U_JSAPI`、`U_NATIVE`、`U_MICROPAY` 这些值不是 `method_expand` 的 key |
 | JSON 内容只放当前场景对象 | 不要把多个渠道对象一起塞进一个 `method_expand` |
 | 对象字段必须完整 | 有 `detail` 就把 `goods_detail[]` 补完整；有 `pid_info` 就把子字段补完整 |
 | 关键身份字段必须真实 | `sub_openid`、`buyer_id`、`user_id`、`auth_code` 只能来自官方指引对应的真实获取链路 |
@@ -227,6 +224,7 @@ public TradePaymentCreateRequest buildRequest(
 - 不做场景组合校验，只按平铺字段做 `@NotBlank`。
 - 用示例值、空对象、半截对象去“补齐”复杂参数。
 - 把多个 `trade_type` 的对象同时塞进一个请求里，指望汇付侧自己兜底。
-- 把 `method_expand` 写成 `{\"T_MINIAPP\": {...}}` 这种包装结构。
+- 把 `method_expand` 写成带支付类型包装 key 的结构。
+- 把 `tx_metadata` 当请求字段传。
 - 把 `acct_split_bunch`、`terminal_device_data`、`combinedpay_data`、`combinedpay_data_fee_info`、`trans_fee_allowance_info` 塞进 `tx_metadata`。
 - 把前端 success 回调直接当作支付成功，不再走后端查单确认。

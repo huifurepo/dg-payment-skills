@@ -24,6 +24,10 @@ $payment = new Payment();
 $client = new BsPayClient();
 ```
 
+聚合支付 PHP 查单、关单、关单查询回答必须显式写明：原交易定位键必须来自落库 / 持久化结果，不能临时猜测 `req_date`、`req_seq_id`、`hf_seq_id`。
+
+字段保留规则：外部 DTO / Controller 已接收 `req_date`、`req_seq_id`、`huifu_id`、金额、通知地址或原交易定位键时，必须保留入参，缺失或非法时显式报错。下面示例里的 `date('Ymd')` 和随机流水号只适用于服务端自主管理这些字段的独立 demo，不得覆盖上游传入值。
+
 ## 聚合支付下单
 
 ```php
@@ -35,7 +39,7 @@ $request = new TradePaymentCreateRequest();
 $request->setReqDate(date('Ymd'));
 $request->setReqSeqId('AP' . date('YmdHis') . random_int(1000, 9999));
 $request->setHuifuId(getenv('HUIFU_MERCHANT_ID'));
-$request->setTradeType('A_NATIVE');
+$request->setTradeType('A_JSAPI');
 $request->setTransAmt('0.10');
 $request->setGoodsDesc('测试订单');
 $request->setNotifyUrl(getenv('HUIFU_NOTIFY_URL'));
@@ -54,7 +58,9 @@ $result = $payment->create($request);
 字段拆分：
 
 1. `trade_type`、`method_expand`、`notify_url` 等值必须按真实场景组装。
-2. `req_date`、`req_seq_id`、`huifu_id` 必须持久化，后续查单、关单、退款都会复用。
+2. `T_JSAPI`、`T_MINIAPP`、`T_APP`、`T_MICROPAY`、`A_JSAPI`、`A_NATIVE`、`A_MICROPAY`、`U_JSAPI`、`U_NATIVE`、`U_MICROPAY` 这些值不是 `method_expand` 的 key；`method_expand` 的 JSON 内容直接是当前场景对象本身。
+3. `tx_metadata` 本身不作为请求字段上送；交易能力扩展按能力名直接传 `acct_split_bunch`、`terminal_device_data`、`combinedpay_data`、`combinedpay_data_fee_info`、`trans_fee_allowance_info`。
+4. `req_date`、`req_seq_id`、`huifu_id` 必须持久化，后续查单、关单、退款都会复用。
 
 ## 扫码交易查询
 
@@ -206,3 +212,5 @@ $result = $client->postRequest($request);
 4. 银联二维码、数字人民币和已成功订单不适合继续关单，遇到这类订单应改走查询或退款链路。
 5. 如果项目是 Composer 安装的 `dg-php-sdk`，request 类仍要通过 `HUIFU_SDK_ROOT` 显式加载，不要假设 `vendor/autoload.php` 会自动装载。
 6. 对账 `file_date` 是文件生成日期，补生成时按交易日期 `+1` 天计算，不要简单写成“昨天”。
+7. 生成真实业务代码时，先判断外部 DTO / Controller 是否已经接收字段；已经接收就必须保留入参，缺失或非法时显式报错，不要在 SDK Request 组装层重新生成并覆盖。
+8. 输出 PHP 业务调用模板时，即使业务脚本只 `require_once bootstrap/loader.php`，最终回答也必须显式写明 `loader.php` 中要配置 `skill_source` / `MerConfig.skill_source`；官方 SDK 在配置后自动补 HTTP 请求头 `jpt-x-skill-source`，并在本次请求 `huifu_id` 非空时自动补 `jpt-x-skill-huifu_id`。

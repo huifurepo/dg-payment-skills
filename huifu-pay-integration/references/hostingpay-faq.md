@@ -45,7 +45,7 @@ config.setProcutId("YYZY");
 ```
 
 **Q：Spring Boot 3.x 启动报错 javax 相关异常？**
-A：dg-java-sdk 3.0.36 内部使用 `javax.validation` 注解。Spring Boot 3.x 已迁移到 `jakarta.validation`，需要添加兼容桥接包：
+A：dg-java-sdk 3.0.37 内部使用 `javax.validation` 注解。Spring Boot 3.x 已迁移到 `jakarta.validation`，需要添加兼容桥接包：
 
 ```xml
 <dependency>

@@ -50,9 +50,11 @@
 
 | 项目 | 当前口径 |
 | --- | --- |
-| Skill 包版本 | `1.2.0` |
-| 托管支付 Java SDK 常量版本 | `dg-java-sdk 3.0.36` |
+| Skill 包版本 | `1.2.2` |
+| 托管支付 Java SDK 常量版本 | `dg-java-sdk 3.0.37` |
 | 聚合支付 Java SDK 版本 | `dg-lightning-sdk 1.0.5` |
+| Python SDK 包 | `dg-sdk 2.0.21`，import 名为 `dg_sdk` |
+| Python 生产环境变量 | 见 `aggregation-python-adapter.md` 与 `hostingpay-python-adapter.md` |
 | 前端收银台 JS SDK | npm 包 `@dg-elements/js-sdk`，接入时以项目锁定版本为准，升级前查询 npm registry |
 | `HUIFU_SKILL_SOURCE` 最终上送格式 | `<skill_source>` |
 
@@ -60,13 +62,13 @@
 
 PHP 场景默认以官方 Composer 包 `huifurepo/dg-php-sdk` 落地：
 
-- 当前 Skill 包基线：`2.0.26`
-- 新项目安装：`composer require "huifurepo/dg-php-sdk:^2.0.26"`
+- 当前 Skill 包基线：`2.0.27`
+- 新项目安装：`composer require "huifurepo/dg-php-sdk:^2.0.27"`
 - 已安装旧版本时：先调整 `composer.json` 版本约束，再执行 `composer update huifurepo/dg-php-sdk --with-all-dependencies`
 - 聚合支付核心主链路优先 `BsPaySdk\core\Payment`
 - 聚合对账与托管支付优先 `BsPayClient::postRequest()`
 
-如果 Composer 不可用，使用 `https://api.github.com/repos/huifurepo/bspay-php-sdk/zipball/cc7bf93d0e77230097efdd610996d237e4a26298` 手动下载当前基线，解压后让 `HUIFU_SDK_ROOT` 指向实际 `BsPaySdk` 目录并校验 `init.php`。
+如果 Composer 不可用，使用 `https://api.github.com/repos/huifurepo/bspay-php-sdk/zipball/refs/tags/2.0.27` 手动下载当前基线，解压后让 `HUIFU_SDK_ROOT` 指向实际 `BsPaySdk` 目录并校验 `init.php`。
 
 当前 Skill 包不再内置 PHP 模板资产或非官方自维护 client。需要核对请求头、签名、HTTP 发送链路差异时，先读 `references/shared-request-header-policy.md` 与 `references/shared-signing-v2.md`；如果问题是控台 Webhook 验签，再读 `references/shared-webhook-signing.md`。必要时检查项目实际安装的官方 SDK 源码；不要用历史自维护实现替代官方 SDK 主链路。
 
@@ -76,4 +78,5 @@ PHP 场景默认以官方 Composer 包 `huifurepo/dg-php-sdk` 落地：
 - `project_id`、`callback_url`、`sub_openid`、`buyer_id`、`auth_code`、`devs_id` 等运行时值必须来自真实业务链路
 - 前端回调不等于最终支付成功，最终状态仍要以服务端查询或异步通知为准
 - PHP 如果使用当前 Skill 包对齐的官方 SDK 主链路，且初始化时已给 `MerConfig.skill_source` 赋值，SDK 会自动带出 skill 相关来源头
-- 如果脚本语言没有官方 SDK 自动补头能力，必须按 `references/shared-request-header-policy.md` 手动补头
+- Python 如果使用当前 Skill 包对齐的官方 `dg-sdk 2.0.21`，必须固定 `DGClient.env = "prod"`、显式传入 `MerConfig.jpt_x_skill_source`，并在每个 request 对象中设置本次真实 `huifu_id`；SDK 会从请求参数自动推导 `jpt-x-skill-huifu_id`，并使用 `jpt-sdk_version` 上送 SDK 版本。安装或版本核对失败时必须显式报错并停止，不要无版本安装或降级。
+- 如果其他脚本语言没有官方 SDK 自动补头能力，或当前实现绕开了官方 SDK 主链路，必须按 `references/shared-request-header-policy.md` 手动补头

@@ -55,7 +55,7 @@
 | `time_expire` | 业务超时策略 | 如不明确可不传，不要乱填过期时间 |
 | `acct_split_bunch` | 分账业务配置 | 只有要做分账时才准备 |
 | `terminal_device_data` | 终端 / 设备采集链路 | 反扫、终端报备、银联场景常见 |
-| `tx_metadata` | 其他扩展能力开关 | 保留为扩展入口，但不要把已确认属于顶层的补贴类字段混塞进去 |
+| `combinedpay_data` / `combinedpay_data_fee_info` / `trans_fee_allowance_info` | 补贴与手续费补贴能力配置 | 按能力名直接作为请求顶层扩展字段传；不要包进 `tx_metadata` |
 
 ### 微信类场景
 

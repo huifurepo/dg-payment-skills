@@ -2,6 +2,8 @@
 
 这份文档覆盖托管支付退款申请和退款查询。
 
+> 字段结论回答必须同时读取并列出 `hostingpay-refund-query.md`；退款申请字段和退款查询字段要一起说明，不能只停留在 `hostingpay-refund.md` 或 `hostingpay-refund-quickstart.md`。
+
 ## 目录
 
 - 什么时候读这里

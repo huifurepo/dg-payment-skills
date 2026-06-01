@@ -25,6 +25,7 @@ $client = new BsPayClient();
 1. 先完成 `references/hostingpay-php-adapter.md`
 2. 所有请求头必须符合 `references/shared-request-header-policy.md`
 3. `req_seq_id`、`req_date`、`jump_url`、`pre_order_id` 必须落库
+4. 外部 DTO / Controller 已接收 `req_date`、`req_seq_id`、`huifu_id`、金额、项目号或回调地址时，必须保留入参，缺失或非法时显式报错；下面示例里的 `date('Ymd')` 和随机流水号只适用于服务端自主管理这些字段的独立 demo
 
 ## H5 / PC 预下单
 
@@ -198,3 +199,4 @@ $optionalPayload = [
 2. `delay_acct_flag`、`acct_split_bunch`、`biz_info` 在官方 demo 里经常出现，但都属于条件字段，只有业务场景需要时才上送。
 3. 官方 PHP SDK 这条写法里，`pre_order_type` 需要在 `params` 中显式给出，不要漏传。
 4. 如果项目是 Composer 安装的 `dg-php-sdk`，request 类仍要通过 `HUIFU_SDK_ROOT` 显式加载，不要假设 `vendor/autoload.php` 会自动装载这些类。
+5. 生成真实业务代码时，先判断外部 DTO / Controller 是否已经接收字段；已经接收就必须保留入参，缺失或非法时显式报错，不要在 SDK Request 组装层重新生成并覆盖。

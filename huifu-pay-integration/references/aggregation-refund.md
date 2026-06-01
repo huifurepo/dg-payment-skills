@@ -62,15 +62,13 @@
 | `org_req_seq_id` | C | 原交易请求流水号；与另外两项三选一 |
 | `remark` | N | 备注，原样返回 |
 | `notify_url` | N | 退款异步通知地址 |
-| `tx_metadata` | N | 扩展参数集合，JSON Object 字符串 |
-
-### `tx_metadata`
-
-| 参数 | 必填 | 说明 |
-| --- | --- | --- |
 | `acct_split_bunch` | N | 分账退款对象，JSON Object 字符串 |
 | `combinedpay_data` | N | 补贴支付退款信息，JSON Array 字符串 |
 | `terminal_device_data` | N | 设备信息，JSON Object 字符串 |
+
+### 交易能力扩展字段
+
+字段结论必须明确：请求侧不传 `tx_metadata` 包装层；不要传 `tx_metadata`；按实际扩展能力直接传它下面的字段，例如 `acct_split_bunch`、`combinedpay_data`、`terminal_device_data`。
 
 #### `acct_split_bunch.acct_infos[]`
 

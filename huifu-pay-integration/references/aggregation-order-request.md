@@ -2,7 +2,7 @@
 
 > 本文只覆盖请求侧参数；渠道扩展参数请继续阅读各渠道分册。
 > 
-> Java SDK 复核基线：`TradePaymentCreateRequest` 独立字段包含 `trade_type`、`method_expand`、`acct_split_bunch`、`terminal_device_data`；`combinedpay_data`、`combinedpay_data_fee_info`、`trans_fee_allowance_info` 作为请求顶层扩展字段通过 `addExtendInfo(...)` / `optional(...)` 注入；`tx_metadata` 单独通过 `request.optional(...)` 或 `Factory.Payment.Common().optional(...)` 注入。
+> Java SDK 复核基线：`TradePaymentCreateRequest` 独立字段包含 `trade_type`、`method_expand`、`acct_split_bunch`、`terminal_device_data`；`combinedpay_data`、`combinedpay_data_fee_info`、`trans_fee_allowance_info` 作为请求顶层扩展字段通过 `addExtendInfo(...)` / `optional(...)` 注入。`tx_metadata` 本身不作为请求字段上送，文档中的交易能力扩展按能力名直接传对应字段。
 
 
 ## 目录
@@ -59,7 +59,6 @@
 | `combinedpay_data` | 补贴支付信息 | String(JSON Array) | - | C | 顶层扩展字段；有补贴支付场景时传，Java SDK 通过 `addExtendInfo(...)` / `optional(...)` 注入 |
 | `combinedpay_data_fee_info` | 补贴支付手续费承担方信息 | String(JSON Object) | - | C | 顶层扩展字段；有明确承担方时传，Java SDK 通过 `addExtendInfo(...)` / `optional(...)` 注入 |
 | `trans_fee_allowance_info` | 手续费补贴信息 | String(JSON Object) | - | C | 顶层扩展字段；有手续费补贴场景时传，Java SDK 通过 `addExtendInfo(...)` / `optional(...)` 注入 |
-| `tx_metadata` | 扩展参数集合 | String(JSON Object) | - | C | 保留为顶层扩展 key，但不要把已确认属于顶层的补贴类字段混塞进去 |
 
 ## `trade_type` 枚举
 
@@ -141,13 +140,13 @@
 - 官方把 `method_expand` 标成 Y，但真实是否有强制子字段取决于 `trade_type`。
 - `acct_split_bunch`、`terminal_device_data` 是请求顶层字段，不要再包进 `tx_metadata`。
 - 开发确认后，`combinedpay_data`、`combinedpay_data_fee_info`、`trans_fee_allowance_info` 也按请求顶层扩展字段处理，不要再包进 `tx_metadata`。
-- `tx_metadata` 仍保留为扩展参数集合入口，但不要把已确认属于顶层的补贴类字段混塞进去；完整边界见 `references/aggregation-order-tx-metadata.md`。
+- `tx_metadata` 本身不作为请求字段上送；完整边界见 `references/aggregation-order-tx-metadata.md`。
 
 ## 参数校验与构造约束
 
 - `trade_type` 先决定场景，再构造该场景自己的 `method_expand` 对象。
-- `method_expand` 的 JSON 内容就是当前渠道对象本身，不要再写成 `{\"T_MINIAPP\": {...}}`、`{\"A_JSAPI\": {...}}` 这种包装结构。
-- `method_expand`、`acct_split_bunch`、`terminal_device_data`、`combinedpay_data`、`combinedpay_data_fee_info`、`trans_fee_allowance_info`、`tx_metadata` 在业务层不要设计成裸字符串；优先用 DTO / `Map` / `List` / `ObjectNode` 建模。
+- `method_expand` 的 JSON 内容就是当前渠道对象本身，不要再写成带 `T_MINIAPP`、`A_JSAPI` 等支付类型包装 key 的结构。
+- `method_expand`、`acct_split_bunch`、`terminal_device_data`、`combinedpay_data`、`combinedpay_data_fee_info`、`trans_fee_allowance_info` 在业务层不要设计成裸字符串；优先用 DTO / `Map` / `List` / `ObjectNode` 建模。
 - 只在调用 SDK 前做一次 JSON 序列化，不要在代码里手写长字符串常量。
 - 对象一旦出现，就要保证子结构完整；不要只传一个空壳对象或半截 JSON。
 - `sub_openid`、`buyer_id`、`user_id`、`auth_code`、`customer_ip`、`devs_id` 这类值若无明确来源，应先暴露缺口，不要让模型补示例值。
@@ -172,8 +171,5 @@ if (cmd.getCombinedpayDataFeeInfo() != null) {
 }
 if (cmd.getTransFeeAllowanceInfo() != null) {
     request.addExtendInfo("trans_fee_allowance_info", objectMapper.writeValueAsString(cmd.getTransFeeAllowanceInfo()));
-}
-if (cmd.getTxMetadata() != null) {
-    request.optional("tx_metadata", objectMapper.writeValueAsString(cmd.getTxMetadata()));
 }
 ```

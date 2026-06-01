@@ -11,13 +11,16 @@
 
 ## 当前版本事实
 
-`1.2.0` 这一版已经包含：
+`1.2.2` 这一版已经包含：
 
 - 单 Skill 结构
 - 平铺 `references/`
 - 官方 PHP SDK 落地口径
-- PHP SDK 包基线为 `huifurepo/dg-php-sdk 2.0.26`
-- 聚合支付 PHP 的下单、查询、关单、退款、对账边界
+- 官方 Python SDK 落地口径
+- PHP SDK 包基线为 `huifurepo/dg-php-sdk 2.0.27`
+- Python SDK 包基线为 `dg-sdk 2.0.21`；安装或版本核对失败时不得无版本安装或降级
+- 聚合支付 PHP / Python 的下单、查询、关单、退款、对账边界
+- 托管支付 PHP / Python 的预下单、查询、关单、退款、对账边界
 - `HUIFU_SKILL_SOURCE` 最终上送值保持 `<skill_source>` 原样透传
 
 ## 何时需要升级版本
@@ -34,6 +37,7 @@
 - `README.md`
 - `CHANGELOG.md`
 - 共享矩阵中的 SDK 版本口径
+- Python references、共享矩阵和请求头策略中的 `dg-sdk` 版本口径
 - 请求头策略中的版本号和 `skill-source` 规则
 - 业务文档中的数量、日期和覆盖范围描述
 

@@ -7,8 +7,8 @@
 
 | 项目 | 内容 |
 | --- | --- |
-| 当前适配 SDK | `dg-java-sdk` `3.0.36`（当前仓库示例基线） |
-| 当前文档口径 | 当前仓库与 Skill 常量统一为 `3.0.36` |
+| 当前适配 SDK | `dg-java-sdk` `3.0.37`（当前仓库示例基线） |
+| 当前文档口径 | 当前仓库与 Skill 常量统一为 `3.0.37` |
 | 最低运行时 | JDK 1.8+ |
 | 初始化入口 | `MerConfig` + `BasePay.initWithMerConfig()` |
 | 主要调用方式 | `BasePayClient.request()` |

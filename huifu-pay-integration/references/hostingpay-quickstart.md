@@ -53,7 +53,7 @@
 <dependency>
     <groupId>com.huifu.bspay.sdk</groupId>
     <artifactId>dg-java-sdk</artifactId>
-    <version>3.0.36</version>
+    <version>3.0.37</version>
 </dependency>
 ```
 

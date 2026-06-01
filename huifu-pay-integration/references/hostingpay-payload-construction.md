@@ -98,6 +98,8 @@ extendInfoMap.put("biz_info", objectMapper.writeValueAsString(cmd.getBizInfo()))
 
 ```java
 public class H5PreOrderCommand {
+    private String reqDate;
+    private String reqSeqId;
     private String huifuId;
     private String transAmt;
     private String goodsDesc;
@@ -113,8 +115,8 @@ public V2TradeHostingPaymentPreorderH5Request buildRequest(
 
     V2TradeHostingPaymentPreorderH5Request request =
             new V2TradeHostingPaymentPreorderH5Request();
-    request.setReqDate(DateTools.getCurrentDateYYYYMMDD());
-    request.setReqSeqId(SequenceTools.getReqSeqId32());
+    request.setReqDate(cmd.getReqDate());
+    request.setReqSeqId(cmd.getReqSeqId());
     request.setHuifuId(cmd.getHuifuId());
     request.setTransAmt(cmd.getTransAmt());
     request.setGoodsDesc(cmd.getGoodsDesc());
@@ -135,11 +137,13 @@ public V2TradeHostingPaymentPreorderH5Request buildRequest(
 }
 ```
 
+如果外部 DTO / Controller 已经接收 `req_date`、`req_seq_id`、`notify_url`、`project_id`、金额或商户号，Builder 只能校验和映射，不要在 Builder 里重新生成并覆盖。只有当前服务端明确拥有字段生成权，且生成值会落库供后续查询、关单、退款复用时，才允许在进入 Builder 之前生成。
+
 ## 校验建议
 
 ### 第一层：DTO 基础校验
 
-- 金额、日期、URL、ID 长度、枚举值
+- `req_date`、`req_seq_id`、金额、日期、URL、ID 长度、枚举值
 - 字段是否为空
 
 ### 第二层：场景组合校验

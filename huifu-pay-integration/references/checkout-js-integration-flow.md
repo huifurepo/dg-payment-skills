@@ -1,6 +1,6 @@
 # 前端收银台接入主链路
 
-> 这份文档只回答一个问题：`references/checkout-js.md` 在真实项目里应该怎么串起前端页面、服务端预下单、JS SDK 与最终查单确认。
+> 这份文档只回答一个问题：`references/checkout-js.md` 在真实项目里应该怎么串起前端页面、服务端预下单、JS SDK 与最终状态确认。最终确认必须同时列出 `hostingpay-query.md` 和 `hostingpay-async-webhook.md`，不能只列查单。
 
 ## 主链路
 
@@ -29,7 +29,7 @@
 1. 先看 `references/hostingpay-customer-preparation.md` 确认 `project_id`、`callback_url`、支付方式开通状态等来源。
 2. 再看 `references/hostingpay-preorder-h5-pc-request.md` 明确服务端预下单字段。
 3. 再读 `references/checkout-js.md` 落 `HFPay`、`createPreOrder` 与组件挂载。
-4. 支付后使用 `references/hostingpay-query.md` 做最终确认。
+4. 支付后同时看 `references/hostingpay-query.md` 与 `references/hostingpay-async-webhook.md` 做最终确认闭环。
 
 ## 接入前必须先确认
 

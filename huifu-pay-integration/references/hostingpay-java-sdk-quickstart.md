@@ -15,7 +15,7 @@
 | 属性 | 值 |
 |-----|-----|
 | SDK 名称 | dg-java-sdk |
-| 当前版本 | 3.0.36 |
+| 当前版本 | 3.0.37 |
 | GroupId | com.huifu.bspay.sdk |
 | ArtifactId | dg-java-sdk |
 
@@ -27,7 +27,7 @@
 <dependency>
     <groupId>com.huifu.bspay.sdk</groupId>
     <artifactId>dg-java-sdk</artifactId>
-    <version>3.0.36</version>
+    <version>3.0.37</version>
 </dependency>
 ```
 
@@ -75,7 +75,7 @@ public class HuifuConfig {
     @Value("${huifu.rsa-public-key}")
     private String rsaPublicKey;
 
-    @Value("${huifu.skill-source:hfps/1.2.0}")
+    @Value("${huifu.skill-source:hfps/1.2.2}")
     private String skillSource;
 
     @PostConstruct
@@ -98,7 +98,7 @@ public class HuifuConfig {
 1. `setProcutId()` 不是拼写错误，是 SDK 原生方法名，请勿改为 `setProductId()`
 2. SDK 初始化在 `@PostConstruct` 中执行，应用启动时仅执行**一次**
 3. 所有配置通过 `@Value` 从 `application.yml` 读取，配置文件通过环境变量注入
-4. `skillSource` 默认可直接使用 `hfps/1.2.0`；如需覆盖，可通过配置项 `huifu.skill-source` 传入，初始化时按 `<skill_source>` 原样透传
+4. `skillSource` 默认可直接使用 `hfps/1.2.2`；如需覆盖，可通过配置项 `huifu.skill-source` 传入，初始化时按 `<skill_source>` 原样透传
 
 ## 步骤 3：验证核心类导入
 

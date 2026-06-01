@@ -1,6 +1,6 @@
-# 聚合下单扩展字段边界：请求顶层、`tx_metadata` 与返回扩展对象
+# 聚合下单交易能力扩展边界：请求顶层与返回 `tx_metadata`
 
-> 这份文件只做一件事：把“请求怎么传”和“返回怎么收”分开。开发确认后，请求侧 `acct_split_bunch`、`terminal_device_data`、`combinedpay_data`、`combinedpay_data_fee_info`、`trans_fee_allowance_info` 都按 `data` 顶层字段处理；不要再把后 3 个补贴类字段包进请求 `tx_metadata`。同步 / 查询返回里，部分扩展对象仍可能放在返回 `tx_metadata` 下；异步回调里，这些对象又可能直接展开在 `resp_data` 顶层。
+> 这份文件只做一件事：把“请求怎么传”和“返回怎么收”分开。请求侧 `tx_metadata` 本身不作为请求字段上送；`acct_split_bunch`、`terminal_device_data`、`combinedpay_data`、`combinedpay_data_fee_info`、`trans_fee_allowance_info` 都按 `data` 顶层字段处理。同步 / 查询返回里，部分扩展对象仍可能放在返回 `tx_metadata` 下；异步回调里，这些对象又可能直接展开在 `resp_data` 顶层。
 
 
 ## 目录
@@ -20,13 +20,13 @@
 | `data.combinedpay_data` | 补贴支付信息 | `request.addExtendInfo(...)` / `client.optional(...)` | 请求顶层扩展字段 |
 | `data.combinedpay_data_fee_info` | 补贴支付手续费承担方信息 | `request.addExtendInfo(...)` / `client.optional(...)` | 请求顶层扩展字段 |
 | `data.trans_fee_allowance_info` | 手续费补贴信息 | `request.addExtendInfo(...)` / `client.optional(...)` | 请求顶层扩展字段 |
-| `data.tx_metadata` | 其他扩展参数集合 | `request.optional("tx_metadata", json)` | 保留为扩展入口，但不要混塞已确认属于顶层的补贴类字段 |
 
 关键约束：
 
+- 请求时不要传 `tx_metadata` 包装层。
 - 请求时不要把 `acct_split_bunch`、`terminal_device_data` 塞进 `tx_metadata`。
 - 请求时也不要把 `combinedpay_data`、`combinedpay_data_fee_info`、`trans_fee_allowance_info` 再包进 `tx_metadata`。
-- 这 3 个补贴类字段现在按开发确认的真实请求口径，直接作为 `data` 顶层扩展字段上送。
+- 这些交易能力扩展字段现在按开发确认的真实请求口径，直接作为 `data` 顶层字段或顶层扩展字段上送。
 
 ## 请求顶层扩展字段
 
@@ -238,7 +238,7 @@
 ## 结构边界说明
 
 - 请求侧 `acct_split_bunch`、`terminal_device_data`、`combinedpay_data`、`combinedpay_data_fee_info`、`trans_fee_allowance_info` 都按 `data` 顶层字段处理。
-- `tx_metadata` 不再承担这 3 个补贴类请求字段的包装职责；不要再把它们塞进去。
+- `tx_metadata` 不再承担请求字段的包装职责；请求时不要传这个包装层。
 - 查询返回里，补贴类对象仍常放在返回 `tx_metadata` 下；异步回调里，同名扩展对象可能直接展开在 `resp_data` 顶层。
 - 同步 / 查询返回 `tx_metadata.terminal_device_data` 和异步 `mer_dev_location` 都是定位对象，只含 `terminal_ip` / `terminal_location`，不要按请求侧设备指纹结构去解析。
 - `payment_fee` 是汇付返回的独立手续费对象，不属于请求参数本体。

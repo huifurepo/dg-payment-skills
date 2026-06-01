@@ -20,12 +20,12 @@
 |-----|------|
 | `references/aggregation-order.md` | 场景总览与阅读入口 |
 | `references/aggregation-customer-preparation.md` | 客户前置准备清单、场景参数来源 |
-| `references/aggregation-payload-construction.md` | `method_expand` / 顶层扩展字段 / `tx_metadata` 参数校验与序列化规范 |
+| `references/aggregation-payload-construction.md` | `method_expand` / 顶层交易能力扩展字段参数校验与序列化规范 |
 | `references/aggregation-order-request.md` | 公共请求参数与顶层字段 |
 | `references/aggregation-order-method-wechat.md` | 微信请求与回调字段 |
 | `references/aggregation-order-method-alipay.md` | 支付宝请求与回调字段 |
 | `references/aggregation-order-method-unionpay.md` | 银联请求与回调字段 |
-| `references/aggregation-order-tx-metadata.md` | 请求顶层字段、保留的 `tx_metadata` 入口、返回扩展对象的边界说明 |
+| `references/aggregation-order-tx-metadata.md` | 请求顶层交易能力扩展字段与返回 `tx_metadata` 的边界说明 |
 | `references/aggregation-order-response.md` | 同步返回、异步回调、解冻通知 |
 | `references/aggregation-order-errors.md` | 返回码与文档勘误 |
 
@@ -33,6 +33,6 @@
 
 - 先确认客户是否已经准备好 `trade_type` 对应的运行时值，例如 `sub_openid`、`buyer_id`、`user_id`、`auth_code`、`customer_ip`、`devs_id`。
 - 先确认官方开发指引要求的业务开通、应用配置、授权绑定动作已经完成；这些不是补参数可以替代的。
-- `method_expand`、`acct_split_bunch`、`terminal_device_data`、`combinedpay_data`、`combinedpay_data_fee_info`、`trans_fee_allowance_info`、`tx_metadata` 在业务层应保持对象结构，做完校验后再统一转成 JSON 字符串。
+- `method_expand`、`acct_split_bunch`、`terminal_device_data`、`combinedpay_data`、`combinedpay_data_fee_info`、`trans_fee_allowance_info` 在业务层应保持对象结构，做完校验后再统一转成 JSON 字符串；`tx_metadata` 本身不作为请求字段上送。
 - 条件必填字段建议在客户自己的 API 层先拦截，不要把缺参请求直接打进 SDK。
 - 微信 / 支付宝 / 银联官方开发指引都要求：前端收到支付完成回调后，后端仍需调用查询订单 API 确认最终状态。

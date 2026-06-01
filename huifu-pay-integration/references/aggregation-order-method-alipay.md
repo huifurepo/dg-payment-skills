@@ -25,7 +25,7 @@
 
 - `trade_type` 负责选择支付宝场景。
 - `method_expand` 的 JSON 内容直接就是支付宝对象本身。
-- 不要再写成 `{ "A_JSAPI": {...} }`、`{ "A_MICROPAY": {...} }` 这种带场景 key 的包装结构。
+- 不要再写成带 `A_JSAPI`、`A_MICROPAY` 等场景 key 的包装结构。
 
 ## 官方接入前准备
 

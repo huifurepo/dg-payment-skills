@@ -17,6 +17,8 @@ use BsPaySdk\core\BsPayClient;
 $client = new BsPayClient();
 ```
 
+字段保留规则：外部 DTO / Controller 已接收 `req_date`、`req_seq_id`、`huifu_id`、退款金额、通知地址、原交易或原退款定位键时，必须保留入参，缺失或非法时显式报错。下面示例里的 `date('Ymd')` 和随机流水号只适用于服务端自主管理这些字段的独立 demo，不得覆盖上游传入值。
+
 ## 发起退款
 
 ```php
@@ -115,3 +117,4 @@ $result = $client->postRequest([
 4. 线上退款优先准备真实的风控与设备信息，再发起请求。
 5. 退款查询时 `org_hf_seq_id` 和 `org_req_seq_id` 二选一即可，但不能同时留空。
 6. 如果项目是 Composer 安装的 `dg-php-sdk`，request 类仍要通过 `HUIFU_SDK_ROOT` 显式加载，不要省掉这一步。
+7. 生成真实业务代码时，先判断外部 DTO / Controller 是否已经接收字段；已经接收就必须保留入参，缺失或非法时显式报错，不要在 SDK Request 组装层重新生成并覆盖。

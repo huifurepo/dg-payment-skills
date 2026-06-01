@@ -24,7 +24,7 @@
 
 - `trade_type` 负责选择银联场景。
 - `method_expand` 的 JSON 内容直接就是银联对象本身。
-- 不要再写成 `{ "U_JSAPI": {...} }`、`{ "U_MICROPAY": {...} }` 这种带场景 key 的包装结构。
+- 不要再写成带 `U_JSAPI`、`U_MICROPAY` 等场景 key 的包装结构。
 
 ## 官方接入前准备
 
