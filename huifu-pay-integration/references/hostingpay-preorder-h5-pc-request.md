@@ -44,7 +44,7 @@
 | `delay_acct_flag` | 是否延迟交易 | String | 1 | N | `Y`=延迟，`N`=不延迟；默认 `N` |
 | `multi_pay_way_flag` | 是否支持切换支付方式 | String | 1 | N | `Y`=支持切换，`N`=不支持；默认 `N` |
 | `acct_split_bunch` | 分账对象 | String | 2000 | N | JSON 对象字符串 |
-| `hosting_data` | 半支付托管扩展参数集合 | String | 2000 | Y | JSON 对象字符串 |
+| `hosting_data` | 统一收银台扩展参数集合 | String | 2000 | Y | JSON 对象字符串 |
 | `time_expire` | 交易失效时间 | String | 14 | N | 格式 `yyyyMMddHHmmss`；默认 10 分钟 |
 | `biz_info` | 业务信息 | String | 2000 | N | JSON 对象字符串 |
 | `notify_url` | 交易异步通知地址 | String | 512 | N | `http` 或 `https` 开头；交易成功或失败时触发 |
@@ -57,6 +57,8 @@
 | `terminal_device_data` | 设备信息 | String | 2048 | N | JSON 对象字符串 |
 | `largeamt_data` | 大额支付参数集合 | String | 2500 | N | JSON 对象字符串 |
 | `fee_sign` | 手续费场景标识 | String | 32 | N | 微信、支付宝交易时生效；不传时走商户默认费率 |
+| `fee_split_flag` | 是否交易手续费分摊 | String | 1 | N | `Y`=分摊，`N`=不分摊；不传默认 `N` |
+| `fee_flag` | 手续费扣款标志 | String | 1 | N | `1`=外扣，`2`=内扣；默认取控台配置 |
 
 ## `trans_type` 支持值
 
@@ -105,7 +107,7 @@
 | 参数 | 中文名 | 类型 | 长度 | 必填 | 说明 |
 |------|--------|------|------|------|------|
 | `project_title` | 项目标题 | String | 64 | Y | 用于账单页面展示 |
-| `project_id` | 半支付托管项目号 | String | 32 | Y | 商户创建的半支付托管项目号 |
+| `project_id` | 托管项目号 | String | 32 | Y | 商户创建的统一收银台托管项目号 |
 | `private_info` | 商户私有信息 | String | 255 | N | 异步通知和主动查询接口中的 `remark` 原样返回 |
 | `callback_url` | 回调地址 | String | 512 | N | 支付成功后跳转回该地址；不填则停留当前页面 |
 | `request_type` | 请求类型 | String | 1 | C | `P`=PC 页面版，默认；`M`=H5 页面版；指定 `trans_type` 时必填 |

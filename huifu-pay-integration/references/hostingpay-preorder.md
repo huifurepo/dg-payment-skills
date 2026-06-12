@@ -1,6 +1,6 @@
 # 托管支付预下单
 
-这份文档覆盖 H5/PC、支付宝小程序、微信小程序三类托管预下单场景。
+这份文档覆盖 H5/PC、支付宝小程序、微信小程序和抖音直连四类托管预下单场景。
 
 ## 什么时候读这里
 
@@ -16,7 +16,7 @@
   -> 调用 v2/trade/hosting/payment/preorder
   -> 保存 pre_order_id / req_seq_id / req_date
   -> 前端跳转或接入 checkout-js
-  -> 回到 hostingpay-query 做最终确认
+  -> 回到 hostingpay-async-webhook + hostingpay-query 做服务端最终确认闭环
 ```
 
 ## pre_order_type 对照
@@ -26,6 +26,7 @@
 | H5 / PC | `1` |
 | 支付宝小程序 | `2` |
 | 微信小程序 | `3` |
+| 抖音直连 | `4` |
 
 ## 关键前置条件
 
@@ -34,6 +35,7 @@
 | H5 / PC | 控台托管项目、`project_id`、支付方式配置 |
 | 支付宝小程序 | 托管支付权限、费率和 `app_data` / `alipay_data` |
 | 微信小程序 | 托管授权、应用 ID、`miniapp_data.seq_id` |
+| 抖音直连 | 抖音开放平台应用、`dy_data.sub_appid`、`busi_scene` 和真实客户端 IP |
 | 全场景 | 合规的 `notify_url` 和真实 `callback_url` |
 
 ## 通用请求字段
@@ -47,6 +49,7 @@
 | `trans_amt` | 交易金额 |
 | `goods_desc` | 商品描述 |
 | `notify_url` | 异步通知地址 |
+| `fee_split_flag` | 是否交易手续费分摊，新版托管预下单字段，`Y`=分摊、`N`=不分摊 |
 
 ## 请求头强制约束
 
@@ -69,8 +72,9 @@
 ## 协作边界
 
 - 如果前端要自己渲染支付入口，下一步读 `references/checkout-js.md`
+- 如果是抖音直连下单，下一步读 `references/hostingpay-preorder-douyin-direct.md`
 - 页面回跳只代表前端流程结束，不代表订单最终成功
-- 最终状态仍要回到 `references/hostingpay-query.md`
+- 最终状态必须回到服务端闭环：异步通知验签/幂等 + `references/hostingpay-query.md` 查单二次确认或补偿查询
 
 ## PHP 路径
 
@@ -84,4 +88,4 @@
 ## 下一步
 
 - 前端嵌入收银台：读 `references/checkout-js.md`
-- 服务端查单：读 `references/hostingpay-query.md`
+- 服务端最终确认闭环：读 `references/hostingpay-async-webhook.md` 和 `references/hostingpay-query.md`

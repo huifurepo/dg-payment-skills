@@ -78,10 +78,10 @@ npm install @dg-elements/js-sdk
 ## 关键边界
 
 - 前端 `callback` 只代表前端流程结束，不代表最终支付成功
-- 最终订单状态仍要由服务端查询或异步通知确认
+- 最终订单状态必须由服务端闭环确认：异步通知需验签、幂等和状态锁，必要时通过托管查单二次确认或补偿查询
 - `project_id`、`callback_url` 等值必须来自真实项目配置，不要让模型猜
 
 ## 下一步
 
 - 服务端预下单能力：读 `references/hostingpay-preorder.md`
-- 支付完成后的最终确认：读 `references/hostingpay-query.md`
+- 支付完成后的最终确认闭环：读 `references/hostingpay-async-webhook.md` 和 `references/hostingpay-query.md`

@@ -1,6 +1,6 @@
 # 请求头策略
 
-本文件定义当前 Skill 包在 `1.2.2` 版本下的统一请求头约束。
+本文件定义当前 Skill 包在 `1.3.0` 版本下的统一请求头约束。
 
 ## 目录
 
@@ -37,7 +37,7 @@
 - 当前 Python SDK 基线会把 `MerConfig.jpt_x_skill_source` 的值透传到 `jpt-x-skill-source`
 - 当前 Python SDK 基线会从最终请求参数 `data.huifu_id` 自动推导 `jpt-x-skill-huifu_id`
 - 当前 Python SDK 的 `MerConfig` 不接收 `jpt_x_skill_huifu_id`；业务侧必须保证每次 request 对象中的 `huifu_id` 是本次真实商户号
-- Python SDK 的 `jpt-sdk_version` 请求头为 `python_2.0.21`
+- Python SDK 的 `jpt-sdk_version` 请求头为 `python_2.0.22`
 
 源码核对提示：
 
@@ -50,6 +50,7 @@
 
 - `v2/trade/hosting/payment/preorder`
 - `v2/trade/hosting/payment/queryorderinfo`
+- `v2/trade/hosting/payment/splitpay/query`
 - `v2/trade/hosting/payment/close`
 - `v2/trade/hosting/payment/htRefund`
 - `v2/trade/hosting/payment/queryRefundInfo`
@@ -59,7 +60,7 @@ Java 官方 SDK 请求头：
 
 | Header | 值 |
 | --- | --- |
-| `sdk_version` | `javaSDK_3.0.37` |
+| `sdk_version` | `javaSDK_3.0.38` |
 | `jpt-x-skill-source` | `<skill_source>` |
 
 条件性 `huifu_id` 约束：
@@ -79,7 +80,7 @@ Python 官方 SDK 请求头：
 
 | Header | 值 |
 | --- | --- |
-| `jpt-sdk_version` | `python_2.0.21` |
+| `jpt-sdk_version` | `python_2.0.22` |
 | `jpt-x-skill-source` | `MerConfig.jpt_x_skill_source` |
 | `jpt-x-skill-huifu_id` | SDK 从最终请求参数 `data.huifu_id` 自动取值；没有 `huifu_id` 时为空 |
 | `Content-Type` | 非文件请求为 `application/json;charset=utf-8` |
@@ -125,7 +126,7 @@ Python 官方 SDK 请求头：
 
 | Header | 值 |
 | --- | --- |
-| `jpt-sdk_version` | `python_2.0.21` |
+| `jpt-sdk_version` | `python_2.0.22` |
 | `jpt-x-skill-source` | `MerConfig.jpt_x_skill_source` |
 | `jpt-x-skill-huifu_id` | SDK 从最终请求参数 `data.huifu_id` 自动取值；没有 `huifu_id` 时为空 |
 | `Content-Type` | 非文件请求为 `application/json;charset=utf-8` |

@@ -13,12 +13,25 @@ EXPECTED_OPENAI_YAML = EXPECTED_SKILL_DIR / "agents" / "openai.yaml"
 EXPECTED_SKILL_TOP_LEVEL = {"SKILL.md", "agents", "references"}
 EXPECTED_REFERENCES = {
     "aggregation-async-webhook.md",
+    "official-service-source-index.md",
+    "skill-version-policy.md",
+    "canonical-regression-prompts.md",
+    "copilot-onboarding.md",
+    "copilot-solution-selection.md",
+    "copilot-solution-cards.md",
+    "copilot-existing-system.md",
+    "copilot-troubleshooting-playbooks.md",
+    "copilot-parameter-review.md",
+    "copilot-go-live-checklist.md",
+    "merchant-onboarding-faq.md",
     "shared-overview.md",
     "shared-signing-v2.md",
+    "shared-webhook-signing.md",
     "shared-async-notify.md",
     "shared-credential-boundary.md",
     "shared-copyright-notice.md",
     "shared-request-header-policy.md",
+    "shared-request-field-preservation.md",
     "shared-server-sdk-matrix.md",
     "shared-frontend-sdk-matrix.md",
     "shared-versioning-policy.md",
@@ -33,6 +46,8 @@ EXPECTED_REFERENCES = {
     "aggregation-java-adapter.md",
     "aggregation-java-sdk-quickstart.md",
     "aggregation-java-tech-spec.md",
+    "aggregation-python-adapter.md",
+    "aggregation-python-scenarios.md",
     "aggregation-php-adapter.md",
     "aggregation-order.md",
     "aggregation-order-quickstart.md",
@@ -64,6 +79,8 @@ EXPECTED_REFERENCES = {
     "hostingpay-java-adapter.md",
     "hostingpay-java-sdk-quickstart.md",
     "hostingpay-java-tech-spec.md",
+    "hostingpay-python-adapter.md",
+    "hostingpay-python-scenarios.md",
     "hostingpay-php-adapter.md",
     "hostingpay-preorder.md",
     "hostingpay-preorder-quickstart.md",
@@ -75,10 +92,12 @@ EXPECTED_REFERENCES = {
     "hostingpay-preorder-h5-pc-errors.md",
     "hostingpay-preorder-alipay-mini.md",
     "hostingpay-preorder-wechat-mini.md",
+    "hostingpay-preorder-douyin-direct.md",
     "hostingpay-preorder-php-scenarios.md",
     "hostingpay-query.md",
     "hostingpay-query-quickstart.md",
     "hostingpay-query-payment-status-query.md",
+    "hostingpay-query-splitpay.md",
     "hostingpay-query-trade-close.md",
     "hostingpay-query-reconciliation.md",
     "hostingpay-query-php-scenarios.md",
@@ -104,7 +123,7 @@ INLINE_CODE_PATTERN = re.compile(r"`([^`\n]+)`")
 SKIP_PARTS = {".git", ".tmp", ".worktrees", ".codex-tasks", "node_modules", "docs"}
 MIN_SHORT_DESCRIPTION_LENGTH = 25
 MAX_SHORT_DESCRIPTION_LENGTH = 64
-MAX_SKILL_REFERENCE_MENTIONS = 40
+MAX_SKILL_REFERENCE_MENTIONS = 60
 LONG_REFERENCE_TOC_LINE_LIMIT = 100
 LOCAL_PATH_PREFIXES = ("references/", "agents/", "scripts/")
 
@@ -115,12 +134,12 @@ class ValidationState:
     warnings: int = 0
 
     def ok(self, message: str) -> None:
-        print(f"✅ OK:    {message}")
+        print(f"[OK]    {message}")
 
     def warning(self, message: str) -> None:
-        print(f"⚠️ WARN:  {message}")
+        print(f"[WARN]  {message}")
         self.warnings += 1
 
     def error(self, message: str) -> None:
-        print(f"❌ ERROR: {message}")
+        print(f"[ERROR] {message}")
         self.errors += 1

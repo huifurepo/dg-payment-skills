@@ -7,8 +7,8 @@
 
 | 项目 | 内容 |
 | --- | --- |
-| 当前适配 SDK | `dg-java-sdk` `3.0.37`（当前仓库示例基线） |
-| 当前文档口径 | 当前仓库与 Skill 常量统一为 `3.0.37` |
+| 当前适配 SDK | `dg-java-sdk` `3.0.38`（当前仓库示例基线） |
+| 当前文档口径 | 当前仓库与 Skill 常量统一为 `3.0.38` |
 | 最低运行时 | JDK 1.8+ |
 | 初始化入口 | `MerConfig` + `BasePay.initWithMerConfig()` |
 | 主要调用方式 | `BasePayClient.request()` |
@@ -22,8 +22,8 @@
 
 ## Java 特有说明
 
-1. 设置产品号的方法名是 `setProcutId()`。
-   这是 SDK 原生方法名，不要改写成 `setProductId()`。
+1. 设置产品号的方法名是 `setProductId()`。
+   `dg-java-sdk 3.0.38` 源码已使用正常拼写，不要再生成旧文档中的 `setProcutId()`。
 2. Spring Boot 2.x 和 3.x 的 import 不一样。
    2.x 常见是 `javax.*`
    3.x 常见是 `jakarta.*`

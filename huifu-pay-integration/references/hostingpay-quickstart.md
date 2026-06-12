@@ -28,7 +28,7 @@
 | `references/hostingpay-base.md` | 补了进入条件、主流程树、运行时边界和下一步路由 | 第一次进入托管支付路径时先看 |
 | `references/hostingpay-customer-preparation.md` | 补了参数来源矩阵、控台项目创建、费率开通、授权绑定、订单沉淀要求 | 还没开始写代码，先确认客户材料是否齐 |
 | `references/hostingpay-payload-construction.md` | 补了条件必填校验、对象字段建模、JSON 序列化边界 | 需要把复杂对象传进 SDK 时看 |
-| `references/hostingpay-java-sdk-quickstart.md` | 补了 Maven 依赖、Spring Boot 配置类、`setProcutId()` 这类 SDK 细节 | 要落初始化代码时看 |
+| `references/hostingpay-java-sdk-quickstart.md` | 补了 Maven 依赖、Spring Boot 配置类、`setProductId()` 这类 SDK 细节 | 要落初始化代码时看 |
 | `references/hostingpay-java-tech-spec.md` | 补了签名、异步通知、重试、HTTP 状态码、连接超时等技术约束 | 遇到技术边界或联调问题时看 |
 | `references/hostingpay-async-webhook.md` | 补了 `notify_url` / Webhook 区分、报文形态、验签、幂等、应答要求 | 需要接异步通知时看 |
 | `references/hostingpay-common-params.md` | 补了 `sys_id`、`huifu_id`、`trans_stat` 等公共语义，不只给字段名 | 不确定公共字段该怎么理解时看 |
@@ -53,7 +53,7 @@
 <dependency>
     <groupId>com.huifu.bspay.sdk</groupId>
     <artifactId>dg-java-sdk</artifactId>
-    <version>3.0.37</version>
+    <version>3.0.38</version>
 </dependency>
 ```
 
@@ -75,7 +75,7 @@ huifu:
 
 关键注意点：
 - **Spring Boot 3.x** 用户需将 `javax.*` 替换为 `jakarta.*`
-- SDK 方法名为 `setProcutId()`（不是 `setProductId`），这是 SDK 原生拼写
+- SDK 产品号方法名为 `setProductId()`，与 `dg-java-sdk 3.0.38` 源码保持一致
 
 ### 第 5 步：开始调用业务接口
 

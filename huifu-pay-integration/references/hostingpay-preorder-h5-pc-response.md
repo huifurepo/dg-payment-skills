@@ -24,7 +24,7 @@
 | `jump_url` | 支付跳转链接 | String | 256 | Y | 直接跳转该链接即可拉起支付 |
 | `usage_type` | 订单类型 | String | 1 | N | `P`=支付，`R`=充值，默认 `P` |
 | `trans_type` | 交易类型 | String | 256 | N | 多值时表示收银台可用支付类型 |
-| `hosting_data` | 半支付托管扩展参数集合 | String | 2000 | Y | JSON 对象字符串 |
+| `hosting_data` | 统一收银台扩展参数集合 | String | 2000 | Y | JSON 对象字符串 |
 | `current_time` | 系统响应时间 | String | 14 | Y | 格式 `yyyyMMddHHmmss` |
 | `time_expire` | 交易失效时间 | String | 14 | Y | 格式 `yyyyMMddHHmmss` |
 
@@ -33,7 +33,7 @@
 | 参数 | 中文名 | 类型 | 长度 | 必填 | 说明 |
 |------|--------|------|------|------|------|
 | `project_title` | 项目标题 | String | 64 | Y | 账单页展示标题 |
-| `project_id` | 半支付托管项目号 | String | 32 | Y | 商户创建的项目号 |
+| `project_id` | 托管项目号 | String | 32 | Y | 商户创建的统一收银台托管项目号 |
 | `private_info` | 商户私有信息 | String | 255 | N | 异步通知和主动查询中的 `remark` 原样返回 |
 | `callback_url` | 回调地址 | String | 512 | N | 支付成功后跳转回该地址 |
 | `request_type` | 请求类型 | String | 1 | C | `P`=PC 页面版，`M`=H5 页面版 |

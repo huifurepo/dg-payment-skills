@@ -5,6 +5,7 @@
 
 - 公共前提
 - H5 / PC 预下单
+- 抖音直连下单
 - 支付宝小程序预下单
 - 微信小程序预下单
 - 生产写法约束
@@ -68,6 +69,49 @@ $jumpUrl = $response['jump_url'] ?? '';
 1. 最小必填通常是 `req_date`、`req_seq_id`、`huifu_id`、`trans_amt`、`goods_desc`、`pre_order_type`。
 2. `hosting_data.project_id`、`hosting_data.project_title`、`hosting_data.callback_url`、`notify_url` 属于生产接入高频推荐字段，不建议照着官网最小 demo 再删减。
 3. `acct_split_bunch`、`biz_info` 属于条件字段，只有在分账、付款人校验、实名限制等场景才补。
+
+## 抖音直连下单
+
+PHP SDK 使用托管预下单 `V2TradeHostingPaymentPreorderH5Request` 承载抖音直连场景，关键是固定 `pre_order_type=4` 并传入 `dy_data`；不要生成不存在的抖音专属 request 类。
+
+```php
+require_once HUIFU_SDK_ROOT . '/request/V2TradeHostingPaymentPreorderH5Request.php';
+
+use BsPaySdk\request\V2TradeHostingPaymentPreorderH5Request;
+
+$request = new V2TradeHostingPaymentPreorderH5Request();
+$result = $client->postRequest([
+    'funcCode' => $request->getFunctionCode(),
+    'params' => [
+        'req_date' => date('Ymd'),
+        'req_seq_id' => 'DY' . date('YmdHis') . random_int(1000, 9999),
+        'huifu_id' => getenv('HUIFU_MERCHANT_ID'),
+        'trans_amt' => '12.50',
+        'goods_desc' => '抖音订单',
+        'pre_order_type' => '4',
+        'notify_url' => getenv('HUIFU_NOTIFY_URL'),
+        'dy_data' => json_encode([
+            'sub_appid' => getenv('DOUYIN_SUB_APPID'),
+            'busi_scene' => 'H5',
+            'h5_info' => [
+                'type' => 'Wap',
+                'app_name' => getenv('DOUYIN_H5_APP_NAME'),
+                'app_url' => getenv('DOUYIN_H5_APP_URL'),
+            ],
+            'scene_info' => [
+                'payer_client_ip' => $clientIp,
+            ],
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+    ],
+]);
+```
+
+字段拆分：
+
+1. `pre_order_type` 固定传 `4`。
+2. `dy_data` 是 `String(JSON Object)`，必须 `json_encode` 后交给 SDK 签名。
+3. `payer_client_ip` 必须来自真实用户终端 IP，不能写示例值。
+4. 同步 `jump_url` 只用于拉起支付，最终状态仍以异步通知验签、幂等和查单闭环为准。
 
 ## 支付宝小程序预下单
 

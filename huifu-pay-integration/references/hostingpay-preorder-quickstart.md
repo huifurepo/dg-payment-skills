@@ -12,7 +12,7 @@
 - 额外环境变量
 - 常见问题
 
-覆盖三种预下单场景：H5/PC 网页支付、支付宝小程序、微信小程序。开发者接入汇付支付最高频的第一个接口。
+覆盖四种预下单场景：H5/PC 网页支付、支付宝小程序、微信小程序、抖音直连。开发者接入汇付支付最高频的第一个接口。
 
 > **前置依赖**：首次接入请先完成 `references/hostingpay-base.md` 的 SDK 初始化。
 
@@ -33,6 +33,7 @@
 - `references/hostingpay-preorder-h5-pc-errors.md`
 - `references/hostingpay-preorder-alipay-mini.md`
 - `references/hostingpay-preorder-wechat-mini.md`
+- `references/hostingpay-preorder-douyin-direct.md`
 - `references/hostingpay-preorder-php-scenarios.md`
 
 ## 场景选择
@@ -42,6 +43,7 @@
 | H5 手机网页 / PC 网页 | `1` | `references/hostingpay-preorder-h5-pc.md` |
 | 支付宝小程序 | `2` | `references/hostingpay-preorder-alipay-mini.md` |
 | 微信小程序 | `3` | `references/hostingpay-preorder-wechat-mini.md` |
+| 抖音直连 | `4` | `references/hostingpay-preorder-douyin-direct.md` |
 
 ## 官方开发指引确认的接入前置项
 
@@ -49,6 +51,7 @@
 - H5 / PC 微信支付：先配置微信授权域名 `api.huifu.com/hostingH5/`。
 - 微信小程序场景：先完成小程序托管授权、代码发布和 appid 绑定，拿到真实应用 ID `seq_id`。
 - 微信小程序拆单支付：不是普通字段开关，需先特批并开通权限。
+- 抖音直连场景：确认抖音开放平台应用、`dy_data.sub_appid`、`busi_scene` 和真实客户端 IP；可复用托管预下单 request，但必须固定 `pre_order_type=4`，不要按 H5/PC `pre_order_type=1` 场景处理。
 - `notify_url` 需满足官方约束：`http/https`、不重定向、不带参数、自定义端口在 `8000-9005`、收到回调后返回 `200`。
 
 ## 端到端支付流程

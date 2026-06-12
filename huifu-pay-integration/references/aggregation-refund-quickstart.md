@@ -26,5 +26,5 @@
 | 文件 | 内容 |
 |-----|------|
 | `references/aggregation-refund.md` | 退款接口总览与阅读入口 |
-| `references/aggregation-refund.md` | 退款接口（含同步、异步与扩展字段） |
+| `references/aggregation-refund.md` | 退款申请字段、同步返回摘要与扩展字段 |
 | `references/aggregation-refund-query.md` | 退款查询（含退款标识语义与扩展字段） |

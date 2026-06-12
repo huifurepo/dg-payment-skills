@@ -38,7 +38,7 @@
 <dependency>
     <groupId>com.huifu.bspay.sdk</groupId>
     <artifactId>dg-java-sdk</artifactId>
-    <version>3.0.37</version>
+    <version>3.0.38</version>
 </dependency>
 ```
 
@@ -57,7 +57,7 @@ mvn clean install
 | 2.x | `javax.annotation.PostConstruct` |
 | 3.x (JDK 17/21) | `jakarta.annotation.PostConstruct` |
 
-> **[与 dg-java-sdk 的重要区别]** Lightning SDK 的 `MerConfig.setProductId()` 拼写**正常**，不像 dg-java-sdk 的 `setProcutId()`（少一个 d）。
+> **[产品号方法名]** Lightning SDK 和当前 `dg-java-sdk 3.0.38` 的 `MerConfig` 产品号方法名都使用 `setProductId(...)`。
 
 ```java
 package com.yourcompany.huifu.config;
@@ -86,7 +86,7 @@ public class HuifuLightningConfig {
     @Value("${huifu.rsa-public-key}")
     private String rsaPublicKey;
 
-    @Value("${huifu.skill-source:hfps/1.2.2}")
+    @Value("${huifu.skill-source:hfps/1.3.0}")
     private String skillSource;
 
     @Value("${huifu.mode:prod}")
@@ -129,12 +129,12 @@ config1.setProductId("MYPAY");
 config1.setSysId("6666000123120001");
 config1.setRsaPrivateKey("...");
 config1.setRsaPublicKey("...");
-config1.setSkillSource("hfps/1.2.2");
+config1.setSkillSource("hfps/1.3.0");
 configs.put("merchant1", config1);
 
 MerConfig config2 = new MerConfig();
 config2.setSysId("6666000123120002");
-config2.setSkillSource("hfps/1.2.2");
+config2.setSkillSource("hfps/1.3.0");
 // ... 配置第二个商户
 configs.put("merchant2", config2);
 
@@ -149,7 +149,7 @@ MerConfig merConfig = new MerConfig();
 merConfig.setCustomConnectTimeout("30000");              // 连接超时 30s（默认 20s），注意是 String 类型
 merConfig.setCustomSocketTimeout("30000");               // 读取超时 30s（默认 20s）
 merConfig.setCustomConnectionRequestTimeout("40000");    // 请求超时 40s（默认 30s）
-merConfig.setSkillSource("hfps/1.2.2");
+merConfig.setSkillSource("hfps/1.3.0");
 ```
 
 ## 步骤 3：验证核心类导入
@@ -249,7 +249,7 @@ DelayTransClient delayClient = Factory.Solution.DelayTrans();
 | 初始化 import | `com.huifu.dg.lightning.*` | `com.huifu.bspay.sdk.opps.*` |
 | MerConfig 包路径 | `com.huifu.dg.lightning.biz.config.MerConfig` | `com.huifu.bspay.sdk.opps.core.config.MerConfig` |
 | BasePay 包路径 | `com.huifu.dg.lightning.utils.BasePay` | `com.huifu.bspay.sdk.opps.core.BasePay` |
-| 设置产品号 | `setProductId()`（正常） | `setProcutId()`（少一个 d） |
+| 设置产品号 | `setProductId()` | `setProductId()` |
 | 调用方式 | `Factory.Payment.Common().create(req)` | `BasePayClient.request(req, false)` |
 | 扩展参数 | `client.optional(key, value)` | `request.setExtendInfo(map)` |
 | HTTP 客户端 | Apache HttpClient 4.5.2 | OkHttp |

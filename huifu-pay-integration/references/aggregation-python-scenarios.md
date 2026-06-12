@@ -16,7 +16,7 @@
 
 ## 公共前提
 
-- 已按 `references/aggregation-python-adapter.md` 安装并验证 `dg-sdk==2.0.21`
+- 已按 `references/aggregation-python-adapter.md` 安装并验证 `dg-sdk==2.0.22`
 - 已调用 `init_huifu_sdk()`
 - 每个 request 对象的 `huifu_id` 必须等于本次真实请求商户号，SDK 会据此生成 `jpt-x-skill-huifu_id`
 - 原交易字段必须来自业务订单表或上游响应
@@ -100,7 +100,7 @@ def query_payment(hf_seq_id: str) -> dict:
 ### 注意事项
 
 - `hf_seq_id`、`out_ord_id`、`req_seq_id` 三选一，示例按 `hf_seq_id` 查询。
-- 前端回调后仍需要查单或异步通知确认最终状态。
+- 前端回调后仍需要服务端闭环确认：异步通知验签/幂等，并通过查单二次确认或补偿查询兜底。
 
 ## 扫码交易关单
 
@@ -187,7 +187,7 @@ def refund_payment(org_req_date: str, org_req_seq_id: str, amount: str) -> dict:
 
 - `org_hf_seq_id` / `org_party_order_id` / `org_req_seq_id` 三选一，示例按 `org_req_seq_id` 定位。
 - 字段必须来自原交易落库。
-- 退款最终状态仍以退款查询或异步通知为准。
+- 退款最终状态仍以退款查询和异步通知闭环为准。
 
 ## 扫码交易退款查询
 

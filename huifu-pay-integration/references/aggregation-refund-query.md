@@ -19,7 +19,7 @@
 | --- | --- |
 | 接口名称 | 扫码交易退款查询 |
 | 汇付端点 | `POST /v4/trade/payment/scanpay/refundquery` |
-| 官方最近更新时间 | `2025-11-14` |
+| 官方最近更新时间 | `2026-05-28` |
 | 支持格式 | `JSON` |
 | 支持交易 | `T_JSAPI`、`T_MINIAPP`、`T_APP`、`A_JSAPI`、`A_NATIVE`、`U_NATIVE`、`U_JSAPI`、`T_MICROPAY`、`A_MICROPAY`、`U_MICROPAY` |
 | 签名说明 | [接入指引-开发指南](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
@@ -104,6 +104,7 @@
 | `trans_time` | String | 6 | N | 交易发生时间，`HHMMSS` |
 | `trade_type` | String | 20 | N | 交易类型，示例值 `TRANS_REFUND` |
 | `trans_stat` | String | 1 | N | `P` 处理中，`S` 成功，`F` 失败，`I` 初始 |
+| `bank_code` | String | 64 | N | 通道返回码 |
 | `bank_message` | String | 256 | N | 通道返回描述 |
 | `fee_amount` | String | 14 | N | 手续费金额，单位元 |
 | `trans_finish_time` | String | 14 | N | 退款完成时间，`yyyyMMddHHmmss` |

@@ -86,7 +86,7 @@
 | hf_seq_id | 汇付全局流水号，汇付系统内部生成的唯一标识 |
 | trans_stat | 交易状态，P=处理中、S=成功、F=失败 |
 | notify_url | 异步通知地址，交易结果通过 HTTP POST 回调此地址 |
-| hosting_data | 半支付托管扩展参数，JSON 字符串，包含项目信息和回调地址 |
+| hosting_data | 统一收银台扩展参数集合，JSON 字符串，包含项目信息和回调地址 |
 | delay_acct_flag | 延迟入账标志，Y=延迟、N=不延迟 |
 | terminal_device_data | 设备信息，JSON 字符串，退款时必填 |
 

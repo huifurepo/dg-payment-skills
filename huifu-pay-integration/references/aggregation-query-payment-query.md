@@ -19,7 +19,7 @@
 | --- | --- |
 | 接口名称 | 扫码交易查询 |
 | 汇付端点 | `POST /v4/trade/payment/scanpay/query` |
-| 官方最近更新时间 | `2025-11-14` |
+| 官方最近更新时间 | `2026-05-28` |
 | 支持格式 | `JSON` |
 | 适用场景 | 异步通知未收到、反扫返回处理中、支付结果二次确认 |
 | 支持交易类型 | `T_JSAPI`、`T_MINIAPP`、`T_APP`、`A_JSAPI`、`A_NATIVE`、`U_JSAPI`、`U_NATIVE`、`T_MICROPAY`、`A_MICROPAY`、`U_MICROPAY` |
@@ -124,12 +124,13 @@
 | `method_expand` | String | - | N | 交易类型扩展参数，JSON 字符串 |
 | `tx_metadata` | String | - | N | 扩展参数集合，JSON 字符串 |
 | `payment_fee` | String | - | N | 手续费对象，JSON 字符串 |
+| `combinedpay_fee_amt` | String | 14 | N | 官方成功示例出现的顶层兼容字段，表示补贴支付手续费金额；优先按 `tx_metadata.combinedpay_data_fee_info` / `payment_fee` 解析结构化信息 |
 
 ## 扩展返回参数
 
 ### `method_expand`
 
-`method_expand` 为 JSON 字符串。官方按每个 `trade_type` 分开列出，但同一渠道族结构一致，可按下述方式解析。
+`method_expand` 为 JSON 字符串。官方按每个 `trade_type` 显式列出包装行，例如 `T_JSAPI`、`T_MINIAPP`、`T_APP`、`T_MICROPAY`、`A_JSAPI`、`A_NATIVE`、`A_MICROPAY`、`U_JSAPI`、`U_NATIVE`、`U_MICROPAY`；本地按渠道族归并展示，同一渠道族结构一致，可按下述方式解析。
 
 #### 微信类交易
 

@@ -44,16 +44,16 @@
 | `goods_desc` | 商品描述 | String | 128 | Y | 商品描述 |
 | `remark` | 备注 | String | 255 | N | 原样返回 |
 | `acct_id` | 账户号 | String | 9 | N | 指定收款账户号，仅支持基本户、现金户 |
-| `time_expire` | 交易有效期 | String | 14 | N | `yyyyMMddHHmmss` |
+| `time_expire` | 交易有效期 | String | 14 | N | `yyyyMMddHHmmss`；建议大于 1 分钟；不传时微信/支付宝通常按约 2 小时后关单处理 |
 | `delay_acct_flag` | 延迟标识 | String | 1 | N | `Y`=延迟，`N`=不延迟，默认 `N` |
 | `fee_flag` | 手续费扣款标识 | Integer | 1 | N | `1`=外扣，`2`=内扣 |
 | `acct_split_bunch` | 分账对象 | String(JSON Object) | - | C | 顶层请求字段；有分账权限时传 |
-| `terminal_device_data` | 设备信息 | String(JSON Object) | - | C | 顶层请求字段；反扫或终端报备场景常用 |
+| `terminal_device_data` | 设备信息 | String(JSON Object) | - | C | 顶层请求字段；反扫支付时必填，终端报备场景也常用 |
 | `limit_pay_type` | 禁用支付方式 | String | 128 | N | 见下方枚举 |
 | `channel_no` | 渠道号 | String | 32 | N | 自有渠道号 |
 | `pay_scene` | 场景类型 | String | 2 | N | 微信业务开通类型 |
 | `term_div_coupon_type` | 分账遇到优惠的处理规则 | String | 2 | N | `1`=按比例分，`2`=按顺序保障，`3`=只给交易商户 |
-| `fq_mer_discount_flag` | 商户贴息标记 | String | 1 | N | `Y`=商户全额贴息，`P`=商户部分贴息 |
+| `fq_mer_discount_flag` | 商户贴息标记 | String | 1 | N | `Y`=商户全额贴息，`P`=商户部分贴息；`P` 需配合支付宝侧 `ali_business_params` 传贴息明细 |
 | `notify_url` | 异步通知地址 | String | 504 | N | HTTP 或 HTTPS 地址 |
 | `method_expand` | 交易类型扩展参数 | String(JSON Object) | - | C | 按 `trade_type` 选择当前渠道对象；JSON 内容直接是当前场景参数本身，不再额外包一层 `T_JSAPI` / `A_JSAPI` / `U_MICROPAY` 这类 key |
 | `combinedpay_data` | 补贴支付信息 | String(JSON Array) | - | C | 顶层扩展字段；有补贴支付场景时传，Java SDK 通过 `addExtendInfo(...)` / `optional(...)` 注入 |

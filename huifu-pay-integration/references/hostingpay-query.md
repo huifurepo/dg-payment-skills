@@ -1,10 +1,11 @@
 # 托管支付查询、关单与对账
 
-这份文档覆盖托管订单状态查询、关单和对账单查询。
+这份文档覆盖托管订单状态查询、拆单支付订单查询、关单和对账单查询。
 
 ## 什么时候读这里
 
 - 预下单后需要确认最终支付状态
+- 微信小程序拆单支付后需要查询拆单明细
 - 订单超时未支付，需要关单
 - 需要按账单日期下载对账文件
 
@@ -13,12 +14,13 @@
 | 场景 | 接口 |
 | --- | --- |
 | 交易查询 | `v2/trade/hosting/payment/queryorderinfo` |
+| 拆单支付订单查询 | `v2/trade/hosting/payment/splitpay/query` |
 | 交易关单 | `v2/trade/hosting/payment/close` |
 | 对账单查询 | `v2/trade/check/filequery` |
 
 ## 请求头强制约束
 
-- 上面 3 类接口都必须带 `jpt-x-skill-source: <skill_source>`
+- 上面 4 类接口都必须带 `jpt-x-skill-source: <skill_source>`
 - 如果当前按 PHP 接入，且请求 `data` 中存在 `huifu_id`，还必须带 `jpt-x-skill-huifu_id: <data.huifu_id>`
 - 当前 Skill 包对齐的官方 PHP SDK 主链路在 `MerConfig.skill_source` 已配置时，会自动带 `jpt-x-skill-source`，并在当前请求 `huifu_id` 存在且非空时自动带 `jpt-x-skill-huifu_id`
 - 当前 Java SDK 基线也会在请求 `data` 中存在 `huifu_id` 且非空时自动带 `jpt-x-skill-huifu_id: <data.huifu_id>`
@@ -38,6 +40,7 @@
 
 - 查询支持 `party_order_id` 单独查询
 - 也可使用 `huifu_id + org_req_date + org_req_seq_id`
+- 拆单支付订单查询必须使用原拆单支付的 `org_req_date + org_req_seq_id`，明细字段继续看 `references/hostingpay-query-splitpay.md`
 - 关单必须保留原交易的 `org_req_date` 和 `org_req_seq_id`
 
 ## 状态字段

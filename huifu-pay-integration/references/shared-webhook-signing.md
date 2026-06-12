@@ -17,7 +17,7 @@ Webhook 不使用 API RSA 公私钥。
 
 验签步骤：
 
-1. 从请求中取官方发送的 `sign`。
+1. 从请求中取官方发送的 `sign`。FAQ 口径里 `sign` 常在 URL query 参数中，不一定在 header；实现时按当前 Web 框架同时确认 query/header 读取位置。
 2. 读取原始请求体字符串 `raw_body`。
 3. 读取当前 Webhook 端点配置的 32 位终端密钥 `endpoint_key`。
 4. 计算 `MD5(raw_body + endpoint_key)`。

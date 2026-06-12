@@ -5,6 +5,7 @@
 ## 目录
 
 - 交易查询
+- 拆单支付订单查询
 - 交易关单
 - 对账单查询
 - 落地建议
@@ -54,6 +55,40 @@ $transStat = $response['trans_stat'] ?? 'P';
 - 前端回跳后做终态确认
 - 异步通知后做二次确认
 - 处理中订单轮询
+
+## 拆单支付订单查询
+
+```php
+require_once HUIFU_SDK_ROOT . '/request/V2TradeHostingPaymentSplitpayQueryRequest.php';
+
+use BsPaySdk\request\V2TradeHostingPaymentSplitpayQueryRequest;
+
+$request = new V2TradeHostingPaymentSplitpayQueryRequest();
+$result = $client->postRequest([
+    'funcCode' => $request->getFunctionCode(),
+    'params' => [
+        'req_date' => date('Ymd'),
+        'req_seq_id' => 'SQ' . date('YmdHis') . random_int(1000, 9999),
+        'huifu_id' => getenv('HUIFU_MERCHANT_ID'),
+        'org_req_date' => $splitOrder->getReqDate(),
+        'org_req_seq_id' => $splitOrder->getReqSeqId(),
+    ],
+]);
+
+$response = $result->getRspDatas()['data'] ?? [];
+$transList = $response['trans_list'] ?? [];
+```
+
+用途：
+
+- 微信小程序拆单支付后查询拆单明细
+- 逐条读取 `trans_list[].trans_stat`
+
+注意事项：
+
+1. 这是拆单支付订单查询，不是普通托管 `queryorderinfo`。
+2. `org_req_date` 和 `org_req_seq_id` 必须来自原拆单支付请求落库字段。
+3. `order_stat` 是订单级状态，不能替代子交易 `trans_list[].trans_stat`。
 
 ## 交易关单
 

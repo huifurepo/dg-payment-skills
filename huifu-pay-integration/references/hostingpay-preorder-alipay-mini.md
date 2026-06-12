@@ -14,7 +14,7 @@
 
 # 支付宝小程序预下单
 
-> 本文依据 2026-03-18 官方文档整理，适用于 `v2/trade/hosting/payment/preorder` 的支付宝小程序场景。
+> 本文依据 2026-05-26 官方文档整理，适用于 `v2/trade/hosting/payment/preorder` 的支付宝小程序场景。
 
 ## 接口概述
 
@@ -88,6 +88,7 @@
 | goods_desc | 商品描述 | String | 40 | Y | 商品描述 |
 | delay_acct_flag | 是否延迟交易 | String | 1 | N | `Y`=延迟，`N`=不延迟，默认 `N` |
 | acct_split_bunch | 分账对象 | String(JSON Object) | 2000 | N | 分账对象 |
+| hosting_data | 统一收银台扩展参数集合 | String(JSON Object) | 2000 | N | 可传项目号等托管扩展 |
 | app_data | app 扩展参数集合 | String(JSON Object) | 2000 | Y | app 扩展参数集合 |
 | time_expire | 交易失效时间 | String | 14 | N | `yyyyMMddHHmmss`；默认 10 分钟 |
 | biz_info | 业务信息 | String(JSON Object) | 2000 | N | 交易相关信息 |
@@ -95,6 +96,8 @@
 | alipay_data | 支付宝参数集合 | String(JSON Object) | 2048 | N | 支付宝场景扩展参数 |
 | terminal_device_data | 设备信息 | String(JSON Object) | 2048 | N | 设备信息 |
 | fee_sign | 手续费场景标识 | String | 32 | N | 商户业务开通配置的手续费场景标识码，仅微信/支付宝交易时生效 |
+| fee_split_flag | 是否交易手续费分摊 | String | 1 | N | `Y`=分摊，`N`=不分摊；不传默认 `N` |
+| fee_flag | 手续费扣款标志 | String | 1 | N | `1`=外扣，`2`=内扣；默认取控台配置 |
 
 ## 嵌套参数展开
 
@@ -114,6 +117,12 @@
 | huifu_id | 分账接收方 ID | String | 32 | N | 斗拱开户时生成 |
 | acct_id | 收款汇付账户号 | String | 32 | N | 仅支持基本户、现金户；仅微信、支付宝、网银支持指定收款账户 |
 | percentage_div | 分账百分比 | String | 6 | N | 表示百分比，如 `23.50`；仅 `percentage_flag=Y` 时起作用，全部分账百分比之和必须为 `100.00` |
+
+### hosting_data
+
+| 参数 | 中文名 | 类型 | 长度 | 必填 | 说明 |
+|------|--------|------|------|------|------|
+| project_id | 项目号 | String | 32 | N | 商户创建的项目号 |
 
 ### app_data
 
@@ -156,7 +165,7 @@
 | goods_detail | 订单包含的商品列表信息 | Array | 2048 | N | 订单商品列表 |
 | merchant_order_no | 商户原始订单号 | String | 32 | N | 商户原始订单号 |
 | operator_id | 商户操作员编号 | String | 28 | N | 商户操作员编号 |
-| product_code | 产品码 | String | 32 | N | 商家和支付宝签约的产品码；小程序场景支付为 `JSAPI_PAY` |
+| product_code | 产品码 | String | 32 | N | 商家和支付宝签约的产品码；小程序场景支付为 `JSAPI_PAY`，当面付为 `FACE_TO_FACE_PAYMENT` |
 | seller_id | 卖家支付宝用户号 | String | 28 | N | 卖家支付宝用户号 |
 | store_id | 商户门店编号 | String | 32 | N | 商户门店编号 |
 | subject | 订单标题 | String | 256 | N | 直连模式必填 |

@@ -13,7 +13,7 @@
 
 # 托管交易查询
 
-> 本文依据 2026-03-23 官方文档整理，适用于 `v2/trade/hosting/payment/queryorderinfo`。
+> 本文依据 2026-05-27 官方文档整理，适用于 `v2/trade/hosting/payment/queryorderinfo`。
 
 ## 接口概述
 
@@ -323,7 +323,7 @@
 | party_order_id | 用户账单上的商户订单号 | String | 64 | N | 用户账单商户订单号 |
 | trans_date | 订单日期 | String | 8 | Y | `yyyyMMdd` |
 | trans_amt | 交易金额 | String | 14 | Y | 单位元，保留两位小数 |
-| pay_type | 交易类型 | String | 16 | N | 返回字段名固定为 `pay_type`；不要按其他接口习惯改成 `trans_type`。官方文档列出 `T_JSAPI`、`T_MINIAPP`、`A_JSAPI`、`A_NATIVE`、`U_NATIVE`、`U_JSAPI`、`QUICK_PAY`、`ONLINE_PAY_B2B`、`ONLINE_PAY_B2C`、`UNION_PAY` |
+| pay_type | 交易类型 | String | 16 | N | 返回字段名固定为 `pay_type`；不要按其他接口习惯改成 `trans_type`。官方文档列出 `T_JSAPI`、`T_MINIAPP`、`A_JSAPI`、`A_NATIVE`、`U_NATIVE`、`U_JSAPI`、`QUICK_PAY`、`ONLINE_PAY_B2B`、`ONLINE_PAY_B2C`、`UNION_PAY`、`Y_H5` |
 | trans_stat | 交易状态 | String | 1 | N | `P`=处理中，`S`=成功，`F`=失败，`I`=初始；`I` 状态很罕见，需联系汇付技术处理 |
 | trans_time | 交易时间 | String | 14 | N | `yyyyMMddHHmmss` |
 | close_stat | 关单状态 | String | 1 | N | `P`=处理中，`S`=成功，`F`=失败 |

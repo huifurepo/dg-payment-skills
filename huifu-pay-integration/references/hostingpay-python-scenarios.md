@@ -17,7 +17,7 @@
 
 ## 公共前提
 
-- 已按 `references/hostingpay-python-adapter.md` 安装并验证 `dg-sdk==2.0.21`
+- 已按 `references/hostingpay-python-adapter.md` 安装并验证 `dg-sdk==2.0.22`
 - 已调用 `init_huifu_sdk()`
 - 每个 request 对象的 `huifu_id` 必须等于本次真实请求商户号，SDK 会据此生成 `jpt-x-skill-huifu_id`
 - 原交易字段必须来自业务订单表或上游响应
@@ -214,7 +214,7 @@ def close_hosting_payment(org_req_date: str, org_req_seq_id: str) -> dict:
 ### 最小示例
 
 ```python
-def refund_hosting_payment(org_req_date: str, amount: str) -> dict:
+def refund_hosting_payment(org_req_date: str, org_req_seq_id: str, amount: str) -> dict:
     huifu_id = os.environ["HUIFU_MERCHANT_ID"]
     init_huifu_sdk()
 
@@ -224,6 +224,7 @@ def refund_hosting_payment(org_req_date: str, amount: str) -> dict:
     request.huifu_id = huifu_id
     request.ord_amt = amount
     request.org_req_date = org_req_date
+    request.org_req_seq_id = org_req_seq_id
     request.risk_check_data = os.environ["HUIFU_RISK_CHECK_DATA_JSON"]
     request.terminal_device_data = os.environ["HUIFU_TERMINAL_DEVICE_DATA_JSON"]
 
@@ -233,7 +234,7 @@ def refund_hosting_payment(org_req_date: str, amount: str) -> dict:
 ### 注意事项
 
 - `risk_check_data`、`terminal_device_data` 是否必填取决于线上退款场景，不能用空对象上线；示例要求它们由业务风控 / 设备模块提前生成 JSON 字符串。
-- 原交易字段和退款金额必须来自业务订单与退款单。
+- 原交易字段和退款金额必须来自业务订单与退款单；托管退款必须在 `org_hf_seq_id`、`org_party_order_id`、`org_req_seq_id` 三个原交易定位键中至少提供一个，示例选择 `org_req_seq_id`。
 
 ## 托管退款查询
 
@@ -295,6 +296,6 @@ def query_check_file(file_date: str) -> dict:
 1. 所有 Python 示例必须体现官方 `dg-sdk` / `dg_sdk`。
 2. 所有 JSON Object 字段必须传 JSON 字符串，不要传 Python dict。
 3. 每个 request 对象必须设置本次真实 `huifu_id`，不要按旧版写 `jpt_x_skill_huifu_id` 初始化参数。
-4. 前端 callback 不等于最终支付成功，最终状态仍回到查单或异步通知。
+4. 前端 callback 不等于最终支付成功，最终状态仍回到服务端查单补偿和异步通知闭环。
 5. 不要把 `jpt-x-skill-source` 或 `jpt-x-skill-huifu_id` 放进业务 `data`。
 6. 示例中的 `new_req_seq_id()` 只适用于服务端自主管理请求流水号的场景；生成真实 Controller / Service 代码时，若外部 DTO / Controller 已接收字段，必须保留入参，缺失或非法时显式报错。

@@ -13,7 +13,7 @@
 - [文档勘误与实现备注](#文档勘误与实现备注)
 
 # 微信小程序预下单
-> 本文依据 2026-03-23 官方文档整理，适用于 `v2/trade/hosting/payment/preorder` 的微信小程序场景。
+> 本文依据 2026-05-26 官方文档整理，适用于 `v2/trade/hosting/payment/preorder` 的微信小程序场景。
 
 ## 接口概述
 | 属性 | 值 |
@@ -86,6 +86,7 @@
 | split_pay_flag | 是否拆单支付 | String | 1 | N | `Y`=拆单支付，`N`=非拆单支付，默认 `N`；需预开通拆单支付权限 |
 | split_pay_data | 拆单支付参数集合 | String(JSON Object) | 2000 | N | 拆单支付参数集合 |
 | acct_split_bunch | 分账对象 | String(JSON Object) | 2000 | N | 分账对象；拆单支付时不生效 |
+| hosting_data | 统一收银台扩展参数集合 | String(JSON Object) | 2000 | N | 可传项目号等托管扩展 |
 | miniapp_data | 微信小程序扩展参数集合 | String(JSON Object) | 2000 | Y | 微信小程序扩展参数集合 |
 | time_expire | 交易失效时间 | String | 14 | N | `yyyyMMddHHmmss`；默认 10 分钟 |
 | biz_info | 业务信息 | String(JSON Object) | 2000 | N | 交易相关信息 |
@@ -93,6 +94,8 @@
 | wx_data | 微信参数集合 | String(JSON Object) | 2048 | N | 微信场景扩展参数 |
 | terminal_device_data | 设备信息 | String(JSON Object) | 2048 | N | 设备信息 |
 | fee_sign | 手续费场景标识 | String | 32 | N | 商户业务开通配置的手续费场景标识码，仅微信/支付宝交易时生效 |
+| fee_split_flag | 是否交易手续费分摊 | String | 1 | N | `Y`=分摊，`N`=不分摊；不传默认 `N` |
+| fee_flag | 手续费扣款标志 | String | 1 | N | `1`=外扣，`2`=内扣；默认取控台配置 |
 
 ## 嵌套参数展开
 ### split_pay_data
@@ -115,6 +118,11 @@
 | huifu_id | 分账接收方 ID | String | 32 | N | 斗拱开户时生成 |
 | acct_id | 收款汇付账户号 | String | 32 | N | 仅支持基本户、现金户；仅微信、支付宝、网银支持指定收款账户 |
 | percentage_div | 分账百分比 | String | 6 | N | 表示百分比，如 `23.50`；仅 `percentage_flag=Y` 时生效，合计必须为 `100.00` |
+
+### hosting_data
+| 参数 | 中文名 | 类型 | 长度 | 必填 | 说明 |
+|------|--------|------|------|------|------|
+| project_id | 项目号 | String | 32 | N | 商户创建的项目号 |
 
 ### miniapp_data
 | 参数 | 中文名 | 类型 | 长度 | 必填 | 说明 |

@@ -40,6 +40,7 @@
 - 查询通常使用 `out_ord_id`、`hf_seq_id`、`req_seq_id` 三选一
 - 按 `req_seq_id` 查询时建议同时保留并传入 `req_date`
 - 关单和关单查询都要求保留原交易标识
+- 合单交易关单和关单查询必须补 `merge_flag=Y`，并使用主单信息定位；非合单或空值使用子单信息
 
 ## 关单约束
 
@@ -61,6 +62,8 @@
 
 - 请求字段固定为 `file_date` 和 `bill_type`
 - 不要自行改写成 `bill_date`、`generate_date` 或 `file_type`
+- 合并账单使用 `bill_type=MERGE_BILL`
+- 文件名字段生产解析要兼容 `file_name` 和历史示例里的 `file_Name`
 - 对账文件通常是 zip 内含 csv
 - `SETTLE_FUND_BILL` 模板是 `.xlsx`
 - 接口口径为 1 年内账单查询

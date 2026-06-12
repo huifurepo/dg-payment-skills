@@ -61,8 +61,8 @@
 
 | `trade_type` | 必须提前明确的值 | 来源 |
 |-------------|------------------|------|
-| `T_JSAPI` | `sub_appid`、`sub_openid` | 官方要求先准备微信公众号、开通微信业务、配置支付授权目录；`sub_openid` 必须通过当前公众号 `appid` 的网页授权流程获取 |
-| `T_MINIAPP` | `sub_appid`、`sub_openid` | 官方要求先准备微信小程序、开通微信业务、完成微信配置；`sub_openid` 必须通过当前小程序 `sub_appid` 获取，且二者不能错配 |
+| `T_JSAPI` | `sub_appid`、`sub_openid` | 官方要求先准备微信公众号、开通微信业务、绑定 `sub_appid`、配置支付授权目录；`sub_openid` 必须通过当前公众号 `sub_appid` 的网页授权流程获取 |
+| `T_MINIAPP` | `sub_appid`、`sub_openid` | 官方要求先准备微信小程序、开通微信业务、完成微信配置和 appid 绑定；`sub_openid` 必须通过当前小程序 `sub_appid` 获取，且二者不能错配 |
 | `T_APP` | `sub_appid` | 应用配置 |
 | `T_MICROPAY` | `auth_code` | 官方要求通过扫码设备实时采集用户付款码；值本身来自用户当次付款码，不应预置到配置中 |
 
@@ -86,8 +86,8 @@
 
 | 场景 | 客户开发前必须完成什么 | 关键运行时值 |
 |------|----------------------|-------------|
-| 微信公众号支付 | 准备公众号、完成商户进件并开通微信业务、配置公众号支付授权目录 | `sub_openid` |
-| 微信小程序支付 | 准备小程序、完成商户进件并开通微信业务、完成微信配置、确认 `sub_appid` 绑定关系 | `sub_openid` |
+| 微信公众号支付 | 准备公众号、完成商户进件并开通微信业务、绑定 `sub_appid`、配置公众号支付授权目录；授权目录通常以 `/` 结尾，配置后可能延迟生效 | `sub_openid` |
+| 微信小程序支付 | 准备小程序、完成商户进件并开通微信业务、完成微信配置、确认 `sub_appid` 绑定关系，清理 appid 配置首尾空格 | `sub_openid` |
 | 支付宝 JS 支付 | 完成商户进件并开通支付宝业务 | `buyer_id` / `buyer_logon_id` |
 | 银联 JS 支付 | 完成商户进件并开通银联业务、准备银联网页授权回调链路 | `user_id`、`customer_ip` |
 | 各类付款码反扫 | 准备扫码枪或终端采集链路 | `auth_code` |
@@ -125,6 +125,9 @@
 | 对账单功能 | `file_date`、`bill_type` |
 | 微信小程序 `sub_appid` 绑定 | `T_MINIAPP` 下单成功率 | 官方 QA 明确要求 `sub_appid` 与商户建立绑定关系 |
 | 微信 `sub_appid` / `sub_openid` 一致性 | `T_MINIAPP` / `T_JSAPI` | 官方 QA 明确要求 `sub_openid` 必须从对应 `sub_appid` 获取 |
+| 接口权限 | 当前接口是否能调用 | `接口权限认证失败` 或 `20003` 时先核对 `sys_id` 是否开通当前接口权限 |
+| 数据权限 | `product_id`、`sys_id`、`huifu_id`、`upper_huifu_id` | `数据权限认证失败` 时核对产品号、服务商/子商户层级和请求头来源 |
+| 渠道路由 | `pay_channel`、`pay_scene`、`channel_no`、线上/线下 `fee_type` | 多渠道或线上/线下混用时要明确场景；不指定通道时不要传空字符串 `channel_no` |
 
 ## 向客户索取材料的最小清单
 

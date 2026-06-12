@@ -11,7 +11,7 @@
 - 关键约束
 - 下一步
 
-支付状态查询、托管交易关单和交易结算对账单查询。
+支付状态查询、拆单支付订单查询、托管交易关单和交易结算对账单查询。
 
 > **前置依赖**：首次接入请先完成 `references/hostingpay-base.md` 的 SDK 初始化。
 
@@ -21,6 +21,7 @@
 |------|------|---------|
 | 支付后页面未跳转 | 用户不确定是否支付成功 | 调用**查询接口**确认 trans_stat |
 | 收到异步通知 | 通知可能被伪造 | 调用**查询接口**做二次确认 |
+| 微信小程序拆单支付后要看子交易 | 普通查单只给订单级信息 | 调用**拆单支付订单查询**读取 `trans_list[].trans_stat` |
 | trans_stat=P | 交易还在处理中 | **轮询查询**：间隔 5 秒，最多 30 次 |
 | 用户长时间未支付 | 订单占用库存 | 调用**关单接口**释放资源 |
 | 需要财务对账 | 核对交易/结算明细 | 调用**对账单查询**下载对账文件 |
@@ -34,6 +35,7 @@
 
 - `references/hostingpay-query.md`
 - `references/hostingpay-query-payment-status-query.md`
+- `references/hostingpay-query-splitpay.md`
 - `references/hostingpay-query-trade-close.md`
 - `references/hostingpay-query-reconciliation.md`
 - `references/hostingpay-query-php-scenarios.md`

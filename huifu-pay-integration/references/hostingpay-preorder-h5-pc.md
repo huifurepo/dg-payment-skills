@@ -1,6 +1,6 @@
 # H5、PC 预下单
 
-> 依据用户提供的汇付官方文档整理，接口更新时间为 `2026.03.18`。当前文档只保留总览、导航和顶层摘要，详细字段已拆到子文档中，避免单文件超过 500 行。
+> 依据用户提供的汇付官方文档整理，接口更新时间为 `2026.05.26`。当前文档只保留总览、导航和顶层摘要，详细字段已拆到子文档中，避免单文件超过 500 行。
 
 
 ## 目录
@@ -77,7 +77,7 @@
 | `trans_amt` | `setTransAmt()` | Y | 交易金额 |
 | `goods_desc` | `setGoodsDesc()` | Y | 商品描述 |
 | `pre_order_type` | `setPreOrderType()` | Y | H5/PC 固定传 `1` |
-| `hosting_data` | `setHostingData()` | Y | 半支付托管扩展参数，JSON 字符串 |
+| `hosting_data` | `setHostingData()` | Y | 统一收银台扩展参数集合，JSON 字符串 |
 | `fee_sign` | `setFeeSign()` | N | 手续费场景标识 |
 
 其他扩展字段统一通过 `setExtendInfo(Map<String, Object>)` 传入。

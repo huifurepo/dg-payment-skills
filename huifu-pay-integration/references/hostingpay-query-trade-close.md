@@ -13,7 +13,7 @@
 
 # 托管交易关单
 
-> 本文依据 2025-01-03 官方文档整理，适用于 `v2/trade/hosting/payment/close`。
+> 本文依据 2026-04-22 官方文档整理，适用于 `v2/trade/hosting/payment/close`。
 
 ## 接口概述
 

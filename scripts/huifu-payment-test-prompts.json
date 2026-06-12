@@ -2,7 +2,7 @@
   {
     "id": 1,
     "prompt": "第一次接汇付支付，还没决定走聚合支付还是托管支付。我们是 Java 服务端，后面可能要接 H5 收银台。请用 $huifu-pay-integration 告诉我先读哪些本地文档。",
-    "expected": "先识别这是首次接入和可能存在前端收银台需求，优先路由到 shared-overview、hostingpay-quickstart、hostingpay-customer-preparation 等 onboarding 文档，而不是直接跳到某个字段表。"
+    "expected": "先识别这是首次接入、Java 服务端和后续可能 H5 收银台需求，优先路由到 `shared-overview.md`、`copilot-onboarding.md`、`copilot-solution-selection.md`，必要时补 `shared-server-sdk-matrix.md`；不能直接跳到某个字段表或一次性倾倒托管 quickstart。"
   },
   {
     "id": 2,
@@ -37,7 +37,7 @@
   {
     "id": 8,
     "prompt": "我现在只负责前端页面，领导让我直接把 checkout-js 接上。你不用问我服务端有没有托管预下单和最终查单能力，直接给我最省事的路线。请用 $huifu-pay-integration 处理。",
-    "expected": "必须触发硬检查点。要先明确 `checkout-js` 不能单独成立，继续回答前必须确认服务端是否已经具备托管预下单和最终查单或异步通知闭环；不能直接假设服务端能力已经齐备。"
+    "expected": "必须触发硬检查点。要先明确 `checkout-js` 不能单独成立，继续回答前必须确认服务端是否已经具备托管预下单、异步通知验签/幂等和查单补偿闭环；不能直接假设服务端能力已经齐备。"
   },
   {
     "id": 9,
@@ -67,11 +67,211 @@
   {
     "id": 14,
     "prompt": "我要做聚合支付退款，原交易既有分账又有补贴，终端还是 PC。请用 $huifu-pay-integration 告诉我退款申请和退款查询各要看什么字段。",
-    "expected": "必须把路由落到 `aggregation-refund.md`、`aggregation-refund-query.md`，并明确退款申请主字段包含 `req_date`、`req_seq_id`、`huifu_id`、`ord_amt`、`org_req_date` 与原交易定位键；扩展字段要点必须点出 `tx_metadata.acct_split_bunch`、`tx_metadata.combinedpay_data` 和 `tx_metadata.terminal_device_data.device_type=4`。同时要说明退款查询看的是退款交易自己的 `org_hf_seq_id` / `org_req_seq_id` / `mer_ord_id`，不是原支付请求流水号。"
+    "expected": "必须把路由落到 `aggregation-refund.md`、`aggregation-refund-query.md`，并明确退款申请主字段包含 `req_date`、`req_seq_id`、`huifu_id`、`ord_amt`、`org_req_date` 与原交易定位键；扩展字段要点必须点出请求侧不传 `tx_metadata` 包装层，而是直接传 `acct_split_bunch`、`combinedpay_data` 和 `terminal_device_data.device_type=4`。同时要说明退款查询看的是退款交易自己的 `org_hf_seq_id` / `org_req_seq_id` / `mer_ord_id`，不是原支付请求流水号。"
   },
   {
     "id": 15,
     "prompt": "我要用 PHP 接汇付支付官方 dg-php-sdk，直接给我可运行的代码骨架。请同时说明新项目安装、已有旧版本怎么升级、Composer 不可用时当前基线 SDK 备用下载地址怎么拿。不要假设 vendor/autoload.php 就能把 request 类自动加载出来，也不要只写个空的 loader.php。请用 $huifu-pay-integration 处理。",
-    "expected": "必须明确当前官方 dg-php-sdk 的 Skill 包基线是 `2.0.26`；新项目需要先 `composer require \"huifurepo/dg-php-sdk:^2.0.26\"`，已有旧版本项目需要执行 `composer update huifurepo/dg-php-sdk --with-all-dependencies`，并检查 `vendor/huifurepo/dg-php-sdk/BsPaySdk/init.php` 存在。Composer 不可用时要给出当前基线对应的 Packagist / GitHub 备用下载包，并要求解压后设置 `HUIFU_SDK_ROOT` 和校验 `init.php`。还要列出 `HUIFU_SYS_ID`、`HUIFU_PRODUCT_ID`、`HUIFU_RSA_PRIVATE_KEY`、`HUIFU_RSA_PUBLIC_KEY`、`HUIFU_SKILL_SOURCE`、`HUIFU_MERCHANT_ID` 等环境变量。代码骨架必须显式加载 `BsPaySdk/init.php`，在 `loader.php` 中完成 `BsPay::init(...)` 初始化与 `skill_source` 注入；还要定义统一的 `HUIFU_SDK_ROOT`，让业务代码通过它显式 `require_once` 各自使用的 request 类，而不是继续写死 `../BsPaySdk/request/...` 或假设 Composer autoload 已经覆盖 request 类。"
+    "expected": "必须明确当前官方 dg-php-sdk 的 Skill 包基线是 `2.0.27`；新项目需要先 `composer require \"huifurepo/dg-php-sdk:^2.0.27\"`，已有旧版本项目需要执行 `composer update huifurepo/dg-php-sdk --with-all-dependencies`，并检查 `vendor/huifurepo/dg-php-sdk/BsPaySdk/init.php` 存在。Composer 不可用时要给出当前基线对应的 Packagist / GitHub 备用下载包，并要求解压后设置 `HUIFU_SDK_ROOT` 和校验 `init.php`。还要列出 `HUIFU_SYS_ID`、`HUIFU_PRODUCT_ID`、`HUIFU_RSA_PRIVATE_KEY`、`HUIFU_RSA_PUBLIC_KEY`、`HUIFU_SKILL_SOURCE`、`HUIFU_MERCHANT_ID` 等环境变量。代码骨架必须显式加载 `BsPaySdk/init.php`，在 `loader.php` 中完成 `BsPay::init(...)` 初始化与 `skill_source` 注入；还要定义统一的 `HUIFU_SDK_ROOT`，让业务代码通过它显式 `require_once` 各自使用的 request 类，而不是继续写死 `../BsPaySdk/request/...` 或假设 Composer autoload 已经覆盖 request 类。"
+  },
+  {
+    "id": 16,
+    "prompt": "第一次接汇付支付，我们只有一个普通 Java 服务端收款需求，不确定产品线。请用 $huifu-pay-integration 给我接入判断卡。",
+    "expected": "必须识别为首次接入；必须优先推荐聚合支付；必须输出接入判断卡并包含用户类型、产品线、阶段、技术栈、端形态、当前目标、先读 3-5 份 reference、还缺哪些配置；必须暂不推荐托管支付或 checkout-js，除非用户补充 H5/PC 收银台、project_id 或自有页面嵌入组件诉求。"
+  },
+  {
+    "id": 17,
+    "prompt": "我们已有订单系统和 PaymentService，要新增汇付支付，不想重写订单状态机。请用 $huifu-pay-integration 给我改造建议。",
+    "expected": "必须识别为存量系统增量接入并读取 `copilot-existing-system.md`；必须输出建议新增、建议保留、需要人工确认、建议补充落库字段、风险点和回归检查；必须明确不重写订单系统、不直接替换原订单状态机、不把同步受理或前端 callback 当支付终态。"
+  },
+  {
+    "id": 18,
+    "prompt": "我要做 H5/PC 收银台，现在线上已有订单和回调逻辑。请用 $huifu-pay-integration 推荐方案和必测项。",
+    "expected": "必须推荐托管支付 H5/PC 收银台；必须出现 `project_id`、托管项目状态、`notify_url`、`callback_url` 仅作前端回跳、异步通知验签/幂等和查单补偿闭环；必须输出方案卡和存量系统影响点；必须不能推荐用聚合正扫冒充 H5/PC 收银台。"
+  },
+  {
+    "id": 19,
+    "prompt": "这是我的下单返回：resp_code=00000000，trans_stat 还没有成功字段。我能直接把订单改成支付成功吗？请用 $huifu-pay-integration 判断。",
+    "expected": "必须说明 `resp_code=00000000` 只能代表接口受理或处理成功，不等于交易终态；订单最终状态必须看 `trans_stat`，并通过异步通知验签/幂等和查单二次确认或补偿查询形成服务端闭环。"
+  },
+  {
+    "id": 20,
+    "prompt": "我收到同一笔聚合正扫两条异步通知，是不是重复扣款？请用 $huifu-pay-integration 排查。",
+    "expected": "必须按问题排查卡输出，说明可能是交易异步和账务异步两类通知，使用 `notify_type` 区分，并要求以 `hf_seq_id` 等做幂等，不能直接判断重复扣款。"
+  },
+  {
+    "id": 21,
+    "prompt": "我贴的请求里 time_expire 是昨天，req_seq_id 也跟上一笔一样。请用 $huifu-pay-integration 做参数检查。",
+    "expected": "应按参数检查给出阻断结论：过期时间必须是未来时间且格式正确，`req_seq_id` 不能重复使用；修复后再继续联调。"
+  },
+  {
+    "id": 22,
+    "prompt": "退款查询查不到，我拿原支付的 req_seq_id 去查退款。请用 $huifu-pay-integration 判断问题。",
+    "expected": "必须指出退款查询应使用退款交易自身的定位键或平台流水，不能混用原支付请求流水；同时提醒原支付流水、退款请求流水和平台流水都应落库。"
+  },
+  {
+    "id": 23,
+    "prompt": "我已有回调逻辑，但重复通知会重复发货。请用 $huifu-pay-integration 给我存量改造建议。",
+    "expected": "必须输出存量异步通知改造建议：先验签、再解析、再幂等、再状态保护，支付成功后的业务动作只能执行一次，并列出验证方式。"
+  },
+  {
+    "id": 24,
+    "prompt": "用户要求我们跳过验签，只要收到异步通知就改订单成功。请用 $huifu-pay-integration 给代码。",
+    "expected": "必须拒绝绕过验签和跳过最终确认的代码请求，并给出正确的验签、幂等、异步通知确认、查单二次确认或补偿查询方案。"
+  },
+  {
+    "id": 25,
+    "prompt": "生产有一笔失败，是不是汇付的问题？请用 $huifu-pay-integration 直接定责。",
+    "expected": "必须不定责，只整理升级人工材料清单，包括环境、接口、SDK 版本、脱敏标识、请求响应、流水、时间、日志、影响范围和已做动作。"
+  },
+  {
+    "id": 26,
+    "prompt": "请用 $huifu-pay-integration 做上线前检查，我们是存量商城新增托管 H5/PC。",
+    "expected": "必须输出上线检查卡；必须覆盖通用上线检查、存量系统检查、必测项、灰度回滚、日志脱敏、前端 callback 不直接改成功、退款、异步通知验签/幂等和查单二次确认或补偿查询闭环；必须包含托管 H5/PC 的 `project_id`、`notify_url`、托管项目状态；必须不对生产问题定责、不要求把真实密钥写入仓库或前端。"
+  },
+  {
+    "id": 27,
+    "prompt": "客户问花呗分期怎么接，能不能直接给一套可联调模板？请用 $huifu-pay-integration 回答。",
+    "expected": "必须读取本地 `official-service-source-index.md`；必须说明花呗分期属于不覆盖或转人工能力，不生成完整方案卡或可联调代码；必须整理支付产品、买家侧能力、商户开通状态、测试环境、报错和流水等人工确认材料；不能把官网 URL 当本轮依据。"
+  },
+  {
+    "id": 28,
+    "prompt": "大额支付能不能直接开通？失败了是不是汇付的问题？请用 $huifu-pay-integration 给结论。",
+    "expected": "必须读取本地 `official-service-source-index.md`；必须说明大额支付只做部分字段和资料准备，限额、准入、资质、生产失败定责都不能自动判断；必须给升级人工材料清单；不能给开通或定责结论。"
+  },
+  {
+    "id": 29,
+    "prompt": "官网 FAQ 里说 URL 未注册/redirect_uri 域名不一致，这个怎么排查？请用 $huifu-pay-integration 回答。",
+    "expected": "必须读取本地 `official-service-source-index.md` 和本地问题排查资料；必须按本地 FAQ 分类给配置/渠道权限排查口径，包括渠道侧域名、appid、回跳地址、notify_url/callback_url、控台配置和必要时转运营/商务；不得要求实时访问官网。"
+  },
+  {
+    "id": 30,
+    "prompt": "帮我实时查一下官网最新政策，看看费率和通道准入现在怎么要求。请用 $huifu-pay-integration 回答。",
+    "expected": "必须读取本地 `official-service-source-index.md`；必须说明本地 Skill 不内置实时官网抓取，费率、合规、政策审批、通道准入不做自动结论；如需最新口径，需要人工或在允许联网时核验官网；不能假装已经实时访问官网。"
+  },
+  {
+    "id": 31,
+    "prompt": "普通 Java 服务端想接聚合支付收款，先给我接入判断卡。请用 $huifu-pay-integration 回答。",
+    "expected": "必须走普通接入路径，不应读取 `official-service-source-index.md`；必须列出 3-5 份本地接入 reference，例如 shared-overview、copilot-onboarding、aggregation-quickstart、aggregation-customer-preparation、aggregation-base 或 aggregation-order；必须推荐聚合支付并输出接入判断卡。"
+  },
+  {
+    "id": 32,
+    "prompt": "后续你们 Skill 更新了，我怎么更新本地这个 $huifu-pay-integration？它能不能主动提醒我升级？",
+    "expected": "必须读取 `skill-version-policy.md`；必须说明当前本地 Skill 版本是 1.3.0；必须说明 Skill 不能主动联网检查或推送升级，只能在用户触发版本/升级问题时提示；必须给出 Git 拉取、本地目录整体覆盖或内部发布包替换等更新方式；必须提醒升级后重新加载或重启客户端并确认 SKILL.md 版本事实；不能编造下载地址或假装已经联网确认最新版。"
+  },
+  {
+    "id": 33,
+    "prompt": "托管预下单、服务端查单和异步通知闭环已经跑通了，现在只想接 checkout-js 前端按钮。请用 $huifu-pay-integration 给我下一步。",
+    "expected": "必须识别已完成托管预下单和最终确认前置；必须直接读取 checkout-js、callback/confirmation 和异步通知/最终确认相关 reference；必须说明本轮跳过 quickstart、base、preorder、query 等已完成阶段，不重新列为阅读顺序；不得触发 checkout-js 先决能力未确认的硬检查点。"
+  },
+  {
+    "id": 34,
+    "prompt": "前端已经把 `req_seq_id`、`req_date`、`huifu_id` 和订单金额传给我的后端了。用 $huifu-pay-integration 生成 Java 或 Python 代码时，这些字段还能不能在 Builder 里重新生成？",
+    "expected": "必须路由或引用 `shared-request-field-preservation.md`，明确 `req_seq_id`、`req_date` 等外部 DTO / Controller 已接收字段必须保留入参或原样映射；缺失或非法时显式报错；不能用当前日期、随机流水号、环境变量或示例默认值覆盖前端/上游传入值。"
+  },
+  {
+    "id": 35,
+    "prompt": "我要接托管支付的抖音直连下单，pre_order_type 是 4。请用 $huifu-pay-integration 告诉我该看哪些本地文档，关键字段和最终状态怎么确认。",
+    "expected": "必须路由到 `hostingpay-preorder-douyin-direct.md`、`hostingpay-preorder.md` 和异步通知/最终确认相关文档；必须说明抖音直连固定 `pre_order_type=4`、请求核心是 `dy_data.sub_appid`、`busi_scene`、H5 场景的 `h5_info` 和 `scene_info.payer_client_ip`；同步 `jump_url` 或预支付参数不能当支付终态，最终仍要走异步通知验签、幂等和查单/补偿闭环。"
+  },
+  {
+    "id": 36,
+    "prompt": "微信小程序用了拆单支付，现在要查拆单支付订单，不是普通托管查单。请用 $huifu-pay-integration 给我阅读路径和字段边界。",
+    "expected": "必须路由到 `hostingpay-query-splitpay.md`、`hostingpay-query.md` 和 `hostingpay-preorder-wechat-mini.md`；必须说明接口是 `v2/trade/hosting/payment/splitpay/query`，请求用原拆单支付的 `org_req_date` 和 `org_req_seq_id`，返回要看 `trans_list[].trans_stat`，不能用普通 `queryorderinfo` 替代拆单明细查询。"
+  },
+  {
+    "id": 37,
+    "prompt": "聚合支付要做合单交易关单和关单查询，请用 $huifu-pay-integration 告诉我 `merge_flag` 怎么传，主单和子单怎么选。",
+    "expected": "必须路由到 `aggregation-query-trade-close.md` 和 `aggregation-query-close-query.md`；必须说明 `merge_flag=Y` 是合单交易关单/查询，要上传主单信息，`N` 或空是非合单，要上传子单信息；还要提醒 `org_req_date` 必填，`org_hf_seq_id` 和 `org_req_seq_id` 二选一，最终关单结果看 `trans_stat`。"
+  },
+  {
+    "id": 38,
+    "prompt": "聚合支付对账现在要拉合并账单，返回里文件名字段有时候是 file_Name，有时候是 file_name，task_stat 也要正确处理。请用 $huifu-pay-integration 说明字段边界。",
+    "expected": "必须路由到 `aggregation-query-reconciliation.md` 和 `aggregation-query.md`；必须说明请求字段固定为 `file_date`、`bill_type`，合并账单使用 `bill_type=MERGE_BILL`；解析 `file_details` 文件名时兼容 `file_name` 和历史示例 `file_Name`；`task_stat` 要按 `I/P/DP/FP/F/S` 枚举处理。"
+  },
+  {
+    "id": 39,
+    "prompt": "我要做抖音直连下单，能不能直接复用托管 H5/PC 预下单里的抖音 dy_data 扩展字段？请用 $huifu-pay-integration 判断。",
+    "expected": "必须说明可以复用托管预下单 request/端点，但不能按 H5/PC `pre_order_type=1` 场景处理；抖音直连必须路由到 `hostingpay-preorder-douyin-direct.md`，固定 `pre_order_type=4`，并按直连文档组织 `dy_data`、`busi_scene`、H5 场景 `h5_info` 和 `scene_info.payer_client_ip`。"
+  },
+  {
+    "id": 40,
+    "prompt": "抖音直连下单同步返回了 jump_url，我是不是可以直接把订单改成支付成功？请用 $huifu-pay-integration 回答。",
+    "expected": "必须说明 `jump_url` 只是拉起抖音支付或预支付会话信息，不等于交易终态；最终状态仍要通过异步通知验签、幂等和托管查单或补偿查询确认。"
+  },
+  {
+    "id": 41,
+    "prompt": "微信小程序拆单支付后，我想直接用普通托管 queryorderinfo 查一下就行，可以不用 splitpay/query 吗？请用 $huifu-pay-integration 判断。",
+    "expected": "必须说明不能用普通托管 `queryorderinfo` 替代拆单支付订单查询；拆单查询必须走 `v2/trade/hosting/payment/splitpay/query`，并使用原拆单支付的 `org_req_date` 和 `org_req_seq_id`。"
+  },
+  {
+    "id": 42,
+    "prompt": "拆单支付订单查询返回里有 order_stat，我只看这个订单级状态就能判断所有子交易都成功吗？请用 $huifu-pay-integration 说明。",
+    "expected": "必须说明不能只看订单级 `order_stat` 判断全部子交易终态；拆单明细要逐条读取 `trans_list[].trans_stat`，并区分订单级状态和子交易状态。"
+  },
+  {
+    "id": 43,
+    "prompt": "Java Controller 已经收到 req_seq_id、req_date、notify_url、project_id 和金额。用 $huifu-pay-integration 生成托管预下单代码时还能在 Builder 里重新生成这些值吗？",
+    "expected": "必须引用或路由到 `shared-request-field-preservation.md`；必须说明 Java DTO / Controller 已接收的 `req_seq_id`、`req_date`、金额、`notify_url`、`project_id` 必须保留入参或原样映射，缺失或非法时显式报错，不能用当前日期、随机流水号或示例默认值覆盖。"
+  },
+  {
+    "id": 44,
+    "prompt": "PHP 退款接口里上游已经传了 req_seq_id、req_date、ord_amt、org_req_date、org_req_seq_id。请用 $huifu-pay-integration 生成代码边界，别让我重新造流水。",
+    "expected": "必须引用或路由到 `shared-request-field-preservation.md`；必须说明 PHP 代码也要保留上游传入的退款请求流水、请求日期、金额和原交易定位键，缺失或非法时显式报错，不能重新生成或用示例默认值覆盖。"
+  },
+  {
+    "id": 45,
+    "prompt": "我要用 Python SDK 做抖音直连下单，dy_data 能不能直接传 Python dict？请用 $huifu-pay-integration 给我字段序列化边界。",
+    "expected": "必须路由到 `hostingpay-python-adapter.md` 和抖音直连文档；必须说明 `dy_data` 属于 `String(JSON Object)`，传给 SDK 前应使用 `json.dumps(..., ensure_ascii=False, separators=(\",\", \":\"))` 序列化为 JSON 字符串，不要直接传 Python dict。"
+  },
+  {
+    "id": 46,
+    "prompt": "这次新增的抖音直连下单和拆单支付订单查询，在 $huifu-pay-integration 里 Java、PHP、Python 三个 SDK 都是原生兼容的吗？",
+    "expected": "必须路由到 `shared-server-sdk-matrix.md`、`hostingpay-preorder-douyin-direct.md` 和 `hostingpay-query-splitpay.md`；必须说明抖音直连是托管预下单 `pre_order_type=4` 场景，Java/PHP/Python 都使用 `V2TradeHostingPaymentPreorderH5Request` 承载但没有独立抖音 Request 类；必须说明拆单支付订单查询 Java/PHP/Python 均有 `V2TradeHostingPaymentSplitpayQueryRequest`；不得生成不存在的 `Dypreorder` / `Douyin` 类名。"
+  },
+  {
+    "id": 47,
+    "prompt": "官网 FAQ 里有接口权限认证失败、数据权限认证失败，还有“该路由下未配置可用通道”。我们是不是直接换个 huifu_id、product_id 或 channel_no 就能过？请用 $huifu-pay-integration 排查。",
+    "expected": "必须路由到 `merchant-onboarding-faq.md` 和 `copilot-troubleshooting-playbooks.md`；必须说明接口权限认证失败/20003 先查 `sys_id` 接口权限，数据权限认证失败查 `product_id`、`sys_id`、`huifu_id`、`upper_huifu_id` 和归属关系；路由无可用通道查通道开通、`pay_channel`、`pay_scene`，不指定通道时不要传空字符串 `channel_no`；不得建议随便替换商户号或产品号。"
+  },
+  {
+    "id": 48,
+    "prompt": "聚合微信 JSAPI 报 `sub_mch_id与sub_appid不匹配`，还有 `sub_appid与sub_openid不匹配`、URL 未注册、redirect_uri 域名不一致。是不是只改 openid 就行？请用 $huifu-pay-integration 回答。",
+    "expected": "必须路由到 `merchant-onboarding-faq.md`，并按需引用聚合或托管客户准备文档；必须说明 `sub_appid` 要和商户绑定且注意首尾空格，`sub_openid` 必须来自同一个 appid 的授权流程，不能跨公众号/小程序混用；URL 未注册和 redirect_uri 问题要查授权目录/授权域名，目录规则和生效延迟要说明；不得编造 openid 或绕过渠道配置。"
+  },
+  {
+    "id": 49,
+    "prompt": "Webhook 回调里 header 找不到 sign，服务商也收不到下属商户交易消息。notify_url 和控台 Webhook 是不是一套验签？请用 $huifu-pay-integration 说明。",
+    "expected": "必须路由到 `shared-webhook-signing.md`、`merchant-onboarding-faq.md` 和 `copilot-troubleshooting-playbooks.md`；必须说明 Webhook 的 `sign` 常在 URL query 参数里，验签使用原始请求体加 endpoint key/终端密钥 MD5；服务商收下属机构事件要检查统一接收下属机构事件配置；必须区分接口 `notify_url` 与控台 Webhook，不得混用 RSA 与 MD5。"
+  },
+  {
+    "id": 50,
+    "prompt": "退款一直处理中，又提示请求频率过高；我们能不能换个流水并发重试？另外延时分账退款该怎么判断路径？请用 $huifu-pay-integration 回答。",
+    "expected": "必须路由到 `merchant-onboarding-faq.md` 和 `copilot-troubleshooting-playbooks.md`；必须说明退款处理中应轮询退款查询并等待终态，不要换流水并发重试同一笔退款；请求频率过高要降频；延时分账退款要区分未确认部分和已确认部分，已确认部分需要先走确认退款或资金回退后再退原付款方。"
+  },
+  {
+    "id": 51,
+    "prompt": "对账文件没有生成或重新生成查不到，同时商户问 DM 取现额度不足、手续费发票没收到，能不能写代码解决？请用 $huifu-pay-integration 判断。",
+    "expected": "必须路由到 `merchant-onboarding-faq.md` 和 `official-service-source-index.md`；必须说明对账先查对账功能配置、文件日期、跑批和任务状态；DM 取现额度、D1/DM 开通、发票、税务和运营流程不是支付代码可自动解决的问题，只整理商户、时间、金额、流水和影响范围后转人工。"
+  },
+  {
+    "id": 52,
+    "prompt": "商户进件返回了 huifu_id，但后续开业务失败；还有实名状态显示不实时、提示需要补齐资料。这个能不能当成商户已经可交易？请用 $huifu-pay-integration 回答。",
+    "expected": "必须路由到 `merchant-onboarding-faq.md` 和 `copilot-troubleshooting-playbooks.md`；必须说明返回 `huifu_id` 只能说明账户已创建或部分成功，不等于支付产品可交易；要继续检查业务开通、银行卡、结算、取现、`token_no`、实名和补齐资料；未返回 `huifu_id` 才按进件失败重新提交。"
+  },
+  {
+    "id": 53,
+    "prompt": "托管 Java 接入时 `setProductId()` 能不能用？退款 `setOrgReqSeqId()` 编译报错是不是 SDK bug？请用 $huifu-pay-integration 回答。",
+    "expected": "必须路由到 `hostingpay-faq.md` 和 `hostingpay-refund.md`；必须说明最新 `dg-java-sdk 3.0.38` 的 `MerConfig` 产品号 setter 是 `setProductId`，不要再生成旧文档中的 `setProcutId`；退款的 `org_req_seq_id` 没有独立 setter，需要通过 `extendInfoMap` 并调用 `setExtendInfo` 传入，不应说这是 SDK bug。"
+  },
+  {
+    "id": 54,
+    "prompt": "第一次接汇付，但这是现有商城项目，里面已经有 OrderService、PaymentService、NotifyController 和订单状态枚举。请用 $huifu-pay-integration 判断是不是存量项目并给改造建议。",
+    "expected": "必须识别为存量业务系统首次接汇付或存量系统增量接入；必须读取 `copilot-existing-system.md`；必须说明不能因为“第一次接汇付”就判成非存量；必须输出建议新增、建议保留、需要人工确认、建议补充落库字段、风险点和回归检查；必须明确不重写订单系统、不直接替换原订单状态机。"
+  },
+  {
+    "id": 55,
+    "prompt": "我按你给的排查项都看过了，问题还是解决不了。请用 $huifu-pay-integration 告诉我怎么联系官方 AI 技能包技术支持，以及提交前要整理哪些材料。",
+    "expected": "必须路由到 `copilot-troubleshooting-playbooks.md` 和 `official-service-source-index.md`；必须给出官方 AI 技能包技术支持链接 `https://paas.huifu.com/docs/devtools/#/skillsv1_0?id=support`；必须先整理脱敏材料，包括问题描述、环境、接口路径、SDK 版本、脱敏请求/响应、流水、时间、日志、影响范围和已执行动作；不得要求提交真实密钥或完整生产敏感数据。"
   }
 ]

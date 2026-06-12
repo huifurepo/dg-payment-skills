@@ -44,6 +44,7 @@
 | `body` | String | N | 商品描述 |
 | `detail` | Object | N | 商品详情 |
 | `goods_tag` | String | N | 订单优惠标记 |
+| `scene_info` | Object | N | APP 场景信息，`T_APP` 可继续展开 `store_info` |
 
 ### `detail`
 
@@ -62,6 +63,12 @@
 | `price` | String | N | 商品单价 |
 | `quantity` | Integer | N | 商品数量 |
 | `wxpay_goods_id` | String | N | 微信侧商品编码 |
+
+### `scene_info`
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `store_info` | Object | N | 门店信息对象；官方 `T_APP` 表显式列出该对象层 |
 
 ## 微信反扫 `T_MICROPAY` 请求字段
 

@@ -65,6 +65,7 @@
 | SETTLE_USER_BILL | 用户结算对账单 |
 | SETTLE_BILL_USER_MONTH | 用户月结算对账单 |
 | SETTLE_FUND_BILL | 结算资金对账单 |
+| MERGE_BILL | 合并账单 |
 
 ## 返回参数
 
@@ -84,7 +85,7 @@
 | download_url | 平台返回的文件地址字段 |
 | file_date | 文件日期 |
 | file_id | 文件 ID |
-| file_Name | 文件名 |
+| file_name / file_Name | 文件名；参数表以 `file_name` 为准，历史示例可能出现 `file_Name`，解析时建议兼容两者 |
 | huifu_id | 商户号 |
 | bill_type | 文件类型 |
 
@@ -100,7 +101,7 @@
 | huifu_id | 商户号 |
 | task_start_time | 任务开始时间 |
 | task_end_time | 任务结束时间 |
-| task_stat | 任务状态：S=成功 |
+| task_stat | 任务状态：`I` 初始化、`P` 处理中、`DP` 数据处理、`FP` 文件生成、`F` 失败、`S` 成功 |
 
 ## SDK 调用示例
 
@@ -231,3 +232,5 @@ data.put("bill_type", req.getBillType());
 5. 交易账单实收金额与结算金额不一致时，计算方式：交易金额 - 手续费 - 退款金额 + 退款手续费
 6. 交易/分账文件不要按旧经验在 04:00 左右立即拉取，最新产品介绍口径建议保守到 12:00 后再取
 7. 公共请求参数 `data` 的官方类型是 `String(JSON)`；不要在字段表中改成普通 `JSON` 类型。
+8. `bill_type=MERGE_BILL` 是 2026-05-07 v2 详细 API 的新增合并账单类型；旧版 Lightning 摘要页可能未列出。
+9. `file_details` 文件名字段官方参数表使用 `file_name`，历史示例有 `file_Name`；生产解析要做兼容，不要只认一种大小写。

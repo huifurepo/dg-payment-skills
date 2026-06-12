@@ -9,6 +9,7 @@
 - 推荐调用方式
 - 强制请求头
 - 与官方 PHP SDK 的对齐要点
+- 新增接口兼容性
 - 启动示例
 - 设计约束
 - 场景入口
@@ -96,9 +97,16 @@ export HUIFU_SYS_ID="渠道商或商户系统号"
 export HUIFU_PRODUCT_ID="汇付产品号"
 export HUIFU_RSA_PRIVATE_KEY="商户 RSA 私钥"
 export HUIFU_RSA_PUBLIC_KEY="汇付 RSA 公钥"
-export HUIFU_SKILL_SOURCE="hfps/1.2.2"
+export HUIFU_SKILL_SOURCE="hfps/1.3.0"
 export HUIFU_MERCHANT_ID="本次请求的 huifu_id"
 export HUIFU_NOTIFY_URL="https://your-domain.example/huifu/notify"
+export HUIFU_PROJECT_ID="托管项目 project_id"
+export HUIFU_PROJECT_TITLE="托管收银台展示标题"
+export HUIFU_CALLBACK_URL="支付完成后的前端回跳地址"
+export HUIFU_ALIPAY_APP_SCHEMA="支付宝小程序 app_schema；非支付宝小程序可不配置"
+export HUIFU_ALIPAY_BUYER_ID="支付宝 buyer_id；按场景配置"
+export HUIFU_MINIAPP_SEQ_ID="微信小程序 seq_id；按场景配置"
+export HUIFU_SPLIT_HUIFU_ID="分账接收方 huifu_id；按场景配置"
 ```
 
 如项目没有使用默认 Composer 目录，额外设置：
@@ -180,9 +188,16 @@ require_once HUIFU_SDK_ROOT . '/init.php';
 1. 当前 Skill 包对齐的官方 PHP SDK 主链路已在 `BsPay::post()` 中自动补 `jpt-x-skill-source`，并在 `huifu_id` 存在且非空时自动补 `jpt-x-skill-huifu_id`。
 2. `BsPayClient::postRequest()` 走的就是这条官方主链路，不需要再为来源头做 patch。
 3. 如果项目没有给 `MerConfig.skill_source` 赋值，SDK 不会带出来源头；这是初始化配置缺口，不是业务接口缺口。
-4. 官方参数表里标注为 `String(JSON Object)` 的字段，例如 `hosting_data`、`app_data`、`miniapp_data`、`acct_split_bunch`、`risk_check_data`、`terminal_device_data`，都要按 JSON 字符串上送。
+4. 官方参数表里标注为 `String(JSON Object)` 的字段，例如 `hosting_data`、`app_data`、`miniapp_data`、`dy_data`、`acct_split_bunch`、`risk_check_data`、`terminal_device_data`，都要按 JSON 字符串上送。
 5. 当前 Skill 包不再内置 PHP 模板资产；差异排查以共享协议文档和项目实际安装的官方 SDK 源码为准。
 6. 业务代码里显式 `require_once` request 类不是退回手写 SDK；这是因为当前官方 Composer 包没有提供 request 类 autoload。
+
+## 新增接口兼容性
+
+| 接口 | PHP SDK 2.0.27 源码核对 | 输出规则 |
+| --- | --- | --- |
+| 抖音直连下单 | 使用托管预下单 `V2TradeHostingPaymentPreorderH5Request`；没有独立抖音直连 Request 类 | 调用 `setPreOrderType("4")`，并通过 `setExtendInfo(...)` / params 承载 `dy_data` 和 `notify_url`；不要生成不存在的 `Dypreorder` / `Douyin` 类 |
+| 拆单支付订单查询 | 存在 `V2TradeHostingPaymentSplitpayQueryRequest` | 可使用官方 request 类；不要用普通 `V2TradeHostingPaymentQueryorderinfoRequest` 替代 |
 
 ## 启动示例
 

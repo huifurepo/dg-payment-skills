@@ -29,23 +29,20 @@ A：最常见原因是 `time_expire`（交易失效时间）已过期。默认 1
 2. 超时后重新调用预下单接口生成新订单
 
 **Q：预下单返回成功但 jump_url 为空？**
-A：检查 `pre_order_type` 是否正确设置（1=H5/PC、2=支付宝小程序、3=微信小程序）。不同类型返回的跳转信息字段不同。
+A：检查 `pre_order_type` 是否正确设置（1=H5/PC、2=支付宝小程序、3=微信小程序、4=抖音直连）。不同类型返回的跳转信息字段不同，抖音直连还要确认 `dy_data`、`busi_scene` 和真实客户端 IP。
 
 ## SDK 使用问题
 
-**Q：`setProcutId()` 拼写看起来不对？**
-A：这是 dg-java-sdk 的**原生拼写**，少了一个 `d`。这不是 bug，SDK 就是这样设计的。如果你调用 `setProductId()` 会编译错误。
+**Q：Java 初始化时产品号 setter 应该用哪个？**
+A：以最新 `dg-java-sdk 3.0.38` 源码为准，`MerConfig` 使用 `setProductId(...)`。不要再生成旧文档中的 `setProcutId(...)`。
 
 ```java
-// ✗ 编译错误 — 方法不存在
+// ✓ dg-java-sdk 3.0.38
 config.setProductId("YYZY");
-
-// ✓ 正确 — SDK 原生拼写
-config.setProcutId("YYZY");
 ```
 
 **Q：Spring Boot 3.x 启动报错 javax 相关异常？**
-A：dg-java-sdk 3.0.37 内部使用 `javax.validation` 注解。Spring Boot 3.x 已迁移到 `jakarta.validation`，需要添加兼容桥接包：
+A：先核对项目实际安装的 `dg-java-sdk` 版本和依赖树。当前 `3.0.38` 源码未检出 `javax.validation` 注解；如果项目仍因历史版本或传递依赖报 `javax.validation` 缺失，再补兼容依赖：
 
 ```xml
 <dependency>

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import json
+import re
 import sys
 from pathlib import Path
 
@@ -21,6 +23,7 @@ from skill_validation_config import (
     SKILL_FILES,
     ValidationState,
 )
+from validate_python_contract import validate_python_prod_contract
 from skill_validation_utils import (
     looks_like_local_path,
     should_skip,
@@ -28,7 +31,6 @@ from skill_validation_utils import (
     validate_repo_files,
     validate_skill_top_level,
 )
-
 
 def main() -> int:
     state = ValidationState()
@@ -38,14 +40,16 @@ def main() -> int:
     validate_skill_files(state)
     validate_agents_files(state)
     validate_entry_docs(state)
+    validate_regression_metadata(state)
+    validate_python_prod_contract(state)
     validate_reference_navigation(state)
     validate_markdown_links(state)
     validate_repo_files(state)
     print(f"\n=== 结果: {state.errors} errors, {state.warnings} warnings ===")
     if state.errors == 0:
-        print("✅ All checks passed")
+        print("[OK] All checks passed")
     else:
-        print("❌ Fix errors before release")
+        print("[ERROR] Fix errors before release")
     return state.errors
 
 
@@ -421,6 +425,48 @@ def validate_entry_docs(state: ValidationState) -> None:
         )
         return
     state.ok(f"{EXPECTED_SKILL_FILE} reference mentions stay within route-only threshold")
+
+
+def validate_regression_metadata(state: ValidationState) -> None:
+    print("\n--- 回归 Prompt 元数据检查 ---")
+    prompts_file = REPO_ROOT / "scripts" / "huifu-payment-test-prompts.json"
+    runner_file = REPO_ROOT / "scripts" / "run_real_model_regression.py"
+    canonical_file = EXPECTED_SKILL_DIR / "references" / "canonical-regression-prompts.md"
+    readme_file = REPO_ROOT / "README.md"
+
+    prompts = json.loads(prompts_file.read_text(encoding="utf-8"))
+    prompt_ids = {int(item["id"]) for item in prompts}
+    runner_text = runner_file.read_text(encoding="utf-8")
+    rule_ids = {int(match.group(1)) for match in re.finditer(r"^\s+(\d+):\s+CaseRule", runner_text, flags=re.M)}
+    missing_rules = sorted(prompt_ids - rule_ids)
+    if missing_rules:
+        state.error(f"missing regression rule ids: {', '.join(map(str, missing_rules))}")
+    else:
+        state.ok(f"all {len(prompt_ids)} regression prompts have runner rules")
+
+    smoke_match = re.search(r"SMOKE_CASE_IDS\s*=\s*\(([^)]*)\)", runner_text)
+    smoke_ids = set()
+    if smoke_match:
+        smoke_ids = {int(value) for value in re.findall(r"\d+", smoke_match.group(1))}
+    required_smoke_ids = {34, 35, 36, 37, 38}
+    missing_smoke = sorted(required_smoke_ids - smoke_ids)
+    if missing_smoke:
+        state.error(f"smoke regression missing required 1.3.0 cases: {', '.join(map(str, missing_smoke))}")
+    else:
+        state.ok("smoke regression covers 1.3.0 field/API refresh cases")
+
+    canonical_count = len(re.findall(r"^### C\d+", canonical_file.read_text(encoding="utf-8"), flags=re.M))
+    if canonical_count != 8:
+        state.error(f"canonical regression prompt count must be 8, found {canonical_count}")
+    else:
+        state.ok("canonical regression prompt count OK")
+
+    readme_text = readme_file.read_text(encoding="utf-8")
+    stale_claims = [claim for claim in ("5/5 passed", "34/34 passed", "5 条随 Skill 分发") if claim in readme_text]
+    if stale_claims:
+        state.error(f"README.md has stale regression claims: {', '.join(stale_claims)}")
+    else:
+        state.ok("README.md regression claims avoid stale fixed totals")
 
 
 def check_required_snippet(path: Path, text: str, snippet: str, state: ValidationState) -> None:

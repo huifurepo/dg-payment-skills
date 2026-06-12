@@ -11,6 +11,8 @@
 - 请求头强制约束
 - 退款主流程
 - 退款申请 data 请求字段
+- 退款申请返回参数
+- 退款申请异步返回参数
 - 退款查询 data 请求字段
 - 关键定位字段
 - 核心规则
@@ -120,6 +122,85 @@
 | --- | --- | --- |
 | `refund_desc` | N | 抖音退款原因，会展示给用户 |
 
+## 退款申请返回参数
+
+同步返回只代表退款请求受理或处理结果，不等于退款终态。退款最终状态仍应通过退款查询和异步通知闭环确认。
+
+| 参数 | 必填 | 说明 |
+| --- | --- | --- |
+| `resp_code` | Y | 业务响应码 |
+| `resp_desc` | Y | 业务响应信息 |
+| `product_id` | Y | 产品号，原样返回 |
+| `huifu_id` | Y | 商户号 |
+| `req_date` | Y | 退款请求日期，原样返回 |
+| `req_seq_id` | Y | 退款请求流水号，原样返回 |
+| `hf_seq_id` | N | 退款全局流水号，扫码退款场景可能返回 |
+| `org_req_date` | N | 原交易请求日期 |
+| `org_req_seq_id` | N | 原交易请求流水号 |
+| `org_hf_seq_id` | N | 原交易全局流水号 |
+| `trans_time` | N | 退款交易发生时间 |
+| `trans_stat` | N | `P` 处理中，`S` 成功，`F` 失败 |
+| `ord_amt` | Y | 退款金额 |
+| `actual_ref_amt` | N | 实际退款金额 |
+| `acct_split_bunch` | N | 分账信息 |
+| `unionpay_response` | N | 银联返回报文 |
+| `dy_response` | N | 抖音返回报文 |
+| `remark` | N | 备注，原样返回 |
+| `bank_code` | N | 通道返回码 |
+| `bank_message` | N | 通道返回描述 |
+| `fee_amt` | N | 退款返还手续费 |
+
+## 退款申请异步返回参数
+
+退款申请可能通过异步通知返回更完整的退款结果。异步通知仍需验签、幂等和必要的退款查询确认，不能只凭同步 `resp_code=00000000` 改退款成功。
+
+| 参数 | 必填 | 说明 |
+| --- | --- | --- |
+| `resp_code` | Y | 业务响应码 |
+| `resp_desc` | Y | 业务响应信息 |
+| `product_id` | Y | 产品号 |
+| `huifu_id` | Y | 商户号 |
+| `mer_name` | N | 商户名称 |
+| `req_date` | Y | 退款请求日期 |
+| `req_seq_id` | Y | 退款请求流水号 |
+| `hf_seq_id` | N | 退款全局流水号 |
+| `org_req_date` | N | 原交易请求日期 |
+| `org_req_seq_id` | N | 原交易请求流水号 |
+| `org_hf_seq_id` | N | 原交易全局流水号 |
+| `org_ord_amt` | N | 原交易订单金额 |
+| `org_fee_amt` | N | 原交易手续费 |
+| `trans_date` | N | 退款交易发生日期 |
+| `trans_time` | N | 退款交易发生时间 |
+| `trans_finish_time` | N | 退款完成时间 |
+| `trans_type` | N | 交易类型，`TRANS_REFUND` |
+| `trans_stat` | N | `P` 处理中，`S` 成功，`F` 失败，`I` 初始 |
+| `ord_amt` | Y | 本次退款金额 |
+| `actual_ref_amt` | N | 实际退款金额 |
+| `total_ref_amt` | N | 原交易累计退款金额 |
+| `total_ref_fee_amt` | N | 原交易累计退款手续费金额 |
+| `ref_cut` | N | 累计退款次数 |
+| `party_order_id` | N | 微信/支付宝/抖音用户账单上的商户订单号 |
+| `bank_code` | N | 通道返回码 |
+| `bank_message` | N | 通道返回描述 |
+| `bank_id` | N | 收款方银行代号，快捷或网银返回 |
+| `bank_name` | N | 收款方银行名称，快捷或网银返回 |
+| `fee_amt` | N | 退款返还手续费 |
+| `acct_split_bunch` | N | 分账退款信息 |
+| `split_fee_info` | N | 分账手续费信息 |
+| `unionpay_response` | N | 银联返回报文，可能含 `coupon_info` 优惠信息 |
+| `dy_response` | N | 抖音返回报文，含抖音原交易订单号、退款单号、用户退款金额等 |
+| `remark` | N | 备注，原样返回 |
+
+### 异步扩展对象摘要
+
+| 对象 | 关键字段 |
+| --- | --- |
+| `acct_split_bunch.acct_infos[]` | `div_amt`、`huifu_id`、`acct_id`、`part_loan_amt` |
+| `split_fee_info` | `total_split_fee_amt`、`split_fee_flag`、`split_fee_details[]` |
+| `split_fee_details[]` | `split_fee_amt`、`split_fee_huifu_id`、`split_fee_acct_id` |
+| `unionpay_response.coupon_info[]` | `type`、`spnsrId`、`offstAmt`、`id`、`desc`、`addnInfo` |
+| `dy_response` | `org_out_trans_id`、`out_trans_id`、`payer_refund` |
+
 ## 退款查询 data 请求字段
 
 | 参数 | 必填 | 说明 |
@@ -145,7 +226,7 @@
 
 1. 退款金额不能超过原交易金额
 2. `resp_code=00000000` 只表示退款请求已受理
-3. 退款最终状态必须看异步通知或退款查询
+3. 退款最终状态必须看退款查询和异步通知闭环
 4. 退款逻辑必须幂等
 
 ## device_type 参考

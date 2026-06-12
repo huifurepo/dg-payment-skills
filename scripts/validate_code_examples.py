@@ -1,26 +1,55 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import argparse
+import ast
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
 import xml.etree.ElementTree as ET
-from dataclasses import dataclass
+import time
+from dataclasses import dataclass, field
 from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SKILL_ROOT = REPO_ROOT / "huifu-pay-integration"
 CODE_FENCE_PATTERN = re.compile(r"```([^\n`]*)\n(.*?)\n```", re.S)
-PHP_TIMEOUT_SECONDS = 10
+DEFAULT_COMMAND_TIMEOUT_SECONDS = 10.0
+DEFAULT_TOTAL_TIMEOUT_SECONDS = 300.0
 SUPPORTED_JS_LANGUAGES = {"js", "javascript"}
+SUPPORTED_PYTHON_LANGUAGES = {"python", "py"}
+LANGUAGE_ALIASES = {
+    "json": "json",
+    "xml": "xml",
+    "bash": "bash",
+    "sh": "bash",
+    "js": "js",
+    "javascript": "js",
+    "php": "php",
+    "java": "java",
+    "python": "python",
+    "py": "python",
+}
 FORBIDDEN_JAVA_PATTERNS = {
     "HttpClientUtils.sendPost": "Java 示例不得回退手写 HTTP",
     "curl_setopt": "服务端示例不得回退 curl_setopt",
+    "setProcutId(": "Java 示例不得使用旧产品号 setter",
 }
+
+
+FORBIDDEN_PYTHON_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
+    (re.compile(r"\brequests\s*\."), "Python examples must not hand-write requests HTTP flows"),
+    (re.compile(r"\bhttpx\s*\."), "Python examples must not hand-write httpx HTTP flows"),
+    (re.compile(r"\burllib\.request\b"), "Python examples must not hand-write urllib HTTP flows"),
+    (re.compile(r"\bHostingClient\b"), "Python examples must not create HostingClient"),
+    (re.compile(r"\bAggregationClient\b"), "Python examples must not create AggregationClient"),
+    (re.compile(r"\bRSA\.import_key\b|\brsa\.PrivateKey\b"), "Python examples must not hand-roll RSA signing"),
+)
 
 
 @dataclass(frozen=True)
@@ -31,16 +60,44 @@ class CodeBlock:
     code: str
 
 
+@dataclass(frozen=True)
+class ValidationOptions:
+    languages: frozenset[str] | None
+    file_filters: tuple[str, ...]
+    command_timeout: float
+    total_timeout: float
+
+
 @dataclass
 class ValidationState:
     errors: int = 0
+    started_at: float = field(default_factory=time.monotonic)
+    command_timeout: float = DEFAULT_COMMAND_TIMEOUT_SECONDS
+    total_timeout: float = DEFAULT_TOTAL_TIMEOUT_SECONDS
 
     def ok(self, message: str) -> None:
-        print(f"✅ OK:    {message}")
+        print(f"[OK]    {message}")
 
     def error(self, message: str) -> None:
-        print(f"❌ ERROR: {message}")
+        print(f"[ERROR] {message}")
         self.errors += 1
+
+    def skip(self, message: str) -> None:
+        print(f"[SKIP]  {message}")
+
+    def remaining_timeout(self) -> float:
+        elapsed = time.monotonic() - self.started_at
+        return max(0.0, self.total_timeout - elapsed)
+
+    def check_timeout(self, stage: str) -> bool:
+        if self.remaining_timeout() > 0:
+            return True
+        self.error(f"{stage} 超过全局超时 {self.total_timeout:.0f}s")
+        return False
+
+    def subprocess_timeout(self) -> float:
+        remaining = self.remaining_timeout()
+        return max(0.1, min(self.command_timeout, remaining))
 
 
 @dataclass(frozen=True)
@@ -56,23 +113,79 @@ class PhpProject:
     sdk_root: Path
 
 
-def main() -> int:
-    state = ValidationState()
-    blocks = collect_code_blocks()
+def main(argv: list[str] | None = None) -> int:
+    options = parse_args(argv)
+    state = ValidationState(command_timeout=options.command_timeout, total_timeout=options.total_timeout)
+    blocks = collect_code_blocks(options)
     print("=== 示例代码校验 ===\n")
-    validate_json_blocks(blocks, state)
-    validate_xml_blocks(blocks, state)
-    validate_bash_blocks(blocks, state)
-    validate_javascript_blocks(blocks, state)
-    validate_php_blocks(blocks, state)
-    validate_java_constraints(blocks, state)
+    run_stage("JSON examples", "json", options, state, lambda: validate_json_blocks(blocks, state))
+    run_stage("XML examples", "xml", options, state, lambda: validate_xml_blocks(blocks, state))
+    run_stage("Bash examples", "bash", options, state, lambda: validate_bash_blocks(blocks, state))
+    run_stage("JavaScript examples", "js", options, state, lambda: validate_javascript_blocks(blocks, state))
+    run_stage("Python examples", "python", options, state, lambda: validate_python_blocks(blocks, state))
+    run_stage("PHP examples", "php", options, state, lambda: validate_php_blocks(blocks, state))
+    run_stage("Java policy checks", "java", options, state, lambda: validate_java_constraints(blocks, state))
     print(f"\n=== 示例代码结果: {state.errors} errors ===")
     return state.errors
 
 
-def collect_code_blocks() -> list[CodeBlock]:
+def parse_args(argv: list[str] | None) -> ValidationOptions:
+    parser = argparse.ArgumentParser(description="Validate Markdown code examples in the Huifu Skill.")
+    parser.add_argument(
+        "--language",
+        action="append",
+        choices=sorted(LANGUAGE_ALIASES),
+        help="Only run one language stage. Can repeat. Examples: --language php --language java",
+    )
+    parser.add_argument(
+        "--file",
+        action="append",
+        default=[],
+        help="Only scan matching Markdown file. Match by absolute path, repo-relative path, skill-relative path, or basename. Can repeat.",
+    )
+    parser.add_argument(
+        "--command-timeout",
+        type=float,
+        default=DEFAULT_COMMAND_TIMEOUT_SECONDS,
+        help="Timeout in seconds for each external syntax/runtime command.",
+    )
+    parser.add_argument(
+        "--timeout",
+        type=float,
+        default=DEFAULT_TOTAL_TIMEOUT_SECONDS,
+        help="Global timeout in seconds for the whole validation run.",
+    )
+    args = parser.parse_args(argv)
+    languages = None
+    if args.language:
+        languages = frozenset(LANGUAGE_ALIASES[item] for item in args.language)
+    return ValidationOptions(
+        languages=languages,
+        file_filters=tuple(args.file),
+        command_timeout=args.command_timeout,
+        total_timeout=args.timeout,
+    )
+
+
+def run_stage(
+    title: str,
+    language_key: str,
+    options: ValidationOptions,
+    state: ValidationState,
+    callback,
+) -> None:
+    if options.languages is not None and language_key not in options.languages:
+        state.skip(f"{title} skipped by --language")
+        return
+    if not state.check_timeout(title):
+        return
+    print(f"--- {title} ---")
+    callback()
+
+
+def collect_code_blocks(options: ValidationOptions) -> list[CodeBlock]:
     blocks: list[CodeBlock] = []
-    for path in iter_markdown_files():
+    for path in iter_markdown_files(options):
         text = path.read_text(encoding="utf-8")
         for index, match in enumerate(CODE_FENCE_PATTERN.finditer(text), start=1):
             language = match.group(1).strip() or "text"
@@ -80,8 +193,35 @@ def collect_code_blocks() -> list[CodeBlock]:
     return blocks
 
 
-def iter_markdown_files() -> list[Path]:
-    return [SKILL_ROOT / "SKILL.md", *sorted((SKILL_ROOT / "references").glob("*.md"))]
+def iter_markdown_files(options: ValidationOptions) -> list[Path]:
+    files = [SKILL_ROOT / "SKILL.md", *sorted((SKILL_ROOT / "references").glob("*.md"))]
+    if not options.file_filters:
+        return files
+    selected: list[Path] = []
+    for raw_filter in options.file_filters:
+        matches = [path for path in files if matches_file_filter(path, raw_filter)]
+        if not matches:
+            raise SystemExit(f"--file did not match any Skill Markdown file: {raw_filter}")
+        selected.extend(matches)
+    return sorted(set(selected))
+
+
+def matches_file_filter(path: Path, raw_filter: str) -> bool:
+    filter_text = raw_filter.replace("\\", "/").strip()
+    names = {path.name, path.as_posix()}
+    for root in (REPO_ROOT, SKILL_ROOT):
+        try:
+            names.add(path.relative_to(root).as_posix())
+        except ValueError:
+            pass
+    candidate = Path(raw_filter)
+    if candidate.exists():
+        try:
+            names.add(candidate.resolve().as_posix())
+            names.add(path.resolve().as_posix())
+        except OSError:
+            pass
+    return filter_text in names
 
 
 def validate_json_blocks(blocks: list[CodeBlock], state: ValidationState) -> None:
@@ -106,8 +246,16 @@ def validate_xml_blocks(blocks: list[CodeBlock], state: ValidationState) -> None
 
 def validate_bash_blocks(blocks: list[CodeBlock], state: ValidationState) -> None:
     selected = [block for block in blocks if block.language == "bash"]
+    if not selected:
+        state.ok("Bash examples valid: 0")
+        return
+    if shutil.which("bash") is None:
+        state.ok(f"Bash examples skipped: bash not found ({len(selected)} blocks)")
+        return
     for block in selected:
-        result = subprocess.run(["bash", "-n"], input=block.code, text=True, capture_output=True)
+        result = run_subprocess(["bash", "-n"], block, state, "Bash 示例语法检查", input=block.code)
+        if result is None:
+            continue
         if result.returncode != 0:
             state.error(format_command_error("Bash 示例语法错误", block, result))
     state.ok(f"Bash examples valid: {len(selected)}")
@@ -119,7 +267,9 @@ def validate_javascript_blocks(blocks: list[CodeBlock], state: ValidationState) 
         for block in selected:
             script = Path(temp_dir) / "snippet.js"
             script.write_text(wrap_javascript(block.code), encoding="utf-8")
-            result = subprocess.run(["node", "--check", str(script)], text=True, capture_output=True)
+            result = run_subprocess(["node", "--check", str(script)], block, state, "JavaScript 示例语法检查")
+            if result is None:
+                continue
             if result.returncode != 0:
                 state.error(format_command_error("JavaScript 示例语法错误", block, result))
             validate_create_preorder_return(block, state)
@@ -136,6 +286,37 @@ def validate_create_preorder_return(block: CodeBlock, state: ValidationState) ->
 
 def wrap_javascript(code: str) -> str:
     return "async function __snippet() {\n" + code + "\n}\n"
+
+
+def validate_python_blocks(blocks: list[CodeBlock], state: ValidationState) -> None:
+    selected = [block for block in blocks if block.language in SUPPORTED_PYTHON_LANGUAGES]
+    for block in selected:
+        validate_python_syntax(block, state)
+        validate_python_forbidden_patterns(block, state)
+        validate_python_official_sdk_usage(block, state)
+    state.ok(f"Python examples syntax/policy-checked: {len(selected)}")
+
+
+def validate_python_syntax(block: CodeBlock, state: ValidationState) -> None:
+    try:
+        ast.parse(block.code)
+    except SyntaxError as exc:
+        state.error(f"Python example syntax error: {format_block(block)} -> line {exc.lineno}: {exc.msg}")
+
+
+def validate_python_forbidden_patterns(block: CodeBlock, state: ValidationState) -> None:
+    for pattern, message in FORBIDDEN_PYTHON_PATTERNS:
+        if pattern.search(block.code):
+            state.error(f"{message}: {format_block(block)}")
+
+
+def validate_python_official_sdk_usage(block: CodeBlock, state: ValidationState) -> None:
+    if not block.path.name.startswith(("aggregation-python-", "hostingpay-python-")):
+        return
+    if not re.search(r"\b(DGClient|MerConfig|Payment[A-Za-z]*Request|V2Trade[A-Za-z]+)", block.code):
+        return
+    if "dg_sdk" not in block.code:
+        state.error(f"Python SDK examples must use official dg_sdk: {format_block(block)}")
 
 
 def validate_php_blocks(blocks: list[CodeBlock], state: ValidationState) -> None:
@@ -159,11 +340,15 @@ def validate_single_php_block(block: CodeBlock, project: PhpProject, state: Vali
     script = project.root / "examples" / f"snippet_{block.index}_{safe_name(block.path)}.php"
     write_file(script, normalize_php_code(block.code))
     env = php_env(project)
-    lint = subprocess.run(["php", "-l", str(script)], text=True, capture_output=True, env=env)
+    lint = run_subprocess(["php", "-l", str(script)], block, state, "PHP 示例语法检查", env=env)
+    if lint is None:
+        return
     if lint.returncode != 0:
         state.error(format_command_error("PHP 示例语法错误", block, lint))
         return
-    result = subprocess.run(["php", str(script)], text=True, capture_output=True, env=env, timeout=PHP_TIMEOUT_SECONDS)
+    result = run_subprocess(["php", str(script)], block, state, "PHP 示例运行", env=env)
+    if result is None:
+        return
     if result.returncode != 0:
         state.error(format_command_error("PHP 示例运行失败", block, result))
 
@@ -184,9 +369,11 @@ class ExampleOrder {
     public function getReqSeqId() { return 'req_seq'; }
 }
 $order = $order ?? new ExampleOrder();
+$splitOrder = $splitOrder ?? new ExampleOrder();
 $refund = $refund ?? new ExampleOrder();
 $refundOrder = $refundOrder ?? new ExampleOrder();
 $openidFromWechat = $openidFromWechat ?? 'openid';
+$clientIp = $clientIp ?? '127.0.0.1';
 $optionalPayload = $optionalPayload ?? [];
 $_SERVER['REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
 $payment = $payment ?? new \\BsPaySdk\\core\\Payment();
@@ -227,6 +414,7 @@ def php_request_stubs() -> list[PhpStubClass]:
         PhpStubClass("request/V2TradeHostingPaymentPreorderWxRequest.php", "BsPaySdk\\request", "V2TradeHostingPaymentPreorderWxRequest"),
         PhpStubClass("request/V2TradeHostingPaymentQueryorderinfoRequest.php", "BsPaySdk\\request", "V2TradeHostingPaymentQueryorderinfoRequest"),
         PhpStubClass("request/V2TradeHostingPaymentQueryrefundinfoRequest.php", "BsPaySdk\\request", "V2TradeHostingPaymentQueryrefundinfoRequest"),
+        PhpStubClass("request/V2TradeHostingPaymentSplitpayQueryRequest.php", "BsPaySdk\\request", "V2TradeHostingPaymentSplitpayQueryRequest"),
     ]
 
 
@@ -240,7 +428,7 @@ $huifuSdkRoot = getenv('HUIFU_SDK_ROOT') ?: dirname(__DIR__) . '/vendor/huifurep
 if (!is_file($huifuSdkRoot . '/init.php')) { throw new RuntimeException('未找到 dg-php-sdk'); }
 if (!defined('HUIFU_SDK_ROOT')) { define('HUIFU_SDK_ROOT', rtrim($huifuSdkRoot, '/')); }
 require_once HUIFU_SDK_ROOT . '/init.php';
-\\BsPaySdk\\core\\BsPay::init(['sys_id' => 'sys', 'product_id' => 'prod', 'rsa_merch_private_key' => 'private', 'rsa_huifu_public_key' => 'public', 'skill_source' => 'hfps/1.2.0'], true);
+\\BsPaySdk\\core\\BsPay::init(['sys_id' => 'sys', 'product_id' => 'prod', 'rsa_merch_private_key' => 'private', 'rsa_huifu_public_key' => 'public', 'skill_source' => 'hfps/1.3.0'], true);
 """)
 
 
@@ -259,7 +447,10 @@ def php_env(project: PhpProject) -> dict[str, str]:
         "HUIFU_PROJECT_TITLE": "title",
         "HUIFU_CALLBACK_URL": "https://callback.example.test",
         "HUIFU_ALIPAY_BUYER_ID": "buyer",
-        "HUIFU_SKILL_SOURCE": "hfps/1.2.0",
+        "HUIFU_ALIPAY_APP_SCHEMA": "alipays://platformapi/startapp",
+        "HUIFU_MINIAPP_SEQ_ID": "miniapp",
+        "HUIFU_SPLIT_HUIFU_ID": "split_merchant",
+        "HUIFU_SKILL_SOURCE": "hfps/1.3.0",
     })
     return env
 
@@ -282,7 +473,7 @@ def validate_named_java_constraints(state: ValidationState) -> None:
     require_text_contains("references/aggregation-query-reconciliation.md", "V2TradeCheckFilequeryRequest", state)
     require_text_contains("references/aggregation-query-reconciliation.md", "BasePayClient.request", state)
     require_text_contains("references/aggregation-java-sdk-quickstart.md", "setProductId", state)
-    require_text_contains("references/hostingpay-java-sdk-quickstart.md", "setProcutId", state)
+    require_text_contains("references/hostingpay-java-sdk-quickstart.md", "setProductId", state)
 
 
 def require_text_contains(relative_path: str, needle: str, state: ValidationState) -> None:
@@ -290,6 +481,28 @@ def require_text_contains(relative_path: str, needle: str, state: ValidationStat
     text = path.read_text(encoding="utf-8")
     if needle not in text:
         state.error(f"Java 约束缺失: {relative_path} -> {needle}")
+
+
+def run_subprocess(
+    command: list[str],
+    block: CodeBlock,
+    state: ValidationState,
+    action: str,
+    **kwargs,
+) -> subprocess.CompletedProcess[str] | None:
+    if not state.check_timeout(action):
+        return None
+    try:
+        return subprocess.run(
+            command,
+            text=True,
+            capture_output=True,
+            timeout=state.subprocess_timeout(),
+            **kwargs,
+        )
+    except subprocess.TimeoutExpired as exc:
+        state.error(f"{action}超时: {format_block(block)} -> {exc.timeout:.1f}s")
+        return None
 
 
 def write_file(path: Path, content: str) -> None:

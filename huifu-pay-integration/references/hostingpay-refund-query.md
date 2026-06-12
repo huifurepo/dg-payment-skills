@@ -13,7 +13,7 @@
 
 # 托管交易退款查询
 
-> 本文依据 2026-03-23 官方文档整理，适用于 `v2/trade/hosting/payment/queryRefundInfo`。
+> 本文依据 2026-05-22 官方文档整理，适用于 `v2/trade/hosting/payment/queryRefundInfo`。
 
 ## 接口概述
 
@@ -183,7 +183,7 @@
 | trans_stat | 交易状态 | String | 1 | N | `P`=处理中，`S`=成功，`F`=失败，`I`=初始；官方行内示例写成 `TRANS_REFUND`，但该值不是状态枚举，代码和示例必须按 `P/S/F/I` 处理 |
 | bank_code | 通道返回码 | String | 64 | N | 通道返回码 |
 | bank_message | 通道返回描述 | String | 256 | N | 通道返回描述 |
-| fee_amt | 手续费金额 | String | 14 | N | 单位元，保留两位小数 |
+| fee_amt | 退款返还手续费 | String | 14 | N | 单位元，保留两位小数 |
 | acct_split_bunch | 分账对象 | String(JSON Object) | - | N | 分账对象，见上文 `acct_split_bunch` |
 | split_fee_info | 分账手续费信息 | String(JSON Object) | - | N | 分账手续费信息，见上文 `split_fee_info` |
 | org_party_order_id | 原交易用户账单上的商户订单号 | String | 64 | N | 扫码退款返回 |
