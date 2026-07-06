@@ -2,6 +2,32 @@
 
 所有重要变更记录在此文件中，格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/)。
 
+## [1.3.1] - 2026-07-03
+
+### 新增
+- 新增 `references/shared-local-sandbox.md`，作为 `hf-payment-local-sandbox` 本地协议模拟、报告校验、故障注入和上线前边界的正式入口。
+- 主 `SKILL.md` 增加本地沙箱快速路由和“本地沙箱检查卡”，用于回答安装/启动、沙箱报告、通知重放、故障注入和上线前证据衔接问题。
+- README、共享总览、版本策略和发布检查清单同步新增本地沙箱能力说明。
+
+### 变更
+- Skill 包版本升级为 `1.3.1`；本次升级不改变支付接口契约，`hf-payment-local-sandbox 1.0.0` 仍锁定 contract bundle `huifu-pay-integration-1.3.0-r4`。
+- 本地沙箱预览版推进到 `1.0.0`，Skill 中的本地沙箱来源字段同步为 `hfps/1.3.1;sandbox/1.0.0`，公开预览包和更新索引继续使用 `latest-preview.zip` / `latest.json` 固定入口。
+- 版本提示策略更新为当前本地 Skill 版本 `1.3.1`，继续明确 Skill 不能主动联网检查或主动推送升级。
+
+### 修复（测评优化轮）
+- 修复 P0：补齐 `hosting.payment.splitpay_query` 缺失的 `sample-hosting-splitpay-query-success` 脱敏变体 fixture（由 `import_local_sandbox_samples.py` 从真实脱敏样例重新生成），`go test`、`doctor`、`validate contract` 全部转绿。
+- 修复 P1 数据竞争：`handleAggregationCreate/Query`、`handleHostingPreorder/Query` 在 `mu.Unlock()` 后改为仅使用锁内快照 `pc := *payment`，消除并发同键查询时对 `*payment` 的锁外解引用；新增 `TestConcurrentAggregationQueryNoDataRace` 配合 `go test -race` 回归。
+- 修复假绿：`scripts/validate_python_contract.py` 补 `__main__` 主入口，独立运行不再静默 exit 0。
+
+### 变更（测评优化轮）
+- 新增 `scripts/validate_contract_fixtures.py`：纯 Python、零工具链依赖的 fixture 引用完整性前置快检，已接入 `validate_local_sandbox_all.py`（`go-test` 之前），杜绝 P0 类缺陷在无 Go 环境下被放行。
+- 安全加固：`money.parseAmountFen` 增加金额上限防 `int64` 溢出回绕；`pinned_http.doPinned` 禁用 keep-alive 避免空闲连接累积；服务器补 `ReadTimeout/WriteTimeout/IdleTimeout`；新增 `recoverPanic` 中间件包裹 control/gateway 避免单请求 panic 断连；`authorized`/`validCSRF` 改用 `crypto/subtle.ConstantTimeCompare`；`--gateway-host` 非本地时打印安全告警。
+- 文档口径统一：幂等键口径以 `shared-async-notify.md` 复合键为 canonical，`hostingpay-faq.md`/`hostingpay-java-tech-spec.md`/`aggregation-java-tech-spec.md` 单键处补"最简形态，完整口径见"指针；`SKILL.md` "字段保真规则"统一为"字段保留规则"并显式命名 `references/shared-request-field-preservation.md`；`shared-overview.md` npm registry 查询补联网守卫；1.3.0 日期口径统一为"基线 06-02 / API 06-10 / Copilot 06-12"；README 显式区分 12 条 runner smoke 与 8 条 canonical 回归集；本地沙箱检查卡"不可验证"项补充"失败态异步通知分叉不可注入、接收侧幂等需接入方自证"。
+- `reference-digests.json` 同步重算 5 个改动文件的 sha256。
+### 边界
+- 本地沙箱通过不代表官方联调通过，不代表具备生产上线条件，也不验证真实商户权限、通道、费率、风控或资金结果。
+- Skill 包仍只包含 `SKILL.md`、`agents/` 和 `references/`，不内置沙箱二进制、内部 RC 制品、真实密钥或生产配置。
+
 ## [1.3.0] - 2026-06-02
 
 ### 新增

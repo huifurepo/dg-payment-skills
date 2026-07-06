@@ -1,0 +1,79 @@
+{
+  "assertions": [
+    "envelope",
+    "headers",
+    "signature",
+    "sample-backed",
+    "business-variant",
+    "notify-rsa-resp-data",
+    "webhook-md5-raw-body"
+  ],
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "endpoint_id": "aggregation.payment.create",
+  "event_assertions": [
+    "payment.accepted",
+    "payment.query",
+    "notify.delivery",
+    "webhook.delivery",
+    "business.variant"
+  ],
+  "expected": {
+    "fields": {
+      "business_variant": "aggregation.wechat",
+      "trade_type": "T_JSAPI",
+      "trans_stat": "P"
+    },
+    "resp_code": "00000100"
+  },
+  "expected_resp_code": "00000100",
+  "field_assertions": [
+    {
+      "equals": "00000100",
+      "path": "resp_code"
+    },
+    {
+      "equals": "T_JSAPI",
+      "path": "trade_type"
+    },
+    {
+      "equals": "P",
+      "path": "trans_stat"
+    },
+    {
+      "exists": true,
+      "path": "hf_seq_id"
+    },
+    {
+      "exists": true,
+      "path": "pay_info"
+    },
+    {
+      "equals": "aggregation.wechat",
+      "path": "business_variant"
+    }
+  ],
+  "headers_profile": "java-php-python-local-sandbox",
+  "id": "sample-aggregation-wechat-native-success",
+  "kind": "sample",
+  "method": "POST",
+  "path": "/v4/trade/payment/create",
+  "request": {
+    "data": {
+      "acct_split_bunch": "{\"acct_infos\":[{\"div_amt\":\"2.47\",\"huifu_id\":\"1234000100000000\"},{\"div_amt\":\"822.53\",\"huifu_id\":\"1234000100000001\"}]}",
+      "delay_acct_flag": "N",
+      "goods_desc": "订单支付",
+      "huifu_id": "1234000100000001",
+      "method_expand": "{\"sub_appid\":\"wx-local-jsapi-appid\",\"sub_openid\":\"sub-openid-wx-jsapi-001\"}",
+      "notify_url": "https://example.invalid/huifu/aggregation-wechat-jsapi-notify",
+      "remark": "微信商城支付",
+      "req_date": "20260701",
+      "req_seq_id": "REQ-WX-JSAPI-0001",
+      "trade_type": "T_JSAPI",
+      "trans_amt": "825.00"
+    }
+  },
+  "sample_coverage_level": "deidentified_production_sample",
+  "sample_digest": "sha256:c23a27b3abe498b4043ba79953b25791453cdf1d551a8349c02ef554f5d3f72b",
+  "schema_version": "1.1",
+  "source_sample_id": "aggregation-wechat-native-success"
+}

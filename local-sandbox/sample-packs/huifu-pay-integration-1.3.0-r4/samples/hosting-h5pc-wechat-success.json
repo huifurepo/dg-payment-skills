@@ -1,0 +1,489 @@
+{
+  "schema_version": "1.0",
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "sample_id": "hosting-h5pc-wechat-success",
+  "title": "托管 H5/PC 微信 pre_order_type=1 成功链路样例",
+  "description": "由附件中的托管 H5/PC 微信预下单、TOP 正扫响应、支付通知、账务通知和 Webhook 日志拆分而来；交易查单响应采用用户补充的另一笔 T_JSAPI 成功查询结果作为同类投射样例。",
+  "source_type": "deidentified_production",
+  "authorization": {
+    "status": "approved",
+    "approved_by": "user-provided-codex-attachment-and-inline-query",
+    "approved_at": "2026-06-29T11:05:00+08:00"
+  },
+  "deidentification": {
+    "status": "passed",
+    "method": "field-level placeholder replacement; removed raw merchant names, real huifu ids, openids, appids, bank order numbers, party order ids, hf sequence ids, prepay ids, IP addresses, long numeric identifiers, and real callback URL hosts while preserving amount, status, H5/PC WeChat, split-account, notify, query, and webhook semantics",
+    "checked_at": "2026-06-29T11:15:00+08:00"
+  },
+  "endpoint": {
+    "id": "hosting.payment.preorder.h5pc",
+    "method": "POST",
+    "path": "/v2/trade/hosting/payment/preorder"
+  },
+  "scenario_id": "HOST-H5-WX-01",
+  "headers_profile": "java-php-python-local-sandbox",
+  "source_summary": {
+    "attachments": [
+      {
+        "name": "pasted-text-preorder.txt",
+        "selected_source_lines": [
+          8,
+          37
+        ],
+        "notes": [
+          "line 8 contains the public H5/PC preorder request with pre_order_type=1, trans_type=T_JSAPI, wx_data, hosting_data, acct_split_bunch, and notify_url",
+          "line 37 contains the same preorder response with resp_code=00000000, pre_order_id, jump_url, usage_type=P, and trans_type=T_JSAPI"
+        ]
+      },
+      {
+        "name": "pasted-text-query-notify-webhook.txt",
+        "selected_source_lines": [
+          1,
+          7,
+          9,
+          15,
+          19,
+          21,
+          25,
+          29,
+          31,
+          39
+        ],
+        "notes": [
+          "line 1 contains the same preorder query response before payment completion",
+          "lines 7 and 9 contain the same T_JSAPI payment notify payload with transStat=S and wxResponse",
+          "lines 15, 19, 21, and 23 contain webhook.v2 hosting.pay submission and result evidence",
+          "lines 25, 27, 29, and 31 contain merchant notify_url delivery via VIRGO topic and SEND_OK result"
+        ]
+      },
+      {
+        "name": "pasted-text-top-and-accounted.txt",
+        "selected_source_lines": [
+          2,
+          5,
+          8,
+          11,
+          14,
+          17,
+          20,
+          23,
+          25
+        ],
+        "notes": [
+          "line 2 contains the downstream TOP T_JSAPI request with wxData and hfSeqId",
+          "line 5 contains the downstream TOP response with transStat=P and wxResponse.payInfo",
+          "lines 17 and 20 contain the accounting notify payload with acctStat=S",
+          "lines 23 and 25 contain hosting.accounted webhook payload and event dispatch request"
+        ]
+      }
+    ],
+    "source_trade_type": "T_JSAPI",
+    "source_channel": "Hosting H5/PC WeChat",
+    "source_product_id": "XLSISV",
+    "source_amount": "2365.00",
+    "query_source": "user-provided inline T_JSAPI query success payload from another transaction, normalized as representative hosting.payment.query projection because the same-order queryorderinfo success log was not available",
+    "notes": [
+      "preorder, downstream TOP response, payment notify, merchant notify_url, hosting.pay webhook, accounting notify, and hosting.accounted webhook all belong to the same source order",
+      "query_success uses a separate user-provided T_JSAPI successful query response and is explicitly marked as representative projection"
+    ]
+  },
+  "request": {
+    "source": "normalized from PreOrderController request and current sandbox hosting.payment.preorder.h5pc contract",
+    "data": {
+      "req_date": "20260629",
+      "req_seq_id": "REQ-HOST-WX-0001",
+      "huifu_id": "1234000100000007",
+      "pre_order_type": "1",
+      "trans_amt": "2365.00",
+      "time_expire": "20260629T105219",
+      "trans_type": "T_JSAPI",
+      "goods_desc": "示例托管微信 H5 订单",
+      "notify_url": "https://example.invalid/huifu/hosting-h5pc-wechat-notify",
+      "delay_acct_flag": "Y",
+      "acct_split_bunch": "{\"acct_infos\":[{\"huifu_id\":\"1234000100000008\",\"div_amt\":\"322.50\"},{\"huifu_id\":\"1234000100000009\",\"div_amt\":\"2042.50\"},{\"huifu_id\":\"1234000100000007\",\"div_amt\":\"0.00\"}]}",
+      "hosting_data": "{\"project_title\":\"示例托管项目\",\"project_id\":\"PROJECT-LOCAL-HOST-WX\",\"callback_url\":\"https://example.invalid/huifu/hosting-callback\",\"request_type\":\"M\",\"private_info\":\"示例订单\"}",
+      "wx_data": "{\"attach\":\"示例服务_订单编号:REQ-HOST-WX-0001_凭证\",\"detail\":{\"cost_price\":\"2365.00\",\"receipt_id\":\"HOST-WX-RECEIPT-0001\",\"goods_detail\":[{\"goods_id\":\"HOST-WX-GOODS-0001\",\"goods_name\":\"示例托管微信 H5 订单\",\"price\":\"2365.00\",\"quantity\":1,\"wxpay_goods_id\":\"HOST-WX-GOODS-0001\"}]},\"scene_info\":{\"store_info\":{\"id\":\"STORE-HOST-WX-001\",\"name\":\"示例服务平台\",\"area_code\":\"310101\",\"address\":\"示例地址\"}}}",
+      "risk_check_data": "{\"ip_addr\":\"127.0.0.1\",\"risk_mng_info\":{\"sub_trade_type\":\"4300\"}}"
+    }
+  },
+  "responses": {
+    "sync": {
+      "source": "normalized from PreOrderController response and downstream TOP T_JSAPI processing response",
+      "data": {
+        "product_id": "XLSISV",
+        "req_seq_id": "REQ-HOST-WX-0001",
+        "req_date": "20260629",
+        "huifu_id": "1234000100000007",
+        "order_type": "HT",
+        "resp_code": "00000000",
+        "resp_desc": "操作成功",
+        "pre_order_id": "PREORDER-HOST-WX-0001",
+        "pre_order_type": "1",
+        "trans_amt": "2365.00",
+        "time_expire": "20260629T105219",
+        "current_time": "20260629T104719",
+        "goods_desc": "示例托管微信 H5 订单",
+        "hosting_data": "{\"project_id\":\"PROJECT-LOCAL-HOST-WX\",\"project_title\":\"示例托管项目\",\"request_type\":\"M\",\"callback_url\":\"https://example.invalid/huifu/hosting-callback\",\"private_info\":\"示例订单\"}",
+        "jump_url": "https://example.invalid/hostingh5/?jump_id=PREORDER-HOST-WX-0001&huifu_id=1234000100000007&bank_switch=Y",
+        "usage_type": "P",
+        "trans_type": "T_JSAPI",
+        "trans_stat": "P",
+        "business_variant": "hosting.h5pc.wechat",
+        "hf_seq_id": "HF-HOST-WX-0001",
+        "party_order_id": "PARTY-HOST-WX-0001",
+        "ref_no": "104741103441",
+        "wx_response": {
+          "pay_info": "{\"timeStamp\":\"1782701261\",\"package\":\"prepay_id=WXPREPAY-HOST-WX-0001\",\"paySign\":\"SIGN-HOST-WX-LOCAL\",\"appId\":\"wx-local-h5pc-appid\",\"signType\":\"RSA\",\"nonceStr\":\"NONCE-HOST-WX-001\"}",
+          "result_code": "00000000",
+          "token_id": "WXPREPAY-HOST-WX-0001"
+        }
+      }
+    },
+    "top_preorder": {
+      "source": "normalized from downstream TOP scan aggregation positive-scan response",
+      "data": {
+        "resp_code": "00000100",
+        "resp_desc": "交易正在处理中 cashCode:000 cashDesc:成功",
+        "sub_resp_code": "00000100",
+        "sub_resp_desc": "交易正在处理中 cashCode:000 cashDesc:成功",
+        "req_date": "20260629",
+        "req_seq_id": "REQ-HOST-WX-0001",
+        "huifu_id": "1234000100000007",
+        "hf_seq_id": "HF-HOST-WX-0001",
+        "trade_type": "T_JSAPI",
+        "trans_amt": "2365.00",
+        "settlement_amt": "2365.00",
+        "trans_stat": "P",
+        "bank_code": "00000000",
+        "bank_message": "用户支付中",
+        "party_order_id": "PARTY-HOST-WX-0001",
+        "business_variant": "hosting.h5pc.wechat",
+        "wx_response": {
+          "pay_info": "{\"timeStamp\":\"1782701261\",\"package\":\"prepay_id=WXPREPAY-HOST-WX-0001\",\"paySign\":\"SIGN-HOST-WX-LOCAL\",\"appId\":\"wx-local-h5pc-appid\",\"signType\":\"RSA\",\"nonceStr\":\"NONCE-HOST-WX-001\"}",
+          "result_code": "00000000",
+          "token_id": "WXPREPAY-HOST-WX-0001"
+        }
+      }
+    },
+    "query_success": {
+      "endpoint": {
+        "id": "hosting.payment.query",
+        "method": "POST",
+        "path": "/v2/trade/hosting/payment/queryorderinfo"
+      },
+      "request": {
+        "data": {
+          "product_id": "XLSISV",
+          "req_seq_id": "QRY-HOST-WX-0001",
+          "req_date": "20260629",
+          "huifu_id": "1234000100000007",
+          "org_req_date": "20260629",
+          "org_req_seq_id": "REQ-HOST-WX-0001"
+        }
+      },
+      "source": "representative projection from user-provided inline T_JSAPI successful query response",
+      "data": {
+        "product_id": "XLSISV",
+        "req_seq_id": "QRY-HOST-WX-0001",
+        "req_date": "20260629",
+        "huifu_id": "1234000100000007",
+        "resp_code": "00000000",
+        "resp_desc": "操作成功",
+        "org_req_date": "20260629",
+        "org_req_seq_id": "REQ-HOST-WX-0001",
+        "pre_order_id": "PREORDER-HOST-WX-0001",
+        "goods_desc": "示例托管微信 H5 订单",
+        "trans_date": "20260629",
+        "order_stat": "1",
+        "org_hf_seq_id": "HF-HOST-WX-0001",
+        "out_trans_id": "WXPAY-HOST-WX-0001",
+        "party_order_id": "PARTY-HOST-WX-0001",
+        "pay_type": "T_JSAPI",
+        "trans_stat": "S",
+        "fee_flag": 2,
+        "trans_time": "20260629T105346",
+        "trans_amt": "0.10",
+        "fee_amt": "0.00",
+        "ref_amt": "0.10",
+        "bank_code": "00",
+        "bank_desc": "支付成功",
+        "wx_response": {
+          "sub_appid": "wx-local-h5pc-appid",
+          "openid": "openid-host-wx-user-001",
+          "sub_openid": "openid-host-wx-sub-001",
+          "bank_type": "OTHERS",
+          "coupon_fee": "0.00"
+        },
+        "wx_user_id": "",
+        "is_div": "N",
+        "acct_split_bunch": {
+          "acct_infos": [
+            {
+              "div_amt": "0.10",
+              "huifu_id": "1234000100000007",
+              "acct_date": "20260629"
+            }
+          ]
+        },
+        "is_delay_acct": "N",
+        "trans_fee_allowance_info": {
+          "receivable_fee_amt": "0.00",
+          "actual_fee_amt": "0.00",
+          "allowance_fee_amt": "0.00",
+          "allowance_type": "0"
+        },
+        "large_pay_data": {
+          "in_acct_flag": ""
+        },
+        "fee_formula_infos": [
+          {
+            "fee_formula": "AMT*0.0068",
+            "fee_type": "TRANS_FEE"
+          }
+        ],
+        "request_ip": "127.0.0.1",
+        "business_variant": "hosting.h5pc.wechat"
+      }
+    },
+    "async_notify": {
+      "source": "normalized from TradeOrderMessageHandler and AbstractPosMessageHandler payment notify payloads",
+      "transport": {
+        "content_type": "application/x-www-form-urlencoded",
+        "signature_rule": "RSA signature over raw resp_data",
+        "ack_body": "RECV_ORD_ID_REQ-HOST-WX-0001"
+      },
+      "data": {
+        "resp_code": "00000000",
+        "resp_desc": "交易成功",
+        "sub_resp_code": "00000000",
+        "sub_resp_desc": "交易成功",
+        "req_date": "20260629",
+        "req_seq_id": "REQ-HOST-WX-0001",
+        "huifu_id": "1234000100000007",
+        "hf_seq_id": "HF-HOST-WX-0001",
+        "trade_type": "T_JSAPI",
+        "trans_type": "T_JSAPI",
+        "product_id": "XLSISV",
+        "trans_amt": "2365.00",
+        "pay_amt": "2365.00",
+        "settlement_amt": "2365.00",
+        "trans_stat": "S",
+        "acct_stat": "I",
+        "bank_code": "00",
+        "bank_message": "支付成功",
+        "bank_order_no": "WXPAY-HOST-WX-0001",
+        "bank_seq_id": "103441",
+        "bank_type": "OTHERS",
+        "out_ord_id": "WXPAY-HOST-WX-0001",
+        "out_trans_id": "WXPAY-HOST-WX-0001",
+        "party_order_id": "PARTY-HOST-WX-0001",
+        "posp_seq_id": "PARTY-HOST-WX-0001",
+        "notify_type": 1,
+        "fee_amt": "30.75",
+        "fee_amount": "30.75",
+        "fee_flag": 1,
+        "fee_rec_type": "1",
+        "charge_flags": "787_0",
+        "ref_no": "104741103441",
+        "end_time": "20260629T104749",
+        "is_delay_acct": "1",
+        "is_div": "1",
+        "pay_scene": "01",
+        "gate_id": "IF",
+        "channel_type": "N",
+        "request_ip": "127.0.0.1",
+        "acct_split_bunch": {
+          "acct_infos": [
+            {
+              "acct_id": "F-LOCAL-HOST-WX-001",
+              "huifu_id": "1234000100000007",
+              "div_amt": "2365.00"
+            }
+          ],
+          "fee_acct_id": "F-LOCAL-HOST-WX-FEE",
+          "fee_huifu_id": "1234000100000008",
+          "fee_amt": "30.75"
+        },
+        "fee_formula_infos": [
+          {
+            "fee_formula": "AMT*0.013",
+            "fee_type": "TRANS_FEE"
+          }
+        ],
+        "wx_response": {
+          "attach": "示例服务_订单编号:REQ-HOST-WX-0001_凭证",
+          "bank_type": "OTHERS",
+          "coupon_fee": "0.00",
+          "openid": "openid-host-wx-user-001",
+          "sub_appid": "",
+          "sub_openid": "openid-host-wx-sub-001"
+        }
+      }
+    },
+    "merchant_notify": {
+      "source": "normalized from ArcherTopMsgSender notify_url VIRGO topic and SEND_OK result",
+      "transport": {
+        "topics": [
+          "VIRGO://https://example.invalid/huifu/hosting-h5pc-wechat-notify"
+        ],
+        "content_type": "application/json",
+        "send_result": "SEND_OK"
+      },
+      "body": {
+        "ord_id": "HOST-WX-NOTIFY-0001",
+        "top_notify_type": "CUSTOM",
+        "trans_type": "CUSTOM",
+        "data": {
+          "resp_code": "00000000",
+          "resp_desc": "交易成功",
+          "req_date": "20260629",
+          "req_seq_id": "REQ-HOST-WX-0001",
+          "huifu_id": "1234000100000007",
+          "hf_seq_id": "HF-HOST-WX-0001",
+          "trade_type": "T_JSAPI",
+          "trans_type": "T_JSAPI",
+          "trans_amt": "2365.00",
+          "pay_amt": "2365.00",
+          "settlement_amt": "2365.00",
+          "trans_stat": "S",
+          "bank_code": "00",
+          "bank_message": "支付成功",
+          "bank_order_no": "WXPAY-HOST-WX-0001",
+          "party_order_id": "PARTY-HOST-WX-0001",
+          "wx_response": {
+            "bank_type": "OTHERS",
+            "coupon_fee": "0.00",
+            "openid": "openid-host-wx-user-001",
+            "attach": "示例服务_订单编号:REQ-HOST-WX-0001_凭证",
+            "sub_appid": "",
+            "sub_openid": "openid-host-wx-sub-001"
+          }
+        }
+      }
+    },
+    "webhook_pay": {
+      "source": "normalized from WebHookHelper webhook.v2 hosting.pay submission",
+      "transport": {
+        "namespace": "opps-webhook",
+        "event_define_no": "hosting.pay",
+        "dispatch_result": {
+          "code": 500,
+          "msg": "该订阅没有匹配的事件"
+        }
+      },
+      "body": {
+        "huifu_id": "1234000100000007",
+        "namespace": "opps-webhook",
+        "event_define_no": "hosting.pay",
+        "trans_stat": "1",
+        "data": {
+          "project_id": "PROJECT-LOCAL-HOST-WX",
+          "hosting_type": "2",
+          "hosting_order_id": "REQ-HOST-WX-0001",
+          "trade_type": "JSAPI",
+          "trans_amt": "2365.00",
+          "fee_amt": "30.75",
+          "create_date": "2026-06-29 10:47:41",
+          "pay_time": "2026-06-29 10:47:49",
+          "pay_way": "JSAPI",
+          "trans_stat": "S",
+          "json_data": "{\"LOCAL_FORM_AMOUNT\":\"2365.00\"}",
+          "bank_code": "00",
+          "bank_message": "支付成功",
+          "remark": "示例订单",
+          "goods_desc": "示例托管微信 H5 订单",
+          "party_order_id": "PARTY-HOST-WX-0001",
+          "top_order_id": "TOP-HOST-WX-0001"
+        }
+      }
+    },
+    "webhook_accounted": {
+      "source": "normalized from AcctMsgToWebhookService and event dispatch request",
+      "transport": {
+        "namespace": "opps-webhook",
+        "event_define_no": "hosting.accounted"
+      },
+      "body": {
+        "acct_stat": "S",
+        "event_define_no": "hosting.accounted",
+        "huifu_id": "1234000100000007",
+        "namespace": "opps-webhook",
+        "trans_stat": "S",
+        "data": {
+          "acct_date": "2026-06-29 10:47:50",
+          "acct_stat": "S",
+          "hf_seq_id": "HF-HOST-WX-0001",
+          "huifu_id": "1234000100000007",
+          "req_date": "20260629",
+          "req_seq_id": "REQ-HOST-WX-0001",
+          "resp_code": "00000000",
+          "resp_desc": "交易成功",
+          "trans_finsh_time": "2026-06-29 10:47:50",
+          "trans_stat": "S",
+          "trans_type": "T_JSAPI"
+        }
+      }
+    }
+  },
+  "expected": {
+    "resp_code": "00000000",
+    "fields": {
+      "business_variant": "hosting.h5pc.wechat",
+      "pre_order_type": "1",
+      "trans_type": "T_JSAPI",
+      "trans_stat": "P"
+    }
+  },
+  "assertions": {
+    "assertions": [
+      "envelope",
+      "headers",
+      "signature",
+      "sample-backed",
+      "business-variant",
+      "string-json-channel-fields",
+      "channel-response-projection",
+      "notify-rsa-resp-data",
+      "webhook-event"
+    ],
+    "field_assertions": [
+      {
+        "path": "resp_code",
+        "equals": "00000000"
+      },
+      {
+        "path": "pre_order_id",
+        "exists": true
+      },
+      {
+        "path": "pre_order_type",
+        "equals": "1"
+      },
+      {
+        "path": "trans_type",
+        "equals": "T_JSAPI"
+      },
+      {
+        "path": "trans_stat",
+        "equals": "P"
+      },
+      {
+        "path": "wx_response",
+        "exists": true
+      },
+      {
+        "path": "business_variant",
+        "equals": "hosting.h5pc.wechat"
+      }
+    ],
+    "event_assertions": [
+      "payment.accepted",
+      "business.variant",
+      "payment.query",
+      "payment.notify",
+      "webhook.hosting.pay",
+      "webhook.hosting.accounted"
+    ]
+  },
+  "sample_sha256": "dca5f0a43ebf5cb0f1a441282cce3f4fcf289fba1b5ce1f75425683140f059da"
+}

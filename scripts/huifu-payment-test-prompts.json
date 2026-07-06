@@ -157,7 +157,7 @@
   {
     "id": 32,
     "prompt": "后续你们 Skill 更新了，我怎么更新本地这个 $huifu-pay-integration？它能不能主动提醒我升级？",
-    "expected": "必须读取 `skill-version-policy.md`；必须说明当前本地 Skill 版本是 1.3.0；必须说明 Skill 不能主动联网检查或推送升级，只能在用户触发版本/升级问题时提示；必须给出 Git 拉取、本地目录整体覆盖或内部发布包替换等更新方式；必须提醒升级后重新加载或重启客户端并确认 SKILL.md 版本事实；不能编造下载地址或假装已经联网确认最新版。"
+    "expected": "必须读取 `skill-version-policy.md`；必须说明当前本地 Skill 版本是 1.3.1；必须说明 Skill 不能主动联网检查或推送升级，只能在用户触发版本/升级问题时提示；必须给出 Git 拉取、本地目录整体覆盖或内部发布包替换等更新方式；必须提醒升级后重新加载或重启客户端并确认 SKILL.md 版本事实；不能编造下载地址或假装已经联网确认最新版。"
   },
   {
     "id": 33,
@@ -273,5 +273,10 @@
     "id": 55,
     "prompt": "我按你给的排查项都看过了，问题还是解决不了。请用 $huifu-pay-integration 告诉我怎么联系官方 AI 技能包技术支持，以及提交前要整理哪些材料。",
     "expected": "必须路由到 `copilot-troubleshooting-playbooks.md` 和 `official-service-source-index.md`；必须给出官方 AI 技能包技术支持链接 `https://paas.huifu.com/docs/devtools/#/skillsv1_0?id=support`；必须先整理脱敏材料，包括问题描述、环境、接口路径、SDK 版本、脱敏请求/响应、流水、时间、日志、影响范围和已执行动作；不得要求提交真实密钥或完整生产敏感数据。"
+  },
+  {
+    "id": 56,
+    "prompt": "本地沙箱 local-sandbox 的场景和报告都通过了，是不是就代表官方联调通过、可以直接生产上线？请用 $huifu-pay-integration 给我下一步。",
+    "expected": "必须路由到 `shared-local-sandbox.md`，并按需引用上线检查；必须说明本地沙箱通过不代表官方联调通过，不代表具备生产上线条件；必须说明 local-sandbox 不验证真实商户权限、通道、费率、风控或资金结果；必须建议进入官方联调和上线检查，不得说可以直接上线。"
   }
 ]

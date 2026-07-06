@@ -1,0 +1,202 @@
+{
+  "schema_version": "1.0",
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "sample_id": "hosting-close-channel-success",
+  "title": "托管关单成功样例",
+  "description": "由用户粘贴的托管关单成功日志拆分归一而来，覆盖预下单后的原交易定位、关单请求、关单响应以及后续 queryorderinfo 查单中的 close_stat 投射。",
+  "source_type": "deidentified_production",
+  "authorization": {
+    "status": "approved",
+    "approved_by": "user-provided-inline-paste",
+    "approved_at": "2026-07-01T15:05:00+08:00"
+  },
+  "deidentification": {
+    "status": "passed",
+    "method": "field-level placeholder replacement; removed raw huifu id, sys id, request sequence ids, trace id, and original transaction locator while preserving hosting close request, original transaction state, close_stat, and queryorderinfo projection semantics",
+    "checked_at": "2026-07-01T15:10:00+08:00"
+  },
+  "endpoint": {
+    "id": "hosting.payment.close",
+    "method": "POST",
+    "path": "/v2/trade/hosting/payment/close"
+  },
+  "scenario_id": "HOST-CLOSE-CHANNEL-01",
+  "headers_profile": "java-php-python-local-sandbox",
+  "source_summary": {
+    "attachment": "inline user paste",
+    "selected_source_lines": [
+      2,
+      4
+    ],
+    "source_product_id": "local envelope product_id MYPAY; source close log omitted product_id",
+    "source_close_state": "S",
+    "source_original_transaction_state": "F",
+    "notes": [
+      "line 2 contains HostingCloseController close request with req_seq_id, req_date, huifu_id, org_req_seq_id, org_req_date, and no product_id in the pasted controller payload",
+      "line 4 contains HostingCloseController close response with resp_code=00000000, org_trans_stat=F, and close_stat=S",
+      "托管支付没有独立关单查询接口；后续关单状态通过 /v2/trade/hosting/payment/queryorderinfo 查询订单并读取 close_stat",
+      "the inline paste does not include the original preorder controller payload; original_preorder is normalized from the close request's original transaction locator",
+      "the inline paste does not include a separate queryorderinfo controller response; queryorderinfo_projection is normalized from close_stat=S in the close response plus the hosting.payment.query contract semantics"
+    ]
+  },
+  "request": {
+    "source": "normalized from HostingCloseController request",
+    "data": {
+      "product_id": "MYPAY",
+      "req_date": "20260701",
+      "req_seq_id": "REQ-HOST-CL-20260701-0001",
+      "huifu_id": "1234000100000030",
+      "org_req_date": "20260701",
+      "org_req_seq_id": "ORG-HOST-PREORDER-20260701-0001"
+    }
+  },
+  "responses": {
+    "original_preorder": {
+      "source": "normalized original hosting preorder context inferred from org_req_seq_id locator",
+      "endpoint": {
+        "id": "hosting.payment.preorder.h5pc",
+        "method": "POST",
+        "path": "/v2/trade/hosting/payment/preorder"
+      },
+      "request": {
+        "data": {
+          "product_id": "MYPAY",
+          "req_date": "20260701",
+          "req_seq_id": "ORG-HOST-PREORDER-20260701-0001",
+          "huifu_id": "1234000100000030",
+          "pre_order_type": "1",
+          "trans_amt": "0.10",
+          "goods_desc": "hosting close channel sample",
+          "notify_url": "https://example.invalid/huifu/hosting-close-channel-notify",
+          "wx_data": "{\"sub_appid\":\"wx-local-sandbox\",\"openid\":\"openid-local\"}"
+        }
+      },
+      "data": {
+        "product_id": "MYPAY",
+        "req_date": "20260701",
+        "req_seq_id": "ORG-HOST-PREORDER-20260701-0001",
+        "huifu_id": "1234000100000030",
+        "resp_code": "00000000",
+        "resp_desc": "操作成功",
+        "pre_order_id": "PRE-HOST-CL-20260701-0001",
+        "order_type": "HT",
+        "trans_amt": "0.10",
+        "trans_stat": "P",
+        "pay_channel": "T",
+        "pay_type": "JSAPI",
+        "business_variant": "hosting.h5pc.wechat"
+      }
+    },
+    "sync": {
+      "source": "normalized from HostingCloseController response",
+      "data": {
+        "product_id": "MYPAY",
+        "req_date": "20260701",
+        "req_seq_id": "REQ-HOST-CL-20260701-0001",
+        "huifu_id": "1234000100000030",
+        "resp_code": "00000000",
+        "resp_desc": "操作成功",
+        "org_req_date": "20260701",
+        "org_req_seq_id": "ORG-HOST-PREORDER-20260701-0001",
+        "org_trans_stat": "F",
+        "close_stat": "S",
+        "business_variant": "hosting.h5pc.wechat"
+      }
+    },
+    "queryorderinfo_projection": {
+      "endpoint": {
+        "id": "hosting.payment.query",
+        "method": "POST",
+        "path": "/v2/trade/hosting/payment/queryorderinfo"
+      },
+      "request": {
+        "data": {
+          "product_id": "MYPAY",
+          "req_date": "20260701",
+          "req_seq_id": "QRY-HOST-CL-CHANNEL-0001",
+          "huifu_id": "1234000100000030",
+          "org_req_date": "20260701",
+          "org_req_seq_id": "ORG-HOST-PREORDER-20260701-0001"
+        }
+      },
+      "source": "normalized hosting.payment.query projection after close; close_stat comes from close response and is projected through queryorderinfo because hosting close has no dedicated close-query endpoint",
+      "data": {
+        "product_id": "MYPAY",
+        "req_date": "20260701",
+        "req_seq_id": "QRY-HOST-CL-CHANNEL-0001",
+        "huifu_id": "1234000100000030",
+        "resp_code": "00000000",
+        "resp_desc": "操作成功",
+        "org_req_date": "20260701",
+        "org_req_seq_id": "ORG-HOST-PREORDER-20260701-0001",
+        "pre_order_id": "PRE-HOST-CL-20260701-0001",
+        "order_type": "HT",
+        "order_stat": "F",
+        "trans_stat": "F",
+        "org_trans_stat": "F",
+        "close_stat": "S",
+        "pay_channel": "T",
+        "pay_type": "JSAPI",
+        "business_variant": "hosting.h5pc.wechat",
+        "trans_amt": "0.10",
+        "trans_time": "20260701T150202",
+        "bank_code": "CLOSED",
+        "bank_desc": "交易已关单"
+      }
+    }
+  },
+  "expected": {
+    "resp_code": "00000000",
+    "fields": {
+      "business_variant": "hosting.h5pc.wechat",
+      "close_stat": "S",
+      "org_trans_stat": "F"
+    }
+  },
+  "assertions": {
+    "assertions": [
+      "envelope",
+      "headers",
+      "signature",
+      "sample-backed",
+      "close-stat-projected-by-queryorderinfo",
+      "channel-close-projection",
+      "state-projection"
+    ],
+    "field_assertions": [
+      {
+        "path": "resp_code",
+        "equals": "00000000"
+      },
+      {
+        "path": "org_trans_stat",
+        "equals": "F"
+      },
+      {
+        "path": "close_stat",
+        "equals": "S"
+      },
+      {
+        "path": "business_variant",
+        "equals": "hosting.h5pc.wechat"
+      }
+    ],
+    "event_assertions": [
+      {
+        "event": "close.accepted",
+        "fields": {
+          "close_stat": "S",
+          "org_trans_stat": "F"
+        }
+      },
+      {
+        "event": "payment.query",
+        "fields": {
+          "close_stat": "S",
+          "business_variant": "hosting.h5pc.wechat"
+        }
+      }
+    ]
+  },
+  "sample_sha256": "8a0a4483cdcb967f985c342c1bb427560908424cd71e0311904057c0225c7c8b"
+}

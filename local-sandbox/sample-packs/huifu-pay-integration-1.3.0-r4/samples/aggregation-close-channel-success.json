@@ -1,0 +1,376 @@
+{
+  "schema_version": "1.0",
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "sample_id": "aggregation-close-channel-success",
+  "title": "聚合关单成功链路样例",
+  "description": "由附件中的聚合未支付订单关单日志拆分归一而来，覆盖未支付订单查询、关单请求、同步响应和关单查询成功投射。",
+  "source_type": "deidentified_production",
+  "authorization": {
+    "status": "approved",
+    "approved_by": "user-provided-codex-attachment",
+    "approved_at": "2026-06-30T18:10:00+08:00"
+  },
+  "deidentification": {
+    "status": "passed",
+    "method": "field-level placeholder replacement; removed raw merchant names, real huifu ids, sys id, WeChat app id, openid, order ids, party order ids, bank order numbers, hf sequence ids, account ids, real callback URL hosts, and long numeric identifiers while preserving aggregation close, unpaid order state, close request, terminal query, and channel projection semantics",
+    "checked_at": "2026-06-30T18:15:00+08:00"
+  },
+  "endpoint": {
+    "id": "aggregation.payment.close",
+    "method": "POST",
+    "path": "/v2/trade/payment/scanpay/close"
+  },
+  "scenario_id": "AGG-CLOSE-CHANNEL-01",
+  "headers_profile": "java-php-python-local-sandbox",
+  "source_summary": {
+    "attachment": "pasted-text.txt",
+    "selected_source_lines": [
+      4,
+      9,
+      11,
+      28,
+      31,
+      41,
+      43,
+      45,
+      47,
+      54
+    ],
+    "source_close_type": "scanpay close",
+    "source_channel": "Aggregation WeChat mini close",
+    "source_product_id": "XLSISV",
+    "source_amount": "30.79",
+    "notes": [
+      "lines 28 and 31 contain the original unpaid order query response with bankCode=NOTPAY and trans_stat=P",
+      "line 9 contains the downstream closeTrans request for the unpaid order",
+      "line 11 contains the public close response with orgTransStat=P, subRespCode=00000100, subRespDesc=关单处理中, and transStat=P",
+      "lines 41, 43, 45, and 47 contain the terminal-query notification after close and the downstream query response with channelStatus=F and transStatus=F",
+      "line 54 contains final query projection with bankMessage=交易已关单, bankCode=00, orgRespCode=90000000, transStat=F for the original payment, and closeTransStat=S in transOrderDo",
+      "the later inline closequery paste confirms the public close-query response shape: subRespCode=00000000, subRespDesc=查询成功, transStat=S, and orgTransStat=F"
+    ]
+  },
+  "request": {
+    "source": "normalized from TradePaymentScanpayCloseController and CloudCheckInfoService request context",
+    "data": {
+      "product_id": "XLSISV",
+      "req_date": "20260630",
+      "req_seq_id": "REQ-AGG-CL-CHANNEL-0001",
+      "huifu_id": "1234000100000025",
+      "org_req_date": "20260630",
+      "org_req_seq_id": "ORG-PAY-AGG-CL-CHANNEL-0001",
+      "org_hf_seq_id": "ORG-HF-AGG-CL-CHANNEL-0001"
+    }
+  },
+  "responses": {
+    "sync": {
+      "source": "normalized from TradePaymentScanpayCloseController response",
+      "data": {
+        "product_id": "XLSISV",
+        "req_date": "20260630",
+        "req_seq_id": "REQ-AGG-CL-CHANNEL-0001",
+        "huifu_id": "1234000100000025",
+        "resp_code": "00000000",
+        "resp_desc": "操作成功",
+        "hf_seq_id": "ORG-HF-AGG-CL-CHANNEL-0001",
+        "org_req_date": "20260630",
+        "org_req_seq_id": "ORG-PAY-AGG-CL-CHANNEL-0001",
+        "org_trans_stat": "P",
+        "sub_resp_code": "00000100",
+        "sub_resp_desc": "关单处理中",
+        "trans_stat": "P",
+        "business_variant": "aggregation.wechat-mini",
+        "pay_channel": "T",
+        "pay_channel_type": "W",
+        "close_status": "processing"
+      }
+    },
+    "unpaid_order_query": {
+      "endpoint": {
+        "id": "aggregation.payment.query",
+        "method": "POST",
+        "path": "/v4/trade/payment/scanpay/query"
+      },
+      "source": "normalized from ScanpayQueryController response before close",
+      "data": {
+        "product_id": "XLSISV",
+        "req_date": "20260630",
+        "req_seq_id": "ORG-PAY-AGG-CL-CHANNEL-0001",
+        "huifu_id": "1234000100000025",
+        "resp_code": "00000000",
+        "resp_desc": "查询成功",
+        "hf_seq_id": "ORG-HF-AGG-CL-CHANNEL-0001",
+        "trans_type": "T_MINIAPP",
+        "trans_stat": "P",
+        "org_resp_code": "00000100",
+        "org_resp_desc": "交易正在处理中",
+        "bank_code": "NOTPAY",
+        "bank_desc": "订单未支付",
+        "bank_message": "订单未支付",
+        "bank_seq_id": "BANKSEQ-AGG-CL-CHANNEL-001",
+        "batch_id": "260630",
+        "pay_channel": "T",
+        "pay_channel_type": "W",
+        "pay_type": "MINIAPP",
+        "trans_amt": "30.79",
+        "settlement_amt": "30.79",
+        "ref_amt": "30.79",
+        "fee_amt": "0.26",
+        "acct_stat": "I",
+        "subsidy_stat": "I",
+        "is_clean_split": "N",
+        "is_delay_acct": "0",
+        "is_div": "0",
+        "party_order_id": "PARTY-AGG-CL-CHANNEL-0001",
+        "ref_no": "REF-AGG-CL-CHANNEL-001",
+        "business_variant": "aggregation.wechat-mini",
+        "acct_split_bunch": {
+          "acct_infos": [
+            {
+              "acct_id": "A-LOCAL-AGG-CL-001",
+              "div_amt": "30.79",
+              "huifu_id": "1234000100000025"
+            }
+          ],
+          "fee_acct_id": "A-LOCAL-AGG-CL-001",
+          "fee_amt": "0.26",
+          "fee_huifu_id": "1234000100000025"
+        },
+        "trans_order_do": {
+          "ord_id": "ORG-ORDER-AGG-CL-CHANNEL-0001",
+          "ord_amt": "30.79",
+          "unconfirm_amt": "30.53",
+          "unconfirm_fee_amt": "0.26",
+          "cash_resp_code": "000",
+          "cash_resp_desc": "成功",
+          "cash_trans_id": "CASH-TXN-AGG-CL-0001",
+          "channel_stat": "P",
+          "close_trans_stat": "",
+          "trans_stat": "P",
+          "goods_desc": "示例未支付订单"
+        }
+      }
+    },
+    "downstream_close": {
+      "source": "normalized from CashTransServiceClient closeTrans request",
+      "request": {
+        "data": {
+          "close_trans_seq_date": "20260630",
+          "close_trans_seq_time": "180400",
+          "inst_id": "XLSISV",
+          "mer_id": "SSP001",
+          "order_id": "ORG-ORDER-AGG-CL-CHANNEL-0001",
+          "product_id": "TOP",
+          "product_seq_date": "20260630",
+          "product_seq_id": "ORG-ORDER-AGG-CL-CHANNEL-0001",
+          "product_seq_time": "173347",
+          "region_id": "HS_12A",
+          "route_region_id": "HS_12B",
+          "trace_id": "ORG-HF-AGG-CL-CHANNEL-0001",
+          "trans_amt": "30.79",
+          "trans_type": "0109"
+        }
+      }
+    },
+    "close_query_success": {
+      "endpoint": {
+        "id": "aggregation.payment.close_query",
+        "method": "POST",
+        "path": "/v2/trade/payment/scanpay/closequery"
+      },
+      "request": {
+            "data": {
+              "product_id": "XLSISV",
+              "productId": "XLSISV",
+              "req_date": "20260630",
+              "reqDate": "20260630",
+              "req_seq_id": "QRY-AGG-CL-CHANNEL-0001",
+              "reqSeqId": "QRY-AGG-CL-CHANNEL-0001",
+              "huifu_id": "1234000100000025",
+              "huifuId": "1234000100000025",
+              "org_req_date": "20260630",
+              "orgReqDate": "20260630",
+              "org_req_seq_id": "ORG-PAY-AGG-CL-CHANNEL-0001",
+              "orgReqSeqId": "ORG-PAY-AGG-CL-CHANNEL-0001",
+              "org_hf_seq_id": "ORG-HF-AGG-CL-CHANNEL-0001",
+              "orgHfSeqId": "ORG-HF-AGG-CL-CHANNEL-0001"
+            }
+          },
+          "source": "normalized from terminal query notification, TopTransQueryHander final-state projection, and later public closequery controller response",
+          "data": {
+            "product_id": "XLSISV",
+            "productId": "XLSISV",
+            "req_date": "20260630",
+            "reqDate": "20260630",
+            "req_seq_id": "QRY-AGG-CL-CHANNEL-0001",
+            "reqSeqId": "QRY-AGG-CL-CHANNEL-0001",
+            "huifu_id": "1234000100000025",
+            "huifuId": "1234000100000025",
+            "resp_code": "00000000",
+            "resp_desc": "查询成功",
+            "sub_resp_code": "00000000",
+            "sub_resp_desc": "查询成功",
+            "subRespCode": "00000000",
+            "subRespDesc": "查询成功",
+            "org_req_date": "20260630",
+            "orgReqDate": "20260630",
+            "org_req_seq_id": "ORG-PAY-AGG-CL-CHANNEL-0001",
+            "orgReqSeqId": "ORG-PAY-AGG-CL-CHANNEL-0001",
+            "org_hf_seq_id": "ORG-HF-AGG-CL-CHANNEL-0001",
+            "orgHfSeqId": "ORG-HF-AGG-CL-CHANNEL-0001",
+            "order_id": "ORG-ORDER-AGG-CL-CHANNEL-0001",
+            "trans_type": "T_MINIAPP",
+            "trans_stat": "S",
+            "transStat": "S",
+            "close_stat": "S",
+            "close_trans_stat": "S",
+            "org_trans_stat": "F",
+            "orgTransStat": "F",
+        "org_resp_code": "90000000",
+        "org_resp_desc": "交易失败",
+        "bank_code": "00",
+        "bank_desc": "交易已关单",
+        "bank_message": "交易已关单",
+        "bank_seq_id": "BANKSEQ-AGG-CL-CHANNEL-001",
+        "batch_id": "260630",
+        "end_time": "20260630T180400",
+        "trans_date": "20260630",
+        "trans_time": "180400",
+        "trans_amt": "30.79",
+        "settlement_amt": "30.79",
+        "ref_amt": "30.79",
+        "fee_amt": "0.26",
+        "pay_channel": "T",
+        "pay_channel_type": "W",
+        "pay_type": "MINIAPP",
+        "channel_status": "F",
+        "channel_rsp_code": "00",
+        "cash_resp_code": "098",
+        "cash_resp_desc": "失败",
+        "cash_trans_id": "CASH-TXN-AGG-CL-0001",
+        "trans_return_code": "098",
+        "trans_return_desc": "失败",
+        "business_variant": "aggregation.wechat-mini",
+        "acct_stat": "I",
+        "subsidy_stat": "I",
+        "is_clean_split": "N",
+        "is_delay_acct": "0",
+        "is_div": "0",
+        "ref_no": "REF-AGG-CL-CHANNEL-001",
+        "acct_split_bunch": {
+          "acct_infos": [
+            {
+              "acct_id": "A-LOCAL-AGG-CL-001",
+              "div_amt": "30.79",
+              "huifu_id": "1234000100000025"
+            }
+          ],
+          "fee_acct_id": "A-LOCAL-AGG-CL-001",
+          "fee_amt": "0.26",
+          "fee_huifu_id": "1234000100000025"
+        },
+        "wx_response": {
+          "sub_appid": "wx-local-close-mini-appid"
+        },
+        "trans_order_do": {
+          "ord_id": "ORG-ORDER-AGG-CL-CHANNEL-0001",
+          "ord_amt": "30.79",
+          "unconfirm_amt": "30.53",
+          "unconfirm_fee_amt": "0.26",
+          "channel_code": "00",
+          "channel_message": "00",
+          "channel_stat": "F",
+          "close_trans_stat": "S",
+          "cash_resp_code": "098",
+          "cash_resp_desc": "失败",
+          "cash_trans_id": "CASH-TXN-AGG-CL-0001",
+          "trans_finish_time": "20260630T180400",
+          "trans_stat": "F",
+          "goods_desc": "示例未支付订单"
+        }
+      }
+    },
+    "terminal_query_notification": {
+      "source": "normalized from Archer terminal query notification and downstream SQRC query response",
+      "transport": {
+        "topic": "C_TOP_TRANS_QUERY",
+        "routing_key": "HS_12B",
+        "message_type": "交易终态查询通知"
+      },
+      "message": {
+        "huifu_id": "1234000100000025",
+        "ord_id": "ORG-ORDER-AGG-CL-CHANNEL-0001",
+        "product_id": "XLSISV",
+        "region_id": "HS_12B",
+        "req_date": "20260630",
+        "req_seq_id": "ORG-PAY-AGG-CL-CHANNEL-0001"
+      },
+      "sqrc_query_result": {
+        "acct_status": "I",
+        "bank_resp_code": "00",
+        "bank_resp_message": "00",
+        "business_amt": "30.79",
+        "channel_rsp_code": "00",
+        "channel_status": "F",
+        "order_id": "ORG-ORDER-AGG-CL-CHANNEL-0001",
+        "pa_mer_id": "SSP001",
+        "pay_channel_type": "W",
+        "product_id": "TOP",
+        "product_seq_date": "20260630",
+        "product_seq_id": "ORG-ORDER-AGG-CL-CHANNEL-0001",
+        "product_seq_time": "173347",
+        "region_id": "HS_12B",
+        "return_code": "000",
+        "return_desc": "成功",
+        "route_region_id": "HS_12B",
+        "settlement_amt": "null",
+        "trace_id": "ORG-HF-AGG-CL-CHANNEL-0001",
+        "trans_date": "20260630",
+        "trans_id": "CASH-TXN-AGG-CL-0001",
+        "trans_return_code": "098",
+        "trans_return_desc": "失败",
+        "trans_status": "F"
+      }
+    }
+  },
+  "expected": {
+    "resp_code": "00000000",
+    "fields": {
+      "business_variant": "aggregation.wechat-mini",
+      "trans_stat": "P"
+    }
+  },
+  "assertions": {
+    "assertions": [
+      "envelope",
+      "headers",
+      "signature",
+      "sample-backed",
+      "close-state-independent",
+      "terminal-payment-guard",
+      "close-locator",
+      "state-projection",
+      "channel-close-projection",
+      "terminal-query-projection"
+    ],
+    "field_assertions": [
+      {
+        "path": "resp_code",
+        "equals": "00000000"
+      },
+      {
+        "path": "trans_stat",
+        "equals": "P"
+      },
+      {
+        "path": "business_variant",
+        "equals": "aggregation.wechat-mini"
+      }
+    ],
+    "event_assertions": [
+      "close.accepted",
+      "close.query",
+      "close.settled"
+    ]
+  },
+  "sample_sha256": "da73e835dd4266b819c2633d973ac975c33804ec35aaf5eec6f973fa0ab93b4c"
+}

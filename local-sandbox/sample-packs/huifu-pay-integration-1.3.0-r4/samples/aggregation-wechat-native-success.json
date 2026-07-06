@@ -1,0 +1,301 @@
+{
+  "schema_version": "1.0",
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "sample_id": "aggregation-wechat-native-success",
+  "title": "聚合微信 T_JSAPI 公众号下单成功链路样例",
+  "description": "由附件中的聚合微信 T_JSAPI 公众号支付日志拆分而来，覆盖下单请求、同步 pay_info 响应、最终成功投射、异步通知和 Webhook。",
+  "source_type": "deidentified_production",
+  "authorization": {
+    "status": "approved",
+    "approved_by": "user-provided-codex-attachment",
+    "approved_at": "2026-07-01T13:20:00+08:00"
+  },
+  "deidentification": {
+    "status": "passed",
+    "method": "field-level placeholder replacement; removed raw log snippets, real merchant names, huifu ids, sys id, WeChat app ids, openids, bank order numbers, party order ids, hf sequence ids, prepay ids, pay signatures, and real callback URL hosts while preserving T_JSAPI method_expand, pay_info, amount, status, channel, fee, notify, and webhook semantics",
+    "checked_at": "2026-07-01T13:30:00+08:00"
+  },
+  "endpoint": {
+    "id": "aggregation.payment.create",
+    "method": "POST",
+    "path": "/v4/trade/payment/create"
+  },
+  "scenario_id": "CHANNEL-NOTIFY-01",
+  "headers_profile": "java-php-python-local-sandbox",
+  "source_summary": {
+    "attachment": "pasted-text.txt",
+    "selected_source_lines": [
+      1
+    ],
+    "source_trade_type": "T_JSAPI",
+    "source_channel": "WeChat JSAPI",
+    "source_product_id": "EDUSTD",
+    "source_amount": "825.00",
+    "notes": [
+      "the create request data includes delay_acct_flag, remark, notify_url, and method_expand as top-level aggregation payment-create fields",
+      "method_expand content is the WeChat scene object itself with sub_appid and sub_openid; it is not wrapped by trade_type and does not use hosting wx_data",
+      "the synchronous create response returns pay_info for front-end invocation and keeps trans_stat=P",
+      "query success evidence uses req_date + req_seq_id lookup and returns method_expand, payment_fee, and acct_split_bunch as JSON strings",
+      "final notify and webhook evidence still use wx_response with eventDefineNo pay.wx_pub"
+    ]
+  },
+  "request": {
+    "source": "normalized from payment-create request log",
+    "data": {
+      "req_date": "20260701",
+      "req_seq_id": "REQ-WX-JSAPI-0001",
+      "huifu_id": "1234000100000001",
+      "trade_type": "T_JSAPI",
+      "trans_amt": "825.00",
+      "goods_desc": "订单支付",
+      "delay_acct_flag": "N",
+      "notify_url": "https://example.invalid/huifu/aggregation-wechat-jsapi-notify",
+      "method_expand": "{\"sub_appid\":\"wx-local-jsapi-appid\",\"sub_openid\":\"sub-openid-wx-jsapi-001\"}",
+      "acct_split_bunch": "{\"acct_infos\":[{\"div_amt\":\"2.47\",\"huifu_id\":\"1234000100000000\"},{\"div_amt\":\"822.53\",\"huifu_id\":\"1234000100000001\"}]}",
+      "remark": "微信商城支付"
+    }
+  },
+  "responses": {
+    "sync": {
+      "source": "normalized from payment-create response log",
+      "data": {
+        "resp_code": "00000100",
+        "resp_desc": "下单成功",
+        "req_date": "20260701",
+        "req_seq_id": "REQ-WX-JSAPI-0001",
+        "huifu_id": "1234000100000001",
+        "hf_seq_id": "HF-WX-JSAPI-0001",
+        "trade_type": "T_JSAPI",
+        "trans_amt": "825.00",
+        "trans_stat": "P",
+        "unconfirm_amt": "825.00",
+        "bank_code": "SUCCESS",
+        "bank_message": "成功",
+        "party_order_id": "PARTY-WX-JSAPI-0001",
+        "atu_sub_mer_id": "WX-SUB-MER-LOCAL-001",
+        "remark": "微信商城支付",
+        "business_variant": "aggregation.wechat",
+        "pay_info": "{\"appId\":\"wx-local-jsapi-appid\",\"timeStamp\":\"1234567890\",\"nonceStr\":\"nonce-wx-jsapi-001\",\"package\":\"prepay_id=wx-prepay-token-local-001\",\"signType\":\"RSA\",\"paySign\":\"RSA-SIGNATURE-LOCAL-001\"}"
+      }
+    },
+    "query_success": {
+      "endpoint": {
+        "id": "aggregation.payment.query",
+        "method": "POST",
+        "path": "/v4/trade/payment/scanpay/query"
+      },
+      "request": {
+        "data": {
+          "huifu_id": "1234000100000001",
+          "req_date": "20260701",
+          "req_seq_id": "REQ-WX-JSAPI-0001"
+        }
+      },
+      "data": {
+        "resp_code": "00000000",
+        "resp_desc": "查询成功",
+        "req_date": "20260701",
+        "req_seq_id": "REQ-WX-JSAPI-0001",
+        "huifu_id": "1234000100000001",
+        "hf_seq_id": "HF-WX-JSAPI-0001",
+        "acct_date": "20260701",
+        "acct_id": "F-LOCAL-WX-SPLIT-002",
+        "trade_type": "T_JSAPI",
+        "trans_amt": "825.00",
+        "pay_amt": "825.00",
+        "settlement_amt": "825.00",
+        "trans_stat": "S",
+        "bank_code": "SUCCESS",
+        "bank_message": "交易成功",
+        "bank_type": "OTHERS",
+        "bank_seq_id": "BANKSEQ-WX-JSAPI-001",
+        "bank_order_no": "WXORDER-LOCAL-JSAPI-0001",
+        "out_trans_id": "WXORDER-LOCAL-JSAPI-0001",
+        "party_order_id": "PARTY-WX-JSAPI-0001",
+        "ref_no": "REF-WX-JSAPI-001",
+        "trans_date": "20260701",
+        "trans_time": "131702",
+        "end_time": "20260701T131716",
+        "delay_acct_flag": "N",
+        "div_flag": "Y",
+        "is_delay_acct": "0",
+        "acct_stat": "S",
+        "fee_amt": "1.73",
+        "fee_amount": "1.73",
+        "fee_rec_type": "1",
+        "fee_formula_infos": [
+          {
+            "fee_type": "TRANS_FEE",
+            "fee_formula": "AMT*0.0021"
+          }
+        ],
+        "acct_split_bunch": "{\"acct_infos\":[{\"acct_id\":\"F-LOCAL-WX-SPLIT-001\",\"div_amt\":\"2.47\",\"huifu_id\":\"1234000100000000\"},{\"acct_id\":\"F-LOCAL-WX-SPLIT-002\",\"div_amt\":\"822.53\",\"huifu_id\":\"1234000100000001\"}]}",
+        "payment_fee": "{\"fee_amount\":\"1.73\",\"fee_formula_infos\":[{\"fee_formula\":\"AMT*0.0021\",\"fee_type\":\"TRANS_FEE\"}],\"fee_huifu_id\":\"1234000100000090\"}",
+        "method_expand": "{\"bank_type\":\"OTHERS\",\"coupon_fee\":\"0.00\",\"openid\":\"openid-wx-jsapi-user-001\",\"sub_appid\":\"wx-local-jsapi-appid\",\"sub_openid\":\"sub-openid-wx-jsapi-001\"}",
+        "wx_user_id": "",
+        "business_variant": "aggregation.wechat"
+      }
+    },
+    "async_notify": {
+      "source": "normalized from TopMessageNotifier notify payload",
+      "transport": {
+        "content_type": "application/x-www-form-urlencoded",
+        "signature_rule": "RSA signature over raw resp_data",
+        "ack_body": "RECV_ORD_ID_REQ-WX-JSAPI-0001"
+      },
+      "data": {
+        "resp_code": "00000000",
+        "resp_desc": "交易成功",
+        "sub_resp_code": "00000000",
+        "sub_resp_desc": "交易成功",
+        "req_date": "20260701",
+        "req_seq_id": "REQ-WX-JSAPI-0001",
+        "huifu_id": "1234000100000001",
+        "hf_seq_id": "HF-WX-JSAPI-0001",
+        "trade_type": "T_JSAPI",
+        "trans_type": "T_JSAPI",
+        "trans_amt": "825.00",
+        "pay_amt": "825.00",
+        "settlement_amt": "825.00",
+        "trans_stat": "S",
+        "bank_desc": "交易成功",
+        "bank_message": "交易成功",
+        "bank_type": "OTHERS",
+        "bank_order_no": "WXORDER-LOCAL-JSAPI-0001",
+        "out_trans_id": "WXORDER-LOCAL-JSAPI-0001",
+        "party_order_id": "PARTY-WX-JSAPI-0001",
+        "notify_type": 1,
+        "wx_response": {
+          "bank_type": "OTHERS",
+          "coupon_fee": "0.00",
+          "openid": "openid-wx-jsapi-user-001",
+          "sub_appid": "wx-local-jsapi-appid",
+          "sub_openid": "sub-openid-wx-jsapi-001"
+        }
+      }
+    },
+    "webhook": {
+      "source": "normalized from WebhookClientImpl request payload",
+      "transport": {
+        "content_type": "application/json",
+        "signature_rule": "MD5(raw_body + endpoint_key) in URL query sign"
+      },
+      "body": {
+        "huifuId": "1234000100000001",
+        "namespace": "opps-webhook",
+        "eventDefineNo": "pay.wx_pub",
+        "event_type": "trans.pay",
+        "env": "prod-like-sample",
+        "transStat": "S",
+        "parentHuifuIds": [
+          "1234000000000000",
+          "1234000100000000"
+        ],
+        "receiveHuifuIds": [
+          "1234000000000000",
+          "1234000100000000",
+          "1234000100000001"
+        ],
+        "data": {
+          "resp_code": "00000000",
+          "resp_desc": "交易成功",
+          "sub_resp_code": "00000000",
+          "sub_resp_desc": "交易成功",
+          "req_date": "20260701",
+          "req_seq_id": "REQ-WX-JSAPI-0001",
+          "huifu_id": "1234000100000001",
+          "hf_seq_id": "HF-WX-JSAPI-0001",
+          "trade_type": "T_JSAPI",
+          "trans_type": "T_JSAPI",
+          "product_id": "EDUSTD",
+          "trans_amt": "825.00",
+          "pay_amt": "825.00",
+          "settlement_amt": "825.00",
+          "trans_stat": "S",
+          "bank_desc": "交易成功",
+          "bank_message": "交易成功",
+          "bank_type": "OTHERS",
+          "bank_seq_id": "BANKSEQ-WX-JSAPI-001",
+          "bank_order_no": "WXORDER-LOCAL-JSAPI-0001",
+          "out_trans_id": "WXORDER-LOCAL-JSAPI-0001",
+          "party_order_id": "PARTY-WX-JSAPI-0001",
+          "notify_type": 1,
+          "delay_acct_flag": "N",
+          "is_delay_acct": "0",
+          "acct_stat": "S",
+          "fee_amt": "1.73",
+          "fee_amount": "1.73",
+          "fee_formula_infos": [
+            {
+              "fee_type": "TRANS_FEE",
+              "fee_formula": "AMT*0.0021"
+            }
+          ],
+          "wx_response": {
+            "bank_type": "OTHERS",
+            "coupon_fee": "0.00",
+            "openid": "openid-wx-jsapi-user-001",
+            "sub_appid": "wx-local-jsapi-appid",
+            "sub_openid": "sub-openid-wx-jsapi-001"
+          }
+        }
+      },
+      "dispatch_result": {
+        "submitted": true
+      }
+    }
+  },
+  "expected": {
+    "resp_code": "00000100",
+    "fields": {
+      "business_variant": "aggregation.wechat",
+      "trade_type": "T_JSAPI",
+      "trans_stat": "P"
+    }
+  },
+  "assertions": {
+    "assertions": [
+      "envelope",
+      "headers",
+      "signature",
+      "sample-backed",
+      "business-variant",
+      "notify-rsa-resp-data",
+      "webhook-md5-raw-body"
+    ],
+    "field_assertions": [
+      {
+        "path": "resp_code",
+        "equals": "00000100"
+      },
+      {
+        "path": "trade_type",
+        "equals": "T_JSAPI"
+      },
+      {
+        "path": "trans_stat",
+        "equals": "P"
+      },
+      {
+        "path": "hf_seq_id",
+        "exists": true
+      },
+      {
+        "path": "pay_info",
+        "exists": true
+      },
+      {
+        "path": "business_variant",
+        "equals": "aggregation.wechat"
+      }
+    ],
+    "event_assertions": [
+      "payment.accepted",
+      "payment.query",
+      "notify.delivery",
+      "webhook.delivery",
+      "business.variant"
+    ]
+  },
+  "sample_sha256": "c23a27b3abe498b4043ba79953b25791453cdf1d551a8349c02ef554f5d3f72b"
+}

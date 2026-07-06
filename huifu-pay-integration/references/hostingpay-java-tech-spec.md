@@ -245,6 +245,7 @@ public class HuifuNotifyController {
 | 数据库唯一索引 | `hf_seq_id` | 通知记录表 `hf_seq_id` 列设唯一索引，INSERT 去重 | 通用场景 |
 | 订单状态机 | `req_seq_id` + 状态 | 仅在订单状态为"待支付"时处理，已终态则跳过 | 强状态管理场景 |
 
+> 上述方案以 `hf_seq_id` 为最简幂等键。完整幂等键口径以 `references/shared-async-notify.md` 为准，建议复合键至少包含 `huifu_id`、`req_seq_id` / `hf_seq_id`、`notify_type` / `trans_type`、`trans_stat` / `event_type`。
 ### 通知重试策略
 
 | 项目 | 说明 |

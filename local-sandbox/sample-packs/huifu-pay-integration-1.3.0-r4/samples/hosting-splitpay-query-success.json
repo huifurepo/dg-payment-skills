@@ -1,0 +1,153 @@
+{
+  "schema_version": "1.0",
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "sample_id": "hosting-splitpay-query-success",
+  "title": "托管拆单支付查询成功且订单级已退款样例",
+  "description": "由用户粘贴的托管拆单支付交易列表日志拆分归一而来，覆盖 splitpay/query 请求字段、订单级已退款 order_stat=3、字符串化 trans_list，以及支付宝/微信子交易渠道响应字段；普通支付成功未退款口径由 canonical fixture hosting-splitpay-query-success 覆盖 order_stat=1。",
+  "source_type": "deidentified_production",
+  "authorization": {
+    "status": "approved",
+    "approved_by": "user-provided-inline-paste",
+    "approved_at": "2026-06-30T19:30:00+08:00"
+  },
+  "deidentification": {
+    "status": "passed",
+    "method": "field-level placeholder replacement; removed raw huifu ids, sys id, request sequence ids, pre_order_id, hf sequence ids, party order ids, Alipay buyer ids, masked phone-like login, WeChat appid/openid values, trace id, and long numeric identifiers while preserving splitpay query locator, order_stat, trans_list, A_NATIVE/T_MINIAPP child transaction states, and channel response semantics",
+    "checked_at": "2026-06-30T19:35:00+08:00"
+  },
+  "endpoint": {
+    "id": "hosting.payment.splitpay_query",
+    "method": "POST",
+    "path": "/v2/trade/hosting/payment/splitpay/query"
+  },
+  "scenario_id": "SPLITPAY-01",
+  "headers_profile": "java-php-python-local-sandbox",
+  "source_summary": {
+    "attachment": "inline user paste",
+    "source_product_id": "YYZY",
+    "source_order_stat": "3",
+    "source_child_pay_types": [
+      "A_NATIVE",
+      "T_MINIAPP"
+    ],
+    "notes": [
+      "request data includes req_date and req_seq_id for the splitpay query itself; these were missing from the r4 local-sandbox fixture before this correction",
+      "org_req_date and org_req_seq_id are the original splitpay preorder/payment locator, not a normal queryorderinfo locator and not a refund locator",
+      "response trans_list is a String(JSON Array), not a native JSON array in the public response",
+      "each trans_list item may contain channel-specific response fields as String(JSON Object), such as alipay_response and wx_response",
+      "order_stat is the order-level state; callers must inspect each trans_list item for child trans_stat",
+      "source_order_stat=3 means the order-level state is refunded; canonical hosting-splitpay-query-success keeps order_stat=1 for a non-refunded successful payment"
+    ]
+  },
+  "request": {
+    "source": "normalized from SplitPayQueryController request",
+    "envelope": {
+      "product_id": "YYZY",
+      "sys_id": "1234000100000030"
+    },
+    "data": {
+      "req_date": "20260630",
+      "req_seq_id": "REQ-HOST-SPLITPAY-QRY-0001",
+      "huifu_id": "1234000100000031",
+      "org_req_date": "20260319",
+      "org_req_seq_id": "ORG-HOST-SPLITPAY-0001"
+    }
+  },
+  "responses": {
+    "sync": {
+      "source": "normalized from SplitPayQueryController response",
+      "data": {
+        "product_id": "YYZY",
+        "req_date": "20260630",
+        "req_seq_id": "REQ-HOST-SPLITPAY-QRY-0001",
+        "huifu_id": "1234000100000031",
+        "org_req_date": "20260319",
+        "org_req_seq_id": "ORG-HOST-SPLITPAY-0001",
+        "pre_order_id": "PRE-HOST-SPLITPAY-0001",
+        "resp_code": "00000000",
+        "resp_desc": "查询成功",
+        "order_stat": "3",
+        "business_variant": "hosting.splitpay",
+        "trans_list": "[{\"pay_type\":\"A_NATIVE\",\"org_hf_seq_id\":\"ORG-HF-HOST-SPLITPAY-ALI-0001\",\"trans_amt\":\"0.10\",\"party_order_id\":\"PARTY-HOST-SPLITPAY-ALI-0001\",\"fee_amt\":\"0.04\",\"ref_amt\":\"0.00\",\"trans_stat\":\"S\",\"trans_time\":\"20260319T161340\",\"bank_code\":\"TRADE_SUCCESS\",\"bank_desc\":\"TRADE_SUCCESS\",\"alipay_response\":\"{\\\"buyer_id\\\":\\\"buyer-ali-splitpay-001\\\",\\\"buyer_logon_id\\\":\\\"buyer-ali-splitpay@example.invalid\\\"}\"},{\"pay_type\":\"T_MINIAPP\",\"org_hf_seq_id\":\"ORG-HF-HOST-SPLITPAY-WX-0001\",\"trans_amt\":\"0.05\",\"party_order_id\":\"PARTY-HOST-SPLITPAY-WX-0001\",\"fee_amt\":\"0.03\",\"ref_amt\":\"0.00\",\"trans_stat\":\"S\",\"trans_time\":\"20260319T161323\",\"bank_code\":\"SUCCESS\",\"bank_desc\":\"交易成功\",\"wx_response\":\"{\\\"wx_user_id\\\":\\\"\\\",\\\"sub_appid\\\":\\\"wx-local-splitpay\\\",\\\"openid\\\":\\\"openid-wx-splitpay-001\\\",\\\"sub_openid\\\":\\\"sub-openid-wx-splitpay-001\\\",\\\"bank_type\\\":\\\"BOSH\\\",\\\"coupon_fee\\\":\\\"0.00\\\"}\"}]",
+        "trans_list_parsed": [
+          {
+            "pay_type": "A_NATIVE",
+            "org_hf_seq_id": "ORG-HF-HOST-SPLITPAY-ALI-0001",
+            "trans_amt": "0.10",
+            "party_order_id": "PARTY-HOST-SPLITPAY-ALI-0001",
+            "fee_amt": "0.04",
+            "ref_amt": "0.00",
+            "trans_stat": "S",
+            "trans_time": "20260319T161340",
+            "bank_code": "TRADE_SUCCESS",
+            "bank_desc": "TRADE_SUCCESS",
+            "alipay_response": {
+              "buyer_id": "buyer-ali-splitpay-001",
+              "buyer_logon_id": "buyer-ali-splitpay@example.invalid"
+            }
+          },
+          {
+            "pay_type": "T_MINIAPP",
+            "org_hf_seq_id": "ORG-HF-HOST-SPLITPAY-WX-0001",
+            "trans_amt": "0.05",
+            "party_order_id": "PARTY-HOST-SPLITPAY-WX-0001",
+            "fee_amt": "0.03",
+            "ref_amt": "0.00",
+            "trans_stat": "S",
+            "trans_time": "20260319T161323",
+            "bank_code": "SUCCESS",
+            "bank_desc": "交易成功",
+            "wx_response": {
+              "wx_user_id": "",
+              "sub_appid": "wx-local-splitpay",
+              "openid": "openid-wx-splitpay-001",
+              "sub_openid": "sub-openid-wx-splitpay-001",
+              "bank_type": "BOSH",
+              "coupon_fee": "0.00"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "expected": {
+    "resp_code": "00000000",
+    "fields": {
+      "order_stat": "3",
+      "business_variant": "hosting.splitpay"
+    }
+  },
+  "assertions": {
+    "assertions": [
+      "envelope",
+      "headers",
+      "signature",
+      "sample-backed",
+      "splitpay-not-queryorderinfo",
+      "trans-list-state",
+      "string-json-channel-fields"
+    ],
+    "field_assertions": [
+      {
+        "path": "resp_code",
+        "equals": "00000000"
+      },
+      {
+        "path": "order_stat",
+        "equals": "3"
+      },
+      {
+        "path": "trans_list",
+        "exists": true
+      },
+      {
+        "path": "business_variant",
+        "equals": "hosting.splitpay"
+      }
+    ],
+    "event_assertions": [
+      "splitpay.query"
+    ]
+  },
+  "sample_sha256": "1a318e9f38a9aee3eeb40f3038d0e7e489a5e7065ff57f9ce5a8e86946b4bb6b"
+}

@@ -19,6 +19,7 @@
 
 - 第一次接入汇付支付，需要先判断聚合支付、托管支付和前端收银台的关系
 - 需要先确认签名、异步通知、请求头、多语言边界或版本口径
+- 需要使用 local-sandbox / 本地沙箱做正式联调前的本地闭环演练或报告校验
 - 用户询问 Skill 版本、如何更新、是否最新版、能力缺失是否需要升级，或排查后需要官方 AI 技能包技术支持
 - 准备写代码，但还不确定应该先读哪份 `references/*.md`
 
@@ -34,7 +35,8 @@
 | `references/copilot-troubleshooting-playbooks.md` | 高频联调问题、开发问题和升级人工 Playbook |
 | `references/copilot-parameter-review.md` | 请求参数、返回参数和代码片段检查规则 |
 | `references/copilot-go-live-checklist.md` | 通用和存量系统上线检查、必测项、升级材料 |
-| `references/canonical-regression-prompts.md` | 安装后可随 Skill 分发的 5 条最小回归 Prompt |
+| `references/shared-local-sandbox.md` | local-sandbox 本地协议模拟、报告校验、故障注入和上线前边界 |
+| `references/canonical-regression-prompts.md` | 安装后可随 Skill 分发的最小回归 Prompt |
 | `references/hostingpay-preorder-douyin-direct.md` | 托管支付抖音直连下单字段与返回 |
 | `references/hostingpay-query-splitpay.md` | 拆单支付订单查询字段与返回 |
 
@@ -82,12 +84,14 @@
 
 | 项目 | 当前口径 |
 | --- | --- |
-| Skill 包版本 | `1.3.0` |
+| Skill 包版本 | `1.3.1` |
+| 1.3.1 refresh | 新增 local-sandbox 本地联调入口和报告边界 |
+| local-sandbox 当前工具 | `hf-payment-local-sandbox 1.0.0`，contract bundle `huifu-pay-integration-1.3.0-r4` |
 | 托管支付 Java SDK 常量版本 | `dg-java-sdk 3.0.38` |
 | 聚合支付 Java SDK 版本 | `dg-lightning-sdk 1.0.5` |
 | Python SDK 包 | `dg-sdk 2.0.22`，import 名为 `dg_sdk` |
 | Python 生产环境变量 | 见 `aggregation-python-adapter.md` 与 `hostingpay-python-adapter.md` |
-| 前端收银台 JS SDK | npm 包 `@dg-elements/js-sdk`，接入时以项目锁定版本为准，升级前查询 npm registry |
+| 前端收银台 JS SDK | npm 包 `@dg-elements/js-sdk`，接入时以项目锁定版本为准；只有用户明确要求且当前环境允许联网时才查询 npm registry |
 | `HUIFU_SKILL_SOURCE` 最终上送格式 | `<skill_source>` |
 
 ## PHP 官方 SDK 口径
@@ -109,6 +113,7 @@ PHP 场景默认以官方 Composer 包 `huifurepo/dg-php-sdk` 落地：
 - `HUIFU_RSA_PRIVATE_KEY`、`HUIFU_RSA_PUBLIC_KEY` 只能留在服务端
 - `project_id`、`callback_url`、`sub_openid`、`buyer_id`、`auth_code`、`devs_id` 等运行时值必须来自真实业务链路
 - 前端回调不等于最终支付成功；最终状态必须经服务端闭环确认，异步通知需验签、事件级幂等和状态锁，并通过查单二次确认或补偿查询兜底
+- local-sandbox 只用于本地协议模拟、闭环演练和自检报告；本地通过不代表官方联调通过、通道权限可用或生产可上线
 - PHP 如果使用当前 Skill 包对齐的官方 SDK 主链路，且初始化时已给 `MerConfig.skill_source` 赋值，SDK 会自动带出 skill 相关来源头
 - Python 如果使用当前 Skill 包对齐的官方 `dg-sdk 2.0.22`，必须固定 `DGClient.env = "prod"`、显式传入 `MerConfig.jpt_x_skill_source`，并在每个 request 对象中设置本次真实 `huifu_id`；SDK 会从请求参数自动推导 `jpt-x-skill-huifu_id`，并使用 `jpt-sdk_version` 上送 SDK 版本。安装或版本核对失败时必须显式报错并停止，不要无版本安装或降级。
 - 如果其他脚本语言没有官方 SDK 自动补头能力，或当前实现绕开了官方 SDK 主链路，必须按 `references/shared-request-header-policy.md` 手动补头

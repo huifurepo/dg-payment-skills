@@ -1,0 +1,39 @@
+{
+  "assertions": [
+    "envelope",
+    "headers",
+    "signature",
+    "close-stat-projected-by-queryorderinfo"
+  ],
+  "contract_bundle": "huifu-pay-integration-1.3.0-r2",
+  "endpoint_id": "hosting.payment.close",
+  "event_assertions": [],
+  "expected": {
+    "fields": {
+      "trans_stat": "P"
+    },
+    "resp_code": "00000000"
+  },
+  "expected_resp_code": "00000000",
+  "field_assertions": [
+    {
+      "equals": "P",
+      "path": "trans_stat"
+    }
+  ],
+  "headers_profile": "java-php-python-local-sandbox",
+  "id": "hosting-close-accepted",
+  "kind": "positive",
+  "method": "POST",
+  "path": "/v2/trade/hosting/payment/close",
+  "request": {
+    "data": {
+      "huifu_id": "6666000100000001",
+      "org_req_date": "{{hosting_req_date}}",
+      "org_req_seq_id": "{{hosting_req_seq_id}}",
+      "req_date": "20260624",
+      "req_seq_id": "S11-CL-HOST"
+    }
+  },
+  "schema_version": "1.1"
+}

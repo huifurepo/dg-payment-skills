@@ -1,6 +1,6 @@
 # 请求头策略
 
-本文件定义当前 Skill 包在 `1.3.0` 版本下的统一请求头约束。
+本文件定义当前 Skill 包在 `1.3.1` 版本下的统一请求头约束。
 
 ## 目录
 
@@ -23,6 +23,8 @@
 ```
 
 如果业务方显式配置 `HUIFU_SKILL_SOURCE`、`skill_source` 或 `jpt_x_skill_source`，HTTP 层应原样透传该值。聚合支付里的 `sys_id` 由各官方 SDK 按自己的实现上送：Java Lightning SDK 会放到独立请求头 `sys_id` / `jpt-sys_id`，PHP 官方 SDK 则仍放在签名前请求体顶层字段，Python 官方 SDK 由 `MerConfig` 管理。
+
+使用 Skill 开发且接入本地沙箱服务时，业务配置传入的 `<skill_source>` 应为 `hfps/1.3.1;sandbox/1.0.0`。官方联调或生产环境应恢复为 `hfps/1.3.1`，不要携带 `;sandbox/...` 后缀。
 
 `jpt-x-skill-source` 属于 HTTP 请求头，不属于业务报文字段本身，不要把它写进 `data`。
 

@@ -1,0 +1,1025 @@
+{
+  "contract_bundle": "huifu-pay-integration-1.3.0-r1",
+  "coverage_runner_version": "1.0",
+  "fixture_runner_version": "1.0",
+  "scenarios": [
+    {
+      "assertions": [
+        "resp_code-in-data",
+        "trans_stat-not-resp-code-is-terminal",
+        "query-projects-state"
+      ],
+      "endpoint_ids": [
+        "aggregation.payment.create",
+        "aggregation.payment.query"
+      ],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [
+        "agg-create-processing",
+        "agg-query-processing-then-success"
+      ],
+      "id": "AGG-01",
+      "runnable": true,
+      "steps": [
+        {
+          "fixture_id": "agg-create-processing",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "agg-query-processing-then-success",
+          "type": "gateway_fixture"
+        },
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "required-fields",
+        "sandbox-error-marked"
+      ],
+      "endpoint_ids": [
+        "aggregation.payment.create"
+      ],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [
+        "agg-create-processing",
+        "agg-create-missing-goods-desc"
+      ],
+      "id": "AGG-02",
+      "runnable": true,
+      "steps": [
+        {
+          "fixture_id": "agg-create-processing",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "agg-create-missing-goods-desc",
+          "type": "gateway_fixture"
+        },
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "query-does-not-force-success"
+      ],
+      "endpoint_ids": [
+        "aggregation.payment.query"
+      ],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [
+        "agg-query-processing-then-success"
+      ],
+      "id": "AGG-03",
+      "runnable": true,
+      "steps": [
+        {
+          "fixture_id": "agg-query-processing-then-success",
+          "type": "gateway_fixture"
+        },
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "callback-not-terminal",
+        "server-confirm-required",
+        "query-projects-state"
+      ],
+      "endpoint_ids": [
+        "hosting.payment.preorder.h5pc",
+        "hosting.payment.query"
+      ],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [
+        "hosting-preorder-accepted",
+        "hosting-query-success"
+      ],
+      "id": "HOST-01",
+      "runnable": true,
+      "steps": [
+        {
+          "fixture_id": "hosting-preorder-accepted",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "hosting-query-success",
+          "type": "gateway_fixture"
+        },
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        },
+        {
+          "name": "checkout-confirm-when-applicable",
+          "type": "control_call"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "conditional-fields",
+        "sandbox-error-marked"
+      ],
+      "endpoint_ids": [
+        "hosting.payment.query"
+      ],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [
+        "hosting-query-success",
+        "hosting-query-missing-locator"
+      ],
+      "id": "HOST-02",
+      "runnable": true,
+      "steps": [
+        {
+          "fixture_id": "hosting-query-success",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "hosting-query-missing-locator",
+          "type": "gateway_fixture"
+        },
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        },
+        {
+          "name": "checkout-confirm-when-applicable",
+          "type": "control_call"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "notify-form-urlencoded",
+        "notify-resp-data-raw-signature",
+        "ack-exact"
+      ],
+      "endpoint_ids": [],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "notify-attempts.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [],
+      "id": "NOTIFY-01",
+      "runnable": true,
+      "steps": [
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        },
+        {
+          "name": "notify-01",
+          "type": "notify_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "ack-mismatch",
+        "max-four-attempts",
+        "attempt-report"
+      ],
+      "endpoint_ids": [],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "notify-attempts.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [],
+      "id": "NOTIFY-02",
+      "runnable": true,
+      "steps": [
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        },
+        {
+          "name": "notify-02",
+          "type": "notify_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "duplicate-delivery",
+        "same-ack-success"
+      ],
+      "endpoint_ids": [],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "notify-attempts.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [],
+      "id": "NOTIFY-03",
+      "runnable": true,
+      "steps": [
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        },
+        {
+          "name": "notify-03",
+          "type": "notify_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "ssrf-allowlist",
+        "query-redaction",
+        "security-finding"
+      ],
+      "endpoint_ids": [],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "notify-attempts.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [],
+      "id": "NOTIFY-04",
+      "runnable": true,
+      "steps": [
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        },
+        {
+          "name": "notify-04",
+          "type": "notify_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "callback-event",
+        "confirm-event",
+        "query-event",
+        "final-state-event"
+      ],
+      "endpoint_ids": [
+        "hosting.payment.preorder.h5pc",
+        "hosting.payment.query"
+      ],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [
+        "hosting-preorder-accepted",
+        "hosting-query-success"
+      ],
+      "id": "CHECKOUT-01",
+      "runnable": true,
+      "steps": [
+        {
+          "fixture_id": "hosting-preorder-accepted",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "hosting-query-success",
+          "type": "gateway_fixture"
+        },
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        },
+        {
+          "name": "checkout-confirm-when-applicable",
+          "type": "control_call"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "business-fail",
+        "http-500",
+        "logical-timeout",
+        "event-recorded"
+      ],
+      "endpoint_ids": [
+        "aggregation.payment.create"
+      ],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [
+        "agg-create-processing",
+        "agg-create-missing-goods-desc"
+      ],
+      "id": "FAULT-01",
+      "runnable": true,
+      "steps": [
+        {
+          "fixture_id": "agg-create-processing",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "agg-create-missing-goods-desc",
+          "type": "gateway_fixture"
+        },
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "csrf-required",
+        "origin-local-only",
+        "cors-default-off"
+      ],
+      "endpoint_ids": [],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [],
+      "id": "SEC-01",
+      "runnable": true,
+      "steps": [
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "payload-digest",
+        "idempotency-conflict",
+        "sandbox-error-marked"
+      ],
+      "endpoint_ids": [
+        "aggregation.payment.create",
+        "hosting.payment.preorder.h5pc"
+      ],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [
+        "agg-create-processing",
+        "hosting-preorder-accepted",
+        "agg-create-missing-goods-desc",
+        "hosting-preorder-missing-project-id"
+      ],
+      "id": "SEC-02",
+      "runnable": true,
+      "steps": [
+        {
+          "fixture_id": "agg-create-processing",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "hosting-preorder-accepted",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "agg-create-missing-goods-desc",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "hosting-preorder-missing-project-id",
+          "type": "gateway_fixture"
+        },
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "report-redaction",
+        "secret-scan",
+        "manifest-includes-secret-scan"
+      ],
+      "endpoint_ids": [],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [],
+      "id": "SEC-03",
+      "runnable": true,
+      "steps": [
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "advisory-only",
+        "private-key-pattern",
+        "hardcoded-secret-pattern",
+        "insecure-tls-pattern"
+      ],
+      "endpoint_ids": [],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [],
+      "id": "SCAN-01",
+      "runnable": true,
+      "steps": [
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "refund-independent-state",
+        "refundable-amount-decreases",
+        "refund-locator"
+      ],
+      "endpoint_ids": [
+        "aggregation.payment.create",
+        "aggregation.payment.query",
+        "aggregation.payment.refund",
+        "aggregation.payment.refund_query"
+      ],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [
+        "agg-create-processing",
+        "agg-query-processing-then-success",
+        "agg-refund-accepted",
+        "agg-refund-query-processing-then-success"
+      ],
+      "id": "REFUND-01",
+      "runnable": true,
+      "steps": [
+        {
+          "fixture_id": "agg-create-processing",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "agg-query-processing-then-success",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "agg-refund-accepted",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "agg-refund-query-processing-then-success",
+          "type": "gateway_fixture"
+        },
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "amount-invariant",
+        "sandbox-error-marked"
+      ],
+      "endpoint_ids": [
+        "aggregation.payment.refund",
+        "hosting.payment.refund"
+      ],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [
+        "agg-refund-accepted",
+        "hosting-refund-accepted",
+        "agg-refund-over-amount",
+        "hosting-refund-over-amount"
+      ],
+      "id": "REFUND-02",
+      "runnable": true,
+      "steps": [
+        {
+          "fixture_id": "agg-refund-accepted",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "hosting-refund-accepted",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "agg-refund-over-amount",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "hosting-refund-over-amount",
+          "type": "gateway_fixture"
+        },
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "refund-locator",
+        "state-projection"
+      ],
+      "endpoint_ids": [
+        "hosting.payment.refund",
+        "hosting.payment.refund_query"
+      ],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [
+        "hosting-refund-accepted",
+        "hosting-refund-query-processing-then-success"
+      ],
+      "id": "REFUND-03",
+      "runnable": true,
+      "steps": [
+        {
+          "fixture_id": "hosting-refund-accepted",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "hosting-refund-query-processing-then-success",
+          "type": "gateway_fixture"
+        },
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "close-state-independent",
+        "terminal-payment-guard"
+      ],
+      "endpoint_ids": [
+        "aggregation.payment.create",
+        "aggregation.payment.close",
+        "aggregation.payment.close_query"
+      ],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [
+        "agg-create-processing",
+        "agg-close-accepted",
+        "agg-close-query-processing-then-success"
+      ],
+      "id": "CLOSE-01",
+      "runnable": true,
+      "steps": [
+        {
+          "fixture_id": "agg-create-processing",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "agg-close-accepted",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "agg-close-query-processing-then-success",
+          "type": "gateway_fixture"
+        },
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "close-stat-projected-by-queryorderinfo"
+      ],
+      "endpoint_ids": [
+        "hosting.payment.preorder.h5pc",
+        "hosting.payment.close",
+        "hosting.payment.query"
+      ],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [
+        "hosting-preorder-accepted",
+        "hosting-close-accepted",
+        "hosting-query-success"
+      ],
+      "id": "CLOSE-02",
+      "runnable": true,
+      "steps": [
+        {
+          "fixture_id": "hosting-preorder-accepted",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "hosting-close-accepted",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "hosting-query-success",
+          "type": "gateway_fixture"
+        },
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "splitpay-not-queryorderinfo",
+        "trans-list-state"
+      ],
+      "endpoint_ids": [
+        "hosting.payment.preorder.h5pc",
+        "hosting.payment.splitpay_query"
+      ],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [
+        "hosting-preorder-accepted",
+        "hosting-splitpay-query-success"
+      ],
+      "id": "SPLITPAY-01",
+      "runnable": true,
+      "steps": [
+        {
+          "fixture_id": "hosting-preorder-accepted",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "hosting-splitpay-query-success",
+          "type": "gateway_fixture"
+        },
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "raw-json-body",
+        "md5-raw-body-endpoint-key",
+        "sign-in-query",
+        "any-2xx-ack"
+      ],
+      "endpoint_ids": [],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json",
+        "webhook-attempts.json"
+      ],
+      "fixture_ids": [],
+      "id": "WEBHOOK-01",
+      "runnable": true,
+      "steps": [
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        },
+        {
+          "name": "webhook-01",
+          "type": "webhook_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "webhook-not-rsa",
+        "notify-exact-ack-not-used",
+        "ssrf-policy-reused"
+      ],
+      "endpoint_ids": [],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json",
+        "webhook-attempts.json"
+      ],
+      "fixture_ids": [],
+      "id": "WEBHOOK-02",
+      "runnable": true,
+      "steps": [
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        },
+        {
+          "name": "webhook-02",
+          "type": "webhook_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "trans-pay-event",
+        "refund-standard-event",
+        "trans-close-event"
+      ],
+      "endpoint_ids": [
+        "aggregation.payment.query",
+        "aggregation.payment.refund_query",
+        "aggregation.payment.close_query"
+      ],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json",
+        "webhook-attempts.json"
+      ],
+      "fixture_ids": [
+        "agg-query-processing-then-success",
+        "agg-refund-query-processing-then-success",
+        "agg-close-query-processing-then-success"
+      ],
+      "id": "WEBHOOK-03",
+      "runnable": true,
+      "steps": [
+        {
+          "fixture_id": "agg-query-processing-then-success",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "agg-refund-query-processing-then-success",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "agg-close-query-processing-then-success",
+          "type": "gateway_fixture"
+        },
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        },
+        {
+          "name": "webhook-03",
+          "type": "webhook_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "task-stat-fp",
+        "file-details-after-second-query",
+        "download-url-local"
+      ],
+      "endpoint_ids": [
+        "shared.reconciliation.filequery"
+      ],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "reconciliation-files.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [
+        "reconciliation-filequery-fp-then-file"
+      ],
+      "id": "RECON-01",
+      "runnable": true,
+      "steps": [
+        {
+          "fixture_id": "reconciliation-filequery-fp-then-file",
+          "type": "gateway_fixture"
+        },
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        }
+      ]
+    },
+    {
+      "assertions": [
+        "default-bill-type",
+        "unsupported-bill-type-error",
+        "sandbox-error-marked"
+      ],
+      "endpoint_ids": [
+        "shared.reconciliation.filequery"
+      ],
+      "expected_events": [],
+      "expected_report_files": [
+        "contract-coverage.json",
+        "endpoint-coverage.json",
+        "events.ndjson",
+        "fixture-coverage.json",
+        "reconciliation-files.json",
+        "report-manifest.json",
+        "scenario-results.json",
+        "summary.json"
+      ],
+      "fixture_ids": [
+        "reconciliation-filequery-fp-then-file",
+        "reconciliation-filequery-unsupported-bill-type"
+      ],
+      "id": "RECON-02",
+      "runnable": true,
+      "steps": [
+        {
+          "fixture_id": "reconciliation-filequery-fp-then-file",
+          "type": "gateway_fixture"
+        },
+        {
+          "fixture_id": "reconciliation-filequery-unsupported-bill-type",
+          "type": "gateway_fixture"
+        },
+        {
+          "name": "required-report-files",
+          "type": "report_assert"
+        }
+      ]
+    }
+  ],
+  "schema_version": "1.1",
+  "source_skill_version": "1.3.0"
+}

@@ -1,0 +1,80 @@
+{
+  "assertions": [
+    "envelope",
+    "headers",
+    "signature",
+    "business-variant"
+  ],
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "endpoint_id": "hosting.payment.preorder.h5pc",
+  "event_assertions": [
+    "payment.accepted",
+    "business.variant"
+  ],
+  "expected": {
+    "fields": {
+      "business_variant": "hosting.wechat-mini"
+    },
+    "resp_code": "00000000"
+  },
+  "expected_resp_code": "00000000",
+  "field_assertions": [
+    {
+      "equals": "P",
+      "path": "trans_stat"
+    },
+    {
+      "exists": true,
+      "path": "pre_order_id"
+    },
+    {
+      "equals": "hosting.wechat-mini",
+      "path": "business_variant"
+    },
+    {
+      "exists": true,
+      "path": "miniapp_data"
+    },
+    {
+      "exists": true,
+      "path": "hosting_data"
+    },
+    {
+      "exists": true,
+      "path": "app_data"
+    },
+    {
+      "exists": true,
+      "path": "wx_response"
+    },
+    {
+      "equals": "&bank_switch=Y",
+      "path": "jump_url"
+    }
+  ],
+  "headers_profile": "java-php-python-local-sandbox",
+  "id": "hosting-mini-wx-preorder",
+  "kind": "variant",
+  "method": "POST",
+  "path": "/v2/trade/hosting/payment/preorder",
+  "request": {
+    "data": {
+      "acct_split_bunch": "{\"percentage_flag\":\"N\",\"is_clean_split\":\"N\",\"acct_infos\":[{\"div_amt\":\"0.02\",\"huifu_id\":\"6666000100000002\"},{\"div_amt\":\"0.02\",\"huifu_id\":\"6666000100000003\"},{\"div_amt\":\"0.01\",\"huifu_id\":\"6666000100000001\"}]}",
+      "app_data": "{\"app_schema\":\"https://example.invalid/app-callback\",\"private_info\":\"\"}",
+      "dy_data": "{\"sub_appid\":\"dy-local-sandbox\",\"h5_info\":{\"type\":\"Ios\"},\"scene_info\":{\"payer_client_ip\":\"127.0.0.1\"}}",
+      "goods_desc": "hosting-mini-wx-preorder",
+      "hosting_data": "{\"request_type\":\"P\",\"project_title\":\"local wechat mini project\",\"project_id\":\"PROJECT-HOST-WX-MINI-001\",\"private_info\":\"local private info\",\"callback_url\":\"https://example.invalid/hosting/callback\"}",
+      "huifu_id": "6666000100000001",
+      "miniapp_data": "{\"seq_id\":\"\",\"need_scheme\":\"Y\"}",
+      "notify_url": "{{notify_url:/notify?case=hosting-channel}}",
+      "pre_order_type": "3",
+      "req_date": "20260701",
+      "req_seq_id": "S12-HOST-MINI-WX",
+      "time_expire": "20260720125858",
+      "trans_amt": "0.05",
+      "unionpay_data": "{\"addn_data\":\"{\\\"customData\\\":\\\"local\\\"}\",\"pnr_ins_id_cd\":\"UP-INS-LOCAL\",\"front_url\":\"https://example.invalid/unionpay\"}",
+      "usage_type": "P"
+    }
+  },
+  "schema_version": "1.1"
+}

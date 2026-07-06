@@ -1,0 +1,90 @@
+{
+  "assertions": [
+    "envelope",
+    "headers",
+    "signature",
+    "sample-backed",
+    "business-variant",
+    "string-json-channel-fields",
+    "channel-response-projection",
+    "notify-rsa-resp-data",
+    "webhook-event"
+  ],
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "endpoint_id": "hosting.payment.preorder.h5pc",
+  "event_assertions": [
+    "payment.accepted",
+    "business.variant",
+    "payment.query",
+    "payment.notify",
+    "webhook.hosting.pay",
+    "webhook.hosting.accounted"
+  ],
+  "expected": {
+    "fields": {
+      "business_variant": "hosting.h5pc.wechat",
+      "pre_order_type": "1",
+      "trans_stat": "P",
+      "trans_type": "T_JSAPI"
+    },
+    "resp_code": "00000000"
+  },
+  "expected_resp_code": "00000000",
+  "field_assertions": [
+    {
+      "equals": "00000000",
+      "path": "resp_code"
+    },
+    {
+      "exists": true,
+      "path": "pre_order_id"
+    },
+    {
+      "equals": "1",
+      "path": "pre_order_type"
+    },
+    {
+      "equals": "T_JSAPI",
+      "path": "trans_type"
+    },
+    {
+      "equals": "P",
+      "path": "trans_stat"
+    },
+    {
+      "exists": true,
+      "path": "wx_response"
+    },
+    {
+      "equals": "hosting.h5pc.wechat",
+      "path": "business_variant"
+    }
+  ],
+  "headers_profile": "java-php-python-local-sandbox",
+  "id": "sample-hosting-h5pc-wechat-success",
+  "kind": "sample",
+  "method": "POST",
+  "path": "/v2/trade/hosting/payment/preorder",
+  "request": {
+    "data": {
+      "acct_split_bunch": "{\"acct_infos\":[{\"huifu_id\":\"1234000100000008\",\"div_amt\":\"322.50\"},{\"huifu_id\":\"1234000100000009\",\"div_amt\":\"2042.50\"},{\"huifu_id\":\"1234000100000007\",\"div_amt\":\"0.00\"}]}",
+      "delay_acct_flag": "Y",
+      "goods_desc": "示例托管微信 H5 订单",
+      "hosting_data": "{\"project_title\":\"示例托管项目\",\"project_id\":\"PROJECT-LOCAL-HOST-WX\",\"callback_url\":\"https://example.invalid/huifu/hosting-callback\",\"request_type\":\"M\",\"private_info\":\"示例订单\"}",
+      "huifu_id": "1234000100000007",
+      "notify_url": "https://example.invalid/huifu/hosting-h5pc-wechat-notify",
+      "pre_order_type": "1",
+      "req_date": "20260629",
+      "req_seq_id": "REQ-HOST-WX-0001",
+      "risk_check_data": "{\"ip_addr\":\"127.0.0.1\",\"risk_mng_info\":{\"sub_trade_type\":\"4300\"}}",
+      "time_expire": "20260629T105219",
+      "trans_amt": "2365.00",
+      "trans_type": "T_JSAPI",
+      "wx_data": "{\"attach\":\"示例服务_订单编号:REQ-HOST-WX-0001_凭证\",\"detail\":{\"cost_price\":\"2365.00\",\"receipt_id\":\"HOST-WX-RECEIPT-0001\",\"goods_detail\":[{\"goods_id\":\"HOST-WX-GOODS-0001\",\"goods_name\":\"示例托管微信 H5 订单\",\"price\":\"2365.00\",\"quantity\":1,\"wxpay_goods_id\":\"HOST-WX-GOODS-0001\"}]},\"scene_info\":{\"store_info\":{\"id\":\"STORE-HOST-WX-001\",\"name\":\"示例服务平台\",\"area_code\":\"310101\",\"address\":\"示例地址\"}}}"
+    }
+  },
+  "sample_coverage_level": "deidentified_production_sample",
+  "sample_digest": "sha256:dca5f0a43ebf5cb0f1a441282cce3f4fcf289fba1b5ce1f75425683140f059da",
+  "schema_version": "1.1",
+  "source_sample_id": "hosting-h5pc-wechat-success"
+}

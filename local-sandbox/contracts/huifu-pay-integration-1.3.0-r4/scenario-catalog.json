@@ -1,0 +1,659 @@
+{
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "scenarios": [
+    {
+      "assertions": [
+        "resp_code-in-data",
+        "trans_stat-not-resp-code-is-terminal",
+        "query-projects-state"
+      ],
+      "endpoints": [
+        "aggregation.payment.create",
+        "aggregation.payment.query"
+      ],
+      "id": "AGG-01",
+      "name": "Aggregation create accepted, first query P, second query S",
+      "phase": "0.1.0"
+    },
+    {
+      "assertions": [
+        "required-fields",
+        "sandbox-error-marked"
+      ],
+      "endpoints": [
+        "aggregation.payment.create"
+      ],
+      "id": "AGG-02",
+      "name": "Aggregation create missing required business fields",
+      "phase": "0.1.0"
+    },
+    {
+      "assertions": [
+        "query-does-not-force-success"
+      ],
+      "endpoints": [
+        "aggregation.payment.query"
+      ],
+      "id": "AGG-03",
+      "name": "Aggregation query can remain processing",
+      "phase": "0.1.0"
+    },
+    {
+      "assertions": [
+        "callback-not-terminal",
+        "server-confirm-required",
+        "query-projects-state"
+      ],
+      "endpoints": [
+        "hosting.payment.preorder.h5pc",
+        "hosting.payment.query"
+      ],
+      "id": "HOST-01",
+      "name": "Hosting preorder returns jump_url, callback is non-terminal, confirm plus query reaches success",
+      "phase": "0.2.0"
+    },
+    {
+      "assertions": [
+        "conditional-fields",
+        "sandbox-error-marked"
+      ],
+      "endpoints": [
+        "hosting.payment.query"
+      ],
+      "id": "HOST-02",
+      "name": "Hosting query locating fields fail",
+      "phase": "0.1.0"
+    },
+    {
+      "assertions": [
+        "notify-form-urlencoded",
+        "notify-resp-data-raw-signature",
+        "ack-exact"
+      ],
+      "endpoints": [],
+      "id": "NOTIFY-01",
+      "name": "Signed notify_url delivery receives exact ACK",
+      "phase": "0.2.0"
+    },
+    {
+      "assertions": [
+        "ack-mismatch",
+        "max-four-attempts",
+        "attempt-report"
+      ],
+      "endpoints": [],
+      "id": "NOTIFY-02",
+      "name": "Wrong ACK triggers bounded retries",
+      "phase": "0.2.0"
+    },
+    {
+      "assertions": [
+        "duplicate-delivery",
+        "same-ack-success"
+      ],
+      "endpoints": [],
+      "id": "NOTIFY-03",
+      "name": "Duplicate notification stays idempotent",
+      "phase": "0.2.0"
+    },
+    {
+      "assertions": [
+        "ssrf-allowlist",
+        "query-redaction",
+        "security-finding"
+      ],
+      "endpoints": [],
+      "id": "NOTIFY-04",
+      "name": "Unsafe notify target is blocked and reported",
+      "phase": "0.2.0"
+    },
+    {
+      "assertions": [
+        "business-fail",
+        "http-500",
+        "logical-timeout",
+        "event-recorded"
+      ],
+      "endpoints": [
+        "aggregation.payment.create"
+      ],
+      "id": "FAULT-01",
+      "name": "Gateway fault injection supports business fail, HTTP 500, and timeout",
+      "phase": "0.3.0"
+    },
+    {
+      "assertions": [
+        "csrf-required",
+        "origin-local-only",
+        "cors-default-off"
+      ],
+      "endpoints": [],
+      "id": "SEC-01",
+      "name": "Control surface rejects missing CSRF token and external Origin",
+      "phase": "0.3.0"
+    },
+    {
+      "assertions": [
+        "payload-digest",
+        "idempotency-conflict",
+        "sandbox-error-marked"
+      ],
+      "endpoints": [
+        "aggregation.payment.create",
+        "hosting.payment.preorder.h5pc"
+      ],
+      "id": "SEC-02",
+      "name": "Same req_seq_id with different payload is blocked as idempotency conflict",
+      "phase": "0.3.0"
+    },
+    {
+      "assertions": [
+        "report-redaction",
+        "secret-scan",
+        "manifest-includes-secret-scan"
+      ],
+      "endpoints": [],
+      "id": "SEC-03",
+      "name": "Reports redact outbound target query data and run secret scan",
+      "phase": "0.3.0"
+    },
+    {
+      "assertions": [
+        "advisory-only",
+        "private-key-pattern",
+        "hardcoded-secret-pattern",
+        "insecure-tls-pattern"
+      ],
+      "endpoints": [],
+      "id": "SCAN-01",
+      "name": "Static advisory scan reports risky source patterns without executing user code",
+      "phase": "0.3.0"
+    },
+    {
+      "assertions": [
+        "refund-independent-state",
+        "refundable-amount-decreases",
+        "refund-locator"
+      ],
+      "endpoints": [
+        "aggregation.payment.create",
+        "aggregation.payment.query",
+        "aggregation.payment.refund",
+        "aggregation.payment.refund_query"
+      ],
+      "id": "REFUND-01",
+      "name": "Aggregation successful payment can be partially refunded and queried P then S",
+      "phase": "0.4.0"
+    },
+    {
+      "assertions": [
+        "amount-invariant",
+        "sandbox-error-marked"
+      ],
+      "endpoints": [
+        "aggregation.payment.refund",
+        "hosting.payment.refund"
+      ],
+      "id": "REFUND-02",
+      "name": "Refund amount cannot exceed refundable payment amount",
+      "phase": "0.4.0"
+    },
+    {
+      "assertions": [
+        "refund-locator",
+        "state-projection"
+      ],
+      "endpoints": [
+        "hosting.payment.refund",
+        "hosting.payment.refund_query"
+      ],
+      "id": "REFUND-03",
+      "name": "Hosting refund and refund query use refund transaction locators",
+      "phase": "0.4.0"
+    },
+    {
+      "assertions": [
+        "close-state-independent",
+        "terminal-payment-guard"
+      ],
+      "endpoints": [
+        "aggregation.payment.create",
+        "aggregation.payment.query",
+        "aggregation.payment.close",
+        "aggregation.payment.close_query"
+      ],
+      "id": "CLOSE-01",
+      "name": "Aggregation processing payment can be closed and close query reaches S",
+      "phase": "0.4.0"
+    },
+    {
+      "assertions": [
+        "close-stat-projected-by-queryorderinfo"
+      ],
+      "endpoints": [
+        "hosting.payment.preorder.h5pc",
+        "hosting.payment.close",
+        "hosting.payment.query"
+      ],
+      "id": "CLOSE-02",
+      "name": "Hosting close is projected through queryorderinfo close_stat",
+      "phase": "0.4.0"
+    },
+    {
+      "assertions": [
+        "splitpay-not-queryorderinfo",
+        "trans-list-state"
+      ],
+      "endpoints": [
+        "hosting.payment.preorder.h5pc",
+        "hosting.payment.splitpay_query"
+      ],
+      "id": "SPLITPAY-01",
+      "name": "Hosting splitpay query returns trans_list and is distinct from queryorderinfo",
+      "phase": "0.4.0"
+    },
+    {
+      "assertions": [
+        "raw-json-body",
+        "md5-raw-body-endpoint-key",
+        "sign-in-query",
+        "any-2xx-ack"
+      ],
+      "endpoints": [],
+      "id": "WEBHOOK-01",
+      "name": "Webhook delivery sends raw JSON body and MD5 sign in URL query",
+      "phase": "0.5.0"
+    },
+    {
+      "assertions": [
+        "webhook-not-rsa",
+        "notify-exact-ack-not-used",
+        "ssrf-policy-reused"
+      ],
+      "endpoints": [],
+      "id": "WEBHOOK-02",
+      "name": "Webhook and notify_url use different signature and ACK rules",
+      "phase": "0.5.0"
+    },
+    {
+      "assertions": [
+        "trans-pay-event",
+        "refund-standard-event",
+        "trans-close-event"
+      ],
+      "endpoints": [
+        "aggregation.payment.query",
+        "aggregation.payment.refund_query",
+        "aggregation.payment.close_query"
+      ],
+      "id": "WEBHOOK-03",
+      "name": "Payment, refund, and close final states emit platform webhook event types",
+      "phase": "0.5.0"
+    },
+    {
+      "assertions": [
+        "task-stat-fp",
+        "file-details-after-second-query",
+        "download-url-local"
+      ],
+      "endpoints": [
+        "shared.reconciliation.filequery"
+      ],
+      "id": "RECON-01",
+      "name": "Reconciliation filequery first returns FP and second returns a local download URL",
+      "phase": "0.5.0"
+    },
+    {
+      "assertions": [
+        "default-bill-type",
+        "unsupported-bill-type-error",
+        "sandbox-error-marked"
+      ],
+      "endpoints": [
+        "shared.reconciliation.filequery"
+      ],
+      "id": "RECON-02",
+      "name": "Reconciliation bill_type defaults to TRADE_BILL and rejects unsupported values",
+      "phase": "0.5.0"
+    },
+    {
+      "assertions": [
+        "method-expand-json",
+        "micropay-auth-code",
+        "channel-response-projection"
+      ],
+      "endpoints": [
+        "aggregation.payment.create",
+        "aggregation.payment.query"
+      ],
+      "id": "AGG-CHANNEL-WX-01",
+      "name": "Aggregation WeChat method_expand and micropay auth_code coverage",
+      "phase": "0.12.0"
+    },
+    {
+      "assertions": [
+        "method-expand-json",
+        "micropay-auth-code",
+        "channel-response-projection"
+      ],
+      "endpoints": [
+        "aggregation.payment.create",
+        "aggregation.payment.query"
+      ],
+      "id": "AGG-CHANNEL-ALI-01",
+      "name": "Aggregation Alipay method_expand and micropay auth_code coverage",
+      "phase": "0.12.0"
+    },
+    {
+      "assertions": [
+        "method-expand-json",
+        "micropay-auth-code",
+        "channel-response-projection"
+      ],
+      "endpoints": [
+        "aggregation.payment.create",
+        "aggregation.payment.query"
+      ],
+      "id": "AGG-CHANNEL-UP-01",
+      "name": "Aggregation UnionPay method_expand and micropay auth_code coverage",
+      "phase": "0.12.0"
+    },
+    {
+      "assertions": [
+        "tx-metadata-not-request-wrapper",
+        "top-level-extension-fields",
+        "query-tx-metadata-projection"
+      ],
+      "endpoints": [
+        "aggregation.payment.create",
+        "aggregation.payment.query"
+      ],
+      "id": "AGG-TX-META-01",
+      "name": "Aggregation tx_metadata request boundary and query projection",
+      "phase": "0.12.0"
+    },
+    {
+      "assertions": [
+        "string-json-channel-fields",
+        "channel-response-projection"
+      ],
+      "endpoints": [
+        "hosting.payment.preorder.h5pc",
+        "hosting.payment.query"
+      ],
+      "id": "HOST-H5-WX-01",
+      "name": "Hosting H5/PC WeChat channel fields and response projection",
+      "phase": "0.12.0"
+    },
+    {
+      "assertions": [
+        "string-json-channel-fields",
+        "channel-response-projection"
+      ],
+      "endpoints": [
+        "hosting.payment.preorder.h5pc",
+        "hosting.payment.query"
+      ],
+      "id": "HOST-H5-ALI-01",
+      "name": "Hosting H5/PC Alipay channel fields and response projection",
+      "phase": "0.12.0"
+    },
+    {
+      "assertions": [
+        "string-json-channel-fields",
+        "channel-response-projection"
+      ],
+      "endpoints": [
+        "hosting.payment.preorder.h5pc",
+        "hosting.payment.query"
+      ],
+      "id": "HOST-H5-UP-01",
+      "name": "Hosting H5/PC UnionPay channel fields and response projection",
+      "phase": "0.12.0"
+    },
+    {
+      "assertions": [
+        "string-json-channel-fields",
+        "channel-response-projection"
+      ],
+      "endpoints": [
+        "hosting.payment.preorder.h5pc",
+        "hosting.payment.query"
+      ],
+      "id": "HOST-H5-DY-01",
+      "name": "Hosting H5/PC Douyin channel fields and response projection",
+      "phase": "0.12.0"
+    },
+    {
+      "assertions": [
+        "pre-order-type-2",
+        "app-data-required",
+        "channel-response-projection"
+      ],
+      "endpoints": [
+        "hosting.payment.preorder.h5pc",
+        "hosting.payment.query"
+      ],
+      "id": "HOST-MINI-ALI-01",
+      "name": "Hosting Alipay mini preorder minimal loop",
+      "phase": "0.12.0"
+    },
+    {
+      "assertions": [
+        "pre-order-type-3",
+        "miniapp-data-required",
+        "channel-response-projection"
+      ],
+      "endpoints": [
+        "hosting.payment.preorder.h5pc",
+        "hosting.payment.query"
+      ],
+      "id": "HOST-MINI-WX-01",
+      "name": "Hosting WeChat mini preorder minimal loop",
+      "phase": "0.12.0"
+    },
+    {
+      "assertions": [
+        "pre-order-type-4",
+        "dy-data-required",
+        "channel-response-projection"
+      ],
+      "endpoints": [
+        "hosting.payment.preorder.h5pc",
+        "hosting.payment.query"
+      ],
+      "id": "HOST-DY-DIRECT-01",
+      "name": "Hosting Douyin direct preorder minimal loop",
+      "phase": "0.12.0"
+    },
+    {
+      "assertions": [
+        "notify-rsa-resp-data",
+        "webhook-md5-raw-body",
+        "channel-response-fields"
+      ],
+      "endpoints": [
+        "aggregation.payment.create",
+        "aggregation.payment.query"
+      ],
+      "id": "CHANNEL-NOTIFY-01",
+      "name": "Channel response fields are carried by notify_url and Webhook without signature rule mixing",
+      "phase": "0.12.0"
+    },
+    {
+      "assertions": [
+        "split-metadata",
+        "query-tx-metadata-projection"
+      ],
+      "endpoints": [
+        "aggregation.payment.create",
+        "aggregation.payment.query"
+      ],
+      "id": "AGG-SPLIT-01",
+      "name": "Aggregation split metadata representative flow",
+      "phase": "0.13.0"
+    },
+    {
+      "assertions": [
+        "combined-payment-metadata",
+        "query-tx-metadata-projection"
+      ],
+      "endpoints": [
+        "aggregation.payment.create",
+        "aggregation.payment.query"
+      ],
+      "id": "AGG-COMBINED-01",
+      "name": "Aggregation combined payment metadata representative flow",
+      "phase": "0.13.0"
+    },
+    {
+      "assertions": [
+        "fee-allowance-metadata",
+        "query-tx-metadata-projection"
+      ],
+      "endpoints": [
+        "aggregation.payment.create",
+        "aggregation.payment.query"
+      ],
+      "id": "AGG-FEE-ALLOWANCE-01",
+      "name": "Aggregation fee allowance metadata representative flow",
+      "phase": "0.13.0"
+    },
+    {
+      "assertions": [
+        "channel-refund-projection"
+      ],
+      "endpoints": [
+        "aggregation.payment.create",
+        "aggregation.payment.query",
+        "aggregation.payment.refund",
+        "aggregation.payment.refund_query"
+      ],
+      "id": "AGG-REFUND-CHANNEL-01",
+      "name": "Aggregation channel payment refund carries channel projection",
+      "phase": "0.13.0"
+    },
+    {
+      "assertions": [
+        "channel-close-projection"
+      ],
+      "endpoints": [
+        "aggregation.payment.create",
+        "aggregation.payment.query",
+        "aggregation.payment.close",
+        "aggregation.payment.close_query"
+      ],
+      "id": "AGG-CLOSE-CHANNEL-01",
+      "name": "Aggregation channel payment close carries channel projection",
+      "phase": "0.13.0"
+    },
+    {
+      "assertions": [
+        "largeamt-data",
+        "channel-response-projection"
+      ],
+      "endpoints": [
+        "hosting.payment.preorder.h5pc",
+        "hosting.payment.query"
+      ],
+      "id": "HOST-LARGEAMT-01",
+      "name": "Hosting H5/PC large amount data validation and projection",
+      "phase": "0.13.0"
+    },
+    {
+      "assertions": [
+        "terminal-device-data",
+        "channel-response-projection"
+      ],
+      "endpoints": [
+        "hosting.payment.preorder.h5pc",
+        "hosting.payment.query"
+      ],
+      "id": "HOST-TERMINAL-01",
+      "name": "Hosting H5/PC terminal device data validation and projection",
+      "phase": "0.13.0"
+    },
+    {
+      "assertions": [
+        "multi-channel-fields",
+        "channel-response-projection"
+      ],
+      "endpoints": [
+        "hosting.payment.preorder.h5pc",
+        "hosting.payment.query"
+      ],
+      "id": "HOST-CHANNEL-COMBO-01",
+      "name": "Hosting H5/PC multi-channel field combination projection",
+      "phase": "0.13.0"
+    },
+    {
+      "assertions": [
+        "channel-refund-projection"
+      ],
+      "endpoints": [
+        "hosting.payment.preorder.h5pc",
+        "hosting.payment.query",
+        "hosting.payment.refund",
+        "hosting.payment.refund_query"
+      ],
+      "id": "HOST-REFUND-CHANNEL-01",
+      "name": "Hosting channel payment refund carries channel projection",
+      "phase": "0.13.0"
+    },
+    {
+      "assertions": [
+        "channel-close-projection",
+        "close-stat-projected-by-queryorderinfo"
+      ],
+      "endpoints": [
+        "hosting.payment.preorder.h5pc",
+        "hosting.payment.close",
+        "hosting.payment.query"
+      ],
+      "id": "HOST-CLOSE-CHANNEL-01",
+      "name": "Hosting channel payment close projects close_stat and channel fields through queryorderinfo",
+      "phase": "0.13.0"
+    },
+    {
+      "assertions": [
+        "bill-type-positive",
+        "local-download-url"
+      ],
+      "endpoints": [
+        "shared.reconciliation.filequery"
+      ],
+      "id": "RECON-BILL-TYPES-01",
+      "name": "Reconciliation additional bill types return local download files",
+      "phase": "0.13.0"
+    },
+    {
+      "assertions": [
+        "empty-file",
+        "expired-download",
+        "forbidden-download"
+      ],
+      "endpoints": [
+        "shared.reconciliation.filequery"
+      ],
+      "id": "RECON-DOWNLOAD-EDGES-01",
+      "name": "Reconciliation empty file and blocked download edge cases",
+      "phase": "0.13.0"
+    },
+    {
+      "assertions": [
+        "amount-boundary",
+        "date-boundary",
+        "conditional-field-conflict"
+      ],
+      "endpoints": [
+        "aggregation.payment.create",
+        "hosting.payment.preorder.h5pc",
+        "shared.reconciliation.filequery"
+      ],
+      "id": "ERROR-FIELDS-01",
+      "name": "Field boundary errors for amount date and pre_order_type",
+      "phase": "0.13.0"
+    }
+  ],
+  "schema_version": "1.0"
+}

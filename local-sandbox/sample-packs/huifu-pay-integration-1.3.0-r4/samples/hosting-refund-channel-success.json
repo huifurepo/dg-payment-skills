@@ -1,0 +1,546 @@
+{
+  "schema_version": "1.0",
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "sample_id": "hosting-refund-channel-success",
+  "title": "托管渠道维度退款成功样例",
+  "description": "由附件中的托管退款成功日志拆分归一而来，覆盖托管原交易投射、退款请求、同步响应、退款查询成功投射、退款异步通知和 Webhook v2 提交证据。",
+  "source_type": "deidentified_production",
+  "authorization": {
+    "status": "approved",
+    "approved_by": "user-provided-codex-attachment",
+    "approved_at": "2026-06-30T18:15:00+08:00"
+  },
+  "deidentification": {
+    "status": "passed",
+    "method": "field-level placeholder replacement; removed raw merchant names, real huifu ids, sys id, account ids, refund order ids, original payment ids, party order ids, bank order numbers, hf sequence ids, WeChat refund ids, message ids, thread hosts, and long numeric identifiers while preserving hosting refund, channel projection, WeChat refund response, notify, query, and webhook semantics",
+    "checked_at": "2026-06-30T18:20:00+08:00"
+  },
+  "endpoint": {
+    "id": "hosting.payment.refund",
+    "method": "POST",
+    "path": "/v2/trade/hosting/payment/htRefund"
+  },
+  "scenario_id": "HOST-REFUND-CHANNEL-01",
+  "headers_profile": "java-php-python-local-sandbox",
+  "source_summary": {
+    "attachment": "pasted-text.txt",
+    "selected_source_lines": [
+      8,
+      10,
+      12,
+      17,
+      19,
+      22,
+      24,
+      29,
+      31
+    ],
+    "source_refund_type": "TRANS_REFUND",
+    "source_channel": "Hosting WeChat channel refund",
+    "source_product_id": "MYPAY",
+    "source_amount": "0.05",
+    "notes": [
+      "line 4 contains the public HostingRefundController refund request with terminal_device_data, risk_check_data, bank_info_data, and notify_url",
+      "line 4 contains the public HostingRefundController sync response with resp_code=00000000, trans_stat=P, bank_code=00000100, and fee_amt=0.03",
+      "line 5 contains the refund success consumption payload with payChannel=T, bankCode=SUCCESS, transStat=S, wxResponse, acctSplitBunch, and splitFeeInfo",
+      "line 6 contains the merchant notify payload sent to the supplied notify_url",
+      "line 6 contains Webhook v2 hosting.refund submission evidence",
+      "lines 7 and 8 contain the public QueryRefundInfoController request and successful response with acct_split_bunch, split_fee_info, org_party_order_id, org_out_order_id, and trans_finish_time"
+    ]
+  },
+  "request": {
+    "source": "normalized from HostingRefundController successful request and downstream TOP refund request",
+    "data": {
+      "product_id": "MYPAY",
+      "req_date": "20260701",
+      "req_seq_id": "REQ-HOST-RF-CHANNEL-0001",
+      "huifu_id": "1234000100000026",
+      "ord_amt": "0.05",
+      "org_req_date": "20260701",
+      "org_req_seq_id": "ORG-HOST-PAY-CHANNEL-0001",
+      "org_hf_seq_id": "",
+      "org_party_order_id": "",
+      "terminal_device_data": "{\"device_type\":\"4\"}",
+      "risk_check_data": "{\"risk_mng_info\":{\"sub_trade_type\":\"4300\"},\"ip_address\":\"127.0.0.1\"}",
+      "bank_info_data": "{\"card_acct_type\":\"P\",\"bank_card_no\":\"\"}",
+      "notify_url": "https://example.invalid/huifu/hosting-refund-channel-notify"
+    }
+  },
+  "responses": {
+    "original_transaction": {
+      "source": "normalized from refund notify original transaction fields",
+      "data": {
+        "product_id": "XLSISV",
+        "req_date": "20260624",
+        "req_seq_id": "ORG-HOST-PAY-CHANNEL-0001",
+        "huifu_id": "1234000100000026",
+        "hf_seq_id": "ORG-HF-HOST-CHANNEL-0001",
+        "org_term_ord_id": "ORG-HOST-TERM-ORDER-0001",
+        "org_order_id": "ORG-HOST-ORDER-0001",
+        "org_out_trans_id": "WX-OUT-TRANS-HOST-0001",
+        "org_party_order_id": "WX-PARTY-HOST-0001",
+        "org_ord_amt": "714.16",
+        "org_fee_amt": "9.64",
+        "pay_channel": "T",
+        "pay_type": "JSAPI",
+        "business_variant": "hosting.h5pc.wechat",
+        "trans_stat": "S"
+      }
+    },
+    "sync": {
+      "source": "normalized from HostingRefundController response",
+      "data": {
+        "product_id": "MYPAY",
+        "req_date": "20260701",
+        "req_seq_id": "REQ-HOST-RF-CHANNEL-0001",
+        "huifu_id": "1234000100000026",
+        "hf_seq_id": "HF-HOST-RF-CHANNEL-0001",
+        "resp_code": "00000000",
+        "resp_desc": "操作成功",
+        "mer_name": "示例商户",
+        "org_req_date": "20260701",
+        "org_req_seq_id": "ORG-HOST-PAY-CHANNEL-0001",
+        "org_hf_seq_id": "ORG-HF-HOST-CHANNEL-0001",
+        "trans_time": "20260701T140705",
+        "trans_stat": "P",
+        "ord_amt": "0.05",
+        "bank_code": "00000100",
+        "bank_message": "交易正在处理中",
+        "fee_amt": "0.03",
+        "pay_channel": "T",
+        "pay_type": "JSAPI",
+        "business_variant": "hosting.h5pc.wechat"
+      }
+    },
+    "downstream_refund": {
+      "source": "normalized from TopTransRefundServiceFacadeImpl request and response",
+      "request": {
+        "data": {
+          "huifu_id": "1234000100000026",
+          "mer_ord_id": "REQ-HOST-RF-CHANNEL-0001",
+          "notify_url": "archer://C_TOP_HOSTINGPAY_REFUND_NOTIFY",
+          "ord_amt": "244.00",
+          "org_req_date": "20260624",
+          "org_req_seq_id": "ORG-HOST-PAY-CHANNEL-0001",
+          "product_id": "XLSISV",
+          "refund_hf_seq_id": "HF-HOST-RF-CHANNEL-0001",
+          "req_date": "20260630",
+          "req_seq_id": "REQ-HOST-RF-CHANNEL-0001",
+          "sys_id": "1234000100000027"
+        }
+      },
+      "data": {
+        "acct_split_bunch": {
+          "acct_infos": [
+            {
+              "acct_date": "20260630",
+              "acct_id": "A-HOST-RF-001",
+              "div_amt": "3.29",
+              "huifu_id": "1234000100000026"
+            },
+            {
+              "acct_date": "20260630",
+              "acct_id": "A-HOST-RF-002",
+              "div_amt": "240.71",
+              "huifu_id": "1234000100000028"
+            }
+          ],
+          "fee_acct_id": "A-HOST-RF-001",
+          "fee_amt": "3.29",
+          "fee_huifu_id": "1234000100000026"
+        },
+        "bank_code": "",
+        "bank_message": "",
+        "bank_seq_id": "BANKSEQ-HOST-RF-001",
+        "hf_seq_id": "HF-HOST-RF-CHANNEL-0001",
+        "huifu_id": "1234000100000026",
+        "loan_flag": "N",
+        "mer_ord_id": "REQ-HOST-RF-CHANNEL-0001",
+        "ord_amt": "244.00",
+        "org_hf_seq_id": "ORG-HF-HOST-CHANNEL-0001",
+        "org_req_date": "20260624",
+        "org_req_seq_id": "ORG-HOST-PAY-CHANNEL-0001",
+        "pay_channel": "T",
+        "pay_type": "JSAPI",
+        "product_id": "XLSISV",
+        "ref_no": "REF-HOST-RF-CHANNEL-001",
+        "refund_hf_seq_id": "HF-HOST-RF-CHANNEL-0001",
+        "req_date": "20260630",
+        "req_seq_id": "REQ-HOST-RF-CHANNEL-0001",
+        "resp_code": "00000100",
+        "resp_desc": "交易正在处理中",
+        "trans_date": "20260630",
+        "trans_stat": "P",
+        "trans_time": "181259"
+      }
+    },
+    "refund_query_success": {
+      "endpoint": {
+        "id": "hosting.payment.refund_query",
+        "method": "POST",
+        "path": "/v2/trade/hosting/payment/queryRefundInfo"
+      },
+      "request": {
+        "data": {
+          "product_id": "MYPAY",
+          "req_date": "20260701",
+          "req_seq_id": "QRY-HOST-RF-CHANNEL-0001",
+          "huifu_id": "1234000100000026",
+          "org_req_date": "20260701",
+          "org_hf_seq_id": "",
+          "org_req_seq_id": "REQ-HOST-RF-CHANNEL-0001"
+        }
+      },
+      "source": "normalized from public QueryRefundInfoController response and successful TRANS_REFUND_NOTIFY state projection",
+      "data": {
+        "product_id": "MYPAY",
+        "req_date": "20260701",
+        "req_seq_id": "QRY-HOST-RF-CHANNEL-0001",
+        "huifu_id": "1234000100000026",
+        "resp_code": "00000000",
+        "resp_desc": "操作成功",
+        "refund_req_date": "20260701",
+        "refund_req_seq_id": "REQ-HOST-RF-CHANNEL-0001",
+        "hf_seq_id": "HF-HOST-RF-CHANNEL-0001",
+        "order_id": "HOST-RF-ORDER-0001",
+        "ord_amt": "0.05",
+        "actual_ref_amt": "0.05",
+        "total_ref_amt": "0.05",
+        "total_ref_fee_amt": "0.03",
+        "org_req_date": "20260701",
+        "org_req_seq_id": "ORG-HOST-PAY-CHANNEL-0001",
+        "org_hf_seq_id": "ORG-HF-HOST-CHANNEL-0001",
+        "org_party_order_id": "PARTY-HOST-RF-CHANNEL-0001",
+        "org_out_order_id": "ORDER-HOST-RF-CHANNEL-0001",
+        "org_ord_amt": "0.05",
+        "org_fee_amt": "0.03",
+        "pay_channel": "T",
+        "pay_type": "JSAPI",
+        "business_variant": "hosting.h5pc.wechat",
+        "trans_type": "TRANS_REFUND",
+        "trans_stat": "S",
+        "cash_trans_stat": "S",
+        "channel_stat": "S",
+        "trans_date": "20260701",
+        "trans_time": "140705",
+        "trans_finish_time": "20260701T140708",
+        "cash_req_date": "20260701",
+        "cash_req_seq_id": "CASH-HOST-RF-REQ-0001",
+        "cash_trans_id": "CASH-HOST-RF-0001",
+        "cash_resp_code": "000",
+        "cash_resp_desc": "成功",
+        "bank_code": "SUCCESS",
+        "bank_message": "退款成功",
+        "bank_resp_code": "SUCCESS",
+        "bank_resp_desc": "退款成功",
+        "bank_seq_id": "BANKSEQ-HOST-RF-001",
+        "ref_no": "REF-HOST-RF-CHANNEL-001",
+        "acct_split_bunch": {
+          "acct_infos": [
+            {
+              "acct_date": "20260701",
+              "acct_id": "A-HOST-RF-001",
+              "div_amt": "0.02",
+              "huifu_id": "1234000100000028"
+            },
+            {
+              "acct_date": "20260701",
+              "acct_id": "A-HOST-RF-002",
+              "div_amt": "0.02",
+              "huifu_id": "1234000100000029"
+            },
+            {
+              "acct_date": "20260701",
+              "acct_id": "A-HOST-RF-003",
+              "div_amt": "0.01",
+              "huifu_id": "1234000100000026"
+            }
+          ],
+          "fee_acct_id": "A-HOST-RF-001",
+          "fee_amt": "0.03",
+          "fee_huifu_id": "1234000100000026"
+        },
+        "split_fee_info": {
+          "split_fee_details": [
+            {
+              "split_fee_acct_id": "A-HOST-RF-001",
+              "split_fee_amt": "0.00",
+              "split_fee_flag": 2,
+              "split_fee_huifu_id": "1234000100000028"
+            },
+            {
+              "split_fee_acct_id": "A-HOST-RF-002",
+              "split_fee_amt": "0.00",
+              "split_fee_flag": 2,
+              "split_fee_huifu_id": "1234000100000029"
+            }
+          ],
+          "total_split_fee_amt": "0.00"
+        },
+        "wx_response": {
+          "cash_refund_fee": "0.05",
+          "coupon_refund_fee": "0.00",
+          "user_received_account": "支付用户零钱"
+        },
+        "channel_refund_projection": {
+          "pay_channel": "T",
+          "bank_code": "SUCCESS",
+          "bank_message": "退款成功",
+          "cash_refund_fee": "0.05",
+          "coupon_refund_fee": "0.00",
+          "user_received_account": "支付用户零钱"
+        }
+      }
+    },
+    "async_notify": {
+      "source": "normalized from Archer TRANS_REFUND_NOTIFY message content and TradeRefundMessageHandler consumed payload",
+      "transport": {
+        "top_notify_type": "TRANS_REFUND_NOTIFY",
+        "topic": "archer://C_TOP_HOSTINGPAY_REFUND_NOTIFY",
+        "content_type": "application/json"
+      },
+      "data": {
+        "resp_code": "00000000",
+        "resp_desc": "交易成功",
+        "sub_resp_code": "00000000",
+        "sub_resp_desc": "交易成功",
+        "req_date": "20260630",
+        "req_seq_id": "REQ-HOST-RF-CHANNEL-0001",
+        "huifu_id": "1234000100000026",
+        "sys_id": "1234000100000027",
+        "hf_seq_id": "HF-HOST-RF-CHANNEL-0001",
+        "trans_type": "TRANS_REFUND",
+        "trans_stat": "S",
+        "trans_date": "20260630",
+        "trans_time": "181259",
+        "trans_finish_time": "20260630T181304",
+        "product_id": "XLSISV",
+        "ord_amt": "244.00",
+        "actual_ref_amt": "244.00",
+        "total_ref_amt": "244.00",
+        "total_ref_fee_amt": "3.29",
+        "org_req_date": "20260624",
+        "org_req_seq_id": "ORG-HOST-PAY-CHANNEL-0001",
+        "org_ord_amt": "714.16",
+        "org_fee_amt": "9.64",
+        "order_id": "HOST-RF-ORDER-0001",
+        "mer_ord_id": "REQ-HOST-RF-CHANNEL-0001",
+        "pay_channel": "T",
+        "pay_type": "JSAPI",
+        "bank_code": "00",
+        "bank_message": "退款成功",
+        "bank_seq_id": "BANKSEQ-HOST-RF-001",
+        "ref_no": "REF-HOST-RF-CHANNEL-001",
+        "cash_resp_code": "000",
+        "cash_resp_desc": "成功",
+        "cash_trans_stat": "S",
+        "channel_stat": "S",
+        "wx_response": {
+          "cash_refund_fee": "244.00",
+          "coupon_refund_fee": "0.00",
+          "user_received_account": "示例银行借记卡"
+        }
+      }
+    },
+    "merchant_notify": {
+      "source": "normalized from Hosting refund notify payload; merchant notify delivery is represented by the same TRANS_REFUND_NOTIFY business payload",
+      "transport": {
+        "topics": [
+          "archer://C_TOP_HOSTINGPAY_REFUND_NOTIFY",
+          "https://example.invalid/huifu/hosting-refund-channel-notify"
+        ],
+        "content_type": "application/json"
+      },
+      "body": {
+        "ord_id": "HOST-RF-CHANNEL-NOTIFY-0001",
+        "top_notify_type": "TRANS_REFUND_NOTIFY",
+        "trans_type": "TRANS_REFUND",
+        "data": {
+          "resp_code": "00000000",
+          "resp_desc": "交易成功",
+          "req_date": "20260630",
+          "req_seq_id": "REQ-HOST-RF-CHANNEL-0001",
+          "huifu_id": "1234000100000026",
+          "hf_seq_id": "HF-HOST-RF-CHANNEL-0001",
+          "trans_type": "TRANS_REFUND",
+          "trans_stat": "S",
+          "trans_finish_time": "20260630T181304",
+          "product_id": "XLSISV",
+          "ord_amt": "244.00",
+          "actual_ref_amt": "244.00",
+          "org_req_date": "20260624",
+          "org_req_seq_id": "ORG-HOST-PAY-CHANNEL-0001",
+          "bank_code": "00",
+          "bank_message": "退款成功",
+          "pay_channel": "T",
+          "wx_response": {
+            "cash_refund_fee": "244.00",
+            "coupon_refund_fee": "0.00",
+            "user_received_account": "示例银行借记卡"
+          }
+        }
+      }
+    },
+    "webhook_refund_standard": {
+      "source": "normalized from WebHookHelper webhook.v2 submit and completion logs",
+      "transport": {
+        "namespace": "opps-webhook",
+        "event_define_no": "refund.standard",
+        "delivery_result": {
+          "code": 500,
+          "msg": "该订阅没有匹配的事件"
+        }
+      },
+      "body": {
+        "huifu_id": "1234000100000026",
+        "namespace": "opps-webhook",
+        "event_define_no": "refund.standard",
+        "trans_stat": "S",
+        "data": {
+          "product_id": "XLSISV",
+          "req_date": "20260630",
+          "req_seq_id": "REQ-HOST-RF-CHANNEL-0001",
+          "huifu_id": "1234000100000026",
+          "sys_id": "1234000100000027",
+          "hf_seq_id": "HF-HOST-RF-CHANNEL-0001",
+          "order_id": "HOST-RF-ORDER-0001",
+          "mer_ord_id": "REQ-HOST-RF-CHANNEL-0001",
+          "trans_type": "TRANS_REFUND",
+          "trans_stat": "S",
+          "trans_date": "20260630",
+          "trans_time": "181259",
+          "trans_finish_time": "20260630T181304",
+          "ord_amt": "244.00",
+          "actual_ref_amt": "244.00",
+          "total_ref_amt": "244.00",
+          "total_ref_fee_amt": "3.29",
+          "org_req_date": "20260624",
+          "org_req_seq_id": "ORG-HOST-PAY-CHANNEL-0001",
+          "org_ord_amt": "714.16",
+          "org_fee_amt": "9.64",
+          "bank_code": "00",
+          "bank_message": "退款成功",
+          "bank_seq_id": "BANKSEQ-HOST-RF-001",
+          "pay_channel": "T",
+          "business_variant": "hosting.h5pc.wechat",
+          "trans_refund_info": {
+            "req_date": "20260630",
+            "req_seq_id": "REQ-HOST-RF-CHANNEL-0001",
+            "ord_id": "HOST-RF-ORDER-0001",
+            "ord_amt": "244.00",
+            "actual_ref_amt": "244.00",
+            "trans_type": "TRANS_REFUND",
+            "trans_stat": "S",
+            "cash_resp_code": "000",
+            "cash_resp_desc": "成功",
+            "cash_trans_stat": "S",
+            "channel_stat": "S",
+            "bank_resp_code": "00",
+            "bank_resp_desc": "退款成功",
+            "atu_response": "{\"cash_refund_fee\":\"244.00\",\"coupon_refund_fee\":\"0.00\",\"refund_recv_accout\":\"示例银行借记卡\"}"
+          },
+          "wx_response": {
+            "cash_refund_fee": "244.00",
+            "coupon_refund_fee": "0.00",
+            "user_received_account": "示例银行借记卡"
+          }
+        }
+      }
+    }
+  },
+  "expected": {
+    "resp_code": "00000000",
+    "fields": {
+      "business_variant": "hosting.h5pc.wechat",
+      "pay_channel": "T",
+      "trans_stat": "P"
+    }
+  },
+  "assertions": {
+    "assertions": [
+      "envelope",
+      "headers",
+      "signature",
+      "sample-backed",
+      "amount-invariant",
+      "refund-state-independent",
+      "refund-locator",
+      "state-projection",
+      "channel-refund-projection",
+      "string-json-channel-fields",
+      "notify-rsa-resp-data",
+      "webhook-event"
+    ],
+    "field_assertions": [
+      {
+        "path": "resp_code",
+        "equals": "00000000"
+      },
+      {
+        "path": "hf_seq_id",
+        "exists": true
+      },
+      {
+        "path": "trans_stat",
+        "equals": "P"
+      },
+      {
+        "path": "bank_code",
+        "equals": "00000100"
+      },
+      {
+        "path": "bank_message",
+        "equals": "交易正在处理中"
+      },
+      {
+        "path": "fee_amt",
+        "equals": "0.03"
+      },
+      {
+        "path": "pay_channel",
+        "equals": "T"
+      },
+      {
+        "path": "business_variant",
+        "equals": "hosting.h5pc.wechat"
+      },
+      {
+        "path": "wx_response",
+        "exists": true
+      }
+    ],
+    "event_assertions": [
+      {
+        "event": "refund.accepted",
+        "fields": {
+          "trans_stat": "P",
+          "bank_code": "00000100"
+        }
+      },
+      {
+        "event": "refund.query",
+        "fields": {
+          "trans_stat": "S",
+          "cash_trans_stat": "S",
+          "channel_stat": "S"
+        }
+      },
+      {
+        "event": "refund.notify",
+        "fields": {
+          "top_notify_type": "TRANS_REFUND_NOTIFY",
+          "trans_stat": "S",
+          "pay_channel": "T"
+        }
+      },
+      {
+        "event": "webhook.refund.standard",
+        "fields": {
+          "event_define_no": "refund.standard",
+          "trans_stat": "S"
+        }
+      }
+    ]
+  },
+  "sample_sha256": "c60ef8ec753e4fd4b4f270bcaadbd58fc156051582959ba33994a6b36cd49fc4"
+}

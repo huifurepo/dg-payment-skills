@@ -1,0 +1,469 @@
+{
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "references": {
+    "aggregation-async-webhook.md": {
+      "reason": "notify_url rules and Webhook raw-body MD5 delivery/replay are covered through 0.5.0",
+      "status": "covered"
+    },
+    "aggregation-base.md": {
+      "reason": "aggregation core create/query covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "aggregation-common-params.md": {
+      "reason": "common response/status fields covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "aggregation-customer-preparation.md": {
+      "reason": "merchant preparation and permissions",
+      "status": "not_sandboxable"
+    },
+    "aggregation-error-codes.md": {
+      "reason": "local business error shape and injected business failure covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "aggregation-faq.md": {
+      "reason": "FAQ",
+      "status": "not_sandboxable"
+    },
+    "aggregation-java-adapter.md": {
+      "reason": "Java header profile covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "aggregation-java-sdk-quickstart.md": {
+      "reason": "Java SDK examples not executed; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "aggregation-java-tech-spec.md": {
+      "reason": "core aggregation endpoints covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "aggregation-order-errors.md": {
+      "reason": "local error envelope covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "aggregation-order-method-alipay.md": {
+      "reason": "Alipay method_expand, A_NATIVE, A_MICROPAY auth_code, and alipay_response projection are covered in 0.12.0; remaining gap: needs deidentified production/joint-debug samples for production-equivalent fields",
+      "remaining_gap_type": "requires_production_sample",
+      "status": "partial"
+    },
+    "aggregation-order-method-unionpay.md": {
+      "reason": "UnionPay method_expand, U_NATIVE, U_MICROPAY auth_code, and unionpay_response projection are covered in 0.12.0; remaining gap: needs deidentified production/joint-debug samples for production-equivalent fields",
+      "remaining_gap_type": "requires_production_sample",
+      "status": "partial"
+    },
+    "aggregation-order-method-wechat.md": {
+      "reason": "WeChat method_expand, T_JSAPI, T_MICROPAY auth_code, and wx_response projection are covered in 0.12.0; remaining gap: needs deidentified production/joint-debug samples for production-equivalent fields",
+      "remaining_gap_type": "requires_production_sample",
+      "status": "partial"
+    },
+    "aggregation-order-quickstart.md": {
+      "reason": "create flow covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "aggregation-order-request.md": {
+      "reason": "required core fields covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "aggregation-order-response.md": {
+      "reason": "core response fields covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "aggregation-order-tx-metadata.md": {
+      "reason": "request wrapper boundary, top-level extension fields, and query tx_metadata projection are covered in 0.12.0",
+      "status": "covered"
+    },
+    "aggregation-order.md": {
+      "reason": "aggregation create endpoint covered",
+      "status": "covered"
+    },
+    "aggregation-payload-construction.md": {
+      "reason": "String(JSON) preservation covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "aggregation-php-adapter.md": {
+      "reason": "PHP header profile covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "aggregation-python-adapter.md": {
+      "reason": "Python header profile covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "aggregation-python-scenarios.md": {
+      "reason": "runtime protocol validation only; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "aggregation-query-close-query.md": {
+      "reason": "aggregation close query endpoint and close trans_stat projection covered in 0.4.0",
+      "status": "covered"
+    },
+    "aggregation-query-payment-query.md": {
+      "reason": "aggregation query endpoint covered",
+      "status": "covered"
+    },
+    "aggregation-query-php-scenarios.md": {
+      "reason": "runtime protocol validation only; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "aggregation-query-quickstart.md": {
+      "reason": "query flow covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "aggregation-query-reconciliation.md": {
+      "reason": "filequery request contract, bill_type handling, FP-to-file state, and local CSV download are covered in 0.5.0",
+      "status": "covered"
+    },
+    "aggregation-query-trade-close.md": {
+      "reason": "aggregation close endpoint and independent close status covered in 0.4.0",
+      "status": "covered"
+    },
+    "aggregation-query.md": {
+      "reason": "payment query covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "aggregation-quickstart.md": {
+      "reason": "quickstart flow partially covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "aggregation-refund-query.md": {
+      "reason": "aggregation refund query locators and P to S state projection covered in 0.4.0",
+      "status": "covered"
+    },
+    "aggregation-refund-quickstart.md": {
+      "reason": "local refund flow covered; SDK-specific examples are not executed; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "aggregation-refund.md": {
+      "reason": "aggregation refund request, amount invariant, independent refund state, and notify_url reuse covered in 0.4.0",
+      "status": "covered"
+    },
+    "canonical-regression-prompts.md": {
+      "reason": "model regression prompts",
+      "status": "not_sandboxable"
+    },
+    "checkout-js-callback-and-confirmation.md": {
+      "reason": "Checkout frontend/component integration is explicitly out of local-sandbox scope; Skill documentation keeps prerequisites and frontend guidance only",
+      "status": "not_sandboxable"
+    },
+    "checkout-js-component-modes.md": {
+      "reason": "Checkout frontend/component integration is explicitly out of local-sandbox scope; Skill documentation keeps prerequisites and frontend guidance only",
+      "status": "not_sandboxable"
+    },
+    "checkout-js-create-preorder-contract.md": {
+      "reason": "Checkout frontend/component integration is explicitly out of local-sandbox scope; Skill documentation keeps prerequisites and frontend guidance only",
+      "status": "not_sandboxable"
+    },
+    "checkout-js-framework-integration-notes.md": {
+      "reason": "Checkout frontend/component integration is explicitly out of local-sandbox scope; Skill documentation keeps prerequisites and frontend guidance only",
+      "status": "not_sandboxable"
+    },
+    "checkout-js-integration-flow.md": {
+      "reason": "Checkout frontend/component integration is explicitly out of local-sandbox scope; Skill documentation keeps prerequisites and frontend guidance only",
+      "status": "not_sandboxable"
+    },
+    "checkout-js-readme.md": {
+      "reason": "Checkout frontend/component integration is explicitly out of local-sandbox scope; Skill documentation keeps prerequisites and frontend guidance only",
+      "status": "not_sandboxable"
+    },
+    "checkout-js.md": {
+      "reason": "Checkout frontend/component integration is explicitly out of local-sandbox scope; Skill documentation keeps prerequisites and frontend guidance only",
+      "status": "not_sandboxable"
+    },
+    "copilot-existing-system.md": {
+      "reason": "existing-system guidance",
+      "status": "not_sandboxable"
+    },
+    "copilot-go-live-checklist.md": {
+      "reason": "go-live checklist is not local simulation",
+      "status": "not_sandboxable"
+    },
+    "copilot-onboarding.md": {
+      "reason": "copilot guidance",
+      "status": "not_sandboxable"
+    },
+    "copilot-parameter-review.md": {
+      "reason": "parameter assertions covered for four core endpoints; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "copilot-solution-cards.md": {
+      "reason": "solution card content",
+      "status": "not_sandboxable"
+    },
+    "copilot-solution-selection.md": {
+      "reason": "solution routing",
+      "status": "not_sandboxable"
+    },
+    "copilot-troubleshooting-playbooks.md": {
+      "reason": "human troubleshooting playbooks",
+      "status": "not_sandboxable"
+    },
+    "hostingpay-async-webhook.md": {
+      "reason": "notify_url rules and Webhook raw-body MD5 delivery/replay are covered through 0.5.0",
+      "status": "covered"
+    },
+    "hostingpay-base.md": {
+      "reason": "hosting preorder/query covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "hostingpay-common-params.md": {
+      "reason": "common response/status fields covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "hostingpay-customer-preparation.md": {
+      "reason": "merchant preparation and permissions",
+      "status": "not_sandboxable"
+    },
+    "hostingpay-error-codes.md": {
+      "reason": "local business error shape and conflict errors covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "hostingpay-faq.md": {
+      "reason": "FAQ",
+      "status": "not_sandboxable"
+    },
+    "hostingpay-java-adapter.md": {
+      "reason": "Java header profile covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "hostingpay-java-sdk-quickstart.md": {
+      "reason": "Java SDK examples not executed; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "hostingpay-java-tech-spec.md": {
+      "reason": "H5/PC preorder and query covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "hostingpay-payload-construction.md": {
+      "reason": "hosting_data String(JSON) covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "hostingpay-php-adapter.md": {
+      "reason": "PHP header profile covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "hostingpay-preorder-alipay-mini.md": {
+      "reason": "pre_order_type=2 app_data and alipay_response minimal loop are covered in 0.12.0; remaining gap: needs deidentified production/joint-debug samples for production-equivalent fields",
+      "remaining_gap_type": "requires_production_sample",
+      "status": "partial"
+    },
+    "hostingpay-preorder-douyin-direct.md": {
+      "reason": "pre_order_type=4 dy_data and dy_response minimal loop are covered in 0.12.0; remaining gap: needs deidentified production/joint-debug samples for production-equivalent fields",
+      "remaining_gap_type": "requires_production_sample",
+      "status": "partial"
+    },
+    "hostingpay-preorder-h5-pc-channel.md": {
+      "reason": "H5/PC wx/alipay/unionpay/dy/terminal/largeamt String(JSON) channel validation is covered in 0.12.0; remaining gap: needs deidentified production/joint-debug samples for production-equivalent fields",
+      "remaining_gap_type": "requires_production_sample",
+      "status": "partial"
+    },
+    "hostingpay-preorder-h5-pc-errors.md": {
+      "reason": "local error envelope covered; remaining gap: needs deidentified production/joint-debug samples for production-equivalent fields",
+      "remaining_gap_type": "requires_production_sample",
+      "status": "partial"
+    },
+    "hostingpay-preorder-h5-pc-request.md": {
+      "reason": "H5/PC preorder request contract covered",
+      "status": "covered"
+    },
+    "hostingpay-preorder-h5-pc-response-channel.md": {
+      "reason": "H5/PC channel response projection for wx/alipay/unionpay/dy response fields is covered in 0.12.0; remaining gap: needs deidentified production/joint-debug samples for production-equivalent fields",
+      "remaining_gap_type": "requires_production_sample",
+      "status": "partial"
+    },
+    "hostingpay-preorder-h5-pc-response.md": {
+      "reason": "core and channel response fields covered for H5/PC variants; production channel values remain synthetic; remaining gap: needs deidentified production/joint-debug samples for production-equivalent fields",
+      "remaining_gap_type": "requires_production_sample",
+      "status": "partial"
+    },
+    "hostingpay-preorder-h5-pc.md": {
+      "reason": "H5/PC preorder covered",
+      "status": "covered"
+    },
+    "hostingpay-preorder-php-scenarios.md": {
+      "reason": "runtime protocol validation only; remaining gap: needs deidentified production/joint-debug samples for production-equivalent fields",
+      "remaining_gap_type": "requires_production_sample",
+      "status": "partial"
+    },
+    "hostingpay-preorder-quickstart.md": {
+      "reason": "H5/PC preorder flow covered; remaining gap: needs deidentified production/joint-debug samples for production-equivalent fields",
+      "remaining_gap_type": "requires_production_sample",
+      "status": "partial"
+    },
+    "hostingpay-preorder-wechat-mini.md": {
+      "reason": "pre_order_type=3 miniapp_data, scheme response, and wx_response minimal loop are covered in 0.12.0; remaining gap: needs deidentified production/joint-debug samples for production-equivalent fields",
+      "remaining_gap_type": "requires_production_sample",
+      "status": "partial"
+    },
+    "hostingpay-preorder.md": {
+      "reason": "hosting preorder endpoint covered",
+      "status": "covered"
+    },
+    "hostingpay-python-adapter.md": {
+      "reason": "Python header profile covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "hostingpay-python-scenarios.md": {
+      "reason": "runtime protocol validation only; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "hostingpay-query-payment-status-query.md": {
+      "reason": "hosting query endpoint covered",
+      "status": "covered"
+    },
+    "hostingpay-query-php-scenarios.md": {
+      "reason": "runtime protocol validation only; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "hostingpay-query-quickstart.md": {
+      "reason": "query flow covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "hostingpay-query-reconciliation.md": {
+      "reason": "shared filequery endpoint covers hosting reconciliation request, bill type handling, FP-to-file state, and local CSV download in 0.5.0",
+      "status": "covered"
+    },
+    "hostingpay-query-splitpay.md": {
+      "reason": "hosting splitpay query endpoint and trans_list state assertions covered in 0.4.0",
+      "status": "covered"
+    },
+    "hostingpay-query-trade-close.md": {
+      "reason": "hosting close endpoint and queryorderinfo close_stat projection covered in 0.4.0",
+      "status": "covered"
+    },
+    "hostingpay-query.md": {
+      "reason": "hosting payment query covered",
+      "status": "covered"
+    },
+    "hostingpay-quickstart.md": {
+      "reason": "H5/PC preorder and query covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "hostingpay-refund-php-scenarios.md": {
+      "reason": "runtime protocol covered; PHP SDK examples are not executed; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "hostingpay-refund-query.md": {
+      "reason": "hosting refund query locators and P to S state projection covered in 0.4.0",
+      "status": "covered"
+    },
+    "hostingpay-refund-quickstart.md": {
+      "reason": "local refund flow covered; SDK-specific examples are not executed; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "hostingpay-refund.md": {
+      "reason": "hosting refund request, amount invariant, and independent refund state covered in 0.4.0",
+      "status": "covered"
+    },
+    "merchant-onboarding-faq.md": {
+      "reason": "merchant onboarding/permission FAQ",
+      "status": "not_sandboxable"
+    },
+    "official-service-source-index.md": {
+      "reason": "official source index and support routing",
+      "status": "not_sandboxable"
+    },
+    "shared-async-notify.md": {
+      "reason": "form-urlencoded sign + resp_data, exact ACK, retry, duplicate, and SSRF handling covered",
+      "status": "covered"
+    },
+    "shared-copyright-notice.md": {
+      "reason": "copyright notice",
+      "status": "not_sandboxable"
+    },
+    "shared-credential-boundary.md": {
+      "reason": "sandbox-only generated credentials",
+      "status": "covered"
+    },
+    "shared-frontend-sdk-matrix.md": {
+      "reason": "Checkout frontend/component integration is explicitly out of local-sandbox scope; Skill documentation keeps prerequisites and frontend guidance only",
+      "status": "not_sandboxable"
+    },
+    "shared-local-sandbox.md": {
+      "reason": "local sandbox usage, preview/public release boundaries, and report workflow are documented; endpoint behavior is validated by local release gates rather than a single payment API fixture",
+      "status": "not_sandboxable"
+    },
+    "shared-overview.md": {
+      "reason": "core product flows plus representative channel variants are covered; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "shared-release-checklist.md": {
+      "reason": "report secret scan and advisory scan covered; signed release/SBOM remain later; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "shared-request-field-preservation.md": {
+      "reason": "field preservation is asserted for core flows plus 0.12.0 channel String(JSON) variants; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "shared-request-header-policy.md": {
+      "reason": "skill source, huifu_id, Host, local Origin, and control CSRF headers validated",
+      "status": "covered"
+    },
+    "shared-server-sdk-matrix.md": {
+      "reason": "header profiles covered, SDK codegen not simulated; remaining gap: can be further simulated with executable samples or additional fixtures",
+      "remaining_gap_type": "simulatable",
+      "status": "partial"
+    },
+    "shared-signing-v2.md": {
+      "reason": "request and response signing implemented",
+      "status": "covered"
+    },
+    "shared-versioning-policy.md": {
+      "reason": "versioning policy",
+      "status": "not_sandboxable"
+    },
+    "shared-webhook-signing.md": {
+      "reason": "Webhook raw JSON body, MD5(raw_body + endpoint_key), URL query sign, any-2xx ACK, and replay are covered in 0.5.0",
+      "status": "covered"
+    },
+    "skill-version-policy.md": {
+      "reason": "Skill version policy",
+      "status": "not_sandboxable"
+    }
+  },
+  "schema_version": "1.0",
+  "source_skill_version": "1.3.1",
+  "statuses": [
+    "covered",
+    "partial",
+    "not_sandboxable",
+    "not_evaluated",
+    "blocked"
+  ]
+}

@@ -1,0 +1,203 @@
+{
+  "schema_version": "1.0",
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "sample_id": "hosting-h5pc-douyin-success",
+  "title": "托管 H5/PC 抖音成功下单样例",
+  "description": "由用户内联粘贴的托管 H5/PC 抖音直连预下单日志拆分而来，重点覆盖 dy_data 请求、下游 TOP dyData 投射，以及响应里的抖音支付包渠道字段。",
+  "source_type": "deidentified_joint_debug",
+  "authorization": {
+    "status": "approved",
+    "approved_by": "user-provided-inline-log",
+    "approved_at": "2026-06-29T14:20:00+08:00"
+  },
+  "deidentification": {
+    "status": "passed",
+    "method": "field-level placeholder replacement; removed raw huifu ids, sys id, hf sequence id, request sequence id, sub app id, partner id, prepay id, signature, nonce, IP addresses, and long numeric identifiers while preserving pre_order_type=4, Y_APP trade type, dy_data, payInfo/jump_url channel fields, amount, and processing status semantics",
+    "checked_at": "2026-06-29T14:25:00+08:00"
+  },
+  "endpoint": {
+    "id": "hosting.payment.preorder.h5pc",
+    "method": "POST",
+    "path": "/v2/trade/hosting/payment/preorder"
+  },
+  "scenario_id": "HOST-H5-DY-01",
+  "headers_profile": "java-php-python-local-sandbox",
+  "source_summary": {
+    "inline_paste": true,
+    "selected_source_events": [
+      "PreOrderController request with pre_order_type=4 and dy_data",
+      "HostingPreOrderTradeInitTask direct Douyin initialization",
+      "TopAggregateTransServiceFacadeImpl request with dyData.orderIp/subAppid",
+      "TopAggregateTransServiceFacadeImpl response with payInfo package/appid/partnerid/prepayid/noncestr/timestamp",
+      "PreOrderController response with jump_url carrying the Douyin payInfo JSON"
+    ],
+    "source_trade_type": "Y_APP",
+    "source_channel": "Hosting H5/PC Douyin",
+    "source_product_id": "YYZY",
+    "source_amount": "0.05",
+    "source_pre_order_type": "4",
+    "notes": [
+      "the pasted log contains a successful preorder response and downstream TOP processing response, both ending in transStat=P",
+      "the pasted log does not contain a final payment notify or post-payment query success record",
+      "this sample therefore covers the requested dy_data request and response channel-field projection, not a paid final-state notification"
+    ]
+  },
+  "request": {
+    "source": "normalized from PreOrderController request and current sandbox hosting.payment.preorder.h5pc contract",
+    "data": {
+      "product_id": "YYZY",
+      "req_date": "20260701",
+      "req_seq_id": "REQ-HOST-DY-0001",
+      "huifu_id": "1234000100000015",
+      "pre_order_type": "4",
+      "trans_amt": "0.05",
+      "time_expire": "20261229T235959",
+      "goods_desc": "示例托管抖音订单",
+      "notify_url": "https://example.invalid/huifu/hosting-h5pc-douyin-notify",
+      "style_id": "STYLE-LOCAL",
+      "delay_acct_flag": "Y",
+      "multi_pay_way_flag": "Y",
+      "dy_data": "{\"busi_scene\":\"H5\",\"sub_appid\":\"dy-local-sandbox\",\"h5_info\":{\"type\":\"Ios\"},\"scene_info\":{\"payer_client_ip\":\"127.0.0.1\"}}"
+    }
+  },
+  "responses": {
+    "sync": {
+      "source": "normalized from PreOrderController response and downstream TOP Y_APP processing response",
+      "data": {
+        "product_id": "YYZY",
+        "req_seq_id": "REQ-HOST-DY-0001",
+        "req_date": "20260629",
+        "huifu_id": "1234000100000015",
+        "order_type": "HT",
+        "resp_code": "00000000",
+        "resp_desc": "操作成功",
+        "pre_order_type": "4",
+        "trade_type": "Y_APP",
+        "trans_amt": "0.05",
+        "trans_stat": "P",
+        "settlement_amt": "0.05",
+        "current_time": "20260629T141314",
+        "jump_url": "{\"package\":\"Sign=DYPay\",\"appid\":\"DY-SUBAPP-LOCAL-001\",\"sign\":\"SIGN-HOST-DY-LOCAL\",\"partnerid\":\"DYPARTNER-LOCAL-001\",\"prepayid\":\"DYPREPAY-HOST-DY-0001\",\"noncestr\":\"NONCE-HOST-DY-001\",\"timestamp\":\"DY-TIMESTAMP-LOCAL-001\"}",
+        "pay_info": "{\"package\":\"Sign=DYPay\",\"appid\":\"DY-SUBAPP-LOCAL-001\",\"sign\":\"SIGN-HOST-DY-LOCAL\",\"partnerid\":\"DYPARTNER-LOCAL-001\",\"prepayid\":\"DYPREPAY-HOST-DY-0001\",\"noncestr\":\"NONCE-HOST-DY-001\",\"timestamp\":\"DY-TIMESTAMP-LOCAL-001\"}",
+        "actual_pay_channel": "016",
+        "actual_pay_channel_sub_mer_id": "DY-SUB-MER-LOCAL-001",
+        "bank_code": "SUCCESS",
+        "bank_message": "下单成功",
+        "business_variant": "hosting.douyin-direct",
+        "dy_response": {
+          "package": "Sign=DYPay",
+          "appid": "DY-SUBAPP-LOCAL-001",
+          "sign": "SIGN-HOST-DY-LOCAL",
+          "partnerid": "DYPARTNER-LOCAL-001",
+          "prepayid": "DYPREPAY-HOST-DY-0001",
+          "noncestr": "NONCE-HOST-DY-001",
+          "timestamp": "DY-TIMESTAMP-LOCAL-001",
+          "actual_pay_channel": "016",
+          "actual_pay_channel_sub_mer_id": "DY-SUB-MER-LOCAL-001"
+        }
+      }
+    },
+    "top_request": {
+      "source": "normalized from TopAggregateTransServiceFacadeImpl request",
+      "data": {
+        "product_id": "YYZY",
+        "req_date": "20260629",
+        "req_seq_id": "REQ-HOST-DY-0001",
+        "huifu_id": "1234000100000015",
+        "sys_id": "1234000100000016",
+        "hf_seq_id": "HF-HOST-DY-0001",
+        "mer_ord_id": "REQ-HOST-DY-0001",
+        "trade_type": "Y_APP",
+        "trans_amt": "0.05",
+        "time_expire": "20261229T235959",
+        "goods_desc": "示例托管抖音订单",
+        "notify_url": "archer://C_TOP_HOSTINGPAY_TRANS_NOTIFY",
+        "dy_data": {
+          "order_ip": "127.0.0.1",
+          "sub_appid": "DY-SUBAPP-LOCAL-001"
+        }
+      }
+    },
+    "top_preorder": {
+      "source": "normalized from TopAggregateTransServiceFacadeImpl response",
+      "data": {
+        "resp_code": "00000100",
+        "resp_desc": "交易正在处理中 cashCode:00 cashDesc:成功",
+        "sub_resp_code": "00000100",
+        "sub_resp_desc": "交易正在处理中 cashCode:00 cashDesc:成功",
+        "req_date": "20260629",
+        "req_seq_id": "REQ-HOST-DY-0001",
+        "huifu_id": "1234000100000015",
+        "sys_id": "1234000100000016",
+        "hf_seq_id": "HF-HOST-DY-0001",
+        "trade_type": "Y_APP",
+        "trans_amt": "0.05",
+        "settlement_amt": "0.05",
+        "trans_stat": "P",
+        "acct_stat": "P",
+        "bank_code": "SUCCESS",
+        "bank_message": "下单成功",
+        "bank_seq_id": "513hup",
+        "batch_id": "260629",
+        "ref_no": "141314513hup",
+        "actual_pay_channel": "016",
+        "actual_pay_channel_sub_mer_id": "DY-SUB-MER-LOCAL-001",
+        "unconfirm_amt": "0.00",
+        "is_clean_split": "N",
+        "mypaytsf_discount": "0.00",
+        "pay_info": "{\"package\":\"Sign=DYPay\",\"appid\":\"DY-SUBAPP-LOCAL-001\",\"sign\":\"SIGN-HOST-DY-LOCAL\",\"partnerid\":\"DYPARTNER-LOCAL-001\",\"prepayid\":\"DYPREPAY-HOST-DY-0001\",\"noncestr\":\"NONCE-HOST-DY-001\",\"timestamp\":\"DY-TIMESTAMP-LOCAL-001\"}",
+        "dy_response": {
+          "package": "Sign=DYPay",
+          "appid": "DY-SUBAPP-LOCAL-001",
+          "sign": "SIGN-HOST-DY-LOCAL",
+          "partnerid": "DYPARTNER-LOCAL-001",
+          "prepayid": "DYPREPAY-HOST-DY-0001",
+          "noncestr": "NONCE-HOST-DY-001",
+          "timestamp": "DY-TIMESTAMP-LOCAL-001",
+          "actual_pay_channel": "016",
+          "actual_pay_channel_sub_mer_id": "DY-SUB-MER-LOCAL-001"
+        },
+        "business_variant": "hosting.douyin-direct"
+      }
+    }
+  },
+  "expected": {
+    "resp_code": "00000000",
+    "fields": {
+      "business_variant": "hosting.douyin-direct",
+      "pre_order_type": "4",
+      "trans_stat": "P"
+    }
+  },
+  "assertions": {
+    "assertions": [
+      "envelope",
+      "headers",
+      "signature",
+      "sample-backed",
+      "business-variant",
+      "string-json-channel-fields",
+      "channel-response-projection",
+      "douyin-channel-fields"
+    ],
+    "field_assertions": [
+      {
+        "path": "resp_code",
+        "equals": "00000000"
+      },
+      {
+        "path": "dy_response",
+        "exists": true
+      },
+      {
+        "path": "business_variant",
+        "equals": "hosting.douyin-direct"
+      }
+    ],
+    "event_assertions": [
+      "payment.accepted",
+      "business.variant"
+    ]
+  },
+  "sample_sha256": "47f97551c13935ebb542fb02e8e27748a4aa0d23f5f477914afb5897c59658c2"
+}

@@ -1,0 +1,552 @@
+{
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "endpoints": [
+    {
+      "assertions": [
+        "envelope",
+        "headers",
+        "signature",
+        "required-fields",
+        "state-transition"
+      ],
+      "id": "aggregation.payment.create",
+      "method": "POST",
+      "negative_fixture": "agg-create-missing-goods-desc",
+      "optional_data": [
+        "remark",
+        "acct_id",
+        "time_expire",
+        "delay_acct_flag",
+        "fee_flag",
+        "acct_split_bunch",
+        "terminal_device_data",
+        "limit_pay_type",
+        "channel_no",
+        "pay_scene",
+        "term_div_coupon_type",
+        "fq_mer_discount_flag",
+        "notify_url",
+        "method_expand",
+        "combinedpay_data",
+        "combinedpay_data_fee_info",
+        "trans_fee_allowance_info"
+      ],
+      "path": "/v4/trade/payment/create",
+      "positive_fixture": "agg-create-processing",
+      "recommended_data": [
+        "req_date"
+      ],
+      "required_data": [
+        "req_seq_id",
+        "huifu_id",
+        "trade_type",
+        "trans_amt",
+        "goods_desc"
+      ],
+      "source_reference": "aggregation-order.md",
+      "state_entity": "payment",
+      "status_field": "trans_stat",
+      "variant_fixtures": [
+        "agg-channel-wx-create",
+        "agg-channel-wx-micropay",
+        "agg-channel-wx-micropay-missing-auth",
+        "agg-channel-ali-create",
+        "agg-channel-ali-micropay",
+        "agg-channel-ali-micropay-missing-auth",
+        "agg-channel-up-create",
+        "agg-channel-up-micropay",
+        "agg-channel-up-micropay-missing-auth",
+        "agg-tx-metadata-create",
+        "agg-tx-metadata-wrapper-error",
+        "agg-split-create",
+        "agg-combined-create",
+        "agg-fee-allowance-create",
+        "agg-create-invalid-amount",
+        "sample-aggregation-alipay-micropay-success",
+        "sample-aggregation-alipay-jsapi-success",
+        "sample-aggregation-alipay-native-success",
+        "sample-aggregation-unionpay-micropay-success",
+        "sample-aggregation-unionpay-native-success",
+        "sample-aggregation-wechat-micropay-success",
+        "sample-aggregation-wechat-native-success"
+      ]
+    },
+    {
+      "assertions": [
+        "envelope",
+        "headers",
+        "signature",
+        "conditional-fields",
+        "state-projection"
+      ],
+      "conditional_groups": [
+        [
+          "out_ord_id"
+        ],
+        [
+          "hf_seq_id"
+        ],
+        [
+          "req_date",
+          "req_seq_id"
+        ]
+      ],
+      "id": "aggregation.payment.query",
+      "method": "POST",
+      "negative_fixture": "agg-query-missing-locator",
+      "path": "/v4/trade/payment/scanpay/query",
+      "positive_fixture": "agg-query-processing-then-success",
+      "required_data": [
+        "huifu_id"
+      ],
+      "source_reference": "aggregation-query-payment-query.md",
+      "state_entity": "payment",
+      "status_field": "trans_stat",
+      "variant_fixtures": [
+        "agg-channel-wx-query",
+        "agg-channel-ali-query",
+        "agg-channel-up-query",
+        "agg-close-channel-unpaid-order-query",
+        "agg-tx-metadata-query",
+        "agg-split-query",
+        "agg-combined-query",
+        "agg-fee-allowance-query"
+      ]
+    },
+    {
+      "assertions": [
+        "envelope",
+        "headers",
+        "signature",
+        "amount-invariant",
+        "refund-state-independent"
+      ],
+      "conditional_groups": [
+        [
+          "org_hf_seq_id"
+        ],
+        [
+          "org_party_order_id"
+        ],
+        [
+          "org_req_seq_id"
+        ]
+      ],
+      "id": "aggregation.payment.refund",
+      "method": "POST",
+      "negative_fixture": "agg-refund-over-amount",
+      "optional_data": [
+        "refund_notify_url",
+        "notify_url",
+        "mer_ord_id"
+      ],
+      "path": "/v4/trade/payment/scanpay/refund",
+      "positive_fixture": "agg-refund-accepted",
+      "required_data": [
+        "req_date",
+        "req_seq_id",
+        "huifu_id",
+        "ord_amt",
+        "org_req_date"
+      ],
+      "source_reference": "aggregation-refund.md",
+      "state_entity": "refund",
+      "status_field": "trans_stat",
+      "variant_fixtures": [
+        "agg-refund-channel-accepted",
+        "sample-aggregation-refund-channel-success"
+      ]
+    },
+    {
+      "assertions": [
+        "envelope",
+        "headers",
+        "signature",
+        "refund-locator",
+        "state-projection"
+      ],
+      "conditional_groups": [
+        [
+          "org_hf_seq_id"
+        ],
+        [
+          "org_req_seq_id"
+        ],
+        [
+          "mer_ord_id"
+        ]
+      ],
+      "id": "aggregation.payment.refund_query",
+      "method": "POST",
+      "negative_fixture": "agg-refund-query-original-payment-locator",
+      "path": "/v4/trade/payment/scanpay/refundquery",
+      "positive_fixture": "agg-refund-query-processing-then-success",
+      "required_data": [
+        "huifu_id"
+      ],
+      "source_reference": "aggregation-refund-query.md",
+      "state_entity": "refund",
+      "status_field": "trans_stat",
+      "variant_fixtures": [
+        "agg-refund-channel-query"
+      ]
+    },
+    {
+      "assertions": [
+        "envelope",
+        "headers",
+        "signature",
+        "close-state-independent",
+        "terminal-payment-guard"
+      ],
+      "conditional_groups": [
+        [
+          "org_hf_seq_id"
+        ],
+        [
+          "org_req_seq_id"
+        ]
+      ],
+      "id": "aggregation.payment.close",
+      "method": "POST",
+      "negative_fixture": "agg-close-paid-payment",
+      "path": "/v2/trade/payment/scanpay/close",
+      "positive_fixture": "agg-close-accepted",
+      "required_data": [
+        "req_date",
+        "req_seq_id",
+        "huifu_id",
+        "org_req_date"
+      ],
+      "source_reference": "aggregation-query-trade-close.md",
+      "state_entity": "close",
+      "status_field": "trans_stat",
+      "variant_fixtures": [
+        "agg-close-channel-accepted",
+        "sample-aggregation-close-channel-success"
+      ]
+    },
+    {
+      "assertions": [
+        "envelope",
+        "headers",
+        "signature",
+        "close-locator",
+        "state-projection"
+      ],
+      "conditional_groups": [
+        [
+          "org_hf_seq_id"
+        ],
+        [
+          "org_req_seq_id"
+        ]
+      ],
+      "id": "aggregation.payment.close_query",
+      "method": "POST",
+      "negative_fixture": "agg-close-query-missing-locator",
+      "path": "/v2/trade/payment/scanpay/closequery",
+      "positive_fixture": "agg-close-query-processing-then-success",
+      "required_data": [
+        "huifu_id",
+        "org_req_date"
+      ],
+      "source_reference": "aggregation-query-close-query.md",
+      "state_entity": "close",
+      "status_field": "trans_stat",
+      "variant_fixtures": [
+        "agg-close-channel-query"
+      ]
+    },
+    {
+      "assertions": [
+        "envelope",
+        "headers",
+        "signature",
+        "required-fields",
+        "string-json",
+        "state-transition"
+      ],
+      "conditional_hosting_data": [
+        {
+          "required": [
+            "request_type"
+          ],
+          "when_data_present": "trans_type"
+        }
+      ],
+      "id": "hosting.payment.preorder.h5pc",
+      "method": "POST",
+      "negative_fixture": "hosting-preorder-missing-project-id",
+      "path": "/v2/trade/hosting/payment/preorder",
+      "positive_fixture": "hosting-preorder-accepted",
+      "required_data": [
+        "req_date",
+        "req_seq_id",
+        "huifu_id",
+        "trans_amt",
+        "goods_desc",
+        "pre_order_type"
+      ],
+      "required_hosting_data": [
+        "project_title",
+        "project_id"
+      ],
+      "source_reference": "hostingpay-preorder-h5-pc-request.md",
+      "state_entity": "payment",
+      "status_field": "trans_stat",
+      "variant_fixtures": [
+        "hosting-h5-wx-preorder",
+        "hosting-h5-wx-invalid-json",
+        "hosting-h5-ali-preorder",
+        "hosting-h5-ali-invalid-json",
+        "hosting-h5-up-preorder",
+        "hosting-h5-up-invalid-json",
+        "hosting-h5-dy-preorder",
+        "hosting-h5-dy-invalid-json",
+        "hosting-mini-ali-preorder",
+        "hosting-mini-ali-missing-app-data",
+        "hosting-mini-wx-preorder",
+        "hosting-mini-wx-missing-miniapp-data",
+        "hosting-dy-direct-preorder",
+        "hosting-dy-direct-missing-dy-data",
+        "hosting-largeamt-preorder",
+        "hosting-terminal-preorder",
+        "hosting-channel-combo-preorder",
+        "hosting-unsupported-pre-order-type",
+        "sample-hosting-alipay-mini-success",
+        "sample-hosting-h5pc-alipay-success",
+        "sample-hosting-h5pc-douyin-success",
+        "sample-hosting-h5pc-terminal-success",
+        "sample-hosting-h5pc-unionpay-success",
+        "sample-hosting-h5pc-wechat-success",
+        "sample-hosting-wechat-mini-success"
+      ]
+    },
+    {
+      "assertions": [
+        "envelope",
+        "headers",
+        "signature",
+        "conditional-fields",
+        "pay-type-preserved",
+        "state-projection"
+      ],
+      "conditional_groups": [
+        [
+          "party_order_id"
+        ],
+        [
+          "huifu_id",
+          "org_req_date",
+          "org_req_seq_id"
+        ]
+      ],
+      "id": "hosting.payment.query",
+      "method": "POST",
+      "negative_fixture": "hosting-query-missing-locator",
+      "path": "/v2/trade/hosting/payment/queryorderinfo",
+      "positive_fixture": "hosting-query-success",
+      "required_data": [
+        "req_date",
+        "req_seq_id"
+      ],
+      "source_reference": "hostingpay-query-payment-status-query.md",
+      "state_entity": "payment",
+      "status_fields": [
+        "order_stat",
+        "trans_stat",
+        "close_stat"
+      ],
+      "variant_fixtures": [
+        "hosting-h5-wx-query",
+        "hosting-h5-ali-query",
+        "hosting-h5-up-query",
+        "hosting-h5-dy-query",
+        "hosting-mini-ali-query",
+        "hosting-mini-wx-query",
+        "hosting-dy-direct-query",
+        "hosting-largeamt-query",
+        "hosting-terminal-query",
+        "hosting-channel-combo-query",
+        "hosting-close-channel-query"
+      ]
+    },
+    {
+      "assertions": [
+        "envelope",
+        "headers",
+        "signature",
+        "amount-invariant",
+        "refund-state-independent"
+      ],
+      "conditional_groups": [
+        [
+          "org_hf_seq_id"
+        ],
+        [
+          "org_party_order_id"
+        ],
+        [
+          "org_req_seq_id"
+        ]
+      ],
+      "id": "hosting.payment.refund",
+      "method": "POST",
+      "negative_fixture": "hosting-refund-over-amount",
+      "optional_data": [
+        "refund_notify_url",
+        "notify_url",
+        "mer_ord_id"
+      ],
+      "path": "/v2/trade/hosting/payment/htRefund",
+      "positive_fixture": "hosting-refund-accepted",
+      "required_data": [
+        "req_date",
+        "req_seq_id",
+        "huifu_id",
+        "ord_amt",
+        "org_req_date"
+      ],
+      "source_reference": "hostingpay-refund.md",
+      "state_entity": "refund",
+      "status_field": "trans_stat",
+      "variant_fixtures": [
+        "hosting-refund-channel-accepted",
+        "sample-hosting-refund-channel-success"
+      ]
+    },
+    {
+      "assertions": [
+        "envelope",
+        "headers",
+        "signature",
+        "refund-locator",
+        "state-projection"
+      ],
+      "conditional_groups": [
+        [
+          "org_hf_seq_id"
+        ],
+        [
+          "org_req_seq_id"
+        ]
+      ],
+      "id": "hosting.payment.refund_query",
+      "method": "POST",
+      "negative_fixture": "hosting-refund-query-original-payment-locator",
+      "path": "/v2/trade/hosting/payment/queryRefundInfo",
+      "positive_fixture": "hosting-refund-query-processing-then-success",
+      "required_data": [
+        "req_date",
+        "req_seq_id",
+        "huifu_id",
+        "org_req_date"
+      ],
+      "source_reference": "hostingpay-refund-query.md",
+      "state_entity": "refund",
+      "status_field": "trans_stat",
+      "variant_fixtures": [
+        "hosting-refund-channel-query"
+      ]
+    },
+    {
+      "assertions": [
+        "envelope",
+        "headers",
+        "signature",
+        "close-stat-projected-by-queryorderinfo"
+      ],
+      "id": "hosting.payment.close",
+      "method": "POST",
+      "negative_fixture": "hosting-close-missing-original",
+      "path": "/v2/trade/hosting/payment/close",
+      "positive_fixture": "hosting-close-accepted",
+      "required_data": [
+        "req_date",
+        "req_seq_id",
+        "huifu_id",
+        "org_req_date",
+        "org_req_seq_id"
+      ],
+      "source_reference": "hostingpay-query-trade-close.md",
+      "state_entity": "close",
+      "status_field": "close_stat",
+      "variant_fixtures": [
+        "hosting-close-channel-accepted",
+        "sample-hosting-close-channel-success"
+      ]
+    },
+    {
+      "assertions": [
+        "envelope",
+        "headers",
+        "signature",
+        "splitpay-not-queryorderinfo",
+        "trans-list-state"
+      ],
+      "id": "hosting.payment.splitpay_query",
+      "method": "POST",
+      "negative_fixture": "hosting-splitpay-query-missing-original",
+      "path": "/v2/trade/hosting/payment/splitpay/query",
+      "positive_fixture": "hosting-splitpay-query-success",
+      "required_data": [
+        "req_date",
+        "req_seq_id",
+        "huifu_id",
+        "org_req_date",
+        "org_req_seq_id"
+      ],
+      "source_reference": "hostingpay-query-splitpay.md",
+      "state_entity": "splitpay",
+      "status_fields": [
+        "order_stat",
+        "trans_list[].trans_stat"
+      ],
+      "variant_fixtures": [
+        "sample-hosting-splitpay-query-success"
+      ]
+    },
+    {
+      "assertions": [
+        "envelope",
+        "headers",
+        "signature",
+        "required-fields",
+        "default-bill-type",
+        "local-download-url"
+      ],
+      "id": "shared.reconciliation.filequery",
+      "method": "POST",
+      "negative_fixture": "reconciliation-filequery-unsupported-bill-type",
+      "optional_data": [
+        "bill_type"
+      ],
+      "path": "/v2/trade/check/filequery",
+      "positive_fixture": "reconciliation-filequery-fp-then-file",
+      "required_data": [
+        "req_date",
+        "req_seq_id",
+        "huifu_id",
+        "file_date"
+      ],
+      "source_reference": "aggregation-query-reconciliation.md",
+      "state_entity": "reconciliation_file",
+      "status_fields": [
+        "task_details.task_stat",
+        "file_details.download_url"
+      ],
+      "variant_fixtures": [
+        "reconciliation-bill-split-bill",
+        "reconciliation-bill-merge-bill",
+        "reconciliation-bill-settle-bill",
+        "reconciliation-empty-file",
+        "reconciliation-expired-download",
+        "reconciliation-forbidden-download",
+        "reconciliation-invalid-date"
+      ]
+    }
+  ],
+  "schema_version": "1.0",
+  "source_skill_version": "1.3.0"
+}

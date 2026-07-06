@@ -1,0 +1,46 @@
+{
+  "assertions": [
+    "envelope",
+    "headers",
+    "signature",
+    "required-fields",
+    "state-transition"
+  ],
+  "contract_bundle": "huifu-pay-integration-1.3.0-r3",
+  "endpoint_id": "aggregation.payment.create",
+  "event_assertions": [],
+  "expected": {
+    "fields": {
+      "trans_stat": "P"
+    },
+    "resp_code": "00000000"
+  },
+  "expected_resp_code": "00000000",
+  "field_assertions": [
+    {
+      "equals": "P",
+      "path": "trans_stat"
+    },
+    {
+      "exists": true,
+      "path": "hf_seq_id"
+    }
+  ],
+  "headers_profile": "java-php-python-local-sandbox",
+  "id": "agg-create-processing",
+  "kind": "positive",
+  "method": "POST",
+  "path": "/v4/trade/payment/create",
+  "request": {
+    "data": {
+      "goods_desc": "scenario aggregation",
+      "huifu_id": "6666000100000001",
+      "notify_url": "{{notify_url:/notify?case=redaction}}",
+      "req_date": "20260624",
+      "req_seq_id": "S11-AGG-01",
+      "trade_type": "A_NATIVE",
+      "trans_amt": "0.11"
+    }
+  },
+  "schema_version": "1.1"
+}

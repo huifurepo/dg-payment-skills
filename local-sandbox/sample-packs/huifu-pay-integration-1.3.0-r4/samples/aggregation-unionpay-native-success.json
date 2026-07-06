@@ -1,0 +1,354 @@
+{
+  "schema_version": "1.0",
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "sample_id": "aggregation-unionpay-native-success",
+  "title": "聚合银联 U_NATIVE 正扫链路样例",
+  "description": "由聚合银联 U_NATIVE 正扫日志修正下单请求与同步二维码响应，覆盖顶层 remark/time_expire、qr_code 下单响应、后续银联渠道字段投射、异步通知和 Webhook 语义。",
+  "source_type": "deidentified_production",
+  "authorization": {
+    "status": "approved",
+    "approved_by": "user-provided-codex-attachment",
+    "approved_at": "2026-06-29T10:40:00+08:00"
+  },
+  "deidentification": {
+    "status": "passed",
+    "method": "field-level placeholder replacement; removed raw merchant names, account ids, QR code URL hosts, long numeric identifiers, transaction ids, internal order ids, and real callback URL hosts while preserving UnionPay U_NATIVE top-level create parameters, qr_code response, amount, remark, expiry, fee, notify, and webhook semantics",
+    "checked_at": "2026-07-01T12:20:00+08:00"
+  },
+  "endpoint": {
+    "id": "aggregation.payment.create",
+    "method": "POST",
+    "path": "/v4/trade/payment/create"
+  },
+  "scenario_id": "CHANNEL-NOTIFY-01",
+  "headers_profile": "java-php-python-local-sandbox",
+  "source_summary": {
+    "attachment": "pasted-text.txt",
+    "selected_source_lines": [
+      1
+    ],
+    "source_trade_type": "U_NATIVE",
+    "source_channel": "UnionPay native",
+    "source_product_id": "XLSISV",
+    "source_amount": "32.50",
+    "notes": [
+      "attachment contains the [聚合支付（闪电版）] U_NATIVE create request with goods_desc, remark, time_expire, notify_url, trade_type, trans_amt, huifu_id, req_date, and req_seq_id as top-level data fields",
+      "the create request does not include method_expand, unionpay_data, risk_check_data, or terminal_device_data for this U_NATIVE positive-scan order",
+      "synchronous response returns resp_code=00000100, resp_desc=下单成功, qr_code, bank_code=00, bank_message=成功[0000000], atu_sub_mer_id, party_order_id, trans_stat=P, and unconfirm_amt",
+      "later dispatch evidence uses eventDefineNo=pay.union_qr and unionpay_response projection; the create response itself should not assert unionpay_response"
+    ]
+  },
+  "request": {
+    "source": "normalized from [聚合支付（闪电版）] request parameters",
+    "data": {
+      "req_date": "20260701",
+      "req_seq_id": "REQ-UP-NATIVE-BILL-0001",
+      "huifu_id": "1234000100000005",
+      "trade_type": "U_NATIVE",
+      "trans_amt": "32.50",
+      "goods_desc": "账单号：LOCAL-BILL-001",
+      "notify_url": "https://example.invalid/huifu/unionpay-native-notify",
+      "remark": "账单号：LOCAL-BILL-001",
+      "time_expire": "20260701T115805"
+    }
+  },
+  "responses": {
+    "sync": {
+      "source": "normalized from [聚合支付（闪电版）] synchronous response",
+      "data": {
+        "resp_code": "00000100",
+        "resp_desc": "下单成功",
+        "req_date": "20260701",
+        "req_seq_id": "REQ-UP-NATIVE-BILL-0001",
+        "huifu_id": "1234000100000005",
+        "hf_seq_id": "HF-UP-NATIVE-BILL-0001",
+        "trade_type": "U_NATIVE",
+        "trans_amt": "32.50",
+        "trans_stat": "P",
+        "unconfirm_amt": "32.38",
+        "bank_code": "00",
+        "bank_message": "成功[0000000]",
+        "party_order_id": "PARTY-UP-NATIVE-BILL-001",
+        "atu_sub_mer_id": "UP-MER-BILL-001",
+        "qr_code": "https://example.invalid/unionpay/qrcode/up-native-bill-001",
+        "remark": "账单号：LOCAL-BILL-001",
+        "business_variant": "aggregation.unionpay"
+      }
+    },
+    "channel": {
+      "source": "normalized from atuResponse.channelNotify",
+      "data": {
+        "return_code": "000",
+        "return_desc": "成功",
+        "bank_code": "00",
+        "bank_message": "成功",
+        "bank_resp_code": "00",
+        "bank_resp_message": "成功",
+        "business_amt": "32.50",
+        "channel_rsp_code": "00",
+        "channel_status": "S",
+        "channel_type": "U",
+        "coupon_fee": "0.00",
+        "debit_flag": "1",
+        "gate_id": "VA",
+        "pay_channel_type": "U",
+        "pay_amt": "32.50",
+        "settlement_amt": "32.50",
+        "party_order_id": "PARTY-UP-NATIVE-BILL-001",
+        "out_trans_id": "UPORDER-UP-NATIVE-BILL-001",
+        "route_region_id": "C23_B",
+        "trans_status": "S",
+        "trans_response_add_info": {
+          "acc_no": "UNIONPAY-CARD-LOCAL-001"
+        }
+      }
+    },
+    "query_success": {
+      "endpoint": {
+        "id": "aggregation.payment.query",
+        "method": "POST",
+        "path": "/v4/trade/payment/scanpay/query"
+      },
+      "request": {
+        "data": {
+          "huifu_id": "1234000100000005",
+          "hf_seq_id": "HF-UP-NATIVE-BILL-0001"
+        }
+      },
+      "source": "normalized query projection from transOrder, channelNotify, and TopMessageNotifier final-state evidence",
+      "data": {
+        "resp_code": "00000000",
+        "resp_desc": "查询成功",
+        "req_date": "20260701",
+        "req_seq_id": "REQ-UP-NATIVE-BILL-0001",
+        "huifu_id": "1234000100000005",
+        "hf_seq_id": "HF-UP-NATIVE-BILL-0001",
+        "trade_type": "U_NATIVE",
+        "trans_amt": "32.50",
+        "pay_amt": "32.50",
+        "settlement_amt": "32.50",
+        "trans_stat": "S",
+        "bank_code": "00",
+        "bank_message": "成功",
+        "bank_seq_id": "BANKSEQ-UP-BILL-001",
+        "bank_order_no": "UPORDER-UP-NATIVE-BILL-001",
+        "out_trans_id": "UPORDER-UP-NATIVE-BILL-001",
+        "party_order_id": "PARTY-UP-NATIVE-BILL-001",
+        "ref_no": "REF-UP-NATIVE-BILL-001",
+        "trans_date": "20260701",
+        "trans_time": "115605",
+        "end_time": "2026-07-01T11:58:13+08:00",
+        "fee_amt": "0.12",
+        "fee_amount": "0.12",
+        "fee_rec_type": "2",
+        "fee_allowance_flag": "1",
+        "trans_fee_allowance_info": {
+          "actual_fee_amt": "0.00",
+          "allowance_fee_amt": "0.12",
+          "allowance_type": "1",
+          "receivable_fee_amt": "0.12"
+        },
+        "fee_formula_infos": [
+          {
+            "fee_type": "TRANS_FEE",
+            "fee_formula": "AMT*0.0038"
+          }
+        ],
+        "acct_split_bunch": {
+          "acct_infos": [
+            {
+              "huifu_id": "1234000100000005",
+              "acct_id": "F-LOCAL-UP-BILL-001",
+              "div_amt": "32.50"
+            }
+          ],
+          "fee_huifu_id": "1234000100000005",
+          "fee_acct_id": "F-LOCAL-UP-BILL-001",
+          "fee_amt": "0.12"
+        },
+        "unionpay_response": {
+          "acc_no": "UNIONPAY-CARD-LOCAL-001",
+          "debit_flag": "1",
+          "pay_channel_type": "U",
+          "resp_code": "00",
+          "resp_msg": "成功"
+        },
+        "business_variant": "aggregation.unionpay"
+      }
+    },
+    "async_notify": {
+      "source": "normalized from TopMessageNotifier notify payload",
+      "transport": {
+        "content_type": "application/x-www-form-urlencoded",
+        "signature_rule": "RSA signature over raw resp_data",
+        "ack_body": "RECV_ORD_ID_REQ-UP-NATIVE-BILL-0001"
+      },
+      "data": {
+        "resp_code": "00000000",
+        "resp_desc": "交易成功",
+        "sub_resp_code": "00000000",
+        "sub_resp_desc": "交易成功",
+        "req_date": "20260701",
+        "req_seq_id": "REQ-UP-NATIVE-BILL-0001",
+        "huifu_id": "1234000100000005",
+        "hf_seq_id": "HF-UP-NATIVE-BILL-0001",
+        "trade_type": "U_NATIVE",
+        "trans_type": "U_NATIVE",
+        "product_id": "XLSISV",
+        "trans_amt": "32.50",
+        "pay_amt": "32.50",
+        "settlement_amt": "32.50",
+        "trans_stat": "S",
+        "acct_stat": "S",
+        "bank_code": "00",
+        "bank_desc": "成功",
+        "bank_message": "成功",
+        "bank_order_no": "UPORDER-UP-NATIVE-BILL-001",
+        "bank_seq_id": "BANKSEQ-UP-BILL-001",
+        "out_ord_id": "UPORDER-UP-NATIVE-BILL-001",
+        "out_trans_id": "UPORDER-UP-NATIVE-BILL-001",
+        "party_order_id": "PARTY-UP-NATIVE-BILL-001",
+        "posp_seq_id": "PARTY-UP-NATIVE-BILL-001",
+        "notify_type": 2,
+        "fee_amt": "0.12",
+        "fee_amount": "0.12",
+        "fee_allowance_flag": "1",
+        "ref_no": "REF-UP-NATIVE-BILL-001",
+        "end_time": "2026-07-01T11:58:13+08:00",
+        "terminal_device_data": {
+          "device_ip": "127.0.0.1",
+          "device_type": "11",
+          "devs_id": "DEVICE-UP-NATIVE-001"
+        },
+        "unionpay_response": {
+          "acc_no": "UNIONPAY-CARD-LOCAL-001"
+        }
+      }
+    },
+    "webhook": {
+      "source": "normalized from TopMessageNotifier merchant callback topics and notify payload",
+      "transport": {
+        "topics": [
+          "VIRGO://https://example.invalid/huifu/unionpay-native-webhook",
+          "VIRGO://https://example.invalid/huifu/unionpay-native-notify"
+        ],
+        "content_type": "application/json",
+        "signature_rule": "MD5(raw_body + endpoint_key) in URL query sign"
+      },
+      "body": {
+        "huifuId": "1234000100000005",
+        "namespace": "opps-webhook",
+        "eventDefineNo": "pay.unionpay_pub",
+        "event_type": "trans.pay",
+        "env": "prod-like-sample",
+        "transStat": "S",
+        "parentHuifuIds": [
+          "1234000000000000",
+          "1234000100000000"
+        ],
+        "receiveHuifuIds": [
+          "1234000000000000",
+          "1234000100000000",
+          "1234000100000005"
+        ],
+        "data": {
+          "resp_code": "00000000",
+          "resp_desc": "交易成功",
+          "sub_resp_code": "00000000",
+          "sub_resp_desc": "交易成功",
+          "req_date": "20260701",
+          "req_seq_id": "REQ-UP-NATIVE-BILL-0001",
+          "huifu_id": "1234000100000005",
+          "hf_seq_id": "HF-UP-NATIVE-BILL-0001",
+          "trade_type": "U_NATIVE",
+          "trans_type": "U_NATIVE",
+          "product_id": "XLSISV",
+          "trans_amt": "32.50",
+          "pay_amt": "32.50",
+          "settlement_amt": "32.50",
+          "trans_stat": "S",
+          "acct_stat": "S",
+          "bank_code": "00",
+          "bank_desc": "成功",
+          "bank_message": "成功",
+          "bank_order_no": "UPORDER-UP-NATIVE-BILL-001",
+          "bank_seq_id": "BANKSEQ-UP-BILL-001",
+          "out_ord_id": "UPORDER-UP-NATIVE-BILL-001",
+          "out_trans_id": "UPORDER-UP-NATIVE-BILL-001",
+          "party_order_id": "PARTY-UP-NATIVE-BILL-001",
+          "posp_seq_id": "PARTY-UP-NATIVE-BILL-001",
+          "notify_type": 2,
+          "fee_amt": "0.12",
+          "fee_amount": "0.12",
+          "fee_allowance_flag": "1",
+          "unionpay_response": {
+            "acc_no": "UNIONPAY-CARD-LOCAL-001",
+            "debit_flag": "1",
+            "pay_channel_type": "U",
+            "resp_code": "00",
+            "resp_msg": "成功"
+          }
+        }
+      },
+      "dispatch_result": {
+        "code": 200,
+        "msg": "delivered"
+      }
+    }
+  },
+  "expected": {
+    "resp_code": "00000100",
+    "fields": {
+      "business_variant": "aggregation.unionpay",
+      "trade_type": "U_NATIVE",
+      "trans_stat": "P"
+    }
+  },
+  "assertions": {
+    "assertions": [
+      "envelope",
+      "headers",
+      "signature",
+      "sample-backed",
+      "business-variant",
+      "channel-response-projection",
+      "notify-rsa-resp-data",
+      "webhook-md5-raw-body",
+      "unionpay-channel-response"
+    ],
+    "field_assertions": [
+      {
+        "path": "resp_code",
+        "equals": "00000100"
+      },
+      {
+        "path": "trade_type",
+        "equals": "U_NATIVE"
+      },
+      {
+        "path": "trans_stat",
+        "equals": "P"
+      },
+      {
+        "path": "hf_seq_id",
+        "exists": true
+      },
+      {
+        "path": "qr_code",
+        "exists": true
+      },
+      {
+        "path": "business_variant",
+        "equals": "aggregation.unionpay"
+      }
+    ],
+    "event_assertions": [
+      "payment.accepted",
+      "payment.query",
+      "notify.delivery",
+      "webhook.delivery",
+      "business.variant"
+    ]
+  },
+  "sample_sha256": "91b5cc16b708afafb12a09578d4c8aac64af53f67f342914d38d427fba0ac00f"
+}

@@ -428,7 +428,7 @@ $huifuSdkRoot = getenv('HUIFU_SDK_ROOT') ?: dirname(__DIR__) . '/vendor/huifurep
 if (!is_file($huifuSdkRoot . '/init.php')) { throw new RuntimeException('未找到 dg-php-sdk'); }
 if (!defined('HUIFU_SDK_ROOT')) { define('HUIFU_SDK_ROOT', rtrim($huifuSdkRoot, '/')); }
 require_once HUIFU_SDK_ROOT . '/init.php';
-\\BsPaySdk\\core\\BsPay::init(['sys_id' => 'sys', 'product_id' => 'prod', 'rsa_merch_private_key' => 'private', 'rsa_huifu_public_key' => 'public', 'skill_source' => 'hfps/1.3.0'], true);
+\\BsPaySdk\\core\\BsPay::init(['sys_id' => 'sys', 'product_id' => 'prod', 'rsa_merch_private_key' => 'private', 'rsa_huifu_public_key' => 'public', 'skill_source' => 'hfps/1.3.1'], true);
 """)
 
 
@@ -450,7 +450,7 @@ def php_env(project: PhpProject) -> dict[str, str]:
         "HUIFU_ALIPAY_APP_SCHEMA": "alipays://platformapi/startapp",
         "HUIFU_MINIAPP_SEQ_ID": "miniapp",
         "HUIFU_SPLIT_HUIFU_ID": "split_merchant",
-        "HUIFU_SKILL_SOURCE": "hfps/1.3.0",
+        "HUIFU_SKILL_SOURCE": "hfps/1.3.1",
     })
     return env
 

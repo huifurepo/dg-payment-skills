@@ -1,0 +1,40 @@
+{
+  "assertions": [
+    "envelope",
+    "headers",
+    "signature",
+    "refund-locator",
+    "state-projection"
+  ],
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "endpoint_id": "hosting.payment.refund_query",
+  "event_assertions": [],
+  "expected": {
+    "fields": {
+      "trans_stat": "S"
+    },
+    "resp_code": "00000000"
+  },
+  "expected_resp_code": "00000000",
+  "field_assertions": [
+    {
+      "equals": "S",
+      "path": "trans_stat"
+    }
+  ],
+  "headers_profile": "java-php-python-local-sandbox",
+  "id": "hosting-refund-query-processing-then-success",
+  "kind": "positive",
+  "method": "POST",
+  "path": "/v2/trade/hosting/payment/queryRefundInfo",
+  "request": {
+    "data": {
+      "huifu_id": "6666000100000001",
+      "org_req_date": "{{refund_req_date}}",
+      "org_req_seq_id": "{{refund_req_seq_id}}",
+      "req_date": "20260624",
+      "req_seq_id": "S11-RF-HOST-QRY"
+    }
+  },
+  "schema_version": "1.1"
+}

@@ -1,0 +1,63 @@
+{
+  "assertions": [
+    "envelope",
+    "headers",
+    "signature",
+    "sample-backed",
+    "close-state-independent",
+    "terminal-payment-guard",
+    "close-locator",
+    "state-projection",
+    "channel-close-projection",
+    "terminal-query-projection"
+  ],
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "endpoint_id": "aggregation.payment.close",
+  "event_assertions": [
+    "close.accepted",
+    "close.query",
+    "close.settled"
+  ],
+  "expected": {
+    "fields": {
+      "business_variant": "aggregation.wechat-mini",
+      "trans_stat": "P"
+    },
+    "resp_code": "00000000"
+  },
+  "expected_resp_code": "00000000",
+  "field_assertions": [
+    {
+      "equals": "00000000",
+      "path": "resp_code"
+    },
+    {
+      "equals": "P",
+      "path": "trans_stat"
+    },
+    {
+      "equals": "aggregation.wechat-mini",
+      "path": "business_variant"
+    }
+  ],
+  "headers_profile": "java-php-python-local-sandbox",
+  "id": "sample-aggregation-close-channel-success",
+  "kind": "sample",
+  "method": "POST",
+  "path": "/v2/trade/payment/scanpay/close",
+  "request": {
+    "data": {
+      "huifu_id": "1234000100000025",
+      "org_hf_seq_id": "ORG-HF-AGG-CL-CHANNEL-0001",
+      "org_req_date": "20260630",
+      "org_req_seq_id": "ORG-PAY-AGG-CL-CHANNEL-0001",
+      "product_id": "XLSISV",
+      "req_date": "20260630",
+      "req_seq_id": "REQ-AGG-CL-CHANNEL-0001"
+    }
+  },
+  "sample_coverage_level": "deidentified_production_sample",
+  "sample_digest": "sha256:da73e835dd4266b819c2633d973ac975c33804ec35aaf5eec6f973fa0ab93b4c",
+  "schema_version": "1.1",
+  "source_sample_id": "aggregation-close-channel-success"
+}

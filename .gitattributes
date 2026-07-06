@@ -4,3 +4,11 @@
 *.yaml text eol=lf
 *.yml text eol=lf
 .gitignore text eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.zip binary
+*.7z binary
+*.tar.gz binary

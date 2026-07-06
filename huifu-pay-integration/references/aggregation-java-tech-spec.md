@@ -81,7 +81,7 @@ SDK 自动使用汇付 RSA 公钥验证响应签名，验签失败时抛出 `Bas
 - **报文形态**：交易类回调通常提交 `sign` 和 `resp_data` 字段，业务字段位于 `resp_data`
 - **响应要求**：HTTP 200，body 返回 `RECV_ORD_ID_` + req_seq_id（5 秒内）
 - **重试策略**：超时未响应最多重试 3 次
-- **幂等键**：以 `hf_seq_id` 为幂等键，防止重复处理
+- **幂等键**：以 `hf_seq_id` 为最简幂等键，防止重复处理（完整口径见 `references/shared-async-notify.md`，建议复合键）
 
 以下示例为流程片段。`HttpServletRequest` 在 Spring Boot 2.x 使用 `javax.servlet.*`，在 3.x 使用 `jakarta.servlet.*`；`huifuPublicKey` 的注入方式可直接参考 `references/aggregation-async-webhook.md` 中的完整类示例。
 

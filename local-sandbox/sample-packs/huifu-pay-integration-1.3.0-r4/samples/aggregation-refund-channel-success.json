@@ -1,0 +1,450 @@
+{
+  "schema_version": "1.0",
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "sample_id": "aggregation-refund-channel-success",
+  "title": "聚合支付宝闪电版渠道退款成功样例",
+  "description": "由用户补充的聚合支付闪电版退款申请旧版内部请求/返回与退款查询请求/返回修正而来，覆盖退款申请、同步成功响应、退款查询成功和渠道维度支付宝退款投射。",
+  "source_type": "deidentified_production",
+  "authorization": {
+    "status": "approved",
+    "approved_by": "user-provided-inline-correction",
+    "approved_at": "2026-06-30T19:10:00+08:00"
+  },
+  "deidentification": {
+    "status": "passed",
+    "method": "field-level placeholder replacement; removed raw huifu ids, sys id, signature, account ids, refund and payment request sequence ids, hf sequence ids, internal order ids, bank order numbers, party order ids, and long numeric identifiers while preserving lightning aggregation refund request, refund-query locator, acct_split_bunch string, Alipay aliResponseBO refund detail, channel projection, and refund status semantics",
+    "checked_at": "2026-06-30T19:20:00+08:00"
+  },
+  "endpoint": {
+    "id": "aggregation.payment.refund",
+    "method": "POST",
+    "path": "/v4/trade/payment/scanpay/refund"
+  },
+  "scenario_id": "AGG-REFUND-CHANNEL-01",
+  "headers_profile": "java-php-python-local-sandbox",
+  "source_summary": {
+    "attachment": "inline user paste",
+    "source_refund_type": "TRANS_REFUND",
+    "source_channel": "Aggregation Alipay native lightning refund",
+    "source_product_id": "YYZY",
+    "source_amount": "0.01",
+    "notes": [
+      "refund application uses refund req_seq_id as the new refund transaction key and may locate the original aggregation payment by org_hf_seq_id + org_req_date",
+      "the legacy internal refund request uses camelCase fields such as huifuId, merOrdId, orgReqSeqId, reqSeqId, sysId; the public gateway request maps these to snake_case data fields for this sample",
+      "refund query uses org_req_seq_id equal to the refund request sequence, not the original payment request sequence",
+      "refund query for a non-existing refund transaction returns resp_code=23000001 and resp_desc=原交易不存在 with an empty trade_type",
+      "refund query response returns acct_split_bunch as a JSON string and includes combinedpay_fee_amt and fee_amount as top-level compatibility fields",
+      "the Alipay channel refund detail is present in the refund response as aliResponseBO and is normalized to alipay_response for business-side projection"
+    ]
+  },
+  "request": {
+    "source": "normalized public refund request from [交易退款接口(闪电版)] legacy request parameters",
+    "envelope": {
+      "product_id": "YYZY",
+      "sys_id": "1234000100000030"
+    },
+    "data": {
+      "req_date": "20260630",
+      "req_seq_id": "REQ-AGG-RF-LIGHTNING-0001",
+      "huifu_id": "1234000100000031",
+      "ord_amt": "0.01",
+      "org_req_date": "20260630",
+      "org_hf_seq_id": "HF-ALI-NATIVE-LIGHTNING-0001"
+    }
+  },
+  "responses": {
+    "sync": {
+      "source": "normalized public refund response from [交易退款接口(闪电版)] legacy return parameters",
+      "data": {
+        "product_id": "YYZY",
+        "req_date": "20260630",
+        "req_seq_id": "REQ-AGG-RF-LIGHTNING-0001",
+        "huifu_id": "1234000100000031",
+        "resp_code": "00000100",
+        "resp_desc": "交易处理中",
+        "ord_amt": "0.01",
+        "org_req_date": "20260630",
+        "org_req_seq_id": "REQ-ALI-NATIVE-LIGHTNING-0001",
+        "org_hf_seq_id": "HF-ALI-NATIVE-LIGHTNING-0001",
+        "hf_seq_id": "HF-AGG-RF-LIGHTNING-0001",
+        "refund_hf_seq_id": "HF-AGG-RF-LIGHTNING-0001",
+        "refund_order_id": "RF-ORDER-AGG-LIGHTNING-0001",
+        "pay_channel": "A",
+        "pay_type": "NATIVE",
+        "business_variant": "aggregation.alipay",
+        "trans_type": "TRANS_REFUND",
+        "trans_stat": "P",
+        "trans_date": "20260630",
+        "trans_time": "190028",
+        "trans_finish_time": "20260630T190030",
+        "bank_message": "",
+        "fee_amount": "0.00",
+        "acct_split_bunch": "{\"acct_infos\":[{\"div_amt\":\"0.01\",\"huifu_id\":\"1234000100000031\"}],\"fee_amount\":\"0.00\"}",
+        "channel_refund_projection": {
+          "pay_channel": "A"
+        }
+      }
+    },
+    "legacy_refund": {
+      "source": "deidentified old internal [交易退款接口(闪电版)] request and return parameters before public field normalization",
+      "request": {
+        "data": {
+          "apiVersion": "V4",
+          "canHfLoan": false,
+          "huifuId": "1234000100000031",
+          "merOrdId": "REQ-AGG-RF-LIGHTNING-0001",
+          "ordAmt": "0.01",
+          "orgReqDate": "20260630",
+          "orgReqSeqId": "REQ-ALI-NATIVE-LIGHTNING-0001",
+          "overdue": false,
+          "productId": "YYZY",
+          "reqDate": "20260630",
+          "reqSeqId": "REQ-AGG-RF-LIGHTNING-0001",
+          "sysId": "1234000100000030"
+        }
+      },
+      "data": {
+        "acctSplitBunch": {
+          "acctInfos": [
+            {
+              "acctDate": "20260630",
+              "acctId": "F-LOCAL-ALI-LIGHT-001",
+              "divAmt": "0.01",
+              "huifuId": "1234000100000031"
+            }
+          ],
+          "feeAcctDate": "",
+          "feeAcctId": "F-LOCAL-ALI-LIGHT-001",
+          "feeAmt": "0.00",
+          "feeHuifuId": "1234000100000031"
+        },
+        "actualRefAmt": "0.01",
+        "aliResponseBO": "{\"refund_detail_item_list\":[{\"amount\":\"0.01\",\"fund_channel\":\"ALIPAYACCOUNT\"}]}",
+        "bankCode": "10000",
+        "bankMessage": "Success",
+        "bankSeqId": "BANKSEQ-AGG-RF-LIGHTNING-001",
+        "hfSeqId": "HF-AGG-RF-LIGHTNING-0001",
+        "huifuId": "1234000100000031",
+        "isCleanSplit": "N",
+        "loanFlag": "N",
+        "merOrdId": "REQ-AGG-RF-LIGHTNING-0001",
+        "ordAmt": "0.01",
+        "ordId": "RF-ORDER-AGG-LIGHTNING-0001",
+        "orgHfSeqId": "HF-ALI-NATIVE-LIGHTNING-0001",
+        "orgPayChannel": "A",
+        "orgReqDate": "20260630",
+        "orgReqSeqId": "REQ-ALI-NATIVE-LIGHTNING-0001",
+        "payType": "NATIVE",
+        "productId": "YYZY",
+        "refNo": "REF-AGG-RF-LIGHTNING-001",
+        "refundHfSeqId": "HF-AGG-RF-LIGHTNING-0001",
+        "reqDate": "20260630",
+        "reqSeqId": "REQ-AGG-RF-LIGHTNING-0001",
+        "subRespCode": "00000000",
+        "subRespDesc": "交易成功",
+        "sysId": "1234000100000030",
+        "transDate": "20260630",
+        "transStat": "S",
+        "transTime": "190028",
+        "transType": "TRANS_REFUND",
+        "transfinishTime": "20260630T190030"
+      }
+    },
+    "refund_query_not_found": {
+      "endpoint": {
+        "id": "aggregation.payment.refund_query",
+        "method": "POST",
+        "path": "/v4/trade/payment/scanpay/refundquery"
+      },
+      "request": {
+        "envelope": {
+          "product_id": "EDUSTD",
+          "sys_id": "1234000100000030",
+          "sign": "SIGNATURE-PLACEHOLDER"
+        },
+        "data": {
+          "huifu_id": "1234000100000031",
+          "org_req_date": "20260701",
+          "org_req_seq_id": "REQ-AGG-RF-NOTFOUND-0001"
+        }
+      },
+      "source": "normalized from [交易退款查询接口(闪电版)] not-found response",
+      "data": {
+        "huifu_id": "1234000100000031",
+        "org_req_date": "20260701",
+        "org_req_seq_id": "REQ-AGG-RF-NOTFOUND-0001",
+        "resp_code": "23000001",
+        "resp_desc": "原交易不存在",
+        "trade_type": ""
+      }
+    },
+    "refund_query_success": {
+      "endpoint": {
+        "id": "aggregation.payment.refund_query",
+        "method": "POST",
+        "path": "/v4/trade/payment/scanpay/refundquery"
+      },
+      "request": {
+        "envelope": {
+          "product_id": "YYZY",
+          "sys_id": "1234000100000030",
+          "sign": "SIGNATURE-PLACEHOLDER"
+        },
+        "data": {
+          "huifu_id": "1234000100000031",
+          "org_req_date": "20260630",
+          "org_req_seq_id": "REQ-AGG-RF-LIGHTNING-0001"
+        }
+      },
+      "source": "normalized from [交易退款查询接口(闪电版)] request and success response",
+      "data": {
+        "product_id": "YYZY",
+        "huifu_id": "1234000100000031",
+        "resp_code": "00000000",
+        "resp_desc": "查询成功",
+        "org_req_date": "20260630",
+        "org_req_seq_id": "REQ-AGG-RF-LIGHTNING-0001",
+        "org_hf_seq_id": "HF-AGG-RF-LIGHTNING-0001",
+        "ord_amt": "0.01",
+        "actual_ref_amt": "0.01",
+        "fee_amount": "0.00",
+        "combinedpay_fee_amt": "0.00",
+        "pay_channel": "A",
+        "business_variant": "aggregation.alipay",
+        "remark": "",
+        "trade_type": "TRANS_REFUND",
+        "trans_date": "20260630",
+        "trans_time": "190028",
+        "trans_finish_time": "20260630T190030",
+        "trans_stat": "S",
+        "bank_message": "退款成功",
+        "acct_split_bunch": "{\"acct_infos\":[{\"div_amt\":\"0.01\",\"huifu_id\":\"1234000100000031\"}]}",
+        "acct_split_bunch_parsed": {
+          "acct_infos": [
+            {
+              "div_amt": "0.01",
+              "huifu_id": "1234000100000031"
+            }
+          ]
+        },
+        "alipay_response": {
+          "refund_detail_item_list": [
+            {
+              "amount": "0.01",
+              "fund_channel": "ALIPAYACCOUNT"
+            }
+          ]
+        }
+      }
+    },
+    "async_notify": {
+      "source": "normalized refund notification payload consistent with the lightning refund response",
+      "transport": {
+        "top_notify_type": "TRANS_REFUND_NOTIFY",
+        "content_type": "application/x-www-form-urlencoded",
+        "signature_rule": "RSA signature over raw resp_data",
+        "topics": [
+          "archer://C_TOP_SSP_WOA_SER",
+          "virgo://https://example.invalid/huifu/aggregation-refund-channel-notify"
+        ]
+      },
+      "data": {
+        "resp_code": "00000000",
+        "resp_desc": "交易成功",
+        "sub_resp_code": "00000000",
+        "sub_resp_desc": "交易成功",
+        "req_date": "20260630",
+        "req_seq_id": "REQ-AGG-RF-LIGHTNING-0001",
+        "huifu_id": "1234000100000031",
+        "sys_id": "1234000100000030",
+        "hf_seq_id": "HF-AGG-RF-LIGHTNING-0001",
+        "trans_type": "TRANS_REFUND",
+        "trans_stat": "S",
+        "trans_date": "20260630",
+        "trans_time": "190028",
+        "trans_finish_time": "20260630T190030",
+        "product_id": "YYZY",
+        "ord_amt": "0.01",
+        "actual_ref_amt": "0.01",
+        "total_ref_amt": "0.01",
+        "total_ref_fee_amt": "0.00",
+        "org_req_date": "20260630",
+        "org_req_seq_id": "REQ-ALI-NATIVE-LIGHTNING-0001",
+        "org_ord_amt": "0.10",
+        "org_fee_amt": "0.04",
+        "order_id": "RF-ORDER-AGG-LIGHTNING-0001",
+        "mer_ord_id": "REQ-AGG-RF-LIGHTNING-0001",
+        "pay_channel": "A",
+        "bank_code": "10000",
+        "bank_desc": "Success",
+        "bank_message": "Success",
+        "bank_seq_id": "BANKSEQ-AGG-RF-LIGHTNING-001",
+        "ref_no": "REF-AGG-RF-LIGHTNING-001",
+        "acct_split_bunch": "{\"acct_infos\":[{\"div_amt\":\"0.01\",\"huifu_id\":\"1234000100000031\"}]}",
+        "alipay_response": "{\"refund_detail_item_list\":[{\"amount\":\"0.01\",\"fund_channel\":\"ALIPAYACCOUNT\"}]}"
+      }
+    },
+    "merchant_notify": {
+      "source": "normalized merchant notify payload for the same lightning refund final state",
+      "transport": {
+        "topics": [
+          "virgo://https://example.invalid/huifu/aggregation-refund-channel-notify"
+        ],
+        "content_type": "application/json"
+      },
+      "body": {
+        "ord_id": "AGG-RF-LIGHTNING-NOTIFY-0001",
+        "top_notify_type": "TRANS_REFUND_NOTIFY",
+        "trans_type": "TRANS_REFUND",
+        "data": {
+          "resp_code": "00000000",
+          "resp_desc": "交易成功",
+          "req_date": "20260630",
+          "req_seq_id": "REQ-AGG-RF-LIGHTNING-0001",
+          "huifu_id": "1234000100000031",
+          "hf_seq_id": "HF-AGG-RF-LIGHTNING-0001",
+          "trans_type": "TRANS_REFUND",
+          "trans_stat": "S",
+          "trans_finish_time": "20260630T190030",
+          "product_id": "YYZY",
+          "ord_amt": "0.01",
+          "actual_ref_amt": "0.01",
+          "org_req_date": "20260630",
+          "org_req_seq_id": "REQ-ALI-NATIVE-LIGHTNING-0001",
+          "bank_code": "10000",
+          "bank_message": "Success",
+          "pay_channel": "A",
+          "alipay_response": {
+            "refund_detail_item_list": [
+              {
+                "amount": "0.01",
+                "fund_channel": "ALIPAYACCOUNT"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "webhook_refund_standard": {
+      "source": "normalized refund.standard webhook payload consistent with the same refund final state",
+      "transport": {
+        "namespace": "opps-webhook",
+        "event_define_no": "refund.standard"
+      },
+      "body": {
+        "huifu_id": "1234000100000031",
+        "namespace": "opps-webhook",
+        "event_define_no": "refund.standard",
+        "trans_stat": "S",
+        "data": {
+          "product_id": "YYZY",
+          "req_date": "20260630",
+          "req_seq_id": "REQ-AGG-RF-LIGHTNING-0001",
+          "huifu_id": "1234000100000031",
+          "sys_id": "1234000100000030",
+          "hf_seq_id": "HF-AGG-RF-LIGHTNING-0001",
+          "order_id": "RF-ORDER-AGG-LIGHTNING-0001",
+          "mer_ord_id": "REQ-AGG-RF-LIGHTNING-0001",
+          "trans_type": "TRANS_REFUND",
+          "trans_stat": "S",
+          "trans_date": "20260630",
+          "trans_time": "190028",
+          "trans_finish_time": "20260630T190030",
+          "ord_amt": "0.01",
+          "actual_ref_amt": "0.01",
+          "total_ref_amt": "0.01",
+          "total_ref_fee_amt": "0.00",
+          "org_req_date": "20260630",
+          "org_req_seq_id": "REQ-ALI-NATIVE-LIGHTNING-0001",
+          "org_ord_amt": "0.10",
+          "org_fee_amt": "0.04",
+          "bank_code": "10000",
+          "bank_desc": "Success",
+          "bank_message": "Success",
+          "bank_seq_id": "BANKSEQ-AGG-RF-LIGHTNING-001",
+          "pay_channel": "A",
+          "business_variant": "aggregation.alipay",
+          "trans_refund_info": {
+            "req_date": "20260630",
+            "req_seq_id": "REQ-AGG-RF-LIGHTNING-0001",
+            "ord_id": "RF-ORDER-AGG-LIGHTNING-0001",
+            "ord_amt": "0.01",
+            "actual_ref_amt": "0.01",
+            "trans_type": "TRANS_REFUND",
+            "trans_stat": "S",
+            "bank_resp_code": "10000",
+            "bank_resp_desc": "Success",
+            "atu_response": "{\"refund_detail_item_list\":[{\"amount\":\"0.01\",\"fund_channel\":\"ALIPAYACCOUNT\"}]}"
+          },
+          "acct_split_bunch": "{\"acct_infos\":[{\"div_amt\":\"0.01\",\"huifu_id\":\"1234000100000031\"}]}",
+          "alipay_response": {
+            "refund_detail_item_list": [
+              {
+                "amount": "0.01",
+                "fund_channel": "ALIPAYACCOUNT"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "expected": {
+    "resp_code": "00000100",
+    "fields": {
+      "business_variant": "aggregation.alipay",
+      "pay_channel": "A",
+      "trans_stat": "P"
+    }
+  },
+  "assertions": {
+    "assertions": [
+      "envelope",
+      "headers",
+      "signature",
+      "sample-backed",
+      "amount-invariant",
+      "refund-state-independent",
+      "refund-locator",
+      "state-projection",
+      "channel-refund-projection",
+      "string-json-channel-fields",
+      "notify-rsa-resp-data",
+      "webhook-event"
+    ],
+    "field_assertions": [
+      {
+        "path": "resp_code",
+        "equals": "00000100"
+      },
+      {
+        "path": "hf_seq_id",
+        "exists": true
+      },
+      {
+        "path": "acct_split_bunch",
+        "exists": true
+      },
+      {
+        "path": "pay_channel",
+        "equals": "A"
+      },
+      {
+        "path": "business_variant",
+        "equals": "aggregation.alipay"
+      },
+      {
+        "path": "trans_stat",
+        "equals": "P"
+      }
+    ],
+    "event_assertions": [
+      "refund.accepted",
+      "refund.query",
+      "refund.notify",
+      "refund.settled",
+      "webhook.refund.standard"
+    ]
+  },
+  "sample_sha256": "cdfd376a438a8168bd3e28b47334d227de2534dcc508edf49c44d8116106902f"
+}

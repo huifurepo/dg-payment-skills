@@ -32,6 +32,7 @@ EXPECTED_REFERENCES = {
     "shared-copyright-notice.md",
     "shared-request-header-policy.md",
     "shared-request-field-preservation.md",
+    "shared-local-sandbox.md",
     "shared-server-sdk-matrix.md",
     "shared-frontend-sdk-matrix.md",
     "shared-versioning-policy.md",

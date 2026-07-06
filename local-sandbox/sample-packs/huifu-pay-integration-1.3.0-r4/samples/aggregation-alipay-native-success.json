@@ -1,0 +1,420 @@
+{
+  "schema_version": "1.0",
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "sample_id": "aggregation-alipay-native-success",
+  "title": "聚合支付宝 A_NATIVE 闪电版成功链路样例",
+  "description": "由聚合支付宝 A_NATIVE 正扫成功交易日志修正而来，覆盖下单请求顶层参数、同步 qr_code 响应、最终成功态、异步处理快照和 Webhook 投递语义。",
+  "source_type": "deidentified_production",
+  "authorization": {
+    "status": "approved",
+    "approved_by": "user-provided-codex-attachment-and-inline-correction",
+    "approved_at": "2026-07-01T12:20:00+08:00"
+  },
+  "deidentification": {
+    "status": "passed",
+    "method": "field-level placeholder replacement; removed raw merchant names, buyer ids, login ids, account ids, QR code URL hosts, long numeric identifiers, transaction ids, internal order ids, gateway regions, Alipay app ids, and real callback URL hosts while preserving lightning aggregation A_NATIVE request, split-account fields, qr_code response, Alipay channel, fee, notify, and webhook semantics",
+    "checked_at": "2026-07-01T12:35:00+08:00"
+  },
+  "endpoint": {
+    "id": "aggregation.payment.create",
+    "method": "POST",
+    "path": "/v4/trade/payment/create"
+  },
+  "scenario_id": "CHANNEL-NOTIFY-01",
+  "headers_profile": "java-php-python-local-sandbox",
+  "source_summary": {
+    "attachment": "pasted-text.txt",
+    "selected_source_evidence": [
+      "attachment supplied Java SDK TradeRequest object for A_NATIVE create",
+      "attachment supplied [聚合支付（闪电版）] synchronous response with qr_code",
+      "attachment supplied async transOrderDO processing snapshot",
+      "attachment supplied Webhook event dispatch payload with alipay_response, acct_split_bunch, and split_fee_info"
+    ],
+    "source_trade_type": "A_NATIVE",
+    "source_channel": "Alipay native lightning",
+    "source_product_id": "KAZX",
+    "source_amount": "5006.89",
+    "notes": [
+      "Java SDK object logging may show methodExpand text near common fields; gateway data should still send acct_split_bunch, delay_acct_flag, time_expire, notify_url, goods_desc, and huifu_id as top-level aggregation payment-create fields",
+      "A_NATIVE does not require method_expand when no Alipay-specific scene parameter is supplied; do not put acct_split_bunch or delay_acct_flag inside method_expand",
+      "the synchronous create response returns qr_code and trans_stat=P with resp_code=00000100",
+      "Alipay buyer/fund details appear later in alipay_response on success projection, not in the create request",
+      "async transOrderDO uses internal camelCase names and can show intermediate accounting/channel states; public final result is confirmed by trans_stat=S in the event dispatch payload"
+    ]
+  },
+  "request": {
+    "source": "normalized from [聚合支付（闪电版）] request parameters",
+    "envelope": {
+      "product_id": "KAZX",
+      "sys_id": "1234000100000030"
+    },
+    "data": {
+      "req_date": "20260701",
+      "req_seq_id": "REQ-ALI-NATIVE-SPLIT-0001",
+      "huifu_id": "1234000100000031",
+      "trade_type": "A_NATIVE",
+      "trans_amt": "5006.89",
+      "goods_desc": "玩具模型",
+      "time_expire": "20260701T140148",
+      "delay_acct_flag": "N",
+      "notify_url": "https://example.invalid/huifu/alipay-native-scan-notify",
+      "acct_split_bunch": "{\"acct_infos\":[{\"div_amt\":\"4906.76\",\"huifu_id\":\"1234000100000031\"},{\"div_amt\":\"100.13\",\"huifu_id\":\"1234000100000032\"}]}"
+    }
+  },
+  "responses": {
+    "sync": {
+      "source": "normalized from [聚合支付（闪电版）] synchronous response",
+      "data": {
+        "resp_code": "00000100",
+        "resp_desc": "下单成功",
+        "req_date": "20260701",
+        "req_seq_id": "REQ-ALI-NATIVE-SPLIT-0001",
+        "huifu_id": "1234000100000031",
+        "hf_seq_id": "HF-ALI-NATIVE-SPLIT-0001",
+        "trade_type": "A_NATIVE",
+        "trans_amt": "5006.89",
+        "trans_stat": "P",
+        "unconfirm_amt": "4966.83",
+        "bank_code": "10000",
+        "bank_message": "Success",
+        "party_order_id": "ALI-PARTY-NATIVE-SPLIT-001",
+        "atu_sub_mer_id": "ALI-SUBMER-SPLIT-001",
+        "qr_code": "https://example.invalid/alipay/qrcode/ali-native-split-001",
+        "business_variant": "aggregation.alipay"
+      }
+    },
+    "query_success": {
+      "endpoint": {
+        "id": "aggregation.payment.query",
+        "method": "POST",
+        "path": "/v4/trade/payment/scanpay/query"
+      },
+      "request": {
+        "envelope": {
+          "product_id": "KAZX",
+          "sys_id": "1234000100000030"
+        },
+        "data": {
+          "huifu_id": "1234000100000031",
+          "req_date": "20260701",
+          "req_seq_id": "REQ-ALI-NATIVE-SPLIT-0001"
+        }
+      },
+      "source": "normalized from [交易查询接口(闪电版)] request and success response",
+      "data": {
+        "resp_code": "00000000",
+        "resp_desc": "成功",
+        "req_date": "20260701",
+        "req_seq_id": "REQ-ALI-NATIVE-SPLIT-0001",
+        "huifu_id": "1234000100000031",
+        "hf_seq_id": "HF-ALI-NATIVE-SPLIT-0001",
+        "trade_type": "A_NATIVE",
+        "trans_amt": "5006.89",
+        "pay_amt": "5006.89",
+        "settlement_amt": "5006.89",
+        "trans_stat": "S",
+        "acct_date": "20260701",
+        "acct_id": "F-LOCAL-ALI-SPLIT-001",
+        "acct_stat": "I",
+        "acct_split_bunch": "{\"acct_infos\":[{\"acct_id\":\"F-LOCAL-ALI-SPLIT-001\",\"div_amt\":\"4906.76\",\"huifu_id\":\"1234000100000031\"},{\"acct_id\":\"F-LOCAL-ALI-SPLIT-002\",\"div_amt\":\"100.13\",\"huifu_id\":\"1234000100000032\"}],\"fee_acct_id\":\"F-LOCAL-ALI-SPLIT-001\",\"fee_huifu_id\":\"1234000100000031\",\"fee_amt\":\"40.06\"}",
+        "delay_acct_flag": "N",
+        "div_flag": "1",
+        "end_time": "20260701T120157",
+        "atu_sub_mer_id": "ALI-SUBMER-SPLIT-001",
+        "bank_message": "TRADE_SUCCESS",
+        "method_expand": "{\"buyer_id\":\"buyer-ali-split-001\",\"buyer_logon_id\":\"buyer-ali-split@example.invalid\",\"fund_bill_list\":[{\"amount\":\"5006.89\",\"fund_type\":\"DEBIT_CARD\",\"fund_channel\":\"BANKCARD\"}]}",
+        "out_trans_id": "ALI-OUT-TRANS-SPLIT-001",
+        "party_order_id": "ALI-PARTY-NATIVE-SPLIT-001",
+        "payment_fee": "{\"fee_amount\":\"40.06\",\"fee_flag\":2,\"fee_formula_infos\":[{\"fee_formula\":\"MAX(0.00,AMT*0.008)\",\"fee_type\":\"TRANS_FEE\"}],\"fee_huifu_id\":\"1234000100000031\"}",
+        "split_fee_info": {
+          "total_split_fee_amt": "0.80",
+          "split_fee_details": [
+            {
+              "split_fee_huifu_id": "1234000100000032",
+              "split_fee_acct_id": "F-LOCAL-ALI-SPLIT-002",
+              "split_fee_amt": "0.80",
+              "split_fee_flag": 2
+            }
+          ]
+        },
+        "business_variant": "aggregation.alipay",
+        "method_expand_parsed": {
+          "buyer_id": "buyer-ali-split-001",
+          "buyer_logon_id": "buyer-ali-split@example.invalid",
+          "fund_bill_list": [
+            {
+              "amount": "5006.89",
+              "fund_type": "DEBIT_CARD",
+              "fund_channel": "BANKCARD"
+            }
+          ]
+        },
+        "payment_fee_parsed": {
+          "fee_amount": "40.06",
+          "fee_flag": 2,
+          "fee_huifu_id": "1234000100000031",
+          "fee_formula_infos": [
+            {
+              "fee_formula": "MAX(0.00,AMT*0.008)",
+              "fee_type": "TRANS_FEE"
+            }
+          ]
+        },
+        "acct_split_bunch_parsed": {
+          "acct_infos": [
+            {
+              "acct_id": "F-LOCAL-ALI-SPLIT-001",
+              "div_amt": "4906.76",
+              "huifu_id": "1234000100000031"
+            },
+            {
+              "acct_id": "F-LOCAL-ALI-SPLIT-002",
+              "div_amt": "100.13",
+              "huifu_id": "1234000100000032"
+            }
+          ],
+          "fee_acct_id": "F-LOCAL-ALI-SPLIT-001",
+          "fee_huifu_id": "1234000100000031",
+          "fee_amt": "40.06"
+        }
+      }
+    },
+    "async_trans_order_snapshot": {
+      "source": "normalized from inline async transOrderDO processing snapshot",
+      "data": {
+        "acct_id": "F-LOCAL-ALI-SPLIT-001",
+        "acct_stat": "I",
+        "agent_id": "1234000100000030",
+        "atu_sub_mer_id": "ALI-SUBMER-SPLIT-001",
+        "bagent_id": "1234000100000030",
+        "bank_mer_id": "ALI-BANK-MER-SPLIT-001",
+        "bank_mer_name": "示例支付宝渠道商户",
+        "bank_resp_code": "10000",
+        "bank_resp_desc": "Success",
+        "bank_seq_id": "BANKSEQ-ALI-SPLIT-001",
+        "cash_req_date": "20260701T120148",
+        "cash_resp_code": "000",
+        "cash_resp_desc": "成功",
+        "cash_trans_id": "CASH-ALI-SPLIT-0001",
+        "channel_stat": "S",
+        "check_cash_flag": "I",
+        "fee_acct_id": "F-LOCAL-ALI-SPLIT-001",
+        "fee_amt": "40.06",
+        "fee_flag": 2,
+        "fee_huifu_id": "1234000100000031",
+        "goods_desc": "玩具模型",
+        "hf_seq_id": "HF-ALI-NATIVE-SPLIT-0001",
+        "huifu_id": "1234000100000031",
+        "mer_name": "示例商户",
+        "mer_ord_id": "REQ-ALI-NATIVE-SPLIT-0001",
+        "ord_amt": "5006.89",
+        "ord_id": "ALI-ORDER-SPLIT-001",
+        "out_trans_id": "ALI-OUT-TRANS-SPLIT-001",
+        "party_order_id": "ALI-PARTY-NATIVE-SPLIT-001",
+        "pay_channel": "A",
+        "pay_channel_id": "ALIPAY-CHANNEL-001",
+        "pay_scene": "02",
+        "pay_type": "NATIVE",
+        "product_id": "KAZX",
+        "real_acct_id": "F-LOCAL-ALI-SPLIT-001",
+        "real_cust_id": "1234000100000031",
+        "ref_amt": "5006.89",
+        "ref_fee_amt": "40.06",
+        "ref_num": "REF-ALI-SPLIT-001",
+        "req_date": "20260701",
+        "req_seq_id": "REQ-ALI-NATIVE-SPLIT-0001",
+        "settle_amt": "5006.89",
+        "sys_id": "1234000100000030",
+        "trans_date": "20260701",
+        "trans_notify_url": "VIRGO://https://example.invalid/huifu/alipay-native-scan-notify",
+        "trans_stat": "S",
+        "trans_type": "1000",
+        "unconfirm_amt": "4966.83",
+        "unconfirm_fee_amt": "40.06"
+      }
+    },
+    "async_notify": {
+      "source": "normalized merchant notification payload using A_NATIVE scan-payment success projection",
+      "transport": {
+        "content_type": "application/x-www-form-urlencoded",
+        "signature_rule": "RSA signature over raw resp_data",
+        "ack_body": "RECV_ORD_ID_REQ-ALI-NATIVE-SPLIT-0001"
+      },
+      "data": {
+        "resp_code": "00000000",
+        "resp_desc": "交易成功",
+        "sub_resp_code": "00000000",
+        "sub_resp_desc": "交易成功",
+        "req_date": "20260701",
+        "req_seq_id": "REQ-ALI-NATIVE-SPLIT-0001",
+        "huifu_id": "1234000100000031",
+        "hf_seq_id": "HF-ALI-NATIVE-SPLIT-0001",
+        "trade_type": "A_NATIVE",
+        "trans_type": "A_NATIVE",
+        "product_id": "KAZX",
+        "trans_amt": "5006.89",
+        "pay_amt": "5006.89",
+        "settlement_amt": "5006.89",
+        "trans_stat": "S",
+        "acct_stat": "S",
+        "bank_code": "TRADE_SUCCESS",
+        "bank_desc": "TRADE_SUCCESS",
+        "bank_message": "TRADE_SUCCESS",
+        "out_trans_id": "ALI-OUT-TRANS-SPLIT-001",
+        "party_order_id": "ALI-PARTY-NATIVE-SPLIT-001",
+        "fee_amt": "40.06",
+        "fee_amount": "40.06",
+        "end_time": "20260701T120157",
+        "method_expand": "{\"buyer_id\":\"buyer-ali-split-001\",\"buyer_logon_id\":\"buyer-ali-split@example.invalid\",\"fund_bill_list\":[{\"amount\":\"5006.89\",\"fund_type\":\"DEBIT_CARD\",\"fund_channel\":\"BANKCARD\"}]}",
+        "payment_fee": "{\"fee_amount\":\"40.06\",\"fee_flag\":2,\"fee_formula_infos\":[{\"fee_formula\":\"MAX(0.00,AMT*0.008)\",\"fee_type\":\"TRANS_FEE\"}],\"fee_huifu_id\":\"1234000100000031\"}",
+        "acct_split_bunch": "{\"acct_infos\":[{\"acct_id\":\"F-LOCAL-ALI-SPLIT-001\",\"div_amt\":\"4906.76\",\"huifu_id\":\"1234000100000031\"},{\"acct_id\":\"F-LOCAL-ALI-SPLIT-002\",\"div_amt\":\"100.13\",\"huifu_id\":\"1234000100000032\"}],\"fee_acct_id\":\"F-LOCAL-ALI-SPLIT-001\",\"fee_huifu_id\":\"1234000100000031\",\"fee_amt\":\"40.06\"}",
+        "alipay_response": {
+          "coupon_fee": "0.00",
+          "buyer_id": "buyer-ali-split-001",
+          "buyer_logon_id": "buyer-ali-split@example.invalid",
+          "app_id": "",
+          "fund_bill_list": [
+            {
+              "amount": "5006.89",
+              "fund_type": "DEBIT_CARD",
+              "fund_channel": "BANKCARD"
+            }
+          ]
+        }
+      }
+    },
+    "webhook": {
+      "source": "normalized webhook payload using A_NATIVE scan-payment success projection",
+      "transport": {
+        "topic": "VIRGO://https://example.invalid/huifu/alipay-native-scan-notify",
+        "content_type": "application/json",
+        "signature_rule": "MD5(raw_body + endpoint_key) in URL query sign"
+      },
+      "body": {
+        "huifuId": "1234000100000031",
+        "namespace": "opps-webhook",
+        "eventDefineNo": "pay.ali_qr",
+        "event_type": "trans.pay",
+        "env": "prod-like-sample",
+        "transStat": "S",
+        "parentHuifuIds": [
+          "1234000000000000",
+          "1234000100000000"
+        ],
+        "receiveHuifuIds": [
+          "1234000000000000",
+          "1234000100000000",
+          "1234000100000031"
+        ],
+        "data": {
+          "resp_code": "00000000",
+          "resp_desc": "交易成功",
+          "req_date": "20260701",
+          "req_seq_id": "REQ-ALI-NATIVE-SPLIT-0001",
+          "huifu_id": "1234000100000031",
+          "hf_seq_id": "HF-ALI-NATIVE-SPLIT-0001",
+          "trade_type": "A_NATIVE",
+          "trans_type": "A_NATIVE",
+          "product_id": "KAZX",
+          "trans_amt": "5006.89",
+          "pay_amt": "5006.89",
+          "settlement_amt": "5006.89",
+          "trans_stat": "S",
+          "acct_stat": "S",
+          "bank_code": "TRADE_SUCCESS",
+          "bank_message": "TRADE_SUCCESS",
+          "out_trans_id": "ALI-OUT-TRANS-SPLIT-001",
+          "party_order_id": "ALI-PARTY-NATIVE-SPLIT-001",
+          "fee_amt": "40.06",
+          "fee_amount": "40.06",
+          "method_expand": "{\"buyer_id\":\"buyer-ali-split-001\",\"buyer_logon_id\":\"buyer-ali-split@example.invalid\",\"fund_bill_list\":[{\"amount\":\"5006.89\",\"fund_type\":\"DEBIT_CARD\",\"fund_channel\":\"BANKCARD\"}]}",
+          "payment_fee": "{\"fee_amount\":\"40.06\",\"fee_flag\":2,\"fee_formula_infos\":[{\"fee_formula\":\"MAX(0.00,AMT*0.008)\",\"fee_type\":\"TRANS_FEE\"}],\"fee_huifu_id\":\"1234000100000031\"}",
+          "acct_split_bunch": "{\"acct_infos\":[{\"acct_id\":\"F-LOCAL-ALI-SPLIT-001\",\"div_amt\":\"4906.76\",\"huifu_id\":\"1234000100000031\"},{\"acct_id\":\"F-LOCAL-ALI-SPLIT-002\",\"div_amt\":\"100.13\",\"huifu_id\":\"1234000100000032\"}],\"fee_acct_id\":\"F-LOCAL-ALI-SPLIT-001\",\"fee_huifu_id\":\"1234000100000031\",\"fee_amt\":\"40.06\"}",
+          "split_fee_info": {
+            "total_split_fee_amt": "0.80",
+            "split_fee_details": [
+              {
+                "split_fee_huifu_id": "1234000100000032",
+                "split_fee_acct_id": "F-LOCAL-ALI-SPLIT-002",
+                "split_fee_amt": "0.80",
+                "split_fee_flag": 2
+              }
+            ]
+          },
+          "alipay_response": {
+            "coupon_fee": "0.00",
+            "buyer_id": "buyer-ali-split-001",
+            "buyer_logon_id": "buyer-ali-split@example.invalid",
+            "app_id": "",
+            "fund_bill_list": [
+              {
+                "amount": "5006.89",
+                "fund_type": "DEBIT_CARD",
+                "fund_channel": "BANKCARD"
+              }
+            ]
+          }
+        }
+      },
+      "dispatch_result": {
+        "code": 200,
+        "msg": "delivered"
+      }
+    }
+  },
+  "expected": {
+    "resp_code": "00000100",
+    "fields": {
+      "business_variant": "aggregation.alipay",
+      "trade_type": "A_NATIVE",
+      "trans_stat": "P"
+    }
+  },
+  "assertions": {
+    "assertions": [
+      "envelope",
+      "headers",
+      "signature",
+      "sample-backed",
+      "business-variant",
+      "method-expand-json",
+      "channel-response-projection",
+      "notify-rsa-resp-data",
+      "webhook-md5-raw-body"
+    ],
+    "field_assertions": [
+      {
+        "path": "resp_code",
+        "equals": "00000100"
+      },
+      {
+        "path": "trade_type",
+        "equals": "A_NATIVE"
+      },
+      {
+        "path": "trans_stat",
+        "equals": "P"
+      },
+      {
+        "path": "hf_seq_id",
+        "exists": true
+      },
+      {
+        "path": "qr_code",
+        "exists": true
+      },
+      {
+        "path": "business_variant",
+        "equals": "aggregation.alipay"
+      }
+    ],
+    "event_assertions": [
+      "payment.accepted",
+      "payment.query",
+      "notify.delivery",
+      "webhook.delivery",
+      "business.variant"
+    ]
+  },
+  "sample_sha256": "2ac1e0b36deae7cf12f6134fc8579ff2a37d899caf7f917434cd3f8a2a78b387"
+}

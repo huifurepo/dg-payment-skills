@@ -1,0 +1,55 @@
+{
+  "assertions": [
+    "envelope",
+    "headers",
+    "signature",
+    "business-variant"
+  ],
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "endpoint_id": "aggregation.payment.query",
+  "event_assertions": [
+    "payment.query"
+  ],
+  "expected": {
+    "fields": {
+      "business_variant": "aggregation.wechat",
+      "trans_stat": "S"
+    },
+    "resp_code": "00000000"
+  },
+  "expected_resp_code": "00000000",
+  "field_assertions": [
+    {
+      "equals": "S",
+      "path": "trans_stat"
+    },
+    {
+      "equals": "aggregation.wechat",
+      "path": "business_variant"
+    },
+    {
+      "exists": true,
+      "path": "method_expand"
+    },
+    {
+      "exists": true,
+      "path": "payment_fee"
+    },
+    {
+      "equals": "T_JSAPI",
+      "path": "trade_type"
+    }
+  ],
+  "headers_profile": "java-php-python-local-sandbox",
+  "id": "agg-channel-wx-query",
+  "kind": "variant",
+  "method": "POST",
+  "path": "/v4/trade/payment/scanpay/query",
+  "request": {
+    "data": {
+      "hf_seq_id": "{{agg_hf_seq_id}}",
+      "huifu_id": "6666000100000001"
+    }
+  },
+  "schema_version": "1.1"
+}

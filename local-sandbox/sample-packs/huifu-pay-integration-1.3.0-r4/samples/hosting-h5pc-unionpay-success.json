@@ -1,0 +1,484 @@
+{
+  "schema_version": "1.0",
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "sample_id": "hosting-h5pc-unionpay-success",
+  "title": "托管 H5/PC 银联成功链路样例",
+  "description": "由附件中的托管 H5/PC 银联成功交易日志拆分而来，重点覆盖 unionpay_data 请求、预下单/支付响应里的银联渠道字段、查单成功态、异步通知和 Webhook。",
+  "source_type": "deidentified_production",
+  "authorization": {
+    "status": "approved",
+    "approved_by": "user-provided-codex-attachment",
+    "approved_at": "2026-06-29T11:35:00+08:00"
+  },
+  "deidentification": {
+    "status": "passed",
+    "method": "field-level placeholder replacement; removed raw merchant names, real huifu ids, buyer ids, card numbers, transaction numbers, bank order numbers, party order ids, hf sequence ids, IP addresses, long numeric identifiers, and real callback URL hosts while preserving amount, status, UnionPay H5/PC channel, fee, notify, query, and webhook semantics",
+    "checked_at": "2026-06-29T11:45:00+08:00"
+  },
+  "endpoint": {
+    "id": "hosting.payment.preorder.h5pc",
+    "method": "POST",
+    "path": "/v2/trade/hosting/payment/preorder"
+  },
+  "scenario_id": "HOST-H5-UP-01",
+  "headers_profile": "java-php-python-local-sandbox",
+  "source_summary": {
+    "attachment": "pasted-text.txt",
+    "selected_source_lines": [
+      1,
+      4,
+      117,
+      129,
+      133,
+      219,
+      223,
+      230,
+      233,
+      245,
+      254
+    ],
+    "source_trade_type": "U_JSAPI",
+    "source_channel": "Hosting H5/PC UnionPay",
+    "source_product_id": "EDUSTD",
+    "source_amount": "4018.00",
+    "source_pre_order_type": "1",
+    "notes": [
+      "line 1 contains the H5/PC preorder request with pre_order_type=1, hosting_data, h5_qrcode_flag, and notify_url",
+      "line 4 contains the preorder response with resp_code=00000000, pre_order_id, jump_url, and usage_type=P",
+      "line 117 contains the hosting payment request with trade_type=U_JSAPI and unionpay_data.client_ip",
+      "line 129 contains the downstream TOP request with unionpayData.clientIp/customerIp/orderDesc/qrCode/userId",
+      "line 133 contains the downstream TOP response with UnionPay QR payInfo, bankCode=00, bankMessage=成功, and transStat=P",
+      "lines 219 and 223 contain successful payment notify payloads with payChannel=U, channelType=U, debitFlag=2, transStat=S, and unionpayResponse.accNo",
+      "lines 230 and 233 contain hosting.accounted webhook evidence for U_JSAPI",
+      "lines 245 and 254 contain successful hosting and SaaS query projections with pay_way=union and pay_type=U_JSAPI"
+    ]
+  },
+  "request": {
+    "source": "normalized from PreOrderController request, HostingPayController U_JSAPI request, and current sandbox hosting.payment.preorder.h5pc contract",
+    "data": {
+      "req_date": "20260628",
+      "req_seq_id": "REQ-HOST-UP-0001",
+      "huifu_id": "1234000100000012",
+      "pre_order_type": "1",
+      "trans_amt": "4018.00",
+      "time_expire": "20260628T164758",
+      "goods_desc": "示例托管银联 H5 订单",
+      "notify_url": "https://example.invalid/huifu/hosting-h5pc-unionpay-notify",
+      "hosting_data": "{\"project_title\":\"示例托管银联项目\",\"project_id\":\"PROJECT-LOCAL-HOST-UP\",\"callback_url\":\"https://example.invalid/huifu/hosting-callback\",\"request_type\":\"M\",\"private_info\":\"示例订单\"}",
+      "h5_qrcode_flag": "Y",
+      "unionpay_data": "{\"client_ip\":\"127.0.0.1\",\"payee_info\":{\"payee_id\":\"unionpay-payee-host-up-001\"}}",
+      "risk_check_data": "{\"ip_address\":\"127.0.0.1\",\"risk_mng_info\":{\"sub_trade_type\":\"4300\"}}"
+    }
+  },
+  "responses": {
+    "sync": {
+      "source": "normalized from PreOrderController response and downstream TOP U_JSAPI processing response",
+      "data": {
+        "product_id": "EDUSTD",
+        "req_seq_id": "REQ-HOST-UP-0001",
+        "req_date": "20260628",
+        "trans_req_date": "20260628",
+        "huifu_id": "1234000100000012",
+        "order_type": "HT",
+        "resp_code": "00000000",
+        "resp_desc": "操作成功",
+        "pre_order_id": "PREORDER-HOST-UP-0001",
+        "pre_order_type": "1",
+        "trans_amt": "4018.00",
+        "time_expire": "20260628T164758",
+        "current_time": "20260628T161758",
+        "goods_desc": "示例托管银联 H5 订单",
+        "hosting_data": "{\"project_id\":\"PROJECT-LOCAL-HOST-UP\",\"project_title\":\"示例托管银联项目\",\"request_type\":\"M\",\"callback_url\":\"https://example.invalid/huifu/hosting-callback\",\"private_info\":\"示例订单\"}",
+        "jump_url": "https://example.invalid/hostingh5/?jump_id=PREORDER-HOST-UP-0001&huifu_id=1234000100000012&show=Y&bank_switch=Y",
+        "usage_type": "P",
+        "project_id": "PROJECT-LOCAL-HOST-UP",
+        "hosting_order_id": "REQ-HOST-UP-0001",
+        "trade_type": "U_JSAPI",
+        "trans_stat": "P",
+        "pay_info": "https://example.invalid/unionpay/qrcode/host-up-001",
+        "business_variant": "hosting.h5pc.unionpay",
+        "hf_seq_id": "HF-HOST-UP-0001",
+        "party_order_id": "PARTY-HOST-UP-0001",
+        "bank_code": "00",
+        "bank_message": "成功[0000000]",
+        "unionpay_response": {
+          "pay_info": "https://example.invalid/unionpay/qrcode/host-up-001",
+          "qr_code": "https://example.invalid/unionpay/qrcode/host-up-001",
+          "resp_code": "00",
+          "resp_msg": "成功[0000000]",
+          "party_order_id": "PARTY-HOST-UP-0001"
+        }
+      }
+    },
+    "payment_request": {
+      "source": "normalized from HostingPayController request",
+      "data": {
+        "req_seq_id": "REQ-HOST-UP-0001",
+        "req_date": "20260628",
+        "huifu_id": "1234000100000012",
+        "hosting_order_id": "REQ-HOST-UP-0001",
+        "project_id": "PROJECT-LOCAL-HOST-UP",
+        "json_data": "{\"HOST-UP-SKU-001\":\"4018.00\"}",
+        "trade_type": "U_JSAPI",
+        "trans_amt": "4018.00",
+        "buyer_id": "unionpay-buyer-host-up-001",
+        "goods_desc": "示例托管银联 H5 订单",
+        "risk_check_data": "{\"ip_address\":\"127.0.0.1\"}",
+        "time_expire": "20260628T164758",
+        "unionpay_data": {
+          "client_ip": "127.0.0.1"
+        },
+        "notify_url": "https://example.invalid/huifu/hosting-h5pc-unionpay-notify",
+        "remark": "remark-local-host-up",
+        "delay_acct_flag": "N",
+        "acct_split_bunch": ""
+      }
+    },
+    "top_preorder": {
+      "source": "normalized from downstream TOP scan aggregation positive-scan response",
+      "data": {
+        "resp_code": "00000100",
+        "resp_desc": "交易正在处理中 cashCode:000 cashDesc:成功",
+        "sub_resp_code": "00000100",
+        "sub_resp_desc": "交易正在处理中 cashCode:000 cashDesc:成功",
+        "req_date": "20260628",
+        "req_seq_id": "REQ-HOST-UP-0001",
+        "huifu_id": "1234000100000012",
+        "hf_seq_id": "HF-HOST-UP-0001",
+        "trade_type": "U_JSAPI",
+        "trans_amt": "4018.00",
+        "settlement_amt": "4018.00",
+        "trans_stat": "P",
+        "unconfirm_amt": "3996.91",
+        "bank_code": "00",
+        "bank_message": "成功[0000000]",
+        "bank_seq_id": "qilsfr",
+        "pay_info": "https://example.invalid/unionpay/qrcode/host-up-001",
+        "party_order_id": "PARTY-HOST-UP-0001",
+        "out_trade_no": "UP-HOST-OUT-0001",
+        "atu_sub_mer_id": "UP-MER-HOST-LOCAL-001",
+        "business_variant": "hosting.h5pc.unionpay",
+        "unionpay_response": {
+          "pay_info": "https://example.invalid/unionpay/qrcode/host-up-001",
+          "resp_code": "00",
+          "resp_msg": "成功[0000000]",
+          "party_order_id": "PARTY-HOST-UP-0001"
+        }
+      }
+    },
+    "query_success": {
+      "endpoint": {
+        "id": "hosting.payment.query",
+        "method": "POST",
+        "path": "/v2/trade/hosting/payment/queryorderinfo"
+      },
+      "request": {
+        "data": {
+          "product_id": "EDUSTD",
+          "req_seq_id": "QRY-HOST-UP-0001",
+          "req_date": "20260628",
+          "huifu_id": "1234000100000012",
+          "org_req_date": "20260628",
+          "org_req_seq_id": "REQ-HOST-UP-0001"
+        }
+      },
+      "source": "normalized from QueryOrderController, QueryOrderInfoController, and TopTransQueryServiceFacadeImpl successful UnionPay projections",
+      "data": {
+        "product_id": "EDUSTD",
+        "req_seq_id": "QRY-HOST-UP-0001",
+        "req_date": "20260628",
+        "huifu_id": "1234000100000012",
+        "resp_code": "00000000",
+        "resp_desc": "操作成功",
+        "org_req_date": "20260628",
+        "org_req_seq_id": "REQ-HOST-UP-0001",
+        "pre_order_id": "PREORDER-HOST-UP-0001",
+        "project_id": "PROJECT-LOCAL-HOST-UP",
+        "hosting_type": "2",
+        "hosting_order_id": "HOST-UP-ORDER-0001",
+        "trade_type": "JSAPI",
+        "pay_type": "U_JSAPI",
+        "pay_way": "union",
+        "goods_desc": "示例托管银联 H5 订单",
+        "trans_date": "20260628",
+        "order_stat": "1",
+        "org_hf_seq_id": "HF-HOST-UP-0001",
+        "out_trans_id": "UP-HOST-TXN-0001",
+        "party_order_id": "PARTY-HOST-UP-0001",
+        "top_order_id": "TOP-HOST-UP-0001",
+        "trans_stat": "S",
+        "fee_flag": 2,
+        "trans_time": "20260628T161911",
+        "trans_amt": "4018.00",
+        "pay_amt": "4018.00",
+        "settlement_amt": "4018.00",
+        "fee_amt": "21.09",
+        "ref_amt": "4018.00",
+        "unconfirm_amt": "3996.91",
+        "bank_code": "00",
+        "bank_desc": "成功",
+        "bank_message": "成功",
+        "bank_seq_id": "qilsfr",
+        "bank_order_no": "UP-HOST-TXN-0001",
+        "ref_no": "161849qilsfr",
+        "channel_type": "U",
+        "pay_channel": "U",
+        "debit_flag": "2",
+        "is_div": "N",
+        "acct_split_bunch": {
+          "acct_infos": [
+            {
+              "div_amt": "4018.00",
+              "huifu_id": "1234000100000012",
+              "acct_id": "F-LOCAL-HOST-UP-001",
+              "acct_date": "20260628"
+            }
+          ],
+          "fee_huifu_id": "1234000100000012",
+          "fee_acct_id": "F-LOCAL-HOST-UP-001",
+          "fee_amt": "21.09"
+        },
+        "is_delay_acct": "N",
+        "large_pay_data": {
+          "in_acct_flag": ""
+        },
+        "fee_formula_infos": [
+          {
+            "fee_formula": "FLO(1000.01,AMT*0.00205,AMT*0.00525)",
+            "fee_type": "TRANS_FEE"
+          }
+        ],
+        "request_ip": "127.0.0.1",
+        "unionpay_response": {
+          "acc_no": "UNIONPAY-CARD-HOST-UP-001",
+          "debit_flag": "2",
+          "pay_channel_type": "U",
+          "resp_code": "00",
+          "resp_msg": "成功"
+        },
+        "business_variant": "hosting.h5pc.unionpay"
+      }
+    },
+    "async_notify": {
+      "source": "normalized from AbstractPosMessageHandler and TradeOrderMessageHandler payment notify payloads",
+      "transport": {
+        "content_type": "application/x-www-form-urlencoded",
+        "signature_rule": "RSA signature over raw resp_data",
+        "ack_body": "RECV_ORD_ID_REQ-HOST-UP-0001"
+      },
+      "data": {
+        "resp_code": "00000000",
+        "resp_desc": "交易成功",
+        "sub_resp_code": "00000000",
+        "sub_resp_desc": "交易成功",
+        "req_date": "20260628",
+        "req_seq_id": "REQ-HOST-UP-0001",
+        "huifu_id": "1234000100000012",
+        "hf_seq_id": "HF-HOST-UP-0001",
+        "trade_type": "U_JSAPI",
+        "trans_type": "U_JSAPI",
+        "product_id": "EDUSTD",
+        "trans_amt": "4018.00",
+        "pay_amt": "4018.00",
+        "settlement_amt": "4018.00",
+        "trans_stat": "S",
+        "acct_stat": "S",
+        "bank_code": "00",
+        "bank_desc": "成功",
+        "bank_message": "成功",
+        "bank_order_no": "UP-HOST-TXN-0001",
+        "bank_seq_id": "qilsfr",
+        "out_ord_id": "UP-HOST-TXN-0001",
+        "out_trans_id": "UP-HOST-TXN-0001",
+        "party_order_id": "PARTY-HOST-UP-0001",
+        "posp_seq_id": "PARTY-HOST-UP-0001",
+        "notify_type": 2,
+        "fee_amt": "21.09",
+        "fee_amount": "21.09",
+        "fee_flag": 2,
+        "fee_rec_type": "1",
+        "debit_flag": "2",
+        "channel_type": "U",
+        "pay_channel": "U",
+        "pay_scene": "02",
+        "gate_id": "Dk",
+        "ref_no": "161849qilsfr",
+        "trans_date": "20260628",
+        "trans_time": "161849",
+        "end_time": "2026-06-28T16:19:12+08:00",
+        "risk_check_info": {
+          "client_ip": "127.0.0.1"
+        },
+        "acct_split_bunch": {
+          "acct_infos": [
+            {
+              "acct_date": "20260628",
+              "acct_id": "F-LOCAL-HOST-UP-001",
+              "div_amt": "4018.00",
+              "huifu_id": "1234000100000012"
+            }
+          ],
+          "fee_acct_date": "20260628",
+          "fee_acct_id": "F-LOCAL-HOST-UP-001",
+          "fee_amt": "21.09",
+          "fee_huifu_id": "1234000100000012"
+        },
+        "fee_formula_infos": [
+          {
+            "fee_formula": "FLO(1000.01,AMT*0.00205,AMT*0.00525)",
+            "fee_type": "TRANS_FEE"
+          }
+        ],
+        "unionpay_response": {
+          "acc_no": "UNIONPAY-CARD-HOST-UP-001"
+        }
+      }
+    },
+    "merchant_notify": {
+      "source": "normalized from ArcherTopMsgSender notify_url VIRGO topic and asynchronous push evidence",
+      "transport": {
+        "topics": [
+          "VIRGO://https://example.invalid/huifu/hosting-h5pc-unionpay-notify"
+        ],
+        "content_type": "application/json"
+      },
+      "body": {
+        "ord_id": "HOST-UP-NOTIFY-0001",
+        "top_notify_type": "CUSTOM",
+        "trans_type": "CUSTOM",
+        "data": {
+          "resp_code": "00000000",
+          "resp_desc": "交易成功",
+          "req_date": "20260628",
+          "req_seq_id": "REQ-HOST-UP-0001",
+          "huifu_id": "1234000100000012",
+          "hf_seq_id": "HF-HOST-UP-0001",
+          "trade_type": "U_JSAPI",
+          "trans_type": "U_JSAPI",
+          "trans_amt": "4018.00",
+          "pay_amt": "4018.00",
+          "settlement_amt": "4018.00",
+          "trans_stat": "S",
+          "bank_code": "00",
+          "bank_message": "成功",
+          "bank_order_no": "UP-HOST-TXN-0001",
+          "party_order_id": "PARTY-HOST-UP-0001",
+          "debit_flag": "2",
+          "unionpay_response": {
+            "acc_no": "UNIONPAY-CARD-HOST-UP-001"
+          }
+        }
+      }
+    },
+    "webhook_pay": {
+      "source": "normalized from WebHookHelper webhook.v2 hosting.pay submission",
+      "transport": {
+        "namespace": "opps-webhook",
+        "event_define_no": "hosting.pay",
+        "dispatch_result": {
+          "code": 500,
+          "msg": "该订阅没有匹配的事件"
+        }
+      },
+      "body": {
+        "huifu_id": "1234000100000012",
+        "namespace": "opps-webhook",
+        "event_define_no": "hosting.pay",
+        "trans_stat": "1",
+        "data": {
+          "project_id": "PROJECT-LOCAL-HOST-UP",
+          "hosting_type": "2",
+          "hosting_order_id": "REQ-HOST-UP-0001",
+          "trade_type": "JSAPI",
+          "trans_amt": "4018.00",
+          "fee_amt": "21.09",
+          "create_date": "2026-06-28 16:18:49",
+          "pay_time": "2026-06-28 16:19:11",
+          "pay_way": "union",
+          "trans_stat": "S",
+          "json_data": "{\"HOST-UP-SKU-001\":\"4018.00\"}",
+          "bank_code": "00",
+          "bank_message": "成功",
+          "goods_desc": "示例托管银联 H5 订单",
+          "party_order_id": "PARTY-HOST-UP-0001",
+          "top_order_id": "TOP-HOST-UP-0001"
+        }
+      }
+    },
+    "webhook_accounted": {
+      "source": "normalized from AcctMsgToWebhookService and event dispatch request",
+      "transport": {
+        "namespace": "opps-webhook",
+        "event_define_no": "hosting.accounted"
+      },
+      "body": {
+        "acct_stat": "S",
+        "event_define_no": "hosting.accounted",
+        "huifu_id": "1234000100000012",
+        "namespace": "opps-webhook",
+        "trans_stat": "S",
+        "data": {
+          "acct_date": "2026-06-28 16:19:12",
+          "acct_stat": "S",
+          "hf_seq_id": "HF-HOST-UP-0001",
+          "huifu_id": "1234000100000012",
+          "req_date": "20260628",
+          "req_seq_id": "REQ-HOST-UP-0001",
+          "resp_code": "00000000",
+          "resp_desc": "交易成功",
+          "trans_finsh_time": "2026-06-28 16:19:12",
+          "trans_stat": "S",
+          "trans_type": "U_JSAPI"
+        }
+      }
+    }
+  },
+  "expected": {
+    "resp_code": "00000000",
+    "fields": {
+      "business_variant": "hosting.h5pc.unionpay",
+      "pre_order_type": "1",
+      "trans_stat": "P"
+    }
+  },
+  "assertions": {
+    "assertions": [
+      "envelope",
+      "headers",
+      "signature",
+      "sample-backed",
+      "business-variant",
+      "string-json-channel-fields",
+      "channel-response-projection",
+      "notify-rsa-resp-data",
+      "webhook-event"
+    ],
+    "field_assertions": [
+      {
+        "path": "resp_code",
+        "equals": "00000000"
+      },
+      {
+        "path": "pre_order_id",
+        "exists": true
+      },
+      {
+        "path": "unionpay_response",
+        "exists": true
+      },
+      {
+        "path": "business_variant",
+        "equals": "hosting.h5pc.unionpay"
+      }
+    ],
+    "event_assertions": [
+      "payment.accepted",
+      "business.variant",
+      "payment.query",
+      "payment.notify",
+      "webhook.hosting.pay",
+      "webhook.hosting.accounted"
+    ]
+  },
+  "sample_sha256": "4f3e1f3abbc2c127f9a66d0a16bdee87e976d2a18e24715e573571179128e4aa"
+}

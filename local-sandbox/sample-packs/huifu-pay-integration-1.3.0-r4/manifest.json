@@ -1,0 +1,180 @@
+{
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "exclusion_policy": {
+    "binary_release": "exclude_raw_samples",
+    "public_source_release": "exclude_sample_packs",
+    "reason": "Deidentified raw samples are audit inputs, not redistributable public release material."
+  },
+  "required_sample_groups": [
+    "aggregation-wechat-channel",
+    "aggregation-alipay-channel",
+    "aggregation-unionpay-channel",
+    "hosting-h5pc-channel-response",
+    "hosting-h5pc-channel-request",
+    "hosting-h5pc-errors",
+    "hosting-alipay-mini",
+    "hosting-wechat-mini",
+    "hosting-douyin-direct",
+    "hosting-php-scenarios"
+  ],
+  "sample_files_glob": "samples/*.json",
+  "sample_importer_version": "1.0",
+  "sample_schema_version": "1.0",
+  "samples": [
+    {
+      "digest": "sha256:c6c9abad5260e2fa03c9bada9c173f792fd74d1f761e4f172cc9d2f67f74d584",
+      "endpoint_id": "aggregation.payment.create",
+      "file": "samples/aggregation-alipay-micropay-success.json",
+      "sample_id": "aggregation-alipay-micropay-success",
+      "scenario_id": "AGG-CHANNEL-ALI-01",
+      "source_type": "deidentified_production"
+    },
+    {
+      "digest": "sha256:2ac1e0b36deae7cf12f6134fc8579ff2a37d899caf7f917434cd3f8a2a78b387",
+      "endpoint_id": "aggregation.payment.create",
+      "file": "samples/aggregation-alipay-native-success.json",
+      "sample_id": "aggregation-alipay-native-success",
+      "scenario_id": "CHANNEL-NOTIFY-01",
+      "source_type": "deidentified_production"
+    },
+    {
+      "digest": "sha256:63aecfb9b12615bb4730531243e06a7b0dfe0ff169d7382120f74cbc1beb4339",
+      "endpoint_id": "aggregation.payment.create",
+      "file": "samples/aggregation-alipay-jsapi-success.json",
+      "sample_id": "aggregation-alipay-jsapi-success",
+      "scenario_id": "CHANNEL-NOTIFY-01",
+      "source_type": "deidentified_production"
+    },
+    {
+      "digest": "sha256:91b5cc16b708afafb12a09578d4c8aac64af53f67f342914d38d427fba0ac00f",
+      "endpoint_id": "aggregation.payment.create",
+      "file": "samples/aggregation-unionpay-native-success.json",
+      "sample_id": "aggregation-unionpay-native-success",
+      "scenario_id": "CHANNEL-NOTIFY-01",
+      "source_type": "deidentified_production"
+    },
+    {
+      "digest": "sha256:d5beae4e07ff9ccfb990a2f8a7fa1581ea689e4ac183aa6a0d16746befd4c05d",
+      "endpoint_id": "aggregation.payment.create",
+      "file": "samples/aggregation-unionpay-micropay-success.json",
+      "sample_id": "aggregation-unionpay-micropay-success",
+      "scenario_id": "AGG-CHANNEL-UP-01",
+      "source_type": "deidentified_production"
+    },
+    {
+      "digest": "sha256:c23a27b3abe498b4043ba79953b25791453cdf1d551a8349c02ef554f5d3f72b",
+      "endpoint_id": "aggregation.payment.create",
+      "file": "samples/aggregation-wechat-native-success.json",
+      "sample_id": "aggregation-wechat-native-success",
+      "scenario_id": "CHANNEL-NOTIFY-01",
+      "source_type": "deidentified_production"
+    },
+    {
+      "digest": "sha256:3d4410ab9f4ed82b62bb5012c426f6c13f8f09ae5cfd71ef41fd6dd759019538",
+      "endpoint_id": "aggregation.payment.create",
+      "file": "samples/aggregation-wechat-micropay-success.json",
+      "sample_id": "aggregation-wechat-micropay-success",
+      "scenario_id": "AGG-CHANNEL-WX-01",
+      "source_type": "deidentified_production"
+    },
+    {
+      "digest": "sha256:cdfd376a438a8168bd3e28b47334d227de2534dcc508edf49c44d8116106902f",
+      "endpoint_id": "aggregation.payment.refund",
+      "file": "samples/aggregation-refund-channel-success.json",
+      "sample_id": "aggregation-refund-channel-success",
+      "scenario_id": "AGG-REFUND-CHANNEL-01",
+      "source_type": "deidentified_production"
+    },
+    {
+      "digest": "sha256:da73e835dd4266b819c2633d973ac975c33804ec35aaf5eec6f973fa0ab93b4c",
+      "endpoint_id": "aggregation.payment.close",
+      "file": "samples/aggregation-close-channel-success.json",
+      "sample_id": "aggregation-close-channel-success",
+      "scenario_id": "AGG-CLOSE-CHANNEL-01",
+      "source_type": "deidentified_production"
+    },
+    {
+      "digest": "sha256:8a0a4483cdcb967f985c342c1bb427560908424cd71e0311904057c0225c7c8b",
+      "endpoint_id": "hosting.payment.close",
+      "file": "samples/hosting-close-channel-success.json",
+      "sample_id": "hosting-close-channel-success",
+      "scenario_id": "HOST-CLOSE-CHANNEL-01",
+      "source_type": "deidentified_production"
+    },
+    {
+      "digest": "sha256:c60ef8ec753e4fd4b4f270bcaadbd58fc156051582959ba33994a6b36cd49fc4",
+      "endpoint_id": "hosting.payment.refund",
+      "file": "samples/hosting-refund-channel-success.json",
+      "sample_id": "hosting-refund-channel-success",
+      "scenario_id": "HOST-REFUND-CHANNEL-01",
+      "source_type": "deidentified_production"
+    },
+    {
+      "digest": "sha256:1a318e9f38a9aee3eeb40f3038d0e7e489a5e7065ff57f9ce5a8e86946b4bb6b",
+      "endpoint_id": "hosting.payment.splitpay_query",
+      "file": "samples/hosting-splitpay-query-success.json",
+      "sample_id": "hosting-splitpay-query-success",
+      "scenario_id": "SPLITPAY-01",
+      "source_type": "deidentified_production"
+    },
+    {
+      "digest": "sha256:dca5f0a43ebf5cb0f1a441282cce3f4fcf289fba1b5ce1f75425683140f059da",
+      "endpoint_id": "hosting.payment.preorder.h5pc",
+      "file": "samples/hosting-h5pc-wechat-success.json",
+      "sample_id": "hosting-h5pc-wechat-success",
+      "scenario_id": "HOST-H5-WX-01",
+      "source_type": "deidentified_production"
+    },
+    {
+      "digest": "sha256:41b61dcee28e9ab0c7c051fca53155629b0d086be21f01c2006e41dfd5970b53",
+      "endpoint_id": "hosting.payment.preorder.h5pc",
+      "file": "samples/hosting-h5pc-alipay-success.json",
+      "sample_id": "hosting-h5pc-alipay-success",
+      "scenario_id": "HOST-H5-ALI-01",
+      "source_type": "deidentified_production"
+    },
+    {
+      "digest": "sha256:ddd7487e90a6bac335e3b6065ce9f76947c898af2868c30a8bae2c24cafdbc6a",
+      "endpoint_id": "hosting.payment.preorder.h5pc",
+      "file": "samples/hosting-alipay-mini-success.json",
+      "sample_id": "hosting-alipay-mini-success",
+      "scenario_id": "HOST-MINI-ALI-01",
+      "source_type": "deidentified_production"
+    },
+    {
+      "digest": "sha256:87e82df372ba49de2d25df3497ec6f8d3042bfc31f3989ed40207f63d78ba80e",
+      "endpoint_id": "hosting.payment.preorder.h5pc",
+      "file": "samples/hosting-wechat-mini-success.json",
+      "sample_id": "hosting-wechat-mini-success",
+      "scenario_id": "HOST-MINI-WX-01",
+      "source_type": "deidentified_production"
+    },
+    {
+      "digest": "sha256:4f3e1f3abbc2c127f9a66d0a16bdee87e976d2a18e24715e573571179128e4aa",
+      "endpoint_id": "hosting.payment.preorder.h5pc",
+      "file": "samples/hosting-h5pc-unionpay-success.json",
+      "sample_id": "hosting-h5pc-unionpay-success",
+      "scenario_id": "HOST-H5-UP-01",
+      "source_type": "deidentified_production"
+    },
+    {
+      "digest": "sha256:29eff07ab7792648a11fa757ef88e223e4be631a5c8b414fe77db182c30dd32e",
+      "endpoint_id": "hosting.payment.preorder.h5pc",
+      "file": "samples/hosting-h5pc-terminal-success.json",
+      "sample_id": "hosting-h5pc-terminal-success",
+      "scenario_id": "HOST-TERMINAL-01",
+      "source_type": "deidentified_production"
+    },
+    {
+      "digest": "sha256:47f97551c13935ebb542fb02e8e27748a4aa0d23f5f477914afb5897c59658c2",
+      "endpoint_id": "hosting.payment.preorder.h5pc",
+      "file": "samples/hosting-h5pc-douyin-success.json",
+      "sample_id": "hosting-h5pc-douyin-success",
+      "scenario_id": "HOST-H5-DY-01",
+      "source_type": "deidentified_joint_debug"
+    }
+  ],
+  "schema_version": "1.0",
+  "source_skill_version": "1.3.0",
+  "status": "samples_available"
+}

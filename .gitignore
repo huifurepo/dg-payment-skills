@@ -1,7 +1,52 @@
 .DS_Store
+Thumbs.db
+
+# Local agent/tool scratch space.
 .claude/
+.workbuddy/
 .tmp/
+.codex-tasks/
+
+# Python/runtime caches.
 __pycache__/
 *.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Local env and credentials. Keep examples tracked.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Build outputs.
+build/
+dist/
+local-sandbox/build/
+local-sandbox/dist/
+local-sandbox/hf-payment-local-sandbox
+local-sandbox/hf-payment-local-sandbox.exe
+local-sandbox/*.exe
+
+# Release/manual upload artifacts. Regenerate from a clean commit instead of committing.
+release-preview/
+*.zip
+*.7z
+*.tar
+*.tar.gz
+*.tgz
+*.sha256
+
+# Local logs and transient files.
+*.log
+*.tmp
+skill-sandbox-assessment-*.md
+
 docs/
 huifu-pay-integration/test-prompts.json

@@ -75,7 +75,7 @@ public class HuifuConfig {
     @Value("${huifu.rsa-public-key}")
     private String rsaPublicKey;
 
-    @Value("${huifu.skill-source:hfps/1.3.0}")
+    @Value("${huifu.skill-source:hfps/1.3.1}")
     private String skillSource;
 
     @PostConstruct
@@ -97,7 +97,7 @@ public class HuifuConfig {
 1. `setProductId()` 是 `dg-java-sdk 3.0.38` 源码中的产品号 setter
 2. SDK 初始化在 `@PostConstruct` 中执行，应用启动时仅执行**一次**
 3. 所有配置通过 `@Value` 从 `application.yml` 读取，配置文件通过环境变量注入
-4. `skillSource` 默认可直接使用 `hfps/1.3.0`；如需覆盖，可通过配置项 `huifu.skill-source` 传入，初始化时按 `<skill_source>` 原样透传
+4. `skillSource` 默认可直接使用 `hfps/1.3.1`；如需覆盖，可通过配置项 `huifu.skill-source` 传入，初始化时按 `<skill_source>` 原样透传
 
 ## 步骤 3：验证核心类导入
 

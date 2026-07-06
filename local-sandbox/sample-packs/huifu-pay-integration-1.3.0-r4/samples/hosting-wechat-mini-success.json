@@ -1,0 +1,645 @@
+{
+  "schema_version": "1.0",
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "sample_id": "hosting-wechat-mini-success",
+  "title": "微信小程序成功链路样例",
+  "description": "由附件中的微信小程序托管支付成功交易日志拆分而来，覆盖 pre_order_type=3、miniapp_data、预下单响应、查单成功、支付通知、商户通知和 Webhook。",
+  "source_type": "deidentified_production",
+  "authorization": {
+    "status": "approved",
+    "approved_by": "user-provided-codex-attachment",
+    "approved_at": "2026-06-29T14:45:00+08:00"
+  },
+  "deidentification": {
+    "status": "passed",
+    "method": "field-level placeholder replacement; removed raw merchant names, real huifu ids, sys id, WeChat app id, gh id, openids, prepay id, pay signatures, bank order numbers, party order ids, hf sequence ids, IP addresses, long numeric identifiers, and real callback URL hosts while preserving pre_order_type=3, miniapp_data, T_MINIAPP, WeChat mini payInfo, wx_response, fee, notify, query, and webhook semantics",
+    "checked_at": "2026-06-29T14:50:00+08:00"
+  },
+  "endpoint": {
+    "id": "hosting.payment.preorder.h5pc",
+    "method": "POST",
+    "path": "/v2/trade/hosting/payment/preorder"
+  },
+  "scenario_id": "HOST-MINI-WX-01",
+  "headers_profile": "java-php-python-local-sandbox",
+  "source_summary": {
+    "attachment": "pasted-text.txt",
+    "selected_source_lines": [
+      2,
+      4,
+      6,
+      12,
+      18,
+      21,
+      24,
+      29,
+      32,
+      37,
+      41,
+      46,
+      50,
+      53,
+      56,
+      64,
+      66
+    ],
+    "source_trade_type": "T_MINIAPP",
+    "source_channel": "Hosting WeChat mini",
+    "source_product_id": "YYZY",
+    "source_amount": "0.05",
+    "source_pre_order_type": "3",
+    "notes": [
+      "line 2 contains the preorder request with pre_order_type=3 and miniapp_data.need_scheme",
+      "line 4 contains the preorder response with resp_code=00000000, pre_order_id, miniapp_data.appid, gh_id, path, and scheme_code",
+      "line 6 contains the preorder query response with the same miniapp_data projection",
+      "lines 12, 18, 21, and 24 contain the T_MINIAPP payment request, downstream TOP request/response, and HostingPayController response with WeChat mini payInfo",
+      "lines 29 and 32 contain successful payment notify payloads with transStat=S and wxResponse",
+      "line 37 contains hosting.pay Webhook projection data",
+      "line 41 contains merchant notify_url payload data with wx_response and split-account projection",
+      "lines 46, 50, and 53 contain successful post-payment query request and response data",
+      "lines 56, 64, and 66 contain accounting notify and hosting.accounted Webhook evidence"
+    ]
+  },
+  "request": {
+    "source": "normalized from PreOrderController request plus same-flow HostingPayController wx_data evidence",
+    "data": {
+      "product_id": "YYZY",
+      "req_date": "20260701",
+      "req_seq_id": "REQ-HOST-MINI-WX-0001",
+      "huifu_id": "1234000100000020",
+      "pre_order_type": "3",
+      "trans_amt": "0.05",
+      "time_expire": "20260720T125858",
+      "usage_type": "P",
+      "goods_desc": "示例微信小程序订单",
+      "checkout_id": "",
+      "notify_url": "https://example.invalid/huifu/hosting-wechat-mini-notify",
+      "delay_acct_flag": "N",
+      "acct_split_bunch": "{\"percentage_flag\":\"N\",\"is_clean_split\":\"N\",\"acct_infos\":[{\"div_amt\":\"0.02\",\"huifu_id\":\"1234000100000022\"},{\"div_amt\":\"0.02\",\"huifu_id\":\"1234000100000023\"},{\"div_amt\":\"0.01\",\"huifu_id\":\"1234000100000020\"}]}",
+      "hosting_data": "{\"request_type\":\"P\",\"project_title\":\"local wechat mini project\",\"project_id\":\"PROJECT-HOST-WX-MINI-001\",\"private_info\":\"local private info\",\"callback_url\":\"https://example.invalid/hosting/callback\"}",
+      "app_data": "{\"app_schema\":\"https://example.invalid/app-callback\",\"private_info\":\"\"}",
+      "miniapp_data": "{\"seq_id\":\"\",\"need_scheme\":\"Y\"}",
+      "dy_data": "{\"sub_appid\":\"dy-local-sandbox\",\"h5_info\":{\"type\":\"Ios\"},\"scene_info\":{\"payer_client_ip\":\"127.0.0.1\"}}",
+      "unionpay_data": "{\"addn_data\":\"{\\\"customData\\\":\\\"local\\\"}\",\"pnr_ins_id_cd\":\"UP-INS-LOCAL\",\"front_url\":\"https://example.invalid/unionpay\"}"
+    }
+  },
+  "responses": {
+    "sync": {
+      "source": "normalized from PreOrderController response and same-flow payment initialization response",
+      "data": {
+        "product_id": "PAYUN",
+        "req_seq_id": "REQ-HOST-MINI-WX-0001",
+        "req_date": "20260629",
+        "trans_req_date": "20260629",
+        "huifu_id": "1234000100000020",
+        "order_type": "HT",
+        "resp_code": "00000000",
+        "resp_desc": "操作成功",
+        "pre_order_id": "PREORDER-HOST-MINI-WX-0001",
+        "pre_order_type": "3",
+        "trans_amt": "81.60",
+        "time_expire": "20260629T142216",
+        "current_time": "20260629T142018",
+        "goods_desc": "示例微信小程序订单",
+        "miniapp_data": "{\"need_scheme\":\"Y\",\"appid\":\"wx-local-mini-appid\",\"gh_id\":\"gh-local-mini-001\",\"path\":\"pages/cashier/cashier\",\"scheme_code\":\"weixin://dl/business/?t=WXMINISCHEMELOCAL001\"}",
+        "jump_url": "&bank_switch=Y",
+        "project_id": "REQ-HOST-MINI-WX-0001",
+        "hosting_order_id": "REQ-HOST-MINI-WX-0001",
+        "trade_type": "T_MINIAPP",
+        "trans_stat": "P",
+        "pay_info": "{\"timeStamp\":\"WX-TIMESTAMP-HOST-MINI-WX-001\",\"package\":\"prepay_id=WXPREPAY-HOST-MINI-WX-0001\",\"paySign\":\"SIGN-HOST-MINI-WX-LOCAL\",\"appId\":\"wx-local-mini-appid\",\"signType\":\"RSA\",\"nonceStr\":\"NONCE-HOST-MINI-WX-001\"}",
+        "business_variant": "hosting.wechat-mini",
+        "hf_seq_id": "HF-HOST-MINI-WX-0001",
+        "party_order_id": "PARTY-HOST-MINI-WX-0001",
+        "bank_code": "00000000",
+        "bank_message": "用户支付中",
+        "wx_response": {
+          "pay_info": "{\"timeStamp\":\"WX-TIMESTAMP-HOST-MINI-WX-001\",\"package\":\"prepay_id=WXPREPAY-HOST-MINI-WX-0001\",\"paySign\":\"SIGN-HOST-MINI-WX-LOCAL\",\"appId\":\"wx-local-mini-appid\",\"signType\":\"RSA\",\"nonceStr\":\"NONCE-HOST-MINI-WX-001\"}",
+          "result_code": "00000000",
+          "token_id": "WXPREPAY-HOST-MINI-WX-0001"
+        }
+      }
+    },
+    "preorder_query": {
+      "source": "normalized from QueryPreOrderController response before payment completion",
+      "data": {
+        "sys_id": "1234000100000021",
+        "req_seq_id": "REQ-HOST-MINI-WX-0001",
+        "req_date": "20260629",
+        "huifu_id": "1234000100000020",
+        "resp_code": "00000000",
+        "resp_desc": "操作成功",
+        "pre_order_id": "PREORDER-HOST-MINI-WX-0001",
+        "trans_amt": "81.60",
+        "pre_order_type": "3",
+        "time_expire": "20260629T142216",
+        "current_time": "20260629T142020",
+        "goods_desc": "示例微信小程序订单",
+        "notify_url": "https://example.invalid/huifu/hosting-wechat-mini-notify",
+        "callback_url": "",
+        "delay_acct_flag": "N",
+        "acct_split_bunch": "",
+        "hosting_data": "",
+        "miniapp_data": "{\"need_scheme\":\"Y\",\"appid\":\"wx-local-mini-appid\",\"gh_id\":\"gh-local-mini-001\",\"path\":\"pages/cashier/cashier\",\"scheme_code\":\"weixin://dl/business/?t=WXMINISCHEMELOCAL001\"}",
+        "jump_url": "&bank_switch=Y",
+        "use_flag": "N",
+        "multi_pay_way_flag": "N",
+        "mer_short_name": "示例商户",
+        "business_variant": "hosting.wechat-mini"
+      }
+    },
+    "payment_request": {
+      "source": "normalized from HostingPayController request",
+      "data": {
+        "req_seq_id": "REQ-HOST-MINI-WX-0001",
+        "req_date": "20260629",
+        "huifu_id": "1234000100000020",
+        "trade_type": "T_MINIAPP",
+        "trans_amt": "81.60",
+        "buyer_id": "openid-host-mini-wx-sub-001",
+        "goods_desc": "示例微信小程序订单",
+        "risk_check_data": "{\"ip_address\":\"127.0.0.1\",\"systemInfo\":{\"uniPlatform\":\"mp-weixin\",\"deviceBrand\":\"iphone\",\"deviceModel\":\"iPhone Local\",\"version\":\"8.0.75\"}}",
+        "time_expire": "20260629T142216",
+        "wx_data": {
+          "sub_appid": "wx-local-mini-appid"
+        },
+        "notify_url": "https://example.invalid/huifu/hosting-wechat-mini-notify",
+        "delay_acct_flag": "N"
+      }
+    },
+    "top_preorder_request": {
+      "source": "normalized from downstream TOP scan aggregation request",
+      "data": {
+        "at_pre_ath": false,
+        "goods_desc": "示例微信小程序订单",
+        "hf_seq_id": "HF-HOST-MINI-WX-0001",
+        "huifu_id": "1234000100000020",
+        "is_delay_acct": "0",
+        "mer_ord_id": "REQ-HOST-MINI-WX-0001",
+        "notify_url": "archer://C_TOP_HOSTINGPAY_TRANS_NOTIFY",
+        "product_id": "PAYUN",
+        "req_date": "20260629",
+        "req_seq_id": "REQ-HOST-MINI-WX-0001",
+        "risk_check_info": "{\"ipAddress\":\"127.0.0.1\",\"riskMngInfo\":\"{\\\"billFlag\\\":\\\"02\\\",\\\"billNo\\\":\\\"BILL-HOST-MINI-WX-0001\\\",\\\"isFixedAmount\\\":\\\"N\\\",\\\"subTradeType\\\":\\\"4300\\\"}\"}",
+        "sys_id": "1234000100000021",
+        "time_expire": "20260629T142216",
+        "trade_type": "T_MINIAPP",
+        "trans_amt": "81.60",
+        "user_id": "openid-host-mini-wx-sub-001",
+        "wx_data": {
+          "body": "示例微信小程序订单",
+          "sub_appid": "wx-local-mini-appid",
+          "sub_openid": "openid-host-mini-wx-sub-001",
+          "time_expire": "20260629T142216"
+        }
+      }
+    },
+    "payment_response": {
+      "source": "normalized from HostingPayController response",
+      "data": {
+        "req_seq_id": "REQ-HOST-MINI-WX-0001",
+        "req_date": "20260629",
+        "trans_req_date": "20260629",
+        "huifu_id": "1234000100000020",
+        "order_type": "HT",
+        "resp_code": "00000000",
+        "resp_desc": "操作成功",
+        "project_id": "REQ-HOST-MINI-WX-0001",
+        "hosting_order_id": "REQ-HOST-MINI-WX-0001",
+        "trade_type": "T_MINIAPP",
+        "trans_amt": "81.60",
+        "trans_stat": "P",
+        "pay_info": "{\"timeStamp\":\"WX-TIMESTAMP-HOST-MINI-WX-001\",\"package\":\"prepay_id=WXPREPAY-HOST-MINI-WX-0001\",\"paySign\":\"SIGN-HOST-MINI-WX-LOCAL\",\"appId\":\"wx-local-mini-appid\",\"signType\":\"RSA\",\"nonceStr\":\"NONCE-HOST-MINI-WX-001\"}",
+        "goods_desc": "示例微信小程序订单",
+        "trans_req_seq_id": "REQ-HOST-MINI-WX-0001",
+        "current_time": "20260629T142021",
+        "split_pay_last_flag": "",
+        "business_variant": "hosting.wechat-mini"
+      }
+    },
+    "top_preorder": {
+      "source": "normalized from downstream TOP scan aggregation response",
+      "data": {
+        "resp_code": "00000100",
+        "resp_desc": "交易正在处理中 cashCode:000 cashDesc:成功",
+        "sub_resp_code": "00000100",
+        "sub_resp_desc": "交易正在处理中 cashCode:000 cashDesc:成功",
+        "req_date": "20260629",
+        "req_seq_id": "REQ-HOST-MINI-WX-0001",
+        "huifu_id": "1234000100000020",
+        "sys_id": "1234000100000021",
+        "hf_seq_id": "HF-HOST-MINI-WX-0001",
+        "trade_type": "T_MINIAPP",
+        "trans_amt": "81.60",
+        "settlement_amt": "81.60",
+        "trans_stat": "P",
+        "acct_stat": "I",
+        "unconfirm_amt": "81.60",
+        "bank_code": "00000000",
+        "bank_message": "用户支付中",
+        "bank_seq_id": "BANKSEQ-HOST-MINI-WX-001",
+        "ref_no": "REF-HOST-MINI-WX-001",
+        "party_order_id": "PARTY-HOST-MINI-WX-0001",
+        "out_trade_no": "WX-OUT-HOST-MINI-WX-0001",
+        "pay_info": "{\"timeStamp\":\"WX-TIMESTAMP-HOST-MINI-WX-001\",\"package\":\"prepay_id=WXPREPAY-HOST-MINI-WX-0001\",\"paySign\":\"SIGN-HOST-MINI-WX-LOCAL\",\"appId\":\"wx-local-mini-appid\",\"signType\":\"RSA\",\"nonceStr\":\"NONCE-HOST-MINI-WX-001\"}",
+        "wx_response": {
+          "pay_info": "{\"timeStamp\":\"WX-TIMESTAMP-HOST-MINI-WX-001\",\"package\":\"prepay_id=WXPREPAY-HOST-MINI-WX-0001\",\"paySign\":\"SIGN-HOST-MINI-WX-LOCAL\",\"appId\":\"wx-local-mini-appid\",\"signType\":\"RSA\",\"nonceStr\":\"NONCE-HOST-MINI-WX-001\"}",
+          "result_code": "00000000",
+          "token_id": "WXPREPAY-HOST-MINI-WX-0001"
+        },
+        "business_variant": "hosting.wechat-mini"
+      }
+    },
+    "query_success": {
+      "endpoint": {
+        "id": "hosting.payment.query",
+        "method": "POST",
+        "path": "/v2/trade/hosting/payment/queryorderinfo"
+      },
+      "request": {
+        "data": {
+          "product_id": "PAYUN",
+          "req_seq_id": "QRY-HOST-MINI-WX-0001",
+          "req_date": "20260629",
+          "huifu_id": "1234000100000020",
+          "org_req_date": "20260629",
+          "org_req_seq_id": "REQ-HOST-MINI-WX-0001"
+        }
+      },
+      "source": "normalized from QueryOrderInfoController and TopTransQueryServiceFacadeImpl successful query responses",
+      "data": {
+        "product_id": "PAYUN",
+        "req_seq_id": "QRY-HOST-MINI-WX-0001",
+        "req_date": "20260629",
+        "huifu_id": "1234000100000020",
+        "resp_code": "00000000",
+        "resp_desc": "操作成功",
+        "org_req_date": "20260629",
+        "org_req_seq_id": "REQ-HOST-MINI-WX-0001",
+        "pre_order_id": "PREORDER-HOST-MINI-WX-0001",
+        "goods_desc": "示例微信小程序订单",
+        "trans_date": "20260629",
+        "order_stat": "1",
+        "org_hf_seq_id": "HF-HOST-MINI-WX-0001",
+        "out_trans_id": "WXPAY-HOST-MINI-WX-0001",
+        "party_order_id": "PARTY-HOST-MINI-WX-0001",
+        "top_order_id": "TOP-HOST-MINI-WX-0001",
+        "pay_type": "T_MINIAPP",
+        "trade_type": "MINIAPP",
+        "pay_way": "MINIAPP",
+        "trans_stat": "S",
+        "fee_flag": 1,
+        "trans_time": "20260629T142025",
+        "trans_amt": "81.60",
+        "pay_amt": "81.60",
+        "settlement_amt": "81.60",
+        "fee_amt": "0.61",
+        "ref_amt": "81.60",
+        "bank_code": "00",
+        "bank_desc": "支付成功",
+        "bank_message": "支付成功",
+        "bank_seq_id": "BANKSEQ-HOST-MINI-WX-001",
+        "bank_order_no": "WXPAY-HOST-MINI-WX-0001",
+        "ref_no": "REF-HOST-MINI-WX-001",
+        "channel_type": "N",
+        "pay_channel": "T",
+        "wx_response": {
+          "sub_appid": "wx-local-mini-appid",
+          "openid": "openid-host-mini-wx-platform-001",
+          "sub_openid": "openid-host-mini-wx-sub-001",
+          "bank_type": "OTHERS",
+          "coupon_fee": "0.00"
+        },
+        "wx_user_id": "",
+        "is_div": "N",
+        "acct_split_bunch": {
+          "acct_infos": [
+            {
+              "div_amt": "81.60",
+              "huifu_id": "1234000100000020",
+              "acct_date": "20260629"
+            }
+          ],
+          "fee_acct_id": "F-LOCAL-HOST-MINI-WX-001",
+          "fee_huifu_id": "1234000100000022",
+          "fee_amt": "0.61"
+        },
+        "is_delay_acct": "N",
+        "fee_formula_infos": [
+          {
+            "fee_formula": "AMT*0.0075",
+            "fee_type": "TRANS_FEE"
+          }
+        ],
+        "request_ip": "127.0.0.1",
+        "business_variant": "hosting.wechat-mini"
+      }
+    },
+    "async_notify": {
+      "source": "normalized from TradeOrderMessageHandler and AbstractPosMessageHandler payment notify payloads",
+      "transport": {
+        "content_type": "application/x-www-form-urlencoded",
+        "signature_rule": "RSA signature over raw resp_data",
+        "ack_body": "RECV_ORD_ID_REQ-HOST-MINI-WX-0001"
+      },
+      "data": {
+        "resp_code": "00000000",
+        "resp_desc": "交易成功",
+        "sub_resp_code": "00000000",
+        "sub_resp_desc": "交易成功",
+        "req_date": "20260629",
+        "req_seq_id": "REQ-HOST-MINI-WX-0001",
+        "huifu_id": "1234000100000020",
+        "hf_seq_id": "HF-HOST-MINI-WX-0001",
+        "trade_type": "T_MINIAPP",
+        "trans_type": "T_MINIAPP",
+        "product_id": "PAYUN",
+        "trans_amt": "81.60",
+        "pay_amt": "81.60",
+        "settlement_amt": "81.60",
+        "trans_stat": "S",
+        "acct_stat": "I",
+        "bank_code": "00",
+        "bank_message": "支付成功",
+        "bank_order_no": "WXPAY-HOST-MINI-WX-0001",
+        "bank_seq_id": "BANKSEQ-HOST-MINI-WX-001",
+        "out_ord_id": "WXPAY-HOST-MINI-WX-0001",
+        "out_trans_id": "WXPAY-HOST-MINI-WX-0001",
+        "party_order_id": "PARTY-HOST-MINI-WX-0001",
+        "posp_seq_id": "PARTY-HOST-MINI-WX-0001",
+        "notify_type": 1,
+        "fee_amt": "0.61",
+        "fee_amount": "0.61",
+        "fee_flag": 1,
+        "fee_rec_type": "1",
+        "gate_id": "IF",
+        "ref_no": "REF-HOST-MINI-WX-001",
+        "trans_date": "20260629",
+        "trans_time": "142021",
+        "end_time": "20260629T142025",
+        "is_delay_acct": "0",
+        "is_div": "0",
+        "acct_split_bunch": {
+          "acct_infos": [
+            {
+              "acct_id": "A-LOCAL-HOST-MINI-WX-001",
+              "div_amt": "81.60",
+              "huifu_id": "1234000100000020"
+            }
+          ],
+          "fee_acct_id": "F-LOCAL-HOST-MINI-WX-001",
+          "fee_amt": "0.61",
+          "fee_huifu_id": "1234000100000022"
+        },
+        "fee_formula_infos": [
+          {
+            "fee_formula": "AMT*0.0075",
+            "fee_type": "TRANS_FEE"
+          }
+        ],
+        "wx_response": {
+          "bank_type": "OTHERS",
+          "coupon_fee": "0.00",
+          "openid": "openid-host-mini-wx-platform-001",
+          "sub_appid": "wx-local-mini-appid",
+          "sub_openid": "openid-host-mini-wx-sub-001"
+        }
+      }
+    },
+    "merchant_notify": {
+      "source": "normalized from ArcherTopMsgSender notify_url VIRGO topic and asynchronous push evidence",
+      "transport": {
+        "topics": [
+          "VIRGO://https://example.invalid/huifu/hosting-wechat-mini-notify"
+        ],
+        "content_type": "application/json"
+      },
+      "body": {
+        "ord_id": "HOST-MINI-WX-NOTIFY-0001",
+        "top_notify_type": "CUSTOM",
+        "trans_type": "CUSTOM",
+        "data": {
+          "resp_code": "00000000",
+          "resp_desc": "交易成功",
+          "req_date": "20260629",
+          "req_seq_id": "REQ-HOST-MINI-WX-0001",
+          "huifu_id": "1234000100000020",
+          "hf_seq_id": "HF-HOST-MINI-WX-0001",
+          "trade_type": "T_MINIAPP",
+          "trans_type": "T_MINIAPP",
+          "trans_amt": "81.60",
+          "pay_amt": "81.60",
+          "settlement_amt": "81.60",
+          "trans_stat": "S",
+          "bank_code": "00",
+          "bank_message": "支付成功",
+          "bank_order_no": "WXPAY-HOST-MINI-WX-0001",
+          "party_order_id": "PARTY-HOST-MINI-WX-0001",
+          "posp_seq_id": "PARTY-HOST-MINI-WX-0001",
+          "pay_scene": "01",
+          "request_ip": "127.0.0.1",
+          "wx_response": {
+            "bank_type": "OTHERS",
+            "coupon_fee": "0.00",
+            "openid": "openid-host-mini-wx-platform-001",
+            "sub_appid": "wx-local-mini-appid",
+            "sub_openid": "openid-host-mini-wx-sub-001"
+          },
+          "acct_split_bunch": {
+            "acct_infos": [
+              {
+                "acct_id": "A-LOCAL-HOST-MINI-WX-001",
+                "huifu_id": "1234000100000020",
+                "div_amt": "81.60"
+              }
+            ],
+            "fee_acct_id": "F-LOCAL-HOST-MINI-WX-001",
+            "fee_huifu_id": "1234000100000022",
+            "fee_amt": "0.61"
+          },
+          "fee_formula_infos": [
+            {
+              "fee_formula": "AMT*0.0075",
+              "fee_type": "TRANS_FEE"
+            }
+          ]
+        }
+      }
+    },
+    "webhook_pay": {
+      "source": "normalized from WebHookHelper webhook.v2 hosting.pay submission",
+      "transport": {
+        "namespace": "opps-webhook",
+        "event_define_no": "hosting.pay",
+        "dispatch_result": {
+          "code": 500,
+          "msg": "该订阅没有匹配的事件"
+        }
+      },
+      "body": {
+        "huifu_id": "1234000100000020",
+        "namespace": "opps-webhook",
+        "event_define_no": "hosting.pay",
+        "trans_stat": "1",
+        "data": {
+          "project_id": "REQ-HOST-MINI-WX-0001",
+          "hosting_type": "2",
+          "hosting_order_id": "REQ-HOST-MINI-WX-0001",
+          "trade_type": "MINIAPP",
+          "trans_amt": "81.60",
+          "fee_amt": "0.61",
+          "create_date": "2026-06-29 14:20:21",
+          "pay_time": "2026-06-29 14:20:26",
+          "pay_way": "MINIAPP",
+          "trans_stat": "S",
+          "bank_code": "00",
+          "bank_message": "支付成功",
+          "goods_desc": "示例微信小程序订单",
+          "party_order_id": "PARTY-HOST-MINI-WX-0001",
+          "top_order_id": "TOP-HOST-MINI-WX-0001"
+        }
+      }
+    },
+    "accounting_notify": {
+      "source": "normalized from notify_type=2 TOP accounting message",
+      "data": {
+        "resp_code": "00000000",
+        "resp_desc": "交易成功",
+        "req_date": "20260629",
+        "req_seq_id": "REQ-HOST-MINI-WX-0001",
+        "huifu_id": "1234000100000020",
+        "hf_seq_id": "HF-HOST-MINI-WX-0001",
+        "trade_type": "T_MINIAPP",
+        "trans_type": "T_MINIAPP",
+        "product_id": "PAYUN",
+        "trans_amt": "81.60",
+        "pay_amt": "81.60",
+        "settlement_amt": "81.60",
+        "trans_stat": "S",
+        "acct_stat": "S",
+        "bank_code": "00",
+        "bank_message": "支付成功",
+        "bank_order_no": "WXPAY-HOST-MINI-WX-0001",
+        "out_trans_id": "WXPAY-HOST-MINI-WX-0001",
+        "party_order_id": "PARTY-HOST-MINI-WX-0001",
+        "notify_type": 2,
+        "fee_amt": "0.61",
+        "fee_flag": 1,
+        "acct_split_bunch": {
+          "acct_infos": [
+            {
+              "acct_date": "20260629",
+              "acct_id": "A-LOCAL-HOST-MINI-WX-001",
+              "div_amt": "81.60",
+              "huifu_id": "1234000100000020"
+            }
+          ],
+          "fee_acct_date": "20260629",
+          "fee_acct_id": "F-LOCAL-HOST-MINI-WX-001",
+          "fee_amt": "0.61",
+          "fee_huifu_id": "1234000100000022"
+        },
+        "wx_response": {
+          "bank_type": "OTHERS",
+          "coupon_fee": "0.00",
+          "openid": "openid-host-mini-wx-platform-001",
+          "sub_appid": "wx-local-mini-appid",
+          "sub_openid": "openid-host-mini-wx-sub-001"
+        }
+      }
+    },
+    "webhook_accounted": {
+      "source": "normalized from AcctMsgToWebhookService and event dispatch request",
+      "transport": {
+        "namespace": "opps-webhook",
+        "event_define_no": "hosting.accounted"
+      },
+      "body": {
+        "acct_stat": "S",
+        "event_define_no": "hosting.accounted",
+        "huifu_id": "1234000100000020",
+        "namespace": "opps-webhook",
+        "trans_stat": "S",
+        "data": {
+          "acct_date": "2026-06-29 14:20:27",
+          "acct_stat": "S",
+          "hf_seq_id": "HF-HOST-MINI-WX-0001",
+          "huifu_id": "1234000100000020",
+          "req_date": "20260629",
+          "req_seq_id": "REQ-HOST-MINI-WX-0001",
+          "resp_code": "00000000",
+          "resp_desc": "交易成功",
+          "trans_finsh_time": "2026-06-29 14:20:27",
+          "trans_stat": "S",
+          "trans_type": "T_MINIAPP"
+        }
+      }
+    }
+  },
+  "expected": {
+    "resp_code": "00000000",
+    "fields": {
+      "business_variant": "hosting.wechat-mini",
+      "pre_order_type": "3",
+      "trans_stat": "P"
+    }
+  },
+  "assertions": {
+    "assertions": [
+      "envelope",
+      "headers",
+      "signature",
+      "sample-backed",
+      "business-variant",
+      "pre-order-type-3",
+      "miniapp-data-required",
+      "string-json-channel-fields",
+      "channel-response-projection",
+      "notify-rsa-resp-data",
+      "webhook-event"
+    ],
+    "field_assertions": [
+      {
+        "path": "resp_code",
+        "equals": "00000000"
+      },
+      {
+        "path": "pre_order_id",
+        "exists": true
+      },
+      {
+        "path": "miniapp_data",
+        "exists": true
+      },
+      {
+        "path": "wx_response",
+        "exists": true
+      },
+      {
+        "path": "hosting_data",
+        "exists": true
+      },
+      {
+        "path": "app_data",
+        "exists": true
+      },
+      {
+        "path": "jump_url",
+        "equals": "&bank_switch=Y"
+      },
+      {
+        "path": "business_variant",
+        "equals": "hosting.wechat-mini"
+      }
+    ],
+    "event_assertions": [
+      "payment.accepted",
+      "business.variant",
+      "payment.query",
+      "payment.notify",
+      "webhook.hosting.pay",
+      "webhook.hosting.accounted"
+    ]
+  },
+  "sample_sha256": "87e82df372ba49de2d25df3497ec6f8d3042bfc31f3989ed40207f63d78ba80e"
+}

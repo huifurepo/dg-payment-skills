@@ -109,3 +109,19 @@ def validate_hosting_python_refund_locator(state: ValidationState) -> None:
         state.error(f"{label} refund example must set one original transaction locator: {keys}")
         return
     state.ok("Hosting Python refund locator OK")
+
+
+def main() -> int:
+    state = ValidationState()
+    print("=== Python 生产口径校验 ===\n")
+    validate_python_prod_contract(state)
+    print(f"\n=== 结果: {state.errors} errors, {state.warnings} warnings ===")
+    if state.errors == 0:
+        print("[OK] All checks passed")
+    else:
+        print("[ERROR] Fix errors before release")
+    return state.errors
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

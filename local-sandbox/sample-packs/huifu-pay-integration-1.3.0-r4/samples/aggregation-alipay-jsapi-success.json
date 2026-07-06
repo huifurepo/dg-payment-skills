@@ -1,0 +1,280 @@
+{
+  "schema_version": "1.0",
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "sample_id": "aggregation-alipay-jsapi-success",
+  "title": "聚合支付宝 A_JSAPI 成功链路样例",
+  "description": "由聚合支付宝 A_JSAPI JS 支付日志拆分而来，覆盖顶层分账参数、method_expand.buyer_id、同步 pay_info.tradeNO、后续 alipay_response 和 pay.ali_js Webhook 语义。",
+  "source_type": "deidentified_production",
+  "authorization": {
+    "status": "approved",
+    "approved_by": "user-provided-codex-attachment",
+    "approved_at": "2026-07-01T15:35:00+08:00"
+  },
+  "deidentification": {
+    "status": "passed",
+    "method": "field-level placeholder replacement; removed raw merchant names, real huifu ids, sys id, buyer ids, buyer login ids, account ids, hf sequence ids, party order ids, bank order numbers, long numeric identifiers, transaction ids, internal order ids, and real callback URL hosts while preserving A_JSAPI request placement, split-account fields, buyer_id method_expand, pay_info, amount, fee, notify, alipay_response, and webhook semantics",
+    "checked_at": "2026-07-01T15:40:00+08:00"
+  },
+  "endpoint": {
+    "id": "aggregation.payment.create",
+    "method": "POST",
+    "path": "/v4/trade/payment/create"
+  },
+  "scenario_id": "CHANNEL-NOTIFY-01",
+  "headers_profile": "java-php-python-local-sandbox",
+  "source_summary": {
+    "attachment": "pasted-text.txt",
+    "selected_source_lines": [
+      1
+    ],
+    "source_trade_type": "A_JSAPI",
+    "source_channel": "Alipay JSAPI",
+    "source_product_id": "EDUSTD",
+    "source_amount": "2355.00",
+    "notes": [
+      "attachment contains the [聚合支付（闪电版）] A_JSAPI create request with acct_split_bunch, method_expand.buyer_id, time_expire, notify_url, trade_type, trans_amt, huifu_id, req_date, and req_seq_id as top-level data fields",
+      "synchronous response returns resp_code=00000100, resp_desc=下单成功, pay_info.tradeNO, bank_code=10000, bank_message=Success, trans_stat=P, and unconfirm_amt",
+      "later event dispatch evidence uses eventDefineNo=pay.ali_js and carries alipay_response, acct_split_bunch, split_fee_info, and fee_formula_infos after the payer completes payment",
+      "A_JSAPI should return pay_info rather than qr_code in the create response"
+    ]
+  },
+  "request": {
+    "source": "normalized from [聚合支付（闪电版）] request parameters",
+    "data": {
+      "req_date": "20260701",
+      "req_seq_id": "REQ-ALI-JSAPI-SPLIT-001",
+      "huifu_id": "1234000100000041",
+      "trade_type": "A_JSAPI",
+      "trans_amt": "2355.00",
+      "goods_desc": "2026.7月账单",
+      "notify_url": "https://example.invalid/huifu/alipay-jsapi-notify",
+      "acct_split_bunch": "{\"acct_infos\":[{\"div_amt\":\"4.71\",\"huifu_id\":\"1234000100000040\"},{\"div_amt\":\"2350.29\",\"huifu_id\":\"1234000100000041\"}]}",
+      "method_expand": "{\"buyer_id\":\"buyer-ali-jsapi-001\"}",
+      "time_expire": "20260701T152738"
+    }
+  },
+  "responses": {
+    "sync": {
+      "source": "normalized from [聚合支付（闪电版）] synchronous response",
+      "data": {
+        "resp_code": "00000100",
+        "resp_desc": "下单成功",
+        "req_date": "20260701",
+        "req_seq_id": "REQ-ALI-JSAPI-SPLIT-001",
+        "huifu_id": "1234000100000041",
+        "hf_seq_id": "HF-ALI-JSAPI-SPLIT-001",
+        "trade_type": "A_JSAPI",
+        "trans_amt": "2355.00",
+        "trans_stat": "P",
+        "unconfirm_amt": "2355.00",
+        "bank_code": "10000",
+        "bank_message": "Success",
+        "party_order_id": "PARTY-ALI-JSAPI-SPLIT-001",
+        "atu_sub_mer_id": "ALI-SUBMER-JSAPI-001",
+        "pay_info": "{\"tradeNO\":\"ALIPAY-TRADE-JSAPI-001\"}",
+        "business_variant": "aggregation.alipay"
+      }
+    },
+    "query_success": {
+      "endpoint": {
+        "id": "aggregation.payment.query",
+        "method": "POST",
+        "path": "/v4/trade/payment/scanpay/query"
+      },
+      "request": {
+        "data": {
+          "huifu_id": "1234000100000041",
+          "hf_seq_id": "HF-ALI-JSAPI-SPLIT-001"
+        }
+      },
+      "source": "normalized from transOrderDO and event dispatch final-state evidence",
+      "data": {
+        "resp_code": "00000000",
+        "resp_desc": "查询成功",
+        "req_date": "20260701",
+        "req_seq_id": "REQ-ALI-JSAPI-SPLIT-001",
+        "huifu_id": "1234000100000041",
+        "hf_seq_id": "HF-ALI-JSAPI-SPLIT-001",
+        "trade_type": "A_JSAPI",
+        "trans_amt": "2355.00",
+        "pay_amt": "2355.00",
+        "settlement_amt": "2355.00",
+        "trans_stat": "S",
+        "acct_stat": "I",
+        "bank_code": "TRADE_SUCCESS",
+        "bank_message": "TRADE_SUCCESS",
+        "bank_seq_id": "BANKSEQ-ALI-JSAPI-001",
+        "bank_order_no": "ALIPAY-ORDER-JSAPI-001",
+        "out_trans_id": "ALIPAY-ORDER-JSAPI-001",
+        "party_order_id": "PARTY-ALI-JSAPI-SPLIT-001",
+        "ref_no": "REF-ALI-JSAPI-001",
+        "trans_date": "20260701",
+        "trans_time": "152238",
+        "end_time": "20260701T152256",
+        "delay_acct_flag": "N",
+        "fee_amt": "4.95",
+        "fee_amount": "4.95",
+        "fee_formula_infos": [
+          {
+            "fee_type": "TRANS_FEE",
+            "fee_formula": "MAX(0.00,AMT*0.0021)"
+          }
+        ],
+        "method_expand": "{\"buyer_id\":\"buyer-ali-jsapi-001\",\"buyer_logon_id\":\"buyer-ali-jsapi@example.invalid\",\"fund_bill_list\":[{\"amount\":\"2355.00\",\"fund_type\":\"DEBIT_CARD\",\"fund_channel\":\"BANKCARD\"}]}",
+        "alipay_response": {
+          "coupon_fee": "0.00",
+          "buyer_logon_id": "buyer-ali-jsapi@example.invalid",
+          "buyer_id": "buyer-ali-jsapi-001",
+          "app_id": "",
+          "fund_bill_list": [
+            {
+              "amount": "2355.00",
+              "fund_type": "DEBIT_CARD",
+              "fund_channel": "BANKCARD"
+            }
+          ]
+        },
+        "acct_split_bunch": {
+          "acct_infos": [
+            {
+              "acct_id": "F-LOCAL-ALI-JSAPI-SPLIT-001",
+              "huifu_id": "1234000100000040",
+              "div_amt": "4.71"
+            },
+            {
+              "acct_id": "F-LOCAL-ALI-JSAPI-SPLIT-002",
+              "huifu_id": "1234000100000041",
+              "div_amt": "2350.29"
+            }
+          ],
+          "fee_acct_id": "F-LOCAL-ALI-JSAPI-FEE-001",
+          "fee_huifu_id": "1234000100000039",
+          "fee_amt": "4.95"
+        },
+        "split_fee_info": {
+          "split_fee_details": [
+            {
+              "split_fee_acct_id": "F-LOCAL-ALI-JSAPI-SPLIT-001",
+              "split_fee_amt": "0.00",
+              "split_fee_flag": 2,
+              "split_fee_huifu_id": "1234000100000040"
+            }
+          ],
+          "total_split_fee_amt": "0.00"
+        },
+        "business_variant": "aggregation.alipay"
+      }
+    },
+    "webhook": {
+      "source": "normalized from event dispatch V2 request",
+      "transport": {
+        "content_type": "application/json",
+        "signature_rule": "MD5(raw_body + endpoint_key) in URL query sign"
+      },
+      "body": {
+        "huifuId": "1234000100000041",
+        "namespace": "opps-webhook",
+        "eventDefineNo": "pay.ali_js",
+        "env": "prod-like-sample",
+        "transStat": "S",
+        "parentHuifuIds": [
+          "1234000100000039"
+        ],
+        "receiveHuifuIds": [
+          "1234000100000039",
+          "1234000100000041"
+        ],
+        "data": {
+          "resp_code": "00000000",
+          "resp_desc": "交易成功",
+          "req_date": "20260701",
+          "req_seq_id": "REQ-ALI-JSAPI-SPLIT-001",
+          "huifu_id": "1234000100000041",
+          "hf_seq_id": "HF-ALI-JSAPI-SPLIT-001",
+          "trade_type": "A_JSAPI",
+          "trans_type": "A_JSAPI",
+          "trans_amt": "2355.00",
+          "pay_amt": "2355.00",
+          "settlement_amt": "2355.00",
+          "trans_stat": "S",
+          "acct_stat": "I",
+          "bank_message": "TRADE_SUCCESS",
+          "bank_desc": "TRADE_SUCCESS",
+          "delay_acct_flag": "N",
+          "alipay_response": {
+            "coupon_fee": "0.00",
+            "buyer_logon_id": "buyer-ali-jsapi@example.invalid",
+            "buyer_id": "buyer-ali-jsapi-001",
+            "app_id": "",
+            "fund_bill_list": [
+              {
+                "amount": "2355.00",
+                "fund_type": "DEBIT_CARD",
+                "fund_channel": "BANKCARD"
+              }
+            ]
+          }
+        }
+      },
+      "dispatch_result": {
+        "code": 200,
+        "msg": "delivered"
+      }
+    }
+  },
+  "expected": {
+    "resp_code": "00000100",
+    "fields": {
+      "business_variant": "aggregation.alipay",
+      "trade_type": "A_JSAPI",
+      "trans_stat": "P"
+    }
+  },
+  "assertions": {
+    "assertions": [
+      "envelope",
+      "headers",
+      "signature",
+      "sample-backed",
+      "business-variant",
+      "method-expand-json",
+      "channel-response-projection",
+      "notify-rsa-resp-data",
+      "webhook-md5-raw-body"
+    ],
+    "field_assertions": [
+      {
+        "path": "resp_code",
+        "equals": "00000100"
+      },
+      {
+        "path": "trade_type",
+        "equals": "A_JSAPI"
+      },
+      {
+        "path": "trans_stat",
+        "equals": "P"
+      },
+      {
+        "path": "hf_seq_id",
+        "exists": true
+      },
+      {
+        "path": "pay_info",
+        "exists": true
+      },
+      {
+        "path": "business_variant",
+        "equals": "aggregation.alipay"
+      }
+    ],
+    "event_assertions": [
+      "payment.accepted",
+      "payment.query",
+      "notify.delivery",
+      "webhook.delivery",
+      "business.variant"
+    ]
+  },
+  "sample_sha256": "63aecfb9b12615bb4730531243e06a7b0dfe0ff169d7382120f74cbc1beb4339"
+}

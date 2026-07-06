@@ -1,0 +1,322 @@
+{
+  "schema_version": "1.0",
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "sample_id": "aggregation-unionpay-micropay-success",
+  "title": "聚合银联 U_MICROPAY 成功链路样例",
+  "description": "由附件中的聚合银联 U_MICROPAY 成功交易日志拆分而来，重点覆盖 auth_code、unionpay_data、银联渠道返回字段和查单成功态投射。",
+  "source_type": "deidentified_production",
+  "authorization": {
+    "status": "approved",
+    "approved_by": "user-provided-codex-attachment",
+    "approved_at": "2026-06-29T10:30:00+08:00"
+  },
+  "deidentification": {
+    "status": "passed",
+    "method": "field-level placeholder replacement; removed raw merchant names, card numbers, real auth_code, device identifiers, geo coordinates, long numeric identifiers, transaction ids, and real callback URL hosts while preserving amount, status, UnionPay channel, coupon, fee, and response projection semantics",
+    "checked_at": "2026-06-29T10:45:00+08:00"
+  },
+  "endpoint": {
+    "id": "aggregation.payment.create",
+    "method": "POST",
+    "path": "/v4/trade/payment/create"
+  },
+  "scenario_id": "AGG-CHANNEL-UP-01",
+  "headers_profile": "java-php-python-local-sandbox",
+  "source_summary": {
+    "attachment": "pasted-text.txt",
+    "selected_source_lines": [
+      295,
+      297,
+      303,
+      326
+    ],
+    "source_trade_type": "U_MICROPAY",
+    "source_channel": "UnionPay micropay",
+    "source_product_id": "XLSISV",
+    "source_amount": "7.58",
+    "notes": [
+      "line 303 contains atuRequest.authCode, unionpayData, terminalDeviceInfo, syncResult, channelNotify, acctNotify, transOrder, and AggregateTransNotifyData for the selected successful U_MICROPAY payment",
+      "syncResult shows the initial UnionPay reverse-scan create response as channelStatus=P and transStatus=P with bankCode=00",
+      "channelNotify carries payChannelType=U, channelStatus=S, debitFlag=1, accNo, couponInfo, couponFee, discountAmt, and payAmt=0.01",
+      "line 326 contains the final notify projection with tradeType=U_MICROPAY, transStat=S, and unionpayResponse.accNo/couponInfo",
+      "the attachment does not contain a separate scanpay query controller log for this payment; query_success is normalized from transOrder, channelNotify, AggregateTransNotifyData, and TopMessageNotifier final-state evidence"
+    ]
+  },
+  "request": {
+    "source": "normalized from atuRequest and current sandbox aggregation.payment.create contract",
+    "data": {
+      "req_date": "20260629",
+      "req_seq_id": "REQ-UP-MICROPAY-0001",
+      "huifu_id": "1234000100000006",
+      "trade_type": "U_MICROPAY",
+      "trans_amt": "7.58",
+      "goods_desc": "示例银联反扫订单",
+      "notify_url": "https://example.invalid/huifu/unionpay-micropay-notify",
+      "auth_code": "AUTHCODE-UP-MICROPAY-001",
+      "method_expand": "{\"auth_code\":\"AUTHCODE-UP-MICROPAY-001\",\"terminal_id\":\"POS-UP-MICRO-001\",\"payee_info\":{\"payee_id\":\"unionpay-payee-local-002\"}}",
+      "unionpay_data": "{\"pid_info\":\"{\\\"pid_sct\\\":\\\"LOCALPID\\\",\\\"pnr_order_id\\\":\\\"REQ-UP-MICROPAY-0001\\\",\\\"trade_scene\\\":\\\"2\\\"}\",\"pnr_ins_id_cd\":\"UP-INS-LOCAL-001\"}",
+      "risk_check_data": "{\"risk_mng_info\":{\"sub_trade_type\":\"4300\"},\"ip_addr\":\"127.0.0.1\"}",
+      "terminal_device_data": "{\"device_type\":\"11\",\"devs_id\":\"DEVICE-UP-MICRO-001\"}",
+      "remark": "remark-local-up-micropay"
+    }
+  },
+  "responses": {
+    "sync": {
+      "source": "normalized from atuResponse.syncResult and payment create response fields",
+      "data": {
+        "resp_code": "00000100",
+        "resp_desc": "下单成功",
+        "sub_resp_code": "00000100",
+        "sub_resp_desc": "下单成功",
+        "req_date": "20260629",
+        "req_seq_id": "REQ-UP-MICROPAY-0001",
+        "huifu_id": "1234000100000006",
+        "hf_seq_id": "HF-UP-MICROPAY-0001",
+        "trade_type": "U_MICROPAY",
+        "trans_amt": "7.58",
+        "settlement_amt": "7.58",
+        "trans_stat": "P",
+        "unconfirm_amt": "7.58",
+        "bank_code": "00",
+        "bank_message": "成功[0000000]",
+        "channel_status": "P",
+        "channel_type": "U",
+        "gate_id": "VB",
+        "party_order_id": "PARTY-UP-MICROPAY-0001",
+        "atu_sub_mer_id": "UP-MER-LOCAL-002",
+        "is_clean_split": "N",
+        "is_delay_acct": "0",
+        "business_variant": "aggregation.unionpay",
+        "unionpay_response": {
+          "party_order_id": "PARTY-UP-MICROPAY-0001",
+          "resp_code": "00",
+          "resp_msg": "成功[0000000]"
+        }
+      }
+    },
+    "channel": {
+      "source": "normalized from atuResponse.channelNotify",
+      "data": {
+        "return_code": "000",
+        "return_desc": "成功",
+        "bank_code": "00",
+        "bank_message": "成功",
+        "bank_resp_code": "00",
+        "bank_resp_message": "成功",
+        "business_amt": "7.58",
+        "channel_rsp_code": "00",
+        "channel_status": "S",
+        "channel_type": "U",
+        "coupon_fee": "7.57",
+        "discount_amt": "7.57",
+        "debit_flag": "1",
+        "gate_id": "VB",
+        "pay_channel_type": "U",
+        "pay_amt": "0.01",
+        "settlement_amt": "7.58",
+        "party_order_id": "PARTY-UP-MICROPAY-0001",
+        "out_trans_id": "UPTXN-LOCAL-002",
+        "route_region_id": "C24_B",
+        "trans_status": "S",
+        "trans_response_add_info": {
+          "acc_no": "UNIONPAY-CARD-LOCAL-002",
+          "coupon_info": [
+            {
+              "id": "UNIONPAY-COUPON-LOCAL-001",
+              "desc": "示例银联优惠",
+              "type": "CP01",
+              "spnsr_id": "UNIONPAY-SPONSOR-LOCAL",
+              "offst_amt": "7.57"
+            }
+          ]
+        }
+      }
+    },
+    "query_success": {
+      "endpoint": {
+        "id": "aggregation.payment.query",
+        "method": "POST",
+        "path": "/v4/trade/payment/scanpay/query"
+      },
+      "request": {
+        "data": {
+          "huifu_id": "1234000100000006",
+          "hf_seq_id": "HF-UP-MICROPAY-0001"
+        }
+      },
+      "source": "normalized query projection from transOrder, channelNotify, AggregateTransNotifyData, and TopMessageNotifier final-state evidence",
+      "data": {
+        "resp_code": "00000000",
+        "resp_desc": "查询成功",
+        "req_date": "20260629",
+        "req_seq_id": "REQ-UP-MICROPAY-0001",
+        "huifu_id": "1234000100000006",
+        "hf_seq_id": "HF-UP-MICROPAY-0001",
+        "trade_type": "U_MICROPAY",
+        "trans_amt": "7.58",
+        "pay_amt": "0.01",
+        "settlement_amt": "7.58",
+        "trans_stat": "S",
+        "bank_code": "00",
+        "bank_message": "成功",
+        "bank_seq_id": "672026",
+        "bank_order_no": "UPTXN-LOCAL-002",
+        "out_trans_id": "UPTXN-LOCAL-002",
+        "party_order_id": "PARTY-UP-MICROPAY-0001",
+        "ref_no": "102325672026",
+        "trans_date": "20260629",
+        "trans_time": "102325",
+        "end_time": "2026-06-29T10:23:27+08:00",
+        "fee_amt": "0.03",
+        "fee_amount": "0.03",
+        "coupon_fee": "7.57",
+        "discount_amt": "7.57",
+        "unconfirm_amt": "7.55",
+        "debit_flag": "1",
+        "fee_formula_infos": [
+          {
+            "fee_type": "TRANS_FEE",
+            "fee_formula": "AMT*0.0038"
+          }
+        ],
+        "acct_split_bunch": {
+          "acct_infos": [
+            {
+              "huifu_id": "1234000100000006",
+              "acct_id": "F-LOCAL-UP-002",
+              "div_amt": "7.58"
+            }
+          ],
+          "fee_huifu_id": "1234000100000006",
+          "fee_acct_id": "F-LOCAL-UP-002",
+          "fee_amt": "0.03"
+        },
+        "unionpay_response": {
+          "acc_no": "UNIONPAY-CARD-LOCAL-002",
+          "coupon_info": [
+            {
+              "spnsr_id": "UNIONPAY-SPONSOR-LOCAL",
+              "id": "UNIONPAY-COUPON-LOCAL-001",
+              "type": "CP01",
+              "offst_amt": "7.57",
+              "desc": "示例银联优惠"
+            }
+          ],
+          "debit_flag": "1",
+          "pay_channel_type": "U",
+          "resp_code": "00",
+          "resp_msg": "成功"
+        },
+        "business_variant": "aggregation.unionpay"
+      }
+    },
+    "async_notify": {
+      "source": "normalized from TopMessageNotifier notify payload",
+      "transport": {
+        "content_type": "application/x-www-form-urlencoded",
+        "signature_rule": "RSA signature over raw resp_data",
+        "ack_body": "RECV_ORD_ID_REQ-UP-MICROPAY-0001"
+      },
+      "data": {
+        "resp_code": "00000000",
+        "resp_desc": "交易成功",
+        "sub_resp_code": "00000000",
+        "sub_resp_desc": "交易成功",
+        "req_date": "20260629",
+        "req_seq_id": "REQ-UP-MICROPAY-0001",
+        "huifu_id": "1234000100000006",
+        "hf_seq_id": "HF-UP-MICROPAY-0001",
+        "trade_type": "U_MICROPAY",
+        "trans_type": "U_MICROPAY",
+        "product_id": "XLSISV",
+        "trans_amt": "7.58",
+        "pay_amt": "0.01",
+        "settlement_amt": "7.58",
+        "trans_stat": "S",
+        "acct_stat": "S",
+        "bank_code": "00",
+        "bank_desc": "成功",
+        "bank_message": "成功",
+        "bank_order_no": "UPTXN-LOCAL-002",
+        "bank_seq_id": "672026",
+        "out_ord_id": "UPTXN-LOCAL-002",
+        "out_trans_id": "UPTXN-LOCAL-002",
+        "party_order_id": "PARTY-UP-MICROPAY-0001",
+        "posp_seq_id": "PARTY-UP-MICROPAY-0001",
+        "notify_type": 2,
+        "coupon_fee": "7.57",
+        "discount_amt": "7.57",
+        "debit_flag": "1",
+        "fee_amt": "0.03",
+        "fee_amount": "0.03",
+        "ref_no": "102325672026",
+        "end_time": "2026-06-29T10:23:27+08:00",
+        "terminal_device_data": {
+          "device_type": "11",
+          "devs_id": "DEVICE-UP-MICRO-001"
+        },
+        "unionpay_response": {
+          "acc_no": "UNIONPAY-CARD-LOCAL-002",
+          "coupon_info": [
+            {
+              "spnsr_id": "UNIONPAY-SPONSOR-LOCAL",
+              "id": "UNIONPAY-COUPON-LOCAL-001",
+              "type": "CP01",
+              "offst_amt": "7.57",
+              "desc": "示例银联优惠"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "expected": {
+    "resp_code": "00000100",
+    "fields": {
+      "business_variant": "aggregation.unionpay",
+      "trade_type": "U_MICROPAY",
+      "trans_stat": "P"
+    }
+  },
+  "assertions": {
+    "assertions": [
+      "envelope",
+      "headers",
+      "signature",
+      "sample-backed",
+      "business-variant",
+      "method-expand-json",
+      "micropay-auth-code",
+      "channel-response-projection",
+      "unionpay-channel-response"
+    ],
+    "field_assertions": [
+      {
+        "path": "resp_code",
+        "equals": "00000100"
+      },
+      {
+        "path": "trade_type",
+        "equals": "U_MICROPAY"
+      },
+      {
+        "path": "trans_stat",
+        "equals": "P"
+      },
+      {
+        "path": "unionpay_response",
+        "exists": true
+      },
+      {
+        "path": "business_variant",
+        "equals": "aggregation.unionpay"
+      }
+    ],
+    "event_assertions": [
+      "payment.accepted",
+      "business.variant",
+      "payment.query"
+    ]
+  },
+  "sample_sha256": "d5beae4e07ff9ccfb990a2f8a7fa1581ea689e4ac183aa6a0d16746befd4c05d"
+}

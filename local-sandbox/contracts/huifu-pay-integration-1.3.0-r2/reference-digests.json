@@ -1,0 +1,513 @@
+{
+  "contract_bundle": "huifu-pay-integration-1.3.0-r2",
+  "files": [
+    {
+      "path": "huifu-pay-integration/SKILL.md",
+      "sha256": "2cc1cbf4c5524c8978520bc4626f1fdef7cbdcec239f4cddad360e395da32c7e",
+      "size_bytes": 29019
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-async-webhook.md",
+      "sha256": "d23d9a18f42c3d59f82ed7d72d7f69af955ffed71087bc5fa27d936a2a72690a",
+      "size_bytes": 7041
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-base.md",
+      "sha256": "6320c258ec3429199e3d6348b8ef57314c0ed2ff49edfe08e4207bc0917175c6",
+      "size_bytes": 3287
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-common-params.md",
+      "sha256": "a3710f636debc3eb7f47c150692a76a652e02d9ca12adab40166adf324434c82",
+      "size_bytes": 6256
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-customer-preparation.md",
+      "sha256": "aa4fd8865688fb57d90d0d8403bb19f0408f48a430f81ca5f310ecbf66731765",
+      "size_bytes": 10257
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-error-codes.md",
+      "sha256": "5a2ad19fe2cce8ad97042788214c189f35b6040468e831e2f37fc27fca53ed7d",
+      "size_bytes": 4081
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-faq.md",
+      "sha256": "54861e20b091009bc30856cecbe515efe3ca95d81d95d6677f74c32dd6660072",
+      "size_bytes": 5044
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-java-adapter.md",
+      "sha256": "ceb256cb184cf2e3a7bdfcce45c4d8381cb16dc69b0eef08ce96a0958458f4bf",
+      "size_bytes": 2239
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-java-sdk-quickstart.md",
+      "sha256": "cca85603ff20aaadb4921313b71e7b154beb41e295bf45981eac8967b0775907",
+      "size_bytes": 8935
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-java-tech-spec.md",
+      "sha256": "3280881e9bf9b132e3e02ce10b72910951888c35cd2c19514d3b4ed1bae6b599",
+      "size_bytes": 5177
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order-errors.md",
+      "sha256": "02eda9277e622d06971570efd67473b5c7966d64e279eb01a3bf78193afd1e8e",
+      "size_bytes": 7063
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order-method-alipay.md",
+      "sha256": "7b770bbf42ad8eb90e58c30a94f9a8f16f4041d555affb39ad2ca190ef7d4247",
+      "size_bytes": 7507
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order-method-unionpay.md",
+      "sha256": "8611e4808a1fb04e79a4903eccd717197bf8b47fadf5837d502e37f57dded6ca",
+      "size_bytes": 3935
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order-method-wechat.md",
+      "sha256": "1a8df12a31a2cd6303e39a360114d5f891a0dfd359e249ce354e932e4c0ef5dc",
+      "size_bytes": 7001
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order-quickstart.md",
+      "sha256": "f1e9cd876649359e9cb7273de5b43fad9392fe66f71bcf21e6689700aec423f7",
+      "size_bytes": 2701
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order-request.md",
+      "sha256": "d938feca037bd89d9e493bd3124e3c47115ad73eca18a485223b5ff689f5ebad",
+      "size_bytes": 10907
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order-response.md",
+      "sha256": "d68846196ca559463fddeb633a4d657ca8542dc4bfb115218c6139dc1deade87",
+      "size_bytes": 10548
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order-tx-metadata.md",
+      "sha256": "87c9c82268365122337ca3cf0cc702f4cc4d98ef95460baa4870cb5374361be7",
+      "size_bytes": 11529
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order.md",
+      "sha256": "fa750cd22b19a13602342ab0407de10f027a245c7f15f41dbcfbb4b5433958c2",
+      "size_bytes": 3407
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-payload-construction.md",
+      "sha256": "d34d0663b150183b72c177a5f348b070c3807ec00502eab7f77ff058a9848b74",
+      "size_bytes": 10005
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-php-adapter.md",
+      "sha256": "5e22fe4f2e002693fe114cf200d366b41a6f6cfaf3d4b1e08c0f7278458263d2",
+      "size_bytes": 10209
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-python-adapter.md",
+      "sha256": "fc55bd3ca5e97b765161176b30a1311ab942ba4d43ac0c765083e3b3d31fdd27",
+      "size_bytes": 7071
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-python-scenarios.md",
+      "sha256": "6e20353b8f0ede9afd0e13e433b56320ab4e4364f9db2e7e7c6160e76e55835c",
+      "size_bytes": 7929
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-query-close-query.md",
+      "sha256": "2b9659932c12b65da83d0e92334c9071e0b66f89b69dcf79788184095ef420b7",
+      "size_bytes": 7479
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-query-payment-query.md",
+      "sha256": "b8d539297aa8db9319536343f38319dc19dd60b3a4a2a1d827edabc7c71c1cf8",
+      "size_bytes": 19426
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-query-php-scenarios.md",
+      "sha256": "199229ce8dc8477a4b8b73db8a3bc1c1286da3ff1654e833ddbc99a5252e8564",
+      "size_bytes": 8630
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-query-quickstart.md",
+      "sha256": "07676d136cfd61bf39ea3b242f30fd4d14b1585102a6d649b6c53bad8280d49d",
+      "size_bytes": 1509
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-query-reconciliation.md",
+      "sha256": "dbc62627c770fcb805d7d4bf258b27c7ab077f4abf72e424b925972aa57c2e41",
+      "size_bytes": 9027
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-query-trade-close.md",
+      "sha256": "b32845aadd1022ba829142fd3065af0b6fbf8b621b06d9ef95d0fce5dc4f354b",
+      "size_bytes": 7889
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-query.md",
+      "sha256": "f583c03906686a293795bf55520c745690e6cb18c2b983b5591a1d44e1c250a0",
+      "size_bytes": 3522
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-quickstart.md",
+      "sha256": "8fd8c176e59f7b531224e2eb0ee95659013178bdb5559aa39674338d4ca1b590",
+      "size_bytes": 3419
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-refund-query.md",
+      "sha256": "c25b3f5f130af6b77869bc9c473c31ceac824b9c73f7ff0c34c9e32096acc220",
+      "size_bytes": 8877
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-refund-quickstart.md",
+      "sha256": "51592dfdd30738d36fb7a2d3479553c5d742f7cb1b9f5741a2b273b64cfed1c7",
+      "size_bytes": 1362
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-refund.md",
+      "sha256": "dd0b03b64e048865f0b4ff548b1847c1363f5a89d9ac43ba5230c10435fce69c",
+      "size_bytes": 11808
+    },
+    {
+      "path": "huifu-pay-integration/references/canonical-regression-prompts.md",
+      "sha256": "7887e94f547bc873cc85718249ea78202f9d313b78664a328784b75963e2f1fc",
+      "size_bytes": 3361
+    },
+    {
+      "path": "huifu-pay-integration/references/checkout-js-callback-and-confirmation.md",
+      "sha256": "7bd00ded03f00faae9432130c0d191cdf91401ecf8194f08fbacb31386babc21",
+      "size_bytes": 2350
+    },
+    {
+      "path": "huifu-pay-integration/references/checkout-js-component-modes.md",
+      "sha256": "f67b42748d297924750b4e8f42347dce904412813284b9a95db491ed7439c225",
+      "size_bytes": 2664
+    },
+    {
+      "path": "huifu-pay-integration/references/checkout-js-create-preorder-contract.md",
+      "sha256": "0a9205b28365b2f174fd0c86ed47c086469c5e4c7bae321c82348944b21083ab",
+      "size_bytes": 3381
+    },
+    {
+      "path": "huifu-pay-integration/references/checkout-js-framework-integration-notes.md",
+      "sha256": "f9ef39ac9531cd9ec88b52bf26776ade3a6ecbb20541f2423c994a8ea1a49f69",
+      "size_bytes": 1806
+    },
+    {
+      "path": "huifu-pay-integration/references/checkout-js-integration-flow.md",
+      "sha256": "4e7d8b4ec6b1bfecfbf64e38c18e8f748df3e6e83ebfa8e6a41b97158cc30a45",
+      "size_bytes": 3260
+    },
+    {
+      "path": "huifu-pay-integration/references/checkout-js-readme.md",
+      "sha256": "7d449f999f63cef159cbf64579791501c4a608234cea68ad64eba4bc2a513a7b",
+      "size_bytes": 1549
+    },
+    {
+      "path": "huifu-pay-integration/references/checkout-js.md",
+      "sha256": "ee80021f92393aa57255602ff325ed84264629e8219bcefc25f1c6ab15f23162",
+      "size_bytes": 2364
+    },
+    {
+      "path": "huifu-pay-integration/references/copilot-existing-system.md",
+      "sha256": "641a35ad263b167f1255d557628c2fe0e7a01a0a752df5c65ce21797bd2a7fc7",
+      "size_bytes": 4711
+    },
+    {
+      "path": "huifu-pay-integration/references/copilot-go-live-checklist.md",
+      "sha256": "11db6210d2b7748c0b0b30ebdb57b3b0340a592abb83018f73c974d73ab2aed4",
+      "size_bytes": 3136
+    },
+    {
+      "path": "huifu-pay-integration/references/copilot-onboarding.md",
+      "sha256": "1d158a0e9adfb72d9e6add163051451db8ffa786c7f2db1e28020bd2b3d44054",
+      "size_bytes": 5174
+    },
+    {
+      "path": "huifu-pay-integration/references/copilot-parameter-review.md",
+      "sha256": "ddb20e1c4d351d28007d1cdc2a6ad6360b152405b478510ae40938f01715bd32",
+      "size_bytes": 2960
+    },
+    {
+      "path": "huifu-pay-integration/references/copilot-solution-cards.md",
+      "sha256": "d1f5fb2c531951938f0bcd15af98a222bd76c247e559783cea7afcd02c54210f",
+      "size_bytes": 8714
+    },
+    {
+      "path": "huifu-pay-integration/references/copilot-solution-selection.md",
+      "sha256": "2fd1ab8cd58cf2a2a37e5403a028c12bfd2e83c405f0328b7a5e9a53d917b182",
+      "size_bytes": 3370
+    },
+    {
+      "path": "huifu-pay-integration/references/copilot-troubleshooting-playbooks.md",
+      "sha256": "e2ecb6d9445e581e2127dc9e9e8763ba580087446b103b38dc631eb5a2fbf716",
+      "size_bytes": 7714
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-async-webhook.md",
+      "sha256": "59ca48f5f797cdea5b77a31ede13384a71bd8d7ffb1bb39f48976b0b4d2fb400",
+      "size_bytes": 11112
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-base.md",
+      "sha256": "8c4903199d641d3a86758fa06e97f0af897503bf84b5f8100dca4ce269502cbc",
+      "size_bytes": 2218
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-common-params.md",
+      "sha256": "3ab9e77b691e577b185dfb37c4ddb556c8dddaece2198bb6ba4645bf3dcf54ba",
+      "size_bytes": 6572
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-customer-preparation.md",
+      "sha256": "f35d9264414e5610c0a2a7aabf584f913973cafd52070893a104b5104f87ea84",
+      "size_bytes": 9974
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-error-codes.md",
+      "sha256": "11244fbeef624606eb364328b5842d73c3f748fec991428297da8e24e6d3e434",
+      "size_bytes": 4294
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-faq.md",
+      "sha256": "b241b5158d16e96749963e7006d700c1d9cc98a1dbcda572eeb83fdda17da521",
+      "size_bytes": 4776
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-java-adapter.md",
+      "sha256": "5c9c8088df54cfcbd4a323b0c9181a40fcdf92f0bc90486d4a884aefa257a3bb",
+      "size_bytes": 1879
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-java-sdk-quickstart.md",
+      "sha256": "aa2174161b7629f94e5707358493df31cdf6bcd90f1dcbe6ce1e27957e6ab6ca",
+      "size_bytes": 6191
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-java-tech-spec.md",
+      "sha256": "3fc441b545c3df7debd153544952f9ab7d176481f93df95218fa54cfcbacbf12",
+      "size_bytes": 11171
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-payload-construction.md",
+      "sha256": "620c02e3fc0d340651c08cf0d17bccd7a59e369d57d7997575273c35f1cace90",
+      "size_bytes": 7898
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-php-adapter.md",
+      "sha256": "2e003a6c6c44bc82d2c2c86f4990db1cc6d88bb4563632e4f7e0d200e223e83a",
+      "size_bytes": 11222
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-alipay-mini.md",
+      "sha256": "fe5d8ec4c0ff3b5c3807cbc075b43ac0a7a4b17858ede976fc8da8bdb444c14a",
+      "size_bytes": 22832
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-douyin-direct.md",
+      "sha256": "d5a88129abb8a67037a52e53bd937886012aecb35259805a3d7973ff40a67351",
+      "size_bytes": 14753
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-channel.md",
+      "sha256": "df26bc85128c8d8f34a5beb77bf29c0401a2a6fc03ba0e5ec8f5261c2519674e",
+      "size_bytes": 9875
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-errors.md",
+      "sha256": "d8e8cc9bb5fe76aa463371c67d16b0b340c85a367eff9c6c5c08854c243d34fe",
+      "size_bytes": 1284
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-request.md",
+      "sha256": "bcb888ccd455dc16a37b68179b80df25bdbc50eaa5944454bd959bfd128703fd",
+      "size_bytes": 9799
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-response-channel.md",
+      "sha256": "8c0e8060ee093c1c286c61f9fa14020aa4a00b909114aba737effed36791e8ef",
+      "size_bytes": 11557
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-response.md",
+      "sha256": "080db745b175fb7d2cd01fcdb8d995757c1ca81af2bcd17fa711a9f38c99b475",
+      "size_bytes": 6402
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc.md",
+      "sha256": "a9238ce41ca2ef9f82225702e553779c3db71b6dc518d896075780a8e505e120",
+      "size_bytes": 9361
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-php-scenarios.md",
+      "sha256": "bf2c7206545a91dd11ea49e4928e9e4dade26047dc828d20927e7889a40fd596",
+      "size_bytes": 9702
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-quickstart.md",
+      "sha256": "88ec0a7cb5246ce9a703edd87b97a049fafb3be36a6014ec4483c18af3bc8469",
+      "size_bytes": 7869
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-wechat-mini.md",
+      "sha256": "26266bd489ef0ed06af04763656762e4e04ae56dcddb88408916ba4dbffdea6b",
+      "size_bytes": 26779
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder.md",
+      "sha256": "681e9cc082b2b7c2210d19d8e1a01f25ae28e68b080309bc85cf4fdfe1f26995",
+      "size_bytes": 3566
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-python-adapter.md",
+      "sha256": "c305f39aa71abf6b18315020f95a961cf6f6abd5cf37c32c761263eb3a234af0",
+      "size_bytes": 7172
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-python-scenarios.md",
+      "sha256": "e59d0ccae1223c61b46d254cfe74d9006b6a2f68ca0be6d6d6e483f0ede34f36",
+      "size_bytes": 9321
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-query-payment-status-query.md",
+      "sha256": "250fef880253facc34993cc8852db2573339a0824d4a263f4e3a66c94dd7aced",
+      "size_bytes": 23697
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-query-php-scenarios.md",
+      "sha256": "6db90ca8587059b85cbb41780387500e500ade2c463e3ff82e410f0fa4cd2afd",
+      "size_bytes": 5495
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-query-quickstart.md",
+      "sha256": "14206e3cc4e4150c681cdc2e73ad43bf7cf6e5e6534aec948a89890d97d34aa7",
+      "size_bytes": 5206
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-query-reconciliation.md",
+      "sha256": "66fbd144b65f1b66424ca87bbc812c0ba055b79d326f8ab1998236796ed568c2",
+      "size_bytes": 12207
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-query-splitpay.md",
+      "sha256": "59fb2b7ba6e811bc0cb4a2ea175d1da82c329f42f6dadd8c7d27716c1f7e0ee9",
+      "size_bytes": 8652
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-query-trade-close.md",
+      "sha256": "dd1db5abc138d58b2a6867f9649cd6caf3be31c5cac8350422815b8b69485205",
+      "size_bytes": 7713
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-query.md",
+      "sha256": "8d4bc719a90fbf67afb44e61ab23bf825c3666f1703a944d2c06517d3a82ec7c",
+      "size_bytes": 3182
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-quickstart.md",
+      "sha256": "738c9952f8cedb339438ca16433fb8491568c2a8af2ea3cc8df78f3cbe745b46",
+      "size_bytes": 5676
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-refund-php-scenarios.md",
+      "sha256": "b21e2d1d2af29f97b865a78403c00ffc4d619a419c93c14e019e0463ce610f50",
+      "size_bytes": 4778
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-refund-query.md",
+      "sha256": "be72a75d5f09bc2d251327f809936bf73de26f60fab851f72e45b8181c06a070",
+      "size_bytes": 12439
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-refund-quickstart.md",
+      "sha256": "b623fb4bcc5ed3ae4696a76ac85888a80d4d1172fa4c45abd739451eb46f6a08",
+      "size_bytes": 4518
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-refund.md",
+      "sha256": "039ec5ee9ff04a874cb0d537af771c88ed7f59f45515436c3389354f94d580a4",
+      "size_bytes": 11197
+    },
+    {
+      "path": "huifu-pay-integration/references/merchant-onboarding-faq.md",
+      "sha256": "4a2a4e16b9fda20769b312f42bd3ce4313150b5230b227a5df7a97ec55bcbf2f",
+      "size_bytes": 9711
+    },
+    {
+      "path": "huifu-pay-integration/references/official-service-source-index.md",
+      "sha256": "23b4f35aee35b69f916b379be29ae7141be4c061929c49ea8f74e2ea42b76ad3",
+      "size_bytes": 18615
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-async-notify.md",
+      "sha256": "9ac76bfd6ea261ff92c887911c30b7f1ad1d003b32d7c6f8f259428ddcb54d85",
+      "size_bytes": 2384
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-copyright-notice.md",
+      "sha256": "9e4ac43b5fba8819e3a6eb3b11a8ea6a6b59f7e1f742deea7d565949c2237f15",
+      "size_bytes": 1024
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-credential-boundary.md",
+      "sha256": "d2d25fd336051c341e144bf3294fce0149fef6969437762341cc4a1e235f2841",
+      "size_bytes": 1756
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-frontend-sdk-matrix.md",
+      "sha256": "b6179dbfa1c88d98f334968124ecc60902cafe994b69933b643333b1b55e4c34",
+      "size_bytes": 1722
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-overview.md",
+      "sha256": "a2562466c4a629fbae348c711e7fcef80aebbcb964c06303de1d3e7da7b52598",
+      "size_bytes": 7239
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-release-checklist.md",
+      "sha256": "beeb0785fa54efe0feae8b5884b7cc4825a2c93000c6dbc611825abee0831c24",
+      "size_bytes": 5125
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-request-field-preservation.md",
+      "sha256": "17dac4251194511af183a283f45684fb76fdbede087e9475fc4a0db738033046",
+      "size_bytes": 6017
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-request-header-policy.md",
+      "sha256": "ea320c5c8e241a9fb08c9ea22eb33b09e2f195ead9bcb4c5510de03c184d657a",
+      "size_bytes": 9225
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-server-sdk-matrix.md",
+      "sha256": "812721aab991d4243b3d90294d880f4c96f364fe668deb7f55433643a82a14e8",
+      "size_bytes": 8982
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-signing-v2.md",
+      "sha256": "26de58eac4d1983da910fa503c0cb94ebfe89d68df5062a763da263db8ad0d5f",
+      "size_bytes": 2688
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-versioning-policy.md",
+      "sha256": "ccea180865986741375a15f61805972f393473ee985e3097b8b7ee0522131e63",
+      "size_bytes": 2157
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-webhook-signing.md",
+      "sha256": "c80d57859f0bc4c830ab2de23f6477acbd00af1f1dc87ff95711665a7fbd0c9e",
+      "size_bytes": 2821
+    },
+    {
+      "path": "huifu-pay-integration/references/skill-version-policy.md",
+      "sha256": "ecdf081a3c99be7b965a86f9d707680acfcdb8f4d38b7655eed1a4bdeae4e1e6",
+      "size_bytes": 4085
+    }
+  ],
+  "reference_digest_schema_version": "1.0",
+  "schema_version": "1.0",
+  "source_skill_version": "1.3.0"
+}

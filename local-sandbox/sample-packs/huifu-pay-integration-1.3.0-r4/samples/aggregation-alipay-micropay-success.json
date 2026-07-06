@@ -1,0 +1,258 @@
+{
+  "schema_version": "1.0",
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "sample_id": "aggregation-alipay-micropay-success",
+  "title": "聚合支付宝 A_MICROPAY 成功链路样例",
+  "description": "由附件中的聚合支付宝 A_MICROPAY 成功交易日志拆分而来，重点覆盖 auth_code 和支付宝渠道响应字段。",
+  "source_type": "deidentified_production",
+  "authorization": {
+    "status": "approved",
+    "approved_by": "user-provided-codex-attachment",
+    "approved_at": "2026-06-29T10:20:00+08:00"
+  },
+  "deidentification": {
+    "status": "passed",
+    "method": "field-level placeholder replacement; removed raw merchant names, buyer ids, buyer logon ids, real auth_code, long numeric identifiers, transaction ids, IP addresses, and real callback URL hosts while preserving amount, status, Alipay channel, fund bill, fee, and response projection semantics",
+    "checked_at": "2026-06-29T10:35:00+08:00"
+  },
+  "endpoint": {
+    "id": "aggregation.payment.create",
+    "method": "POST",
+    "path": "/v4/trade/payment/create"
+  },
+  "scenario_id": "AGG-CHANNEL-ALI-01",
+  "headers_profile": "java-php-python-local-sandbox",
+  "source_summary": {
+    "attachment": "pasted-text.txt",
+    "selected_source_lines": [
+      29,
+      31,
+      43,
+      99,
+      109,
+      110,
+      113,
+      119
+    ],
+    "source_trade_type": "A_MICROPAY",
+    "source_channel": "Alipay micropay",
+    "source_product_id": "YMFZS",
+    "source_amount": "1.00",
+    "notes": [
+      "line 29 contains the public v2 micropay request with data.auth_code",
+      "line 43 selects TraceType=A_MICROPAY and A_MICROPAY.TransProcessor",
+      "line 99 contains the downstream Pegasus request with authCode and payChannelType=A",
+      "line 109 contains channel return fields including bankCode=10000, bankMessage=Success, channelStatus=S, payChannelType=A, and transResponseAddInfo.fund_bill_list",
+      "line 110 contains AggregateTransImpl.authCodePay final response with tradeType=A_MICROPAY, transStat=S, and alipayResponse",
+      "line 119 contains the converted alipayResponseDTO evidence for buyer, fundBillList, and Success projection",
+      "the attachment does not contain a separate scanpay query controller log for this payment; query_success is normalized from the authCodePay result and channel return evidence"
+    ]
+  },
+  "request": {
+    "source": "normalized from v2 MicropayTransController request and current sandbox aggregation.payment.create contract",
+    "data": {
+      "req_date": "20260629",
+      "req_seq_id": "REQ-ALI-MICROPAY-0001",
+      "huifu_id": "1234000100000004",
+      "trade_type": "A_MICROPAY",
+      "trans_amt": "1.00",
+      "goods_desc": "示例支付宝反扫",
+      "notify_url": "https://example.invalid/huifu/alipay-micropay-notify",
+      "auth_code": "AUTHCODE-ALI-MICROPAY-001",
+      "method_expand": "{\"auth_code\":\"AUTHCODE-ALI-MICROPAY-001\",\"terminal_id\":\"POS-ALI-MICRO-001\",\"business_params\":{\"out_trade_risk_info\":\"{}\"}}",
+      "risk_check_data": "{\"risk_mng_info\":{\"sub_trade_type\":\"4300\"},\"ip_addr\":\"127.0.0.1\"}",
+      "remark": "remark-local-ali-micropay"
+    }
+  },
+  "responses": {
+    "sync": {
+      "source": "normalized from AggregateTransImpl.authCodePay result",
+      "data": {
+        "resp_code": "00000000",
+        "resp_desc": "交易成功",
+        "sub_resp_code": "00000000",
+        "sub_resp_desc": "交易成功",
+        "req_date": "20260629",
+        "req_seq_id": "REQ-ALI-MICROPAY-0001",
+        "huifu_id": "1234000100000004",
+        "hf_seq_id": "HF-ALI-MICROPAY-0001",
+        "trade_type": "A_MICROPAY",
+        "trans_amt": "1.00",
+        "pay_amt": "1.00",
+        "settlement_amt": "1.00",
+        "trans_stat": "S",
+        "unconfirm_amt": "0.99",
+        "temporary_fee_amt": "0.01",
+        "bank_code": "TRADE_SUCCESS",
+        "bank_message": "TRADE_SUCCESS",
+        "bank_seq_id": "025280",
+        "batch_id": "260629",
+        "ref_no": "100921025280",
+        "channel_type": "U",
+        "party_order_id": "PARTY-ALI-MICROPAY-0001",
+        "out_trans_id": "ALITXN-LOCAL-001",
+        "atu_sub_mer_id": "ALI-MER-LOCAL-002",
+        "is_clean_split": "N",
+        "is_delay_acct": "0",
+        "business_variant": "aggregation.alipay",
+        "alipay_response": {
+          "buyer_id": "buyer-ali-micropay-001",
+          "buyer_logon_id": "buyer-ali-micropay-user-001",
+          "code": "10000",
+          "sub_msg": "Success",
+          "gmt_payment": "2026-06-29T10:09:23+08:00",
+          "out_trade_no": "PARTY-ALI-MICROPAY-0001",
+          "trade_no": "ALITXN-LOCAL-001",
+          "fund_bill_list": [
+            {
+              "amount": "1.00",
+              "fund_channel": "ALIPAYACCOUNT"
+            }
+          ]
+        }
+      }
+    },
+    "channel": {
+      "source": "normalized from Pegasus BizScanCustFacade.bizScanCust return",
+      "data": {
+        "return_code": "000",
+        "return_desc": "成功",
+        "bank_code": "10000",
+        "bank_message": "Success",
+        "bank_resp_code": "10000",
+        "business_amt": "1.00",
+        "channel_rsp_code": "00",
+        "channel_status": "S",
+        "channel_type": "U",
+        "coupon_fee": "0.00",
+        "gate_id": "Vu",
+        "pay_channel_type": "A",
+        "pay_amt": "1.00",
+        "settlement_amt": "1.00",
+        "party_order_id": "PARTY-ALI-MICROPAY-0001",
+        "out_trans_id": "ALITXN-LOCAL-001",
+        "route_region_id": "HS_10A",
+        "trans_status": "S",
+        "end_time": "2026-06-29T10:09:23+08:00",
+        "trans_response_add_info": {
+          "fund_bill_list": [
+            {
+              "amount": "1.00",
+              "fund_channel": "ALIPAYACCOUNT"
+            }
+          ]
+        }
+      }
+    },
+    "query_success": {
+      "endpoint": {
+        "id": "aggregation.payment.query",
+        "method": "POST",
+        "path": "/v4/trade/payment/scanpay/query"
+      },
+      "request": {
+        "data": {
+          "huifu_id": "1234000100000004",
+          "hf_seq_id": "HF-ALI-MICROPAY-0001"
+        }
+      },
+      "source": "normalized query projection from terminal authCodePay result and Alipay channel return evidence",
+      "data": {
+        "resp_code": "00000000",
+        "resp_desc": "查询成功",
+        "req_date": "20260629",
+        "req_seq_id": "REQ-ALI-MICROPAY-0001",
+        "huifu_id": "1234000100000004",
+        "hf_seq_id": "HF-ALI-MICROPAY-0001",
+        "trade_type": "A_MICROPAY",
+        "trans_amt": "1.00",
+        "pay_amt": "1.00",
+        "settlement_amt": "1.00",
+        "trans_stat": "S",
+        "bank_code": "TRADE_SUCCESS",
+        "bank_message": "TRADE_SUCCESS",
+        "bank_seq_id": "025280",
+        "bank_order_no": "ALITXN-LOCAL-001",
+        "out_trans_id": "ALITXN-LOCAL-001",
+        "party_order_id": "PARTY-ALI-MICROPAY-0001",
+        "ref_no": "100921025280",
+        "trans_date": "20260629",
+        "trans_time": "100921",
+        "end_time": "2026-06-29T10:09:23+08:00",
+        "fee_amt": "0.01",
+        "fee_amount": "0.01",
+        "fee_formula_infos": [
+          {
+            "fee_type": "TRANS_FEE",
+            "fee_formula": "AMT*0.006"
+          }
+        ],
+        "alipay_response": {
+          "buyer_id": "buyer-ali-micropay-001",
+          "buyer_logon_id": "buyer-ali-micropay-user-001",
+          "code": "10000",
+          "sub_msg": "Success",
+          "gmt_payment": "2026-06-29T10:09:23+08:00",
+          "out_trade_no": "PARTY-ALI-MICROPAY-0001",
+          "trade_no": "ALITXN-LOCAL-001",
+          "fund_bill_list": [
+            {
+              "amount": "1.00",
+              "fund_channel": "ALIPAYACCOUNT"
+            }
+          ]
+        },
+        "business_variant": "aggregation.alipay"
+      }
+    }
+  },
+  "expected": {
+    "resp_code": "00000000",
+    "fields": {
+      "business_variant": "aggregation.alipay",
+      "trade_type": "A_MICROPAY",
+      "trans_stat": "S"
+    }
+  },
+  "assertions": {
+    "assertions": [
+      "envelope",
+      "headers",
+      "signature",
+      "sample-backed",
+      "business-variant",
+      "method-expand-json",
+      "micropay-auth-code",
+      "channel-response-projection",
+      "alipay-channel-response"
+    ],
+    "field_assertions": [
+      {
+        "path": "resp_code",
+        "equals": "00000000"
+      },
+      {
+        "path": "trade_type",
+        "equals": "A_MICROPAY"
+      },
+      {
+        "path": "trans_stat",
+        "equals": "S"
+      },
+      {
+        "path": "alipay_response",
+        "exists": true
+      },
+      {
+        "path": "business_variant",
+        "equals": "aggregation.alipay"
+      }
+    ],
+    "event_assertions": [
+      "payment.accepted",
+      "business.variant",
+      "payment.query"
+    ]
+  },
+  "sample_sha256": "c6c9abad5260e2fa03c9bada9c173f792fd74d1f761e4f172cc9d2f67f74d584"
+}

@@ -1,0 +1,58 @@
+{
+  "assertions": [
+    "envelope",
+    "headers",
+    "signature",
+    "business-variant"
+  ],
+  "contract_bundle": "huifu-pay-integration-1.3.0-r3",
+  "endpoint_id": "hosting.payment.preorder.h5pc",
+  "event_assertions": [
+    "payment.accepted",
+    "business.variant"
+  ],
+  "expected": {
+    "fields": {
+      "business_variant": "hosting.h5pc.douyin"
+    },
+    "resp_code": "00000000"
+  },
+  "expected_resp_code": "00000000",
+  "field_assertions": [
+    {
+      "equals": "P",
+      "path": "trans_stat"
+    },
+    {
+      "exists": true,
+      "path": "pre_order_id"
+    },
+    {
+      "equals": "hosting.h5pc.douyin",
+      "path": "business_variant"
+    },
+    {
+      "exists": true,
+      "path": "dy_response"
+    }
+  ],
+  "headers_profile": "java-php-python-local-sandbox",
+  "id": "hosting-h5-dy-preorder",
+  "kind": "variant",
+  "method": "POST",
+  "path": "/v2/trade/hosting/payment/preorder",
+  "request": {
+    "data": {
+      "dy_data": "{\"sub_appid\":\"dy-local-sandbox\",\"h5_info\":{\"type\":\"local\"}}",
+      "goods_desc": "hosting-h5-dy-preorder",
+      "hosting_data": "{\"project_title\":\"local sandbox project\",\"project_id\":\"PRJ_LOCAL_SANDBOX\",\"request_type\":\"M\"}",
+      "huifu_id": "6666000100000001",
+      "notify_url": "{{notify_url:/notify?case=hosting-channel}}",
+      "pre_order_type": "1",
+      "req_date": "20260624",
+      "req_seq_id": "S12-HOST-H5-DY",
+      "trans_amt": "0.12"
+    }
+  },
+  "schema_version": "1.1"
+}

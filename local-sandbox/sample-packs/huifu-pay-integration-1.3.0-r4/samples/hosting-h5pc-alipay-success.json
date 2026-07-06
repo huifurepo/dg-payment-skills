@@ -1,0 +1,461 @@
+{
+  "schema_version": "1.0",
+  "contract_bundle": "huifu-pay-integration-1.3.0-r4",
+  "sample_id": "hosting-h5pc-alipay-success",
+  "title": "托管 H5/PC 支付宝成功链路样例",
+  "description": "由附件中的托管支付宝成功交易日志拆分而来，重点覆盖 alipay_data 请求、预下单/支付响应里的支付宝渠道字段、异步通知和 Webhook。",
+  "source_type": "deidentified_production",
+  "authorization": {
+    "status": "approved",
+    "approved_by": "user-provided-codex-attachment",
+    "approved_at": "2026-06-29T11:20:00+08:00"
+  },
+  "deidentification": {
+    "status": "passed",
+    "method": "field-level placeholder replacement; removed raw merchant names, real huifu ids, buyer ids, buyer logon ids, trade numbers, bank order numbers, party order ids, hf sequence ids, IP addresses, long numeric identifiers, and real callback URL hosts while preserving amount, status, Alipay channel, split-account, fee, notify, and webhook semantics",
+    "checked_at": "2026-06-29T11:30:00+08:00"
+  },
+  "endpoint": {
+    "id": "hosting.payment.preorder.h5pc",
+    "method": "POST",
+    "path": "/v2/trade/hosting/payment/preorder"
+  },
+  "scenario_id": "HOST-H5-ALI-01",
+  "headers_profile": "java-php-python-local-sandbox",
+  "source_summary": {
+    "attachment": "pasted-text.txt",
+    "selected_source_lines": [
+      2,
+      4,
+      6,
+      13,
+      19,
+      22,
+      25,
+      29,
+      32,
+      37,
+      41,
+      50,
+      58,
+      60
+    ],
+    "source_trade_type": "A_JSAPI",
+    "source_channel": "Hosting Alipay",
+    "source_product_id": "KAZX",
+    "source_amount": "320.00",
+    "source_pre_order_type": "2",
+    "notes": [
+      "line 2 contains the preorder request with alipay_data.subject, app_data, split account data, and notify_url",
+      "line 4 contains the preorder response with pre_order_id and Alipay jump_url",
+      "line 19 contains the downstream TOP request with alipayData.buyerId and alipayData.subject",
+      "line 22 contains the downstream TOP response with alipayResponse.code=10000, alipayResponse.subMsg=Success, and payInfo.tradeNO",
+      "lines 29 and 32 contain payment notify payloads with alipayResponse buyerId, buyerLogonId, couponFee, fundBillList, debitFlag=2, and transStat=S",
+      "line 41 contains the merchant notify_url payload with normalized alipay_response channel fields",
+      "lines 37, 58, and 60 contain hosting.pay and hosting.accounted webhook evidence",
+      "the observed source preorder uses pre_order_type=2; the sample is placed in the requested H5/PC Alipay file and preserves the Alipay channel-response evidence"
+    ]
+  },
+  "request": {
+    "source": "normalized from PreOrderController request and current sandbox hosting.payment.preorder.h5pc contract",
+    "data": {
+      "req_date": "20260628",
+      "req_seq_id": "REQ-HOST-ALI-0001",
+      "huifu_id": "1234000100000010",
+      "pre_order_type": "2",
+      "trans_amt": "320.00",
+      "time_expire": "20260629T001431",
+      "goods_desc": "示例托管支付宝订单",
+      "notify_url": "https://example.invalid/huifu/hosting-h5pc-alipay-notify",
+      "acct_split_bunch": "{\"acct_infos\":[{\"percentage_div\":0.35,\"huifu_id\":\"1234000100000011\"},{\"percentage_div\":99.65,\"huifu_id\":\"1234000100000010\"}],\"percentage_flag\":\"Y\"}",
+      "app_data": "{\"app_schema\":\"localAlipayApp://\"}",
+      "alipay_data": "{\"subject\":\"示例托管支付宝订单\",\"buyer_id\":\"buyer-ali-host-001\"}",
+      "hosting_data": "{\"project_title\":\"示例托管支付宝项目\",\"project_id\":\"PROJECT-LOCAL-HOST-ALI\",\"request_type\":\"M\"}"
+    }
+  },
+  "responses": {
+    "sync": {
+      "source": "normalized from PreOrderController response and downstream TOP A_JSAPI processing response",
+      "data": {
+        "product_id": "KAZX",
+        "req_seq_id": "REQ-HOST-ALI-0001",
+        "req_date": "20260628",
+        "huifu_id": "1234000100000010",
+        "order_type": "HT",
+        "resp_code": "00000000",
+        "resp_desc": "操作成功",
+        "pre_order_id": "PREORDER-HOST-ALI-0001",
+        "pre_order_type": "2",
+        "trans_amt": "320.00",
+        "time_expire": "20260629T001431",
+        "current_time": "20260628T235934",
+        "goods_desc": "示例托管支付宝订单",
+        "app_data": "{\"app_schema\":\"localAlipayApp://\"}",
+        "jump_url": "alipays://platformapi/startapp?appId=ALIAPP-LOCAL-001&thirdPartSchema=localAlipayApp://&page=pages/cashier/cashier?p=PREORDER-HOST-ALI-0001&bank_switch=Y",
+        "trade_type": "A_JSAPI",
+        "trans_stat": "P",
+        "business_variant": "hosting.h5pc.alipay",
+        "hf_seq_id": "HF-HOST-ALI-0001",
+        "party_order_id": "PARTY-HOST-ALI-0001",
+        "pay_info": "{\"tradeNO\":\"ALIPAY-TRADE-LOCAL-001\"}",
+        "alipay_response": {
+          "code": "10000",
+          "pay_info": "{\"tradeNO\":\"ALIPAY-TRADE-LOCAL-001\"}",
+          "sub_msg": "Success"
+        }
+      }
+    },
+    "payment_response": {
+      "source": "normalized from HostingPayController response",
+      "data": {
+        "req_seq_id": "REQ-HOST-ALI-0001",
+        "req_date": "20260628",
+        "trans_req_date": "20260628",
+        "huifu_id": "1234000100000010",
+        "order_type": "HT",
+        "resp_code": "00000000",
+        "resp_desc": "操作成功",
+        "project_id": "PROJECT-LOCAL-HOST-ALI",
+        "hosting_order_id": "REQ-HOST-ALI-0001",
+        "trade_type": "A_JSAPI",
+        "trans_amt": "320.00",
+        "trans_stat": "P",
+        "pay_info": "{\"tradeNO\":\"ALIPAY-TRADE-LOCAL-001\"}",
+        "goods_desc": "示例托管支付宝订单",
+        "trans_req_seq_id": "REQ-HOST-ALI-0001",
+        "current_time": "20260628T235937",
+        "split_pay_last_flag": "",
+        "alipay_response": {
+          "code": "10000",
+          "pay_info": "{\"tradeNO\":\"ALIPAY-TRADE-LOCAL-001\"}",
+          "sub_msg": "Success"
+        }
+      }
+    },
+    "query_success": {
+      "endpoint": {
+        "id": "hosting.payment.query",
+        "method": "POST",
+        "path": "/v2/trade/hosting/payment/queryorderinfo"
+      },
+      "request": {
+        "data": {
+          "product_id": "KAZX",
+          "req_seq_id": "QRY-HOST-ALI-0001",
+          "req_date": "20260628",
+          "huifu_id": "1234000100000010",
+          "org_req_date": "20260628",
+          "org_req_seq_id": "REQ-HOST-ALI-0001"
+        }
+      },
+      "source": "normalized query projection from payment notify, accounting notify, and merchant notify final-state evidence",
+      "data": {
+        "product_id": "KAZX",
+        "req_seq_id": "QRY-HOST-ALI-0001",
+        "req_date": "20260628",
+        "huifu_id": "1234000100000010",
+        "resp_code": "00000000",
+        "resp_desc": "操作成功",
+        "org_req_date": "20260628",
+        "org_req_seq_id": "REQ-HOST-ALI-0001",
+        "pre_order_id": "PREORDER-HOST-ALI-0001",
+        "goods_desc": "示例托管支付宝订单",
+        "trans_date": "20260628",
+        "order_stat": "1",
+        "org_hf_seq_id": "HF-HOST-ALI-0001",
+        "out_trans_id": "ALIPAY-TXN-HOST-ALI-0001",
+        "party_order_id": "PARTY-HOST-ALI-0001",
+        "pay_type": "A_JSAPI",
+        "trans_stat": "S",
+        "fee_flag": 2,
+        "trans_time": "20260628T235936",
+        "trans_amt": "320.00",
+        "pay_amt": "320.00",
+        "settlement_amt": "320.00",
+        "fee_amt": "0.80",
+        "ref_amt": "320.00",
+        "unconfirm_amt": "319.20",
+        "bank_code": "TRADE_SUCCESS",
+        "bank_desc": "TRADE_SUCCESS",
+        "bank_seq_id": "741616",
+        "bank_order_no": "ALIPAY-TXN-HOST-ALI-0001",
+        "ref_no": "235936741616",
+        "gate_id": "Dx",
+        "channel_type": "U",
+        "debit_flag": "2",
+        "alipay_response": {
+          "app_id": "",
+          "buyer_id": "buyer-ali-host-001",
+          "buyer_logon_id": "buyer-ali-host-user-001",
+          "coupon_fee": "0.00",
+          "fund_bill_list": [
+            {
+              "amount": "320.00",
+              "fund_channel": "BANKCARD",
+              "fund_type": "CREDIT_CARD"
+            }
+          ]
+        },
+        "is_div": "1",
+        "is_delay_acct": "0",
+        "acct_split_bunch": {
+          "acct_infos": [
+            {
+              "acct_id": "F-LOCAL-HOST-ALI-001",
+              "huifu_id": "1234000100000011",
+              "div_amt": "1.12"
+            },
+            {
+              "acct_id": "F-LOCAL-HOST-ALI-002",
+              "huifu_id": "1234000100000010",
+              "div_amt": "318.88"
+            }
+          ],
+          "fee_acct_id": "F-LOCAL-HOST-ALI-FEE",
+          "fee_huifu_id": "1234000100000010",
+          "fee_amt": "0.80"
+        },
+        "fee_formula_infos": [
+          {
+            "fee_formula": "AMT*0.0025",
+            "fee_type": "TRANS_FEE"
+          }
+        ],
+        "business_variant": "hosting.h5pc.alipay"
+      }
+    },
+    "async_notify": {
+      "source": "normalized from TradeOrderMessageHandler and AbstractPosMessageHandler payment notify payloads",
+      "transport": {
+        "content_type": "application/x-www-form-urlencoded",
+        "signature_rule": "RSA signature over raw resp_data",
+        "ack_body": "RECV_ORD_ID_REQ-HOST-ALI-0001"
+      },
+      "data": {
+        "resp_code": "00000000",
+        "resp_desc": "交易成功",
+        "sub_resp_code": "00000000",
+        "sub_resp_desc": "交易成功",
+        "req_date": "20260628",
+        "req_seq_id": "REQ-HOST-ALI-0001",
+        "huifu_id": "1234000100000010",
+        "hf_seq_id": "HF-HOST-ALI-0001",
+        "trade_type": "A_JSAPI",
+        "trans_type": "A_JSAPI",
+        "product_id": "KAZX",
+        "trans_amt": "320.00",
+        "pay_amt": "320.00",
+        "settlement_amt": "320.00",
+        "trans_stat": "S",
+        "acct_stat": "I",
+        "bank_code": "TRADE_SUCCESS",
+        "bank_message": "TRADE_SUCCESS",
+        "bank_order_no": "ALIPAY-TXN-HOST-ALI-0001",
+        "bank_seq_id": "741616",
+        "out_ord_id": "ALIPAY-TXN-HOST-ALI-0001",
+        "out_trans_id": "ALIPAY-TXN-HOST-ALI-0001",
+        "party_order_id": "PARTY-HOST-ALI-0001",
+        "posp_seq_id": "PARTY-HOST-ALI-0001",
+        "notify_type": 1,
+        "fee_amt": "0.80",
+        "fee_amount": "0.80",
+        "fee_flag": 2,
+        "fee_rec_type": "1",
+        "debit_flag": "2",
+        "ref_no": "235936741616",
+        "end_time": "20260628T235940",
+        "is_delay_acct": "0",
+        "is_div": "1",
+        "pay_scene": "02",
+        "gate_id": "Dx",
+        "channel_type": "U",
+        "request_ip": "127.0.0.1",
+        "alipay_response": {
+          "app_id": "",
+          "buyer_id": "buyer-ali-host-001",
+          "buyer_logon_id": "buyer-ali-host-user-001",
+          "coupon_fee": "0.00",
+          "fund_bill_list": [
+            {
+              "amount": "320.00",
+              "fund_channel": "BANKCARD",
+              "fund_type": "CREDIT_CARD"
+            }
+          ]
+        },
+        "split_fee_info": {
+          "split_fee_details": [
+            {
+              "split_fee_acct_id": "F-LOCAL-HOST-ALI-001",
+              "split_fee_amt": "0.00",
+              "split_fee_huifu_id": "1234000100000011",
+              "split_fee_flag": 2
+            }
+          ],
+          "total_split_fee_amt": "0.00"
+        },
+        "fee_formula_infos": [
+          {
+            "fee_formula": "AMT*0.0025",
+            "fee_type": "TRANS_FEE"
+          }
+        ]
+      }
+    },
+    "merchant_notify": {
+      "source": "normalized from ArcherTopMsgSender notify_url VIRGO topic and asynchronous push evidence",
+      "transport": {
+        "topics": [
+          "VIRGO://https://example.invalid/huifu/hosting-h5pc-alipay-notify"
+        ],
+        "content_type": "application/json"
+      },
+      "body": {
+        "ord_id": "HOST-ALI-NOTIFY-0001",
+        "top_notify_type": "CUSTOM",
+        "trans_type": "CUSTOM",
+        "data": {
+          "resp_code": "00000000",
+          "resp_desc": "交易成功",
+          "req_date": "20260628",
+          "req_seq_id": "REQ-HOST-ALI-0001",
+          "huifu_id": "1234000100000010",
+          "hf_seq_id": "HF-HOST-ALI-0001",
+          "trade_type": "A_JSAPI",
+          "trans_type": "A_JSAPI",
+          "trans_amt": "320.00",
+          "pay_amt": "320.00",
+          "settlement_amt": "320.00",
+          "trans_stat": "S",
+          "bank_code": "TRADE_SUCCESS",
+          "bank_message": "TRADE_SUCCESS",
+          "bank_order_no": "ALIPAY-TXN-HOST-ALI-0001",
+          "party_order_id": "PARTY-HOST-ALI-0001",
+          "debit_flag": "2",
+          "alipay_response": {
+            "coupon_fee": "0.00",
+            "buyer_logon_id": "buyer-ali-host-user-001",
+            "buyer_id": "buyer-ali-host-001",
+            "app_id": "",
+            "fund_bill_list": [
+              {
+                "amount": "320.00",
+                "fund_type": "CREDIT_CARD",
+                "fund_channel": "BANKCARD"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "webhook_pay": {
+      "source": "normalized from WebHookHelper webhook.v2 hosting.pay submission",
+      "transport": {
+        "namespace": "opps-webhook",
+        "event_define_no": "hosting.pay",
+        "dispatch_result": {
+          "code": 500,
+          "msg": "该订阅没有匹配的事件"
+        }
+      },
+      "body": {
+        "huifu_id": "1234000100000010",
+        "namespace": "opps-webhook",
+        "event_define_no": "hosting.pay",
+        "trans_stat": "1",
+        "data": {
+          "project_id": "PROJECT-LOCAL-HOST-ALI",
+          "hosting_type": "2",
+          "hosting_order_id": "REQ-HOST-ALI-0001",
+          "trade_type": "JSAPI",
+          "trans_amt": "320.00",
+          "fee_amt": "0.80",
+          "create_date": "2026-06-28 23:59:36",
+          "pay_time": "2026-06-28 23:59:40",
+          "pay_way": "JSAPI",
+          "trans_stat": "S",
+          "bank_code": "TRADE_SUCCESS",
+          "bank_message": "TRADE_SUCCESS",
+          "goods_desc": "示例托管支付宝订单",
+          "party_order_id": "PARTY-HOST-ALI-0001",
+          "top_order_id": "TOP-HOST-ALI-0001"
+        }
+      }
+    },
+    "webhook_accounted": {
+      "source": "normalized from AcctMsgToWebhookService and event dispatch request",
+      "transport": {
+        "namespace": "opps-webhook",
+        "event_define_no": "hosting.accounted"
+      },
+      "body": {
+        "acct_stat": "S",
+        "event_define_no": "hosting.accounted",
+        "huifu_id": "1234000100000010",
+        "namespace": "opps-webhook",
+        "trans_stat": "S",
+        "data": {
+          "acct_date": "2026-06-28 23:59:41",
+          "acct_stat": "S",
+          "hf_seq_id": "HF-HOST-ALI-0001",
+          "huifu_id": "1234000100000010",
+          "req_date": "20260628",
+          "req_seq_id": "REQ-HOST-ALI-0001",
+          "resp_code": "00000000",
+          "resp_desc": "交易成功",
+          "trans_finsh_time": "2026-06-28 23:59:41",
+          "trans_stat": "S",
+          "trans_type": "A_JSAPI"
+        }
+      }
+    }
+  },
+  "expected": {
+    "resp_code": "00000000",
+    "fields": {
+      "business_variant": "hosting.h5pc.alipay",
+      "pre_order_type": "2",
+      "trans_stat": "P"
+    }
+  },
+  "assertions": {
+    "assertions": [
+      "envelope",
+      "headers",
+      "signature",
+      "sample-backed",
+      "business-variant",
+      "string-json-channel-fields",
+      "channel-response-projection",
+      "notify-rsa-resp-data",
+      "webhook-event"
+    ],
+    "field_assertions": [
+      {
+        "path": "resp_code",
+        "equals": "00000000"
+      },
+      {
+        "path": "pre_order_id",
+        "exists": true
+      },
+      {
+        "path": "alipay_response",
+        "exists": true
+      },
+      {
+        "path": "business_variant",
+        "equals": "hosting.h5pc.alipay"
+      }
+    ],
+    "event_assertions": [
+      "payment.accepted",
+      "business.variant",
+      "payment.query",
+      "payment.notify",
+      "webhook.hosting.pay",
+      "webhook.hosting.accounted"
+    ]
+  },
+  "sample_sha256": "41b61dcee28e9ab0c7c051fca53155629b0d086be21f01c2006e41dfd5970b53"
+}
