@@ -27,7 +27,7 @@
 托管支付 PHP 默认使用官方 Composer 包：
 
 - `huifurepo/dg-php-sdk`
-- 当前 Skill 包基线：`2.0.27`
+- 当前 Skill 包基线：`2.0.29`
 
 业务入口统一走：
 
@@ -54,16 +54,16 @@
 | 项 | 值 |
 | --- | --- |
 | Composer 包 | `huifurepo/dg-php-sdk` |
-| 当前 Skill 包基线 | `2.0.27` |
+| 当前 Skill 包基线 | `2.0.29` |
 | 官方 SDK 文档 | `https://paas.huifu.com/partners/prod/devtools/doc/sdk_php.md` |
 | Packagist 包路径 | `https://packagist.org/packages/huifurepo/dg-php-sdk` |
 | GitHub 项目主页 | `https://github.com/huifurepo/bspay-php-sdk` |
-| 备用下载包 | `https://api.github.com/repos/huifurepo/bspay-php-sdk/zipball/refs/tags/2.0.27` |
+| 备用下载包 | `https://api.github.com/repos/huifurepo/bspay-php-sdk/zipball/refs/tags/2.0.29` |
 
 新项目安装当前 Skill 基线：
 
 ```bash
-composer require "huifurepo/dg-php-sdk:^2.0.27"
+composer require "huifurepo/dg-php-sdk:^2.0.29"
 composer show huifurepo/dg-php-sdk
 test -f vendor/huifurepo/dg-php-sdk/BsPaySdk/init.php
 ```
@@ -71,24 +71,24 @@ test -f vendor/huifurepo/dg-php-sdk/BsPaySdk/init.php
 已有项目升级到当前 Skill 基线：
 
 ```bash
-composer require "huifurepo/dg-php-sdk:^2.0.27" --with-all-dependencies
+composer require "huifurepo/dg-php-sdk:^2.0.29" --with-all-dependencies
 composer update huifurepo/dg-php-sdk --with-all-dependencies
 composer show huifurepo/dg-php-sdk
 test -f vendor/huifurepo/dg-php-sdk/BsPaySdk/init.php
 ```
 
-如果用户项目已经安装了低于 `2.0.27` 的 SDK，约定是先把 `composer.json` 中 `huifurepo/dg-php-sdk` 的版本约束调整到 `^2.0.27` 或更精确的 `2.0.27`，再执行上面的升级命令；不要在旧 SDK 上继续生成新字段或新接口代码。
+如果用户项目已经安装了低于 `2.0.29` 的 SDK，约定是先把 `composer.json` 中 `huifurepo/dg-php-sdk` 的版本约束调整到 `^2.0.29` 或更精确的 `2.0.29`，再执行上面的升级命令；不要在旧 SDK 上继续生成新字段或新接口代码。
 
 Composer 不可用或内网不能访问 Packagist 时，可使用当前基线对应的官方包分发地址手动落地：
 
 ```bash
-curl -L "https://api.github.com/repos/huifurepo/bspay-php-sdk/zipball/refs/tags/2.0.27" -o dg-php-sdk-2.0.27.zip
-unzip dg-php-sdk-2.0.27.zip
+curl -L "https://api.github.com/repos/huifurepo/bspay-php-sdk/zipball/refs/tags/2.0.29" -o dg-php-sdk-2.0.29.zip
+unzip dg-php-sdk-2.0.29.zip
 export HUIFU_SDK_ROOT="/absolute/path/to/extracted/BsPaySdk"
 test -f "$HUIFU_SDK_ROOT/init.php"
 ```
 
-手动下载方式只解决安装来源问题，不改变运行约束：只能保留一个实际使用的 SDK 路径，`HUIFU_SDK_ROOT` 必须指向本次确认过的 `BsPaySdk` 目录。官方 SDK 文档版本表在 2026-04-24 直接校验时仍只列到 `v2.0.25`，且该行 OSS 下载地址返回 404；不要把可访问的旧包地址当作 `2.0.27` 替代品。
+手动下载方式只解决安装来源问题，不改变运行约束：只能保留一个实际使用的 SDK 路径，`HUIFU_SDK_ROOT` 必须指向本次确认过的 `BsPaySdk` 目录。官方 SDK 文档版本表在 2026-04-24 直接校验时仍只列到 `v2.0.25`，且该行 OSS 下载地址返回 404；不要把可访问的旧包地址当作 `2.0.29` 替代品。
 
 运行前至少准备以下环境变量：
 
@@ -97,7 +97,7 @@ export HUIFU_SYS_ID="渠道商或商户系统号"
 export HUIFU_PRODUCT_ID="汇付产品号"
 export HUIFU_RSA_PRIVATE_KEY="商户 RSA 私钥"
 export HUIFU_RSA_PUBLIC_KEY="汇付 RSA 公钥"
-export HUIFU_SKILL_SOURCE="hfps/1.3.1"
+export HUIFU_SKILL_SOURCE="hfps/1.3.2"
 export HUIFU_MERCHANT_ID="本次请求的 huifu_id"
 export HUIFU_NOTIFY_URL="https://your-domain.example/huifu/notify"
 export HUIFU_PROJECT_ID="托管项目 project_id"
@@ -176,7 +176,7 @@ require_once HUIFU_SDK_ROOT . '/init.php';
 
 | Header | 值 |
 | --- | --- |
-| `sdk_version` | 官方 SDK 默认值 `php#v2.0.27` |
+| `sdk_version` | 官方 SDK 默认值 `php_v2.0.29` |
 | `charset` | 官方 SDK 默认值 `UTF-8` |
 | `jpt-x-skill-source` | `MerConfig.skill_source` 非空时自动带 `<skill_source>` |
 | `jpt-x-skill-huifu_id` | `MerConfig.skill_source` 已配置且 `data.huifu_id` 存在且非空时自动带 `<data.huifu_id>` |
@@ -194,7 +194,7 @@ require_once HUIFU_SDK_ROOT . '/init.php';
 
 ## 新增接口兼容性
 
-| 接口 | PHP SDK 2.0.27 源码核对 | 输出规则 |
+| 接口 | PHP SDK 2.0.29 源码核对 | 输出规则 |
 | --- | --- | --- |
 | 抖音直连下单 | 使用托管预下单 `V2TradeHostingPaymentPreorderH5Request`；没有独立抖音直连 Request 类 | 调用 `setPreOrderType("4")`，并通过 `setExtendInfo(...)` / params 承载 `dy_data` 和 `notify_url`；不要生成不存在的 `Dypreorder` / `Douyin` 类 |
 | 拆单支付订单查询 | 存在 `V2TradeHostingPaymentSplitpayQueryRequest` | 可使用官方 request 类；不要用普通 `V2TradeHostingPaymentQueryorderinfoRequest` 替代 |

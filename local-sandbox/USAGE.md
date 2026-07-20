@@ -1,8 +1,10 @@
 # hf-payment-local-sandbox 使用说明
 
-适用版本：`hf-payment-local-sandbox` 1.0.0
+适用版本：`hf-payment-local-sandbox` 1.0.1（源码/提测候选；当前公开 preview 仍为 1.0.0）
 
-适配 Skill：`huifu-pay-integration` 1.3.1
+适配 Skill 使用说明：`huifu-pay-integration` 1.3.2
+
+冻结协议来源 Skill：`huifu-pay-integration` 1.3.1
 
 适配合同包：`huifu-pay-integration-1.3.0-r4`
 
@@ -173,9 +175,9 @@ https://cloudpnrcdn.oss-cn-shanghai.aliyuncs.com/huifuskills/hf-payment-local-sa
 
 ```bash
 python3 scripts/generate_local_sandbox_update_index.py \
-  --manifest release-preview/1.0.0/dist/release-manifest.json \
+  --manifest release-preview/1.0.1/dist/release-manifest.json \
   --public-base-url https://cloudpnrcdn.oss-cn-shanghai.aliyuncs.com/huifuskills/ \
-  --output release-preview/1.0.0/hf-payment-local-sandbox-latest.json
+  --output release-preview/1.0.1/hf-payment-local-sandbox-latest.json
 ```
 
 上传时保持文件名：
@@ -213,14 +215,14 @@ https://cloudpnrcdn.oss-cn-shanghai.aliyuncs.com/huifuskills/
 - `gateway_url`：配置到客户项目的 SDK 网关地址、base URL、endpoint 或支付出口层
 - `sys_id`、`product_id`：配置到客户项目的汇付系统号和产品号
 - `huifu_id`：本地样例汇付 ID，默认 `6666000100000001`；接真实联调或生产时改为客户自己的汇付 ID
-- `skill_source`：本地沙箱模式的来源字段，当前固定为 `hfps/1.3.1;sandbox/1.0.0`；官方联调或生产恢复为 `hfps/1.3.1`
+- `skill_source`：本地沙箱模式的来源字段，当前固定为 `hfps/1.3.1;sandbox/1.0.1`；官方联调或生产使用 `hfps/1.3.2`
 - `merchant_private_key`：客户项目用于请求签名的 PKCS8 Base64 私钥，无 PEM 头尾，无换行，优先配置到官方 SDK
 - `merchant_public_key`：客户项目用于验证沙箱响应和通知签名的 X509 Base64 公钥，无 PEM 头尾，无换行，优先配置到官方 SDK
 - `webhook_endpoint_key`：客户项目用于验证本地沙箱 Webhook 签名的 32 位终端密钥；Webhook 验签规则是大写 `MD5(raw_body + webhook_endpoint_key)`，不要和 RSA 公私钥混用
 - `signature_model`：`dual_key_local_sandbox`
 - `usage`：字段用途说明
 
-`merchant_private_key` 和 `merchant_public_key` 是商户项目需要配置的两项 RSA 值：前者用于请求加签，后者用于响应和 Notify 验签，不表示同一对 RSA 密钥。`webhook_endpoint_key` 只用于 Webhook 的 MD5 验签，不是 RSA 私钥或公钥。`skill_source` 用于 SDK 来源请求头；只有本地沙箱模式使用 `hfps/1.3.1;sandbox/1.0.0`，官方联调和生产不要携带沙箱后缀。
+`merchant_private_key` 和 `merchant_public_key` 是商户项目需要配置的两项 RSA 值：前者用于请求加签，后者用于响应和 Notify 验签，不表示同一对 RSA 密钥。`webhook_endpoint_key` 只用于 Webhook 的 MD5 验签，不是 RSA 私钥或公钥。`skill_source` 用于 SDK 来源请求头；只有本地沙箱模式使用 `hfps/1.3.1;sandbox/1.0.1`，官方联调和生产使用 `hfps/1.3.2` 且不要携带沙箱后缀。
 
 查看 Profile 指纹，不会回显完整私钥：
 
@@ -261,7 +263,7 @@ https://cloudpnrcdn.oss-cn-shanghai.aliyuncs.com/huifuskills/
 - 将网关地址改为 `gateway_url`，默认是 `http://127.0.0.1:8766`
 - 使用 `official-demo` Profile 导出的同一套 `product_id/sys_id` 和请求签名私钥字段；官方 SDK 优先使用 `merchant_private_key`
 - 响应和通知验签优先使用导出的 `merchant_public_key`
-- 请求头建议带上 `jpt-x-skill-source: hfps/1.3.1;sandbox/1.0.0`
+- 请求头建议带上 `jpt-x-skill-source: hfps/1.3.1;sandbox/1.0.1`
 - 如请求中有 `huifu_id`，请求头建议带上 `jpt-x-skill-huifu_id`
 - `notify_url` 优先使用本机 loopback 地址
 - `notify_url` 或 Webhook 目标需要访问外部地址时，启动服务时必须显式传入 `--notify-allow <完整通知或 Webhook 地址>`

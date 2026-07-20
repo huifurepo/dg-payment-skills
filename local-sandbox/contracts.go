@@ -6,20 +6,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/fs"
-	"os"
-	"path/filepath"
 	"sort"
 	"strings"
 )
 
 const (
 	appName            = "hf-payment-local-sandbox"
-	appVersion         = "1.0.0"
+	appVersion         = "1.0.1"
 	contractBundle     = "huifu-pay-integration-1.3.0-r4"
 	skillVersion       = "1.3.1"
 	skillSource        = "hfps/" + skillVersion
 	sandboxSkillSource = skillSource + ";sandbox/" + appVersion
-	reportSchema       = "1.7"
+	reportSchema       = "1.8"
 	scenarioSchema     = "1.0"
 )
 
@@ -293,9 +291,6 @@ func validateContractBundle(bundle *ContractBundle) []string {
 		}
 	}
 	problems = append(problems, validateReferenceDigestManifest(bundle)...)
-	if root, ok := findWorkspaceRoot(); ok {
-		problems = append(problems, validateReferenceDigestsAgainstRoot(bundle, root)...)
-	}
 	if len(bundle.Endpoints.Endpoints) != 13 {
 		problems = append(problems, fmt.Sprintf("expected 13 covered endpoints, got %d", len(bundle.Endpoints.Endpoints)))
 	}
@@ -471,86 +466,10 @@ type ReferenceDigestCheck struct {
 }
 
 func referenceDigestCheck(bundle *ContractBundle) ReferenceDigestCheck {
-	root, ok := findWorkspaceRoot()
-	if !ok {
-		return ReferenceDigestCheck{Status: "not_evaluated", Problems: []string{"workspace Skill source is not available"}}
-	}
-	problems := validateReferenceDigestsAgainstRoot(bundle, root)
-	status := "passed"
-	if len(problems) > 0 {
-		status = "failed"
-	}
-	return ReferenceDigestCheck{Status: status, Checked: len(bundle.ReferenceDigests.Files), Problems: problems}
-}
-
-func validateReferenceDigestsAgainstRoot(bundle *ContractBundle, root string) []string {
-	var problems []string
-	expected := map[string]ReferenceDigestFile{}
-	for _, file := range bundle.ReferenceDigests.Files {
-		expected[filepath.Clean(file.Path)] = file
-	}
-	actual := map[string]bool{}
-	for _, rel := range expectedReferenceSourceFiles(root) {
-		actual[filepath.Clean(rel)] = true
-	}
-	for _, file := range expected {
-		path := filepath.Join(root, filepath.FromSlash(file.Path))
-		b, err := os.ReadFile(path)
-		if err != nil {
-			problems = append(problems, "reference digest source missing "+file.Path)
-			continue
-		}
-		sum := sha256.Sum256(b)
-		if hex.EncodeToString(sum[:]) != file.SHA256 {
-			problems = append(problems, "reference digest changed "+file.Path)
-		}
-		if int64(len(b)) != file.SizeBytes {
-			problems = append(problems, "reference digest size changed "+file.Path)
-		}
-	}
-	for rel := range actual {
-		if _, ok := expected[rel]; !ok {
-			problems = append(problems, "reference digest source added "+filepath.ToSlash(rel))
-		}
-	}
-	return problems
-}
-
-func expectedReferenceSourceFiles(root string) []string {
-	var out []string
-	skill := filepath.Join(root, "huifu-pay-integration", "SKILL.md")
-	if fileExists(skill) {
-		out = append(out, filepath.ToSlash(filepath.Join("huifu-pay-integration", "SKILL.md")))
-	}
-	refsDir := filepath.Join(root, "huifu-pay-integration", "references")
-	entries, err := os.ReadDir(refsDir)
-	if err != nil {
-		return out
-	}
-	for _, entry := range entries {
-		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".md") {
-			continue
-		}
-		out = append(out, filepath.ToSlash(filepath.Join("huifu-pay-integration", "references", entry.Name())))
-	}
-	sort.Strings(out)
-	return out
-}
-
-func findWorkspaceRoot() (string, bool) {
-	cwd, err := os.Getwd()
-	if err != nil {
-		return "", false
-	}
-	for {
-		if fileExists(filepath.Join(cwd, "huifu-pay-integration", "SKILL.md")) {
-			return cwd, true
-		}
-		parent := filepath.Dir(cwd)
-		if parent == cwd {
-			return "", false
-		}
-		cwd = parent
+	return ReferenceDigestCheck{
+		Status:   "frozen_snapshot",
+		Checked:  len(bundle.ReferenceDigests.Files),
+		Problems: nil,
 	}
 }
 

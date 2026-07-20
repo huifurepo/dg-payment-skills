@@ -1,6 +1,6 @@
 # 请求头策略
 
-本文件定义当前 Skill 包在 `1.3.1` 版本下的统一请求头约束。
+本文件定义当前 Skill 包在 `1.3.2` 版本下已覆盖支付接口的统一请求头约束。
 
 ## 目录
 
@@ -24,7 +24,7 @@
 
 如果业务方显式配置 `HUIFU_SKILL_SOURCE`、`skill_source` 或 `jpt_x_skill_source`，HTTP 层应原样透传该值。聚合支付里的 `sys_id` 由各官方 SDK 按自己的实现上送：Java Lightning SDK 会放到独立请求头 `sys_id` / `jpt-sys_id`，PHP 官方 SDK 则仍放在签名前请求体顶层字段，Python 官方 SDK 由 `MerConfig` 管理。
 
-使用 Skill 开发且接入本地沙箱服务时，业务配置传入的 `<skill_source>` 应为 `hfps/1.3.1;sandbox/1.0.0`。官方联调或生产环境应恢复为 `hfps/1.3.1`，不要携带 `;sandbox/...` 后缀。
+local-sandbox `1.0.1` 的冻结 r4 快照使用 `hfps/1.3.1;sandbox/1.0.1`。官方联调或生产环境使用 `hfps/1.3.2`，不要携带 `;sandbox/...` 后缀。
 
 `jpt-x-skill-source` 属于 HTTP 请求头，不属于业务报文字段本身，不要把它写进 `data`。
 
@@ -32,19 +32,19 @@
 
 - 当前 Java SDK 基线会把 `MerConfig.setSkillSource(...)` 的值按 `<skill_source>` 原样透传到 `jpt-x-skill-source`
 - 如果当前 Java 请求参数里的 `huifu_id` 存在且非空，SDK 还会自动补 `jpt-x-skill-huifu_id: <data.huifu_id>`
-- 当前 Skill 包对齐的官方 PHP SDK 主链路会在 `MerConfig.skill_source` 非空时，于 `BsPay::post()` 主链路自动补 `jpt-x-skill-source`
+- 当前 Skill 包对齐的官方 PHP SDK 只在 `BsPay::post()` 无文件 JSON 分支中，于 `MerConfig.skill_source` 非空时自动补 `jpt-x-skill-source`
 - 如果当前 PHP 请求参数里的 `huifu_id` 存在且非空，且 `MerConfig.skill_source` 已配置，SDK 还会自动补 `jpt-x-skill-huifu_id: <data.huifu_id>`
-- `BsPaySdk\core\Payment` 和 `BsPayClient::postRequest()` 都走这条官方 `BsPay::post()` 主链路，不需要再为来源头打补丁
-- PHP 侧只有在绕开官方 SDK 主链路时，才需要手动补 `jpt-x-skill-source` / `jpt-x-skill-huifu_id`
+- `BsPaySdk\core\Payment` 和 `BsPayClient::postRequest()` 的无文件请求走这条 JSON 主链路；请求含真实 `huifu_id` 时不需要再为来源头打补丁
+- PHP 传入 `CURLFile` 后进入独立 multipart 分支，该分支缺少 `jpt-x-skill-source`、`jpt-x-skill-huifu_id` 和 `jpt-sdk_version`，且关闭请求签名和响应验签；当前必须阻断，不能用手动补头或手写 HTTP 绕过
 - 当前 Python SDK 基线会把 `MerConfig.jpt_x_skill_source` 的值透传到 `jpt-x-skill-source`
-- 当前 Python SDK 基线会从最终请求参数 `data.huifu_id` 自动推导 `jpt-x-skill-huifu_id`
+- 当前 Python SDK 基线会从最终请求参数 `data.huifu_id` 推导 `jpt-x-skill-huifu_id`；但在字段缺失时仍发送值为空字符串的该头，不能描述为“条件省略”
 - 当前 Python SDK 的 `MerConfig` 不接收 `jpt_x_skill_huifu_id`；业务侧必须保证每次 request 对象中的 `huifu_id` 是本次真实商户号
-- Python SDK 的 `jpt-sdk_version` 请求头为 `python_2.0.22`
+- Python SDK 的 `jpt-sdk_version` 请求头为 `python_2.0.23`
 
 源码核对提示：
 
-- 当前本地 PHP SDK 在补 `jpt-x-skill-huifu_id` 前直接读取 `$request_params['huifu_id']`；如果某接口请求参数没有 `huifu_id` 且运行环境把 PHP warning 升级为异常，应按 SDK 源码修正或升级 SDK，不要通过关闭 warning、吞异常或写固定 `huifu_id` 来掩盖问题
-- 当前 Python SDK 的 `jpt-x-skill-huifu_id` 来自 `ApiRequest._build_request_info()` 对最终请求参数执行的 `params.get("huifu_id", "")`；多商户或代调用时不要配置固定 huifu 头字段，而要逐次设置 request 的 `huifu_id`
+- 当前本地 PHP SDK 在无文件 JSON 分支补 `jpt-x-skill-huifu_id` 前直接读取 `$request_params['huifu_id']`；企业进件、个人进件以及不传可选 `huifu_id` 的图片请求会触发该路径。如果运行环境把 PHP warning 升级为异常，应按 SDK 源码修正或升级 SDK，并阻断对应 PHP 可运行代码生成；不要通过关闭 warning、吞异常或写固定/空 `huifu_id` 来掩盖问题
+- 当前 Python SDK 的 `jpt-x-skill-huifu_id` 来自 `ApiRequest._build_request_info()` 对最终请求参数执行的 `params.get("huifu_id", "")`，并在 `jpt_x_skill_source` 非空时无条件写入头；企业/个人进件及图片不传可选 `huifu_id` 时，把空头行为作为 SDK 兼容性提示和联调/上线前验证项，不单独阻断 Python 可运行代码，也不得询问客户是否允许空头。业务报文仍不得补空/虚构 `data.huifu_id`，多商户或代调用时也不得配置固定 huifu 头字段
 
 ## 托管支付请求头
 
@@ -62,7 +62,7 @@ Java 官方 SDK 请求头：
 
 | Header | 值 |
 | --- | --- |
-| `sdk_version` | `javaSDK_3.0.38` |
+| `sdk_version` | `javaSDK_3.0.39` |
 | `jpt-x-skill-source` | `<skill_source>` |
 
 条件性 `huifu_id` 约束：
@@ -73,7 +73,7 @@ PHP 官方 SDK 请求头：
 
 | Header | 值 |
 | --- | --- |
-| `sdk_version` | `php#v2.0.27` |
+| `sdk_version` | `php_v2.0.29` |
 | `charset` | `UTF-8` |
 | `jpt-x-skill-source` | `MerConfig.skill_source` 非空时自动带 `<skill_source>` |
 | `jpt-x-skill-huifu_id` | `MerConfig.skill_source` 已配置且 `params.huifu_id` 存在且非空时自动带 `<data.huifu_id>` |
@@ -82,9 +82,9 @@ Python 官方 SDK 请求头：
 
 | Header | 值 |
 | --- | --- |
-| `jpt-sdk_version` | `python_2.0.22` |
+| `jpt-sdk_version` | `python_2.0.23` |
 | `jpt-x-skill-source` | `MerConfig.jpt_x_skill_source` |
-| `jpt-x-skill-huifu_id` | SDK 从最终请求参数 `data.huifu_id` 自动取值；没有 `huifu_id` 时为空 |
+| `jpt-x-skill-huifu_id` | SDK 从最终请求参数 `data.huifu_id` 自动取值；没有 `huifu_id` 时仍发送空值头，属于 SDK 兼容性告警，不是业务硬停止 |
 | `Content-Type` | 非文件请求为 `application/json;charset=utf-8` |
 
 SDK 版本请求头是 SDK 自动生成的 HTTP 请求头，不作为手写值或安装包下载依据；当前 Skill 的 PHP / Python 安装包基线见 `references/shared-server-sdk-matrix.md`。
@@ -119,7 +119,7 @@ PHP 官方 SDK 请求头：
 
 | Header | 值 |
 | --- | --- |
-| `sdk_version` | `php#v2.0.27` |
+| `sdk_version` | `php_v2.0.29` |
 | `charset` | `UTF-8` |
 | `jpt-x-skill-source` | `MerConfig.skill_source` 非空时自动带 `<skill_source>` |
 | `jpt-x-skill-huifu_id` | `MerConfig.skill_source` 已配置且 `params.huifu_id` 存在且非空时自动带 `<data.huifu_id>` |
@@ -128,9 +128,9 @@ Python 官方 SDK 请求头：
 
 | Header | 值 |
 | --- | --- |
-| `jpt-sdk_version` | `python_2.0.22` |
+| `jpt-sdk_version` | `python_2.0.23` |
 | `jpt-x-skill-source` | `MerConfig.jpt_x_skill_source` |
-| `jpt-x-skill-huifu_id` | SDK 从最终请求参数 `data.huifu_id` 自动取值；没有 `huifu_id` 时为空 |
+| `jpt-x-skill-huifu_id` | SDK 从最终请求参数 `data.huifu_id` 自动取值；没有 `huifu_id` 时仍发送空值头，属于 SDK 兼容性告警，不是业务硬停止 |
 | `Content-Type` | 非文件请求为 `application/json;charset=utf-8` |
 
 说明：
@@ -170,13 +170,19 @@ Python 官方 SDK 请求头：
 
 ## 常规 HTTP 与报文约束
 
-下面这些是基础 HTTP / 报文约束，不替代上面的 SDK 对齐头：
+下面这些是已覆盖的 JSON 支付接口基础 HTTP / 报文约束，不替代上面的 SDK 对齐头，也不适用于 Java 图片 `file_url` 的 multipart 文本字段特例：
 
 - `Content-Type: application/json;charset=UTF-8`
 - 请求报文顶层字段位置固定为 `sys_id`、`product_id`、`sign`、`data`
 - URL 参数中不要携带 JSON 数据
 - 请求体和响应体应尽量避免超过 `10MB`；文件场景优先走文件服务
 - 业务接口避免返回空响应体
+
+## 商户进件例外
+
+企业/个人进件、业务开通、申请状态和详情查询可按 `shared-server-sdk-matrix.md` 中已核验的三语言 SDK 路径处理，但不把 SDK 字段序列化外推成资料权限或状态结论。
+
+图片接口必须按语言和模式区分：`file_url` 模式下 Java SDK 对该 URI 特判为 multipart 文本字段，末参使用 `isPage=true`，SDK 保留请求签名但跳过响应验签；PHP/Python 无文件时使用 JSON。PHP `CURLFile` 本地文件分支因缺失 Skill 埋点头并关闭请求签名和响应验签而阻断。本文件不证明本地二进制文件上传、图片响应标识、服务端取 URL 成功、幂等/重试或任何进件回调。不得把通用支付 JSON/回调规则外推到这些未确认边界。
 
 ## 明确禁止
 
@@ -188,3 +194,4 @@ Python 官方 SDK 请求头：
 6. 缺头后静默忽略，靠默认值兜底
 7. Python 使用官方 SDK 时，误把 `jpt-x-skill-huifu_id` 当作业务 `data` 字段或继续按旧版构造 `MerConfig(..., jpt_x_skill_source, jpt_x_skill_huifu_id)`
 8. Python 安装或版本核对失败时，静默安装不带版本约束的 `dg-sdk` 或降级
+9. 仅因 Python SDK 发送空的 `jpt-x-skill-huifu_id` 就中断企业/个人进件或图片 `file_url` 方案，并让客户判断“是否允许空请求头”

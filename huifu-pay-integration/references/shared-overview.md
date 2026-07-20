@@ -39,6 +39,9 @@
 | `references/canonical-regression-prompts.md` | 安装后可随 Skill 分发的最小回归 Prompt |
 | `references/hostingpay-preorder-douyin-direct.md` | 托管支付抖音直连下单字段与返回 |
 | `references/hostingpay-query-splitpay.md` | 拆单支付订单查询字段与返回 |
+| `references/merchant-onboarding-enterprise.md`、`references/merchant-onboarding-individual.md` | 企业与个人基础信息进件的精确路由 |
+| `references/merchant-onboarding-image-upload.md`、`references/merchant-onboarding-business-open.md` | 图片上传与业务开通；仅 `file_url` 有按语言区分的受控 SDK 片段，本地文件和回调不生成实现 |
+| `references/merchant-onboarding-detail-query.md`、`references/merchant-onboarding-application-status-query.md` | 商户详情核对与申请状态补偿查询 |
 
 ## 共享资料地图
 
@@ -84,12 +87,12 @@
 
 | 项目 | 当前口径 |
 | --- | --- |
-| Skill 包版本 | `1.3.1` |
-| 1.3.1 refresh | 新增 local-sandbox 本地联调入口和报告边界 |
-| local-sandbox 当前工具 | `hf-payment-local-sandbox 1.0.0`，contract bundle `huifu-pay-integration-1.3.0-r4` |
-| 托管支付 Java SDK 常量版本 | `dg-java-sdk 3.0.38` |
+| Skill 包版本 | `1.3.2` |
+| 1.3.2 refresh | 新增商户进件六接口完整字段目录、外部资料索引和 SDK 安全边界 |
+| local-sandbox 源码候选 | `hf-payment-local-sandbox 1.0.1`，contract bundle `huifu-pay-integration-1.3.0-r4`，report schema `1.8`；当前公开 preview 仍为 `1.0.0` |
+| 托管支付 Java SDK 常量版本 | `dg-java-sdk 3.0.39` |
 | 聚合支付 Java SDK 版本 | `dg-lightning-sdk 1.0.5` |
-| Python SDK 包 | `dg-sdk 2.0.22`，import 名为 `dg_sdk` |
+| Python SDK 包 | `dg-sdk 2.0.23`，import 名为 `dg_sdk` |
 | Python 生产环境变量 | 见 `aggregation-python-adapter.md` 与 `hostingpay-python-adapter.md` |
 | 前端收银台 JS SDK | npm 包 `@dg-elements/js-sdk`，接入时以项目锁定版本为准；只有用户明确要求且当前环境允许联网时才查询 npm registry |
 | `HUIFU_SKILL_SOURCE` 最终上送格式 | `<skill_source>` |
@@ -98,13 +101,13 @@
 
 PHP 场景默认以官方 Composer 包 `huifurepo/dg-php-sdk` 落地：
 
-- 当前 Skill 包基线：`2.0.27`
-- 新项目安装：`composer require "huifurepo/dg-php-sdk:^2.0.27"`
+- 当前 Skill 包基线：`2.0.29`
+- 新项目安装：`composer require "huifurepo/dg-php-sdk:^2.0.29"`
 - 已安装旧版本时：先调整 `composer.json` 版本约束，再执行 `composer update huifurepo/dg-php-sdk --with-all-dependencies`
 - 聚合支付核心主链路优先 `BsPaySdk\core\Payment`
 - 聚合对账与托管支付优先 `BsPayClient::postRequest()`
 
-如果 Composer 不可用，使用 `https://api.github.com/repos/huifurepo/bspay-php-sdk/zipball/refs/tags/2.0.27` 手动下载当前基线，解压后让 `HUIFU_SDK_ROOT` 指向实际 `BsPaySdk` 目录并校验 `init.php`。
+如果 Composer 不可用，使用 `https://api.github.com/repos/huifurepo/bspay-php-sdk/zipball/refs/tags/2.0.29` 手动下载当前基线，解压后让 `HUIFU_SDK_ROOT` 指向实际 `BsPaySdk` 目录并校验 `init.php`。
 
 当前 Skill 包不再内置 PHP 模板资产或非官方自维护 client。需要核对请求头、签名、HTTP 发送链路差异时，先读 `references/shared-request-header-policy.md` 与 `references/shared-signing-v2.md`；如果问题是控台 Webhook 验签，再读 `references/shared-webhook-signing.md`。必要时检查项目实际安装的官方 SDK 源码；不要用历史自维护实现替代官方 SDK 主链路。
 
@@ -115,5 +118,5 @@ PHP 场景默认以官方 Composer 包 `huifurepo/dg-php-sdk` 落地：
 - 前端回调不等于最终支付成功；最终状态必须经服务端闭环确认，异步通知需验签、事件级幂等和状态锁，并通过查单二次确认或补偿查询兜底
 - local-sandbox 只用于本地协议模拟、闭环演练和自检报告；本地通过不代表官方联调通过、通道权限可用或生产可上线
 - PHP 如果使用当前 Skill 包对齐的官方 SDK 主链路，且初始化时已给 `MerConfig.skill_source` 赋值，SDK 会自动带出 skill 相关来源头
-- Python 如果使用当前 Skill 包对齐的官方 `dg-sdk 2.0.22`，必须固定 `DGClient.env = "prod"`、显式传入 `MerConfig.jpt_x_skill_source`，并在每个 request 对象中设置本次真实 `huifu_id`；SDK 会从请求参数自动推导 `jpt-x-skill-huifu_id`，并使用 `jpt-sdk_version` 上送 SDK 版本。安装或版本核对失败时必须显式报错并停止，不要无版本安装或降级。
+- Python 如果使用当前 Skill 包对齐的官方 `dg-sdk 2.0.23`，必须固定 `DGClient.env = "prod"`、显式传入 `MerConfig.jpt_x_skill_source`，并在每个 request 对象中设置本次真实 `huifu_id`；SDK 会从请求参数自动推导 `jpt-x-skill-huifu_id`，并使用 `jpt-sdk_version` 上送 SDK 版本。安装或版本核对失败时必须显式报错并停止，不要无版本安装或降级。
 - 如果其他脚本语言没有官方 SDK 自动补头能力，或当前实现绕开了官方 SDK 主链路，必须按 `references/shared-request-header-policy.md` 手动补头

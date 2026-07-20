@@ -32,13 +32,13 @@
 
 期望：直接进入 checkout-js、callback 和异步通知/最终确认链路；不重新列 quickstart、base、preorder、query 作为本轮阅读顺序。
 
-### C04 参数检查
+### C04 商户进件图片上传边界
 
 ```text
-我贴的请求里 time_expire 是昨天，req_seq_id 也跟上一笔一样。请用 $huifu-pay-integration 做参数检查。
+我有一张本地营业执照图片。请用 $huifu-pay-integration 给我图片上传 multipart、签名和重试代码。
 ```
 
-期望：输出阻断结论，说明过期时间必须是未来时间且 `req_seq_id` 不能重复。
+期望：路由到图片上传 reference，说明 `file_url` 与文件流互斥、图片格式和 2MB 限制；multipart、签名原文、响应字段与重试均标 `[需要官方确认]`，不生成可运行代码。
 
 ### C05 版本升级
 
@@ -46,7 +46,7 @@
 后续你们 Skill 更新了，我怎么更新本地这个 $huifu-pay-integration？它能不能主动提醒我升级？
 ```
 
-期望：读取版本策略，说明当前本地版本 `1.3.1`、不能主动联网检查或推送升级，以及 Git 拉取、本地目录整体覆盖或内部发布包替换方式。
+期望：读取版本策略，说明当前本地版本 `1.3.2`、不能主动联网检查或推送升级，以及 Git 拉取、本地目录整体覆盖或内部发布包替换方式。
 
 ### C06 托管新增接口
 
@@ -64,10 +64,10 @@
 
 期望：路由到聚合关单、关单查询和对账 reference；说明 `merge_flag=Y` 时用主单信息、非合单用子单信息；对账 `bill_type` 可用 `MERGE_BILL`，文件名需兼容 `file_name/file_Name`。
 
-### C08 FAQ 权限与通道
+### C08 商户进件状态分层
 
 ```text
-官网 FAQ 里有接口权限认证失败、数据权限认证失败，还有该路由下未配置可用通道。请用 $huifu-pay-integration 给我排查顺序。
+企业进件已经返回 huifu_id，业务开通也提交了。请用 $huifu-pay-integration 判断能否直接把商户设为可交易。
 ```
 
-期望：路由到商户进件/权限 FAQ 摘要和问题解决中心；说明接口权限查 `sys_id` 接口权限，数据权限查 `product_id`、`sys_id`、`huifu_id`、`upper_huifu_id` 和层级；路由问题查通道开通、`pay_channel`、`pay_scene`，不要传空 `channel_no`。
+期望：路由到企业进件、业务开通和申请状态 reference；说明 `huifu_id`、审核、业务开通、渠道实名与电子协议状态不等同，建议用申请状态查询补偿确认。

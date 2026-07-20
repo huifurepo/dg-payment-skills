@@ -1486,7 +1486,7 @@ td { min-width: 72px; }
         <li>把 <code>sys_id</code>、<code>product_id</code>、<code>merchant_private_key</code> 配置到项目请求签名配置中；这是官方 SDK 常用的 PKCS8 Base64 私钥格式，无 PEM 头尾，无换行。</li>
         <li>把 <code>merchant_public_key</code> 配置到项目响应和通知验签公钥中；这是官方 SDK 常用的 X509 Base64 公钥格式，无 PEM 头尾，无换行，由本地沙箱响应签名私钥派生，用来模拟平台响应签名链路。</li>
         <li>如果项目要接 Webhook，把 <code>webhook_endpoint_key</code> 配置到项目 Webhook 终端密钥中；沙箱会用它计算大写 <code>MD5(raw_body + webhook_endpoint_key)</code>，业务侧用同一个值验签。</li>
-        <li>把 <code>skill_source</code> 配置为 <code>hfps/1.3.1;sandbox/1.0.0</code>；官方联调或生产环境恢复为 <code>hfps/1.3.1</code>，不要携带沙箱后缀。</li>
+        <li>把 <code>skill_source</code> 配置为 <code>hfps/1.3.1;sandbox/1.0.1</code>；官方联调或生产环境使用 <code>hfps/1.3.2</code>，不要携带沙箱后缀。</li>
         <li>每笔请求的 <code>data.huifu_id</code> 使用客户自己的汇付 ID；本地样例可使用 <code>6666000100000001</code>。</li>
         <li>如需测试 Webhook，在页面“Webhook 目标地址”中填写本机接收地址，例如 <code>http://127.0.0.1:18081/webhook</code>，保存后业务状态里的 Webhook 按钮会变为可用。</li>
         <li>客户项目建议从后端 SDK、支付出口层或本地开发代理访问 <code>gateway_url</code>；浏览器前端跨 Origin 直连可能被本地安全策略拦截。</li>
@@ -1998,7 +1998,7 @@ td { min-width: 72px; }
       merchant_public_key: credentials.merchant_public_key || "",
       webhook_endpoint_key: credentials.webhook_endpoint_key || "",
       signature_model: credentials.signature_model || ready.signature_model || "",
-      usage: credentials.usage || ("本地沙箱模式下 skill_source 使用 " + (credentials.skill_source || ready.sandbox_skill_source || "hfps/1.3.1;sandbox/1.0.0") + "；merchant_private_key 用于客户项目请求加签；merchant_public_key 用于客户项目验证本地沙箱响应和通知签名；webhook_endpoint_key 用于客户项目验证本地沙箱 Webhook 签名。RSA 密钥值均为无 PEM 头尾、无换行的 Base64。")
+      usage: credentials.usage || ("本地沙箱模式下 skill_source 使用 " + (credentials.skill_source || ready.sandbox_skill_source || "hfps/1.3.1;sandbox/1.0.1") + "；merchant_private_key 用于客户项目请求加签；merchant_public_key 用于客户项目验证本地沙箱响应和通知签名；webhook_endpoint_key 用于客户项目验证本地沙箱 Webhook 签名。RSA 密钥值均为无 PEM 头尾、无换行的 Base64。")
     };
   }
 

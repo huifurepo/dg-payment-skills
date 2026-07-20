@@ -25,7 +25,7 @@ SUCCESS_RESP_CODES = {"00000000", "00000100"}
 def main() -> int:
     global ACTIVE_PRODUCT_ID, ACTIVE_SYS_ID
     parser = argparse.ArgumentParser(description="Run Java/PHP/Python samples against local-sandbox.")
-    parser.add_argument("--version", default="1.0.0")
+    parser.add_argument("--version", default="1.0.1")
     parser.add_argument("--keep-temp", action="store_true")
     args = parser.parse_args()
 
@@ -241,7 +241,7 @@ def post_gateway(gateway_url: str, path: str, data: dict[str, object], private_v
         method="POST",
         headers={
             "Content-Type": "application/json;charset=UTF-8",
-            "jpt-x-skill-source": "hfps/1.3.1;sandbox/1.0.0",
+            "jpt-x-skill-source": "hfps/1.3.1;sandbox/1.0.1",
             "jpt-x-skill-huifu_id": str(data["huifu_id"]),
         },
     )
@@ -574,7 +574,7 @@ public class SandboxJavaSample {
     String body = "{\"sys_id\":\"" + esc(SYS_ID) + "\",\"product_id\":\"" + esc(PRODUCT_ID) + "\",\"sign\":\"" + esc(sign) + "\",\"data\":" + canonical + "}";
     HttpRequest req = HttpRequest.newBuilder(URI.create(gateway + path))
       .header("Content-Type", "application/json;charset=UTF-8")
-      .header("jpt-x-skill-source", "hfps/1.3.1;sandbox/1.0.0")
+      .header("jpt-x-skill-source", "hfps/1.3.1;sandbox/1.0.1")
       .header("jpt-x-skill-huifu_id", data.get("huifu_id"))
       .POST(HttpRequest.BodyPublishers.ofString(body, StandardCharsets.UTF_8)).build();
     String resp = HttpClient.newHttpClient().send(req, HttpResponse.BodyHandlers.ofString()).body();
@@ -668,7 +668,7 @@ function post_gateway($gateway, $path, $data, $privatePem) {
     $context = stream_context_create([
         "http" => [
             "method" => "POST",
-            "header" => "Content-Type: application/json;charset=UTF-8\r\njpt-x-skill-source: hfps/1.3.1;sandbox/1.0.0\r\njpt-x-skill-huifu_id: " . $data["huifu_id"] . "\r\n",
+            "header" => "Content-Type: application/json;charset=UTF-8\r\njpt-x-skill-source: hfps/1.3.1;sandbox/1.0.1\r\njpt-x-skill-huifu_id: " . $data["huifu_id"] . "\r\n",
             "content" => $body,
             "ignore_errors" => true,
             "timeout" => 10,

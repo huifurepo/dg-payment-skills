@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"crypto/md5"
+	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -12,13 +13,67 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strings"
 	"sync"
 	"testing"
 	"time"
 )
 
-func TestContractCoverageMatchesSkillExpectedReferences(t *testing.T) {
+const r4ContractAssetsSHA256 = "0be7dc6263dcbbb8a1f48df6a472dd1a1fb612ba63444d1ec909eaa019862c16"
+
+func TestR4ContractAssetsStayFrozen(t *testing.T) {
+	root := filepath.Join("contracts", "huifu-pay-integration-1.3.0-r4")
+	var files []string
+	err := filepath.WalkDir(root, func(path string, entry os.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if !entry.IsDir() {
+			files = append(files, path)
+		}
+		return nil
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	sort.Strings(files)
+	hash := sha256.New()
+	for _, path := range files {
+		body, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		rel, err := filepath.Rel(root, path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		sum := sha256.Sum256(body)
+		fmt.Fprintf(hash, "%s\n%x\n", filepath.ToSlash(rel), sum)
+	}
+	if got := fmt.Sprintf("%x", hash.Sum(nil)); got != r4ContractAssetsSHA256 {
+		t.Fatalf("r4 contract assets changed: got %s want %s", got, r4ContractAssetsSHA256)
+	}
+}
+
+func TestFrozenReferenceEvidenceUsesVersionedReportContract(t *testing.T) {
+	if appVersion != "1.0.1" {
+		t.Fatalf("frozen reference evidence requires app version 1.0.1, got %s", appVersion)
+	}
+	if reportSchema != "1.8" {
+		t.Fatalf("frozen reference evidence requires report schema 1.8, got %s", reportSchema)
+	}
+	bundle, err := loadContractBundle()
+	if err != nil {
+		t.Fatal(err)
+	}
+	check := referenceDigestCheck(bundle)
+	if check.Status != "frozen_snapshot" || check.Checked != len(bundle.ReferenceDigests.Files) || len(check.Problems) != 0 {
+		t.Fatalf("unexpected frozen reference evidence: %+v", check)
+	}
+}
+
+func TestContractCoverageIsFrozenSnapshotOfSkillReferences(t *testing.T) {
 	bundle, err := loadContractBundle()
 	if err != nil {
 		t.Fatal(err)
@@ -28,14 +83,14 @@ func TestContractCoverageMatchesSkillExpectedReferences(t *testing.T) {
 		t.Fatalf("contract bundle has problems: %v", problems)
 	}
 
-	expected := readExpectedReferences(t)
-	for _, name := range expected {
-		if _, ok := bundle.References.References[name]; !ok {
-			t.Fatalf("reference %s is missing from reference-coverage.json", name)
-		}
+	expected := map[string]bool{}
+	for _, name := range readExpectedReferences(t) {
+		expected[name] = true
 	}
-	if len(bundle.References.References) != len(expected) {
-		t.Fatalf("reference coverage count mismatch: got %d want %d", len(bundle.References.References), len(expected))
+	for name := range bundle.References.References {
+		if !expected[name] {
+			t.Fatalf("frozen contract reference %s is no longer declared by the Skill", name)
+		}
 	}
 }
 
@@ -1650,14 +1705,14 @@ func TestUpdateCheckEndpointReportsAvailableVersion(t *testing.T) {
 			"schema_version":       "1.0",
 			"name":                 appName,
 			"channel":              "preview",
-			"latest_version":       "1.0.1",
+			"latest_version":       "1.0.2",
 			"contract_bundle":      contractBundle,
 			"source_skill_version": skillVersion,
 			"release_notes_url":    "https://paas.huifu.com/docs/devtools/#/skillsv1_0",
 			"download_page_url":    "https://paas.huifu.com/docs/devtools/#/skillsv1_0",
 			"downloads": map[string]any{
 				updatePlatformKey(): map[string]any{
-					"name":       "hf-payment-local-sandbox_1.0.1_" + strings.ReplaceAll(runtimeOSArch(), "/", "_") + ".tar.gz",
+					"name":       "hf-payment-local-sandbox_1.0.2_" + strings.ReplaceAll(runtimeOSArch(), "/", "_") + ".tar.gz",
 					"url":        updateServer.URL + "/hf-payment-local-sandbox.tar.gz",
 					"sha256":     sha,
 					"size_bytes": 12345,
@@ -1783,7 +1838,7 @@ func TestControlUIDashboardAndStateRedaction(t *testing.T) {
 	if !strings.Contains(html, "汇付支付本地沙箱服务") || !strings.Contains(html, "/__asset/huifu-logo.png") || !strings.Contains(html, "supportModal") {
 		t.Fatalf("control UI did not render dashboard HTML: %s", rec.Body.String())
 	}
-	for _, want := range []string{"usageModal", "exportCredentialsBtn", "导出凭证", "使用说明", "workspaceTabs", "scrollTopBtn", "data-delivery-channel", "requestLogTable", "logDetailModal", "复制 JSON", "webhookTargetInput", "saveWebhookTargetBtn", "showWebhookKeyBtn", "webhook_endpoint_key", "hfps/1.3.1;sandbox/1.0.0"} {
+	for _, want := range []string{"usageModal", "exportCredentialsBtn", "导出凭证", "使用说明", "workspaceTabs", "scrollTopBtn", "data-delivery-channel", "requestLogTable", "logDetailModal", "复制 JSON", "webhookTargetInput", "saveWebhookTargetBtn", "showWebhookKeyBtn", "webhook_endpoint_key", "hfps/1.3.1;sandbox/1.0.1"} {
 		if !strings.Contains(html, want) {
 			t.Fatalf("control UI missing %q: %s", want, html)
 		}
@@ -3014,7 +3069,7 @@ func TestScenarioValidationProducesExecutionCoverage(t *testing.T) {
 	}
 }
 
-func TestContractValidationCatchesDigestAndFixtureDrift(t *testing.T) {
+func TestContractValidationCatchesManifestAndFixtureDrift(t *testing.T) {
 	bundle, err := loadContractBundle()
 	if err != nil {
 		t.Fatal(err)
@@ -3022,10 +3077,10 @@ func TestContractValidationCatchesDigestAndFixtureDrift(t *testing.T) {
 	digestDrift := *bundle
 	digestDrift.ReferenceDigests = bundle.ReferenceDigests
 	digestDrift.ReferenceDigests.Files = append([]ReferenceDigestFile(nil), bundle.ReferenceDigests.Files...)
-	digestDrift.ReferenceDigests.Files[0].SHA256 = strings.Repeat("0", 64)
+	digestDrift.ReferenceDigests.Files[0].SHA256 = strings.Repeat("0", 63)
 	problems := validateContractBundle(&digestDrift)
-	if !containsProblem(problems, "reference digest changed") {
-		t.Fatalf("digest drift was not detected: %v", problems)
+	if !containsProblem(problems, "invalid reference digest entry") {
+		t.Fatalf("invalid digest manifest was not detected: %v", problems)
 	}
 
 	missingFixture := *bundle

@@ -3,7 +3,7 @@ from __future__ import annotations
 from skill_validation_config import EXPECTED_SKILL_DIR, EXPECTED_SKILL_FILE, REPO_ROOT, ValidationState
 
 
-PYTHON_SDK_VERSION = "2.0.22"
+PYTHON_SDK_VERSION = "2.0.23"
 PYTHON_SDK_HEADER_VERSION = f"python_{PYTHON_SDK_VERSION}"
 PYTHON_CONTRACT_FILES = (
     REPO_ROOT / "README.md",

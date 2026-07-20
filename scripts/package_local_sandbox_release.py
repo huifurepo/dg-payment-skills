@@ -15,9 +15,10 @@ from pathlib import Path
 
 
 APP_NAME = "hf-payment-local-sandbox"
+APP_VERSION = "1.0.1"
 CONTRACT_BUNDLE = "huifu-pay-integration-1.3.0-r4"
 SOURCE_SKILL_VERSION = "1.3.1"
-REPORT_SCHEMA_VERSION = "1.7"
+REPORT_SCHEMA_VERSION = "1.8"
 SCENARIO_SCHEMA_VERSION = "1.0"
 SIGNING_PROFILE = "sdk-v2-sorted-json"
 GOLDEN_VECTOR_VERSION = "1.0"
@@ -52,6 +53,8 @@ def main() -> int:
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--targets", default=",".join(DEFAULT_TARGETS))
     args = parser.parse_args()
+    if args.version != APP_VERSION:
+        parser.error(f"--version must match the source app version {APP_VERSION}")
 
     repo_root = Path(__file__).resolve().parents[1]
     sandbox_dir = repo_root / "local-sandbox"

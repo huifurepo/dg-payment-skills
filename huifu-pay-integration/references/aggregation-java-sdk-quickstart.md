@@ -38,7 +38,7 @@
 <dependency>
     <groupId>com.huifu.bspay.sdk</groupId>
     <artifactId>dg-java-sdk</artifactId>
-    <version>3.0.38</version>
+    <version>3.0.39</version>
 </dependency>
 ```
 
@@ -57,7 +57,7 @@ mvn clean install
 | 2.x | `javax.annotation.PostConstruct` |
 | 3.x (JDK 17/21) | `jakarta.annotation.PostConstruct` |
 
-> **[产品号方法名]** Lightning SDK 和当前 `dg-java-sdk 3.0.38` 的 `MerConfig` 产品号方法名都使用 `setProductId(...)`。
+> **[产品号方法名]** Lightning SDK 和当前 `dg-java-sdk 3.0.39` 的 `MerConfig` 产品号方法名都使用 `setProductId(...)`。
 
 ```java
 package com.yourcompany.huifu.config;
@@ -86,7 +86,7 @@ public class HuifuLightningConfig {
     @Value("${huifu.rsa-public-key}")
     private String rsaPublicKey;
 
-    @Value("${huifu.skill-source:hfps/1.3.1}")
+    @Value("${huifu.skill-source:hfps/1.3.2}")
     private String skillSource;
 
     @Value("${huifu.mode:prod}")
@@ -129,12 +129,12 @@ config1.setProductId("MYPAY");
 config1.setSysId("6666000123120001");
 config1.setRsaPrivateKey("...");
 config1.setRsaPublicKey("...");
-config1.setSkillSource("hfps/1.3.1");
+config1.setSkillSource("hfps/1.3.2");
 configs.put("merchant1", config1);
 
 MerConfig config2 = new MerConfig();
 config2.setSysId("6666000123120002");
-config2.setSkillSource("hfps/1.3.1");
+config2.setSkillSource("hfps/1.3.2");
 // ... 配置第二个商户
 configs.put("merchant2", config2);
 
@@ -149,7 +149,7 @@ MerConfig merConfig = new MerConfig();
 merConfig.setCustomConnectTimeout("30000");              // 连接超时 30s（默认 20s），注意是 String 类型
 merConfig.setCustomSocketTimeout("30000");               // 读取超时 30s（默认 20s）
 merConfig.setCustomConnectionRequestTimeout("40000");    // 请求超时 40s（默认 30s）
-merConfig.setSkillSource("hfps/1.3.1");
+merConfig.setSkillSource("hfps/1.3.2");
 ```
 
 ## 步骤 3：验证核心类导入

@@ -1,6 +1,6 @@
 # 本地沙箱联调入口
 
-本文件定义 Skill `1.3.1` 对 `hf-payment-local-sandbox` 的使用边界、路由和最小操作口径。它只用于本地协议模拟、闭环演练和自检报告，不替代汇付官方联调环境或生产上线验收。
+本文件定义 Skill `1.3.2` 对 `hf-payment-local-sandbox` 的使用边界、路由和最小操作口径。它只用于本地协议模拟、闭环演练和自检报告，不替代汇付官方联调环境或生产上线验收。
 
 ## 目录
 
@@ -26,8 +26,9 @@
 
 | 项目 | 当前口径 |
 | --- | --- |
-| Skill 包版本 | `1.3.1` |
-| 本地沙箱工具 | `hf-payment-local-sandbox 1.0.0` |
+| Skill 包版本 | `1.3.2` |
+| 本地沙箱源码候选 | `hf-payment-local-sandbox 1.0.1`，report schema `1.8` |
+| 当前公开 preview | `hf-payment-local-sandbox 1.0.0`；`1.0.1` 发布前不得称公开包已升级 |
 | Contract bundle | `huifu-pay-integration-1.3.0-r4` |
 | 推荐凭证 Profile | `official-demo` |
 | 数据来源 | 合成数据和脱敏样例派生 fixture |
@@ -37,9 +38,9 @@
 | 下载包内容 | 构建后的 preview 总包，内含各平台 archive、启动器、`USAGE.md`、SBOM、provenance、manifest 和 SHA256 清单 |
 | 分发状态 | 公开预览下载可用；正式公开上线仍需签名、公证、授权和版本固定下载 URL 证据 |
 
-`1.0.0` 的协议契约仍锁定 `huifu-pay-integration-1.3.0-r4`，这是支付协议快照版本；Skill `1.3.1` 新增的是本地沙箱入口和使用说明，不表示支付接口契约被重命名。
+`1.0.1` 源码候选的协议契约仍锁定 `huifu-pay-integration-1.3.0-r4`，这是支付协议快照版本；Skill `1.3.2` 不修改该冻结契约、不增加商户进件模拟端点。`1.0.1` 只把冻结快照证据显式报告为 `frozen_snapshot`，并用 report schema `1.8` 标识这项报告行为变化。
 
-预览总包 URL 当前对应维护者构建出的 `hf-payment-local-sandbox-1.0.0-preview.zip` 重命名分发包。`latest-preview.zip` 是便于官网文档长期引用的预览别名；如果用户要正式上线证据或不可变归档，应使用带版本号的固定下载 URL、SHA256 和发布记录。
+预览总包 URL 当前对应维护者构建出的 `hf-payment-local-sandbox-1.0.0-preview.zip` 重命名分发包。`latest-preview.zip` 是便于官网文档长期引用的预览别名；在 `1.0.1` 完成构建、签名与发布证据前，只能称其为源码/提测候选，不能把公开 URL 描述为 `1.0.1`。如果用户要正式上线证据或不可变归档，应使用带版本号的固定下载 URL、SHA256 和发布记录。
 
 ## 固定边界
 
@@ -97,7 +98,7 @@ hf-payment-local-sandbox serve \
 
 3. 查看或导出 `official-demo` Profile。普通用户优先通过页面“导出凭证”下载 `sandbox-credentials.json`；命令行导出只作为维护者排障能力。无论哪种方式，都不要在文档、日志和报告里回显完整私钥。
 
-`official-demo` 用户可见字段固定为 `product_id`、`sys_id`、商户请求签名私钥、沙箱响应验签公钥和 Webhook 终端密钥。预览包不内置完整私钥；首次使用时会在本机生成或读取 `sandbox-data/credentials/official-demo-merchant-private.pem` 和 `sandbox-data/credentials/official-demo-sandbox-private.pem` 两套 RSA 私钥。本地沙箱模式下，请求签名使用导出的商户私钥；沙箱用本机保存的商户请求验签公钥验请求签名；响应和通知由本机沙箱私钥加签；客户项目优先用导出的 `merchant_public_key` 验响应和通知签名。页面导出的 `sandbox-credentials.json` 只面向商户项目配置，和“复制配置”保持同一套扁平英文 key：`gateway_url`、`sys_id`、`product_id`、`huifu_id`、`skill_source`、`merchant_private_key`、`merchant_public_key`、`webhook_endpoint_key`、`signature_model`、`usage`，不再包含重复的 `merchant_config`、`sandbox_config` 或说明型嵌套层。官方 SDK 优先字段为无 PEM 头尾、无换行的 PKCS8 Base64 `merchant_private_key` 和 X509 Base64 `merchant_public_key`；Webhook 验签使用 `webhook_endpoint_key` 计算大写 `MD5(raw_body + webhook_endpoint_key)`，业务代码可用大小写不敏感比较兼容历史实现；本地配置直接给出样例 `huifu_id = 6666000100000001`。本地沙箱模式下 `skill_source` 固定使用 `hfps/1.3.1;sandbox/1.0.0`；官方联调或生产环境恢复为 `hfps/1.3.1`，不要携带 `;sandbox/...` 后缀。报告中必须保留 `signature_model = dual_key_local_sandbox`。
+`official-demo` 用户可见字段固定为 `product_id`、`sys_id`、商户请求签名私钥、沙箱响应验签公钥和 Webhook 终端密钥。预览包不内置完整私钥；首次使用时会在本机生成或读取 `sandbox-data/credentials/official-demo-merchant-private.pem` 和 `sandbox-data/credentials/official-demo-sandbox-private.pem` 两套 RSA 私钥。本地沙箱模式下，请求签名使用导出的商户私钥；沙箱用本机保存的商户请求验签公钥验请求签名；响应和通知由本机沙箱私钥加签；客户项目优先用导出的 `merchant_public_key` 验响应和通知签名。页面导出的 `sandbox-credentials.json` 只面向商户项目配置，和“复制配置”保持同一套扁平英文 key：`gateway_url`、`sys_id`、`product_id`、`huifu_id`、`skill_source`、`merchant_private_key`、`merchant_public_key`、`webhook_endpoint_key`、`signature_model`、`usage`，不再包含重复的 `merchant_config`、`sandbox_config` 或说明型嵌套层。官方 SDK 优先字段为无 PEM 头尾、无换行的 PKCS8 Base64 `merchant_private_key` 和 X509 Base64 `merchant_public_key`；Webhook 验签使用 `webhook_endpoint_key` 计算大写 `MD5(raw_body + webhook_endpoint_key)`，业务代码可用大小写不敏感比较兼容历史实现；本地配置直接给出样例 `huifu_id = 6666000100000001`。本地沙箱模式下 `skill_source` 固定使用 `hfps/1.3.1;sandbox/1.0.1`；官方联调或生产环境使用 `hfps/1.3.2`，不要携带 `;sandbox/...` 后缀。报告中必须保留 `signature_model = dual_key_local_sandbox`。
 
 4. 已有项目使用本地沙箱时，不是另写一套“SDK 接入指南”，而是在项目现有支付出口层增加仅本地启用的 `local-sandbox` 运行模式。先尝试把官方 SDK 的网关基础地址、base URL、endpoint 或 HTTP client 配置为 `gateway_url`；如果 SDK 没有暴露这类配置项，则保留生产路径继续走官方 SDK，只在项目自己的支付网关封装层增加本地分支：复用原有订单组装、字段校验、幂等键和请求对象，发送阶段按汇付 envelope POST 到 `gateway_url + 接口路径`，响应再转换回项目原有业务服务接口。不要改官方 SDK 源码，不要用 hosts 劫持官方域名到本机，也不要让本地分支在生产环境默认启用。
 
@@ -165,5 +166,5 @@ hf-payment-local-sandbox report --report-dir ./sandbox-report --format md --outp
 ```
 
 ```text
-当前 Skill 1.3.1 新增了 local-sandbox 使用入口；沙箱 1.0.0 的协议契约仍是 huifu-pay-integration-1.3.0-r4，这是兼容快照，不代表支付接口契约被升到 1.3.1。
+当前 Skill 1.3.2 继续保留 local-sandbox 使用入口；沙箱 1.0.1 源码候选与当前公开 1.0.0 preview 的协议契约均仍是 huifu-pay-integration-1.3.0-r4，这是兼容快照，不代表支付接口契约或沙箱来源标识被升到 1.3.2。
 ```

@@ -24,6 +24,15 @@ EXPECTED_REFERENCES = {
     "copilot-parameter-review.md",
     "copilot-go-live-checklist.md",
     "merchant-onboarding-faq.md",
+    "merchant-onboarding-image-upload.md",
+    "merchant-onboarding-enterprise.md",
+    "merchant-onboarding-individual.md",
+    "merchant-onboarding-business-open.md",
+    "merchant-onboarding-detail-query.md",
+    "merchant-onboarding-application-status-query.md",
+    "merchant-onboarding-complete-field-catalog.md",
+    "merchant-onboarding-field-contracts.md",
+    "merchant-onboarding-external-resources.md",
     "shared-overview.md",
     "shared-signing-v2.md",
     "shared-webhook-signing.md",
@@ -124,7 +133,10 @@ INLINE_CODE_PATTERN = re.compile(r"`([^`\n]+)`")
 SKIP_PARTS = {".git", ".tmp", ".worktrees", ".codex-tasks", "node_modules", "docs"}
 MIN_SHORT_DESCRIPTION_LENGTH = 25
 MAX_SHORT_DESCRIPTION_LENGTH = 64
-MAX_SKILL_REFERENCE_MENTIONS = 60
+# 1.3.2 adds seven merchant-onboarding atomic routes and their combined
+# readiness/FAQ routes. Keep a finite route-only ceiling while allowing those
+# explicit dispatch entries in SKILL.md.
+MAX_SKILL_REFERENCE_MENTIONS = 90
 LONG_REFERENCE_TOC_LINE_LIMIT = 100
 LOCAL_PATH_PREFIXES = ("references/", "agents/", "scripts/")
 

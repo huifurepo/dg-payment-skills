@@ -161,6 +161,8 @@ def validate_archive(path: Path, binary_name: str, version: str, contract_bundle
     build_info = json.loads(members["build-info.json"].decode("utf-8"))
     require(build_info.get("name") == APP_NAME, f"{path.name} build-info name mismatch")
     require(build_info.get("version") == version, f"{path.name} build-info version mismatch")
+    usage_text = members["USAGE.md"].decode("utf-8")
+    require(f"适用版本：`{APP_NAME}` {version}" in usage_text, f"{path.name} USAGE.md version mismatch")
     require(build_info.get("contract_bundle") == contract_bundle, f"{path.name} build-info contract mismatch")
     require(build_info.get("signing_profile") == SIGNING_PROFILE, f"{path.name} build-info signing_profile mismatch")
     require(build_info.get("golden_vector_version") == GOLDEN_VECTOR_VERSION, f"{path.name} build-info golden_vector_version mismatch")

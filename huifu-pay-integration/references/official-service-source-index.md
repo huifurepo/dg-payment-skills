@@ -23,6 +23,7 @@
 | 联调攻略 | https://paas.huifu.com/open/service/develop/#/ | 2026-05-15 | 支付产品联调步骤、托管支付、分账、异步回调、常见接入顺序 | 李稼祥 | 方案卡、联调步骤、必测项、常见卡点 |
 | FAQ | https://paas.huifu.com/open/service/faq/#/ | 2026-05-15 | 高频错误、权限/配置/状态/流水/回调/签名问题 | 李稼祥 | 问题分类、排查顺序、修复建议、升级人工条件 |
 | API 文档 | https://paas.huifu.com/partners/lightning/api/、https://paas.huifu.com/partners/api/doc/ | 2026-06-10 | 聚合支付下单、查单、关单、退款、对账、托管预下单、抖音直连下单、拆单支付订单查询页面 | 李稼祥 | 字段差异刷新、接口新增/修改确认 |
+| 商户进件 API 文档 | https://paas.huifu.com/partners/api/doc/shgl/shjj/、https://paas.huifu.com/partners/api/doc/shgl/shywkt/、https://paas.huifu.com/navigator/ossApi/api_shjj_shtpsc.json | 2026-07-17 | 企业/个人进件、图片上传、业务开通、商户详情、申请状态的完整字段路径与外部资料 | 李稼祥 | 脱敏字段合同、完整字段目录、外部资料索引和 P0 未确认项 |
 | AI 技能包技术支持 | https://paas.huifu.com/docs/devtools/#/skillsv1_0?id=support | 2026-06-12 | 官方 AI 技能包技术支持联系方式 | 李稼祥 | 用户明确要求技术支持或本地排查仍解决不了时给出联系方式 |
 
 ## 运行时规则
@@ -48,6 +49,7 @@
 | checkout-js 自有页面嵌入 | 联调攻略 | `references/checkout-js.md`、`references/checkout-js-create-preorder-contract.md`、`references/checkout-js-callback-and-confirmation.md` | 已覆盖 | 明确 checkout-js 依赖托管预下单，前端 callback 只做流程回调 | 不在未确认服务端预下单、异步通知和查单补偿闭环时给安装和接法 | 联调攻略，2026-05-15 |
 | 异步通知、验签、幂等、固定回包 | 联调攻略、FAQ | `references/shared-async-notify.md`、`references/shared-signing-v2.md`、`references/shared-webhook-signing.md`、`references/copilot-troubleshooting-playbooks.md` | 已覆盖 | 先验签、再解析、再事件级幂等和状态锁；最终状态通过查单二次确认或补偿查询闭环 | 不提供跳过验签、收到通知即改成功、伪造支付成功代码 | 联调攻略/FAQ，2026-05-15 |
 | 商户进件、接口/数据权限、通道配置、appid/openid、Webhook 高频 FAQ | FAQ、业务指引 | `references/merchant-onboarding-faq.md`、`references/copilot-troubleshooting-playbooks.md`、`references/official-service-source-index.md` | 已覆盖 | 只使用脱敏摘要；按进件结果、接口权限、数据权限、通道路由、appid/openid、授权目录和 Webhook 配置给排查顺序 | 不复制原始 FAQ 目录、截图/base64 或真实数据；不承诺通道准入/审核结果 | FAQ，2026-06-10 |
+| 企业/个人进件、图片上传、业务开通、详情或申请状态 API | API 文档 + 当前生产 SDK 源码 | 六个原子 reference、`references/merchant-onboarding-complete-field-catalog.md`、`references/merchant-onboarding-field-contracts.md`、`references/merchant-onboarding-external-resources.md` | 部分覆盖 | 六接口已有完整字段路径和外部资料索引；五个 JSON 接口已有三语言 SDK 类证据；图片只对 `file_url` 按语言输出受控片段，本地文件与回调标 `[需要官方确认]` | 不生成未证实本地上传/回调代码，不记录证件、银行卡、图片、`token_no` 或签约链接 | API 文档与 SDK，2026-07-17 |
 | 分账参数、分账退款、分账查询 | 业务指引、联调攻略、FAQ | `references/aggregation-order-tx-metadata.md`、`references/hostingpay-payload-construction.md`、`references/copilot-solution-cards.md` | 部分覆盖 | 覆盖聚合和托管常用分账参数、接收方、金额/比例、退款关系；复杂权限和手续费承担转人工确认 | 不自动判断分账权限、费率或资金合规结论 | 业务指引/联调攻略/FAQ，2026-05-15 |
 | 存量系统新增汇付、改回调、补退款 | 业务指引、FAQ | `references/copilot-existing-system.md`、`references/copilot-go-live-checklist.md`、`references/copilot-troubleshooting-playbooks.md` | 已覆盖 | 建议新增适配层、保留原订单逻辑、补落库字段、做状态映射和回归检查 | 不重写订单系统；不直接替换原状态机 | 业务指引/FAQ，2026-05-15 |
 | 上线检查、灰度、回滚、生产失败材料 | 业务指引、FAQ | `references/copilot-go-live-checklist.md`、`references/copilot-existing-system.md`、`references/official-service-source-index.md` | 已覆盖 | 输出通用上线检查、存量系统检查、必测项、日志脱敏、升级人工材料 | 不对生产问题定责；不把真实密钥写入仓库或前端 | 业务指引/FAQ，2026-05-15 |
@@ -77,7 +79,7 @@
 | 用户问题/报错 | 分类 | 本地权威 reference | 本地处理口径 |
 | --- | --- | --- | --- |
 | URL 未注册、redirect_uri 域名不一致 | 配置/渠道权限 | `references/copilot-troubleshooting-playbooks.md`、`references/hostingpay-customer-preparation.md` | 检查渠道侧域名、appid、回跳地址、`notify_url`/`callback_url` 和控台配置；必要时转运营/商务 |
-| 商户进件是否成功、返回 `huifu_id` 但业务开通失败 | 商户进件/实名 | `references/merchant-onboarding-faq.md`、`references/copilot-troubleshooting-playbooks.md` | 有 `huifu_id` 只能说明账户已创建，不等于支付产品可交易；继续检查银行卡、结算、取现、渠道开通和 `token_no` |
+| 商户进件是否成功、返回 `huifu_id` 但业务开通失败 | 商户进件/实名 | `references/merchant-onboarding-faq.md`、`references/copilot-troubleshooting-playbooks.md` | `huifu_id` 仅是同步响应可能返回的商户号，不能单独说明账户创建或支付产品可交易；结合 `resp_code`、`resp_desc`、`apply_no` 和申请状态查询，再检查银行卡、结算、取现、渠道开通和 `token_no` |
 | 接口权限认证失败、`20003`、数据权限认证失败 | 接口/数据权限 | `references/merchant-onboarding-faq.md`、`references/copilot-troubleshooting-playbooks.md` | 接口权限看 `sys_id` 和接口路径；数据权限看 `product_id`、`sys_id`、`huifu_id`、`upper_huifu_id` 和层级 |
 | 该路由下未配置可用通道、入驻信息配置有误 | 通道/路由 | `references/merchant-onboarding-faq.md`、`references/copilot-troubleshooting-playbooks.md` | 检查通道开通、线上/线下业务、`pay_channel`、`pay_scene`、`fee_type`；不指定通道时不要传空 `channel_no` |
 | `sub_mch_id` 与 `sub_appid` 不匹配、`sub_openid` 不匹配 | appid/openid | `references/merchant-onboarding-faq.md`、`references/aggregation-customer-preparation.md`、`references/hostingpay-customer-preparation.md` | 检查 appid 绑定、首尾空格、openid 是否来自同一 appid 授权流程 |

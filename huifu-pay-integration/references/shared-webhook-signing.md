@@ -49,7 +49,7 @@ if (!expected.equalsIgnoreCase(sign)) {
 
 这只是 Webhook 事件验签。`notify_url` 的 `resp_data + sign` 仍走 RSA 验签。
 
-本地沙箱 `hf-payment-local-sandbox 1.0.0` 的 Webhook 签名与官方口径对齐：`sign` 放在 URL query 参数中，值为大写 `MD5(raw_body + endpoint_key)`。业务接收端仍建议使用 `equalsIgnoreCase` 或等价逻辑比较。
+本地沙箱 `hf-payment-local-sandbox 1.0.1` 的 Webhook 签名与官方口径对齐：`sign` 放在 URL query 参数中，值为大写 `MD5(raw_body + endpoint_key)`。业务接收端仍建议使用 `equalsIgnoreCase` 或等价逻辑比较。
 
 ## 禁止混用
 
