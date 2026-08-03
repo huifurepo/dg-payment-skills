@@ -12,3 +12,6 @@
 *.zip binary
 *.7z binary
 *.tar.gz binary
+
+# Official source snapshots preserve the exact downloaded bytes and hashes.
+maintainer-contracts/official-sources/** -text whitespace=-trailing-space,-space-before-tab

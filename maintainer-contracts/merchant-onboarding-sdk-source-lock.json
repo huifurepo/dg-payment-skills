@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-07-24",
+  "provenance": {
+    "status": "USER_PROVIDED_SOURCE_TREE",
+    "sdk_root_hint": "/mnt/d/work/project/1.3.0/sdk",
+    "official_download_url": null,
+    "official_tag_or_commit": null,
+    "note": "用户提供了本地 SDK 目录；本锁只证明后续校验使用相同源码字节，不宣称官方分发来源已验证。"
+  },
+  "tree_digest_algorithm": "sha256 over sorted records: uint32be(path_utf8_length) + path_utf8 + uint64be(file_length) + file_bytes",
+  "components": {
+    "java": {
+      "version": "3.0.40",
+      "include": "pom.xml and **/*.java; exclude target, __pycache__, .git",
+      "file_count": 674,
+      "tree_sha256": "be1c4ab0e9203dda03a85d36dc58eb783ede69d530ee22e2d29ce9cc27d41269"
+    },
+    "php": {
+      "version": "2.0.30",
+      "include": "**/*.php; exclude target, __pycache__, .git",
+      "file_count": 355,
+      "tree_sha256": "8cac134ebbdbfb0a81fc25ac7441aaeb31e3946ad7a9ad0b42fb1aa33ef73c27"
+    },
+    "python": {
+      "version": "2.0.24",
+      "include": "**/*.py; exclude target, __pycache__, .git",
+      "file_count": 347,
+      "tree_sha256": "233b82dac235bd132d8191036fa8ded6df282984fc3613a83796bc524779c264"
+    }
+  }
+}

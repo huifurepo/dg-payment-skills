@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "refresh_id": "api-refresh-2026-07-29-r3",
+  "requested_at": "2026-07-29",
+  "version_state": {
+    "reason": "The fifth review refreshes official API evidence and link handling without changing either Skill package version.",
+    "huifu-pay-integration": "1.3.3",
+    "huifu-merchant-onboarding": "1.0.0"
+  },
+  "source_locks": {
+    "merchant_onboarding": {
+      "path": "maintainer-contracts/merchant-onboarding-source-lock.json",
+      "sha256": "242c8588f825dd6182ba474299ecbe7554357de6a7fb1720a0d5f46dc33bf9cd"
+    },
+    "payment": {
+      "path": "maintainer-contracts/payment-source-lock.json",
+      "sha256": "99520419703d114e9c639ebd409358a383f427be66057a056483741a3096a147"
+    }
+  },
+  "scope": [
+    "merchant onboarding enterprise material_card_info refresh",
+    "nested same-leaf province and bank-field isolation",
+    "source-relative field-link resolution with original-target preservation",
+    "normative resource versus runtime URL classification",
+    "upstream broken-anchor and non-HTTPS/test-domain risk markers",
+    "payment method_expand confirmed flat response and A_IMICROPAY example typo",
+    "common return-code/base-parameter/term sources and notify_url dual notification mapping"
+  ],
+  "previous_refresh": {
+    "refresh_id": "api-refresh-2026-07-28-r2",
+    "contract": "maintainer-contracts/api-refresh-2026-07-28.json"
+  },
+  "frozen_assets_policy": {
+    "preserve": [
+      "local-sandbox/contracts/huifu-pay-integration-1.3.0-r1",
+      "local-sandbox/contracts/huifu-pay-integration-1.3.0-r2",
+      "local-sandbox/contracts/huifu-pay-integration-1.3.0-r3",
+      "local-sandbox/contracts/huifu-pay-integration-1.3.0-r4",
+      "local-sandbox/sample-packs/huifu-pay-integration-1.3.0-r4"
+    ],
+    "rule": "Historical frozen bytes and digests must not be rewritten by this refresh."
+  },
+  "release_rule": "Skill versions remain 1.3.3 and 1.0.0. Do not overwrite a previously published artifact; any newly published same-version artifact must use a distinct immutable filename and bind this refresh ID, source locks and source commit."
+}

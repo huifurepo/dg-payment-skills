@@ -16,6 +16,11 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
+from validation_runtime import require_assertions_enabled
+
+
+require_assertions_enabled()
+
 OFFICIAL_PROFILE = "official-demo"
 ACTIVE_SYS_ID = "6666000108840829"
 ACTIVE_PRODUCT_ID = "YYZY"

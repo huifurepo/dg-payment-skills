@@ -14,8 +14,16 @@ from pathlib import Path
 
 SIGNING_PROFILE = "sdk-v2-sorted-json"
 GOLDEN_VECTOR_VERSION = "1.0"
-JAVA_SDK = Path("docs/sdk/bspay-java-sdk-parent-generator-sdk/opps-bspay-java-sdk")
-PHP_TOOL = Path("docs/sdk/bspay-php-sdk-feature_generator_sdk/BsPaySdk/core/BsPayTools.php")
+JAVA_SDK_CANDIDATES = (
+    Path("bspay-java-sdk-parent-main/bspay-java-sdk-parent-main/opps-bspay-java-sdk"),
+    Path("bspay-java-sdk-parent-generator-sdk/opps-bspay-java-sdk"),
+    Path("opps-bspay-java-sdk"),
+)
+PHP_TOOL_CANDIDATES = (
+    Path("bspay-php-sdk-master/bspay-php-sdk-master/BsPaySdk/core/BsPayTools.php"),
+    Path("bspay-php-sdk-feature_generator_sdk/BsPaySdk/core/BsPayTools.php"),
+    Path("BsPaySdk/core/BsPayTools.php"),
+)
 
 REQUEST_VECTORS = [
     {
@@ -88,13 +96,20 @@ SYNTHETIC_PUBLIC_KEY_X509_B64 = (
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate local-sandbox SDK signing golden vectors.")
     parser.add_argument("--strict", action="store_true", help="fail if Java, Maven, PHP, or Go harnesses cannot run")
+    parser.add_argument("--sdk-root", type=Path, default=os.environ.get("HUIFU_SDK_ROOT"), help="root containing the official Java and PHP SDK archives")
     args = parser.parse_args()
 
-    repo_root = Path(__file__).resolve().parents[1]
-    java_sdk_dir = repo_root / JAVA_SDK
-    php_tool = repo_root / PHP_TOOL
-    require(java_sdk_dir.is_dir(), f"Java SDK directory not found: {java_sdk_dir}", args.strict)
-    require(php_tool.is_file(), f"PHP BsPayTools not found: {php_tool}", args.strict)
+    if args.sdk_root is None:
+        return blocked("HUIFU_SDK_ROOT or --sdk-root is required for SDK golden-vector evidence")
+    sdk_root = args.sdk_root.resolve()
+    if not sdk_root.is_dir():
+        return blocked(f"SDK root is not a directory: {sdk_root}")
+    java_sdk_dir = find_sdk_component(sdk_root, JAVA_SDK_CANDIDATES, directory=True)
+    php_tool = find_sdk_component(sdk_root, PHP_TOOL_CANDIDATES, directory=False)
+    if java_sdk_dir is None:
+        return blocked(f"Java SDK not found under {sdk_root}")
+    if php_tool is None:
+        return blocked(f"PHP BsPayTools not found under {sdk_root}")
 
     with tempfile.TemporaryDirectory(prefix="hf-sandbox-golden-") as tmp_raw:
         tmp = Path(tmp_raw)
@@ -172,6 +187,30 @@ def main() -> int:
         )
     )
     return 0
+
+
+def find_sdk_component(root: Path, candidates: tuple[Path, ...], *, directory: bool) -> Path | None:
+    for candidate in candidates:
+        path = root / candidate
+        if (path.is_dir() if directory else path.is_file()):
+            return path
+    return None
+
+
+def blocked(message: str) -> int:
+    print(
+        json.dumps(
+            {
+                "ok": False,
+                "status": "BLOCKED",
+                "golden_vector_version": GOLDEN_VECTOR_VERSION,
+                "signing_profile": SIGNING_PROFILE,
+                "reason": message,
+            },
+            ensure_ascii=False,
+        )
+    )
+    return 2
 
 
 def build_java_harness(tmp: Path, java_sdk_dir: Path, strict: bool) -> str:

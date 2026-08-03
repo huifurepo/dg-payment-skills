@@ -20,6 +20,7 @@ from skill_validation_config import (
     MIN_SHORT_DESCRIPTION_LENGTH,
     NAME_PATTERN,
     REPO_ROOT,
+    SKILL_SPECS,
     SKILL_FILES,
     ValidationState,
 )
@@ -32,6 +33,37 @@ from skill_validation_utils import (
     validate_skill_top_level,
 )
 
+DESCRIPTION_REQUIRED_TERMS = {
+    "huifu-pay-integration": (
+        "聚合支付",
+        "托管支付",
+        "checkout-js",
+        "签名",
+        "幂等",
+        "商户进件",
+        "业务开通",
+        "huifu-merchant-onboarding",
+    ),
+    "huifu-merchant-onboarding": (
+        "企业",
+        "个人",
+        "开户",
+        "图片",
+        "业务开通",
+        "业务开通修改",
+        "基本信息修改",
+        "费率查询",
+        "状态变更",
+        "短信",
+        "商户详情",
+        "申请状态",
+        "支付下单",
+        "支付终态",
+        "huifu-pay-integration",
+    ),
+}
+
+
 def main() -> int:
     state = ValidationState()
     print("=== Skill 仓库校验 ===\n")
@@ -43,6 +75,7 @@ def main() -> int:
     validate_regression_metadata(state)
     validate_python_prod_contract(state)
     validate_reference_navigation(state)
+    validate_reference_reachability(state)
     validate_markdown_links(state)
     validate_repo_files(state)
     print(f"\n=== 结果: {state.errors} errors, {state.warnings} warnings ===")
@@ -55,30 +88,37 @@ def main() -> int:
 
 def validate_repo_layout(state: ValidationState) -> None:
     print("--- 仓库发布结构检查（自定义约束） ---")
-    if SKILL_FILES != [EXPECTED_SKILL_FILE]:
-        found = ", ".join(str(path.relative_to(REPO_ROOT)) for path in SKILL_FILES) or "none"
-        state.error(f"expected only {EXPECTED_SKILL_FILE.relative_to(REPO_ROOT)}, found: {found}")
+    expected_files = sorted(spec.skill_file for spec in SKILL_SPECS)
+    actual_files = sorted(REPO_ROOT.glob("*/SKILL.md"))
+    if actual_files != expected_files:
+        found = ", ".join(str(path.relative_to(REPO_ROOT)) for path in actual_files) or "none"
+        state.error(f"skill layout differs from skills-manifest.json: {found}")
     else:
-        state.ok(f"single skill layout OK: {EXPECTED_SKILL_FILE.relative_to(REPO_ROOT)}")
+        state.ok(f"skill layout matches manifest: {len(expected_files)} skills")
 
-    references_dir = EXPECTED_SKILL_DIR / "references"
-    if not references_dir.is_dir():
-        state.error("huifu-pay-integration/references missing")
-        return
-    nested_dirs = sorted(path.relative_to(references_dir) for path in references_dir.iterdir() if path.is_dir())
-    if nested_dirs:
-        state.error(f"references must stay flat, found subdirectories: {', '.join(map(str, nested_dirs))}")
-    missing_refs = sorted(name for name in EXPECTED_REFERENCES if not (references_dir / name).exists())
-    if missing_refs:
-        state.error(f"missing references: {', '.join(missing_refs)}")
-    else:
-        state.ok("all expected reference files exist")
-    actual_refs = {path.name for path in references_dir.glob("*.md")}
-    extra_refs = sorted(actual_refs - EXPECTED_REFERENCES)
-    if extra_refs:
-        state.error(f"unexpected references: {', '.join(extra_refs)}")
-    else:
-        state.ok("reference file set matches expected single-skill manifest")
+    for spec in SKILL_SPECS:
+        references_dir = spec.references_dir
+        if not references_dir.is_dir():
+            state.error(f"{spec.skill_id}/references missing")
+            continue
+        nested_dirs = sorted(
+            path.relative_to(references_dir) for path in references_dir.iterdir() if path.is_dir()
+        )
+        if nested_dirs:
+            state.error(
+                f"{spec.skill_id}: references must stay flat, found: "
+                f"{', '.join(map(str, nested_dirs))}"
+            )
+        expected_refs = spec.expected_references
+        actual_refs = {path.name for path in references_dir.glob("*.md")}
+        missing_refs = sorted(expected_refs - actual_refs)
+        extra_refs = sorted(actual_refs - expected_refs)
+        if missing_refs:
+            state.error(f"{spec.skill_id}: missing references: {', '.join(missing_refs)}")
+        if extra_refs:
+            state.error(f"{spec.skill_id}: unexpected references: {', '.join(extra_refs)}")
+        if not missing_refs and not extra_refs:
+            state.ok(f"{spec.skill_id}: reference set matches manifest ({len(actual_refs)})")
 
 
 def validate_skill_files(state: ValidationState) -> None:
@@ -236,6 +276,17 @@ def validate_description(description: object, skill_file: Path, state: Validatio
     if len(description) > 1024:
         state.error(f"{skill_file} description exceeds 1024 chars")
         return
+    missing_terms = [
+        term
+        for term in DESCRIPTION_REQUIRED_TERMS.get(skill_file.parent.name, ())
+        if term not in description
+    ]
+    if missing_terms:
+        state.error(
+            f"{skill_file} description is missing routing terms: "
+            + ", ".join(missing_terms)
+        )
+        return
     state.ok(f"{skill_file} description OK")
 
 
@@ -252,24 +303,40 @@ def validate_body(body: str, skill_file: Path, state: ValidationState) -> None:
 
 def validate_agents_files(state: ValidationState) -> None:
     print("\n--- Agents 元数据检查（自定义约束） ---")
-    if not EXPECTED_OPENAI_YAML.is_file():
-        state.error("huifu-pay-integration/agents/openai.yaml missing")
+    for spec in SKILL_SPECS:
+        openai_file = spec.agents_file
+        if not openai_file.is_file():
+            state.error(f"{openai_file.relative_to(REPO_ROOT)} missing")
+            continue
+        interface, quoted = parse_openai_interface(openai_file, state)
+        if interface is None:
+            continue
+        validate_interface_string(openai_file, interface, quoted, "display_name", 1, 80, state)
+        validate_interface_string(
+            openai_file,
+            interface,
+            quoted,
+            "short_description",
+            MIN_SHORT_DESCRIPTION_LENGTH,
+            MAX_SHORT_DESCRIPTION_LENGTH,
+            state,
+        )
+        validate_default_prompt(interface, quoted, openai_file, spec.skill_id, state)
+        validate_interface_consistency(interface, spec.skill_file, openai_file, state)
+        validate_openai_policy(openai_file, state)
+
+
+def validate_openai_policy(openai_file: Path, state: ValidationState) -> None:
+    text = openai_file.read_text(encoding="utf-8")
+    if not re.search(
+        r"(?m)^policy:\s*$\n^[ ]{2}allow_implicit_invocation:\s*(?:true|false)\s*$",
+        text,
+    ):
+        state.error(
+            f"{openai_file} must explicitly set policy.allow_implicit_invocation"
+        )
         return
-    interface, quoted = parse_openai_interface(EXPECTED_OPENAI_YAML, state)
-    if interface is None:
-        return
-    validate_interface_string(EXPECTED_OPENAI_YAML, interface, quoted, "display_name", 1, 80, state)
-    validate_interface_string(
-        EXPECTED_OPENAI_YAML,
-        interface,
-        quoted,
-        "short_description",
-        MIN_SHORT_DESCRIPTION_LENGTH,
-        MAX_SHORT_DESCRIPTION_LENGTH,
-        state,
-    )
-    validate_default_prompt(interface, quoted, EXPECTED_OPENAI_YAML, state)
-    validate_interface_consistency(interface, EXPECTED_SKILL_FILE, state)
+    state.ok(f"{openai_file} invocation policy is explicit")
 
 
 def parse_openai_interface(
@@ -332,12 +399,13 @@ def validate_default_prompt(
     interface: dict[str, str],
     quoted: set[str],
     openai_file: Path,
+    skill_id: str,
     state: ValidationState,
 ) -> None:
     validate_interface_string(openai_file, interface, quoted, "default_prompt", 1, 200, state)
     prompt = interface.get("default_prompt", "")
-    if f"${EXPECTED_SKILL_DIR.name}" not in prompt:
-        state.error(f"{openai_file} interface.default_prompt must mention ${EXPECTED_SKILL_DIR.name}")
+    if f"${skill_id}" not in prompt:
+        state.error(f"{openai_file} interface.default_prompt must mention ${skill_id}")
         return
     state.ok(f"{openai_file} interface.default_prompt skill reference OK")
 
@@ -345,6 +413,7 @@ def validate_default_prompt(
 def validate_interface_consistency(
     interface: dict[str, str],
     skill_file: Path,
+    openai_file: Path,
     state: ValidationState,
 ) -> None:
     text = skill_file.read_text(encoding="utf-8")
@@ -354,20 +423,22 @@ def validate_interface_consistency(
         return
     display_name = interface.get("display_name", "")
     if display_name != heading:
-        state.error(f"{EXPECTED_OPENAI_YAML} interface.display_name must match SKILL.md H1 heading")
+        state.error(f"{openai_file} interface.display_name must match SKILL.md H1 heading")
     else:
-        state.ok(f"{EXPECTED_OPENAI_YAML} interface.display_name matches SKILL.md heading")
+        state.ok(f"{openai_file} interface.display_name matches SKILL.md heading")
     validate_keyword_groups(
         interface.get("short_description", ""),
         build_short_description_groups(text),
         "interface.short_description",
         state,
+        openai_file,
     )
     validate_keyword_groups(
         interface.get("default_prompt", ""),
         build_default_prompt_groups(text),
         "interface.default_prompt",
         state,
+        openai_file,
     )
 
 
@@ -380,6 +451,8 @@ def extract_skill_heading(text: str) -> str | None:
 
 def build_short_description_groups(text: str) -> list[tuple[str, tuple[str, ...]]]:
     groups: list[tuple[str, tuple[str, ...]]] = []
+    if "# 汇付商户进件" in text:
+        return [("商户进件", ("商户进件", "进件"))]
     if "聚合支付" in text:
         groups.append(("聚合支付", ("聚合支付",)))
     if "托管支付" in text:
@@ -403,35 +476,40 @@ def validate_keyword_groups(
     groups: list[tuple[str, tuple[str, ...]]],
     field_name: str,
     state: ValidationState,
+    openai_file: Path,
 ) -> None:
     for label, options in groups:
         if any(option in value for option in options):
-            state.ok(f"{EXPECTED_OPENAI_YAML} {field_name} covers {label}")
+            state.ok(f"{openai_file} {field_name} covers {label}")
             continue
-        state.error(f"{EXPECTED_OPENAI_YAML} {field_name} missing keyword group: {label}")
+        state.error(f"{openai_file} {field_name} missing keyword group: {label}")
 
 
 def validate_entry_docs(state: ValidationState) -> None:
     print("\n--- 入口文档检查（自定义约束） ---")
-    skill_text = EXPECTED_SKILL_FILE.read_text(encoding="utf-8")
-    overview_file = EXPECTED_SKILL_DIR / "references" / "shared-overview.md"
-    overview_text = overview_file.read_text(encoding="utf-8")
-    check_required_snippet(EXPECTED_SKILL_FILE, skill_text, "references/shared-copyright-notice.md", state)
-    check_required_snippet(EXPECTED_SKILL_FILE, skill_text, "references/shared-overview.md", state)
-    references_count = skill_text.count("references/")
-    if references_count > MAX_SKILL_REFERENCE_MENTIONS:
-        state.error(
-            f"{EXPECTED_SKILL_FILE} should stay route-focused, found {references_count} references/ mentions"
+    for spec in SKILL_SPECS:
+        skill_text = spec.skill_file.read_text(encoding="utf-8")
+        check_required_snippet(
+            spec.skill_file, skill_text, "references/shared-copyright-notice.md", state
         )
-        return
-    state.ok(f"{EXPECTED_SKILL_FILE} reference mentions stay within route-only threshold")
+        check_required_snippet(spec.skill_file, skill_text, "references/shared-overview.md", state)
+        references_count = skill_text.count("references/")
+        if references_count > spec.max_reference_mentions:
+            state.error(
+                f"{spec.skill_file} should stay route-focused, found "
+                f"{references_count} references/ mentions"
+            )
+            continue
+        state.ok(
+            f"{spec.skill_file} reference mentions stay within "
+            f"{spec.max_reference_mentions}"
+        )
 
 
 def validate_regression_metadata(state: ValidationState) -> None:
     print("\n--- 回归 Prompt 元数据检查 ---")
     prompts_file = REPO_ROOT / "scripts" / "huifu-payment-test-prompts.json"
     runner_file = REPO_ROOT / "scripts" / "run_real_model_regression.py"
-    canonical_file = EXPECTED_SKILL_DIR / "references" / "canonical-regression-prompts.md"
     readme_file = REPO_ROOT / "README.md"
 
     prompts = json.loads(prompts_file.read_text(encoding="utf-8"))
@@ -443,23 +521,56 @@ def validate_regression_metadata(state: ValidationState) -> None:
         state.error(f"missing regression rule ids: {', '.join(map(str, missing_rules))}")
     else:
         state.ok(f"all {len(prompt_ids)} regression prompts have runner rules")
+    suite_counts = {
+        suite: sum(1 for item in prompts if item.get("suite") == suite)
+        for suite in ("payment", "onboarding")
+    }
+    if suite_counts != {"payment": 57, "onboarding": 29}:
+        state.error(f"regression ownership/count changed unexpectedly: {suite_counts}")
+    else:
+        state.ok("86 cases have unique payment=57/onboarding=29 ownership")
+    expected_suite_files = {
+        "payment": [item for item in prompts if item.get("suite") == "payment"],
+        "onboarding": [item for item in prompts if item.get("suite") == "onboarding"],
+    }
+    for suite, expected_items in expected_suite_files.items():
+        suite_file = REPO_ROOT / f"tests/regression/{suite}.json"
+        actual_items = json.loads(suite_file.read_text(encoding="utf-8"))
+        if actual_items != expected_items:
+            state.error(f"{suite_file.relative_to(REPO_ROOT)} drifted from canonical prompts")
+        else:
+            state.ok(f"{suite}: generated regression suite matches canonical prompts")
+    cross_file = REPO_ROOT / "tests/regression/cross-route.json"
+    cross_cases = json.loads(cross_file.read_text(encoding="utf-8"))
+    if len(cross_cases) != 31 or any(item.get("suite") != "cross-route" for item in cross_cases):
+        state.error("cross-route regression suite must contain 31 tagged cases")
+    else:
+        state.ok("cross-route regression suite count OK: 31")
 
     smoke_match = re.search(r"SMOKE_CASE_IDS\s*=\s*\(([^)]*)\)", runner_text)
     smoke_ids = set()
     if smoke_match:
         smoke_ids = {int(value) for value in re.findall(r"\d+", smoke_match.group(1))}
-    required_smoke_ids = {34, 35, 36, 37, 38}
+    required_smoke_ids = {34, 35, 36, 37, 38, 1001, 1002, 1019}
     missing_smoke = sorted(required_smoke_ids - smoke_ids)
     if missing_smoke:
         state.error(f"smoke regression missing required 1.3.0 cases: {', '.join(map(str, missing_smoke))}")
     else:
         state.ok("smoke regression covers 1.3.0 field/API refresh cases")
 
-    canonical_count = len(re.findall(r"^### C\d+", canonical_file.read_text(encoding="utf-8"), flags=re.M))
-    if canonical_count != 8:
-        state.error(f"canonical regression prompt count must be 8, found {canonical_count}")
-    else:
-        state.ok("canonical regression prompt count OK")
+    for spec in SKILL_SPECS:
+        canonical_file = spec.references_dir / "canonical-regression-prompts.md"
+        canonical_count = len(
+            re.findall(r"^### [CO]\d+", canonical_file.read_text(encoding="utf-8"), flags=re.M)
+        )
+        expected_count = spec.canonical_regression_count
+        if canonical_count != expected_count:
+            state.error(
+                f"{spec.skill_id}: canonical prompt count must be "
+                f"{expected_count}, found {canonical_count}"
+            )
+        else:
+            state.ok(f"{spec.skill_id}: canonical regression prompt count OK")
 
     readme_text = readme_file.read_text(encoding="utf-8")
     stale_claims = [claim for claim in ("5/5 passed", "34/34 passed", "5 条随 Skill 分发") if claim in readme_text]
@@ -478,19 +589,63 @@ def check_required_snippet(path: Path, text: str, snippet: str, state: Validatio
 
 def validate_reference_navigation(state: ValidationState) -> None:
     print("\n--- Reference 导航检查（自定义约束） ---")
-    references_dir = EXPECTED_SKILL_DIR / "references"
     missing_toc = []
-    for path in sorted(references_dir.glob("*.md")):
-        lines = path.read_text(encoding="utf-8").splitlines()
-        if len(lines) <= LONG_REFERENCE_TOC_LINE_LIMIT:
-            continue
-        if has_reference_toc(lines):
-            continue
-        missing_toc.append(path.name)
+    for spec in SKILL_SPECS:
+        for path in sorted(spec.references_dir.glob("*.md")):
+            lines = path.read_text(encoding="utf-8").splitlines()
+            if len(lines) <= LONG_REFERENCE_TOC_LINE_LIMIT:
+                continue
+            if has_reference_toc(lines):
+                continue
+            missing_toc.append(f"{spec.skill_id}/{path.name}")
     if missing_toc:
         state.error(f"long references missing TOC: {', '.join(missing_toc)}")
         return
     state.ok("long references include TOC blocks")
+
+
+def validate_reference_reachability(state: ValidationState) -> None:
+    print("\n--- Reference 可达性检查 ---")
+    reference_name_pattern = re.compile(
+        r"(?<![A-Za-z0-9_.-])([A-Za-z0-9][A-Za-z0-9._-]*\.md)"
+    )
+    entry_reference_pattern = re.compile(r"references/([A-Za-z0-9][A-Za-z0-9._-]*\.md)")
+
+    for spec in SKILL_SPECS:
+        reference_paths = {
+            path.name: path for path in sorted(spec.references_dir.glob("*.md"))
+        }
+        entry_text = spec.skill_file.read_text(encoding="utf-8")
+        pending = [
+            name
+            for name in entry_reference_pattern.findall(entry_text)
+            if name in reference_paths
+        ]
+        reachable: set[str] = set()
+
+        while pending:
+            name = pending.pop()
+            if name in reachable:
+                continue
+            reachable.add(name)
+            text = reference_paths[name].read_text(encoding="utf-8")
+            pending.extend(
+                candidate
+                for candidate in reference_name_pattern.findall(text)
+                if candidate in reference_paths and candidate not in reachable
+            )
+
+        missing = sorted(set(reference_paths) - reachable)
+        if missing:
+            state.error(
+                f"{spec.skill_id}: orphan references not reachable from SKILL.md: "
+                + ", ".join(missing)
+            )
+            continue
+        state.ok(
+            f"{spec.skill_id}: all {len(reference_paths)} references are reachable "
+            "from SKILL.md"
+        )
 
 
 def has_reference_toc(lines: list[str]) -> bool:
@@ -505,8 +660,10 @@ def validate_markdown_links(state: ValidationState) -> None:
         if should_skip(markdown_file):
             continue
         check_links(markdown_file, state)
-        if markdown_file.is_relative_to(EXPECTED_SKILL_DIR):
-            check_inline_paths(markdown_file, state)
+        for spec in SKILL_SPECS:
+            if markdown_file.is_relative_to(spec.root):
+                check_inline_paths(markdown_file, spec.root, state)
+                break
 
 
 def check_links(markdown_file: Path, state: ValidationState) -> None:
@@ -520,7 +677,7 @@ def check_links(markdown_file: Path, state: ValidationState) -> None:
             state.error(f"{markdown_file.relative_to(REPO_ROOT)} -> broken link: {target}")
 
 
-def check_inline_paths(markdown_file: Path, state: ValidationState) -> None:
+def check_inline_paths(markdown_file: Path, skill_root: Path, state: ValidationState) -> None:
     in_fence = False
     for line_no, line in enumerate(markdown_file.read_text(encoding="utf-8").splitlines(), start=1):
         stripped = line.strip()
@@ -533,7 +690,7 @@ def check_inline_paths(markdown_file: Path, state: ValidationState) -> None:
             candidate = match.group(1).strip()
             if not looks_like_local_path(candidate):
                 continue
-            resolved = (EXPECTED_SKILL_DIR / candidate.rstrip("/")).resolve()
+            resolved = (skill_root / candidate.rstrip("/")).resolve()
             if resolved.exists():
                 continue
             state.error(

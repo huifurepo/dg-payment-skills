@@ -5,7 +5,7 @@
 - [SDK 映射](#sdk-映射)
 - [公共请求参数](#公共请求参数)
 - [请求参数 data](#请求参数-data)
-- [嵌套参数展开](#嵌套参数展开)
+- [同步响应 data 嵌套参数展开](#同步响应-data-嵌套参数展开)
 - [请求示例](#请求示例)
 - [同步返回参数](#同步返回参数)
 - [业务返回码](#业务返回码)
@@ -81,15 +81,17 @@
 | org_hf_seq_id | 退款全局流水号 | String | 128 | C | 与 `org_req_seq_id` 二选一，不能都为空 |
 | org_req_seq_id | 退款请求流水号 | String | 128 | C | 与 `org_hf_seq_id` 二选一，不能都为空 |
 
-## 嵌套参数展开
+## 同步响应 data 嵌套参数展开
 
-### acct_split_bunch
+以下对象全部属于 `response.data`，不是退款查询请求字段。完整路径、类型、长度和 Y/N/C 同时以 `payment-complete-field-catalog.md` 的“托管交易退款查询”为准。
+
+### `response.data.acct_split_bunch`
 
 | 参数 | 中文名 | 类型 | 长度 | 必填 | 说明 |
 |------|--------|------|------|------|------|
 | acct_infos | 分账明细 | Array | 2048 | Y | 分账明细 |
 
-#### acct_split_bunch.acct_infos[]
+#### `response.data.acct_split_bunch.acct_infos[]`
 
 | 参数 | 中文名 | 类型 | 长度 | 必填 | 说明 |
 |------|--------|------|------|------|------|
@@ -98,7 +100,7 @@
 | acct_id | 账户号 | String | 16 | N | 账户号 |
 | part_loan_amt | 垫资金额 | String | 12 | N | 单位元，保留两位小数；若由第三方全额垫资，则不传 |
 
-### split_fee_info
+### `response.data.split_fee_info`
 
 | 参数 | 中文名 | 类型 | 长度 | 必填 | 说明 |
 |------|--------|------|------|------|------|
@@ -106,7 +108,7 @@
 | split_fee_flag | 分账手续费扣款标志 | String | 1 | N | `1`=外扣，`2`=内扣 |
 | split_fee_details | 分账手续费明细 | Array | - | N | 分账手续费明细 |
 
-#### split_fee_info.split_fee_details[]
+#### `response.data.split_fee_info.split_fee_details[]`
 
 | 参数 | 中文名 | 类型 | 长度 | 必填 | 说明 |
 |------|--------|------|------|------|------|
@@ -114,13 +116,13 @@
 | split_fee_huifu_id | 分账手续费承担方商户号 | String | 32 | Y | 分账手续费承担方商户号 |
 | split_fee_acct_id | 分账手续费承担方账号 | String | 16 | Y | 分账手续费承担方账号 |
 
-### unionpay_response
+### `response.data.unionpay_response`
 
 | 参数 | 中文名 | 类型 | 长度 | 必填 | 说明 |
 |------|--------|------|------|------|------|
 | coupon_info | 银联优惠信息 | Object | - | N | 银联使用优惠活动时出现；官方说明同时写为 `jsonArray` 格式 |
 
-#### unionpay_response.coupon_info[]
+#### `response.data.unionpay_response.coupon_info[]`
 
 | 参数 | 中文名 | 类型 | 长度 | 必填 | 说明 |
 |------|--------|------|------|------|------|
@@ -131,7 +133,7 @@
 | id | 项目编号 | String | 40 | N | 用于票券编号等 |
 | desc | 项目简称 | String | 40 | N | 优惠活动简称 |
 
-### dy_response
+### `response.data.dy_response`
 
 | 参数 | 中文名 | 类型 | 长度 | 必填 | 说明 |
 |------|--------|------|------|------|------|
@@ -193,8 +195,10 @@
 | loan_acct_type | 垫资账户类型 | String | 2 | N | `01`=基本户，`05`=充值户，默认充值户 |
 | org_out_order_id | 原外部订单号 | String | 128 | N | 扫码退款返回 |
 | unionpay_response | 银联返回的响应报文 | String(JSON Object) | 6000 | N | 扫码退款返回 |
-| dy_response | 抖音返回的响应报文 | String(JSON Object) | 6000 | N | 抖音响应报文 |
+| dy_response | 抖音返回的响应报文 | String（子表编码待确认） | 6000 | N | 官网未声明 JSON；子字段只作合同展示路径 |
 | trans_finish_time | 退款完成时间 | String | 14 | N | `yyyyMMddHHmmss` |
+
+`dy_response` 的父字段只有 `String(6000)` 证据，官网没有说明 JSON 编码；其展开子字段保留为合同定位路径，但真实样本或官方确认前不得生成固定 JSON decode 路径。
 
 ### 同步成功示例
 
@@ -234,7 +238,7 @@
 
 - 公共返回参数表声明顶层 `sign` 必返，但官方成功示例只展示了 `data`，没有展示 `sign`。
 - `trans_stat` 的说明列给出了 `P/S/F/I` 四种状态，但同一行示例值写成 `TRANS_REFUND`；当前保留该官方冲突记录，字段取值仍只按 `P/S/F/I` 输出和解析，不要生成 `TRANS_REFUND` 作为 `trans_stat` 示例。
-- `unionpay_response.coupon_info` 的类型列写为 `Object`，说明又写成 `jsonArray` 格式；当前按“对象中承载数组语义”理解，并展开为 `coupon_info[]`。
+- `unionpay_response.coupon_info` 的类型列写为 `Object`，说明又写成 `jsonArray` 格式；完整目录为遍历子项保留 `coupon_info[]` 路径，但传输容器类型仍标记 `[官方文档口径冲突]`。没有真实样本或官方确认前，不得把 Object 或 Array 任一方写成不可变 DTO 结论。
 - `actual_ref_amt` 在官方成功示例里给的是空字符串，但字段表定义为金额字段；消费方不要只按数值型做强解析。
 - `split_fee_acct_id` 在本页长度写为 `16`，而退款申请异步文档中的同名字段长度写为 `9`；当前按本页官方表保留，并显式记录跨页不一致。
 - 本页 `org_req_date`、`org_req_seq_id` 指向退款请求本身，不是原支付交易；这是退款查询最容易用错的地方。

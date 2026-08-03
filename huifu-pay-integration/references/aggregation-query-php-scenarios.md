@@ -2,6 +2,8 @@
 
 本文件覆盖聚合支付 PHP 的下单、扫码交易查询、关单、关单查询、退款、退款查询、对账。
 
+> 🔴 TLS 硬停：锁定的 PHP `2.0.30` 关闭对端证书校验。本页所有片段只用于静态字段/SDK 形态审查，不得执行真实网络调用，不得用于联调或生产；解除条件是启用证书链与主机名校验并通过错证书/错域名测试。
+
 ## 目录
 
 - 聚合支付下单
@@ -11,7 +13,7 @@
 - 扫码交易退款
 - 扫码交易退款查询
 - 对账单查询
-- 生产写法约束
+- 未来安全制品约束
 
 默认你已经按 `references/aggregation-php-adapter.md` 初始化了：
 
@@ -47,7 +49,7 @@ $request->setMethodExpand(json_encode([
     'buyer_id' => getenv('HUIFU_ALIPAY_BUYER_ID'),
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 
-$result = $payment->create($request);
+$requestShape = $request; // 静态 DTO；禁止执行 $payment->create(...)
 ```
 
 适合场景：
@@ -74,7 +76,7 @@ $request->setReqDate(date('Ymd'));
 $request->setHuifuId(getenv('HUIFU_MERCHANT_ID'));
 $request->setHfSeqId($order->getHfSeqId());
 
-$result = $payment->query($request);
+$requestShape = $request; // 静态 DTO；禁止执行 $payment->query(...)
 ```
 
 适合场景：
@@ -101,7 +103,7 @@ $request->setHuifuId(getenv('HUIFU_MERCHANT_ID'));
 $request->setOrgReqDate($order->getReqDate());
 $request->setOrgReqSeqId($order->getReqSeqId());
 
-$result = $payment->close($request);
+$requestShape = $request; // 静态 DTO；禁止执行 $payment->close(...)
 ```
 
 适合场景：
@@ -123,9 +125,9 @@ $request->setHuifuId(getenv('HUIFU_MERCHANT_ID'));
 $request->setOrgReqDate($order->getReqDate());
 $request->setOrgReqSeqId($order->getReqSeqId());
 
-$result = $payment->closeQuery($request);
+$requestShape = $request; // 静态 DTO；禁止执行 $payment->closeQuery(...)
 
-$response = $result->getRspDatas()['data'] ?? [];
+$response = []; // 仅展示响应白名单形态；不得伪造网络响应
 $transStat = $response['trans_stat'] ?? 'P';
 ```
 
@@ -150,7 +152,7 @@ $request->setOrgReqSeqId($order->getReqSeqId());
 $request->setOrdAmt('0.10');
 $request->setNotifyUrl(getenv('HUIFU_NOTIFY_URL'));
 
-$result = $payment->refund($request);
+$requestShape = $request; // 静态 DTO；禁止执行 $payment->refund(...)
 ```
 
 适合场景：
@@ -170,7 +172,7 @@ $request->setHuifuId(getenv('HUIFU_MERCHANT_ID'));
 $request->setOrgReqDate($refundOrder->getReqDate());
 $request->setOrgReqSeqId($refundOrder->getReqSeqId());
 
-$result = $payment->refundQuery($request);
+$requestShape = $request; // 静态 DTO；禁止执行 $payment->refundQuery(...)
 ```
 
 适合场景：
@@ -196,7 +198,7 @@ $request->setExtendInfo([
     'bill_type' => 'TRADE_BILL',
 ]);
 
-$result = $client->postRequest($request);
+$requestShape = $request; // 静态 DTO；禁止执行 $client->postRequest(...)
 ```
 
 适合场景：
@@ -204,7 +206,7 @@ $result = $client->postRequest($request);
 - 下载交易账单或结算账单
 - 抽平业务对账和财务核对数据
 
-## 生产写法约束
+## 未来安全制品约束
 
 1. 官网 demo 里的 `test` 只可作为字段占位，不可进入实际 skill 示例；所有交易定位键都必须来自原订单落库值。
 2. 聚合支付核心主链路优先 `BsPaySdk\core\Payment`；对账才使用 `BsPayClient::postRequest()`。

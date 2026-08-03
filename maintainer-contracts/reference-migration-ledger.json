@@ -1,0 +1,5322 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "ff7b6acde574f498fde9c6f0763078b0e2eea3b7",
+  "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+  "review_basis": "All 110 baseline blobs and every post-migration destination blob are sealed by commit and SHA-256; SPLIT/REWRITE transformations also retain source and destination heading inventories for independent content review.",
+  "source_root": "huifu-pay-integration/references",
+  "source_reference_count": 110,
+  "category_counts": {
+    "KEEP": 78,
+    "REWRITE_PAYMENT": 8,
+    "SPLIT": 13,
+    "MOVE": 7,
+    "REWRITE_ONBOARDING": 2,
+    "REPO_ONLY": 2
+  },
+  "entries": [
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-async-webhook.md",
+      "source_basename": "aggregation-async-webhook.md",
+      "source_sha256": "fa4224a4caa3903d770a11c1bfb0df4c0e37b9b1118c5ea6ddd540a5d2648e8c",
+      "source_size_bytes": 6859,
+      "source_line_count": 182,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-async-webhook.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "fa4224a4caa3903d770a11c1bfb0df4c0e37b9b1118c5ea6ddd540a5d2648e8c",
+          "migration_size_bytes": 6859,
+          "migration_line_count": 182,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-base.md",
+      "source_basename": "aggregation-base.md",
+      "source_sha256": "b211bc90d766c55d7c774009c9c83b651cfdd8598d929adc2884be4155a1d54d",
+      "source_size_bytes": 3197,
+      "source_line_count": 90,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-base.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "b211bc90d766c55d7c774009c9c83b651cfdd8598d929adc2884be4155a1d54d",
+          "migration_size_bytes": 3197,
+          "migration_line_count": 90,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-common-params.md",
+      "source_basename": "aggregation-common-params.md",
+      "source_sha256": "c9c296304f0f0774a7180809e81f489016ea6b83efb44b0d2fbb24790e796091",
+      "source_size_bytes": 6106,
+      "source_line_count": 150,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-common-params.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "c9c296304f0f0774a7180809e81f489016ea6b83efb44b0d2fbb24790e796091",
+          "migration_size_bytes": 6106,
+          "migration_line_count": 150,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-customer-preparation.md",
+      "source_basename": "aggregation-customer-preparation.md",
+      "source_sha256": "96f0e3e08fc8f8d38349531544dc6e32681444c2d63754a61b3fa23c59d128c9",
+      "source_size_bytes": 10112,
+      "source_line_count": 155,
+      "category": "REWRITE_PAYMENT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-customer-preparation.md",
+          "operation": "rewrite",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "d34094d63e5b4ccaa4504ae727ba97683a6fc40dc7c0992d33d35f406477dd9a",
+          "migration_size_bytes": 10129,
+          "migration_line_count": 155,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "目录",
+              "source_line": 6
+            },
+            {
+              "level": 2,
+              "heading": "参数来源分类",
+              "source_line": 19
+            },
+            {
+              "level": 2,
+              "heading": "全局必备配置",
+              "source_line": 29
+            },
+            {
+              "level": 2,
+              "heading": "官方开发指引确认的通用前置动作",
+              "source_line": 40
+            },
+            {
+              "level": 2,
+              "heading": "聚合下单前要准备什么",
+              "source_line": 46
+            },
+            {
+              "level": 3,
+              "heading": "所有 trade_type 通用",
+              "source_line": 48
+            },
+            {
+              "level": 3,
+              "heading": "微信类场景",
+              "source_line": 60
+            },
+            {
+              "level": 3,
+              "heading": "支付宝类场景",
+              "source_line": 69
+            },
+            {
+              "level": 3,
+              "heading": "银联类场景",
+              "source_line": 77
+            },
+            {
+              "level": 2,
+              "heading": "渠道级前置准备矩阵",
+              "source_line": 85
+            },
+            {
+              "level": 2,
+              "heading": "扩展字段相关准备项",
+              "source_line": 95
+            },
+            {
+              "level": 2,
+              "heading": "查询 / 关单 / 退款前要沉淀什么",
+              "source_line": 105
+            },
+            {
+              "level": 2,
+              "heading": "权限 / 开通项检查",
+              "source_line": 116
+            },
+            {
+              "level": 2,
+              "heading": "向客户索取材料的最小清单",
+              "source_line": 132
+            },
+            {
+              "level": 3,
+              "heading": "必需",
+              "source_line": 134
+            },
+            {
+              "level": 3,
+              "heading": "按场景补充",
+              "source_line": 141
+            },
+            {
+              "level": 2,
+              "heading": "给模型的硬约束",
+              "source_line": 150
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "目录",
+          "source_line": 6
+        },
+        {
+          "level": 2,
+          "heading": "参数来源分类",
+          "source_line": 19
+        },
+        {
+          "level": 2,
+          "heading": "全局必备配置",
+          "source_line": 29
+        },
+        {
+          "level": 2,
+          "heading": "官方开发指引确认的通用前置动作",
+          "source_line": 40
+        },
+        {
+          "level": 2,
+          "heading": "聚合下单前要准备什么",
+          "source_line": 46
+        },
+        {
+          "level": 3,
+          "heading": "所有 trade_type 通用",
+          "source_line": 48
+        },
+        {
+          "level": 3,
+          "heading": "微信类场景",
+          "source_line": 60
+        },
+        {
+          "level": 3,
+          "heading": "支付宝类场景",
+          "source_line": 69
+        },
+        {
+          "level": 3,
+          "heading": "银联类场景",
+          "source_line": 77
+        },
+        {
+          "level": 2,
+          "heading": "渠道级前置准备矩阵",
+          "source_line": 85
+        },
+        {
+          "level": 2,
+          "heading": "扩展字段相关准备项",
+          "source_line": 95
+        },
+        {
+          "level": 2,
+          "heading": "查询 / 关单 / 退款前要沉淀什么",
+          "source_line": 105
+        },
+        {
+          "level": 2,
+          "heading": "权限 / 开通项检查",
+          "source_line": 116
+        },
+        {
+          "level": 2,
+          "heading": "向客户索取材料的最小清单",
+          "source_line": 132
+        },
+        {
+          "level": 3,
+          "heading": "必需",
+          "source_line": 134
+        },
+        {
+          "level": 3,
+          "heading": "按场景补充",
+          "source_line": 141
+        },
+        {
+          "level": 2,
+          "heading": "给模型的硬约束",
+          "source_line": 150
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-error-codes.md",
+      "source_basename": "aggregation-error-codes.md",
+      "source_sha256": "82c41682fcff2e8633070a70b4086fa9f3805c30db3e4b5fec4f7d5dc9b78c0e",
+      "source_size_bytes": 4001,
+      "source_line_count": 80,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-error-codes.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "82c41682fcff2e8633070a70b4086fa9f3805c30db3e4b5fec4f7d5dc9b78c0e",
+          "migration_size_bytes": 4001,
+          "migration_line_count": 80,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-faq.md",
+      "source_basename": "aggregation-faq.md",
+      "source_sha256": "bec7190a8a8dcc6c3582d5ab3d6f0977f2144560ca7b407fbb375351b2549cc4",
+      "source_size_bytes": 4925,
+      "source_line_count": 119,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-faq.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "bec7190a8a8dcc6c3582d5ab3d6f0977f2144560ca7b407fbb375351b2549cc4",
+          "migration_size_bytes": 4925,
+          "migration_line_count": 119,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-java-adapter.md",
+      "source_basename": "aggregation-java-adapter.md",
+      "source_sha256": "ca9b03c3ab164b3a225c164083543ff42e0c8b3e8d3228da3443ea542989b885",
+      "source_size_bytes": 2200,
+      "source_line_count": 39,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-java-adapter.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "ca9b03c3ab164b3a225c164083543ff42e0c8b3e8d3228da3443ea542989b885",
+          "migration_size_bytes": 2200,
+          "migration_line_count": 39,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-java-sdk-quickstart.md",
+      "source_basename": "aggregation-java-sdk-quickstart.md",
+      "source_sha256": "32766f71acc30d76a43e9ebbb59fed1a79e74fa04bf837a16025c58eef403138",
+      "source_size_bytes": 8935,
+      "source_line_count": 255,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-java-sdk-quickstart.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "32766f71acc30d76a43e9ebbb59fed1a79e74fa04bf837a16025c58eef403138",
+          "migration_size_bytes": 8935,
+          "migration_line_count": 255,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-java-tech-spec.md",
+      "source_basename": "aggregation-java-tech-spec.md",
+      "source_sha256": "9f81a1f3b044183418f45383228b8c1b67f722c8a6cc1fbd0aaf3003938fe258",
+      "source_size_bytes": 5086,
+      "source_line_count": 172,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-java-tech-spec.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "9f81a1f3b044183418f45383228b8c1b67f722c8a6cc1fbd0aaf3003938fe258",
+          "migration_size_bytes": 5086,
+          "migration_line_count": 172,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-order-errors.md",
+      "source_basename": "aggregation-order-errors.md",
+      "source_sha256": "14ea497da00c47537f0437e74a269847f29afb0ae4365cd351e461c62e5202db",
+      "source_size_bytes": 6930,
+      "source_line_count": 133,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-order-errors.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "14ea497da00c47537f0437e74a269847f29afb0ae4365cd351e461c62e5202db",
+          "migration_size_bytes": 6930,
+          "migration_line_count": 133,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-order-method-alipay.md",
+      "source_basename": "aggregation-order-method-alipay.md",
+      "source_sha256": "f3a2cef35ebe9e071f2e3ec8e59e2e9a84a200e778beb7fae1c0373b69a87721",
+      "source_size_bytes": 7323,
+      "source_line_count": 184,
+      "category": "REWRITE_PAYMENT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-order-method-alipay.md",
+          "operation": "rewrite",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "fccdafab4329c772bb3b68eefe1037c9dbf632f926624f9edc6429b9f3c51a02",
+          "migration_size_bytes": 7373,
+          "migration_line_count": 184,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "目录",
+              "source_line": 4
+            },
+            {
+              "level": 2,
+              "heading": "适用交易类型",
+              "source_line": 16
+            },
+            {
+              "level": 2,
+              "heading": "`method_expand` 对象边界",
+              "source_line": 24
+            },
+            {
+              "level": 2,
+              "heading": "官方接入前准备",
+              "source_line": 30
+            },
+            {
+              "level": 2,
+              "heading": "`A_JSAPI` / `A_NATIVE` 请求字段",
+              "source_line": 36
+            },
+            {
+              "level": 2,
+              "heading": "`A_MICROPAY` 请求字段",
+              "source_line": 57
+            },
+            {
+              "level": 2,
+              "heading": "支付宝共用子结构",
+              "source_line": 72
+            },
+            {
+              "level": 3,
+              "heading": "`goods_detail[]`",
+              "source_line": 74
+            },
+            {
+              "level": 3,
+              "heading": "`A_JSAPI` / `A_NATIVE` 的 `extend_params`",
+              "source_line": 87
+            },
+            {
+              "level": 3,
+              "heading": "`A_MICROPAY` 的 `extend_params`",
+              "source_line": 99
+            },
+            {
+              "level": 3,
+              "heading": "`ext_user_info`",
+              "source_line": 111
+            },
+            {
+              "level": 2,
+              "heading": "同步返回支付宝扩展",
+              "source_line": 123
+            },
+            {
+              "level": 2,
+              "heading": "异步 `alipay_response`",
+              "source_line": 136
+            },
+            {
+              "level": 3,
+              "heading": "`voucher_detail_list[]`",
+              "source_line": 155
+            },
+            {
+              "level": 3,
+              "heading": "`fund_bill_list[]`",
+              "source_line": 166
+            },
+            {
+              "level": 2,
+              "heading": "支付宝实现备注",
+              "source_line": 176
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "目录",
+          "source_line": 4
+        },
+        {
+          "level": 2,
+          "heading": "适用交易类型",
+          "source_line": 16
+        },
+        {
+          "level": 2,
+          "heading": "`method_expand` 对象边界",
+          "source_line": 24
+        },
+        {
+          "level": 2,
+          "heading": "官方接入前准备",
+          "source_line": 30
+        },
+        {
+          "level": 2,
+          "heading": "`A_JSAPI` / `A_NATIVE` 请求字段",
+          "source_line": 36
+        },
+        {
+          "level": 2,
+          "heading": "`A_MICROPAY` 请求字段",
+          "source_line": 57
+        },
+        {
+          "level": 2,
+          "heading": "支付宝共用子结构",
+          "source_line": 72
+        },
+        {
+          "level": 3,
+          "heading": "`goods_detail[]`",
+          "source_line": 74
+        },
+        {
+          "level": 3,
+          "heading": "`A_JSAPI` / `A_NATIVE` 的 `extend_params`",
+          "source_line": 87
+        },
+        {
+          "level": 3,
+          "heading": "`A_MICROPAY` 的 `extend_params`",
+          "source_line": 99
+        },
+        {
+          "level": 3,
+          "heading": "`ext_user_info`",
+          "source_line": 111
+        },
+        {
+          "level": 2,
+          "heading": "同步返回支付宝扩展",
+          "source_line": 123
+        },
+        {
+          "level": 2,
+          "heading": "异步 `alipay_response`",
+          "source_line": 136
+        },
+        {
+          "level": 3,
+          "heading": "`voucher_detail_list[]`",
+          "source_line": 155
+        },
+        {
+          "level": 3,
+          "heading": "`fund_bill_list[]`",
+          "source_line": 166
+        },
+        {
+          "level": 2,
+          "heading": "支付宝实现备注",
+          "source_line": 176
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-order-method-unionpay.md",
+      "source_basename": "aggregation-order-method-unionpay.md",
+      "source_sha256": "5f94d9a7fe6ea81c5c1b71b611375d0386e25c2dabfc0f3a803fb2e866050abc",
+      "source_size_bytes": 3822,
+      "source_line_count": 113,
+      "category": "REWRITE_PAYMENT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-order-method-unionpay.md",
+          "operation": "rewrite",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "4889cf1af1c3212a2443b01a7f7b31c5b4bb10f82d8a04d5020ad94369464c57",
+          "migration_size_bytes": 3872,
+          "migration_line_count": 113,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "目录",
+              "source_line": 4
+            },
+            {
+              "level": 2,
+              "heading": "适用交易类型",
+              "source_line": 15
+            },
+            {
+              "level": 2,
+              "heading": "`method_expand` 对象边界",
+              "source_line": 23
+            },
+            {
+              "level": 2,
+              "heading": "官方接入前准备",
+              "source_line": 29
+            },
+            {
+              "level": 2,
+              "heading": "`U_JSAPI` / `U_NATIVE` 请求字段",
+              "source_line": 35
+            },
+            {
+              "level": 3,
+              "heading": "`payee_info`",
+              "source_line": 49
+            },
+            {
+              "level": 2,
+              "heading": "`U_MICROPAY` 请求字段",
+              "source_line": 58
+            },
+            {
+              "level": 3,
+              "heading": "`pid_info`",
+              "source_line": 72
+            },
+            {
+              "level": 2,
+              "heading": "同步返回银联扩展",
+              "source_line": 80
+            },
+            {
+              "level": 2,
+              "heading": "异步 `unionpay_response`",
+              "source_line": 90
+            },
+            {
+              "level": 3,
+              "heading": "`coupon_info[]`",
+              "source_line": 97
+            },
+            {
+              "level": 2,
+              "heading": "银联实现备注",
+              "source_line": 108
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "目录",
+          "source_line": 4
+        },
+        {
+          "level": 2,
+          "heading": "适用交易类型",
+          "source_line": 15
+        },
+        {
+          "level": 2,
+          "heading": "`method_expand` 对象边界",
+          "source_line": 23
+        },
+        {
+          "level": 2,
+          "heading": "官方接入前准备",
+          "source_line": 29
+        },
+        {
+          "level": 2,
+          "heading": "`U_JSAPI` / `U_NATIVE` 请求字段",
+          "source_line": 35
+        },
+        {
+          "level": 3,
+          "heading": "`payee_info`",
+          "source_line": 49
+        },
+        {
+          "level": 2,
+          "heading": "`U_MICROPAY` 请求字段",
+          "source_line": 58
+        },
+        {
+          "level": 3,
+          "heading": "`pid_info`",
+          "source_line": 72
+        },
+        {
+          "level": 2,
+          "heading": "同步返回银联扩展",
+          "source_line": 80
+        },
+        {
+          "level": 2,
+          "heading": "异步 `unionpay_response`",
+          "source_line": 90
+        },
+        {
+          "level": 3,
+          "heading": "`coupon_info[]`",
+          "source_line": 97
+        },
+        {
+          "level": 2,
+          "heading": "银联实现备注",
+          "source_line": 108
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-order-method-wechat.md",
+      "source_basename": "aggregation-order-method-wechat.md",
+      "source_sha256": "4203ecc37c6047941737f7dc9d11cfa5126cdbf3e499fcaeed17b5fa8a0ed0ed",
+      "source_size_bytes": 6845,
+      "source_line_count": 170,
+      "category": "REWRITE_PAYMENT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-order-method-wechat.md",
+          "operation": "rewrite",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "03297b59d423445435f61d42eb4f9d126eba5499f39835b07dbf0aeb78cf0421",
+          "migration_size_bytes": 6939,
+          "migration_line_count": 170,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "目录",
+              "source_line": 4
+            },
+            {
+              "level": 2,
+              "heading": "适用交易类型",
+              "source_line": 15
+            },
+            {
+              "level": 2,
+              "heading": "`method_expand` 对象边界",
+              "source_line": 24
+            },
+            {
+              "level": 2,
+              "heading": "官方接入前准备",
+              "source_line": 30
+            },
+            {
+              "level": 2,
+              "heading": "微信公众号 / 小程序 / APP 请求字段",
+              "source_line": 37
+            },
+            {
+              "level": 3,
+              "heading": "`detail`",
+              "source_line": 49
+            },
+            {
+              "level": 3,
+              "heading": "`detail.goods_detail[]`",
+              "source_line": 57
+            },
+            {
+              "level": 3,
+              "heading": "`scene_info`",
+              "source_line": 67
+            },
+            {
+              "level": 2,
+              "heading": "微信反扫 `T_MICROPAY` 请求字段",
+              "source_line": 73
+            },
+            {
+              "level": 3,
+              "heading": "`scene_info.store_info`",
+              "source_line": 88
+            },
+            {
+              "level": 2,
+              "heading": "同步返回微信扩展",
+              "source_line": 97
+            },
+            {
+              "level": 2,
+              "heading": "异步 `wx_response`",
+              "source_line": 118
+            },
+            {
+              "level": 3,
+              "heading": "`promotion_detail[]`",
+              "source_line": 137
+            },
+            {
+              "level": 3,
+              "heading": "`promotion_detail.goods_detail[]`",
+              "source_line": 153
+            },
+            {
+              "level": 2,
+              "heading": "微信实现备注",
+              "source_line": 163
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "目录",
+          "source_line": 4
+        },
+        {
+          "level": 2,
+          "heading": "适用交易类型",
+          "source_line": 15
+        },
+        {
+          "level": 2,
+          "heading": "`method_expand` 对象边界",
+          "source_line": 24
+        },
+        {
+          "level": 2,
+          "heading": "官方接入前准备",
+          "source_line": 30
+        },
+        {
+          "level": 2,
+          "heading": "微信公众号 / 小程序 / APP 请求字段",
+          "source_line": 37
+        },
+        {
+          "level": 3,
+          "heading": "`detail`",
+          "source_line": 49
+        },
+        {
+          "level": 3,
+          "heading": "`detail.goods_detail[]`",
+          "source_line": 57
+        },
+        {
+          "level": 3,
+          "heading": "`scene_info`",
+          "source_line": 67
+        },
+        {
+          "level": 2,
+          "heading": "微信反扫 `T_MICROPAY` 请求字段",
+          "source_line": 73
+        },
+        {
+          "level": 3,
+          "heading": "`scene_info.store_info`",
+          "source_line": 88
+        },
+        {
+          "level": 2,
+          "heading": "同步返回微信扩展",
+          "source_line": 97
+        },
+        {
+          "level": 2,
+          "heading": "异步 `wx_response`",
+          "source_line": 118
+        },
+        {
+          "level": 3,
+          "heading": "`promotion_detail[]`",
+          "source_line": 137
+        },
+        {
+          "level": 3,
+          "heading": "`promotion_detail.goods_detail[]`",
+          "source_line": 153
+        },
+        {
+          "level": 2,
+          "heading": "微信实现备注",
+          "source_line": 163
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-order-quickstart.md",
+      "source_basename": "aggregation-order-quickstart.md",
+      "source_sha256": "db2245d31261114e4738899a8623110e398c9ee438c98137acae668f69197cf0",
+      "source_size_bytes": 2663,
+      "source_line_count": 38,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-order-quickstart.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "db2245d31261114e4738899a8623110e398c9ee438c98137acae668f69197cf0",
+          "migration_size_bytes": 2663,
+          "migration_line_count": 38,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-order-request.md",
+      "source_basename": "aggregation-order-request.md",
+      "source_sha256": "5696d3705435b5e7b98fd9b5cdac069c62d6e716cb5ad962cbdcb9d7bcc686ed",
+      "source_size_bytes": 10735,
+      "source_line_count": 175,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-order-request.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "5696d3705435b5e7b98fd9b5cdac069c62d6e716cb5ad962cbdcb9d7bcc686ed",
+          "migration_size_bytes": 10735,
+          "migration_line_count": 175,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-order-response.md",
+      "source_basename": "aggregation-order-response.md",
+      "source_sha256": "0015ab85b691650a7d75340293ac3bb4fd46b0a1b496402fc5acaf9bed3534b9",
+      "source_size_bytes": 10374,
+      "source_line_count": 174,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-order-response.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "0015ab85b691650a7d75340293ac3bb4fd46b0a1b496402fc5acaf9bed3534b9",
+          "migration_size_bytes": 10374,
+          "migration_line_count": 174,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-order-tx-metadata.md",
+      "source_basename": "aggregation-order-tx-metadata.md",
+      "source_sha256": "8a33edcd54c8d6b2461730b8963b1dd7030dd57d71da58d53129ab564a4ff279",
+      "source_size_bytes": 11285,
+      "source_line_count": 244,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-order-tx-metadata.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "8a33edcd54c8d6b2461730b8963b1dd7030dd57d71da58d53129ab564a4ff279",
+          "migration_size_bytes": 11285,
+          "migration_line_count": 244,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-order.md",
+      "source_basename": "aggregation-order.md",
+      "source_sha256": "b048baf374e3c32f01ecea75fb74786ffe320c2a3480ae9f56d8657d74cb3318",
+      "source_size_bytes": 3314,
+      "source_line_count": 93,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-order.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "b048baf374e3c32f01ecea75fb74786ffe320c2a3480ae9f56d8657d74cb3318",
+          "migration_size_bytes": 3314,
+          "migration_line_count": 93,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-payload-construction.md",
+      "source_basename": "aggregation-payload-construction.md",
+      "source_sha256": "ee150b8f989b2f303d0c3673ee6fc397fc87a74571f72d7fa0cde994ed8771f0",
+      "source_size_bytes": 9775,
+      "source_line_count": 230,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-payload-construction.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "ee150b8f989b2f303d0c3673ee6fc397fc87a74571f72d7fa0cde994ed8771f0",
+          "migration_size_bytes": 9775,
+          "migration_line_count": 230,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-php-adapter.md",
+      "source_basename": "aggregation-php-adapter.md",
+      "source_sha256": "2288263e57d74e7df0af488b3e41a48d079ef8a3a955226f60421f7869d7dbf9",
+      "source_size_bytes": 10209,
+      "source_line_count": 229,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-php-adapter.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "2288263e57d74e7df0af488b3e41a48d079ef8a3a955226f60421f7869d7dbf9",
+          "migration_size_bytes": 10209,
+          "migration_line_count": 229,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-python-adapter.md",
+      "source_basename": "aggregation-python-adapter.md",
+      "source_sha256": "eb092e17e999213311473b1041abdc8627b4a1562fa67c45fbc2d551c608aee2",
+      "source_size_bytes": 6910,
+      "source_line_count": 162,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-python-adapter.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "eb092e17e999213311473b1041abdc8627b4a1562fa67c45fbc2d551c608aee2",
+          "migration_size_bytes": 6910,
+          "migration_line_count": 162,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-python-scenarios.md",
+      "source_basename": "aggregation-python-scenarios.md",
+      "source_sha256": "ff384b6f6990c48302f2d37257c5f2182f00196c2f36864fcf9452f430c7d276",
+      "source_size_bytes": 7679,
+      "source_line_count": 252,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-python-scenarios.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "ff384b6f6990c48302f2d37257c5f2182f00196c2f36864fcf9452f430c7d276",
+          "migration_size_bytes": 7679,
+          "migration_line_count": 252,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-query-close-query.md",
+      "source_basename": "aggregation-query-close-query.md",
+      "source_sha256": "a67d496c558d6061d17521a6f29509aa8b3c3edb0596b382b87e0a9382ae787d",
+      "source_size_bytes": 7322,
+      "source_line_count": 173,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-query-close-query.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "a67d496c558d6061d17521a6f29509aa8b3c3edb0596b382b87e0a9382ae787d",
+          "migration_size_bytes": 7322,
+          "migration_line_count": 173,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-query-payment-query.md",
+      "source_basename": "aggregation-query-payment-query.md",
+      "source_sha256": "8684845a7830662ee35858e3d01d9087310eb887661ae5a713f0c5ccd5d747b4",
+      "source_size_bytes": 19029,
+      "source_line_count": 402,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-query-payment-query.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "8684845a7830662ee35858e3d01d9087310eb887661ae5a713f0c5ccd5d747b4",
+          "migration_size_bytes": 19029,
+          "migration_line_count": 402,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-query-php-scenarios.md",
+      "source_basename": "aggregation-query-php-scenarios.md",
+      "source_sha256": "699bba1c1434d370b4a0dc76bdfa51e9f4b64fe3d332d4f2595894a360b048aa",
+      "source_size_bytes": 8414,
+      "source_line_count": 216,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-query-php-scenarios.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "699bba1c1434d370b4a0dc76bdfa51e9f4b64fe3d332d4f2595894a360b048aa",
+          "migration_size_bytes": 8414,
+          "migration_line_count": 216,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-query-quickstart.md",
+      "source_basename": "aggregation-query-quickstart.md",
+      "source_sha256": "f0ffd77807aa81fdb9452ad1c6cd4bcf657dedacef737a40f6e756bd6aa91dbb",
+      "source_size_bytes": 1480,
+      "source_line_count": 29,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-query-quickstart.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "f0ffd77807aa81fdb9452ad1c6cd4bcf657dedacef737a40f6e756bd6aa91dbb",
+          "migration_size_bytes": 1480,
+          "migration_line_count": 29,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-query-reconciliation.md",
+      "source_basename": "aggregation-query-reconciliation.md",
+      "source_sha256": "eb89626461c36452a8e289a27a1bd750786ab21f608297b85c188e2ed146aca3",
+      "source_size_bytes": 8801,
+      "source_line_count": 236,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-query-reconciliation.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "eb89626461c36452a8e289a27a1bd750786ab21f608297b85c188e2ed146aca3",
+          "migration_size_bytes": 8801,
+          "migration_line_count": 236,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-query-trade-close.md",
+      "source_basename": "aggregation-query-trade-close.md",
+      "source_sha256": "d6ba1f303fc4a748753d2a1f7e884c45deda8872b728731d28d13ff185f535ef",
+      "source_size_bytes": 7721,
+      "source_line_count": 186,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-query-trade-close.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "d6ba1f303fc4a748753d2a1f7e884c45deda8872b728731d28d13ff185f535ef",
+          "migration_size_bytes": 7721,
+          "migration_line_count": 186,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-query.md",
+      "source_basename": "aggregation-query.md",
+      "source_sha256": "c0e56a3be4f467a726c23f0da822c3f1a88878aff307ef030146325957cf9981",
+      "source_size_bytes": 3444,
+      "source_line_count": 89,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-query.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "c0e56a3be4f467a726c23f0da822c3f1a88878aff307ef030146325957cf9981",
+          "migration_size_bytes": 3444,
+          "migration_line_count": 89,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-quickstart.md",
+      "source_basename": "aggregation-quickstart.md",
+      "source_sha256": "8d200f5314e0359011f1e2491f4672462e41705eb442889394642478c1c28c40",
+      "source_size_bytes": 3374,
+      "source_line_count": 45,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-quickstart.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "8d200f5314e0359011f1e2491f4672462e41705eb442889394642478c1c28c40",
+          "migration_size_bytes": 3374,
+          "migration_line_count": 45,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-refund-query.md",
+      "source_basename": "aggregation-refund-query.md",
+      "source_sha256": "92dfc6232ac22ddeee10019b6791695c1df6e6a78db7ee00752326c37e026567",
+      "source_size_bytes": 8668,
+      "source_line_count": 214,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-refund-query.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "92dfc6232ac22ddeee10019b6791695c1df6e6a78db7ee00752326c37e026567",
+          "migration_size_bytes": 8668,
+          "migration_line_count": 214,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-refund-quickstart.md",
+      "source_basename": "aggregation-refund-quickstart.md",
+      "source_sha256": "5f2e6e79549254743eaf651ffced335464cb52bb24b721e9925a5ab312e71cf1",
+      "source_size_bytes": 1337,
+      "source_line_count": 30,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-refund-quickstart.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "5f2e6e79549254743eaf651ffced335464cb52bb24b721e9925a5ab312e71cf1",
+          "migration_size_bytes": 1337,
+          "migration_line_count": 30,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-refund.md",
+      "source_basename": "aggregation-refund.md",
+      "source_sha256": "a568f99d1d258f34f415bfbd95e89d2f60fe45de052d041746a259b9a11d64d3",
+      "source_size_bytes": 11676,
+      "source_line_count": 276,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/aggregation-refund.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "a568f99d1d258f34f415bfbd95e89d2f60fe45de052d041746a259b9a11d64d3",
+          "migration_size_bytes": 11676,
+          "migration_line_count": 276,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/canonical-regression-prompts.md",
+      "source_basename": "canonical-regression-prompts.md",
+      "source_sha256": "cab74b734542bcad413a77af01bed547259cb0780c58c0f9a78cd098512d605f",
+      "source_size_bytes": 3395,
+      "source_line_count": 73,
+      "category": "SPLIT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/canonical-regression-prompts.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "5ccaf9bfd184ecd02f2d3bb96d7df18d2fafdfefadf6b8ac861d541d93343d34",
+          "migration_size_bytes": 2612,
+          "migration_line_count": 57,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "使用方式",
+              "source_line": 5
+            },
+            {
+              "level": 2,
+              "heading": "Prompt 清单",
+              "source_line": 9
+            },
+            {
+              "level": 3,
+              "heading": "C01 首次接入",
+              "source_line": 11
+            },
+            {
+              "level": 3,
+              "heading": "C02 存量系统",
+              "source_line": 19
+            },
+            {
+              "level": 3,
+              "heading": "C03 checkout-js 已完成前置",
+              "source_line": 27
+            },
+            {
+              "level": 3,
+              "heading": "C05 版本升级",
+              "source_line": 35
+            },
+            {
+              "level": 3,
+              "heading": "C06 托管新增接口",
+              "source_line": 43
+            },
+            {
+              "level": 3,
+              "heading": "C07 聚合字段更新",
+              "source_line": 51
+            }
+          ]
+        },
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/canonical-regression-prompts.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "14f333dd19f944d8d4d2a80849a65eeba8900b3aee181fc71181b07978fa96e1",
+          "migration_size_bytes": 983,
+          "migration_line_count": 35,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "Prompt 清单",
+              "source_line": 3
+            },
+            {
+              "level": 3,
+              "heading": "O01 图片上传边界",
+              "source_line": 5
+            },
+            {
+              "level": 3,
+              "heading": "O02 状态分层",
+              "source_line": 13
+            },
+            {
+              "level": 3,
+              "heading": "O03 完整字段",
+              "source_line": 21
+            },
+            {
+              "level": 3,
+              "heading": "O04 通知未知边界",
+              "source_line": 29
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "使用方式",
+          "source_line": 5
+        },
+        {
+          "level": 2,
+          "heading": "Prompt 清单",
+          "source_line": 9
+        },
+        {
+          "level": 3,
+          "heading": "C01 首次接入",
+          "source_line": 11
+        },
+        {
+          "level": 3,
+          "heading": "C02 存量系统",
+          "source_line": 19
+        },
+        {
+          "level": 3,
+          "heading": "C03 checkout-js 已完成前置",
+          "source_line": 27
+        },
+        {
+          "level": 3,
+          "heading": "C04 商户进件图片上传边界",
+          "source_line": 35
+        },
+        {
+          "level": 3,
+          "heading": "C05 版本升级",
+          "source_line": 43
+        },
+        {
+          "level": 3,
+          "heading": "C06 托管新增接口",
+          "source_line": 51
+        },
+        {
+          "level": 3,
+          "heading": "C07 聚合字段更新",
+          "source_line": 59
+        },
+        {
+          "level": 3,
+          "heading": "C08 商户进件状态分层",
+          "source_line": 67
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/checkout-js-callback-and-confirmation.md",
+      "source_basename": "checkout-js-callback-and-confirmation.md",
+      "source_sha256": "996c92df38e855684ad69c544821683fc5f219ccca7899c4d9c125a4eaa639ff",
+      "source_size_bytes": 2273,
+      "source_line_count": 77,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/checkout-js-callback-and-confirmation.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "996c92df38e855684ad69c544821683fc5f219ccca7899c4d9c125a4eaa639ff",
+          "migration_size_bytes": 2273,
+          "migration_line_count": 77,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/checkout-js-component-modes.md",
+      "source_basename": "checkout-js-component-modes.md",
+      "source_sha256": "8ecec8e3c2629acd6c8c88c8951598ddb184996d7a7c90ae525879397722e2ba",
+      "source_size_bytes": 2575,
+      "source_line_count": 89,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/checkout-js-component-modes.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "8ecec8e3c2629acd6c8c88c8951598ddb184996d7a7c90ae525879397722e2ba",
+          "migration_size_bytes": 2575,
+          "migration_line_count": 89,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/checkout-js-create-preorder-contract.md",
+      "source_basename": "checkout-js-create-preorder-contract.md",
+      "source_sha256": "0bb9d37d6c3ef9994499d0bfde7fa2099f956e7e9112691d35f525728d86d2c3",
+      "source_size_bytes": 3269,
+      "source_line_count": 112,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/checkout-js-create-preorder-contract.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "0bb9d37d6c3ef9994499d0bfde7fa2099f956e7e9112691d35f525728d86d2c3",
+          "migration_size_bytes": 3269,
+          "migration_line_count": 112,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/checkout-js-framework-integration-notes.md",
+      "source_basename": "checkout-js-framework-integration-notes.md",
+      "source_sha256": "17f03ba604c2152fd948e1103bfb51d408ae986471e7db40a32d56d2270b26fc",
+      "source_size_bytes": 1761,
+      "source_line_count": 45,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/checkout-js-framework-integration-notes.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "17f03ba604c2152fd948e1103bfb51d408ae986471e7db40a32d56d2270b26fc",
+          "migration_size_bytes": 1761,
+          "migration_line_count": 45,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/checkout-js-integration-flow.md",
+      "source_basename": "checkout-js-integration-flow.md",
+      "source_sha256": "5178058400a249fbd999bd54e36482393d7667085246613522a25d41d0aa5b11",
+      "source_size_bytes": 3186,
+      "source_line_count": 77,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/checkout-js-integration-flow.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "5178058400a249fbd999bd54e36482393d7667085246613522a25d41d0aa5b11",
+          "migration_size_bytes": 3186,
+          "migration_line_count": 77,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/checkout-js-readme.md",
+      "source_basename": "checkout-js-readme.md",
+      "source_sha256": "ea5213954c0791ff806d9965f5ab89e5ebcf88b9b1dcd38ef16b78f67d05e516",
+      "source_size_bytes": 1521,
+      "source_line_count": 28,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/checkout-js-readme.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "ea5213954c0791ff806d9965f5ab89e5ebcf88b9b1dcd38ef16b78f67d05e516",
+          "migration_size_bytes": 1521,
+          "migration_line_count": 28,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/checkout-js.md",
+      "source_basename": "checkout-js.md",
+      "source_sha256": "564f97d168240c3a0d9774872f359f97081866b0b1b12f5b3624aa290ba3d639",
+      "source_size_bytes": 2282,
+      "source_line_count": 87,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/checkout-js.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "564f97d168240c3a0d9774872f359f97081866b0b1b12f5b3624aa290ba3d639",
+          "migration_size_bytes": 2282,
+          "migration_line_count": 87,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/copilot-existing-system.md",
+      "source_basename": "copilot-existing-system.md",
+      "source_sha256": "c7ed29352e1636ab538dbf26f0e0a93480e1ef0762a95ef45d3f4a746188adf6",
+      "source_size_bytes": 4883,
+      "source_line_count": 87,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/copilot-existing-system.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "c7ed29352e1636ab538dbf26f0e0a93480e1ef0762a95ef45d3f4a746188adf6",
+          "migration_size_bytes": 4883,
+          "migration_line_count": 87,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/copilot-go-live-checklist.md",
+      "source_basename": "copilot-go-live-checklist.md",
+      "source_sha256": "e6ce7fed9f76ae147eccb3d1f6d84225022fe7bc6d0357f045479915be597957",
+      "source_size_bytes": 3136,
+      "source_line_count": 71,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/copilot-go-live-checklist.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "e6ce7fed9f76ae147eccb3d1f6d84225022fe7bc6d0357f045479915be597957",
+          "migration_size_bytes": 3136,
+          "migration_line_count": 71,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/copilot-onboarding.md",
+      "source_basename": "copilot-onboarding.md",
+      "source_sha256": "aad83ee4c66dc97aa2d1c17140facf5b6db420d6ac61daf66cd8f3d3291e2ee9",
+      "source_size_bytes": 5174,
+      "source_line_count": 81,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/copilot-onboarding.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "aad83ee4c66dc97aa2d1c17140facf5b6db420d6ac61daf66cd8f3d3291e2ee9",
+          "migration_size_bytes": 5174,
+          "migration_line_count": 81,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/copilot-parameter-review.md",
+      "source_basename": "copilot-parameter-review.md",
+      "source_sha256": "ddb20e1c4d351d28007d1cdc2a6ad6360b152405b478510ae40938f01715bd32",
+      "source_size_bytes": 2960,
+      "source_line_count": 66,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/copilot-parameter-review.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "ddb20e1c4d351d28007d1cdc2a6ad6360b152405b478510ae40938f01715bd32",
+          "migration_size_bytes": 2960,
+          "migration_line_count": 66,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/copilot-solution-cards.md",
+      "source_basename": "copilot-solution-cards.md",
+      "source_sha256": "89f2c75fc04b83862f680bf9fd284db0aec6517063ef63d006279b4a0def19dc",
+      "source_size_bytes": 8714,
+      "source_line_count": 102,
+      "category": "REWRITE_PAYMENT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/copilot-solution-cards.md",
+          "operation": "rewrite",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "64434acb7516091c77249471b9e67eb4c8dbcc06469d3d708bd88a6024834ddb",
+          "migration_size_bytes": 8682,
+          "migration_line_count": 102,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "目录",
+              "source_line": 5
+            },
+            {
+              "level": 2,
+              "heading": "统一模板",
+              "source_line": 15
+            },
+            {
+              "level": 2,
+              "heading": "卡详写规则",
+              "source_line": 30
+            },
+            {
+              "level": 2,
+              "heading": "完整展开样例",
+              "source_line": 36
+            },
+            {
+              "level": 3,
+              "heading": "S03 聚合支付微信小程序",
+              "source_line": 40
+            },
+            {
+              "level": 3,
+              "heading": "S08 托管支付 H5/PC 收银台",
+              "source_line": 51
+            },
+            {
+              "level": 2,
+              "heading": "编号说明",
+              "source_line": 62
+            },
+            {
+              "level": 2,
+              "heading": "P0 方案卡",
+              "source_line": 66
+            },
+            {
+              "level": 2,
+              "heading": "P1 方案卡",
+              "source_line": 83
+            },
+            {
+              "level": 2,
+              "heading": "使用规则",
+              "source_line": 94
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "目录",
+          "source_line": 5
+        },
+        {
+          "level": 2,
+          "heading": "统一模板",
+          "source_line": 15
+        },
+        {
+          "level": 2,
+          "heading": "卡详写规则",
+          "source_line": 30
+        },
+        {
+          "level": 2,
+          "heading": "完整展开样例",
+          "source_line": 36
+        },
+        {
+          "level": 3,
+          "heading": "S03 聚合支付微信小程序",
+          "source_line": 40
+        },
+        {
+          "level": 3,
+          "heading": "S08 托管支付 H5/PC 收银台",
+          "source_line": 51
+        },
+        {
+          "level": 2,
+          "heading": "编号说明",
+          "source_line": 62
+        },
+        {
+          "level": 2,
+          "heading": "P0 方案卡",
+          "source_line": 66
+        },
+        {
+          "level": 2,
+          "heading": "P1 方案卡",
+          "source_line": 83
+        },
+        {
+          "level": 2,
+          "heading": "使用规则",
+          "source_line": 94
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/copilot-solution-selection.md",
+      "source_basename": "copilot-solution-selection.md",
+      "source_sha256": "2fd1ab8cd58cf2a2a37e5403a028c12bfd2e83c405f0328b7a5e9a53d917b182",
+      "source_size_bytes": 3370,
+      "source_line_count": 71,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/copilot-solution-selection.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "2fd1ab8cd58cf2a2a37e5403a028c12bfd2e83c405f0328b7a5e9a53d917b182",
+          "migration_size_bytes": 3370,
+          "migration_line_count": 71,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/copilot-troubleshooting-playbooks.md",
+      "source_basename": "copilot-troubleshooting-playbooks.md",
+      "source_sha256": "c22e080314e36200369fd20faf2fb3862dfbeb4408930d1fdf9331f51b3a7af5",
+      "source_size_bytes": 8026,
+      "source_line_count": 93,
+      "category": "SPLIT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/copilot-troubleshooting-playbooks.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "0ca2abc8c1d0dbbd8ed77b533946ddede58ffc9b2c4ad211ec8a037b8a4de365",
+          "migration_size_bytes": 7672,
+          "migration_line_count": 91,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "目录",
+              "source_line": 5
+            },
+            {
+              "level": 2,
+              "heading": "输出结构",
+              "source_line": 12
+            },
+            {
+              "level": 2,
+              "heading": "问题分类",
+              "source_line": 26
+            },
+            {
+              "level": 2,
+              "heading": "高频 Playbook",
+              "source_line": 48
+            },
+            {
+              "level": 2,
+              "heading": "升级人工",
+              "source_line": 80
+            }
+          ]
+        },
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/copilot-troubleshooting-playbooks.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "b4a90fd7eecf3b369c7000a2d2ac97affd7c25b54193d57d6c5da1579d4235cb",
+          "migration_size_bytes": 1916,
+          "migration_line_count": 29,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "输出结构",
+              "source_line": 3
+            },
+            {
+              "level": 2,
+              "heading": "高频问题",
+              "source_line": 14
+            },
+            {
+              "level": 2,
+              "heading": "升级人工",
+              "source_line": 27
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "目录",
+          "source_line": 5
+        },
+        {
+          "level": 2,
+          "heading": "输出结构",
+          "source_line": 12
+        },
+        {
+          "level": 2,
+          "heading": "问题分类",
+          "source_line": 26
+        },
+        {
+          "level": 2,
+          "heading": "高频 Playbook",
+          "source_line": 49
+        },
+        {
+          "level": 2,
+          "heading": "升级人工",
+          "source_line": 82
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-async-webhook.md",
+      "source_basename": "hostingpay-async-webhook.md",
+      "source_sha256": "0a6bf26aa043bf553b6bbca8295ab44e29bc7f2bae8aafae9b0bf027dc932063",
+      "source_size_bytes": 10858,
+      "source_line_count": 254,
+      "category": "REWRITE_PAYMENT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-async-webhook.md",
+          "operation": "rewrite",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "162e6649ad9e71859ccaaf5d4aa0ec8b9c9342a984ac93cd168c2b1c2ce22646",
+          "migration_size_bytes": 10747,
+          "migration_line_count": 254,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "目录",
+              "source_line": 6
+            },
+            {
+              "level": 2,
+              "heading": "两种机制的区别",
+              "source_line": 23
+            },
+            {
+              "level": 2,
+              "heading": "`notify_url` 回调规则",
+              "source_line": 30
+            },
+            {
+              "level": 2,
+              "heading": "交易类回调的真实报文形态",
+              "source_line": 39
+            },
+            {
+              "level": 2,
+              "heading": "Spring Boot 接收与验签示例",
+              "source_line": 57
+            },
+            {
+              "level": 2,
+              "heading": "按场景解析扩展字段示例",
+              "source_line": 140
+            },
+            {
+              "level": 2,
+              "heading": "哪些字段能写业务逻辑",
+              "source_line": 180
+            },
+            {
+              "level": 2,
+              "heading": "`notify_url` 应答要求",
+              "source_line": 186
+            },
+            {
+              "level": 2,
+              "heading": "Webhook 规则",
+              "source_line": 194
+            },
+            {
+              "level": 2,
+              "heading": "Webhook 签名与 API 签名的区别",
+              "source_line": 202
+            },
+            {
+              "level": 2,
+              "heading": "Webhook 落地步骤",
+              "source_line": 219
+            },
+            {
+              "level": 2,
+              "heading": "Webhook 重试策略",
+              "source_line": 226
+            },
+            {
+              "level": 2,
+              "heading": "常见事件类型",
+              "source_line": 232
+            },
+            {
+              "level": 2,
+              "heading": "使用建议",
+              "source_line": 244
+            },
+            {
+              "level": 2,
+              "heading": "参考",
+              "source_line": 251
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "目录",
+          "source_line": 6
+        },
+        {
+          "level": 2,
+          "heading": "两种机制的区别",
+          "source_line": 23
+        },
+        {
+          "level": 2,
+          "heading": "`notify_url` 回调规则",
+          "source_line": 30
+        },
+        {
+          "level": 2,
+          "heading": "交易类回调的真实报文形态",
+          "source_line": 39
+        },
+        {
+          "level": 2,
+          "heading": "Spring Boot 接收与验签示例",
+          "source_line": 57
+        },
+        {
+          "level": 2,
+          "heading": "按场景解析扩展字段示例",
+          "source_line": 140
+        },
+        {
+          "level": 2,
+          "heading": "哪些字段能写业务逻辑",
+          "source_line": 180
+        },
+        {
+          "level": 2,
+          "heading": "`notify_url` 应答要求",
+          "source_line": 186
+        },
+        {
+          "level": 2,
+          "heading": "Webhook 规则",
+          "source_line": 194
+        },
+        {
+          "level": 2,
+          "heading": "Webhook 签名与 API 签名的区别",
+          "source_line": 202
+        },
+        {
+          "level": 2,
+          "heading": "Webhook 落地步骤",
+          "source_line": 219
+        },
+        {
+          "level": 2,
+          "heading": "Webhook 重试策略",
+          "source_line": 226
+        },
+        {
+          "level": 2,
+          "heading": "常见事件类型",
+          "source_line": 232
+        },
+        {
+          "level": 2,
+          "heading": "使用建议",
+          "source_line": 244
+        },
+        {
+          "level": 2,
+          "heading": "参考",
+          "source_line": 251
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-base.md",
+      "source_basename": "hostingpay-base.md",
+      "source_sha256": "4117fdae3c9dc5ff9930bf8643d11fbc4736757d13dc89c443a26b78e75f6982",
+      "source_size_bytes": 2153,
+      "source_line_count": 65,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-base.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "4117fdae3c9dc5ff9930bf8643d11fbc4736757d13dc89c443a26b78e75f6982",
+          "migration_size_bytes": 2153,
+          "migration_line_count": 65,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-common-params.md",
+      "source_basename": "hostingpay-common-params.md",
+      "source_sha256": "0aabee1521c6f495bbc962dcb9562493ab8e7d2a489b58ac91706a562c81baf4",
+      "source_size_bytes": 6449,
+      "source_line_count": 124,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-common-params.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "0aabee1521c6f495bbc962dcb9562493ab8e7d2a489b58ac91706a562c81baf4",
+          "migration_size_bytes": 6449,
+          "migration_line_count": 124,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-customer-preparation.md",
+      "source_basename": "hostingpay-customer-preparation.md",
+      "source_sha256": "b0cf91f89efa29bd69986a0b5d7c68cd075b6aeb66c7609a728d2fb2be4f4f22",
+      "source_size_bytes": 9839,
+      "source_line_count": 145,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-customer-preparation.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "b0cf91f89efa29bd69986a0b5d7c68cd075b6aeb66c7609a728d2fb2be4f4f22",
+          "migration_size_bytes": 9839,
+          "migration_line_count": 145,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-error-codes.md",
+      "source_basename": "hostingpay-error-codes.md",
+      "source_sha256": "19a2c94badaacbf3833feb0f0d597621318efd794d04e4877649c3071d159a3a",
+      "source_size_bytes": 4195,
+      "source_line_count": 99,
+      "category": "SPLIT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-error-codes.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "daf791bb97e57227cce67d840dc34aa88d598378297c42e69aa15445cebc7fd2",
+          "migration_size_bytes": 3896,
+          "migration_line_count": 91,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "网关返回码（HTTP 层）",
+              "source_line": 5
+            },
+            {
+              "level": 2,
+              "heading": "网关业务返回码",
+              "source_line": 22
+            },
+            {
+              "level": 2,
+              "heading": "业务返回码（线上交易 / 托管支付）",
+              "source_line": 32
+            },
+            {
+              "level": 3,
+              "heading": "通用",
+              "source_line": 34
+            },
+            {
+              "level": 3,
+              "heading": "托管支付（hosting）专用",
+              "source_line": 44
+            },
+            {
+              "level": 3,
+              "heading": "预下单 / 支付相关",
+              "source_line": 52
+            },
+            {
+              "level": 3,
+              "heading": "关单相关",
+              "source_line": 65
+            },
+            {
+              "level": 3,
+              "heading": "退款相关",
+              "source_line": 74
+            },
+            {
+              "level": 2,
+              "heading": "使用边界",
+              "source_line": 86
+            }
+          ]
+        },
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/merchant-onboarding-error-codes.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "f398bd2c50de0716622f16155dad4e329d8c0c9cdeb344a4b1d3c964676b30c7",
+          "migration_size_bytes": 842,
+          "migration_line_count": 16,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "通用层次",
+              "source_line": 3
+            },
+            {
+              "level": 2,
+              "heading": "固定边界",
+              "source_line": 12
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "网关返回码（HTTP 层）",
+          "source_line": 5
+        },
+        {
+          "level": 2,
+          "heading": "网关业务返回码",
+          "source_line": 22
+        },
+        {
+          "level": 2,
+          "heading": "业务返回码（线上交易 / 托管支付）",
+          "source_line": 32
+        },
+        {
+          "level": 3,
+          "heading": "通用",
+          "source_line": 34
+        },
+        {
+          "level": 3,
+          "heading": "商户进件相关",
+          "source_line": 44
+        },
+        {
+          "level": 3,
+          "heading": "托管支付（hosting）专用",
+          "source_line": 52
+        },
+        {
+          "level": 3,
+          "heading": "预下单 / 支付相关",
+          "source_line": 60
+        },
+        {
+          "level": 3,
+          "heading": "关单相关",
+          "source_line": 73
+        },
+        {
+          "level": 3,
+          "heading": "退款相关",
+          "source_line": 82
+        },
+        {
+          "level": 2,
+          "heading": "使用边界",
+          "source_line": 94
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-faq.md",
+      "source_basename": "hostingpay-faq.md",
+      "source_sha256": "ade45d836d8eb7d8882acc68c430fc0d7786b3d26bde779adbe84cf600f8f62c",
+      "source_size_bytes": 4891,
+      "source_line_count": 92,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-faq.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "ade45d836d8eb7d8882acc68c430fc0d7786b3d26bde779adbe84cf600f8f62c",
+          "migration_size_bytes": 4891,
+          "migration_line_count": 92,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-java-adapter.md",
+      "source_basename": "hostingpay-java-adapter.md",
+      "source_sha256": "bca324f524a67c1097354c9320a400a7011bb4a7cb09a34db676e80ff1659fe4",
+      "source_size_bytes": 1839,
+      "source_line_count": 42,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-java-adapter.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "bca324f524a67c1097354c9320a400a7011bb4a7cb09a34db676e80ff1659fe4",
+          "migration_size_bytes": 1839,
+          "migration_line_count": 42,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-java-sdk-quickstart.md",
+      "source_basename": "hostingpay-java-sdk-quickstart.md",
+      "source_sha256": "1f916e602592798d0d10cf236c2fdf668b55ac663ef1be40f5d3e9e4363c6340",
+      "source_size_bytes": 6191,
+      "source_line_count": 165,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-java-sdk-quickstart.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "1f916e602592798d0d10cf236c2fdf668b55ac663ef1be40f5d3e9e4363c6340",
+          "migration_size_bytes": 6191,
+          "migration_line_count": 165,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-java-tech-spec.md",
+      "source_basename": "hostingpay-java-tech-spec.md",
+      "source_sha256": "4ccd70b764ada71449d4c119da34360f1390458c3dd645b49b789010a7eb8099",
+      "source_size_bytes": 11130,
+      "source_line_count": 295,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-java-tech-spec.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "4ccd70b764ada71449d4c119da34360f1390458c3dd645b49b789010a7eb8099",
+          "migration_size_bytes": 11130,
+          "migration_line_count": 295,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-payload-construction.md",
+      "source_basename": "hostingpay-payload-construction.md",
+      "source_sha256": "fc537ea2fc65e90b7a31e8771a894a992a6b19afe39ee286f6e4ce6bfd75ca72",
+      "source_size_bytes": 7696,
+      "source_line_count": 202,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-payload-construction.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "fc537ea2fc65e90b7a31e8771a894a992a6b19afe39ee286f6e4ce6bfd75ca72",
+          "migration_size_bytes": 7696,
+          "migration_line_count": 202,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-php-adapter.md",
+      "source_basename": "hostingpay-php-adapter.md",
+      "source_sha256": "198b34b55d5de02653d4603e868be80846424d95dc88df0606c3fcb598a8c7f9",
+      "source_size_bytes": 11222,
+      "source_line_count": 250,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-php-adapter.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "198b34b55d5de02653d4603e868be80846424d95dc88df0606c3fcb598a8c7f9",
+          "migration_size_bytes": 11222,
+          "migration_line_count": 250,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-preorder-alipay-mini.md",
+      "source_basename": "hostingpay-preorder-alipay-mini.md",
+      "source_sha256": "cb634ef6bf25c42cf275e645a9e3f1687b4bd5eac76c3ae0673fbbafcd403aed",
+      "source_size_bytes": 22446,
+      "source_line_count": 405,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-preorder-alipay-mini.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "cb634ef6bf25c42cf275e645a9e3f1687b4bd5eac76c3ae0673fbbafcd403aed",
+          "migration_size_bytes": 22446,
+          "migration_line_count": 405,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-preorder-douyin-direct.md",
+      "source_basename": "hostingpay-preorder-douyin-direct.md",
+      "source_sha256": "d5a88129abb8a67037a52e53bd937886012aecb35259805a3d7973ff40a67351",
+      "source_size_bytes": 14753,
+      "source_line_count": 261,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-preorder-douyin-direct.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "d5a88129abb8a67037a52e53bd937886012aecb35259805a3d7973ff40a67351",
+          "migration_size_bytes": 14753,
+          "migration_line_count": 261,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-channel.md",
+      "source_basename": "hostingpay-preorder-h5-pc-channel.md",
+      "source_sha256": "8b713f4b1ad65742baacfd00ad9d51a57ced8e3756b7c72ebdfb1c449ebe44f7",
+      "source_size_bytes": 9692,
+      "source_line_count": 183,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-channel.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "8b713f4b1ad65742baacfd00ad9d51a57ced8e3756b7c72ebdfb1c449ebe44f7",
+          "migration_size_bytes": 9692,
+          "migration_line_count": 183,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-errors.md",
+      "source_basename": "hostingpay-preorder-h5-pc-errors.md",
+      "source_sha256": "7ed1eb5f9bd4ceacc526f677d736b0da5c62c14c0d5ed3b04793f39c25ad664a",
+      "source_size_bytes": 1262,
+      "source_line_count": 22,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-errors.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "7ed1eb5f9bd4ceacc526f677d736b0da5c62c14c0d5ed3b04793f39c25ad664a",
+          "migration_size_bytes": 1262,
+          "migration_line_count": 22,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-request.md",
+      "source_basename": "hostingpay-preorder-h5-pc-request.md",
+      "source_sha256": "47d9db2ca5f313fb83f2a9bc379f151ff37a8bf0e54e58cd0d66d30b948fccf2",
+      "source_size_bytes": 9647,
+      "source_line_count": 157,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-request.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "47d9db2ca5f313fb83f2a9bc379f151ff37a8bf0e54e58cd0d66d30b948fccf2",
+          "migration_size_bytes": 9647,
+          "migration_line_count": 157,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-response-channel.md",
+      "source_basename": "hostingpay-preorder-h5-pc-response-channel.md",
+      "source_sha256": "2f3dbfbf32ebe94a41fd4032e59c4c2b966eca276c0a9ec105c792822ae330eb",
+      "source_size_bytes": 11346,
+      "source_line_count": 211,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-response-channel.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "2f3dbfbf32ebe94a41fd4032e59c4c2b966eca276c0a9ec105c792822ae330eb",
+          "migration_size_bytes": 11346,
+          "migration_line_count": 211,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-response.md",
+      "source_basename": "hostingpay-preorder-h5-pc-response.md",
+      "source_sha256": "3c80a6780641cc6821c13ac44b7473831d666b464ff942038d69827a63113bae",
+      "source_size_bytes": 6311,
+      "source_line_count": 93,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-response.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "3c80a6780641cc6821c13ac44b7473831d666b464ff942038d69827a63113bae",
+          "migration_size_bytes": 6311,
+          "migration_line_count": 93,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc.md",
+      "source_basename": "hostingpay-preorder-h5-pc.md",
+      "source_sha256": "f8a8195fab0ed5b87e5f4997eb80e205e67101156ef70608d28d28c38c003902",
+      "source_size_bytes": 9159,
+      "source_line_count": 204,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "f8a8195fab0ed5b87e5f4997eb80e205e67101156ef70608d28d28c38c003902",
+          "migration_size_bytes": 9159,
+          "migration_line_count": 204,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-preorder-php-scenarios.md",
+      "source_basename": "hostingpay-preorder-php-scenarios.md",
+      "source_sha256": "0da4dc793412768a95f55e85ffbfb0f4394967fd5ac177441537f1404394202b",
+      "source_size_bytes": 9509,
+      "source_line_count": 246,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-preorder-php-scenarios.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "0da4dc793412768a95f55e85ffbfb0f4394967fd5ac177441537f1404394202b",
+          "migration_size_bytes": 9509,
+          "migration_line_count": 246,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-preorder-quickstart.md",
+      "source_basename": "hostingpay-preorder-quickstart.md",
+      "source_sha256": "00b4226274a60e193bae0c7445a6a4188f7a85ad27eb524d2ab748a4f474bcec",
+      "source_size_bytes": 7703,
+      "source_line_count": 179,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-preorder-quickstart.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "00b4226274a60e193bae0c7445a6a4188f7a85ad27eb524d2ab748a4f474bcec",
+          "migration_size_bytes": 7703,
+          "migration_line_count": 179,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-preorder-wechat-mini.md",
+      "source_basename": "hostingpay-preorder-wechat-mini.md",
+      "source_sha256": "7ef179c3c76bc665beabd0f9af9d24a3321c4f158b018d211ed732b553063ba4",
+      "source_size_bytes": 26376,
+      "source_line_count": 421,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-preorder-wechat-mini.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "7ef179c3c76bc665beabd0f9af9d24a3321c4f158b018d211ed732b553063ba4",
+          "migration_size_bytes": 26376,
+          "migration_line_count": 421,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-preorder.md",
+      "source_basename": "hostingpay-preorder.md",
+      "source_sha256": "26ed22801071d1ff6debee9f442782e42f4693c392cff1a22eefd18ed3a969e0",
+      "source_size_bytes": 3492,
+      "source_line_count": 91,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-preorder.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "26ed22801071d1ff6debee9f442782e42f4693c392cff1a22eefd18ed3a969e0",
+          "migration_size_bytes": 3492,
+          "migration_line_count": 91,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-python-adapter.md",
+      "source_basename": "hostingpay-python-adapter.md",
+      "source_sha256": "a860e51e8684ee8c5a31aad1a2dc4cd652b1bbc6b6cfc43dd608403396b86aa1",
+      "source_size_bytes": 7030,
+      "source_line_count": 183,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-python-adapter.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "a860e51e8684ee8c5a31aad1a2dc4cd652b1bbc6b6cfc43dd608403396b86aa1",
+          "migration_size_bytes": 7030,
+          "migration_line_count": 183,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-python-scenarios.md",
+      "source_basename": "hostingpay-python-scenarios.md",
+      "source_sha256": "74e71bf87e9b5c94cfb9dc0759ad4f4ee4b4f7c9581a96c8a748d5bbf35b2b0a",
+      "source_size_bytes": 9036,
+      "source_line_count": 301,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-python-scenarios.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "74e71bf87e9b5c94cfb9dc0759ad4f4ee4b4f7c9581a96c8a748d5bbf35b2b0a",
+          "migration_size_bytes": 9036,
+          "migration_line_count": 301,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-query-payment-status-query.md",
+      "source_basename": "hostingpay-query-payment-status-query.md",
+      "source_sha256": "dd0546115af89dd042480281c4d183c4dc18f2acf1f35aed5d28d6c9788a2de9",
+      "source_size_bytes": 23291,
+      "source_line_count": 408,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-query-payment-status-query.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "dd0546115af89dd042480281c4d183c4dc18f2acf1f35aed5d28d6c9788a2de9",
+          "migration_size_bytes": 23291,
+          "migration_line_count": 408,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-query-php-scenarios.md",
+      "source_basename": "hostingpay-query-php-scenarios.md",
+      "source_sha256": "3412a12c90113d7912809c1dbd761ddbf92cfe3b57ecac3bf6b86b7f14eb992e",
+      "source_size_bytes": 5387,
+      "source_line_count": 156,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-query-php-scenarios.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "3412a12c90113d7912809c1dbd761ddbf92cfe3b57ecac3bf6b86b7f14eb992e",
+          "migration_size_bytes": 5387,
+          "migration_line_count": 156,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-query-quickstart.md",
+      "source_basename": "hostingpay-query-quickstart.md",
+      "source_sha256": "a5996bab62c92dd07995c186e0c6d95d4d0052f96ad85ddf96dba42f2097c539",
+      "source_size_bytes": 5087,
+      "source_line_count": 127,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-query-quickstart.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "a5996bab62c92dd07995c186e0c6d95d4d0052f96ad85ddf96dba42f2097c539",
+          "migration_size_bytes": 5087,
+          "migration_line_count": 127,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-query-reconciliation.md",
+      "source_basename": "hostingpay-query-reconciliation.md",
+      "source_sha256": "b8572036322e6ad221de025c38ad9b4dad36f4ebdd124f346259a2ae5f59641c",
+      "source_size_bytes": 11979,
+      "source_line_count": 228,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-query-reconciliation.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "b8572036322e6ad221de025c38ad9b4dad36f4ebdd124f346259a2ae5f59641c",
+          "migration_size_bytes": 11979,
+          "migration_line_count": 228,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-query-splitpay.md",
+      "source_basename": "hostingpay-query-splitpay.md",
+      "source_sha256": "59fb2b7ba6e811bc0cb4a2ea175d1da82c329f42f6dadd8c7d27716c1f7e0ee9",
+      "source_size_bytes": 8652,
+      "source_line_count": 162,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-query-splitpay.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "59fb2b7ba6e811bc0cb4a2ea175d1da82c329f42f6dadd8c7d27716c1f7e0ee9",
+          "migration_size_bytes": 8652,
+          "migration_line_count": 162,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-query-trade-close.md",
+      "source_basename": "hostingpay-query-trade-close.md",
+      "source_sha256": "8ad32dd9cf8708118e50b8ba215e57b76e5b71c7b12c56c1dbb3d071ce234541",
+      "source_size_bytes": 7537,
+      "source_line_count": 177,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-query-trade-close.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "8ad32dd9cf8708118e50b8ba215e57b76e5b71c7b12c56c1dbb3d071ce234541",
+          "migration_size_bytes": 7537,
+          "migration_line_count": 177,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-query.md",
+      "source_basename": "hostingpay-query.md",
+      "source_sha256": "60dab78ec132a8d13d3ea5258234e269e83966e53ff1e8adf9addbaaa001a150",
+      "source_size_bytes": 3109,
+      "source_line_count": 87,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-query.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "60dab78ec132a8d13d3ea5258234e269e83966e53ff1e8adf9addbaaa001a150",
+          "migration_size_bytes": 3109,
+          "migration_line_count": 87,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-quickstart.md",
+      "source_basename": "hostingpay-quickstart.md",
+      "source_sha256": "612c611b7c6519ccece46632ef84a64b8fd2c9cdec78a3367f122ff871833362",
+      "source_size_bytes": 5559,
+      "source_line_count": 119,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-quickstart.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "612c611b7c6519ccece46632ef84a64b8fd2c9cdec78a3367f122ff871833362",
+          "migration_size_bytes": 5559,
+          "migration_line_count": 119,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-refund-php-scenarios.md",
+      "source_basename": "hostingpay-refund-php-scenarios.md",
+      "source_sha256": "71b92e45fcca6449f03218aecae3b48b93aecfde27e8aa18465f53a849049c28",
+      "source_size_bytes": 4658,
+      "source_line_count": 120,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-refund-php-scenarios.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "71b92e45fcca6449f03218aecae3b48b93aecfde27e8aa18465f53a849049c28",
+          "migration_size_bytes": 4658,
+          "migration_line_count": 120,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-refund-query.md",
+      "source_basename": "hostingpay-refund-query.md",
+      "source_sha256": "69dfdb7c7371fd228976a0ca60a14d158ef081c4cc9475c2ca82e27cc7ebd2a2",
+      "source_size_bytes": 12201,
+      "source_line_count": 240,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-refund-query.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "69dfdb7c7371fd228976a0ca60a14d158ef081c4cc9475c2ca82e27cc7ebd2a2",
+          "migration_size_bytes": 12201,
+          "migration_line_count": 240,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-refund-quickstart.md",
+      "source_basename": "hostingpay-refund-quickstart.md",
+      "source_sha256": "533255551b61bfe9d197ef2e6281cf5a11043d9f5d26f30011a217de313c6818",
+      "source_size_bytes": 4389,
+      "source_line_count": 131,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-refund-quickstart.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "533255551b61bfe9d197ef2e6281cf5a11043d9f5d26f30011a217de313c6818",
+          "migration_size_bytes": 4389,
+          "migration_line_count": 131,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-refund.md",
+      "source_basename": "hostingpay-refund.md",
+      "source_sha256": "7cd3d878e05bf4fa8ea74f7e43cde10dcfe94a3f435d4854f7b00a11e3211dad",
+      "source_size_bytes": 11023,
+      "source_line_count": 262,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/hostingpay-refund.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "7cd3d878e05bf4fa8ea74f7e43cde10dcfe94a3f435d4854f7b00a11e3211dad",
+          "migration_size_bytes": 11023,
+          "migration_line_count": 262,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/merchant-onboarding-application-status-query.md",
+      "source_basename": "merchant-onboarding-application-status-query.md",
+      "source_sha256": "c2fa3ae62290d06d3b56ef24c7f7c4389dbd45eabb5cabbc0369487426967010",
+      "source_size_bytes": 4667,
+      "source_line_count": 38,
+      "category": "MOVE",
+      "destinations": [
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/merchant-onboarding-application-status-query.md",
+          "operation": "move",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "c2fa3ae62290d06d3b56ef24c7f7c4389dbd45eabb5cabbc0369487426967010",
+          "migration_size_bytes": 4667,
+          "migration_line_count": 38,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/merchant-onboarding-business-open.md",
+      "source_basename": "merchant-onboarding-business-open.md",
+      "source_sha256": "254be282500c56b4d940fac9e8595ed40bbf611cb653ec28ac824cc177f71692",
+      "source_size_bytes": 7368,
+      "source_line_count": 66,
+      "category": "MOVE",
+      "destinations": [
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/merchant-onboarding-business-open.md",
+          "operation": "move",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "254be282500c56b4d940fac9e8595ed40bbf611cb653ec28ac824cc177f71692",
+          "migration_size_bytes": 7368,
+          "migration_line_count": 66,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/merchant-onboarding-complete-field-catalog.md",
+      "source_basename": "merchant-onboarding-complete-field-catalog.md",
+      "source_sha256": "550715a08ec08f5c20a6119483d49dfb22700bc2d0366711faa8cb7b3b4b9acc",
+      "source_size_bytes": 285868,
+      "source_line_count": 1608,
+      "category": "MOVE",
+      "destinations": [
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
+          "operation": "move",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "550715a08ec08f5c20a6119483d49dfb22700bc2d0366711faa8cb7b3b4b9acc",
+          "migration_size_bytes": 285868,
+          "migration_line_count": 1608,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/merchant-onboarding-detail-query.md",
+      "source_basename": "merchant-onboarding-detail-query.md",
+      "source_sha256": "098c42e1b0ba7c10af9e0157e98451b594c89489bc8c4148ea400b13b7277704",
+      "source_size_bytes": 3972,
+      "source_line_count": 39,
+      "category": "MOVE",
+      "destinations": [
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/merchant-onboarding-detail-query.md",
+          "operation": "move",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "098c42e1b0ba7c10af9e0157e98451b594c89489bc8c4148ea400b13b7277704",
+          "migration_size_bytes": 3972,
+          "migration_line_count": 39,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/merchant-onboarding-enterprise.md",
+      "source_basename": "merchant-onboarding-enterprise.md",
+      "source_sha256": "c2562a084cebd5f0b2a7eef651290f5830c8847a69f8853d8397fa68e057c038",
+      "source_size_bytes": 6226,
+      "source_line_count": 62,
+      "category": "MOVE",
+      "destinations": [
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/merchant-onboarding-enterprise.md",
+          "operation": "move",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "c2562a084cebd5f0b2a7eef651290f5830c8847a69f8853d8397fa68e057c038",
+          "migration_size_bytes": 6226,
+          "migration_line_count": 62,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/merchant-onboarding-external-resources.md",
+      "source_basename": "merchant-onboarding-external-resources.md",
+      "source_sha256": "dad33786cc91870bacaa1d17692c0d2e28b32d40512e4d4874e143da76787c7f",
+      "source_size_bytes": 17226,
+      "source_line_count": 162,
+      "category": "MOVE",
+      "destinations": [
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/merchant-onboarding-external-resources.md",
+          "operation": "move",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "dad33786cc91870bacaa1d17692c0d2e28b32d40512e4d4874e143da76787c7f",
+          "migration_size_bytes": 17226,
+          "migration_line_count": 162,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/merchant-onboarding-faq.md",
+      "source_basename": "merchant-onboarding-faq.md",
+      "source_sha256": "5d88cebb15a1243f9e3a0a481d404e25347e2852d2b177b9f7db919eb7ebe0d6",
+      "source_size_bytes": 10067,
+      "source_line_count": 117,
+      "category": "SPLIT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/payment-operations-faq.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "b3b0a56b61528fe34280c7b8ca2452dd611f2ade9d2eb74f9898e41775782386",
+          "migration_size_bytes": 1581,
+          "migration_line_count": 29,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "通道和路由",
+              "source_line": 3
+            },
+            {
+              "level": 2,
+              "heading": "appid、openid 和授权目录",
+              "source_line": 9
+            },
+            {
+              "level": 2,
+              "heading": "Webhook",
+              "source_line": 15
+            },
+            {
+              "level": 2,
+              "heading": "退款、对账和资金运营",
+              "source_line": 21
+            },
+            {
+              "level": 2,
+              "heading": "边界",
+              "source_line": 27
+            }
+          ]
+        },
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/merchant-onboarding-faq.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "55ff2bcac102a174c56691fd5f9f780aeec9e4261045f16b04aad801dfba72e3",
+          "migration_size_bytes": 1590,
+          "migration_line_count": 35,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "进件结果",
+              "source_line": 3
+            },
+            {
+              "level": 2,
+              "heading": "权限",
+              "source_line": 9
+            },
+            {
+              "level": 2,
+              "heading": "业务开通",
+              "source_line": 15
+            },
+            {
+              "level": 2,
+              "heading": "实名、绑卡和补资料",
+              "source_line": 21
+            },
+            {
+              "level": 2,
+              "heading": "图片",
+              "source_line": 27
+            },
+            {
+              "level": 2,
+              "heading": "输出边界",
+              "source_line": 33
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "目录",
+          "source_line": 5
+        },
+        {
+          "level": 2,
+          "heading": "什么时候读",
+          "source_line": 17
+        },
+        {
+          "level": 2,
+          "heading": "商户进件结果判断",
+          "source_line": 28
+        },
+        {
+          "level": 2,
+          "heading": "接口权限和数据权限",
+          "source_line": 40
+        },
+        {
+          "level": 2,
+          "heading": "通道和路由配置",
+          "source_line": 52
+        },
+        {
+          "level": 2,
+          "heading": "appid、openid 和授权目录",
+          "source_line": 63
+        },
+        {
+          "level": 2,
+          "heading": "实名认证、入驻和控台状态",
+          "source_line": 76
+        },
+        {
+          "level": 2,
+          "heading": "Webhook 和异步事件配置",
+          "source_line": 87
+        },
+        {
+          "level": 2,
+          "heading": "退款、分账、对账和资金运营边界",
+          "source_line": 98
+        },
+        {
+          "level": 2,
+          "heading": "输出边界",
+          "source_line": 112
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/merchant-onboarding-field-contracts.md",
+      "source_basename": "merchant-onboarding-field-contracts.md",
+      "source_sha256": "8266241f07be16b2f8ece5b5e5fcc6492384271915c59e8bc92777b31abcb542",
+      "source_size_bytes": 29318,
+      "source_line_count": 257,
+      "category": "REWRITE_ONBOARDING",
+      "destinations": [
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md",
+          "operation": "rewrite",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "8266241f07be16b2f8ece5b5e5fcc6492384271915c59e8bc92777b31abcb542",
+          "migration_size_bytes": 29318,
+          "migration_line_count": 257,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "目录",
+              "source_line": 3
+            },
+            {
+              "level": 2,
+              "heading": "使用方式与证据边界",
+              "source_line": 12
+            },
+            {
+              "level": 2,
+              "heading": "公共信封",
+              "source_line": 21
+            },
+            {
+              "level": 2,
+              "heading": "字段生成硬约束",
+              "source_line": 38
+            },
+            {
+              "level": 2,
+              "heading": "请求字段速查",
+              "source_line": 61
+            },
+            {
+              "level": 3,
+              "heading": "企业进件 `data`",
+              "source_line": 65
+            },
+            {
+              "level": 3,
+              "heading": "个人进件 `data`",
+              "source_line": 76
+            },
+            {
+              "level": 3,
+              "heading": "业务开通 `data`",
+              "source_line": 84
+            },
+            {
+              "level": 2,
+              "heading": "值域、默认值与条件速查",
+              "source_line": 93
+            },
+            {
+              "level": 3,
+              "heading": "企业进件约束",
+              "source_line": 97
+            },
+            {
+              "level": 3,
+              "heading": "个人进件约束",
+              "source_line": 115
+            },
+            {
+              "level": 3,
+              "heading": "企业/个人公共资金对象约束",
+              "source_line": 131
+            },
+            {
+              "level": 3,
+              "heading": "商户业务开通顶层标量约束",
+              "source_line": 149
+            },
+            {
+              "level": 3,
+              "heading": "查询响应方向约束",
+              "source_line": 191
+            },
+            {
+              "level": 3,
+              "heading": "必填 `card_info` 叶子合同",
+              "source_line": 209
+            },
+            {
+              "level": 3,
+              "heading": "图片与查询请求",
+              "source_line": 233
+            },
+            {
+              "level": 2,
+              "heading": "状态与回调字段归属",
+              "source_line": 241
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "目录",
+          "source_line": 3
+        },
+        {
+          "level": 2,
+          "heading": "使用方式与证据边界",
+          "source_line": 12
+        },
+        {
+          "level": 2,
+          "heading": "公共信封",
+          "source_line": 21
+        },
+        {
+          "level": 2,
+          "heading": "字段生成硬约束",
+          "source_line": 38
+        },
+        {
+          "level": 2,
+          "heading": "请求字段速查",
+          "source_line": 61
+        },
+        {
+          "level": 3,
+          "heading": "企业进件 `data`",
+          "source_line": 65
+        },
+        {
+          "level": 3,
+          "heading": "个人进件 `data`",
+          "source_line": 76
+        },
+        {
+          "level": 3,
+          "heading": "业务开通 `data`",
+          "source_line": 84
+        },
+        {
+          "level": 2,
+          "heading": "值域、默认值与条件速查",
+          "source_line": 93
+        },
+        {
+          "level": 3,
+          "heading": "企业进件约束",
+          "source_line": 97
+        },
+        {
+          "level": 3,
+          "heading": "个人进件约束",
+          "source_line": 115
+        },
+        {
+          "level": 3,
+          "heading": "企业/个人公共资金对象约束",
+          "source_line": 131
+        },
+        {
+          "level": 3,
+          "heading": "商户业务开通顶层标量约束",
+          "source_line": 149
+        },
+        {
+          "level": 3,
+          "heading": "查询响应方向约束",
+          "source_line": 191
+        },
+        {
+          "level": 3,
+          "heading": "必填 `card_info` 叶子合同",
+          "source_line": 209
+        },
+        {
+          "level": 3,
+          "heading": "图片与查询请求",
+          "source_line": 233
+        },
+        {
+          "level": 2,
+          "heading": "状态与回调字段归属",
+          "source_line": 241
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/merchant-onboarding-image-upload.md",
+      "source_basename": "merchant-onboarding-image-upload.md",
+      "source_sha256": "1de8529cd62dd890bc17b6c4e36c8f0bfbb81cd25ebb05612bdb1946d41462c2",
+      "source_size_bytes": 9854,
+      "source_line_count": 117,
+      "category": "REWRITE_ONBOARDING",
+      "destinations": [
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/merchant-onboarding-image-upload.md",
+          "operation": "rewrite",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "1de8529cd62dd890bc17b6c4e36c8f0bfbb81cd25ebb05612bdb1946d41462c2",
+          "migration_size_bytes": 9854,
+          "migration_line_count": 117,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "目录",
+              "source_line": 3
+            },
+            {
+              "level": 2,
+              "heading": "适用范围",
+              "source_line": 12
+            },
+            {
+              "level": 2,
+              "heading": "已确认的请求合同",
+              "source_line": 16
+            },
+            {
+              "level": 2,
+              "heading": "`file_url` 模式：已核验的语言边界",
+              "source_line": 27
+            },
+            {
+              "level": 2,
+              "heading": "公共请求头",
+              "source_line": 39
+            },
+            {
+              "level": 2,
+              "heading": "P0：仍需要官方确认",
+              "source_line": 103
+            },
+            {
+              "level": 2,
+              "heading": "使用边界",
+              "source_line": 113
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "目录",
+          "source_line": 3
+        },
+        {
+          "level": 2,
+          "heading": "适用范围",
+          "source_line": 12
+        },
+        {
+          "level": 2,
+          "heading": "已确认的请求合同",
+          "source_line": 16
+        },
+        {
+          "level": 2,
+          "heading": "`file_url` 模式：已核验的语言边界",
+          "source_line": 27
+        },
+        {
+          "level": 2,
+          "heading": "公共请求头",
+          "source_line": 39
+        },
+        {
+          "level": 2,
+          "heading": "P0：仍需要官方确认",
+          "source_line": 103
+        },
+        {
+          "level": 2,
+          "heading": "使用边界",
+          "source_line": 113
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/merchant-onboarding-individual.md",
+      "source_basename": "merchant-onboarding-individual.md",
+      "source_sha256": "f3aa967b50c7235458ab3ea59499389612d3fdf0e487dbdde8a90386adb13455",
+      "source_size_bytes": 5890,
+      "source_line_count": 54,
+      "category": "MOVE",
+      "destinations": [
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/merchant-onboarding-individual.md",
+          "operation": "move",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "f3aa967b50c7235458ab3ea59499389612d3fdf0e487dbdde8a90386adb13455",
+          "migration_size_bytes": 5890,
+          "migration_line_count": 54,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/official-service-source-index.md",
+      "source_basename": "official-service-source-index.md",
+      "source_sha256": "f6ca965044e7237b5a9602fa77875c0817158d2a0e142eb08a36f46094f0a129",
+      "source_size_bytes": 19832,
+      "source_line_count": 117,
+      "category": "SPLIT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/official-service-source-index.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "d697452e018e558a4dc50df091431dd95cf4ee822213a0ea733c56cea0cbcc68",
+          "migration_size_bytes": 17756,
+          "migration_line_count": 113,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "目录",
+              "source_line": 7
+            },
+            {
+              "level": 2,
+              "heading": "资料源登记",
+              "source_line": 18
+            },
+            {
+              "level": 2,
+              "heading": "运行时规则",
+              "source_line": 28
+            },
+            {
+              "level": 2,
+              "heading": "本地覆盖矩阵",
+              "source_line": 37
+            },
+            {
+              "level": 2,
+              "heading": "不覆盖和转人工菜单",
+              "source_line": 54
+            },
+            {
+              "level": 2,
+              "heading": "技术支持联系方式",
+              "source_line": 66
+            },
+            {
+              "level": 2,
+              "heading": "高频 FAQ 分类映射",
+              "source_line": 74
+            },
+            {
+              "level": 2,
+              "heading": "字段规范",
+              "source_line": 95
+            },
+            {
+              "level": 2,
+              "heading": "禁止沉淀",
+              "source_line": 107
+            }
+          ]
+        },
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/official-service-source-index.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "bbf8770b11ad84b492e3ccec22875c01a3db8e9616f79e1579e158e100c57351",
+          "migration_size_bytes": 1705,
+          "migration_line_count": 24,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "六接口来源",
+              "source_line": 5
+            },
+            {
+              "level": 2,
+              "heading": "使用规则",
+              "source_line": 18
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "目录",
+          "source_line": 7
+        },
+        {
+          "level": 2,
+          "heading": "资料源登记",
+          "source_line": 18
+        },
+        {
+          "level": 2,
+          "heading": "运行时规则",
+          "source_line": 29
+        },
+        {
+          "level": 2,
+          "heading": "本地覆盖矩阵",
+          "source_line": 38
+        },
+        {
+          "level": 2,
+          "heading": "不覆盖和转人工菜单",
+          "source_line": 57
+        },
+        {
+          "level": 2,
+          "heading": "技术支持联系方式",
+          "source_line": 69
+        },
+        {
+          "level": 2,
+          "heading": "高频 FAQ 分类映射",
+          "source_line": 77
+        },
+        {
+          "level": 2,
+          "heading": "字段规范",
+          "source_line": 99
+        },
+        {
+          "level": 2,
+          "heading": "禁止沉淀",
+          "source_line": 111
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-async-notify.md",
+      "source_basename": "shared-async-notify.md",
+      "source_sha256": "4c37c884805dd14306aee83cb1bc341fb748f6970e3eadb3f1abec3fd3978185",
+      "source_size_bytes": 2579,
+      "source_line_count": 73,
+      "category": "REWRITE_PAYMENT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/shared-async-notify.md",
+          "operation": "rewrite",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "c42f5d3bef63ebe726fe1f2813f74743e7585ab57b657da760e8254ef0d2ea47",
+          "migration_size_bytes": 2454,
+          "migration_line_count": 73,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "基本规则",
+              "source_line": 9
+            },
+            {
+              "level": 2,
+              "heading": "收到通知后的返回要求",
+              "source_line": 19
+            },
+            {
+              "level": 2,
+              "heading": "回调数据体",
+              "source_line": 28
+            },
+            {
+              "level": 2,
+              "heading": "回调验签",
+              "source_line": 37
+            },
+            {
+              "level": 2,
+              "heading": "幂等要求",
+              "source_line": 45
+            },
+            {
+              "level": 2,
+              "heading": "状态确认建议",
+              "source_line": 55
+            },
+            {
+              "level": 2,
+              "heading": "当前 Skill 包中的协作关系",
+              "source_line": 69
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "基本规则",
+          "source_line": 9
+        },
+        {
+          "level": 2,
+          "heading": "收到通知后的返回要求",
+          "source_line": 19
+        },
+        {
+          "level": 2,
+          "heading": "回调数据体",
+          "source_line": 28
+        },
+        {
+          "level": 2,
+          "heading": "回调验签",
+          "source_line": 37
+        },
+        {
+          "level": 2,
+          "heading": "幂等要求",
+          "source_line": 45
+        },
+        {
+          "level": 2,
+          "heading": "状态确认建议",
+          "source_line": 55
+        },
+        {
+          "level": 2,
+          "heading": "当前 Skill 包中的协作关系",
+          "source_line": 69
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-copyright-notice.md",
+      "source_basename": "shared-copyright-notice.md",
+      "source_sha256": "390fde6aa7a4a6bd5c0a302a5acc4df8c53f29d1a8a01191a5d5d26abd33428f",
+      "source_size_bytes": 1009,
+      "source_line_count": 15,
+      "category": "SPLIT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/shared-copyright-notice.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "390fde6aa7a4a6bd5c0a302a5acc4df8c53f29d1a8a01191a5d5d26abd33428f",
+          "migration_size_bytes": 1009,
+          "migration_line_count": 15,
+          "migration_headings": []
+        },
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/shared-copyright-notice.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "390fde6aa7a4a6bd5c0a302a5acc4df8c53f29d1a8a01191a5d5d26abd33428f",
+          "migration_size_bytes": 1009,
+          "migration_line_count": 15,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-credential-boundary.md",
+      "source_basename": "shared-credential-boundary.md",
+      "source_sha256": "99844c33b3c1ade93d7bbc8bc89974b357b9ead7bec037d39efcfa55ad5f4d71",
+      "source_size_bytes": 2247,
+      "source_line_count": 43,
+      "category": "SPLIT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/shared-credential-boundary.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "ca19b4d994cbc4295b2a6e2dc0190e32d3beacf98eb30a2257b822e217cbc7e1",
+          "migration_size_bytes": 1725,
+          "migration_line_count": 35,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "凭据角色说明",
+              "source_line": 5
+            },
+            {
+              "level": 2,
+              "heading": "存放边界",
+              "source_line": 9
+            },
+            {
+              "level": 2,
+              "heading": "接入方应做到",
+              "source_line": 16
+            },
+            {
+              "level": 2,
+              "heading": "语言适配说明",
+              "source_line": 24
+            },
+            {
+              "level": 2,
+              "heading": "运行时配置说明",
+              "source_line": 28
+            }
+          ]
+        },
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/shared-credential-boundary.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "7c18e6fc6f33605fa3dffcbf24fa8ff245d5e2df3638a975813ae3c2afdd14a2",
+          "migration_size_bytes": 1049,
+          "migration_line_count": 20,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "服务端凭据",
+              "source_line": 3
+            },
+            {
+              "level": 2,
+              "heading": "进件敏感资料",
+              "source_line": 9
+            },
+            {
+              "level": 2,
+              "heading": "请求头",
+              "source_line": 16
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "凭据角色说明",
+          "source_line": 5
+        },
+        {
+          "level": 2,
+          "heading": "存放边界",
+          "source_line": 9
+        },
+        {
+          "level": 2,
+          "heading": "接入方应做到",
+          "source_line": 16
+        },
+        {
+          "level": 2,
+          "heading": "商户进件敏感资料",
+          "source_line": 24
+        },
+        {
+          "level": 2,
+          "heading": "语言适配说明",
+          "source_line": 32
+        },
+        {
+          "level": 2,
+          "heading": "运行时配置说明",
+          "source_line": 36
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-frontend-sdk-matrix.md",
+      "source_basename": "shared-frontend-sdk-matrix.md",
+      "source_sha256": "34c9be9ff7192ea2bd3a5e73377cadf953b00dc6cc9558811c9e0870a8326df1",
+      "source_size_bytes": 1722,
+      "source_line_count": 62,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/shared-frontend-sdk-matrix.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "34c9be9ff7192ea2bd3a5e73377cadf953b00dc6cc9558811c9e0870a8326df1",
+          "migration_size_bytes": 1722,
+          "migration_line_count": 62,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-local-sandbox.md",
+      "source_basename": "shared-local-sandbox.md",
+      "source_sha256": "d0a7a80bcc0aa5f2095f36342d467424fb3e4683a024291702340141cd0cad73",
+      "source_size_bytes": 14927,
+      "source_line_count": 170,
+      "category": "REWRITE_PAYMENT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/shared-local-sandbox.md",
+          "operation": "rewrite",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "46c5910d4c2acb70f45641c8a65f311f5ab5836ff4bfc67fcb0f1088eb072812",
+          "migration_size_bytes": 14892,
+          "migration_line_count": 170,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "目录",
+              "source_line": 5
+            },
+            {
+              "level": 2,
+              "heading": "什么时候读取",
+              "source_line": 16
+            },
+            {
+              "level": 2,
+              "heading": "当前版本口径",
+              "source_line": 25
+            },
+            {
+              "level": 2,
+              "heading": "固定边界",
+              "source_line": 45
+            },
+            {
+              "level": 2,
+              "heading": "最小使用流程",
+              "source_line": 55
+            },
+            {
+              "level": 2,
+              "heading": "常用演练能力",
+              "source_line": 114
+            },
+            {
+              "level": 2,
+              "heading": "与正式联调的关系",
+              "source_line": 132
+            },
+            {
+              "level": 2,
+              "heading": "输出规则",
+              "source_line": 151
+            },
+            {
+              "level": 2,
+              "heading": "推荐短句",
+              "source_line": 162
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "目录",
+          "source_line": 5
+        },
+        {
+          "level": 2,
+          "heading": "什么时候读取",
+          "source_line": 16
+        },
+        {
+          "level": 2,
+          "heading": "当前版本口径",
+          "source_line": 25
+        },
+        {
+          "level": 2,
+          "heading": "固定边界",
+          "source_line": 45
+        },
+        {
+          "level": 2,
+          "heading": "最小使用流程",
+          "source_line": 55
+        },
+        {
+          "level": 2,
+          "heading": "常用演练能力",
+          "source_line": 114
+        },
+        {
+          "level": 2,
+          "heading": "与正式联调的关系",
+          "source_line": 132
+        },
+        {
+          "level": 2,
+          "heading": "输出规则",
+          "source_line": 151
+        },
+        {
+          "level": 2,
+          "heading": "推荐短句",
+          "source_line": 162
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-overview.md",
+      "source_basename": "shared-overview.md",
+      "source_sha256": "ac9b94a8930d52a26ae16181df45bedf0c26d549888377b177cbb7eb528e45a5",
+      "source_size_bytes": 8487,
+      "source_line_count": 122,
+      "category": "SPLIT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/shared-overview.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "4177589ee8e23a4a3338e95cc2ec9515f42f5f818a42c53825038cdca62b6ea9",
+          "migration_size_bytes": 1718,
+          "migration_line_count": 41,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "什么时候读取",
+              "source_line": 5
+            },
+            {
+              "level": 2,
+              "heading": "产品线",
+              "source_line": 11
+            },
+            {
+              "level": 2,
+              "heading": "公共资料",
+              "source_line": 20
+            },
+            {
+              "level": 2,
+              "heading": "边界",
+              "source_line": 32
+            },
+            {
+              "level": 2,
+              "heading": "当前版本",
+              "source_line": 39
+            }
+          ]
+        },
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/shared-overview.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "ebe227379d14ed1c2efafddf74eee477805eea1ac90b56bc08617d4a1dfd78e4",
+          "migration_size_bytes": 1672,
+          "migration_line_count": 34,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "什么时候读取",
+              "source_line": 5
+            },
+            {
+              "level": 2,
+              "heading": "能力地图",
+              "source_line": 11
+            },
+            {
+              "level": 2,
+              "heading": "固定边界",
+              "source_line": 25
+            },
+            {
+              "level": 2,
+              "heading": "当前来源",
+              "source_line": 32
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "目录",
+          "source_line": 7
+        },
+        {
+          "level": 2,
+          "heading": "什么时候先读这里",
+          "source_line": 18
+        },
+        {
+          "level": 2,
+          "heading": "接入副驾驶地图",
+          "source_line": 26
+        },
+        {
+          "level": 2,
+          "heading": "共享资料地图",
+          "source_line": 46
+        },
+        {
+          "level": 2,
+          "heading": "产品线判断树",
+          "source_line": 62
+        },
+        {
+          "level": 2,
+          "heading": "推荐阅读顺序",
+          "source_line": 76
+        },
+        {
+          "level": 2,
+          "heading": "当前版本事实",
+          "source_line": 86
+        },
+        {
+          "level": 2,
+          "heading": "PHP 官方 SDK 口径",
+          "source_line": 100
+        },
+        {
+          "level": 2,
+          "heading": "全局边界",
+          "source_line": 114
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-release-checklist.md",
+      "source_basename": "shared-release-checklist.md",
+      "source_sha256": "c31b8ea230a964f198bc3ee93f2f1e87725e8c6c9298c28c0b6fa2e309b0e7f8",
+      "source_size_bytes": 9389,
+      "source_line_count": 84,
+      "category": "REPO_ONLY",
+      "destinations": [
+        {
+          "scope": "repo",
+          "path": "maintainer-contracts/shared-release-checklist.md",
+          "operation": "move",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "c31b8ea230a964f198bc3ee93f2f1e87725e8c6c9298c28c0b6fa2e309b0e7f8",
+          "migration_size_bytes": 9389,
+          "migration_line_count": 84,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-request-field-preservation.md",
+      "source_basename": "shared-request-field-preservation.md",
+      "source_sha256": "0db1edcfdb157244691d2907ed3f0483a0fb611150f6c7c97e03169f92c6f5ea",
+      "source_size_bytes": 5880,
+      "source_line_count": 137,
+      "category": "SPLIT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/shared-request-field-preservation.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "0db1edcfdb157244691d2907ed3f0483a0fb611150f6c7c97e03169f92c6f5ea",
+          "migration_size_bytes": 5880,
+          "migration_line_count": 137,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "目录",
+              "source_line": 9
+            },
+            {
+              "level": 2,
+              "heading": "核心原则",
+              "source_line": 22
+            },
+            {
+              "level": 2,
+              "heading": "高风险字段",
+              "source_line": 28
+            },
+            {
+              "level": 2,
+              "heading": "允许生成的条件",
+              "source_line": 41
+            },
+            {
+              "level": 2,
+              "heading": "推荐 Java 形态",
+              "source_line": 51
+            },
+            {
+              "level": 2,
+              "heading": "禁止 Java 形态",
+              "source_line": 72
+            },
+            {
+              "level": 2,
+              "heading": "推荐 PHP 形态",
+              "source_line": 81
+            },
+            {
+              "level": 2,
+              "heading": "禁止 PHP 形态",
+              "source_line": 92
+            },
+            {
+              "level": 2,
+              "heading": "推荐 Python 形态",
+              "source_line": 103
+            },
+            {
+              "level": 2,
+              "heading": "禁止 Python 形态",
+              "source_line": 112
+            },
+            {
+              "level": 2,
+              "heading": "生成代码时的判断顺序",
+              "source_line": 123
+            },
+            {
+              "level": 2,
+              "heading": "相关文档",
+              "source_line": 130
+            }
+          ]
+        },
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/shared-request-field-preservation.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "9dbec9f9f71caf2c304be88e7b929a02a65ee79ca7b6feaf429e89e8620206b4",
+          "migration_size_bytes": 1104,
+          "migration_line_count": 27,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "核心原则",
+              "source_line": 3
+            },
+            {
+              "level": 2,
+              "heading": "高风险字段",
+              "source_line": 7
+            },
+            {
+              "level": 2,
+              "heading": "生成条件",
+              "source_line": 18
+            },
+            {
+              "level": 2,
+              "heading": "相关文档",
+              "source_line": 25
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "目录",
+          "source_line": 9
+        },
+        {
+          "level": 2,
+          "heading": "核心原则",
+          "source_line": 22
+        },
+        {
+          "level": 2,
+          "heading": "高风险字段",
+          "source_line": 28
+        },
+        {
+          "level": 2,
+          "heading": "允许生成的条件",
+          "source_line": 41
+        },
+        {
+          "level": 2,
+          "heading": "推荐 Java 形态",
+          "source_line": 51
+        },
+        {
+          "level": 2,
+          "heading": "禁止 Java 形态",
+          "source_line": 72
+        },
+        {
+          "level": 2,
+          "heading": "推荐 PHP 形态",
+          "source_line": 81
+        },
+        {
+          "level": 2,
+          "heading": "禁止 PHP 形态",
+          "source_line": 92
+        },
+        {
+          "level": 2,
+          "heading": "推荐 Python 形态",
+          "source_line": 103
+        },
+        {
+          "level": 2,
+          "heading": "禁止 Python 形态",
+          "source_line": 112
+        },
+        {
+          "level": 2,
+          "heading": "生成代码时的判断顺序",
+          "source_line": 123
+        },
+        {
+          "level": 2,
+          "heading": "相关文档",
+          "source_line": 130
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-request-header-policy.md",
+      "source_basename": "shared-request-header-policy.md",
+      "source_sha256": "05d9a70d0597bd100834d43b11c42eacef56b3d65e46e2c8e878a0d545e4d651",
+      "source_size_bytes": 11252,
+      "source_line_count": 197,
+      "category": "SPLIT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/shared-request-header-policy.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "a062c2fb24388add24676e2095ac14e786f554408e4a944298068c466fa1224d",
+          "migration_size_bytes": 9238,
+          "migration_line_count": 185,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "目录",
+              "source_line": 5
+            },
+            {
+              "level": 2,
+              "heading": "核心规则",
+              "source_line": 15
+            },
+            {
+              "level": 2,
+              "heading": "Java、PHP 与 Python 的确认结论",
+              "source_line": 31
+            },
+            {
+              "level": 2,
+              "heading": "托管支付请求头",
+              "source_line": 44
+            },
+            {
+              "level": 2,
+              "heading": "聚合支付请求头",
+              "source_line": 87
+            },
+            {
+              "level": 2,
+              "heading": "脚本语言约束",
+              "source_line": 137
+            },
+            {
+              "level": 3,
+              "heading": "PHP 官方 SDK 路径",
+              "source_line": 141
+            },
+            {
+              "level": 3,
+              "heading": "Python 官方 SDK 路径",
+              "source_line": 150
+            },
+            {
+              "level": 3,
+              "heading": "其他脚本语言或非官方调用路径",
+              "source_line": 160
+            },
+            {
+              "level": 2,
+              "heading": "常规 HTTP 与报文约束",
+              "source_line": 166
+            },
+            {
+              "level": 2,
+              "heading": "明确禁止",
+              "source_line": 176
+            }
+          ]
+        },
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/shared-request-header-policy.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "359800aa819afdd76b8cff86607ea6a08a81b7f782191224ca95cf992e8cee00",
+          "migration_size_bytes": 1530,
+          "migration_line_count": 37,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "核心规则",
+              "source_line": 3
+            },
+            {
+              "level": 2,
+              "heading": "Java",
+              "source_line": 13
+            },
+            {
+              "level": 2,
+              "heading": "PHP",
+              "source_line": 20
+            },
+            {
+              "level": 2,
+              "heading": "Python",
+              "source_line": 26
+            },
+            {
+              "level": 2,
+              "heading": "明确禁止",
+              "source_line": 32
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "目录",
+          "source_line": 5
+        },
+        {
+          "level": 2,
+          "heading": "核心规则",
+          "source_line": 15
+        },
+        {
+          "level": 2,
+          "heading": "Java、PHP 与 Python 的确认结论",
+          "source_line": 31
+        },
+        {
+          "level": 2,
+          "heading": "托管支付请求头",
+          "source_line": 49
+        },
+        {
+          "level": 2,
+          "heading": "聚合支付请求头",
+          "source_line": 92
+        },
+        {
+          "level": 2,
+          "heading": "脚本语言约束",
+          "source_line": 142
+        },
+        {
+          "level": 3,
+          "heading": "PHP 官方 SDK 路径",
+          "source_line": 146
+        },
+        {
+          "level": 3,
+          "heading": "Python 官方 SDK 路径",
+          "source_line": 155
+        },
+        {
+          "level": 3,
+          "heading": "其他脚本语言或非官方调用路径",
+          "source_line": 165
+        },
+        {
+          "level": 2,
+          "heading": "常规 HTTP 与报文约束",
+          "source_line": 171
+        },
+        {
+          "level": 2,
+          "heading": "商户进件例外",
+          "source_line": 181
+        },
+        {
+          "level": 2,
+          "heading": "明确禁止",
+          "source_line": 187
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-server-sdk-matrix.md",
+      "source_basename": "shared-server-sdk-matrix.md",
+      "source_sha256": "86201ef60080ac29a3b2a7185ba08490283809b03814c8d8152de102245ed3e0",
+      "source_size_bytes": 12277,
+      "source_line_count": 171,
+      "category": "SPLIT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/shared-server-sdk-matrix.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "ac43ecbc602c10e3bfa5eebcd9711c2351c1240b120d093da69ad36b55d17fa0",
+          "migration_size_bytes": 9037,
+          "migration_line_count": 154,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "目录",
+              "source_line": 5
+            },
+            {
+              "level": 2,
+              "heading": "官方语言支持概览",
+              "source_line": 16
+            },
+            {
+              "level": 2,
+              "heading": "当前 Skill 包的真实覆盖范围",
+              "source_line": 26
+            },
+            {
+              "level": 2,
+              "heading": "新增接口 SDK 兼容性",
+              "source_line": 37
+            },
+            {
+              "level": 2,
+              "heading": "当前版本口径",
+              "source_line": 46
+            },
+            {
+              "level": 2,
+              "heading": "PHP 默认落地方式",
+              "source_line": 56
+            },
+            {
+              "level": 2,
+              "heading": "Python 默认落地方式",
+              "source_line": 102
+            },
+            {
+              "level": 2,
+              "heading": "读法建议",
+              "source_line": 132
+            },
+            {
+              "level": 2,
+              "heading": "语言边界提醒",
+              "source_line": 144
+            }
+          ]
+        },
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/shared-server-sdk-matrix.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "a607388ea4f5d1ef8bddfcd7d4aacd72d4282c07420a23d16312885ef2d4a295",
+          "migration_size_bytes": 2232,
+          "migration_line_count": 51,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "目录",
+              "source_line": 3
+            },
+            {
+              "level": 2,
+              "heading": "版本基线",
+              "source_line": 10
+            },
+            {
+              "level": 2,
+              "heading": "五个 JSON 接口",
+              "source_line": 18
+            },
+            {
+              "level": 2,
+              "heading": "图片上传",
+              "source_line": 35
+            },
+            {
+              "level": 2,
+              "heading": "语言边界",
+              "source_line": 45
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "目录",
+          "source_line": 5
+        },
+        {
+          "level": 2,
+          "heading": "官方语言支持概览",
+          "source_line": 17
+        },
+        {
+          "level": 2,
+          "heading": "当前 Skill 包的真实覆盖范围",
+          "source_line": 27
+        },
+        {
+          "level": 2,
+          "heading": "新增接口 SDK 兼容性",
+          "source_line": 38
+        },
+        {
+          "level": 2,
+          "heading": "商户进件 SDK 证据",
+          "source_line": 47
+        },
+        {
+          "level": 2,
+          "heading": "当前版本口径",
+          "source_line": 63
+        },
+        {
+          "level": 2,
+          "heading": "PHP 默认落地方式",
+          "source_line": 73
+        },
+        {
+          "level": 2,
+          "heading": "Python 默认落地方式",
+          "source_line": 119
+        },
+        {
+          "level": 2,
+          "heading": "读法建议",
+          "source_line": 149
+        },
+        {
+          "level": 2,
+          "heading": "语言边界提醒",
+          "source_line": 161
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-signing-v2.md",
+      "source_basename": "shared-signing-v2.md",
+      "source_sha256": "53e9de555c51203e3d2a4f795250077f5df15b6ad889d1ac15fd7d2fb719a27c",
+      "source_size_bytes": 3090,
+      "source_line_count": 88,
+      "category": "SPLIT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/shared-signing-v2.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "d9901c96eb6a752a2b519de7bb85f892891fc93e260eb2cc0854b97046261a03",
+          "migration_size_bytes": 2615,
+          "migration_line_count": 84,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "适用方式",
+              "source_line": 5
+            },
+            {
+              "level": 2,
+              "heading": "请求外层结构",
+              "source_line": 11
+            },
+            {
+              "level": 2,
+              "heading": "请求签名规则",
+              "source_line": 28
+            },
+            {
+              "level": 2,
+              "heading": "同步返回验签",
+              "source_line": 37
+            },
+            {
+              "level": 2,
+              "heading": "异步回调验签",
+              "source_line": 43
+            },
+            {
+              "level": 2,
+              "heading": "与控台 Webhook 的边界",
+              "source_line": 49
+            },
+            {
+              "level": 2,
+              "heading": "建模规则",
+              "source_line": 57
+            },
+            {
+              "level": 2,
+              "heading": "在当前 Skill 包里的落地位置",
+              "source_line": 71
+            },
+            {
+              "level": 2,
+              "heading": "不应该混进来的内容",
+              "source_line": 78
+            }
+          ]
+        },
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/shared-signing-v2.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "95008c22384f596ab9d76e79fd0ca4191c7e1cca719314d4925080806c6e824f",
+          "migration_size_bytes": 1075,
+          "migration_line_count": 24,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "JSON 接口",
+              "source_line": 3
+            },
+            {
+              "level": 2,
+              "heading": "图片例外",
+              "source_line": 10
+            },
+            {
+              "level": 2,
+              "heading": "通知例外",
+              "source_line": 16
+            },
+            {
+              "level": 2,
+              "heading": "禁止",
+              "source_line": 20
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "适用方式",
+          "source_line": 5
+        },
+        {
+          "level": 2,
+          "heading": "请求外层结构",
+          "source_line": 11
+        },
+        {
+          "level": 2,
+          "heading": "请求签名规则",
+          "source_line": 28
+        },
+        {
+          "level": 2,
+          "heading": "同步返回验签",
+          "source_line": 37
+        },
+        {
+          "level": 2,
+          "heading": "异步回调验签",
+          "source_line": 43
+        },
+        {
+          "level": 2,
+          "heading": "与控台 Webhook 的边界",
+          "source_line": 49
+        },
+        {
+          "level": 2,
+          "heading": "商户进件例外",
+          "source_line": 57
+        },
+        {
+          "level": 2,
+          "heading": "建模规则",
+          "source_line": 61
+        },
+        {
+          "level": 2,
+          "heading": "在当前 Skill 包里的落地位置",
+          "source_line": 75
+        },
+        {
+          "level": 2,
+          "heading": "不应该混进来的内容",
+          "source_line": 82
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-versioning-policy.md",
+      "source_basename": "shared-versioning-policy.md",
+      "source_sha256": "9de89861fc2dc45f44beddecf3b4d8ce1d1d17a60652a58f3b8f89baf4aa4e1b",
+      "source_size_bytes": 3262,
+      "source_line_count": 61,
+      "category": "REPO_ONLY",
+      "destinations": [
+        {
+          "scope": "repo",
+          "path": "maintainer-contracts/shared-versioning-policy.md",
+          "operation": "move",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "9de89861fc2dc45f44beddecf3b4d8ce1d1d17a60652a58f3b8f89baf4aa4e1b",
+          "migration_size_bytes": 3262,
+          "migration_line_count": 61,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-webhook-signing.md",
+      "source_basename": "shared-webhook-signing.md",
+      "source_sha256": "3f4769c2a7fe430c1247cfc5d1bb81823ebc96eadeb709376be29f93ec33cb79",
+      "source_size_bytes": 3122,
+      "source_line_count": 66,
+      "category": "KEEP",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/shared-webhook-signing.md",
+          "operation": "keep",
+          "expect_byte_identical": true,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "3f4769c2a7fe430c1247cfc5d1bb81823ebc96eadeb709376be29f93ec33cb79",
+          "migration_size_bytes": 3122,
+          "migration_line_count": 66,
+          "migration_headings": []
+        }
+      ],
+      "source_headings": [],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/skill-version-policy.md",
+      "source_basename": "skill-version-policy.md",
+      "source_sha256": "34d8a9fcf6ca8fdaec39b006cc63cbbf57ee0b649db7f38695a2a506b13aa7ba",
+      "source_size_bytes": 4490,
+      "source_line_count": 67,
+      "category": "SPLIT",
+      "destinations": [
+        {
+          "scope": "payment",
+          "path": "huifu-pay-integration/references/skill-version-policy.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "70bcf1cb7c2dcd2d576fc80c4b3532a58910a89ac47b7d7ddc30b652ed547691",
+          "migration_size_bytes": 856,
+          "migration_line_count": 18,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "当前版本",
+              "source_line": 3
+            },
+            {
+              "level": 2,
+              "heading": "更新方式",
+              "source_line": 12
+            }
+          ]
+        },
+        {
+          "scope": "onboarding",
+          "path": "huifu-merchant-onboarding/references/skill-version-policy.md",
+          "operation": "split",
+          "expect_byte_identical": false,
+          "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+          "migration_sha256": "94d132c558a0dd3835bc197a92a0b89d5dc830d6ef525f73ab2dadd3e1b86673",
+          "migration_size_bytes": 800,
+          "migration_line_count": 18,
+          "migration_headings": [
+            {
+              "level": 2,
+              "heading": "当前版本",
+              "source_line": 3
+            },
+            {
+              "level": 2,
+              "heading": "更新方式",
+              "source_line": 12
+            }
+          ]
+        }
+      ],
+      "source_headings": [
+        {
+          "level": 2,
+          "heading": "什么时候读取",
+          "source_line": 5
+        },
+        {
+          "level": 2,
+          "heading": "当前版本卡",
+          "source_line": 14
+        },
+        {
+          "level": 2,
+          "heading": "用户如何更新",
+          "source_line": 26
+        },
+        {
+          "level": 2,
+          "heading": "什么时候提示升级",
+          "source_line": 39
+        },
+        {
+          "level": 2,
+          "heading": "输出规则",
+          "source_line": 47
+        },
+        {
+          "level": 2,
+          "heading": "推荐短句",
+          "source_line": 59
+        }
+      ],
+      "cross_skill_link_allowed": false,
+      "status": "completed"
+    }
+  ]
+}

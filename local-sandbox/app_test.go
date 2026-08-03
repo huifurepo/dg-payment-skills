@@ -73,7 +73,7 @@ func TestFrozenReferenceEvidenceUsesVersionedReportContract(t *testing.T) {
 	}
 }
 
-func TestContractCoverageIsFrozenSnapshotOfSkillReferences(t *testing.T) {
+func TestContractCoverageIsBoundToFrozenSkillVersion(t *testing.T) {
 	bundle, err := loadContractBundle()
 	if err != nil {
 		t.Fatal(err)
@@ -82,15 +82,11 @@ func TestContractCoverageIsFrozenSnapshotOfSkillReferences(t *testing.T) {
 	if len(problems) > 0 {
 		t.Fatalf("contract bundle has problems: %v", problems)
 	}
-
-	expected := map[string]bool{}
-	for _, name := range readExpectedReferences(t) {
-		expected[name] = true
+	if bundle.References.SourceSkillVersion != skillVersion {
+		t.Fatalf("reference coverage source version = %s, want frozen %s", bundle.References.SourceSkillVersion, skillVersion)
 	}
-	for name := range bundle.References.References {
-		if !expected[name] {
-			t.Fatalf("frozen contract reference %s is no longer declared by the Skill", name)
-		}
+	if bundle.ReferenceDigests.SourceSkillVersion != skillVersion {
+		t.Fatalf("reference digest source version = %s, want frozen %s", bundle.ReferenceDigests.SourceSkillVersion, skillVersion)
 	}
 }
 
@@ -3784,34 +3780,6 @@ func assertNoTopLevelRespCode(t *testing.T, resp SignedResponse) {
 	if _, ok := top["sign"]; !ok {
 		t.Fatal("sign missing at top level")
 	}
-}
-
-func readExpectedReferences(t *testing.T) []string {
-	t.Helper()
-	b, err := os.ReadFile(filepath.Join("..", "scripts", "skill_validation_config.py"))
-	if err != nil {
-		t.Fatal(err)
-	}
-	text := string(b)
-	start := strings.Index(text, "EXPECTED_REFERENCES = {")
-	if start < 0 {
-		t.Fatal("EXPECTED_REFERENCES not found")
-	}
-	end := strings.Index(text[start:], "}\nALLOWED_TOP_LEVEL_KEYS")
-	if end < 0 {
-		t.Fatal("EXPECTED_REFERENCES end not found")
-	}
-	block := text[start : start+end]
-	re := regexp.MustCompile(`"([^"]+\.md)"`)
-	matches := re.FindAllStringSubmatch(block, -1)
-	var out []string
-	for _, match := range matches {
-		out = append(out, match[1])
-	}
-	if len(out) == 0 {
-		t.Fatal("no references parsed")
-	}
-	return out
 }
 
 func containsProblem(problems []string, want string) bool {

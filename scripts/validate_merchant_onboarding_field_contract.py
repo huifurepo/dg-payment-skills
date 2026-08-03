@@ -5,10 +5,28 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+from skill_validation_config import onboarding_source_date, onboarding_source_dir
+
 
 ROOT = Path(__file__).resolve().parent.parent
-CONTRACT = ROOT / "huifu-pay-integration/references/merchant-onboarding-field-contracts.md"
-EXTERNAL_RESOURCES = ROOT / "huifu-pay-integration/references/merchant-onboarding-external-resources.md"
+CONTRACT = ROOT / "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md"
+EXTERNAL_RESOURCES = ROOT / "huifu-merchant-onboarding/references/merchant-onboarding-external-resources.md"
+CATALOG = ROOT / "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md"
+HEADER_POLICY = ROOT / "huifu-merchant-onboarding/references/shared-request-header-policy.md"
+ONBOARDING_SKILL = ROOT / "huifu-merchant-onboarding/SKILL.md"
+OFFICIAL_SOURCES = onboarding_source_dir()
+SOURCE_DATE_FILES = {
+    "enterprise": "enterprise.md",
+    "individual": "individual.md",
+    "business_open": "business-open.md",
+    "detail_query": "detail-query.md",
+    "status_query": "status-query.md",
+    "business_open_modify": "business-open-modify.md",
+    "basic_info_modify": "basic-info-modify.md",
+    "rate_query": "rate-query.md",
+    "status_change": "status-change.md",
+    "sms_send": "sms-send.md",
+}
 
 EXTERNAL_RESOURCE_REQUIRED = (
     "外部资料提示",
@@ -35,6 +53,10 @@ EXTERNAL_RESOURCE_REQUIRED = (
     "原址不在 Skill 中复述",
     "response.data.qry_wx_conf_list[].pay_scene",
     "response.data.wx_conf_result_list[].pay_scene",
+    "response.data.wx_fee_rate_list[].pay_scene",
+    "request.data.material_card_info.prov_id/area_id",
+    "request.data.material_card_info.branch_code",
+    "十个 Markdown JSON 接口顶层 `sign`（不含图片上传）",
 )
 
 EXTERNAL_RESOURCE_FORBIDDEN = (
@@ -48,7 +70,8 @@ REQUIRED = {
     "individual": ("个人商户进件", "req_seq_id String(32) Y", "mcc String(7) Y", "settle_card_front_pic String(64) Y", "head_huifu_id String(18) C", "`bank_code`", "`cert_begin_date`"),
     "business": (
         "商户业务开通",
-        "huifu_id/upper_huifu_id String(18) Y",
+        "huifu_id String(18) Y",
+        "upper_huifu_id String(18) C",
         "agreement_info String(JSON Object) C",
         "agreement_info.agreement_async_return_url",
         "busi_async_return_url String(128) N",
@@ -75,9 +98,35 @@ REQUIRED = {
         "详情响应 `sms_send_flag=Y/N`",
     ),
     "status": ("申请单状态查询", "apply_no String(18) Y", "data.apply_status", "data.reg_status", "bank_card_conf_status", "bind_card_status", "cash_status", "settle_status", "union_conf_status", "out_order_funds_status", "均为 `String(1)`：`P/S/F`", "`P=处理中`、`S=成功`、`F=失败`", "data.wx_zl_config.apply_state", "`String(32)`：`S/P/N/F/C`", "data.ali_zl_config[].apply_status"),
-    "callbacks": ("reg_result_list[].business_stat", "zl_async_info.apply_state", "agreement_info_list[].con_stat", "ord_id:String(44)", "RECV_ORD_ID_", "[需要官方确认]", "逐业务通知外层包装待官方样本确认"),
-    "headers": ("jpt-x-skill-source: <skill_source>", "jpt-x-skill-huifu_id: <data.huifu_id>", "Java、PHP、Python SDK 主链路"),
-    "java-security": ("五个 JSON 接口和图片 `file_url` 模式", "公共 `AbstractRequest`", "`BasePay.debug` 默认为 `true`", "BasePay.debug = false;", "任何 SDK 请求之前", "不得在并发请求中临时切换", "五个 JSON 接口保留请求签名和响应验签", "图片 `file_url` 必须使用 `isPage=true`", "保留请求签名但跳过响应验签"),
+    "business-modify": ("商户业务开通修改", "req_seq_id String(32) Y", "huifu_id String(18) Y", "50 组嵌套配置", "async.business.ord_id", "async.business.reg_result_list[]", "`josnArray`", "禁止采用该示例"),
+    "basic-modify": ("商户基本信息修改", "upper_huifu_id String(18) C", "资料对象和条件", "审核异步", "基本信息修改 `data.card_info.area_id`", "`String(8) Y`"),
+    "rate-query": ("商户费率信息查询", "fee_rate_type String N", "响应 `huifu_id:String(18) Y`", "[官方文档口径冲突]", "没有专属 Request 类"),
+    "status-change": ("商户状态变更", "upd_status_reason String(512) Y", "官方多行注释中的 `file_list` 已废弃", "仅字符串 `1/0`"),
+    "sms-send": ("商户短信发送", "verify_type String Y", "phone/operation_type/verify_code/elec_acct_sign_seq_id", "C 条件"),
+    "callbacks": ("reg_result_list[].business_stat", "zl_async_info.apply_state", "async.agreement.agreement_info_list.con_stat", "没有 `Array/jsonArray`", "ord_id:String(44)", "RECV_ORD_ID_", "[需要官方确认]", "逐业务通知外层包装待官方样本确认"),
+    "headers": ("jpt-x-skill-source: <skill_source>", "jpt-x-skill-huifu_id: <data.huifu_id>", "Java、PHP、Python SDK 主链路", "hfms/1.0.0", "hfps/1.3.3;hfms/1.0.0"),
+    "same-leaf-paths": (
+        "不得按叶字段名去重",
+        "request.data.prov_id",
+        "request.data.area_id",
+        "request.data.card_info.prov_id",
+        "request.data.card_info.area_id",
+        "request.data.elec_acct_config.elec_card_list[].prov_id",
+        "request.data.elec_acct_config.elec_card_list[].area_id",
+        "不能跨接口复用长度",
+    ),
+    "java-security": ("九个已有专属 Request 类的 JSON 接口", "公共 `AbstractRequest`", "`BasePay.debug` 默认为 `true`", "BasePay.debug = false;", "任何 SDK 请求之前", "不得在并发请求中临时切换", "保留请求签名和响应验签", "图片 `file_url` 必须使用 `isPage=true`", "保留请求签名但跳过响应验签"),
+    "source-refresh": (
+        onboarding_source_date(),
+        "official-service-source-index.md",
+        "允许增量的机器门禁保存在维护仓库",
+        "upper_huifu_id",
+        "scene_type",
+        "material_card_info",
+        "sys_id",
+        "渠道商",
+        "总部商户",
+    ),
 }
 
 ATOMIC_PAGES = (
@@ -98,12 +147,12 @@ ATOMIC_HEADER_TERMS = (
     "外部资料提示",
 )
 ATOMIC_CONTRACT_TERMS = {
-    "merchant-onboarding-enterprise.md": ("sign:String(2048) Y", "data.audit_status", "`Y/N/F`", "SDK 兼容性告警", "不单独阻断", "不得询问客户", "成功 ACK", "`data.async_return_url:String(120) N`", "禁止使用 `notify_url`"),
-    "merchant-onboarding-individual.md": ("sign:String(512) N", "data.audit_status", "`Y/N/F`", "SDK 兼容性告警", "不单独阻断", "不得询问客户", "成功 ACK", "`data.async_return_url:String(120) N`", "禁止使用 `notify_url`"),
+    "merchant-onboarding-enterprise.md": ("sign:String(2048) Y", "data.audit_status", "`Y/N/F`", "SDK 兼容性告警", "不单独阻断", "不得询问客户", "成功 ACK", "`data.async_return_url:String(120) N`", "禁止使用 `notify_url`", "`data.prov_id/area_id`", "`data.card_info.prov_id/area_id`", "`data.material_card_info.prov_id/area_id`", "`data.material_card_info:String(JSON Object) N`", "以说明列“jsonObject字符串”为 wire 依据", "不能传普通嵌套 Object", "不能按叶字段名合并", "`String(64) C`", "`scene_type` 含线下场景时必填"),
+    "merchant-onboarding-individual.md": ("sign:String(512) N", "data.audit_status", "`Y/N/F`", "SDK 兼容性告警", "不单独阻断", "不得询问客户", "成功 ACK", "`data.async_return_url:String(120) N`", "禁止使用 `notify_url`", "`data.prov_id/area_id`", "`data.card_info.prov_id/area_id`", "不得按 `prov_id/area_id` 叶字段名去重", "`String(64) C`", "`scene_type` 含线下场景时必填"),
     "merchant-onboarding-business-open.md": (
-        "reg_result_list[].business_stat",
-        "zl_async_info.apply_state",
-        "agreement_info_list[].con_stat",
+        "async.business.reg_result_list[].business_stat",
+        "async.business.zl_async_info.apply_state",
+        "async.agreement.agreement_info_list.con_stat",
         "`data.online_flag/quick_flag/withhold_flag`",
         "仅字符串 `Y/N`",
         "默认 `2`",
@@ -112,8 +161,51 @@ ATOMIC_CONTRACT_TERMS = {
         "不得统一填 `1`",
     ),
     "merchant-onboarding-image-upload.md": ("发送空的 `jpt-x-skill-huifu_id`", "SDK 兼容性提示", "不单独阻断", "不得询问客户", "DGTools.request_post", "file_url", "顶层 `file`", "不支持填写“企业商户进件”或“个人商户进件”接口返回的用户号"),
-    "merchant-onboarding-detail-query.md": ("req_seq_id:String(32)", "req_date:String(8)", "huifu_id:String(18)", "`1=开通`、`0=未开通`、空=未配置", "禁止把查询响应直接复制为开通请求", "`service_phone` 标为 `String(11)`"),
+    "merchant-onboarding-detail-query.md": ("559 个具名路径", "req_seq_id:String(32)", "req_date:String(8)", "huifu_id:String(18)", "`1=开通`、`0=未开通`、空=未配置", "禁止把查询响应直接复制为开通请求", "`service_phone` 标为 `String(11)`", "`response.data.material_card_info:String(JSON Object) N`", "以说明列“jsonObject字符串”为 wire 依据", "`card_type/card_name/card_no/prov_id/area_id/branch_code`"),
     "merchant-onboarding-application-status-query.md": ("data.bank_card_conf_status:String(1)", "data.bind_card_status:String(1)", "data.cash_status:String(1)", "data.settle_status:String(1)", "data.union_conf_status:String(1)", "data.out_order_funds_status:String(1)", "`P=处理中`、`S=成功`、`F=失败`", "data.wx_zl_config.apply_state:String(32)", "data.ali_zl_config[].apply_status:String(1)", "data.agreement_info_list[].con_stat:String(2)", "`wx_config_list[].config_type`", "页面内部不一致"),
+}
+NEW_ATOMIC_CONTRACT_TERMS = {
+    "merchant-onboarding-business-open-modify.md": (
+        "434 个节点",
+        "请求 372、同步响应 6、异步通知 56",
+        "V2MerchantBusiModifyRequest",
+        "async.business.ord_id:String(44)",
+        "async.business.reg_result_list[]",
+        "async.agreement.agreement_info_list.con_stat",
+        "[官方文档口径冲突]",
+        "RECV_ORD_ID_",
+    ),
+    "merchant-onboarding-basic-info-modify.md": (
+        "199 个节点",
+        "请求 164、同步响应 7、异步通知 28",
+        "V2MerchantBasicdataModifyRequest",
+        "async.agreement.agreement_info_list.con_stat",
+        "不能把同步响应成功解释为",
+        "`data.prov_id/area_id`",
+        "`data.card_info.prov_id/area_id`",
+        "`String(8) Y`",
+    ),
+    "merchant-onboarding-rate-query.md": (
+        "35 个节点",
+        "请求 8、同步响应 27、无异步通知",
+        "[官方文档口径冲突]",
+        "request.data.huifu_id",
+        "response.data.huifu_id",
+        "32/18",
+        "未找到 `/v2/merchant/fee-rate/query` 的专属 Request 类",
+    ),
+    "merchant-onboarding-status-change.md": (
+        "14 个节点",
+        "请求 9、同步响应 5、无异步通知",
+        "V2MerchantBusiModifyBusistatusRequest",
+        "禁止生成 `request.data.file_list`",
+    ),
+    "merchant-onboarding-sms-send.md": (
+        "20 个节点",
+        "请求 12、同步响应 8、无异步通知",
+        "V2MerchantBasicdataSmsSendRequest",
+        "data.verify_code:String(6) C",
+    ),
 }
 FORBIDDEN = (
     "| 逐业务通知 `business_stat` |",
@@ -126,7 +218,7 @@ TOP_LEVEL_FIELDS = {
     "enterprise": (
         "### 企业进件 `data`",
         "### 个人进件 `data`",
-        "req_seq_id req_date upper_huifu_id reg_name short_name receipt_name mer_en_name ent_type mcc busi_type scene_type license_pic license_code license_type license_validity_type license_begin_date license_end_date found_date reg_capital business_scope reg_prov_id reg_area_id reg_district_id reg_detail prov_id area_id district_id detail_addr legal_name legal_cert_type legal_cert_no legal_cert_validity_type legal_cert_begin_date legal_cert_end_date legal_mobile_no legal_addr legal_cert_back_pic legal_cert_front_pic beneficiary_info contact_name contact_mobile_no contact_email sms_send_flag login_name service_phone reg_acct_pic card_info settle_config settle_card_front_pic settle_cert_back_pic settle_cert_front_pic auth_entrust_pic cash_config head_office_flag use_head_info_flag head_huifu_id mer_url mer_icp store_header_pic store_indoor_pic store_cashier_desk_pic ext_mer_id remarks async_return_url elec_acct_config share_holder_info_list extended_material_list activated_products",
+        "req_seq_id req_date upper_huifu_id reg_name short_name receipt_name mer_en_name ent_type mcc busi_type scene_type license_pic license_code license_type license_validity_type license_begin_date license_end_date found_date reg_capital business_scope reg_prov_id reg_area_id reg_district_id reg_detail prov_id area_id district_id detail_addr legal_name legal_cert_type legal_cert_no legal_cert_validity_type legal_cert_begin_date legal_cert_end_date legal_mobile_no legal_addr legal_cert_back_pic legal_cert_front_pic beneficiary_info contact_name contact_mobile_no contact_email sms_send_flag login_name service_phone reg_acct_pic card_info settle_config settle_card_front_pic settle_cert_back_pic settle_cert_front_pic auth_entrust_pic cash_config head_office_flag use_head_info_flag head_huifu_id mer_url mer_icp store_header_pic store_indoor_pic store_cashier_desk_pic ext_mer_id remarks async_return_url elec_acct_config share_holder_info_list extended_material_list activated_products material_card_info",
     ),
     "individual": (
         "### 个人进件 `data`",
@@ -198,10 +290,106 @@ def declared_card_fields(text: str, start: str, end: str) -> dict[str, str]:
     return fields
 
 
+def locked_source_update_dates() -> dict[str, str]:
+    dates: dict[str, str] = {}
+    for key, filename in SOURCE_DATE_FILES.items():
+        source = OFFICIAL_SOURCES / filename
+        match = re.search(
+            r"最近更新时间：(\d{4})\.(\d{1,2})\.(\d{1,2})",
+            source.read_text(encoding="utf-8"),
+        )
+        if match is None:
+            raise ValueError(f"{filename}: locked source update date is missing")
+        year, month, day = match.groups()
+        dates[key] = f"{year}-{int(month):02d}-{int(day):02d}"
+    return dates
+
+
 def main() -> int:
     text = CONTRACT.read_text(encoding="utf-8") if CONTRACT.is_file() else ""
     external_text = EXTERNAL_RESOURCES.read_text(encoding="utf-8") if EXTERNAL_RESOURCES.is_file() else ""
+    catalog_text = CATALOG.read_text(encoding="utf-8") if CATALOG.is_file() else ""
+    header_text = HEADER_POLICY.read_text(encoding="utf-8") if HEADER_POLICY.is_file() else ""
+    skill_text = ONBOARDING_SKILL.read_text(encoding="utf-8") if ONBOARDING_SKILL.is_file() else ""
     missing = [f"{section}: {term}" for section, terms in REQUIRED.items() for term in terms if term not in text]
+    for term in (
+        "仅 `huifu-merchant-onboarding 1.0.0`",
+        "`hfms/1.0.0`",
+        "`hfps/1.3.3;hfms/1.0.0`",
+        "顺序固定为支付、进件",
+        "英文分号且不加空格",
+        "显式提供经确认的合同值时原样透传",
+    ):
+        if term not in header_text:
+            missing.append(f"shared-request-header-policy.md: {term}")
+    for term in (
+        "`request.data.prov_id/area_id`",
+        "`request.data.card_info.prov_id/area_id`",
+        "`request.data.material_card_info.prov_id/area_id`",
+        "request/response wire 均按 String(JSON Object)",
+        "1,218 个请求、713 个同步响应和 180 个通知节点",
+        "`hfms/1.0.0`",
+        "`hfps/1.3.3;hfms/1.0.0`",
+    ):
+        if term not in skill_text:
+            missing.append(f"SKILL.md: {term}")
+    catalog_path_counts = {
+        "| `request.data.prov_id` |": 3,
+        "| `request.data.area_id` |": 3,
+        "| `request.data.card_info.prov_id` |": 3,
+        "| `request.data.card_info.area_id` |": 3,
+        "| `request.data.material_card_info.prov_id` |": 1,
+        "| `request.data.material_card_info.area_id` |": 1,
+        "| `response.data.material_card_info.prov_id` |": 1,
+        "| `response.data.material_card_info.area_id` |": 1,
+    }
+    for row_prefix, expected_count in catalog_path_counts.items():
+        actual_count = catalog_text.count(row_prefix)
+        if actual_count != expected_count:
+            missing.append(
+                f"complete catalog duplicate-path guard: {row_prefix} "
+                f"expected={expected_count}, actual={actual_count}"
+            )
+    for term in (
+        "不得按叶字段名去重",
+        "`request.data.prov_id/area_id` 是经营省市",
+        "`request.data.card_info.prov_id/area_id` 是结算卡省市",
+        "`request.data.material_card_info.prov_id/area_id`",
+        "基本信息修改的 `card_info.area_id` 长度为 `8`",
+        "企业/个人进件对应路径长度为 `6`",
+        "`response.data.material_card_info.prov_id/area_id`",
+        "四组字段均不得合并",
+    ):
+        if term not in catalog_text:
+            missing.append(f"complete catalog same-leaf guidance: {term}")
+    if (
+        "| `request.data.card_info.area_id` | 银行所在市 | `String` | `8` | `Y` |"
+        not in catalog_text
+    ):
+        missing.append("complete catalog: basic-info-modify card_info.area_id String(8) Y")
+    try:
+        source_dates = locked_source_update_dates()
+    except (OSError, ValueError) as exc:
+        missing.append(str(exc))
+    else:
+        expected_date_clauses = (
+            (
+                "refreshed source dates",
+                "企业、个人和详情页当前记录更新时间仍为 `2026-07-28`",
+                all(source_dates[key] == "2026-07-28" for key in ("enterprise", "individual", "detail_query"))
+                and all(source_dates[key] == "2026-07-27" for key in ("business_open", "basic_info_modify")),
+            ),
+            (
+                "unchanged source count",
+                "其余十页与 `2026-07-28` 快照逐字节一致",
+                True,
+            ),
+        )
+        missing.extend(
+            f"{label}: {clause}"
+            for label, clause, compatible in expected_date_clauses
+            if not compatible or clause not in text
+        )
     missing.extend(
         f"merchant-onboarding-external-resources.md: {term}"
         for term in EXTERNAL_RESOURCE_REQUIRED
@@ -227,6 +415,27 @@ def main() -> int:
         page_text = page.read_text(encoding="utf-8") if page.is_file() else ""
         missing.extend(f"{name}: {term}" for term in ATOMIC_HEADER_TERMS if term not in page_text)
         missing.extend(f"{name}: {term}" for term in ATOMIC_CONTRACT_TERMS[name] if term not in page_text)
+    for name, terms in NEW_ATOMIC_CONTRACT_TERMS.items():
+        page = references / name
+        page_text = page.read_text(encoding="utf-8") if page.is_file() else ""
+        missing.extend(
+            f"{name}: merchant-onboarding-complete-field-catalog.md"
+            for _ in (0,)
+            if "merchant-onboarding-complete-field-catalog.md" not in page_text
+        )
+        missing.extend(f"{name}: {term}" for term in terms if term not in page_text)
+        missing.extend(
+            f"{name}: {term}"
+            for term in (
+                "## 公共请求头",
+                "`jpt-x-skill-source: <skill_source>`",
+                "`hfms/1.0.0`",
+                "`hfps/1.3.3;hfms/1.0.0`",
+                "`jpt-x-skill-huifu_id`",
+                "真实 `data.huifu_id`",
+            )
+            if term not in page_text
+        )
     forbidden_hits = [term for term in FORBIDDEN if term in text]
     if missing or forbidden_hits or forbidden_external_hits:
         print("Merchant-onboarding field-contract validation failed:")

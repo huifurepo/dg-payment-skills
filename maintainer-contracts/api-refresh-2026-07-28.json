@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "refresh_id": "api-refresh-2026-07-28-r2",
+  "requested_at": "2026-07-28",
+  "version_state": {
+    "reason": "A later maintenance request synchronized the Skill package versions with the current source identifiers.",
+    "huifu-pay-integration": "1.3.3",
+    "huifu-merchant-onboarding": "1.0.0"
+  },
+  "source_locks": {
+    "merchant_onboarding": {
+      "path": "maintainer-contracts/merchant-onboarding-source-lock.json",
+      "sha256": "768b74dd227722b38427f8f9a7aac939c6f39333a028ae4d907791400ea45d39"
+    },
+    "payment": {
+      "path": "maintainer-contracts/payment-source-lock.json",
+      "sha256": "99520419703d114e9c639ebd409358a383f427be66057a056483741a3096a147"
+    }
+  },
+  "scope": [
+    "merchant onboarding field requiredness and conditions",
+    "image upload signing evidence conflict",
+    "payment product and SDK language boundaries",
+    "payment Java and PHP security gates",
+    "hosting preorder, reconciliation and close contracts",
+    "Skill routing and completion criteria"
+  ],
+  "frozen_assets_policy": {
+    "preserve": [
+      "local-sandbox/contracts/huifu-pay-integration-1.3.0-r1",
+      "local-sandbox/contracts/huifu-pay-integration-1.3.0-r2",
+      "local-sandbox/contracts/huifu-pay-integration-1.3.0-r3",
+      "local-sandbox/contracts/huifu-pay-integration-1.3.0-r4",
+      "local-sandbox/sample-packs/huifu-pay-integration-1.3.0-r4"
+    ],
+    "rule": "Historical frozen bytes and digests must not be rewritten by this refresh."
+  },
+  "release_rule": "Do not overwrite a prior artifact with the same Skill version; bind any package to refresh_id, source locks and source commit."
+}

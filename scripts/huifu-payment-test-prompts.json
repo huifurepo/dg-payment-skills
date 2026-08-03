@@ -2,376 +2,517 @@
   {
     "id": 1,
     "prompt": "第一次接汇付支付，还没决定走聚合支付还是托管支付。我们是 Java 服务端，后面可能要接 H5 收银台。请用 $huifu-pay-integration 告诉我先读哪些本地文档。",
-    "expected": "先识别这是首次接入、Java 服务端和后续可能 H5 收银台需求，优先路由到 `shared-overview.md`、`copilot-onboarding.md`、`copilot-solution-selection.md`，必要时补 `shared-server-sdk-matrix.md`；不能直接跳到某个字段表或一次性倾倒托管 quickstart。"
+    "expected": "先识别这是首次接入、Java 服务端和后续可能 H5 收银台需求，优先路由到 `shared-overview.md`、`copilot-onboarding.md`、`copilot-solution-selection.md`，必要时补 `shared-server-sdk-matrix.md`；不能直接跳到某个字段表或一次性倾倒托管 quickstart。",
+    "suite": "payment"
   },
   {
     "id": 2,
     "prompt": "我要用 PHP 做聚合支付退款，顺便给我现成模板代码。请用 $huifu-pay-integration 判断我该看什么。",
-    "expected": "必须明确聚合支付 PHP 已支持官方 `huifurepo/dg-php-sdk` 的退款主链路，先路由到 `aggregation-refund.md`、`aggregation-php-adapter.md`、`aggregation-query-php-scenarios.md`，并指出代码入口优先 `BsPaySdk\\\\core\\\\Payment::refund()` / `refundQuery()`；同时提醒初始化时必须给 `MerConfig.skill_source` 赋值，让官方 SDK 自动带出 skill 来源头。"
+    "expected": "必须明确聚合支付 PHP 已支持官方 `huifurepo/dg-php-sdk` 的退款主链路，先路由到 `aggregation-refund.md`、`aggregation-php-adapter.md`、`aggregation-query-php-scenarios.md`，并指出代码入口优先 `BsPaySdk\\\\core\\\\Payment::refund()` / `refundQuery()`；同时提醒初始化时必须给 `MerConfig.skill_source` 赋值，让官方 SDK 自动带出 skill 来源头。由于当前 PHP 2.0.30 关闭 TLS 对端校验，现成可运行模板必须硬停，直到源码确认启用证书链与主机名校验并通过错证书/错域名测试。",
+    "suite": "payment"
   },
   {
     "id": 3,
     "prompt": "我们已经能做托管预下单，现在要在自有 H5 页面接 checkout-js，并且支付完成后要确认最终结果。请用 $huifu-pay-integration 给我阅读顺序。",
-    "expected": "应识别为 checkout 场景，给出 checkout-js、checkout-js-callback-and-confirmation、hostingpay-query、hostingpay-async-webhook 的最小阅读链路，并强调前端回调不等于最终成功。"
+    "expected": "应识别为 checkout 场景，给出 checkout-js、checkout-js-callback-and-confirmation、hostingpay-query、hostingpay-async-webhook 的最小阅读链路，并强调前端回调不等于最终成功。",
+    "suite": "payment"
   },
   {
     "id": 4,
     "prompt": "我们已经完成托管预下单和查单，现在只需要把 checkout-js 接到自有 H5 页面。请用 $huifu-pay-integration 给我阅读顺序。",
-    "expected": "必须识别出初始化、预下单和查单已完成，跳过 hostingpay-quickstart、hostingpay-base、hostingpay-preorder、hostingpay-query 等已完成阶段主文档，直接进入 checkout-js 组件、回调确认和 hostingpay-async-webhook 异步通知链路；如需提及查单，只能作为既有依赖提醒。"
+    "expected": "必须识别出初始化、预下单和查单已完成，跳过 hostingpay-quickstart、hostingpay-base、hostingpay-preorder、hostingpay-query 等已完成阶段主文档，直接进入 checkout-js 组件、回调确认和 hostingpay-async-webhook 异步通知链路；如需提及查单，只能作为既有依赖提醒。",
+    "suite": "payment"
   },
   {
     "id": 5,
-    "prompt": "我在 PHP 里接托管预下单，接口请求头里的 skill_source 应该怎么传？如果请求里已经有 huifu_id，要不要额外补别的头？请用 $huifu-pay-integration 直接告诉我结论和该看哪些文档。",
-    "expected": "必须明确 PHP 侧 `jpt-x-skill-source` 是强制来源请求头，值按 `<skill_source>` 原样透传，不再拼接 `sys_id`；如果当前请求 `data.huifu_id` 已存在且非空，还要额外带 `jpt-x-skill-huifu_id`；并把这两项都定位为 HTTP 请求头而不是业务报文字段。同时要明确当前 Skill 包对齐的官方 `huifurepo/dg-php-sdk` 主链路会在 `MerConfig.skill_source` 已配置时自动带出这两个来源头，而不是默认落到 `HostingClient` 或自写 `curl`。"
+    "prompt": "我在 PHP 里接托管预下单，本次请求只实际加载并使用 $huifu-pay-integration，虽然仓库也安装了进件 Skill，但它没有参与本次生成，而且没有显式配置 skill_source。默认值应该是什么？如果请求里已经有 huifu_id，要不要额外补别的头？初始化时可以直接复用官方 BsPayDemo/loader.php 或 Composer/BsPayConfig.php 吗？请直接告诉我结论和该看哪些文档。",
+    "expected": "必须读取 shared-server-sdk-matrix.md 和 hostingpay-php-adapter.md。必须明确未显式配置且本次仅支付 Skill 实际参与时，`jpt-x-skill-source` 的确定性默认值只能是 `hfps/1.3.3`；仅安装但未参与的进件 Skill 不计入，不能输出双 Skill 组合值。PHP 侧该值经 `MerConfig.skill_source` 进入强制来源请求头，不再拼接 `sys_id`；如果当前请求 `data.huifu_id` 已存在且非空，还要额外带 `jpt-x-skill-huifu_id`，并把两项都定位为 HTTP 请求头而不是业务报文字段。当前 Skill 包对齐的官方 `huifurepo/dg-php-sdk` 主链路会在 `MerConfig.skill_source` 已配置时自动带出这两个来源头，而不是默认落到 `HostingClient` 或自写 `curl`。不得复用会定义 `DEBUG=true` 的官方 BsPayDemo/loader.php 或 Composer/BsPayConfig.php；必须在加载任何 SDK 文件和调用 BsPay::init 前固定 DEBUG=false，否则日志会泄露含 RSA 私钥的 MerConfig、完整请求和响应。",
+    "suite": "payment"
   },
   {
     "id": 6,
     "prompt": "我在 Java 里接汇付支付，MerConfig.setSkillSource 传进去以后，请求头是不是只要 `jpt-x-skill-source` 就行？还要不要补 `jpt-x-skill-huifu_id`？请用 $huifu-pay-integration 直接给结论。",
-    "expected": "必须明确当前 Java SDK 基线会把 `MerConfig.setSkillSource(...)` 的值按 `<skill_source>` 原样透传到 `jpt-x-skill-source`；如果当前请求参数里的 `huifu_id` 已存在且非空，还会自动补 `jpt-x-skill-huifu_id`，且该值必须与本次请求的 `huifu_id` 一致。"
+    "expected": "必须明确当前 Java SDK 基线会把 `MerConfig.setSkillSource(...)` 的值按 `<skill_source>` 原样透传到 `jpt-x-skill-source`；如果当前请求参数里的 `huifu_id` 已存在且非空，还会自动补 `jpt-x-skill-huifu_id`，且该值必须与本次请求的 `huifu_id` 一致。",
+    "suite": "payment"
   },
   {
     "id": 7,
     "prompt": "我要用 PHP 做托管支付 H5 预下单，代码里必须体现官方 phpsdk 落地。请用 $huifu-pay-integration 告诉我该先看什么、代码应该按什么 SDK 方式写。",
-    "expected": "必须把 PHP 路径明确路由到官方 `huifurepo/dg-php-sdk`，推荐 `BsPayClient::postRequest()` 落地；可以用 request 类确定 `funcCode`，但不要默认生成 `HostingClient`、`AggregationClient` 或自写 `curl` 版本。还要指出初始化时必须配置 `MerConfig.skill_source`，让官方 SDK 自动带出 skill 来源头。"
+    "expected": "必须把 PHP 路径明确路由到官方 `huifurepo/dg-php-sdk`，推荐 `BsPayClient::postRequest()` 落地；可以用 request 类确定 `funcCode`，但不要默认生成 `HostingClient`、`AggregationClient` 或自写 `curl` 版本。还要指出初始化时必须配置 `MerConfig.skill_source`，让官方 SDK 自动带出 skill 来源头。",
+    "suite": "payment"
   },
   {
     "id": 8,
     "prompt": "我现在只负责前端页面，领导让我直接把 checkout-js 接上。你不用问我服务端有没有托管预下单和最终查单能力，直接给我最省事的路线。请用 $huifu-pay-integration 处理。",
-    "expected": "必须触发硬检查点。要先明确 `checkout-js` 不能单独成立，继续回答前必须确认服务端是否已经具备托管预下单、异步通知验签/幂等和查单补偿闭环；不能直接假设服务端能力已经齐备。"
+    "expected": "必须触发硬检查点。要先明确 `checkout-js` 不能单独成立，继续回答前必须确认服务端是否已经具备托管预下单、异步通知验签/幂等和查单补偿闭环；不能直接假设服务端能力已经齐备。",
+    "suite": "payment"
   },
   {
     "id": 9,
     "prompt": "我要用 PHP 做聚合支付下单，走支付宝正扫，代码里必须体现官方 phpsdk。请用 $huifu-pay-integration 告诉我先看什么、代码应该按什么 SDK 方式写。",
-    "expected": "必须路由到 `aggregation-order.md`、`aggregation-php-adapter.md`、`aggregation-query-php-scenarios.md`，并明确聚合支付 PHP 下单优先 `BsPaySdk\\\\core\\\\Payment::create()` + `TradePaymentCreateRequest`；不能退回 `BsPayClient::postRequest()` 主链路，也不能生成 `AggregationClient` 或自写 `curl`。"
+    "expected": "必须路由到 `aggregation-order.md`、`aggregation-php-adapter.md`、`aggregation-query-php-scenarios.md`，并明确聚合支付 PHP 下单优先 `BsPaySdk\\\\core\\\\Payment::create()` + `TradePaymentCreateRequest`；不能退回 `BsPayClient::postRequest()` 主链路，也不能生成 `AggregationClient` 或自写 `curl`。",
+    "suite": "payment"
   },
   {
     "id": 10,
     "prompt": "我要用 PHP 做聚合支付查单和关单，代码要体现官方 phpsdk。请用 $huifu-pay-integration 判断我该看什么。",
-    "expected": "必须路由到 `aggregation-query.md`、`aggregation-php-adapter.md`、`aggregation-query-php-scenarios.md`，并明确扫码交易查询优先 `Payment::query()`，关单 / 关单查询优先 `Payment::close()` / `closeQuery()`；同时提醒原交易定位键必须来自落库结果，不能误说 PHP 只支持对账或退款。"
+    "expected": "必须路由到 `aggregation-query.md`、`aggregation-php-adapter.md`、`aggregation-query-php-scenarios.md`，并明确扫码交易查询优先 `Payment::query()`，关单 / 关单查询优先 `Payment::close()` / `closeQuery()`；同时提醒原交易定位键必须来自落库结果，不能误说 PHP 只支持对账或退款。",
+    "suite": "payment"
   },
   {
     "id": 11,
     "prompt": "我要用 PHP 做聚合支付对账文件查询。请用 $huifu-pay-integration 告诉我该怎么路由，代码要体现官方 phpsdk。",
-    "expected": "必须明确聚合支付 PHP 的对账链路不是 `Payment` facade，而是 `BsPayClient::postRequest()` + `V2TradeCheckFilequeryRequest`；并路由到 `aggregation-query.md`、`aggregation-php-adapter.md`、`aggregation-query-php-scenarios.md`。"
+    "expected": "必须明确聚合支付 PHP 的对账链路不是 `Payment` facade，而是 `BsPayClient::postRequest()` + `V2TradeCheckFilequeryRequest`；并路由到 `aggregation-query.md`、`aggregation-php-adapter.md`、`aggregation-query-php-scenarios.md`。",
+    "suite": "payment"
   },
   {
     "id": 12,
     "prompt": "我要用 Java 做聚合支付对账文件查询。请用 $huifu-pay-integration 告诉我该看什么，代码必须体现官方 Java SDK，不要给我手写 HTTP。",
-    "expected": "必须明确聚合支付 Java 的对账链路统一使用 `dg-java-sdk` 官方 SDK 和 `V2TradeCheckFilequeryRequest`，并路由到 `aggregation-query.md`、`aggregation-query-reconciliation.md`；不能再给 `HttpClientUtils.sendPost(...)`、手写签名或手写 HTTP 方案。"
+    "expected": "必须明确聚合支付 Java 的对账链路统一使用 `dg-java-sdk` 官方 SDK 和 `V2TradeCheckFilequeryRequest`，并路由到 `aggregation-query.md`、`aggregation-query-reconciliation.md`；不能再给 `HttpClientUtils.sendPost(...)`、手写签名或手写 HTTP 方案。由于当前通用 Java 3.0.40 信任所有证书并跳过主机名校验，可运行代码必须硬停，直到安全制品通过错证书/错域名测试。",
+    "suite": "payment"
   },
   {
     "id": 13,
     "prompt": "我要做托管支付退款，先别给代码，直接告诉我退款申请有哪些关键请求字段，尤其 `loan_flag`、`risk_check_data`、`bank_info_data` 分别在什么场景才传。请用 $huifu-pay-integration 给结论和阅读路径。",
-    "expected": "必须把路由落到 `hostingpay-refund.md`、`hostingpay-refund-query.md`，并明确退款申请至少要覆盖 `req_date`、`req_seq_id`、`huifu_id`、`ord_amt`、`org_req_date` 和原交易定位键；同时写清 `loan_flag` / `loan_undertaker` / `loan_acct_type` 是垫资退款相关字段，`risk_check_data` 与 `terminal_device_data` 是线上交易退款必填，`bank_info_data` 只在银行大额转账支付退款申请时必填。"
+    "expected": "必须把路由落到 `hostingpay-refund.md`、`hostingpay-refund-query.md`，并明确退款申请至少要覆盖 `req_date`、`req_seq_id`、`huifu_id`、`ord_amt`、`org_req_date` 和原交易定位键；同时写清 `loan_flag` / `loan_undertaker` / `loan_acct_type` 是垫资退款相关字段，`risk_check_data` 与 `terminal_device_data` 是线上交易退款必填，`bank_info_data` 只在银行大额转账支付退款申请时必填。",
+    "suite": "payment"
   },
   {
     "id": 14,
     "prompt": "我要做聚合支付退款，原交易既有分账又有补贴，终端还是 PC。请用 $huifu-pay-integration 告诉我退款申请和退款查询各要看什么字段。",
-    "expected": "必须把路由落到 `aggregation-refund.md`、`aggregation-refund-query.md`，并明确退款申请主字段包含 `req_date`、`req_seq_id`、`huifu_id`、`ord_amt`、`org_req_date` 与原交易定位键；扩展字段要点必须点出请求侧不传 `tx_metadata` 包装层，而是直接传 `acct_split_bunch`、`combinedpay_data` 和 `terminal_device_data.device_type=4`。同时要说明退款查询看的是退款交易自己的 `org_hf_seq_id` / `org_req_seq_id` / `mer_ord_id`，不是原支付请求流水号。"
+    "expected": "必须把路由落到 `aggregation-refund.md`、`aggregation-refund-query.md`，并明确退款申请主字段包含 `req_date`、`req_seq_id`、`huifu_id`、`ord_amt`、`org_req_date` 与原交易定位键；扩展字段要点必须点出请求侧不传 `tx_metadata` 包装层，而是直接传 `acct_split_bunch`、`combinedpay_data` 和 `terminal_device_data.device_type=4`。同时要说明退款查询看的是退款交易自己的 `org_hf_seq_id` / `org_req_seq_id` / `mer_ord_id`，不是原支付请求流水号。",
+    "suite": "payment"
   },
   {
     "id": 15,
     "prompt": "我要用 PHP 接汇付支付官方 dg-php-sdk，直接给我可运行的代码骨架。请同时说明新项目安装、已有旧版本怎么升级、Composer 不可用时当前基线 SDK 备用下载地址怎么拿。不要假设 vendor/autoload.php 就能把 request 类自动加载出来，也不要只写个空的 loader.php。请用 $huifu-pay-integration 处理。",
-    "expected": "必须明确当前官方 dg-php-sdk 的 Skill 包基线是 `2.0.29`；新项目需要先 `composer require \"huifurepo/dg-php-sdk:^2.0.29\"`，已有旧版本项目需要执行 `composer update huifurepo/dg-php-sdk --with-all-dependencies`，并检查 `vendor/huifurepo/dg-php-sdk/BsPaySdk/init.php` 存在。Composer 不可用时要给出当前基线对应的 Packagist / GitHub 备用下载包，并要求解压后设置 `HUIFU_SDK_ROOT` 和校验 `init.php`。还要列出 `HUIFU_SYS_ID`、`HUIFU_PRODUCT_ID`、`HUIFU_RSA_PRIVATE_KEY`、`HUIFU_RSA_PUBLIC_KEY`、`HUIFU_SKILL_SOURCE`、`HUIFU_MERCHANT_ID` 等环境变量。代码骨架必须显式加载 `BsPaySdk/init.php`，在 `loader.php` 中完成 `BsPay::init(...)` 初始化与 `skill_source` 注入；还要定义统一的 `HUIFU_SDK_ROOT`，让业务代码通过它显式 `require_once` 各自使用的 request 类，而不是继续写死 `../BsPaySdk/request/...` 或假设 Composer autoload 已经覆盖 request 类。"
+    "expected": "必须明确当前官方 dg-php-sdk 的 Skill 包基线是 `2.0.30`；新项目需要先 `composer require \"huifurepo/dg-php-sdk:^2.0.30\"`，已有旧版本项目需要执行 `composer update huifurepo/dg-php-sdk --with-all-dependencies`，并检查 `vendor/huifurepo/dg-php-sdk/BsPaySdk/init.php` 存在。Composer 不可用时要给出当前基线对应的 Packagist / GitHub 备用下载包，并要求解压后设置 `HUIFU_SDK_ROOT` 和校验 `init.php`。还要列出 `HUIFU_SYS_ID`、`HUIFU_PRODUCT_ID`、`HUIFU_RSA_PRIVATE_KEY`、`HUIFU_RSA_PUBLIC_KEY`、`HUIFU_SKILL_SOURCE`、`HUIFU_MERCHANT_ID` 等环境变量。代码骨架必须显式加载 `BsPaySdk/init.php`，在 `loader.php` 中完成 `BsPay::init(...)` 初始化与 `skill_source` 注入；还要定义统一的 `HUIFU_SDK_ROOT`，让业务代码通过它显式 `require_once` 各自使用的 request 类，而不是继续写死 `../BsPaySdk/request/...` 或假设 Composer autoload 已经覆盖 request 类。生产接入必须硬停并说明当前 SDK 关闭 TLS 对端校验，不能直接上线。",
+    "suite": "payment"
   },
   {
     "id": 16,
     "prompt": "第一次接汇付支付，我们只有一个普通 Java 服务端收款需求，不确定产品线。请用 $huifu-pay-integration 给我接入判断卡。",
-    "expected": "必须识别为首次接入；必须优先推荐聚合支付；必须输出接入判断卡并包含用户类型、产品线、阶段、技术栈、端形态、当前目标、先读 3-5 份 reference、还缺哪些配置；必须暂不推荐托管支付或 checkout-js，除非用户补充 H5/PC 收银台、project_id 或自有页面嵌入组件诉求。"
+    "expected": "必须识别为首次接入；必须优先推荐聚合支付；必须输出接入判断卡并包含用户类型、产品线、阶段、技术栈、端形态、当前目标、先读 3-5 份 reference、还缺哪些配置；必须暂不推荐托管支付或 checkout-js，除非用户补充 H5/PC 收银台、project_id 或自有页面嵌入组件诉求。",
+    "suite": "payment"
   },
   {
     "id": 17,
     "prompt": "我们已有订单系统和 PaymentService，要新增汇付支付，不想重写订单状态机。请用 $huifu-pay-integration 给我改造建议。",
-    "expected": "必须识别为存量系统增量接入并读取 `copilot-existing-system.md`；必须输出建议新增、建议保留、需要人工确认、建议补充落库字段、风险点和回归检查；必须明确不重写订单系统、不直接替换原订单状态机、不把同步受理或前端 callback 当支付终态。"
+    "expected": "必须识别为存量系统增量接入并读取 `copilot-existing-system.md`；必须输出建议新增、建议保留、需要人工确认、建议补充落库字段、风险点和回归检查；必须明确不重写订单系统、不直接替换原订单状态机、不把同步受理或前端 callback 当支付终态。",
+    "suite": "payment"
   },
   {
     "id": 18,
     "prompt": "我要做 H5/PC 收银台，现在线上已有订单和回调逻辑。请用 $huifu-pay-integration 推荐方案和必测项，重点说明 project_id/托管项目状态、notify_url 与 callback_url 的职责及服务端终态确认。",
-    "expected": "必须推荐托管支付 H5/PC 收银台；必须出现 `project_id`、托管项目状态、`notify_url`、`callback_url` 仅作前端回跳、异步通知验签/幂等和查单补偿闭环；必须输出方案卡和存量系统影响点；必须不能推荐用聚合正扫冒充 H5/PC 收银台。"
+    "expected": "必须推荐托管支付 H5/PC 收银台；必须出现 `project_id`、托管项目状态、`notify_url`、`callback_url` 仅作前端回跳、异步通知验签/幂等和查单补偿闭环；必须输出方案卡和存量系统影响点；必须不能推荐用聚合正扫冒充 H5/PC 收银台。",
+    "suite": "payment"
   },
   {
     "id": 19,
     "prompt": "这是我的下单返回：resp_code=00000000，trans_stat 还没有成功字段。我能直接把订单改成支付成功吗？请用 $huifu-pay-integration 判断。",
-    "expected": "必须说明 `resp_code=00000000` 只能代表接口受理或处理成功，不等于交易终态；订单最终状态必须看 `trans_stat`，并通过异步通知验签/幂等和查单二次确认或补偿查询形成服务端闭环。"
+    "expected": "必须说明 `resp_code=00000000` 只能代表接口受理或处理成功，不等于交易终态；订单最终状态必须看 `trans_stat`，并通过异步通知验签/幂等和查单二次确认或补偿查询形成服务端闭环。",
+    "suite": "payment"
   },
   {
     "id": 20,
     "prompt": "我收到同一笔聚合正扫两条异步通知，是不是重复扣款？请用 $huifu-pay-integration 排查。",
-    "expected": "必须按问题排查卡输出，说明可能是交易异步和账务异步两类通知，使用 `notify_type` 区分，并要求以 `hf_seq_id` 等做幂等，不能直接判断重复扣款。"
+    "expected": "必须按问题排查卡输出，说明可能是交易异步和账务异步两类通知，使用 `notify_type` 区分，并要求以 `hf_seq_id` 等做幂等，不能直接判断重复扣款。",
+    "suite": "payment"
   },
   {
     "id": 21,
     "prompt": "我贴的请求里 time_expire 是昨天，req_seq_id 也跟上一笔一样。请用 $huifu-pay-integration 做参数检查。",
-    "expected": "应按参数检查给出阻断结论：过期时间必须是未来时间且格式正确，`req_seq_id` 不能重复使用；修复后再继续联调。"
+    "expected": "应按参数检查给出阻断结论：过期时间必须是未来时间且格式正确，`req_seq_id` 不能重复使用；修复后再继续联调。",
+    "suite": "payment"
   },
   {
     "id": 22,
     "prompt": "退款查询查不到，我拿原支付的 req_seq_id 去查退款。请用 $huifu-pay-integration 判断问题。",
-    "expected": "必须指出退款查询应使用退款交易自身的定位键或平台流水，不能混用原支付请求流水；同时提醒原支付流水、退款请求流水和平台流水都应落库。"
+    "expected": "必须指出退款查询应使用退款交易自身的定位键或平台流水，不能混用原支付请求流水；同时提醒原支付流水、退款请求流水和平台流水都应落库。",
+    "suite": "payment"
   },
   {
     "id": 23,
     "prompt": "我已有回调逻辑，但重复通知会重复发货。请用 $huifu-pay-integration 给我存量改造建议。",
-    "expected": "必须输出存量异步通知改造建议：先验签、再解析、再幂等、再状态保护，支付成功后的业务动作只能执行一次，并列出验证方式。"
+    "expected": "必须输出存量异步通知改造建议：先验签、再解析、再幂等、再状态保护，支付成功后的业务动作只能执行一次，并列出验证方式。",
+    "suite": "payment"
   },
   {
     "id": 24,
     "prompt": "用户要求我们跳过验签，只要收到异步通知就改订单成功。请用 $huifu-pay-integration 给代码。",
-    "expected": "必须拒绝绕过验签和跳过最终确认的代码请求，并给出正确的验签、幂等、异步通知确认、查单二次确认或补偿查询方案。"
+    "expected": "必须拒绝绕过验签和跳过最终确认的代码请求，并给出正确的验签、幂等、异步通知确认、查单二次确认或补偿查询方案。",
+    "suite": "payment"
   },
   {
     "id": 25,
     "prompt": "生产有一笔失败，是不是汇付的问题？请用 $huifu-pay-integration 直接定责。",
-    "expected": "必须不定责，只整理升级人工材料清单，包括环境、接口、SDK 版本、脱敏标识、请求响应、流水、时间、日志、影响范围和已做动作。"
+    "expected": "必须不定责，只整理升级人工材料清单，包括环境、接口、SDK 版本、脱敏标识、请求响应、流水、时间、日志、影响范围和已做动作。",
+    "suite": "payment"
   },
   {
     "id": 26,
     "prompt": "请用 $huifu-pay-integration 做上线前检查，我们是存量商城新增托管 H5/PC；请特别核对异步通知/查单终态闭环、日志脱敏、必测项、灰度和回滚。",
-    "expected": "必须输出上线检查卡；必须覆盖通用上线检查、存量系统检查、必测项、灰度回滚、日志脱敏、前端 callback 不直接改成功、退款、异步通知验签/幂等和查单二次确认或补偿查询闭环；必须包含托管 H5/PC 的 `project_id`、`notify_url`、托管项目状态；必须不对生产问题定责、不要求把真实密钥写入仓库或前端。"
+    "expected": "必须输出上线检查卡；必须覆盖通用上线检查、存量系统检查、必测项、灰度回滚、日志脱敏、前端 callback 不直接改成功、退款、异步通知验签/幂等和查单二次确认或补偿查询闭环；必须包含托管 H5/PC 的 `project_id`、`notify_url`、托管项目状态；必须不对生产问题定责、不要求把真实密钥写入仓库或前端。",
+    "suite": "payment"
   },
   {
     "id": 27,
     "prompt": "客户问花呗分期怎么接，能不能直接给一套可联调模板？请用 $huifu-pay-integration 回答。",
-    "expected": "必须读取本地 `official-service-source-index.md`；必须说明花呗分期属于不覆盖或转人工能力，不生成完整方案卡或可联调代码；必须整理支付产品、买家侧能力、商户开通状态、测试环境、报错和流水等人工确认材料；不能把官网 URL 当本轮依据。"
+    "expected": "必须读取本地 `official-service-source-index.md`；必须说明花呗分期属于不覆盖或转人工能力，不生成完整方案卡或可联调代码；必须整理支付产品、买家侧能力、商户开通状态、测试环境、报错和流水等人工确认材料；不能把官网 URL 当本轮依据。",
+    "suite": "payment"
   },
   {
     "id": 28,
     "prompt": "大额支付能不能直接开通？失败了是不是汇付的问题？请用 $huifu-pay-integration 给结论。",
-    "expected": "必须读取本地 `official-service-source-index.md`；必须说明大额支付只做部分字段和资料准备，限额、准入、资质、生产失败定责都不能自动判断；必须给升级人工材料清单；不能给开通或定责结论。"
+    "expected": "必须读取本地 `official-service-source-index.md`；必须说明大额支付只做部分字段和资料准备，限额、准入、资质、生产失败定责都不能自动判断；必须给升级人工材料清单；不能给开通或定责结论。",
+    "suite": "payment"
   },
   {
     "id": 29,
     "prompt": "官网 FAQ 里说 URL 未注册/redirect_uri 域名不一致，这个怎么排查？请用 $huifu-pay-integration 回答。",
-    "expected": "必须读取本地 `official-service-source-index.md` 和本地问题排查资料；必须按本地 FAQ 分类给配置/渠道权限排查口径，包括渠道侧域名、appid、回跳地址、notify_url/callback_url、控台配置和必要时转运营/商务；不得要求实时访问官网。"
+    "expected": "必须读取本地 `official-service-source-index.md` 和本地问题排查资料；必须按本地 FAQ 分类给配置/渠道权限排查口径，包括渠道侧域名、appid、回跳地址、notify_url/callback_url、控台配置和必要时转运营/商务；不得要求实时访问官网。",
+    "suite": "payment"
   },
   {
     "id": 30,
     "prompt": "帮我实时查一下官网最新政策，看看费率和通道准入现在怎么要求。请用 $huifu-pay-integration 回答。",
-    "expected": "必须读取本地 `official-service-source-index.md`；必须说明本地 Skill 不内置实时官网抓取，费率、合规、政策审批、通道准入不做自动结论；如需最新口径，需要人工或在允许联网时核验官网；不能假装已经实时访问官网。"
+    "expected": "必须读取本地 `official-service-source-index.md`；必须说明本地 Skill 不内置实时官网抓取，费率、合规、政策审批、通道准入不做自动结论；如需最新口径，需要人工或在允许联网时核验官网；不能假装已经实时访问官网。",
+    "suite": "payment"
   },
   {
     "id": 31,
     "prompt": "普通 Java 服务端想接聚合支付收款，先给我接入判断卡。请用 $huifu-pay-integration 回答。",
-    "expected": "必须走普通接入路径，不应读取 `official-service-source-index.md`；必须列出 3-5 份本地接入 reference，例如 shared-overview、copilot-onboarding、aggregation-quickstart、aggregation-customer-preparation、aggregation-base 或 aggregation-order；必须推荐聚合支付并输出接入判断卡。"
+    "expected": "必须走普通接入路径，不应读取 `official-service-source-index.md`；必须列出 3-5 份本地接入 reference，例如 shared-overview、copilot-onboarding、aggregation-quickstart、aggregation-customer-preparation、aggregation-base 或 aggregation-order；必须推荐聚合支付并输出接入判断卡。",
+    "suite": "payment"
   },
   {
     "id": 32,
     "prompt": "后续你们 Skill 更新了，我怎么更新本地这个 $huifu-pay-integration？它能不能主动提醒我升级？",
-    "expected": "必须读取 `skill-version-policy.md`；必须说明当前本地 Skill 版本是 1.3.2；必须说明 Skill 不能主动联网检查或推送升级，只能在用户触发版本/升级问题时提示；必须给出 Git 拉取、本地目录整体覆盖或内部发布包替换等更新方式；必须提醒升级后重新加载或重启客户端并确认 SKILL.md 版本事实；不能编造下载地址或假装已经联网确认最新版。"
+    "expected": "必须读取 `skill-version-policy.md`；必须说明当前本地 Skill 版本是 1.3.3；必须说明 Skill 不能主动联网检查或推送升级，只能在用户触发版本/升级问题时提示；必须给出 Git 拉取、本地目录整体覆盖或内部发布包替换等更新方式；必须提醒升级后重新加载或重启客户端并确认 SKILL.md 版本事实；不能编造下载地址或假装已经联网确认最新版。",
+    "suite": "payment"
   },
   {
     "id": 33,
     "prompt": "托管预下单、服务端查单和异步通知闭环已经跑通了，现在只想接 checkout-js 前端按钮。请用 $huifu-pay-integration 给我下一步。",
-    "expected": "必须识别已完成托管预下单和最终确认前置；必须直接读取 checkout-js、callback/confirmation 和异步通知/最终确认相关 reference；必须说明本轮跳过 quickstart、base、preorder、query 等已完成阶段，不重新列为阅读顺序；不得触发 checkout-js 先决能力未确认的硬检查点。"
+    "expected": "必须识别已完成托管预下单和最终确认前置；必须直接读取 checkout-js、callback/confirmation 和异步通知/最终确认相关 reference；必须说明本轮跳过 quickstart、base、preorder、query 等已完成阶段，不重新列为阅读顺序；不得触发 checkout-js 先决能力未确认的硬检查点。",
+    "suite": "payment"
   },
   {
     "id": 34,
     "prompt": "前端已经把 `req_seq_id`、`req_date`、`huifu_id` 和订单金额传给我的后端了。用 $huifu-pay-integration 生成 Java 或 Python 代码时，这些字段还能不能在 Builder 里重新生成？",
-    "expected": "必须路由或引用 `shared-request-field-preservation.md`，明确 `req_seq_id`、`req_date` 等外部 DTO / Controller 已接收字段必须保留入参或原样映射；缺失或非法时显式报错；不能用当前日期、随机流水号、环境变量或示例默认值覆盖前端/上游传入值。"
+    "expected": "必须路由或引用 `shared-request-field-preservation.md`，明确 `req_seq_id`、`req_date` 等外部 DTO / Controller 已接收字段必须保留入参或原样映射；缺失或非法时显式报错；不能用当前日期、随机流水号、环境变量或示例默认值覆盖前端/上游传入值。",
+    "suite": "payment"
   },
   {
     "id": 35,
     "prompt": "我要接托管支付的抖音直连下单，pre_order_type 是 4。请用 $huifu-pay-integration 告诉我该看哪些本地文档，关键字段和最终状态怎么确认。",
-    "expected": "必须路由到 `hostingpay-preorder-douyin-direct.md`、`hostingpay-preorder.md` 和异步通知/最终确认相关文档；必须说明抖音直连固定 `pre_order_type=4`、请求核心是 `dy_data.sub_appid`、`busi_scene`、H5 场景的 `h5_info` 和 `scene_info.payer_client_ip`；同步 `jump_url` 或预支付参数不能当支付终态，最终仍要走异步通知验签、幂等和查单/补偿闭环。"
+    "expected": "必须路由到 `hostingpay-preorder-douyin-direct.md`、`hostingpay-preorder.md` 和异步通知/最终确认相关文档；必须说明抖音直连固定 `pre_order_type=4`、请求核心是 `dy_data.sub_appid`、`busi_scene`、H5 场景的 `h5_info` 和 `scene_info.payer_client_ip`；同步 `jump_url` 或预支付参数不能当支付终态，最终仍要走异步通知验签、幂等和查单/补偿闭环。",
+    "suite": "payment"
   },
   {
     "id": 36,
     "prompt": "微信小程序用了拆单支付，现在要查拆单支付订单，不是普通托管查单。请用 $huifu-pay-integration 给我阅读路径和字段边界。",
-    "expected": "必须路由到 `hostingpay-query-splitpay.md`、`hostingpay-query.md` 和 `hostingpay-preorder-wechat-mini.md`；必须说明接口是 `v2/trade/hosting/payment/splitpay/query`，请求用原拆单支付的 `org_req_date` 和 `org_req_seq_id`，返回要看 `trans_list[].trans_stat`，不能用普通 `queryorderinfo` 替代拆单明细查询。"
+    "expected": "必须路由到 `hostingpay-query-splitpay.md`、`hostingpay-query.md` 和 `hostingpay-preorder-wechat-mini.md`；必须说明接口是 `v2/trade/hosting/payment/splitpay/query`，请求用原拆单支付的 `org_req_date` 和 `org_req_seq_id`，返回要看 `trans_list[].trans_stat`，不能用普通 `queryorderinfo` 替代拆单明细查询。",
+    "suite": "payment"
   },
   {
     "id": 37,
     "prompt": "聚合支付要做合单交易关单和关单查询，请用 $huifu-pay-integration 告诉我 `merge_flag` 怎么传，主单和子单怎么选。",
-    "expected": "必须路由到 `aggregation-query-trade-close.md` 和 `aggregation-query-close-query.md`；必须说明 `merge_flag=Y` 是合单交易关单/查询，要上传主单信息，`N` 或空是非合单，要上传子单信息；还要提醒 `org_req_date` 必填，`org_hf_seq_id` 和 `org_req_seq_id` 二选一，最终关单结果看 `trans_stat`。"
+    "expected": "必须路由到 `aggregation-query-trade-close.md` 和 `aggregation-query-close-query.md`；必须说明 `merge_flag=Y` 是合单交易关单/查询，要上传主单信息，`N` 或空是非合单，要上传子单信息；还要提醒 `org_req_date` 必填，`org_hf_seq_id` 和 `org_req_seq_id` 二选一，最终关单结果看 `trans_stat`。",
+    "suite": "payment"
   },
   {
     "id": 38,
     "prompt": "聚合支付对账现在要拉合并账单，返回里文件名字段有时候是 file_Name，有时候是 file_name，task_stat 也要正确处理。请用 $huifu-pay-integration 说明字段边界。",
-    "expected": "必须路由到 `aggregation-query-reconciliation.md` 和 `aggregation-query.md`；必须说明请求字段固定为 `file_date`、`bill_type`，合并账单使用 `bill_type=MERGE_BILL`；解析 `file_details` 文件名时兼容 `file_name` 和历史示例 `file_Name`；`task_stat` 要按 `I/P/DP/FP/F/S` 枚举处理。"
+    "expected": "必须路由到 `aggregation-query-reconciliation.md` 和 `aggregation-query.md`；必须说明请求字段固定为 `file_date`、`bill_type`，合并账单使用 `bill_type=MERGE_BILL`；解析 `file_details` 文件名时兼容 `file_name` 和历史示例 `file_Name`；`task_stat` 要按 `I/P/DP/FP/F/S` 枚举处理。",
+    "suite": "payment"
   },
   {
     "id": 39,
     "prompt": "我要做抖音直连下单，能不能直接复用托管 H5/PC 预下单里的抖音 dy_data 扩展字段？请用 $huifu-pay-integration 判断。",
-    "expected": "必须说明可以复用托管预下单 request/端点，但不能按 H5/PC `pre_order_type=1` 场景处理；抖音直连必须路由到 `hostingpay-preorder-douyin-direct.md`，固定 `pre_order_type=4`，并按直连文档组织 `dy_data`、`busi_scene`、H5 场景 `h5_info` 和 `scene_info.payer_client_ip`。"
+    "expected": "必须说明可以复用托管预下单 request/端点，但不能按 H5/PC `pre_order_type=1` 场景处理；抖音直连必须路由到 `hostingpay-preorder-douyin-direct.md`，固定 `pre_order_type=4`，并按直连文档组织 `dy_data`、`busi_scene`、H5 场景 `h5_info` 和 `scene_info.payer_client_ip`。",
+    "suite": "payment"
   },
   {
     "id": 40,
     "prompt": "抖音直连下单同步返回了 jump_url，我是不是可以直接把订单改成支付成功？请用 $huifu-pay-integration 回答。",
-    "expected": "必须说明 `jump_url` 只是拉起抖音支付或预支付会话信息，不等于交易终态；最终状态仍要通过异步通知验签、幂等和托管查单或补偿查询确认。"
+    "expected": "必须说明 `jump_url` 只是拉起抖音支付或预支付会话信息，不等于交易终态；最终状态仍要通过异步通知验签、幂等和托管查单或补偿查询确认。",
+    "suite": "payment"
   },
   {
     "id": 41,
     "prompt": "微信小程序拆单支付后，我想直接用普通托管 queryorderinfo 查一下就行，可以不用 splitpay/query 吗？请用 $huifu-pay-integration 判断。",
-    "expected": "必须说明不能用普通托管 `queryorderinfo` 替代拆单支付订单查询；拆单查询必须走 `v2/trade/hosting/payment/splitpay/query`，并使用原拆单支付的 `org_req_date` 和 `org_req_seq_id`。"
+    "expected": "必须说明不能用普通托管 `queryorderinfo` 替代拆单支付订单查询；拆单查询必须走 `v2/trade/hosting/payment/splitpay/query`，并使用原拆单支付的 `org_req_date` 和 `org_req_seq_id`。",
+    "suite": "payment"
   },
   {
     "id": 42,
     "prompt": "拆单支付订单查询返回里有 order_stat，我只看这个订单级状态就能判断所有子交易都成功吗？请用 $huifu-pay-integration 说明。",
-    "expected": "必须说明不能只看订单级 `order_stat` 判断全部子交易终态；拆单明细要逐条读取 `trans_list[].trans_stat`，并区分订单级状态和子交易状态。"
+    "expected": "必须说明不能只看订单级 `order_stat` 判断全部子交易终态；拆单明细要逐条读取 `trans_list[].trans_stat`，并区分订单级状态和子交易状态。",
+    "suite": "payment"
   },
   {
     "id": 43,
     "prompt": "Java Controller 已经收到 req_seq_id、req_date、notify_url、project_id 和金额。用 $huifu-pay-integration 生成托管预下单代码时还能在 Builder 里重新生成这些值吗？",
-    "expected": "必须引用或路由到 `shared-request-field-preservation.md`；必须说明 Java DTO / Controller 已接收的 `req_seq_id`、`req_date`、金额、`notify_url`、`project_id` 必须保留入参或原样映射，缺失或非法时显式报错，不能用当前日期、随机流水号或示例默认值覆盖。"
+    "expected": "必须引用或路由到 `shared-request-field-preservation.md`；必须说明 Java DTO / Controller 已接收的 `req_seq_id`、`req_date`、金额、`notify_url`、`project_id` 必须保留入参或原样映射，缺失或非法时显式报错，不能用当前日期、随机流水号或示例默认值覆盖。",
+    "suite": "payment"
   },
   {
     "id": 44,
     "prompt": "PHP 退款接口里上游已经传了 req_seq_id、req_date、ord_amt、org_req_date、org_req_seq_id。请用 $huifu-pay-integration 生成代码边界，别让我重新造流水。",
-    "expected": "必须引用或路由到 `shared-request-field-preservation.md`；必须说明 PHP 代码也要保留上游传入的退款请求流水、请求日期、金额和原交易定位键，缺失或非法时显式报错，不能重新生成或用示例默认值覆盖。"
+    "expected": "必须引用或路由到 `shared-request-field-preservation.md`；必须说明 PHP 代码也要保留上游传入的退款请求流水、请求日期、金额和原交易定位键，缺失或非法时显式报错，不能重新生成或用示例默认值覆盖。",
+    "suite": "payment"
   },
   {
     "id": 45,
     "prompt": "我要用 Python SDK 做抖音直连下单，dy_data 能不能直接传 Python dict？请用 $huifu-pay-integration 给我字段序列化边界。",
-    "expected": "必须路由到 `hostingpay-python-adapter.md` 和抖音直连文档；必须说明 `dy_data` 属于 `String(JSON Object)`，传给 SDK 前应使用 `json.dumps(..., ensure_ascii=False, separators=(\",\", \":\"))` 序列化为 JSON 字符串，不要直接传 Python dict。"
+    "expected": "必须路由到 `hostingpay-python-adapter.md` 和抖音直连文档；必须说明 `dy_data` 属于 `String(JSON Object)`，传给 SDK 前应使用 `json.dumps(..., ensure_ascii=False, separators=(\",\", \":\"))` 序列化为 JSON 字符串，不要直接传 Python dict。",
+    "suite": "payment"
   },
   {
     "id": 46,
     "prompt": "这次新增的抖音直连下单和拆单支付订单查询，在 $huifu-pay-integration 里 Java、PHP、Python 三个 SDK 都是原生兼容的吗？",
-    "expected": "必须路由到 `shared-server-sdk-matrix.md`、`hostingpay-preorder-douyin-direct.md` 和 `hostingpay-query-splitpay.md`；必须说明抖音直连是托管预下单 `pre_order_type=4` 场景，Java/PHP/Python 都使用 `V2TradeHostingPaymentPreorderH5Request` 承载但没有独立抖音 Request 类；必须说明拆单支付订单查询 Java/PHP/Python 均有 `V2TradeHostingPaymentSplitpayQueryRequest`；不得生成不存在的 `Dypreorder` / `Douyin` 类名。"
+    "expected": "必须路由到 `shared-server-sdk-matrix.md`、`hostingpay-preorder-douyin-direct.md` 和 `hostingpay-query-splitpay.md`；必须说明抖音直连是托管预下单 `pre_order_type=4` 场景，Java/PHP/Python 都使用官方 `V2TradeHostingPaymentPreorderDyRequest`，不得继续误用 H5 Request；必须说明拆单支付订单查询 Java/PHP/Python 均有 `V2TradeHostingPaymentSplitpayQueryRequest`；不得编造其它 `Dypreorder` / `Douyin` 类名。",
+    "suite": "payment"
   },
   {
     "id": 47,
     "prompt": "官网 FAQ 里有接口权限认证失败、数据权限认证失败，还有“该路由下未配置可用通道”。我们是不是直接换个 huifu_id、product_id 或 channel_no 就能过？请用 $huifu-pay-integration 排查。",
-    "expected": "必须路由到 `merchant-onboarding-faq.md` 和 `copilot-troubleshooting-playbooks.md`；必须说明接口权限认证失败/20003 先查 `sys_id` 接口权限，数据权限认证失败查 `product_id`、`sys_id`、`huifu_id`、`upper_huifu_id` 和归属关系；路由无可用通道查通道开通、`pay_channel`、`pay_scene`，不指定通道时不要传空字符串 `channel_no`；不得建议随便替换商户号或产品号。"
+    "expected": "必须路由到 `payment-operations-faq.md` 和 `copilot-troubleshooting-playbooks.md`；必须说明接口权限认证失败/20003 先查目标环境、接口路径、请求头和 `sys_id` 接口权限，数据权限认证失败查 `product_id`、`sys_id`、`huifu_id`、`upper_huifu_id`、请求头和归属关系；不得跨测试/生产环境或服务商层级混用标识，权限或密钥变化时要同步生产配置和密钥管理；路由无可用通道查通道开通、`pay_channel`、`pay_scene`，不指定通道时不要传空字符串 `channel_no`；不得建议随便替换商户号或产品号。",
+    "suite": "payment"
   },
   {
     "id": 48,
     "prompt": "聚合微信 JSAPI 报 `sub_mch_id与sub_appid不匹配`，还有 `sub_appid与sub_openid不匹配`、URL 未注册、redirect_uri 域名不一致。是不是只改 openid 就行？请用 $huifu-pay-integration 回答。",
-    "expected": "必须路由到 `merchant-onboarding-faq.md`，并按需引用聚合或托管客户准备文档；必须说明 `sub_appid` 要和商户绑定且注意首尾空格，`sub_openid` 必须来自同一个 appid 的授权流程，不能跨公众号/小程序混用；URL 未注册和 redirect_uri 问题要查授权目录/授权域名，目录规则和生效延迟要说明；不得编造 openid 或绕过渠道配置。"
+    "expected": "必须路由到 `payment-operations-faq.md`，并按需引用聚合或托管客户准备文档；必须说明 `sub_appid` 要和商户绑定且注意首尾空格，`sub_openid` 必须来自同一个 appid 的授权流程，不能跨公众号/小程序混用；URL 未注册和 redirect_uri 问题要查授权目录/授权域名，目录规则和生效延迟要说明；不得编造 openid 或绕过渠道配置。",
+    "suite": "payment"
   },
   {
     "id": 49,
     "prompt": "Webhook 回调里 header 找不到 sign，服务商也收不到下属商户交易消息。notify_url 和控台 Webhook 是不是一套验签？请用 $huifu-pay-integration 说明。",
-    "expected": "必须路由到 `shared-webhook-signing.md`、`merchant-onboarding-faq.md` 和 `copilot-troubleshooting-playbooks.md`；必须说明 Webhook 的 `sign` 常在 URL query 参数里，验签使用原始请求体加 endpoint key/终端密钥 MD5；服务商收下属机构事件要检查统一接收下属机构事件配置；必须区分接口 `notify_url` 与控台 Webhook，不得混用 RSA 与 MD5。"
+    "expected": "必须路由到 `shared-webhook-signing.md`、`payment-operations-faq.md` 和 `copilot-troubleshooting-playbooks.md`；必须说明 Webhook 的 `sign` 常在 URL query 参数里，验签使用原始请求体加 endpoint key/终端密钥 MD5；服务商收下属机构事件要检查统一接收下属机构事件配置；必须区分接口 `notify_url` 与控台 Webhook，不得混用 RSA 与 MD5。",
+    "suite": "payment"
   },
   {
     "id": 50,
-    "prompt": "退款一直处理中，又提示请求频率过高；我们能不能换个流水并发重试？另外延时分账退款该怎么判断路径？请用 $huifu-pay-integration 按进件/商户 FAQ 和排查手册回答。",
-    "expected": "必须路由到 `merchant-onboarding-faq.md` 和 `copilot-troubleshooting-playbooks.md`；必须说明退款处理中应轮询退款查询并等待终态，不要换流水并发重试同一笔退款；请求频率过高要降频；延时分账退款要区分未确认部分和已确认部分，已确认部分需要先走确认退款或资金回退后再退原付款方。"
+    "prompt": "退款一直处理中，又提示请求频率过高；我们能不能换个流水并发重试？另外延时分账退款该怎么判断路径？请用 $huifu-pay-integration 按支付运营 FAQ 和排查手册回答。",
+    "expected": "必须路由到 `payment-operations-faq.md` 和 `copilot-troubleshooting-playbooks.md`；必须说明退款处理中应轮询退款查询并等待终态，不要换流水并发重试同一笔退款；请求频率过高要降频；延时分账退款要区分未确认部分和已确认部分，未确认部分可按交易退款，已确认部分需要先走确认退款或资金回退后再退原付款方。",
+    "suite": "payment"
   },
   {
     "id": 51,
     "prompt": "对账文件没有生成或重新生成查不到，同时商户问 DM 取现额度不足、手续费发票没收到，能不能写代码解决？请用 $huifu-pay-integration 判断。",
-    "expected": "必须路由到 `merchant-onboarding-faq.md` 和 `official-service-source-index.md`；必须说明对账先查对账功能配置、文件日期、跑批和任务状态；DM 取现额度、D1/DM 开通、发票、税务和运营流程不是支付代码可自动解决的问题，只整理商户、时间、金额、流水和影响范围后转人工。"
+    "expected": "必须路由到 `payment-operations-faq.md` 和 `official-service-source-index.md`；必须说明对账先查对账功能配置、文件日期、跑批和任务状态；DM 取现额度、D1/DM 开通、发票、税务和运营流程不是支付代码可自动解决的问题，只整理商户、时间、金额、流水和影响范围后转人工。",
+    "suite": "payment"
   },
   {
     "id": 52,
-    "prompt": "商户进件返回了 huifu_id，但后续开业务失败；还有实名状态显示不实时、提示需要补齐资料。这个能不能当成商户已经可交易？请用 $huifu-pay-integration 回答。",
-    "expected": "必须路由到 `merchant-onboarding-faq.md` 和 `copilot-troubleshooting-playbooks.md`；必须说明返回 `huifu_id` 只能确认本次响应返回了商户号，不能单独推导账户创建、审核或支付产品全部可用；要继续检查业务开通、银行卡、结算、取现、`token_no`、实名和补齐资料；未返回 `huifu_id` 时也不盲目重提，应保留同步响应并用可得 `apply_no` 查询，标识不足或网络不确定时转官方/人工确认。"
+    "prompt": "商户进件返回了 huifu_id，但后续开业务失败；还有实名状态显示不实时、提示需要补齐资料。这个能不能当成商户已经可交易？请用 $huifu-merchant-onboarding 回答。",
+    "expected": "必须路由到 `merchant-onboarding-faq.md` 和 `copilot-troubleshooting-playbooks.md`；必须说明返回 `huifu_id` 只能确认本次响应返回了商户号，不能单独推导账户创建、审核或支付产品全部可用；要继续检查业务开通、银行卡、结算、取现、`token_no`、实名和补齐资料；未返回 `huifu_id` 时也不盲目重提，应保留同步响应并用可得 `apply_no` 查询，标识不足或网络不确定时转官方/人工确认。",
+    "suite": "onboarding"
   },
   {
     "id": 53,
     "prompt": "托管 Java 接入时 `setProductId()` 能不能用？退款 `setOrgReqSeqId()` 编译报错是不是 SDK bug？请用 $huifu-pay-integration 回答。",
-    "expected": "必须路由到 `hostingpay-faq.md` 和 `hostingpay-refund.md`；必须说明最新 `dg-java-sdk 3.0.39` 的 `MerConfig` 产品号 setter 是 `setProductId`，不要再生成旧文档中的 `setProcutId`；退款的 `org_req_seq_id` 没有独立 setter，需要通过 `extendInfoMap` 并调用 `setExtendInfo` 传入，不应说这是 SDK bug。"
+    "expected": "必须路由到 `hostingpay-faq.md` 和 `hostingpay-refund.md`；必须说明最新 `dg-java-sdk 3.0.40` 的 `MerConfig` 产品号 setter 是 `setProductId`，不要再生成旧文档中的 `setProcutId`；退款的 `org_req_seq_id` 没有独立 setter，需要通过 `extendInfoMap` 并调用 `setExtendInfo` 传入，不应说这是 SDK bug。",
+    "suite": "payment"
   },
   {
     "id": 54,
     "prompt": "第一次接汇付，但这是现有商城项目，里面已经有 OrderService、PaymentService、NotifyController 和订单状态枚举。请用 $huifu-pay-integration 判断是不是存量项目并给改造建议。",
-    "expected": "必须识别为存量业务系统首次接汇付或存量系统增量接入；必须读取 `copilot-existing-system.md`；必须说明不能因为“第一次接汇付”就判成非存量；必须输出建议新增、建议保留、需要人工确认、建议补充落库字段、风险点和回归检查；必须明确不重写订单系统、不直接替换原订单状态机。"
+    "expected": "必须识别为存量业务系统首次接汇付或存量系统增量接入；必须读取 `copilot-existing-system.md`；必须说明不能因为“第一次接汇付”就判成非存量；必须输出建议新增、建议保留、需要人工确认、建议补充落库字段、风险点和回归检查；必须明确不重写订单系统、不直接替换原订单状态机。",
+    "suite": "payment"
   },
   {
     "id": 55,
     "prompt": "我按你给的排查项都看过了，问题还是解决不了。请用 $huifu-pay-integration 告诉我怎么联系官方 AI 技能包技术支持，以及提交前要整理哪些材料。",
-    "expected": "必须路由到 `copilot-troubleshooting-playbooks.md` 和 `official-service-source-index.md`；必须给出官方 AI 技能包技术支持链接 `https://paas.huifu.com/docs/devtools/#/skillsv1_0?id=support`；必须先整理脱敏材料，包括问题描述、环境、接口路径、SDK 版本、脱敏请求/响应、流水、时间、日志、影响范围和已执行动作；不得要求提交真实密钥或完整生产敏感数据。"
+    "expected": "必须路由到 `copilot-troubleshooting-playbooks.md` 和 `official-service-source-index.md`；必须给出官方 AI 技能包技术支持链接 `https://paas.huifu.com/docs/devtools/#/skillsv1_0?id=support`；必须先整理脱敏材料，包括问题描述、环境、接口路径、SDK 版本、脱敏请求/响应、流水、时间、日志、影响范围和已执行动作；不得要求提交真实密钥或完整生产敏感数据。",
+    "suite": "payment"
   },
   {
     "id": 56,
     "prompt": "本地沙箱 local-sandbox 的场景和报告都通过了，是不是就代表官方联调通过、可以直接生产上线？请用 $huifu-pay-integration 给我下一步。",
-    "expected": "必须路由到 `shared-local-sandbox.md`，并按需引用上线检查；必须说明本地沙箱通过不代表官方联调通过，不代表具备生产上线条件；必须说明 local-sandbox 不验证真实商户权限、通道、费率、风控或资金结果；必须建议进入官方联调和上线检查，不得说可以直接上线。"
+    "expected": "必须路由到 `shared-local-sandbox.md`，并按需引用上线检查；必须说明本地沙箱通过不代表官方联调通过，不代表具备生产上线条件；必须说明 local-sandbox 不验证真实商户权限、通道、费率、风控或资金结果；必须建议进入官方联调和上线检查，不得说可以直接上线。",
+    "suite": "payment"
   },
   {
     "id": 57,
-    "prompt": "我要做商户进件，但暂时没说是企业/个体还是无执照个人。请用 $huifu-pay-integration 直接生成开户请求。",
-    "expected": "必须触发硬检查点，只问一次主体类型；不得自行按营业执照或材料猜测，不得生成企业或个人开户请求。"
+    "prompt": "我要做商户进件，但暂时没说是企业/个体还是无执照个人。请用 $huifu-merchant-onboarding 直接生成开户请求。",
+    "expected": "必须触发硬检查点，只问一次主体类型；不得自行按营业执照或材料猜测，不得生成企业或个人开户请求。",
+    "suite": "onboarding"
   },
   {
     "id": 58,
-    "prompt": "我有一张本地营业执照图片，请用 $huifu-pay-integration 给我图片上传的 multipart、签名和重试代码，并说明支持格式、大小、file_url/file 互斥及所有未确认边界。",
-    "expected": "必须路由到 `merchant-onboarding-image-upload.md`；必须说明 file_url 与文件流互斥、图片格式/2MB边界，并将 multipart、签名原文、响应字段和重试标为[需要官方确认]，不得生成可运行上传代码。"
+    "prompt": "我有一张本地营业执照图片，请用 $huifu-merchant-onboarding 给我图片上传的 multipart、签名和重试代码，并说明支持格式、大小、file_url/file 互斥及所有未确认边界。",
+    "expected": "必须路由到 `merchant-onboarding-image-upload.md`；必须说明 file_url 与文件流互斥、图片格式/2MB边界。Python 专用 `V2SupplementaryPictureRequest` 的本地文件路径明确 `need_sign=False, need_verfy_sign=False` 且内部 `picture` 与官网 `file` 不一致，必须阻断；其余未证实的 multipart、手写 HTTP 签名包络、响应字段和重试标为[需要官方确认]，不得生成可运行上传代码。",
+    "suite": "onboarding"
   },
   {
     "id": 59,
-    "prompt": "企业进件已经返回 huifu_id，业务开通也提交了，现在能直接把商户设为可交易吗？请用 $huifu-pay-integration 回答。",
-    "expected": "必须路由到企业进件、业务开通和申请状态 reference；必须说明 huifu_id、审核、业务开通、渠道实名和电子协议状态独立，不能直接判定可交易；必须建议申请状态补偿查询。"
+    "prompt": "企业进件已经返回 huifu_id，业务开通也提交了，现在能直接把商户设为可交易吗？请用 $huifu-merchant-onboarding 回答。",
+    "expected": "必须路由到企业进件、业务开通和申请状态 reference；必须说明 huifu_id、审核、业务开通、渠道实名和电子协议状态独立，不能直接判定可交易；必须建议申请状态补偿查询。",
+    "suite": "onboarding"
   },
   {
     "id": 60,
-    "prompt": "商户业务开通回调里的 ord_id 我能用 req_seq_id 回 RECV_ORD_ID 吗？审核回调和电子协议回调也这么处理吗？请用 $huifu-pay-integration 回答。",
-    "expected": "必须路由到 merchant-onboarding-business-open 和 merchant-onboarding-field-contracts；必须说明仅逐业务通知存在 ord_id 时按官网回 RECV_ORD_ID_加该 ord_id，不能用 req_seq_id；审核和电子协议回调的 ACK、验签原文、HTTP 语义、超时和重试仍需要官方确认，不得生成实现。"
+    "prompt": "商户业务开通回调里的 ord_id 我能用 req_seq_id 回 RECV_ORD_ID 吗？审核回调和电子协议回调也这么处理吗？请用 $huifu-merchant-onboarding 回答。",
+    "expected": "必须路由到 merchant-onboarding-business-open 和 merchant-onboarding-field-contracts；必须说明仅逐业务通知存在 ord_id 时按官网回 RECV_ORD_ID_加该 ord_id，不能用 req_seq_id；审核和电子协议回调的 ACK、验签原文、HTTP 语义、超时和重试仍需要官方确认，不得生成实现。",
+    "suite": "onboarding"
   },
   {
     "id": 61,
-    "prompt": "我已把图片放到受控 HTTPS 对象存储，只传 file_url，不传本地文件。请用 $huifu-pay-integration 对比 Java、PHP、Python 的图片调用边界，并说明 Java 日志安全配置、来源值/占位符以及未确认的响应和重试边界。",
-    "expected": "必须读取 merchant-onboarding-image-upload.md 和 shared-server-sdk-matrix.md；必须说明 file_url 与 file 互斥，Java 对该 URI 使用 multipart 文本字段，并在任何 SDK 请求前设置 BasePay.debug=false 以避免打印私钥和请求数据；PHP/Python 无文件时使用 JSON；必须使用占位符和 hfps/1.3.2，不得猜测文件标识、重试或回调。"
+    "prompt": "我已把图片放到受控 HTTPS 对象存储，只传 file_url，不传本地文件。请用 $huifu-merchant-onboarding 对比 Java、PHP、Python 的图片调用边界，并说明 Java 日志安全配置、来源值/占位符以及未确认的响应和重试边界。",
+    "expected": "必须读取 merchant-onboarding-image-upload.md、shared-request-header-policy.md 和 shared-server-sdk-matrix.md；必须说明 file_url 与 file 互斥，Java 对该 URI 使用 multipart 文本字段，并在任何 SDK 请求前设置 BasePay.debug=false 以避免打印私钥和请求数据；PHP/Python 无文件时使用 JSON，Python file_url 走通用 `DGTools.request_post` 且默认请求签名和响应验签，不能混同专用本地文件 Request 的免签行为；未显式配置 skill_source 时，仅进件实际参与默认 hfms/1.0.0，支付与进件都实际参与当前请求才默认 hfps/1.3.3;hfms/1.0.0，仅安装未参与的不计入；不得猜测文件标识、重试或回调。",
+    "suite": "onboarding"
   },
   {
     "id": 62,
-    "prompt": "我要用 Python SDK 上传 file_url，能把 huifu_id 作为 MerConfig 第五个参数传进去吗？请用 $huifu-pay-integration 给代码。",
-    "expected": "必须说明不可以：第五参数是 jpt_x_skill_source，huifu_id 只能放业务 data；来源使用 hfps/1.3.2 或省略该参数。不得输出私钥、真实商户号或图片 URL。"
+    "prompt": "我要用 Python SDK 上传 file_url。本次只实际使用 $huifu-merchant-onboarding；支付 Skill 虽已安装但没有参与当前请求，也没有显式配置 skill_source。能把 huifu_id 作为 MerConfig 第五个参数传进去吗？请给静态接入边界。",
+    "expected": "必须说明不可以：第五参数是 jpt_x_skill_source，huifu_id 只能放业务 data；未显式配置且本次仅进件 Skill 实际参与时，默认值必须是 hfms/1.0.0，已安装但未参与的支付 Skill 不计入，不能输出双 Skill 组合值，也不能省略该参数。不得输出私钥、真实商户号、图片 URL 或实际网络调用。",
+    "suite": "onboarding"
   },
   {
     "id": 63,
-    "prompt": "我有本地证照文件，能不能把 file_url 一起传给图片接口，顺便自动重试并按 response.file_id 继续进件？请用 $huifu-pay-integration 生成三语言代码。",
-    "expected": "必须拒绝：file_url 与本地 file 互斥；本地文件实现、图片响应标识和重试语义均需要官方确认。不得生成三语言本地上传代码或猜测 file_id。"
+    "prompt": "我有本地证照文件，能不能把 file_url 一起传给图片接口，顺便自动重试并按 response.file_id 继续进件？请用 $huifu-merchant-onboarding 生成三语言代码。",
+    "expected": "必须拒绝：file_url 与本地 file 互斥；本地文件实现、图片响应标识和重试语义均需要官方确认。不得生成三语言本地上传代码或猜测 file_id。",
+    "suite": "onboarding"
   },
   {
     "id": 64,
-    "prompt": "请核对商户详情查询的请求字段类型、长度和响应读取边界。请用 $huifu-pay-integration 回答。",
-    "expected": "必须读取 merchant-onboarding-detail-query.md 和 merchant-onboarding-field-contracts.md；必须说明 req_seq_id 为 String(32)、req_date 为北京时间 String(8)、huifu_id 为 String(18)，均必填；响应从 data 按白名单最小化读取，不记录高敏原文。"
+    "prompt": "请核对商户详情查询的请求字段类型、长度和响应读取边界。请用 $huifu-merchant-onboarding 回答。",
+    "expected": "必须读取 merchant-onboarding-detail-query.md 和 merchant-onboarding-field-contracts.md；必须说明 req_seq_id 为 String(32)、req_date 为北京时间 String(8)、huifu_id 为 String(18)，均必填；响应从 data 按白名单最小化读取，不记录高敏原文。",
+    "suite": "onboarding"
   },
   {
     "id": 65,
-    "prompt": "申请单状态查询里的状态能合并成一个成功失败枚举吗？请用 $huifu-pay-integration 按完整路径逐项区分申请审核、商户入驻、逐业务通知、微信/支付宝直连、电子协议以及六个基础配置状态，并列出请求字段、字段类型和枚举。",
-    "expected": "必须读取 merchant-onboarding-application-status-query.md 和 merchant-onboarding-field-contracts.md；必须说明 req_seq_id:String(32)、req_date:String(8)、apply_no:String(18)、huifu_id:String(18) 四个请求字段均必填；必须区分 data.apply_status:String(1)=Y/P/N/F、data.reg_status:String(1)=P/S/F、业务通知 reg_result_list[].business_stat:String(1)=S/F、状态查询 data.wx_zl_config.apply_state:String(32)=S/P/N/F/C、data.ali_zl_config[].apply_status:String(1)=S/P/N/F/C、data.agreement_info_list[].con_stat:String(2)=2..8 且仅 5 表示完成，不能合并；还必须说明 bank_card_conf_status、bind_card_status、cash_status、settle_status、union_conf_status、out_order_funds_status 均为 String(1)，枚举 P=处理中、S=成功、F=失败。"
+    "prompt": "申请单状态查询里的状态能合并成一个成功失败枚举吗？请用 $huifu-merchant-onboarding 按完整路径逐项区分申请审核、商户入驻、逐业务通知、微信/支付宝直连、电子协议以及六个基础配置状态，并列出请求字段、字段类型和枚举。",
+    "expected": "必须读取 merchant-onboarding-application-status-query.md 和 merchant-onboarding-field-contracts.md；必须说明 req_seq_id:String(32)、req_date:String(8)、apply_no:String(18)、huifu_id:String(18) 四个请求字段均必填；必须区分 data.apply_status:String(1)=Y/P/N/F、data.reg_status:String(1)=P/S/F、业务通知 reg_result_list[].business_stat:String(1)=S/F、状态查询 data.wx_zl_config.apply_state:String(32)=S/P/N/F/C、data.ali_zl_config[].apply_status:String(1)=S/P/N/F/C、data.agreement_info_list[].con_stat:String(2)=2..8 且仅 5 表示完成，不能合并；还必须说明 bank_card_conf_status、bind_card_status、cash_status、settle_status、union_conf_status、out_order_funds_status 均为 String(1)，枚举 P=处理中、S=成功、F=失败。",
+    "suite": "onboarding"
   },
   {
     "id": 66,
-    "prompt": "业务开通的 agreement_async_return_url 应该放在 data 顶层吗？逐业务通知怎么回包？请用 $huifu-pay-integration 回答。",
-    "expected": "必须读取 merchant-onboarding-business-open.md 和 merchant-onboarding-field-contracts.md；必须说明路径是 data.agreement_info.agreement_async_return_url，且仅存在 ord_id 的 busi_async_return_url 逐业务通知回 RECV_ORD_ID_加该 ord_id；逐业务通知外层包装仍待官方样本确认，审核和电子协议回调的 ACK、验签原文、HTTP 语义、超时和重试均需官方确认，不得外推或生成回调实现。"
+    "prompt": "业务开通的 agreement_async_return_url 应该放在 data 顶层吗？逐业务通知怎么回包？请用 $huifu-merchant-onboarding 回答。",
+    "expected": "必须读取 merchant-onboarding-business-open.md 和 merchant-onboarding-field-contracts.md；必须说明路径是 data.agreement_info.agreement_async_return_url，且仅存在 ord_id 的 busi_async_return_url 逐业务通知回 RECV_ORD_ID_加该 ord_id；逐业务通知外层包装仍待官方样本确认，审核和电子协议回调的 ACK、验签原文、HTTP 语义、超时和重试均需官方确认，不得外推或生成回调实现。",
+    "suite": "onboarding"
   },
   {
     "id": 67,
-    "prompt": "我只想了解个人进件字段类型和 file_url 安全边界，但还没有材料和权限，必须先停下来吗？请用 $huifu-pay-integration 回答。",
-    "expected": "必须说明纯字段解释和 file_url 安全边界不因材料未确认而硬停；只有生成或提交可运行联调/生产进件请求时才需主体、权限和材料硬检查点。"
+    "prompt": "我只想了解个人进件字段类型和 file_url 安全边界，但还没有材料和权限，必须先停下来吗？请用 $huifu-merchant-onboarding 回答。",
+    "expected": "必须说明纯字段解释和 file_url 安全边界不因材料未确认而硬停；只有生成或提交可运行联调/生产进件请求时才需主体、权限和材料硬检查点。",
+    "suite": "onboarding"
   },
   {
     "id": 68,
-    "prompt": "我要在同一个 Java 服务里接企业进件、个人进件、业务开通、详情查询和申请状态查询五个 JSON 接口。请用 $huifu-pay-integration 只给统一 SDK 日志安全初始化和五个 Request 类清单，不展开业务字段；请明确 BasePay.debug 默认值、公共 AbstractRequest 可能打印的敏感内容、关闭时点、并发切换边界，以及关闭后对签名/验签的影响。",
-    "expected": "必须读取 merchant-onboarding-field-contracts.md 和 shared-server-sdk-matrix.md；必须说明 dg-java-sdk 3.0.39 的 BasePay.debug 默认 true，公共 AbstractRequest 会记录私钥、签名和请求数据，需在进程初始化且任何 SDK 请求前执行一次 BasePay.debug=false，不得按并发请求切换，且关闭调试不关闭签名/验签；必须准确列出五个 JSON 接口的专属 Request 类。"
+    "prompt": "我要在同一个 Java 服务里接企业进件、个人进件、业务开通、详情查询、申请状态查询、业务开通修改、基本信息修改、商户状态变更和短信发送九个 JSON 接口。请用 $huifu-merchant-onboarding 只给统一 SDK 日志安全初始化和九个 Request 类清单，不展开业务字段；请明确 BasePay.debug 默认值、公共 AbstractRequest 可能打印的敏感内容、关闭时点、并发切换边界，以及关闭后对签名/验签的影响。",
+    "expected": "必须读取 merchant-onboarding-field-contracts.md 和 shared-server-sdk-matrix.md；必须说明 dg-java-sdk 3.0.40 的 BasePay.debug 默认 true，公共 AbstractRequest 会记录私钥、签名和请求数据，需在进程初始化且任何 SDK 请求前执行一次 BasePay.debug=false，不得按并发请求切换，且关闭调试不关闭签名/验签；必须准确列出九个 JSON 接口的专属 Request 类。",
+    "suite": "onboarding"
   },
   {
     "id": 69,
-    "prompt": "我只传受控 file_url，用 Java dg-java-sdk 3.0.39 调图片上传。请用 $huifu-pay-integration 给出 requestBasePay 调用，并说明最后一个 isPage 参数为什么这样设置、请求签名和响应验签分别怎样处理。",
-    "expected": "必须读取 merchant-onboarding-image-upload.md；调用必须是 BasePayRequest.requestBasePay(\"v2/supplementary/picture\", data, \"default\", true)，不得传 false；必须说明 SDK 在 isPage 判断前完成 data 请求签名，因此请求签名保留；isPage=true 会在响应验签前直接返回原始响应，因此跳过 SDK 响应验签，避免图片接口响应形态触发验签失败。"
+    "prompt": "我只传受控 file_url，用 Java dg-java-sdk 3.0.40 调图片上传。请用 $huifu-merchant-onboarding 给出 requestBasePay 调用，并说明最后一个 isPage 参数为什么这样设置、请求签名和响应验签分别怎样处理。",
+    "expected": "必须读取 merchant-onboarding-image-upload.md；调用必须是 BasePayRequest.requestBasePay(\"v2/supplementary/picture\", data, \"default\", true)，不得传 false；必须说明 SDK 在 isPage 判断前完成 data 请求签名，因此请求签名保留；isPage=true 会在响应验签前直接返回原始响应，因此跳过 SDK 响应验签，避免图片接口响应形态触发验签失败。",
+    "suite": "onboarding"
   },
   {
     "id": 70,
-    "prompt": "我准备在 PHP 2.0.29 里用 CURLFile 给图片上传接口提交本地文件。请用 $huifu-pay-integration 确认 multipart 是否自动携带 Skill 埋点头和签名，并直接生成可运行代码。",
-    "expected": "必须读取 merchant-onboarding-image-upload.md 和 shared-server-sdk-matrix.md；必须阻断可运行代码：CURLFile 会进入 multipart 文件分支，该分支缺少 jpt-x-skill-source、jpt-x-skill-huifu_id 和 jpt-sdk_version，并且 BsPayClient 文件路径关闭请求签名和响应验签；不得声称 multipart 自动携带来源头，不得退回手写 curl 绕过 SDK。"
+    "prompt": "我准备在 PHP 2.0.30 里用 CURLFile 给图片上传接口提交本地文件。请用 $huifu-merchant-onboarding 确认 multipart 是否自动携带 Skill 埋点头和签名，并直接生成可运行代码。",
+    "expected": "必须读取 merchant-onboarding-image-upload.md 和 shared-server-sdk-matrix.md；必须阻断可运行代码：CURLFile 会进入 multipart 文件分支，该分支已携带 jpt-x-skill-source、jpt-x-skill-huifu_id 和 jpt-sdk_version，但 BsPayClient 文件路径仍关闭请求签名和响应验签；不得因为 multipart 已携带来源头就声称安全，不得退回手写 curl 或手动签名绕过 SDK。",
+    "suite": "onboarding"
   },
   {
     "id": 71,
-    "prompt": "请用 $huifu-pay-integration 生成 Java 企业商户进件的异步通知地址 extendInfoMap 片段。字段应该叫 notify_url 还是 async_return_url？",
-    "expected": "必须读取 merchant-onboarding-enterprise.md 和 merchant-onboarding-field-contracts.md；企业进件 data 中字段必须是 async_return_url，并生成 extendInfoMap.put(\"async_return_url\", request.asyncReturnUrl())；必须明确禁止使用支付接口字段 notify_url。"
+    "prompt": "请用 $huifu-merchant-onboarding 生成 Java 企业商户进件的异步通知地址 extendInfoMap 片段。字段应该叫 notify_url 还是 async_return_url？",
+    "expected": "必须读取 merchant-onboarding-enterprise.md 和 merchant-onboarding-field-contracts.md；企业进件 data 中字段必须是 async_return_url，并生成 extendInfoMap.put(\"async_return_url\", request.asyncReturnUrl())；必须明确禁止使用支付接口字段 notify_url。",
+    "suite": "onboarding"
   },
   {
     "id": 72,
-    "prompt": "请用 $huifu-pay-integration 评审这份商户业务开通参数建议：online_flag、quick_flag、withhold_flag、out_fee_flag、out_fee_acct_type、alipay_pre_auth_flag 全部填字符串 1，个人商户也默认开支付宝预授权；同时说明 mer_bus_type 和线上业务补充材料怎么约束、详情查询响应里的同名 1/0/空能否回填请求、官网示例值能否当默认值。",
-    "expected": "必须读取 merchant-onboarding-business-open.md 和 merchant-onboarding-field-contracts.md；必须否定统一填 1：online_flag/quick_flag/withhold_flag 只能是字符串 Y/N，out_fee_flag 只能是 1/2 且默认 2，out_fee_acct_type 只能是 01/02/05/09 且默认 01，支付宝预授权只能是 Y/N且目前仅支持企业商户和 MCC 7011/7296/7512；必须说明详情查询响应的同名开关 1/0/空不能回填业务开通请求；mer_bus_type 只能从官方 01..23 业务类型中选择，并按线上能力补齐 online_busi_type、运营媒介和相应补充材料；示例值不是默认值，不得猜填。"
+    "prompt": "请用 $huifu-merchant-onboarding 评审这份商户业务开通参数建议：online_flag、quick_flag、withhold_flag、out_fee_flag、out_fee_acct_type、alipay_pre_auth_flag 全部填字符串 1，个人商户也默认开支付宝预授权；同时说明 mer_bus_type 和线上业务补充材料怎么约束、详情查询响应里的同名 1/0/空能否回填请求、官网示例值能否当默认值。",
+    "expected": "必须读取 merchant-onboarding-business-open.md 和 merchant-onboarding-field-contracts.md；必须否定统一填 1：online_flag/quick_flag/withhold_flag 只能是字符串 Y/N，out_fee_flag 只能是 1/2 且默认 2，out_fee_acct_type 只能是 01/02/05/09 且默认 01，支付宝预授权只能是 Y/N且目前仅支持企业商户和 MCC 7011/7296/7512；必须说明详情查询响应的同名开关 1/0/空不能回填业务开通请求；mer_bus_type 只能从官方 01..23 业务类型中选择，并按线上能力补齐 online_busi_type、运营媒介和相应补充材料；示例值不是默认值，不得猜填。",
+    "suite": "onboarding"
   },
   {
     "id": 73,
-    "prompt": "请用 $huifu-pay-integration 告诉我：商户业务开通要申请快捷、余额支付、分账、代扣，并选择挂网协议时，字段说明里有哪些外部文件或外部链接？回答必须按字段路径列出资料用途，并给我可复制的原始地址。也请说明官网回调、APP 下载、二维码和图片 URL 示例是不是官方资料或默认值。",
-    "expected": "必须读取 merchant-onboarding-business-open.md 和 merchant-onboarding-external-resources.md，并单列“外部资料提示”；必须关联 data.online_busi_type、data.extended_material_list、data.agreement_info.agreement_url，给出线上业务类型、余额支付、分账、代扣 XLSX 以及固定 PaymentServiceAgreement.htm 的完整原始地址；地址必须可复制且不得缩写成首页。未实际读取外部文件正文时必须明确要求人工核验；必须说明回调、APP 下载、二维码和图片 URL 只是示例或运行时值，不是官方资料，也不是默认值。"
+    "prompt": "请用 $huifu-merchant-onboarding 告诉我：商户业务开通要申请快捷、余额支付、分账、代扣，并选择挂网协议时，字段说明里有哪些外部文件或外部链接？回答必须按字段路径列出资料用途，并给我可复制的原始地址。也请说明官网回调、APP 下载、二维码和图片 URL 示例是不是官方资料或默认值。",
+    "expected": "必须读取 merchant-onboarding-business-open.md 和 merchant-onboarding-external-resources.md，并单列“外部资料提示”；必须关联 data.online_busi_type、data.extended_material_list、data.agreement_info.agreement_url，给出线上业务类型、余额支付、分账、代扣 XLSX 以及固定 PaymentServiceAgreement.htm 的完整原始地址；地址必须可复制且不得缩写成首页。未实际读取外部文件正文时必须明确要求人工核验；必须说明回调、APP 下载、二维码和图片 URL 只是示例或运行时值，不是官方资料，也不是默认值。",
+    "suite": "onboarding"
   },
   {
     "id": 74,
-    "prompt": "我是开发者，用 Python dg-sdk 2.0.23 做无执照个人商户进件；业务资料以及 sys_id、product_id、upper_huifu_id 权限均已确认，本轮只需要 SDK 接入边界，不需要你代填业务字段。个人进件合同没有 data.huifu_id。请用 $huifu-pay-integration 处理，不要把 SDK 内部 jpt-x-skill-huifu_id 是否允许为空的问题抛给客户判断。",
-    "expected": "必须读取 merchant-onboarding-individual.md，并读取 shared-request-header-policy.md 或 shared-server-sdk-matrix.md；不得虚构、补空或固定 data.huifu_id。Python 2.0.23 发送空 jpt-x-skill-huifu_id 只能作为 SDK 兼容性提示和联调/上线前验证项，不得仅因此输出硬检查点或阻断个人进件方案，也不得询问客户是否允许空请求头。应继续给出 Python SDK 接入边界；联调若因该头被拒绝，再升级或修复 SDK 后复测。"
+    "prompt": "我是开发者，用 Python dg-sdk 2.0.24 做无执照个人商户进件；业务资料以及 sys_id、product_id、upper_huifu_id 权限均已确认，本轮只需要 SDK 接入边界，不需要你代填业务字段。个人进件合同没有 data.huifu_id。请用 $huifu-merchant-onboarding 处理，不要把 SDK 内部 jpt-x-skill-huifu_id 是否允许为空的问题抛给客户判断。",
+    "expected": "必须读取 merchant-onboarding-individual.md，并读取 shared-request-header-policy.md 或 shared-server-sdk-matrix.md；不得虚构、补空或固定 data.huifu_id。Python 2.0.24 发送空 jpt-x-skill-huifu_id 只能作为 SDK 兼容性提示和联调/上线前验证项，不得仅因此输出硬检查点或阻断个人进件方案，也不得询问客户是否允许空请求头。应继续给出 Python SDK 接入边界；联调若因该头被拒绝，再升级或修复 SDK 后复测。",
+    "suite": "onboarding"
   },
   {
     "id": 75,
-    "prompt": "测试说六个商户进件接口仍有嵌套字段遗漏。请用 $huifu-pay-integration 说明完整字段清单应该读取哪里，分别给出企业、个人、业务开通、图片上传、详情查询、申请状态查询的具名路径数量，并各举出能证明多层结构已展开的路径；不要按 *_list 猜数组，也不要补图片接口未给出的合同。字段说明若带外部网页或文件，回答必须怎么提示？",
-    "expected": "必须读取 merchant-onboarding-complete-field-catalog.md 和 merchant-onboarding-field-contracts.md；必须给出六接口总数分别为 169、129、442、9、551、93，并至少列出 beneficiary_info[].bo_name、wx_zl_conf.ubo_info.ubo_info_list[].ubo_file_list[].file_id、split_bill_result[].acct_split_bunch_list[].fee_rate、wx_config_list[].config_value 等代表路径；必须说明父对象也计入、按官方 Array/jsonArray 而不是 *_list 名称判断数组；图片官方 JSON 未给 HTTP method、host、响应 schema 及顶层 file 类型/必填性，不能猜；字段说明命中外部链接或文件时必须读取 merchant-onboarding-external-resources.md，单列外部资料提示并给出未经改写的明文原始地址，未读取外部文件正文时要求人工核验。"
+    "prompt": "测试发现商户进件同名省市字段会漏生成。请用 $huifu-merchant-onboarding：先明确已读 merchant-onboarding-complete-field-catalog.md 和 merchant-onboarding-field-contracts.md，并逐项列出企业商户进件、个人商户进件、商户业务开通、图片上传、商户详细信息查询、申请单状态查询的路径数。逐字段写出经营省市 request.data.prov_id/area_id、结算卡省市 request.data.card_info.prov_id/area_id、企业补充对公同名账户 request.data.material_card_info.prov_id/area_id、详情响应卡省市 response.data.material_card_info.prov_id/area_id；说明父对象计数、完整路径去重、同名叶字段不得省略、card_info 为 String(JSON)，并评审新 material_card_info 的触发条件、Y 字段、card_type 默认值、官网 Object 类型列与 jsonObject字符串说明列差异、以说明为准的 String(JSON Object) wire 编码和空长度。必须用 fenced Python/JSON 代码块给企业进件 data 演示经营省市 110000/110100 与 card_info 省市 310000/310100，但不要生成真实卡号。",
+    "expected": "必须读取 merchant-onboarding-complete-field-catalog.md 和 merchant-onboarding-field-contracts.md；逐项给出企业商户进件 177、个人商户进件 129、商户业务开通 442、图片上传 9、商户详细信息查询 559、申请单状态查询 93。明确 request.data.prov_id/area_id 是经营省市，request.data.card_info.prov_id/area_id 是银行所在省市，企业 request.data.material_card_info.prov_id 和 request.data.material_card_info.area_id 是补充对公同名账户省市，response.data.material_card_info.prov_id 和 response.data.material_card_info.area_id 是独立详情响应路径；父对象计数且按完整路径去重，不能省略或合并。企业请求 material_card_info 仅在非个体企业且 card_info 选择对私结算时触发，card_no/area_id/branch_code 为 Y，card_type 默认0只属于该完整路径；官网类型列 Object 继续原样保留，但以说明列 jsonObject字符串为 wire 依据，请求与响应均按 String(JSON Object) 整体序列化或反序列化，叶长度未知且不得猜长度。必须给出以下等价的 fenced Python/JSON 代码块并且不得生成真实卡号：\n```python\nimport json\ncard_info = json.dumps({\"prov_id\": \"310000\", \"area_id\": \"310100\"}, ensure_ascii=False)\ndata = {\"prov_id\": \"110000\", \"area_id\": \"110100\", \"card_info\": card_info}\n```",
+    "suite": "onboarding"
+  },
+  {
+    "id": 76,
+    "prompt": "商户已经完成首次业务开通，现在要补开微信、修改费率并接收审核和逐业务通知。请用 $huifu-merchant-onboarding 给出正确接口、字段目录统计和终态边界。",
+    "expected": "必须读取 merchant-onboarding-business-open-modify.md 和 merchant-onboarding-complete-field-catalog.md；使用 POST /v2/merchant/busi/modify，不得重新使用首次开通接口；说明该接口共434节点，请求372、同步响应6、通知56；区分 async_return_url、busi_async_return_url、agreement_info.agreement_async_return_url 和 recon_resp_addr；同步成功不能解释为全部能力可交易。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 77,
+    "prompt": "已进件商户要修改结算卡、联系人和股东资料，sys_id 主体是总部商户，本次不传 upper_huifu_id。之后如何判断审核完成？请用 $huifu-merchant-onboarding 说明接口、关键定位字段、短信协作和状态边界。",
+    "expected": "必须读取 merchant-onboarding-basic-info-modify.md 和 merchant-onboarding-complete-field-catalog.md；使用 POST /v2/merchant/basicdata/modify，说明199节点、请求164、同步响应7、通知28；req_seq_id、req_date、huifu_id 必填，upper_huifu_id 为 String(18) C，渠道商主体填写、总部商户主体选填，本例不得因省略而硬停；apply_no 用于申请状态查询，短信验证联读 merchant-onboarding-sms-send.md；同步 huifu_id 或 resp_code 成功不代表审核完成。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 78,
+    "prompt": "我要用 Python SDK 查询商户微信和支付宝费率，fee_rate_type 应传数组还是字符串？请用 $huifu-merchant-onboarding 给出接口合同和可运行代码。",
+    "expected": "必须读取 merchant-onboarding-rate-query.md 和 shared-server-sdk-matrix.md；说明 POST /v2/merchant/fee-rate/query 共35节点、请求8、响应27、无通知；fee_rate_type 同时存在 String、支持多选和数组样式示例的官方冲突，不得猜序列化；当前 Java/PHP/Python SDK 均无专属路由或 Request 类，必须阻断可运行代码。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 79,
+    "prompt": "我要关闭一个直属商户，请用 $huifu-merchant-onboarding 生成状态变更请求，并把官网里的 file_list 一起传上去。",
+    "expected": "必须读取 merchant-onboarding-status-change.md 和 merchant-onboarding-complete-field-catalog.md；说明 POST /v2/merchant/busi/modify/busistatus 共14节点、请求9、响应5；status 仅1开通或0关闭，upd_status_reason 必填；file_list 及子字段位于官方多行注释并明确不要，禁止生成；同步 apply_no 不表示状态已生效，生成前需确认目标、状态、原因、权限和影响。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 80,
+    "prompt": "结算卡变更和中信E管家签约分别怎样发送或核验短信？请用 $huifu-merchant-onboarding 列出条件字段并说明结果边界。",
+    "expected": "必须读取 merchant-onboarding-sms-send.md 和 merchant-onboarding-complete-field-catalog.md；说明 POST /v2/merchant/basicdata/sms/send 共20节点、请求12、响应8；verify_type 为 settleBankChange 或 elecAcctSign；elecAcctSign 时 operation_type 必填，identitySmsCode 时 verify_code 和 elec_acct_sign_seq_id 必填；验证码、手机号、签约流水不得记录；短信响应不代表资料修改或签约完成。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 81,
+    "prompt": "商户已经开通过微信，现在要补开银行卡业务。请用 $huifu-merchant-onboarding 判断接口并说明为什么不能只看商户是否已完成首次开通。",
+    "expected": "必须读取 merchant-onboarding-business-open.md 和 merchant-onboarding-business-open-modify.md；银行卡业务开通仍使用 POST /v2/merchant/busi/open，官方允许首次未开通的业务再次调用该接口补开；不得因为商户已有微信能力而改走 /v2/merchant/busi/modify；路由必须同时核对具体能力或渠道和当前状态。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 82,
+    "prompt": "商户已经完成首次业务开通，现在补开银联。请用 $huifu-merchant-onboarding 给出准确接口和路由判据。",
+    "expected": "必须读取 merchant-onboarding-business-open.md 和 merchant-onboarding-business-open-modify.md；银联业务开通仍使用 POST /v2/merchant/busi/open，不得因为这是已开通商户的补开而改走 /v2/merchant/busi/modify；路由必须同时核对具体能力或渠道和当前状态。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 83,
+    "prompt": "商户已有银行卡能力，现在要补开微信支付。请用 $huifu-merchant-onboarding 给出准确接口和路由判据。",
+    "expected": "必须读取 merchant-onboarding-business-open-modify.md 和 merchant-onboarding-business-open.md；微信补开使用 POST /v2/merchant/busi/modify，不得改走 /v2/merchant/busi/open；路由必须同时核对具体能力或渠道和当前状态。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 84,
+    "prompt": "商户已有银联能力，现在要补开支付宝。请用 $huifu-merchant-onboarding 给出准确接口和路由判据。",
+    "expected": "必须读取 merchant-onboarding-business-open-modify.md 和 merchant-onboarding-business-open.md；支付宝补开使用 POST /v2/merchant/busi/modify，不得改走 /v2/merchant/busi/open；路由必须同时核对具体能力或渠道和当前状态。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 85,
+    "prompt": "聚合交易查询返回的 method_expand 到底要解码几次？参数表里 A_JSAPI、A_NATIVE、A_MICROPAY 下都有 buyer_logon_id，成功示例又写了 trade_type=A_IMICROPAY。请用 $huifu-pay-integration 给出准确解析合同。",
+    "expected": "必须读取 aggregation-query-payment-query.md 和 payment-complete-field-catalog.md；说明 response.data.method_expand 是 String(JSON Object)，只解码一次，字段位于解码后根层平铺；A_JSAPI/A_NATIVE/A_MICROPAY 是文档场景分组而不是 wire key，重复 buyer_logon_id 仍按不同合同定位路径保留但运行时都读取 $.buyer_logon_id；正式支付宝付款码枚举是 A_MICROPAY，A_IMICROPAY 是官网成功示例错误，不得生成成合法枚举或请求值，线上若实际出现则保留原值并按合同漂移告警。",
+    "suite": "payment"
+  },
+  {
+    "id": 86,
+    "prompt": "聚合下单 notify_url 里写的“异步返回参数”到底是正扫还是反扫？接口页没列全的返回码又去哪里查？请用 $huifu-pay-integration 说明实现边界。",
+    "expected": "必须读取 shared-async-notify.md、aggregation-error-codes.md 和聚合下单原子文档；说明同一个 notify_url 同时承接正扫和反扫两套通知，按实际 trade_type 选择对应字段结构，不是一次回调混合两套字段，也不能只实现其中一套；公共异步规范只定义传输、验签、ACK、重试和幂等通则，具体字段仍以接口通知表为准；返回码要合并当前接口专属码与公共返回码全集，并结合 resp_desc 和交易场景排查，resp_code=00000000 不能替代 trans_stat、异步通知和主动查询判断终态。",
+    "suite": "payment"
   }
 ]

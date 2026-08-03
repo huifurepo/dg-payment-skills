@@ -1,0 +1,219 @@
+[
+  {
+    "id": 1001,
+    "suite": "cross-route",
+    "expected_skill": "onboarding",
+    "prompt": "接口提示系统号没有权限，我正在提交企业开户资料，应该用哪个 Skill 排查？",
+    "expected": "路由到商户进件 Skill，检查进件接口权限而不是支付交易实现。"
+  },
+  {
+    "id": 1002,
+    "suite": "cross-route",
+    "expected_skill": "payment",
+    "prompt": "支付下单返回该路由下没有可用通道，应该加载支付还是进件 Skill？",
+    "expected": "主路由属于支付 Skill；若确认渠道尚未开通，再交接进件 Skill。"
+  },
+  {
+    "id": 1003,
+    "suite": "cross-route",
+    "expected_skill": "onboarding",
+    "prompt": "我要开通微信、支付宝和分账业务，参数是 online_flag、wx_conf_list 和 split_conf_info。",
+    "expected": "路由到商户业务开通。"
+  },
+  {
+    "id": 1004,
+    "suite": "cross-route",
+    "expected_skill": "payment",
+    "prompt": "我要传 pay_channel、pay_scene 和 channel_no 发起一笔聚合支付。",
+    "expected": "路由到支付 Skill。"
+  },
+  {
+    "id": 1005,
+    "suite": "cross-route",
+    "expected_skill": "onboarding",
+    "prompt": "企业进件的 async_return_url 回调怎么处理？",
+    "expected": "路由到商户进件，并保留未知审核通知协议边界。"
+  },
+  {
+    "id": 1006,
+    "suite": "cross-route",
+    "expected_skill": "payment",
+    "prompt": "托管支付 notify_url 收到重复通知，订单应该怎么幂等？",
+    "expected": "路由到支付通知。"
+  },
+  {
+    "id": 1007,
+    "suite": "cross-route",
+    "expected_skill": "onboarding",
+    "prompt": "进件响应已经拿到 huifu_id，怎么判断业务开通和协议是否完成？",
+    "expected": "路由到进件状态分层。"
+  },
+  {
+    "id": 1008,
+    "suite": "cross-route",
+    "expected_skill": "payment",
+    "prompt": "下单请求头里的 huifu_id 应该从哪里取，能不能写固定值？",
+    "expected": "路由到支付请求头和字段保留规则。"
+  },
+  {
+    "id": 1009,
+    "suite": "cross-route",
+    "expected_skill": "onboarding",
+    "prompt": "V2MerchantBasicdataEntRequest 的 Java debug 和请求头要怎么初始化？",
+    "expected": "路由到进件 SDK 安全矩阵。"
+  },
+  {
+    "id": 1010,
+    "suite": "cross-route",
+    "expected_skill": "payment",
+    "prompt": "V2TradeHostingPaymentPreorderH5Request 应该读取哪个 Skill？",
+    "expected": "路由到支付 Skill。"
+  },
+  {
+    "id": 1011,
+    "suite": "cross-route",
+    "expected_skill": "onboarding",
+    "prompt": "share_holder_info_list 里的股东手机号和证件字段是否完整？",
+    "expected": "路由到进件完整字段目录。"
+  },
+  {
+    "id": 1012,
+    "suite": "cross-route",
+    "expected_skill": "payment",
+    "prompt": "splitpay/query 的 trans_list 状态怎么解释？",
+    "expected": "路由到托管拆单支付查询。"
+  },
+  {
+    "id": 1013,
+    "suite": "cross-route",
+    "expected_skill": "onboarding",
+    "prompt": "图片上传拿 file_id，要传 file_url 还是本地 file？",
+    "expected": "路由到进件图片上传并说明互斥及 SDK 边界。"
+  },
+  {
+    "id": 1014,
+    "suite": "cross-route",
+    "expected_skill": "payment",
+    "prompt": "checkout-js 的 callback 已成功，可以把订单改为支付成功吗？",
+    "expected": "路由到支付 Skill，禁止把前端 callback 当终态。"
+  },
+  {
+    "id": 1015,
+    "suite": "cross-route",
+    "expected_skill": "onboarding",
+    "prompt": "申请单绑卡、结算和取现状态都是 P，下一步怎么查？",
+    "expected": "路由到进件申请状态查询。"
+  },
+  {
+    "id": 1016,
+    "suite": "cross-route",
+    "expected_skill": "payment",
+    "prompt": "退款一直处理中并且查询不到退款单，应该加载哪个 Skill？",
+    "expected": "路由到支付退款和退款查询。"
+  },
+  {
+    "id": 1017,
+    "suite": "cross-route",
+    "expected_skill": "onboarding",
+    "prompt": "业务开通的 online_flag 查询是 1，提交请求时也填 1 吗？",
+    "expected": "路由到进件字段合同，禁止把查询 1/0 回填为请求值。"
+  },
+  {
+    "id": 1018,
+    "suite": "cross-route",
+    "expected_skill": "payment",
+    "prompt": "聚合支付合单关单的 merge_flag 和主子单怎么传？",
+    "expected": "路由到聚合关单。"
+  },
+  {
+    "id": 1019,
+    "suite": "cross-route",
+    "expected_skill": "both",
+    "prompt": "新商户还没开户，但本周要完成微信 JSAPI 收款，请给完整交接顺序；两个 Skill 都存在且没有显式配置 skill_source，请同时给出来源头默认值。",
+    "expected": "先用进件 Skill 完成账户和微信业务准备，再用支付 Skill 完成 JSAPI 下单与终态；jpt-x-skill-source 使用 hfps/1.3.3;hfms/1.0.0。"
+  },
+  {
+    "id": 1020,
+    "suite": "cross-route",
+    "expected_skill": "both",
+    "prompt": "商户已返回 huifu_id，但支付报通道不可用，如何分两个模块排查？",
+    "expected": "进件 Skill 核对业务/渠道开通，支付 Skill 核对交易路由参数。"
+  },
+  {
+    "id": 1021,
+    "suite": "cross-route",
+    "expected_skill": "both",
+    "prompt": "企业进件审核通过后，要接 checkout-js，还缺哪些服务端步骤？",
+    "expected": "进件和支付两个 Skill 分段交接。"
+  },
+  {
+    "id": 1022,
+    "suite": "cross-route",
+    "expected_skill": "both",
+    "prompt": "我要做平台商户批量开户，并在开户完成后自动发起首笔支付。",
+    "expected": "两个 Skill 分别负责进件和支付，不能把同步进件响应当可交易终态。"
+  },
+  {
+    "id": 1023,
+    "suite": "cross-route",
+    "expected_skill": "both",
+    "prompt": "支付 Webhook 收不到消息，同时商户业务开通通知也没收到，怎么分开排查？",
+    "expected": "区分支付 Webhook 与进件通知协议，分别路由两个 Skill。"
+  },
+  {
+    "id": 1024,
+    "suite": "cross-route",
+    "expected_skill": "both",
+    "prompt": "我要上线一个从商户开户、业务开通到支付退款的全流程，应该加载哪些 Skill？",
+    "expected": "同时加载两个 Skill，并按进件完成后交接支付的顺序执行。"
+  },
+  {
+    "id": 1025,
+    "suite": "cross-route",
+    "expected_skill": "onboarding",
+    "prompt": "商户已经完成首次业务开通，现在补开微信并调整费率，应该使用哪个接口？",
+    "expected": "路由到进件 Skill 的商户业务开通修改，不得重新提交首次业务开通接口。"
+  },
+  {
+    "id": 1026,
+    "suite": "cross-route",
+    "expected_skill": "onboarding",
+    "prompt": "已进件商户要修改结算卡和联系人资料，并处理短信验证。",
+    "expected": "路由到商户基本信息修改，并按需要联读商户短信发送。"
+  },
+  {
+    "id": 1027,
+    "suite": "cross-route",
+    "expected_skill": "onboarding",
+    "prompt": "查询这个商户当前配置的微信和支付宝费率。",
+    "expected": "路由到商户费率信息查询，而不是支付订单费用或对账。"
+  },
+  {
+    "id": 1028,
+    "suite": "cross-route",
+    "expected_skill": "onboarding",
+    "prompt": "关闭一个直属商户的交易和控台登录能力。",
+    "expected": "路由到商户状态变更，而不是支付订单关单。"
+  },
+  {
+    "id": 1029,
+    "suite": "cross-route",
+    "expected_skill": "onboarding",
+    "prompt": "结算卡变更要发送验证码，字段和条件怎么传？",
+    "expected": "路由到商户短信发送并保护验证码和手机号。"
+  },
+  {
+    "id": 1030,
+    "suite": "cross-route",
+    "expected_skill": "payment",
+    "prompt": "我想查询一笔支付订单实际收取的手续费和对账结果。",
+    "expected": "路由到支付 Skill，不得因费率一词进入商户费率配置查询。"
+  },
+  {
+    "id": 1031,
+    "suite": "cross-route",
+    "expected_skill": "onboarding",
+    "prompt": "我要给商户补开业务，直接告诉我该调用哪个接口。",
+    "expected": "路由到进件 Skill，并同时确认具体能力或渠道和当前开通状态；银行卡、银联仍走业务开通，微信、支付宝补开走业务开通修改，不得只按是否首次猜选。"
+  }
+]

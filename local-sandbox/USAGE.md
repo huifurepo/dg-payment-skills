@@ -215,14 +215,14 @@ https://cloudpnrcdn.oss-cn-shanghai.aliyuncs.com/huifuskills/
 - `gateway_url`：配置到客户项目的 SDK 网关地址、base URL、endpoint 或支付出口层
 - `sys_id`、`product_id`：配置到客户项目的汇付系统号和产品号
 - `huifu_id`：本地样例汇付 ID，默认 `6666000100000001`；接真实联调或生产时改为客户自己的汇付 ID
-- `skill_source`：本地沙箱模式的来源字段，当前固定为 `hfps/1.3.1;sandbox/1.0.1`；官方联调或生产使用 `hfps/1.3.2`
+- `skill_source`：本地沙箱模式的来源字段，当前固定为 `hfps/1.3.1;sandbox/1.0.1`；官方联调或生产使用 `hfps/1.3.3`
 - `merchant_private_key`：客户项目用于请求签名的 PKCS8 Base64 私钥，无 PEM 头尾，无换行，优先配置到官方 SDK
 - `merchant_public_key`：客户项目用于验证沙箱响应和通知签名的 X509 Base64 公钥，无 PEM 头尾，无换行，优先配置到官方 SDK
 - `webhook_endpoint_key`：客户项目用于验证本地沙箱 Webhook 签名的 32 位终端密钥；Webhook 验签规则是大写 `MD5(raw_body + webhook_endpoint_key)`，不要和 RSA 公私钥混用
 - `signature_model`：`dual_key_local_sandbox`
 - `usage`：字段用途说明
 
-`merchant_private_key` 和 `merchant_public_key` 是商户项目需要配置的两项 RSA 值：前者用于请求加签，后者用于响应和 Notify 验签，不表示同一对 RSA 密钥。`webhook_endpoint_key` 只用于 Webhook 的 MD5 验签，不是 RSA 私钥或公钥。`skill_source` 用于 SDK 来源请求头；只有本地沙箱模式使用 `hfps/1.3.1;sandbox/1.0.1`，官方联调和生产使用 `hfps/1.3.2` 且不要携带沙箱后缀。
+`merchant_private_key` 和 `merchant_public_key` 是商户项目需要配置的两项 RSA 值：前者用于请求加签，后者用于响应和 Notify 验签，不表示同一对 RSA 密钥。`webhook_endpoint_key` 只用于 Webhook 的 MD5 验签，不是 RSA 私钥或公钥。`skill_source` 用于 SDK 来源请求头；只有本地沙箱模式使用 `hfps/1.3.1;sandbox/1.0.1`，官方联调和生产使用 `hfps/1.3.3` 且不要携带沙箱后缀。
 
 查看 Profile 指纹，不会回显完整私钥：
 

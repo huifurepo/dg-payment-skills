@@ -76,7 +76,7 @@
 | S07 | 聚合支付随交易分账参数 | 下单携带分账、补贴、终端信息 | `aggregation-order-tx-metadata.md`、`aggregation-payload-construction.md` |
 | S08 | 托管支付 H5/PC 收银台 | H5/PC 跳转收银台、project_id | `hostingpay-preorder-h5-pc.md`、`hostingpay-preorder-h5-pc-request.md`、`hostingpay-query.md` |
 | S09 | 异步通知/验签/幂等 | 接收 notify_url 或控台 Webhook | `shared-async-notify.md`、`shared-webhook-signing.md`、`aggregation-async-webhook.md`、`hostingpay-async-webhook.md` |
-| S10 | 上线前联调验收 | 联调完成准备上线 | `copilot-go-live-checklist.md`、`shared-release-checklist.md` |
+| S10 | 上线前联调验收 | 联调完成准备上线 | `copilot-go-live-checklist.md` |
 | S11 | 存量订单系统新增汇付支付 | 已有订单系统新增汇付渠道 | `copilot-existing-system.md`、`aggregation-query.md`、`shared-async-notify.md` |
 | S12 | 存量系统新增退款/退款查询 | 已有支付后补退款能力 | `copilot-existing-system.md`、`aggregation-refund.md`、`hostingpay-refund.md` |
 

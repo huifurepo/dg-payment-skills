@@ -166,7 +166,7 @@
     "delay_acct_flag": "N",
     "hosting_data": "{\"callback_url\":\"https://paas.huifu.com\",\"project_id\":\"PROJECTID2023101225142567\",\"project_title\":\"收银台标题\",\"private_info\":\"商户私有信息test\"}",
     "req_seq_id": "20240514163256046l9da4ecgqugo7h",
-    "biz_info": "{\"payer_check_wx\":{\"limit_payer\":\"ADULT\",\"real_name_flag\":\"Y\"},\"person_payer\":{\"cert_type\":\"IDENTITY_CARD\",\"cert_no\":\"<ENCRYPTED_CERT_NO_FROM_CLIENT>\",\"name\":\"张三\",\"mobile\":\"15012345678\"},\"payer_check_ali\":{\"fix_buyer\":\"F\",\"need_check_info\":\"T\",\"min_age\":\"12\"}}",
+    "biz_info": "{\"payer_check_wx\":{\"limit_payer\":\"ADULT\",\"real_name_flag\":\"Y\"},\"person_payer\":{\"cert_type\":\"IDENTITY_CARD\",\"cert_no\":\"<ENCRYPTED_CERT_NO_FROM_CLIENT>\",\"name\":\"张三\",\"mobile\":\"<ENCRYPTED_MOBILE_FROM_CLIENT>\"},\"payer_check_ali\":{\"fix_buyer\":\"F\",\"need_check_info\":\"T\",\"min_age\":\"12\"}}",
     "req_date": "20240514",
     "trans_amt": "0.10",
     "huifu_id": "6666000109133323",
@@ -199,6 +199,6 @@
 
 - 官方请求示例中带有 `checkout_id`，但参数表没有定义该字段；当前 skill 不将其视为正式接入参数。
 - `trans_finish_time` 在异步返回表中的长度列为 `6`，但格式写成 `yyyyMMddHHmmss`；实现时应按完整时间戳处理。
-- `wx_response.cash_fee` 与 `wx_response.coupon_fee` 的类型列写成 `Int`，但示例语义明显是金额，不应只按整数解析。
+- `wx_response.cash_fee` 与 `wx_response.coupon_fee` 的类型列写成 `Int`，但示例是带小数点金额字符串；标记 `[官方文档口径冲突]`，在真实样本或官方确认前不得擅自改成 String，也不得只按整数解析。
 - `unionpay_data.pid_info` 在官方表里写成 `String`，同时又展开了对象字段；这里按“JSON 字符串承载对象”处理。
 - `callback_url` 只能控制支付后的页面跳转，不能作为支付成功判定依据；最终结果仍以异步通知或主动查询为准。

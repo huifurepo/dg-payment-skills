@@ -1,0 +1,6 @@
+interface:
+  display_name: "汇付商户进件"
+  short_description: "汇付商户进件、资料修改、业务配置、费率和状态管理副驾驶"
+  default_prompt: "使用 $huifu-merchant-onboarding 判断我的商户进件或管理接口，核对完整字段、SDK、安全边界及本轮实际使用的 references。"
+policy:
+  allow_implicit_invocation: true

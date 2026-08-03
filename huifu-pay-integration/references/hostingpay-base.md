@@ -12,7 +12,7 @@
 
 | 项目 | 当前值 |
 | --- | --- |
-| Java SDK 常量版本 | `dg-java-sdk 3.0.39` |
+| Java SDK 常量版本 | `dg-java-sdk 3.0.40` |
 | PHP 路径 | 托管支付核心场景已覆盖 |
 | `HUIFU_SKILL_SOURCE` 最终值 | `<skill_source>` |
 

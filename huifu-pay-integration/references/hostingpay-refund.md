@@ -55,162 +55,205 @@
 
 ## 退款申请 data 请求字段
 
-| 参数 | 必填 | 说明 |
-| --- | --- | --- |
-| `req_date` | Y | 本次退款请求日期，格式 `yyyyMMdd` |
-| `req_seq_id` | Y | 本次退款请求流水号，同一 `huifu_id` 下当天唯一 |
-| `huifu_id` | Y | 商户号 |
-| `ord_amt` | Y | 申请退款金额，单位元，保留两位小数；延时交易退款金额必须小于等于待确认金额 |
-| `org_req_date` | Y | 原交易请求日期，格式 `yyyyMMdd` |
-| `org_hf_seq_id` | C | 原交易全局流水号；与 `org_party_order_id`、`org_req_seq_id` 三选一 |
-| `org_party_order_id` | C | 原交易微信/支付宝用户账单上的商户单号；扫码退款场景三选一，拆单支付场景与 `org_hf_seq_id` 二选一 |
-| `org_req_seq_id` | C | 原交易请求流水号；与其他两项按官方规则择一上送 |
-| `acct_split_bunch` | N | 分账对象，JSON Object 字符串 |
-| `remark` | N | 备注，原样返回 |
-| `loan_flag` | N | 是否垫资退款，`Y`=垫资出款，`N`=普通出款，默认 `N` |
-| `loan_undertaker` | N | 垫资承担者 `huifu_id` |
-| `loan_acct_type` | N | 垫资账户类型，`01`=基本户，`05`=充值户，默认充值户 |
-| `risk_check_data` | C | 安全信息，线上交易退款必填，JSON Object 字符串 |
-| `terminal_device_data` | C | 设备信息，线上交易退款必填，JSON Object 字符串 |
-| `notify_url` | N | 退款异步通知地址 |
-| `bank_info_data` | C | 大额转账支付账户信息，银行大额转账支付退款申请时必填 |
-| `dy_data` | N | 抖音扩展参数集合，JSON Object 字符串 |
+| 参数 | 类型 | 长度 | 官网必填 | 条件与说明 |
+| --- | --- | --- | --- | --- |
+| `req_date` | String | 8 | Y | 本次退款请求日期，格式 `yyyyMMdd` |
+| `req_seq_id` | String | 128 | Y | 本次退款请求流水号，同一 `huifu_id` 下当天唯一 |
+| `huifu_id` | String | 32 | Y | 商户号 |
+| `ord_amt` | String | 14 | Y | 申请退款金额，单位元，保留两位小数；延时交易退款金额必须小于等于待确认金额 |
+| `org_req_date` | String | 8 | Y | 原交易请求日期，格式 `yyyyMMdd` |
+| `org_hf_seq_id` | String | 128 | N | 条件上与 `org_party_order_id`、`org_req_seq_id` 三选一；拆单支付时与 `org_party_order_id` 二选一 |
+| `org_party_order_id` | String | 64 | N | 扫码退款条件上三选一；拆单支付时与 `org_hf_seq_id` 二选一 |
+| `org_req_seq_id` | String | 128 | N | 条件上与另外两项三选一 |
+| `acct_split_bunch` | String(JSON Object) | 2048 | N | 分账对象 |
+| `remark` | String | 84 | N | 备注，原样返回 |
+| `loan_flag` | String | 2 | N | `Y`=垫资出款，`N`=普通出款，默认 `N` |
+| `loan_undertaker` | String | 32 | N | 垫资承担者 `huifu_id` |
+| `loan_acct_type` | String | 2 | N | `01`=基本户，`05`=充值户，默认充值户 |
+| `risk_check_data` | String(JSON Object) | 2048 | C | 线上交易退款必填 |
+| `terminal_device_data` | String(JSON Object) | 2048 | C | 线上交易退款必填 |
+| `notify_url` | String | 512 | N | 退款异步通知地址 |
+| `bank_info_data` | String(JSON Object) | 1024 | C | 银行大额转账支付退款申请时必填 |
+| `dy_data` | String(JSON Object) | 2048 | N | 抖音扩展参数集合 |
 
 ### `acct_split_bunch.acct_infos[]`
 
-| 参数 | 必填 | 说明 |
-| --- | --- | --- |
-| `div_amt` | Y | 分账金额，单位元，保留两位小数 |
-| `huifu_id` | Y | 分账接收方 ID |
-| `part_loan_amt` | N | 垫资金额；若由第三方全额垫资则不传 |
+| 参数 | 类型 | 长度 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| `div_amt` | String | 14 | Y | 分账金额，单位元，保留两位小数 |
+| `huifu_id` | String | 32 | Y | 分账接收方 ID |
+| `part_loan_amt` | String | 12 | N | 垫资金额；若由第三方全额垫资则不传 |
 
 ### `risk_check_data`
 
-| 参数 | 必填 | 说明 |
-| --- | --- | --- |
-| `ip_addr` | N | IP 地址；与经纬度、基站地址至少三选一送一项 |
-| `base_station` | N | 基站地址；与 IP、经纬度至少三选一送一项 |
-| `latitude` | N | 纬度；与 IP、基站地址至少三选一送一项 |
-| `longitude` | N | 经度；与 IP、基站地址至少三选一送一项 |
+| 参数 | 类型 | 长度 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| `ip_addr` | String | 32 | N | 与经纬度、基站地址至少三选一送一项 |
+| `base_station` | String | 64 | N | 与 IP、经纬度至少三选一送一项 |
+| `latitude` | String | 20 | N | 与 IP、基站地址至少三选一送一项 |
+| `longitude` | String | 20 | N | 与 IP、基站地址至少三选一送一项 |
+
+> **[官方文档口径冲突]** 请求参数表定义 `risk_check_data.ip_addr/base_station/latitude/longitude`，但同页成功请求样例使用 `risk_check_data.ip_address`，并额外出现表中未定义的 `risk_check_data.risk_mng_info.sub_trade_type`。两套路径只能作为互不等价的候选口径保留；取得真实联调样本或官方确认前，不得静默把 `ip_addr` 重命名为 `ip_address`、补入 `risk_mng_info`，也不得生成生产 DTO 或固定校验器。
 
 ### `terminal_device_data`
 
-| 参数 | 必填 | 说明 |
-| --- | --- | --- |
-| `device_type` | N | `1` 手机，`2` 平板，`3` 手表，`4` PC |
-| `device_ip` | N | 交易设备公网 IP |
-| `device_mac` | N | 交易设备 MAC |
-| `device_gps` | N | 交易设备 GPS |
-| `device_imei` | N | 交易设备 IMEI |
-| `device_imsi` | N | 交易设备 IMSI |
-| `device_icc_id` | N | 交易设备 ICCID |
-| `device_wifi_mac` | N | 交易设备 WIFI MAC |
+| 参数 | 类型 | 长度 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| `device_type` | String | 2 | N | `1` 手机，`2` 平板，`3` 手表，`4` PC |
+| `device_ip` | String | 64 | N | 交易设备公网 IP |
+| `device_mac` | String | 64 | N | 交易设备 MAC |
+| `device_gps` | String | 64 | N | 交易设备 GPS |
+| `device_imei` | String | 64 | N | 交易设备 IMEI |
+| `device_imsi` | String | 64 | N | 交易设备 IMSI |
+| `device_icc_id` | String | 64 | N | 交易设备 ICCID |
+| `device_wifi_mac` | String | 64 | N | 交易设备 WIFI MAC |
 
 ### `bank_info_data`
 
-| 参数 | 必填 | 说明 |
-| --- | --- | --- |
-| `province` | C | 付款方为对公账户时必填，省份代码 |
-| `area` | C | 付款方为对公账户时必填，地区代码 |
-| `bank_code` | C | 付款方为对公账户时必填，银行编号 |
-| `correspondent_code` | C | 付款方为对公账户时必填，联行号 |
-| `card_acct_type` | N | 付款方账户类型，`E`=对公，`P`=对私，默认 `P` |
+| 参数 | 类型 | 长度 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| `province` | String | 4 | C | 付款方为对公账户时必填，省份代码 |
+| `area` | String | 4 | C | 付款方为对公账户时必填，地区代码 |
+| `bank_code` | String | 8 | C | 付款方为对公账户时必填，银行编号 |
+| `correspondent_code` | String | 30 | C | 付款方为对公账户时必填，联行号 |
+| `card_acct_type` | String | 1 | N | `E`=对公，`P`=对私，默认 `P` |
 
 ### `dy_data`
 
-| 参数 | 必填 | 说明 |
-| --- | --- | --- |
-| `refund_desc` | N | 抖音退款原因，会展示给用户 |
+| 参数 | 类型 | 长度 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| `refund_desc` | String | 200 | N | 抖音退款原因，会展示给用户 |
 
 ## 退款申请返回参数
 
 同步返回只代表退款请求受理或处理结果，不等于退款终态。退款最终状态仍应通过退款查询和异步通知闭环确认。
 
-| 参数 | 必填 | 说明 |
-| --- | --- | --- |
-| `resp_code` | Y | 业务响应码 |
-| `resp_desc` | Y | 业务响应信息 |
-| `product_id` | Y | 产品号，原样返回 |
-| `huifu_id` | Y | 商户号 |
-| `req_date` | Y | 退款请求日期，原样返回 |
-| `req_seq_id` | Y | 退款请求流水号，原样返回 |
-| `hf_seq_id` | N | 退款全局流水号，扫码退款场景可能返回 |
-| `org_req_date` | N | 原交易请求日期 |
-| `org_req_seq_id` | N | 原交易请求流水号 |
-| `org_hf_seq_id` | N | 原交易全局流水号 |
-| `trans_time` | N | 退款交易发生时间 |
-| `trans_stat` | N | `P` 处理中，`S` 成功，`F` 失败 |
-| `ord_amt` | Y | 退款金额 |
-| `actual_ref_amt` | N | 实际退款金额 |
-| `acct_split_bunch` | N | 分账信息 |
-| `unionpay_response` | N | 银联返回报文 |
-| `dy_response` | N | 抖音返回报文 |
-| `remark` | N | 备注，原样返回 |
-| `bank_code` | N | 通道返回码 |
-| `bank_message` | N | 通道返回描述 |
-| `fee_amt` | N | 退款返还手续费 |
+| 参数 | 类型 | 长度 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| `resp_code` | String | 8 | Y | 业务响应码 |
+| `resp_desc` | String | 512 | Y | 业务响应信息 |
+| `product_id` | String | 32 | Y | 产品号，原样返回 |
+| `huifu_id` | String | 32 | Y | 商户号 |
+| `req_date` | String | 8 | Y | 退款请求日期，原样返回 |
+| `req_seq_id` | String | 128 | Y | 退款请求流水号，原样返回 |
+| `hf_seq_id` | String | 128 | N | 退款全局流水号，扫码退款场景可能返回 |
+| `org_req_date` | String | 8 | N | 原交易请求日期 |
+| `org_req_seq_id` | String | 128 | N | 原交易请求流水号 |
+| `org_hf_seq_id` | String | 128 | N | 原交易全局流水号 |
+| `trans_time` | String | 14 | N | 退款交易发生时间 |
+| `trans_stat` | String | 1 | N | `P` 处理中，`S` 成功，`F` 失败 |
+| `ord_amt` | String | 14 | Y | 退款金额 |
+| `actual_ref_amt` | String | 14 | N | 实际退款金额 |
+| `acct_split_bunch` | String(JSON Object) | 2048 | N | 分账信息 |
+| `unionpay_response` | String(JSON Object) | 6000 | N | 银联返回报文 |
+| `dy_response` | String（子表编码待确认） | 6000 | N | 官网未声明 JSON；子字段只作合同展示路径 |
+| `remark` | String | 84 | N | 备注，原样返回 |
+| `bank_code` | String | 64 | N | 通道返回码 |
+| `bank_message` | String | 256 | N | 通道返回描述 |
+| `fee_amt` | String | 14 | N | 退款返还手续费 |
 
 ## 退款申请异步返回参数
 
 退款申请可能通过异步通知返回更完整的退款结果。异步通知仍需验签、幂等和必要的退款查询确认，不能只凭同步 `resp_code=00000000` 改退款成功。
 
-| 参数 | 必填 | 说明 |
-| --- | --- | --- |
-| `resp_code` | Y | 业务响应码 |
-| `resp_desc` | Y | 业务响应信息 |
-| `product_id` | Y | 产品号 |
-| `huifu_id` | Y | 商户号 |
-| `mer_name` | N | 商户名称 |
-| `req_date` | Y | 退款请求日期 |
-| `req_seq_id` | Y | 退款请求流水号 |
-| `hf_seq_id` | N | 退款全局流水号 |
-| `org_req_date` | N | 原交易请求日期 |
-| `org_req_seq_id` | N | 原交易请求流水号 |
-| `org_hf_seq_id` | N | 原交易全局流水号 |
-| `org_ord_amt` | N | 原交易订单金额 |
-| `org_fee_amt` | N | 原交易手续费 |
-| `trans_date` | N | 退款交易发生日期 |
-| `trans_time` | N | 退款交易发生时间 |
-| `trans_finish_time` | N | 退款完成时间 |
-| `trans_type` | N | 交易类型，`TRANS_REFUND` |
-| `trans_stat` | N | `P` 处理中，`S` 成功，`F` 失败，`I` 初始 |
-| `ord_amt` | Y | 本次退款金额 |
-| `actual_ref_amt` | N | 实际退款金额 |
-| `total_ref_amt` | N | 原交易累计退款金额 |
-| `total_ref_fee_amt` | N | 原交易累计退款手续费金额 |
-| `ref_cut` | N | 累计退款次数 |
-| `party_order_id` | N | 微信/支付宝/抖音用户账单上的商户订单号 |
-| `bank_code` | N | 通道返回码 |
-| `bank_message` | N | 通道返回描述 |
-| `bank_id` | N | 收款方银行代号，快捷或网银返回 |
-| `bank_name` | N | 收款方银行名称，快捷或网银返回 |
-| `fee_amt` | N | 退款返还手续费 |
-| `acct_split_bunch` | N | 分账退款信息 |
-| `split_fee_info` | N | 分账手续费信息 |
-| `unionpay_response` | N | 银联返回报文，可能含 `coupon_info` 优惠信息 |
-| `dy_response` | N | 抖音返回报文，含抖音原交易订单号、退款单号、用户退款金额等 |
-| `remark` | N | 备注，原样返回 |
+| 参数 | 类型 | 长度 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| `resp_code` | String | 8 | Y | 业务响应码 |
+| `resp_desc` | String | 512 | Y | 业务响应信息 |
+| `huifu_id` | String | 32 | Y | 商户号 |
+| `mer_name` | String | 128 | Y | 商户名称，线上交易返回 |
+| `req_date` | String | 8 | Y | 退款请求日期 |
+| `req_seq_id` | String | 128 | Y | 退款请求流水号 |
+| `hf_seq_id` | String | 128 | N | 退款全局流水号 |
+| `org_req_date` | String | 8 | N | 原交易请求日期 |
+| `org_req_seq_id` | String | 128 | N | 原交易请求流水号 |
+| `org_ord_amt` | String | 14 | Y | 原交易订单金额 |
+| `org_fee_amt` | String | 14 | Y | 原交易手续费 |
+| `trans_date` | String | 8 | Y | 退款交易发生日期 |
+| `trans_time` | String | 6 | N | 退款交易发生时间，`HHmmss` |
+| `trans_finish_time` | String | 14 | N | 退款完成时间，`yyyyMMddHHmmss` |
+| `trans_type` | String | 40 | Y | 交易类型，`TRANS_REFUND` |
+| `trans_stat` | String | 1 | N | `P` 处理中，`S` 成功，`F` 失败 |
+| `ord_amt` | String | 14 | Y | 本次退款金额 |
+| `actual_ref_amt` | String | 14 | N | 实际退款金额 |
+| `total_ref_amt` | String | 14 | Y | 原交易累计退款金额 |
+| `total_ref_fee_amt` | String | 14 | Y | 原交易累计退款手续费金额 |
+| `ref_cut` | String | 14 | Y | 累计退款次数 |
+| `party_order_id` | String | 64 | N | 微信/支付宝/抖音用户账单上的商户订单号 |
+| `bank_code` | String | 64 | N | 通道返回码 |
+| `bank_message` | String | 256 | N | 通道返回描述 |
+| `bank_id` | String | 32 | N | 收款方银行代号，快捷或网银返回 |
+| `bank_name` | String | 128 | N | 收款方银行名称，快捷或网银返回 |
+| `fee_amt` | String | 14 | N | 退款返还手续费 |
+| `acct_split_bunch` | String(JSON Object) | 4000 | Y | 分账退款信息 |
+| `split_fee_info` | String(JSON Object) | 2048 | N | 分账手续费信息，线上交易返回 |
+| `unionpay_response` | String(JSON Object) | 6000 | N | 银联返回报文，可能含 `coupon_info` 优惠信息 |
+| `dy_response` | String（子表编码待确认） | 6000 | N | 官网未声明 JSON；子字段只作合同展示路径 |
+| `remark` | String | 84 | N | 备注，原样返回 |
 
-### 异步扩展对象摘要
+### 同步/异步扩展对象
 
-| 对象 | 关键字段 |
-| --- | --- |
-| `acct_split_bunch.acct_infos[]` | `div_amt`、`huifu_id`、`acct_id`、`part_loan_amt` |
-| `split_fee_info` | `total_split_fee_amt`、`split_fee_flag`、`split_fee_details[]` |
-| `split_fee_details[]` | `split_fee_amt`、`split_fee_huifu_id`、`split_fee_acct_id` |
-| `unionpay_response.coupon_info[]` | `type`、`spnsrId`、`offstAmt`、`id`、`desc`、`addnInfo` |
-| `dy_response` | `org_out_trans_id`、`out_trans_id`、`payer_refund` |
+`acct_split_bunch` 的对象长度以所在主表为准：同步 2048、异步 4000。
+
+`dy_response` 的父字段仅由官网定义为 `String(6000)`，未说明 JSON 编码。以下 `org_out_trans_id/out_trans_id/payer_refund` 是官网展开的合同定位路径；在真实样本或官方确认前，wire 子表编码和 JSON decode 路径均为 `[需要官方确认]`。
+
+| 字段路径 | 类型 | 长度 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| `acct_infos[]` | Array | 2048 | N | 分账明细 |
+| `fee_amt` | String | 14 | N | 退款返还手续费 |
+
+`acct_split_bunch.acct_infos[]`：
+
+| 字段路径 | 类型 | 长度 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| `div_amt` | String | 14 | Y | 分账金额 |
+| `huifu_id` | String | 32 | Y | 分账接收方 ID |
+
+`split_fee_info`：
+
+| 字段路径 | 类型 | 长度 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| `split_fee_flag` | String | 1 | Y | `1` 外扣、`2` 内扣 |
+| `total_split_fee_amt` | String | 14 | Y | 总分账手续费金额 |
+| `split_fee_details[]` | Array | 2048 | Y | 分账手续费明细 |
+
+`split_fee_info.split_fee_details[]`：
+
+| 字段路径 | 类型 | 长度 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| `split_fee_amt` | String | 14 | Y | 分账手续费金额 |
+| `split_fee_huifu_id` | String | 32 | Y | 分账手续费承担方商户号 |
+| `split_fee_acct_id` | String | 9 | N | 分账手续费承担方账号 |
+
+`unionpay_response.coupon_info[]`：
+
+| 字段路径 | 类型 | 长度 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| `addnInfo` | String | 100 | N | 附加信息 |
+| `spnsrId` | String | 20 | Y | 出资方 |
+| `type` | String | 4 | Y | 项目类型，如 `DD01`、`CP01` |
+| `offstAmt` | String | 14 | Y | 抵消交易金额 |
+| `id` | String | 40 | N | 项目编号 |
+| `desc` | String | 40 | N | 项目简称 |
+
+`dy_response`：
+
+| 字段路径 | 类型 | 长度 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| `org_out_trans_id` | String | 32 | N | 抖音原交易订单号 |
+| `out_trans_id` | String | 32 | N | 抖音退款单号 |
+| `payer_refund` | String | 12 | N | 退款给用户的金额，不含优惠券金额 |
 
 ## 退款查询 data 请求字段
 
-| 参数 | 必填 | 说明 |
-| --- | --- | --- |
-| `req_date` | Y | 本次查询请求日期，格式 `yyyyMMdd` |
-| `req_seq_id` | Y | 本次查询请求流水号，同一 `huifu_id` 下当天唯一 |
-| `huifu_id` | Y | 商户号 |
-| `org_req_date` | Y | 退款请求日期，不是原支付交易日期 |
-| `org_hf_seq_id` | C | 退款全局流水号；与 `org_req_seq_id` 二选一 |
-| `org_req_seq_id` | C | 退款请求流水号；与 `org_hf_seq_id` 二选一 |
+| 参数 | 类型 | 长度 | 官网必填 | 条件与说明 |
+| --- | --- | --- | --- | --- |
+| `req_date` | String | 8 | Y | 本次查询请求日期，格式 `yyyyMMdd` |
+| `req_seq_id` | String | 128 | Y | 本次查询请求流水号，同一 `huifu_id` 下当天唯一 |
+| `huifu_id` | String | 32 | Y | 商户号 |
+| `org_req_date` | String | 8 | Y | 退款请求日期，不是原支付交易日期 |
+| `org_hf_seq_id` | String | 128 | C | 与 `org_req_seq_id` 二选一，不能都为空 |
+| `org_req_seq_id` | String | 128 | C | 与 `org_hf_seq_id` 二选一，不能都为空 |
 
 查询补充说明：
 

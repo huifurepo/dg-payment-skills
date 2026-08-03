@@ -2,6 +2,8 @@
 
 本文件覆盖托管支付退款与退款查询的 PHP 调用方式。
 
+> 🔴 TLS 硬停：锁定的 PHP `2.0.30` 关闭对端证书校验。本页所有片段只用于静态字段/SDK 形态审查，不得执行真实网络调用，不得用于联调或生产；解除条件是启用证书链与主机名校验并通过错证书/错域名测试。
+
 ## 目录
 
 - 发起退款
@@ -27,7 +29,7 @@ require_once HUIFU_SDK_ROOT . '/request/V2TradeHostingPaymentHtrefundRequest.php
 use BsPaySdk\request\V2TradeHostingPaymentHtrefundRequest;
 
 $request = new V2TradeHostingPaymentHtrefundRequest();
-$result = $client->postRequest([
+$requestShape = (static function (array $request): array { return $request; })([
     'funcCode' => $request->getFunctionCode(),
     'params' => [
         'req_date' => date('Ymd'),
@@ -69,7 +71,7 @@ require_once HUIFU_SDK_ROOT . '/request/V2TradeHostingPaymentQueryrefundinfoRequ
 use BsPaySdk\request\V2TradeHostingPaymentQueryrefundinfoRequest;
 
 $request = new V2TradeHostingPaymentQueryrefundinfoRequest();
-$result = $client->postRequest([
+$requestShape = (static function (array $request): array { return $request; })([
     'funcCode' => $request->getFunctionCode(),
     'params' => [
         'req_date' => date('Ymd'),
@@ -80,7 +82,7 @@ $result = $client->postRequest([
     ],
 ]);
 
-$response = $result->getRspDatas()['data'] ?? [];
+$response = []; // 仅展示响应白名单形态；不得伪造网络响应
 $transStat = $response['trans_stat'] ?? 'P';
 ```
 
@@ -92,7 +94,7 @@ require_once HUIFU_SDK_ROOT . '/request/V2TradeHostingPaymentQueryrefundinfoRequ
 use BsPaySdk\request\V2TradeHostingPaymentQueryrefundinfoRequest;
 
 $request = new V2TradeHostingPaymentQueryrefundinfoRequest();
-$result = $client->postRequest([
+$requestShape = (static function (array $request): array { return $request; })([
     'funcCode' => $request->getFunctionCode(),
     'params' => [
         'req_date' => date('Ymd'),

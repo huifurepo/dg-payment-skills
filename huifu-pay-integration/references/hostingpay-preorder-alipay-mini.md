@@ -81,6 +81,8 @@
 |------|--------|------|------|------|------|
 | huifu_id | 商户号 | String | 32 | Y | 开户自动生成 |
 | acct_id | 收款汇付账户号 | String | 32 | N | 仅支持基本户、现金户；不填默认基本户；仅微信、支付宝、网银支持指定收款账户 |
+| channel_no | 通道号 | String | 32 | N | 指定路由通道时传真实通道号；不要传空字符串 |
+| pay_scene | 支付场景 | String | 2 | N | 官网列值为 N；指定 `channel_no` 时条件必填 |
 | req_date | 请求日期 | String | 8 | Y | `yyyyMMdd` |
 | req_seq_id | 请求流水号 | String | 64 | Y | 同一 `huifu_id` 下当天唯一 |
 | pre_order_type | 预下单类型 | String | 1 | Y | 支付宝预下单固定为 `2` |
@@ -88,7 +90,7 @@
 | goods_desc | 商品描述 | String | 40 | Y | 商品描述 |
 | delay_acct_flag | 是否延迟交易 | String | 1 | N | `Y`=延迟，`N`=不延迟，默认 `N` |
 | acct_split_bunch | 分账对象 | String(JSON Object) | 2000 | N | 分账对象 |
-| hosting_data | 统一收银台扩展参数集合 | String(JSON Object) | 2000 | N | 可传项目号等托管扩展 |
+| hosting_data | 统一收银台扩展参数集合 | String(JSON Object) | 2000 | N | 可传项目号等托管扩展；不得因 H5/PC 为 Y 而提升为必填 |
 | app_data | app 扩展参数集合 | String(JSON Object) | 2000 | Y | app 扩展参数集合 |
 | time_expire | 交易失效时间 | String | 14 | N | `yyyyMMddHHmmss`；默认 10 分钟 |
 | biz_info | 业务信息 | String(JSON Object) | 2000 | N | 交易相关信息 |

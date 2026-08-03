@@ -15,7 +15,7 @@
 | 属性 | 值 |
 |-----|-----|
 | SDK 名称 | dg-java-sdk |
-| 当前版本 | 3.0.39 |
+| 当前版本 | 3.0.40 |
 | GroupId | com.huifu.bspay.sdk |
 | ArtifactId | dg-java-sdk |
 
@@ -27,7 +27,7 @@
 <dependency>
     <groupId>com.huifu.bspay.sdk</groupId>
     <artifactId>dg-java-sdk</artifactId>
-    <version>3.0.39</version>
+    <version>3.0.40</version>
 </dependency>
 ```
 
@@ -46,7 +46,7 @@ mvn clean install
 | 2.x | `javax.annotation.PostConstruct` | `javax.validation.constraints.NotBlank` |
 | 3.x (JDK 17/21) | `jakarta.annotation.PostConstruct` | `jakarta.validation.constraints.NotBlank` |
 
-> **[SDK 方法名口径]** `dg-java-sdk 3.0.39` 的 `MerConfig` 产品号方法名为 `setProductId(...)`。不要再生成旧文档中的 `setProcutId(...)`。
+> **[SDK 方法名口径]** `dg-java-sdk 3.0.40` 的 `MerConfig` 产品号方法名为 `setProductId(...)`。不要再生成旧文档中的 `setProcutId(...)`。
 
 ```java
 package com.yourcompany.huifu.config;
@@ -75,11 +75,14 @@ public class HuifuConfig {
     @Value("${huifu.rsa-public-key}")
     private String rsaPublicKey;
 
-    @Value("${huifu.skill-source:hfps/1.3.2}")
+    @Value("${huifu.skill-source:hfps/1.3.3}")
     private String skillSource;
 
     @PostConstruct
     public void initSdk() throws Exception {
+        // 通用 SDK 默认 debug=true，会输出私钥、签名和请求数据。
+        BasePay.debug = false;
+
         MerConfig merConfig = new MerConfig();
         merConfig.setProductId(productId);
         merConfig.setSysId(sysId);
@@ -94,10 +97,12 @@ public class HuifuConfig {
 
 **关键说明**：
 
-1. `setProductId()` 是 `dg-java-sdk 3.0.39` 源码中的产品号 setter
+1. `setProductId()` 是 `dg-java-sdk 3.0.40` 源码中的产品号 setter
 2. SDK 初始化在 `@PostConstruct` 中执行，应用启动时仅执行**一次**
-3. 所有配置通过 `@Value` 从 `application.yml` 读取，配置文件通过环境变量注入
-4. `skillSource` 默认可直接使用 `hfps/1.3.2`；如需覆盖，可通过配置项 `huifu.skill-source` 传入，初始化时按 `<skill_source>` 原样透传
+3. `BasePay.debug=false` 必须在任何初始化或请求前全局执行一次，不得按请求或线程临时切换
+4. 所有配置通过 `@Value` 从 `application.yml` 读取，配置文件通过环境变量注入
+5. `skillSource` 默认可直接使用 `hfps/1.3.3`；如需覆盖，可通过配置项 `huifu.skill-source` 传入，初始化时按 `<skill_source>` 原样透传
+6. 当前锁定通用 Java SDK 的 HTTP 客户端不验证证书链和主机名；本片段只说明初始化形态，不代表可直接用于联调或生产，必须先满足 `shared-server-sdk-matrix.md` 的传输安全硬停。
 
 ## 步骤 3：验证核心类导入
 
@@ -146,7 +151,7 @@ if ("00000000".equals(respCode)) {
 | H5/PC 预下单 | `V2TradeHostingPaymentPreorderH5Request` | `com.huifu.bspay.sdk.opps.core.request` |
 | 支付宝小程序预下单 | `V2TradeHostingPaymentPreorderAliRequest` | 同上 |
 | 微信小程序预下单 | `V2TradeHostingPaymentPreorderWxRequest` | 同上 |
-| 抖音直连下单 | 使用 `V2TradeHostingPaymentPreorderH5Request`，设置 `pre_order_type=4` | 同上 |
+| 抖音直连下单 | `V2TradeHostingPaymentPreorderDyRequest`，设置 `pre_order_type=4` | 同上 |
 | 托管交易查询 | `V2TradeHostingPaymentQueryorderinfoRequest` | 同上 |
 | 托管交易退款 | `V2TradeHostingPaymentHtrefundRequest` | 同上 |
 | 退款结果查询 | `V2TradeHostingPaymentQueryrefundinfoRequest` | 同上 |
@@ -162,4 +167,4 @@ SDK Request 类有两类字段：
 
 **判断规则**：查看 Request 类是否有对应 setter，有则用 setter，无则用 extendInfoMap。
 
-抖音直连下单属于托管预下单场景，不能编造 `Dypreorder` / `Douyin` 类名；必须使用 `V2TradeHostingPaymentPreorderH5Request`，固定 `pre_order_type=4`，并把 `dy_data` 等字段通过字段或 `extendInfoMap` 透传。
+抖音直连仍属于托管预下单场景，但当前 `3.0.40` 基线已有 `V2TradeHostingPaymentPreorderDyRequest`；固定 `pre_order_type=4`，`dy_data` 使用专属 setter，其他无 setter 字段通过 `extendInfoMap` 透传。

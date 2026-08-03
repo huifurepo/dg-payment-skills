@@ -34,15 +34,15 @@ A：检查 `pre_order_type` 是否正确设置（1=H5/PC、2=支付宝小程序�
 ## SDK 使用问题
 
 **Q：Java 初始化时产品号 setter 应该用哪个？**
-A：以最新 `dg-java-sdk 3.0.39` 源码为准，`MerConfig` 使用 `setProductId(...)`。不要再生成旧文档中的 `setProcutId(...)`。
+A：以最新 `dg-java-sdk 3.0.40` 源码为准，`MerConfig` 使用 `setProductId(...)`。不要再生成旧文档中的 `setProcutId(...)`。
 
 ```java
-// ✓ dg-java-sdk 3.0.39
+// ✓ dg-java-sdk 3.0.40
 config.setProductId("YYZY");
 ```
 
 **Q：Spring Boot 3.x 启动报错 javax 相关异常？**
-A：先核对项目实际安装的 `dg-java-sdk` 版本和依赖树。当前 `3.0.39` 源码未检出 `javax.validation` 注解；如果项目仍因历史版本或传递依赖报 `javax.validation` 缺失，再补兼容依赖：
+A：先核对项目实际安装的 `dg-java-sdk` 版本和依赖树。当前 `3.0.40` 源码未检出 `javax.validation` 注解；如果项目仍因历史版本或传递依赖报 `javax.validation` 缺失，再补兼容依赖：
 
 ```xml
 <dependency>

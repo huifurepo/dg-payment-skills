@@ -32,15 +32,15 @@
 | 场景 | 抖音直连下单 |
 | `pre_order_type` | `4` |
 | 报文格式 | `application/json` |
-| SDK Request 类 | Java / PHP / Python 均使用托管预下单 `V2TradeHostingPaymentPreorderH5Request`；不要生成独立 `Dypreorder` / `Douyin` 类 |
+| SDK Request 类 | Java / PHP / Python 当前基线均使用 `V2TradeHostingPaymentPreorderDyRequest`；功能码仍映射共用 preorder Endpoint |
 
 ## SDK 兼容性
 
 | 语言 | 当前核对结果 | 输出规则 |
 | --- | --- | --- |
-| Java | 使用 `V2TradeHostingPaymentPreorderH5Request`，该 request 指向共用 `preorder` 端点且有 `setPreOrderType(...)` | 调用 `setPreOrderType("4")`，`dy_data`、`notify_url` 等无专属 setter 的字段通过 `setExtendInfo(...)` / `addExtendInfo(...)` 传入；不要生成不存在的 `Dypreorder` / `Douyin` request 类 |
-| PHP | 使用 `V2TradeHostingPaymentPreorderH5Request`，该 request 指向共用 `preorder` 端点且有 `setPreOrderType(...)` | 调用 `setPreOrderType("4")`，`dy_data`、`notify_url` 等扩展字段通过 `setExtendInfo(...)` / params 传入；不要生成不存在的 `Dypreorder` / `Douyin` request 类 |
-| Python | 使用 `V2TradeHostingPaymentPreorderH5Request`，该 request 调用共用 `preorder` URL | 设置 `request.pre_order_type = "4"`，`dy_data` 先序列化为 JSON 字符串后通过 `.post(extend_infos)` 传入；不要生成不存在的抖音专属 request 类 |
+| Java | `V2TradeHostingPaymentPreorderDyRequest` | 调用 `setPreOrderType("4")`、`setDyData(...)`；`notify_url` 等无专属 setter 的字段走 extendInfo |
+| PHP | `V2TradeHostingPaymentPreorderDyRequest` | 调用 `setPreOrderType("4")`、`setDyData(...)`；扩展字段按官方 request/params 路径传入 |
+| Python | `V2TradeHostingPaymentPreorderDyRequest` | 设置 `pre_order_type="4"` 和 `dy_data`，扩展字段通过 `.post(extend_infos)` 传入 |
 
 ## 公共请求参数
 
@@ -258,4 +258,4 @@
 - `jump_url` 是短时效拉起凭证：APP 预支付参数约 2 小时有效，H5 中间页 URL 约 5 分钟有效，业务侧过期后应重新下单。
 - 同步返回的 `jump_url` 或预支付参数只用于前端拉起支付，不等于支付成功。
 - 最终状态必须走服务端闭环：异步通知验签、幂等和必要的托管查单或拆单查询确认。
-- SDK 说明必须区分“抖音直连是托管预下单场景”与“存在独立抖音 Request 类”；三语言都使用托管预下单 request，不要说存在独立抖音 Request 类。
+- SDK 说明必须区分“抖音直连仍是托管预下单场景”与“当前三语言基线已有专属 Request 类”；专属类的功能码仍指向共用 preorder Endpoint。

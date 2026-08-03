@@ -1,0 +1,2198 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "ff7b6acde574f498fde9c6f0763078b0e2eea3b7",
+  "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+  "reviewed_at": "2026-07-24",
+  "reviewers": [
+    {
+      "role": "migration-and-standards-review",
+      "identity": "minimal_split"
+    },
+    {
+      "role": "official-source-and-spec-review",
+      "identity": "shared_core_family"
+    },
+    {
+      "role": "final-adjudication",
+      "identity": "root"
+    }
+  ],
+  "method": "Independent post-migration section inventory review. Every baseline H2/H3 section, or the whole document when no H2/H3 exists, is routed to at least one sealed migration destination. No section is approved for deletion.",
+  "entries": [
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-customer-preparation.md",
+      "category": "REWRITE_PAYMENT",
+      "destination_paths": [
+        "huifu-pay-integration/references/aggregation-customer-preparation.md"
+      ],
+      "source_section_inventory_sha256": "f915267d7c7ab5d55457208d9a5fa8fd7f5a25641faa0106779ce647469d0343",
+      "section_routes": [
+        {
+          "source_section": "L2@6:目录",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-customer-preparation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@19:参数来源分类",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-customer-preparation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@29:全局必备配置",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-customer-preparation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@40:官方开发指引确认的通用前置动作",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-customer-preparation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@46:聚合下单前要准备什么",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-customer-preparation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@48:所有 trade_type 通用",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-customer-preparation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@60:微信类场景",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-customer-preparation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@69:支付宝类场景",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-customer-preparation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@77:银联类场景",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-customer-preparation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@85:渠道级前置准备矩阵",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-customer-preparation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@95:扩展字段相关准备项",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-customer-preparation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@105:查询 / 关单 / 退款前要沉淀什么",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-customer-preparation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@116:权限 / 开通项检查",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-customer-preparation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@132:向客户索取材料的最小清单",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-customer-preparation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@134:必需",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-customer-preparation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@141:按场景补充",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-customer-preparation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@150:给模型的硬约束",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-customer-preparation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-order-method-alipay.md",
+      "category": "REWRITE_PAYMENT",
+      "destination_paths": [
+        "huifu-pay-integration/references/aggregation-order-method-alipay.md"
+      ],
+      "source_section_inventory_sha256": "043a261228aca4a3dce20e4c07a606142b5ef0e9d87f24af5cc4623cba11b052",
+      "section_routes": [
+        {
+          "source_section": "L2@4:目录",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-alipay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@16:适用交易类型",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-alipay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@24:`method_expand` 对象边界",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-alipay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@30:官方接入前准备",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-alipay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@36:`A_JSAPI` / `A_NATIVE` 请求字段",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-alipay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@57:`A_MICROPAY` 请求字段",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-alipay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@72:支付宝共用子结构",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-alipay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@74:`goods_detail[]`",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-alipay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@87:`A_JSAPI` / `A_NATIVE` 的 `extend_params`",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-alipay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@99:`A_MICROPAY` 的 `extend_params`",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-alipay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@111:`ext_user_info`",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-alipay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@123:同步返回支付宝扩展",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-alipay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@136:异步 `alipay_response`",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-alipay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@155:`voucher_detail_list[]`",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-alipay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@166:`fund_bill_list[]`",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-alipay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@176:支付宝实现备注",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-alipay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-order-method-unionpay.md",
+      "category": "REWRITE_PAYMENT",
+      "destination_paths": [
+        "huifu-pay-integration/references/aggregation-order-method-unionpay.md"
+      ],
+      "source_section_inventory_sha256": "291622a8ac152d877fabddeaa3271f71bfa3f2e9dbb8fa0b9e9890160e313243",
+      "section_routes": [
+        {
+          "source_section": "L2@4:目录",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-unionpay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@15:适用交易类型",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-unionpay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@23:`method_expand` 对象边界",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-unionpay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@29:官方接入前准备",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-unionpay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@35:`U_JSAPI` / `U_NATIVE` 请求字段",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-unionpay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@49:`payee_info`",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-unionpay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@58:`U_MICROPAY` 请求字段",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-unionpay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@72:`pid_info`",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-unionpay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@80:同步返回银联扩展",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-unionpay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@90:异步 `unionpay_response`",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-unionpay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@97:`coupon_info[]`",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-unionpay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@108:银联实现备注",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-unionpay.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/aggregation-order-method-wechat.md",
+      "category": "REWRITE_PAYMENT",
+      "destination_paths": [
+        "huifu-pay-integration/references/aggregation-order-method-wechat.md"
+      ],
+      "source_section_inventory_sha256": "e1cd005e2ba56cb53c8af3ac6dec09a3ba71f02e0f7215b5582028fe4a6c0047",
+      "section_routes": [
+        {
+          "source_section": "L2@4:目录",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-wechat.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@15:适用交易类型",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-wechat.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@24:`method_expand` 对象边界",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-wechat.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@30:官方接入前准备",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-wechat.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@37:微信公众号 / 小程序 / APP 请求字段",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-wechat.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@49:`detail`",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-wechat.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@57:`detail.goods_detail[]`",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-wechat.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@67:`scene_info`",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-wechat.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@73:微信反扫 `T_MICROPAY` 请求字段",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-wechat.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@88:`scene_info.store_info`",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-wechat.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@97:同步返回微信扩展",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-wechat.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@118:异步 `wx_response`",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-wechat.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@137:`promotion_detail[]`",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-wechat.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@153:`promotion_detail.goods_detail[]`",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-wechat.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@163:微信实现备注",
+          "destination_paths": [
+            "huifu-pay-integration/references/aggregation-order-method-wechat.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/canonical-regression-prompts.md",
+      "category": "SPLIT",
+      "destination_paths": [
+        "huifu-pay-integration/references/canonical-regression-prompts.md",
+        "huifu-merchant-onboarding/references/canonical-regression-prompts.md"
+      ],
+      "source_section_inventory_sha256": "017924b6bbe6922535513a9b6527e4dba347df0a3d840a29690f4fe70deb156e",
+      "section_routes": [
+        {
+          "source_section": "L2@5:使用方式",
+          "destination_paths": [
+            "huifu-pay-integration/references/canonical-regression-prompts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@9:Prompt 清单",
+          "destination_paths": [
+            "huifu-pay-integration/references/canonical-regression-prompts.md",
+            "huifu-merchant-onboarding/references/canonical-regression-prompts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@11:C01 首次接入",
+          "destination_paths": [
+            "huifu-pay-integration/references/canonical-regression-prompts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@19:C02 存量系统",
+          "destination_paths": [
+            "huifu-pay-integration/references/canonical-regression-prompts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@27:C03 checkout-js 已完成前置",
+          "destination_paths": [
+            "huifu-pay-integration/references/canonical-regression-prompts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@35:C04 商户进件图片上传边界",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/canonical-regression-prompts.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L3@43:C05 版本升级",
+          "destination_paths": [
+            "huifu-pay-integration/references/canonical-regression-prompts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@51:C06 托管新增接口",
+          "destination_paths": [
+            "huifu-pay-integration/references/canonical-regression-prompts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@59:C07 聚合字段更新",
+          "destination_paths": [
+            "huifu-pay-integration/references/canonical-regression-prompts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@67:C08 商户进件状态分层",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/canonical-regression-prompts.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/copilot-solution-cards.md",
+      "category": "REWRITE_PAYMENT",
+      "destination_paths": [
+        "huifu-pay-integration/references/copilot-solution-cards.md"
+      ],
+      "source_section_inventory_sha256": "cad9388bfa80a89c0f32a9603e5b438cc822b7807bdb024acf6758396b96704f",
+      "section_routes": [
+        {
+          "source_section": "L2@5:目录",
+          "destination_paths": [
+            "huifu-pay-integration/references/copilot-solution-cards.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@15:统一模板",
+          "destination_paths": [
+            "huifu-pay-integration/references/copilot-solution-cards.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@30:卡详写规则",
+          "destination_paths": [
+            "huifu-pay-integration/references/copilot-solution-cards.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@36:完整展开样例",
+          "destination_paths": [
+            "huifu-pay-integration/references/copilot-solution-cards.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@40:S03 聚合支付微信小程序",
+          "destination_paths": [
+            "huifu-pay-integration/references/copilot-solution-cards.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@51:S08 托管支付 H5/PC 收银台",
+          "destination_paths": [
+            "huifu-pay-integration/references/copilot-solution-cards.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@62:编号说明",
+          "destination_paths": [
+            "huifu-pay-integration/references/copilot-solution-cards.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@66:P0 方案卡",
+          "destination_paths": [
+            "huifu-pay-integration/references/copilot-solution-cards.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@83:P1 方案卡",
+          "destination_paths": [
+            "huifu-pay-integration/references/copilot-solution-cards.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@94:使用规则",
+          "destination_paths": [
+            "huifu-pay-integration/references/copilot-solution-cards.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/copilot-troubleshooting-playbooks.md",
+      "category": "SPLIT",
+      "destination_paths": [
+        "huifu-pay-integration/references/copilot-troubleshooting-playbooks.md",
+        "huifu-merchant-onboarding/references/copilot-troubleshooting-playbooks.md"
+      ],
+      "source_section_inventory_sha256": "359043eee413d8f6ac0f720fc6bb8a20774db0e59418e080404e76b2e7564c95",
+      "section_routes": [
+        {
+          "source_section": "L2@5:目录",
+          "destination_paths": [
+            "huifu-pay-integration/references/copilot-troubleshooting-playbooks.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@12:输出结构",
+          "destination_paths": [
+            "huifu-pay-integration/references/copilot-troubleshooting-playbooks.md",
+            "huifu-merchant-onboarding/references/copilot-troubleshooting-playbooks.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@26:问题分类",
+          "destination_paths": [
+            "huifu-pay-integration/references/copilot-troubleshooting-playbooks.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@49:高频 Playbook",
+          "destination_paths": [
+            "huifu-pay-integration/references/copilot-troubleshooting-playbooks.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@82:升级人工",
+          "destination_paths": [
+            "huifu-pay-integration/references/copilot-troubleshooting-playbooks.md",
+            "huifu-merchant-onboarding/references/copilot-troubleshooting-playbooks.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-async-webhook.md",
+      "category": "REWRITE_PAYMENT",
+      "destination_paths": [
+        "huifu-pay-integration/references/hostingpay-async-webhook.md"
+      ],
+      "source_section_inventory_sha256": "0dde1c307de0b4d2ea4e8e7dfb1f262e7b9be0984b61696c22da22dbdcc209a1",
+      "section_routes": [
+        {
+          "source_section": "L2@6:目录",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-async-webhook.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@23:两种机制的区别",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-async-webhook.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@30:`notify_url` 回调规则",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-async-webhook.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@39:交易类回调的真实报文形态",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-async-webhook.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@57:Spring Boot 接收与验签示例",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-async-webhook.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@140:按场景解析扩展字段示例",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-async-webhook.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@180:哪些字段能写业务逻辑",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-async-webhook.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@186:`notify_url` 应答要求",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-async-webhook.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@194:Webhook 规则",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-async-webhook.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@202:Webhook 签名与 API 签名的区别",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-async-webhook.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@219:Webhook 落地步骤",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-async-webhook.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@226:Webhook 重试策略",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-async-webhook.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@232:常见事件类型",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-async-webhook.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@244:使用建议",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-async-webhook.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@251:参考",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-async-webhook.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/hostingpay-error-codes.md",
+      "category": "SPLIT",
+      "destination_paths": [
+        "huifu-pay-integration/references/hostingpay-error-codes.md",
+        "huifu-merchant-onboarding/references/merchant-onboarding-error-codes.md"
+      ],
+      "source_section_inventory_sha256": "a1756319f97eac16bc9542964debcb5da71061cf50ec95ddf7fa36794d8fd502",
+      "section_routes": [
+        {
+          "source_section": "L2@5:网关返回码（HTTP 层）",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-error-codes.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@22:网关业务返回码",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-error-codes.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@32:业务返回码（线上交易 / 托管支付）",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-error-codes.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@34:通用",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-error-codes.md",
+            "huifu-merchant-onboarding/references/merchant-onboarding-error-codes.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@44:商户进件相关",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-error-codes.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L3@52:托管支付（hosting）专用",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-error-codes.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@60:预下单 / 支付相关",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-error-codes.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@73:关单相关",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-error-codes.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@82:退款相关",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-error-codes.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@94:使用边界",
+          "destination_paths": [
+            "huifu-pay-integration/references/hostingpay-error-codes.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/merchant-onboarding-faq.md",
+      "category": "SPLIT",
+      "destination_paths": [
+        "huifu-pay-integration/references/payment-operations-faq.md",
+        "huifu-merchant-onboarding/references/merchant-onboarding-faq.md"
+      ],
+      "source_section_inventory_sha256": "f0c34f8fac226d8465d254cdd9b6bb3366e0edf09e0f555d35b7d42b82622986",
+      "section_routes": [
+        {
+          "source_section": "L2@5:目录",
+          "destination_paths": [
+            "huifu-pay-integration/references/payment-operations-faq.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@17:什么时候读",
+          "destination_paths": [
+            "huifu-pay-integration/references/payment-operations-faq.md",
+            "huifu-merchant-onboarding/references/merchant-onboarding-faq.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@28:商户进件结果判断",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-faq.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@40:接口权限和数据权限",
+          "destination_paths": [
+            "huifu-pay-integration/references/payment-operations-faq.md",
+            "huifu-merchant-onboarding/references/merchant-onboarding-faq.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@52:通道和路由配置",
+          "destination_paths": [
+            "huifu-pay-integration/references/payment-operations-faq.md",
+            "huifu-merchant-onboarding/references/merchant-onboarding-faq.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@63:appid、openid 和授权目录",
+          "destination_paths": [
+            "huifu-pay-integration/references/payment-operations-faq.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@76:实名认证、入驻和控台状态",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-faq.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@87:Webhook 和异步事件配置",
+          "destination_paths": [
+            "huifu-pay-integration/references/payment-operations-faq.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@98:退款、分账、对账和资金运营边界",
+          "destination_paths": [
+            "huifu-pay-integration/references/payment-operations-faq.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@112:输出边界",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-faq.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/merchant-onboarding-field-contracts.md",
+      "category": "REWRITE_ONBOARDING",
+      "destination_paths": [
+        "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md"
+      ],
+      "source_section_inventory_sha256": "0f5a90d7c93d87a7a254177de75221f1bd27b8a92e0cfbb77ab97a9e1028417f",
+      "section_routes": [
+        {
+          "source_section": "L2@3:目录",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@12:使用方式与证据边界",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@21:公共信封",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@38:字段生成硬约束",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@61:请求字段速查",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@65:企业进件 `data`",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@76:个人进件 `data`",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@84:业务开通 `data`",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@93:值域、默认值与条件速查",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@97:企业进件约束",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@115:个人进件约束",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@131:企业/个人公共资金对象约束",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@149:商户业务开通顶层标量约束",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@191:查询响应方向约束",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@209:必填 `card_info` 叶子合同",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@233:图片与查询请求",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@241:状态与回调字段归属",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/merchant-onboarding-image-upload.md",
+      "category": "REWRITE_ONBOARDING",
+      "destination_paths": [
+        "huifu-merchant-onboarding/references/merchant-onboarding-image-upload.md"
+      ],
+      "source_section_inventory_sha256": "782700f970f17d236075378268e8eba9e4909912295f279f8433864fad65a371",
+      "section_routes": [
+        {
+          "source_section": "L2@3:目录",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-image-upload.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@12:适用范围",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-image-upload.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@16:已确认的请求合同",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-image-upload.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@27:`file_url` 模式：已核验的语言边界",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-image-upload.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@39:公共请求头",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-image-upload.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@103:P0：仍需要官方确认",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-image-upload.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@113:使用边界",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/merchant-onboarding-image-upload.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/official-service-source-index.md",
+      "category": "SPLIT",
+      "destination_paths": [
+        "huifu-pay-integration/references/official-service-source-index.md",
+        "huifu-merchant-onboarding/references/official-service-source-index.md"
+      ],
+      "source_section_inventory_sha256": "1273832eadeae9ca2f453bd570ddb59dc8b67aa552c4498e064eac38900ca519",
+      "section_routes": [
+        {
+          "source_section": "L2@7:目录",
+          "destination_paths": [
+            "huifu-pay-integration/references/official-service-source-index.md",
+            "huifu-merchant-onboarding/references/official-service-source-index.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@18:资料源登记",
+          "destination_paths": [
+            "huifu-pay-integration/references/official-service-source-index.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@29:运行时规则",
+          "destination_paths": [
+            "huifu-pay-integration/references/official-service-source-index.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@38:本地覆盖矩阵",
+          "destination_paths": [
+            "huifu-pay-integration/references/official-service-source-index.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@57:不覆盖和转人工菜单",
+          "destination_paths": [
+            "huifu-pay-integration/references/official-service-source-index.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@69:技术支持联系方式",
+          "destination_paths": [
+            "huifu-pay-integration/references/official-service-source-index.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@77:高频 FAQ 分类映射",
+          "destination_paths": [
+            "huifu-pay-integration/references/official-service-source-index.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@99:字段规范",
+          "destination_paths": [
+            "huifu-pay-integration/references/official-service-source-index.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@111:禁止沉淀",
+          "destination_paths": [
+            "huifu-pay-integration/references/official-service-source-index.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-async-notify.md",
+      "category": "REWRITE_PAYMENT",
+      "destination_paths": [
+        "huifu-pay-integration/references/shared-async-notify.md"
+      ],
+      "source_section_inventory_sha256": "0ca370b70c21e619977aea93480e886eae0a97fe9b058740f5304715a3e82108",
+      "section_routes": [
+        {
+          "source_section": "L2@9:基本规则",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-async-notify.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@19:收到通知后的返回要求",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-async-notify.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@28:回调数据体",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-async-notify.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@37:回调验签",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-async-notify.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@45:幂等要求",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-async-notify.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@55:状态确认建议",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-async-notify.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@69:当前 Skill 包中的协作关系",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-async-notify.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-copyright-notice.md",
+      "category": "SPLIT",
+      "destination_paths": [
+        "huifu-pay-integration/references/shared-copyright-notice.md",
+        "huifu-merchant-onboarding/references/shared-copyright-notice.md"
+      ],
+      "source_section_inventory_sha256": "c4fad770105646457b604a9ad8345ae8c7d33178a95f12b63446475683f90416",
+      "section_routes": [
+        {
+          "source_section": "__whole_document__",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-copyright-notice.md",
+            "huifu-merchant-onboarding/references/shared-copyright-notice.md"
+          ],
+          "decision": "whole-document-retained-after-rewrite",
+          "review_note": "无二/三级标题；按完整源 blob 与固定迁移目标 blob 进行逐文件内容复核。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-credential-boundary.md",
+      "category": "SPLIT",
+      "destination_paths": [
+        "huifu-pay-integration/references/shared-credential-boundary.md",
+        "huifu-merchant-onboarding/references/shared-credential-boundary.md"
+      ],
+      "source_section_inventory_sha256": "6929f1f8b78d2a45e7fcfb728d209ea5fa0068cf1e1beead4ce40cc7e60e18fc",
+      "section_routes": [
+        {
+          "source_section": "L2@5:凭据角色说明",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-credential-boundary.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@9:存放边界",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-credential-boundary.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@16:接入方应做到",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-credential-boundary.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@24:商户进件敏感资料",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/shared-credential-boundary.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@32:语言适配说明",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-credential-boundary.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@36:运行时配置说明",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-credential-boundary.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-local-sandbox.md",
+      "category": "REWRITE_PAYMENT",
+      "destination_paths": [
+        "huifu-pay-integration/references/shared-local-sandbox.md"
+      ],
+      "source_section_inventory_sha256": "8881e8832aa8654696c7907258f96a73497e7b48e64ce548a27664a0e40ffbe1",
+      "section_routes": [
+        {
+          "source_section": "L2@5:目录",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-local-sandbox.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@16:什么时候读取",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-local-sandbox.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@25:当前版本口径",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-local-sandbox.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@45:固定边界",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-local-sandbox.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@55:最小使用流程",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-local-sandbox.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@114:常用演练能力",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-local-sandbox.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@132:与正式联调的关系",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-local-sandbox.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@151:输出规则",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-local-sandbox.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@162:推荐短句",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-local-sandbox.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-overview.md",
+      "category": "SPLIT",
+      "destination_paths": [
+        "huifu-pay-integration/references/shared-overview.md",
+        "huifu-merchant-onboarding/references/shared-overview.md"
+      ],
+      "source_section_inventory_sha256": "fce78d90c004879c88968ca30b2c43540fe86d1f4c5fbc930e59ad2f9c66b977",
+      "section_routes": [
+        {
+          "source_section": "L2@7:目录",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/shared-overview.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@18:什么时候先读这里",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-overview.md",
+            "huifu-merchant-onboarding/references/shared-overview.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@26:接入副驾驶地图",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-overview.md",
+            "huifu-merchant-onboarding/references/shared-overview.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@46:共享资料地图",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-overview.md",
+            "huifu-merchant-onboarding/references/shared-overview.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@62:产品线判断树",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-overview.md",
+            "huifu-merchant-onboarding/references/shared-overview.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@76:推荐阅读顺序",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-overview.md",
+            "huifu-merchant-onboarding/references/shared-overview.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@86:当前版本事实",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-overview.md",
+            "huifu-merchant-onboarding/references/shared-overview.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@100:PHP 官方 SDK 口径",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-overview.md",
+            "huifu-merchant-onboarding/references/shared-overview.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@114:全局边界",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-overview.md",
+            "huifu-merchant-onboarding/references/shared-overview.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-request-field-preservation.md",
+      "category": "SPLIT",
+      "destination_paths": [
+        "huifu-pay-integration/references/shared-request-field-preservation.md",
+        "huifu-merchant-onboarding/references/shared-request-field-preservation.md"
+      ],
+      "source_section_inventory_sha256": "362dbaf1b0a33c9ae23d110be05320bbaefd91332807391bafd30670078e0943",
+      "section_routes": [
+        {
+          "source_section": "L2@9:目录",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-field-preservation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@22:核心原则",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-field-preservation.md",
+            "huifu-merchant-onboarding/references/shared-request-field-preservation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@28:高风险字段",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-field-preservation.md",
+            "huifu-merchant-onboarding/references/shared-request-field-preservation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@41:允许生成的条件",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-field-preservation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@51:推荐 Java 形态",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-field-preservation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@72:禁止 Java 形态",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-field-preservation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@81:推荐 PHP 形态",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-field-preservation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@92:禁止 PHP 形态",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-field-preservation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@103:推荐 Python 形态",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-field-preservation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@112:禁止 Python 形态",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-field-preservation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@123:生成代码时的判断顺序",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-field-preservation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@130:相关文档",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-field-preservation.md",
+            "huifu-merchant-onboarding/references/shared-request-field-preservation.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-request-header-policy.md",
+      "category": "SPLIT",
+      "destination_paths": [
+        "huifu-pay-integration/references/shared-request-header-policy.md",
+        "huifu-merchant-onboarding/references/shared-request-header-policy.md"
+      ],
+      "source_section_inventory_sha256": "ff76913641aef3de3c9f53b80e3613e7582fc79040cc2b078fa95a3b6753f7ee",
+      "section_routes": [
+        {
+          "source_section": "L2@5:目录",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-header-policy.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@15:核心规则",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-header-policy.md",
+            "huifu-merchant-onboarding/references/shared-request-header-policy.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@31:Java、PHP 与 Python 的确认结论",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-header-policy.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@49:托管支付请求头",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-header-policy.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@92:聚合支付请求头",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-header-policy.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@142:脚本语言约束",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-header-policy.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@146:PHP 官方 SDK 路径",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-header-policy.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@155:Python 官方 SDK 路径",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-header-policy.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L3@165:其他脚本语言或非官方调用路径",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-header-policy.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@171:常规 HTTP 与报文约束",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-header-policy.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@181:商户进件例外",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/shared-request-header-policy.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@187:明确禁止",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-request-header-policy.md",
+            "huifu-merchant-onboarding/references/shared-request-header-policy.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-server-sdk-matrix.md",
+      "category": "SPLIT",
+      "destination_paths": [
+        "huifu-pay-integration/references/shared-server-sdk-matrix.md",
+        "huifu-merchant-onboarding/references/shared-server-sdk-matrix.md"
+      ],
+      "source_section_inventory_sha256": "09e48b1336f098ea0b7c7051572d15d75f48d58567d43a69c92f46eed308df39",
+      "section_routes": [
+        {
+          "source_section": "L2@5:目录",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-server-sdk-matrix.md",
+            "huifu-merchant-onboarding/references/shared-server-sdk-matrix.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@17:官方语言支持概览",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-server-sdk-matrix.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@27:当前 Skill 包的真实覆盖范围",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-server-sdk-matrix.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@38:新增接口 SDK 兼容性",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-server-sdk-matrix.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@47:商户进件 SDK 证据",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/shared-server-sdk-matrix.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@63:当前版本口径",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-server-sdk-matrix.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@73:PHP 默认落地方式",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-server-sdk-matrix.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@119:Python 默认落地方式",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-server-sdk-matrix.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@149:读法建议",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-server-sdk-matrix.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@161:语言边界提醒",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-server-sdk-matrix.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/shared-signing-v2.md",
+      "category": "SPLIT",
+      "destination_paths": [
+        "huifu-pay-integration/references/shared-signing-v2.md",
+        "huifu-merchant-onboarding/references/shared-signing-v2.md"
+      ],
+      "source_section_inventory_sha256": "0d009768f33f71e46b8db82ce4c4c0b88bd7ad379bc49086427d1577ca08aa19",
+      "section_routes": [
+        {
+          "source_section": "L2@5:适用方式",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-signing-v2.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@11:请求外层结构",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-signing-v2.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@28:请求签名规则",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-signing-v2.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@37:同步返回验签",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-signing-v2.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@43:异步回调验签",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-signing-v2.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@49:与控台 Webhook 的边界",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-signing-v2.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@57:商户进件例外",
+          "destination_paths": [
+            "huifu-merchant-onboarding/references/shared-signing-v2.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@61:建模规则",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-signing-v2.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@75:在当前 Skill 包里的落地位置",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-signing-v2.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        },
+        {
+          "source_section": "L2@82:不应该混进来的内容",
+          "destination_paths": [
+            "huifu-pay-integration/references/shared-signing-v2.md"
+          ],
+          "decision": "retained-or-verbatim-routed",
+          "review_note": "目标文档保留同名标题或同名章节标识。"
+        }
+      ],
+      "status": "approved"
+    },
+    {
+      "source_path": "huifu-pay-integration/references/skill-version-policy.md",
+      "category": "SPLIT",
+      "destination_paths": [
+        "huifu-pay-integration/references/skill-version-policy.md",
+        "huifu-merchant-onboarding/references/skill-version-policy.md"
+      ],
+      "source_section_inventory_sha256": "aef20f06d901a55abf1f25d29ab4d1255094a707e056a4f8f60ed07f1b06a557",
+      "section_routes": [
+        {
+          "source_section": "L2@5:什么时候读取",
+          "destination_paths": [
+            "huifu-pay-integration/references/skill-version-policy.md",
+            "huifu-merchant-onboarding/references/skill-version-policy.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@14:当前版本卡",
+          "destination_paths": [
+            "huifu-pay-integration/references/skill-version-policy.md",
+            "huifu-merchant-onboarding/references/skill-version-policy.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@26:用户如何更新",
+          "destination_paths": [
+            "huifu-pay-integration/references/skill-version-policy.md",
+            "huifu-merchant-onboarding/references/skill-version-policy.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@39:什么时候提示升级",
+          "destination_paths": [
+            "huifu-pay-integration/references/skill-version-policy.md",
+            "huifu-merchant-onboarding/references/skill-version-policy.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@47:输出规则",
+          "destination_paths": [
+            "huifu-pay-integration/references/skill-version-policy.md",
+            "huifu-merchant-onboarding/references/skill-version-policy.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        },
+        {
+          "source_section": "L2@59:推荐短句",
+          "destination_paths": [
+            "huifu-pay-integration/references/skill-version-policy.md",
+            "huifu-merchant-onboarding/references/skill-version-policy.md"
+          ],
+          "decision": "domain-split-and-restructured",
+          "review_note": "原共享章节按支付/进件边界拆入所列目标；标题可能合并或改名，固定目标 blob 已复核。"
+        }
+      ],
+      "status": "approved"
+    }
+  ]
+}

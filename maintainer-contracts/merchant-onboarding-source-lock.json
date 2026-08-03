@@ -1,0 +1,413 @@
+{
+  "schema_version": 1,
+  "migration_baseline_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+  "source_date": "2026-07-29",
+  "previous_snapshot_date": "2026-07-28",
+  "verified_at": "2026-07-29T10:02:19+08:00",
+  "sources": [
+    {
+      "key": "enterprise",
+      "title": "企业商户进件",
+      "filename": "enterprise.md",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_qyshjbxxrz_kyc.md",
+      "sha256": "ce61c1f138252b0d7d29302db8d75ebc9337a25f75e38d3ec9a186d7c4e26e28",
+      "field_count": 177
+    },
+    {
+      "key": "individual",
+      "title": "个人商户进件",
+      "filename": "individual.md",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_grshjbxxrz_kyc.md",
+      "sha256": "7d9f610e9df63c35b6f6c31a3e1e724c4fb2b4261acddf1c7a022228d6ca3321",
+      "field_count": 129
+    },
+    {
+      "key": "business_open",
+      "title": "商户业务开通",
+      "filename": "business-open.md",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_kyc.md",
+      "sha256": "1ef4ed0e644a0631e144dbb280482e03f596c1f470f43a26b59d3e063e56490c",
+      "field_count": 442
+    },
+    {
+      "key": "image_upload",
+      "title": "图片上传",
+      "filename": "image-upload.json",
+      "url": "https://paas.huifu.com/navigator/ossApi/api_shjj_shtpsc.json",
+      "sha256": "e1acf74e60436d069f3c605c19b24aab6d703494e1ebdd8c90b11104e4646125",
+      "field_count": 9
+    },
+    {
+      "key": "detail_query",
+      "title": "商户详细信息查询",
+      "filename": "detail-query.md",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shxxxxcx_kyc.md",
+      "sha256": "36d713243329871a4703aa414e9edb2e06e84ea6be484eecae3eaace46ea3d8d",
+      "field_count": 559
+    },
+    {
+      "key": "status_query",
+      "title": "申请单状态查询",
+      "filename": "status-query.md",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_sqdztcx.md",
+      "sha256": "89f51fdbca529b1f7166aeba1d5d24eb16469fd153cd09cafbf811d9e68f050f",
+      "field_count": 93
+    },
+    {
+      "key": "business_open_modify",
+      "title": "商户业务开通修改",
+      "filename": "business-open-modify.md",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywktxg_kyc.md",
+      "sha256": "fdeaaa0a40556046d817c70a46c2fe1c71756f8648ffe640db6585ca6f5963a3",
+      "field_count": 434
+    },
+    {
+      "key": "basic_info_modify",
+      "title": "商户基本信息修改",
+      "filename": "basic-info-modify.md",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shjbxxxg_kyc.md",
+      "sha256": "0f3e6d3491799ca37802e63239dd8f2b382064d41ad2e8a89e6767ae089d35c5",
+      "field_count": 199
+    },
+    {
+      "key": "rate_query",
+      "title": "商户费率信息查询",
+      "filename": "rate-query.md",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_merchant_conf_search_cx.md",
+      "sha256": "c9bfb5ed774cf8bce622bb536d16b1ed60ffedd5bd5540bf83177cdf592008b9",
+      "field_count": 35
+    },
+    {
+      "key": "status_change",
+      "title": "商户状态变更",
+      "filename": "status-change.md",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/api_shgl_shztbg.md",
+      "sha256": "d2fe6ab4404abd79b3ac5f5eecffaaec9d61d245ac1a60ebccddee889535a07f",
+      "field_count": 14
+    },
+    {
+      "key": "sms_send",
+      "title": "商户短信发送",
+      "filename": "sms-send.md",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shdxfs.md",
+      "sha256": "562e269268e10248931e0c9ed556a99e88966ddd953b67333f9a106df5934bc3",
+      "field_count": 20
+    }
+  ],
+  "totals": {
+    "fields": 2111,
+    "request": 1218,
+    "response": 713,
+    "callback": 180,
+    "parent": 230,
+    "leaf": 1881,
+    "root_tables": 55,
+    "extend_tables": 205
+  },
+  "api_refresh": {
+    "refresh_id": "api-refresh-2026-07-29-r3",
+    "previous_refresh_id": "api-refresh-2026-07-28-r2",
+    "retrieved_at": "2026-07-29T10:02:19+08:00",
+    "official_page_update": "2026-07-28",
+    "changed_pages": [
+      "企业商户进件"
+    ],
+    "changed_fields": [
+      {
+        "interface": "企业商户进件",
+        "surface": "请求 data",
+        "path": "request.data.upper_huifu_id"
+      },
+      {
+        "interface": "个人商户进件",
+        "surface": "请求 data",
+        "path": "request.data.upper_huifu_id"
+      },
+      {
+        "interface": "商户业务开通",
+        "surface": "请求 data",
+        "path": "request.data.upper_huifu_id"
+      },
+      {
+        "interface": "商户基本信息修改",
+        "surface": "请求 data",
+        "path": "request.data.upper_huifu_id"
+      }
+    ],
+    "required_before": "Y",
+    "required_after": "C",
+    "condition": "sys_id主体为渠道商时填写；sys_id主体为总部商户时选填",
+    "conditional_material_changes": [
+      {
+        "interface": "企业商户进件",
+        "surface": "请求 data",
+        "path": "request.data.store_header_pic",
+        "required_before": "Y",
+        "required_after": "C"
+      },
+      {
+        "interface": "企业商户进件",
+        "surface": "请求 data",
+        "path": "request.data.store_indoor_pic",
+        "required_before": "Y",
+        "required_after": "C"
+      },
+      {
+        "interface": "企业商户进件",
+        "surface": "请求 data",
+        "path": "request.data.store_cashier_desk_pic",
+        "required_before": "Y",
+        "required_after": "C"
+      },
+      {
+        "interface": "个人商户进件",
+        "surface": "请求 data",
+        "path": "request.data.store_header_pic",
+        "required_before": "C",
+        "required_after": "C"
+      },
+      {
+        "interface": "个人商户进件",
+        "surface": "请求 data",
+        "path": "request.data.store_indoor_pic",
+        "required_before": "C",
+        "required_after": "C"
+      },
+      {
+        "interface": "个人商户进件",
+        "surface": "请求 data",
+        "path": "request.data.store_cashier_desk_pic",
+        "required_before": "C",
+        "required_after": "C"
+      }
+    ],
+    "conditional_material_rule": "scene_type字段含有线下场景时必填",
+    "field_paths_added": 14,
+    "latest_field_paths_added": 7,
+    "field_paths_removed": 0
+  },
+  "extension_from_1_0_0": {
+    "base_fields": 1409,
+    "added_fields": 702,
+    "removed_fields": 0,
+    "changed_legacy_fields": 11,
+    "added_source_keys": [
+      "business_open_modify",
+      "basic_info_modify",
+      "rate_query",
+      "status_change",
+      "sms_send"
+    ]
+  },
+  "allowed_delta_from_1_3_2": [
+    {
+      "operation": "ADD",
+      "interface": "企业商户进件",
+      "surface": "请求 data",
+      "path": "request.data.share_holder_info_list[].mobile_no",
+      "label": "股东手机号",
+      "type": "String",
+      "length": "11",
+      "required": "N",
+      "description": "—"
+    },
+    {
+      "operation": "ADD",
+      "interface": "商户详细信息查询",
+      "surface": "响应 data",
+      "path": "response.data.share_holder_info_list[].mobile_no",
+      "label": "股东手机号",
+      "type": "String",
+      "length": "11",
+      "required": "N",
+      "description": "—"
+    },
+    {
+      "operation": "ADD",
+      "interface": "商户详细信息查询",
+      "surface": "响应 data",
+      "path": "response.data.material_card_info",
+      "label": "对公卡信息",
+      "type": "Object",
+      "length": "—",
+      "required": "N",
+      "description": "jsonObject字符串"
+    },
+    {
+      "operation": "ADD",
+      "interface": "商户详细信息查询",
+      "surface": "响应 data",
+      "path": "response.data.material_card_info.card_type",
+      "label": "银行账户类型",
+      "type": "String",
+      "length": "—",
+      "required": "N",
+      "description": "0：对公"
+    },
+    {
+      "operation": "ADD",
+      "interface": "商户详细信息查询",
+      "surface": "响应 data",
+      "path": "response.data.material_card_info.card_name",
+      "label": "银行账户名称",
+      "type": "String",
+      "length": "—",
+      "required": "N",
+      "description": "—"
+    },
+    {
+      "operation": "ADD",
+      "interface": "商户详细信息查询",
+      "surface": "响应 data",
+      "path": "response.data.material_card_info.card_no",
+      "label": "对公银行账号",
+      "type": "String",
+      "length": "—",
+      "required": "N",
+      "description": "示例值：[官网示例已脱敏]"
+    },
+    {
+      "operation": "ADD",
+      "interface": "商户详细信息查询",
+      "surface": "响应 data",
+      "path": "response.data.material_card_info.prov_id",
+      "label": "银行所在省",
+      "type": "String",
+      "length": "—",
+      "required": "N",
+      "description": "[参考省市区编码表；](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) 示例值：310000"
+    },
+    {
+      "operation": "ADD",
+      "interface": "商户详细信息查询",
+      "surface": "响应 data",
+      "path": "response.data.material_card_info.area_id",
+      "label": "银行所在市",
+      "type": "String",
+      "length": "—",
+      "required": "N",
+      "description": "[参考省市区编码表；](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm)示例值：310100"
+    },
+    {
+      "operation": "ADD",
+      "interface": "商户详细信息查询",
+      "surface": "响应 data",
+      "path": "response.data.material_card_info.branch_code",
+      "label": "支行联行号",
+      "type": "String",
+      "length": "—",
+      "required": "N",
+      "description": "参考：[银行支行编码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_yhzhbm)；示例值：102290026507"
+    },
+    {
+      "operation": "ADD",
+      "interface": "企业商户进件",
+      "surface": "请求 data",
+      "path": "request.data.material_card_info",
+      "label": "对公卡信息",
+      "type": "Object",
+      "length": "—",
+      "required": "N",
+      "description": "jsonObject字符串；商户对公账户信息配置，当非个体工商户的企业商户，card_info选择对私结算（含法人、非法人）时，需补充对公同名账户信息"
+    },
+    {
+      "operation": "ADD",
+      "interface": "企业商户进件",
+      "surface": "请求 data",
+      "path": "request.data.material_card_info.card_type",
+      "label": "银行账户类型",
+      "type": "String",
+      "length": "—",
+      "required": "N",
+      "description": "对公，不填默认 0"
+    },
+    {
+      "operation": "ADD",
+      "interface": "企业商户进件",
+      "surface": "请求 data",
+      "path": "request.data.material_card_info.card_name",
+      "label": "银行账户名称",
+      "type": "String",
+      "length": "—",
+      "required": "N",
+      "description": "账户名必须与营业执照名称一致"
+    },
+    {
+      "operation": "ADD",
+      "interface": "企业商户进件",
+      "surface": "请求 data",
+      "path": "request.data.material_card_info.card_no",
+      "label": "对公银行账号",
+      "type": "String",
+      "length": "—",
+      "required": "Y",
+      "description": "对公银行账号"
+    },
+    {
+      "operation": "ADD",
+      "interface": "企业商户进件",
+      "surface": "请求 data",
+      "path": "request.data.material_card_info.prov_id",
+      "label": "银行所在省",
+      "type": "String",
+      "length": "—",
+      "required": "N",
+      "description": "[参考省市区编码表；](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) 示例值：310000"
+    },
+    {
+      "operation": "ADD",
+      "interface": "企业商户进件",
+      "surface": "请求 data",
+      "path": "request.data.material_card_info.area_id",
+      "label": "银行所在市",
+      "type": "String",
+      "length": "—",
+      "required": "Y",
+      "description": "[参考省市区编码表；](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) 示例值：310100"
+    },
+    {
+      "operation": "ADD",
+      "interface": "企业商户进件",
+      "surface": "请求 data",
+      "path": "request.data.material_card_info.branch_code",
+      "label": "支行联行号",
+      "type": "String",
+      "length": "—",
+      "required": "Y",
+      "description": "参考：[银行支行编码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_yhzhbm)；示例值：102290026507"
+    }
+  ],
+  "allowed_corrections_from_1_3_2": [
+    {
+      "operation": "CORRECT_DESCRIPTION",
+      "interface": "商户详细信息查询",
+      "surface": "响应 data",
+      "path": "response.data.mer_config_info.online_fee_conf_list[].bus_type",
+      "before": {
+        "label": "业务类型",
+        "type": "String",
+        "length": "2",
+        "required": "Y",
+        "description": "1.网银支付， 2.快捷支付， 3.手机WAP支付；4：B2B网银充值"
+      },
+      "after": {
+        "label": "业务类型",
+        "type": "String",
+        "length": "2",
+        "required": "Y",
+        "description": "1.网银支付， 2.快捷支付， 3.手机WAP支付；4：B2B网银充值 5：B2C网银充值，6：代扣支付 示例值：1"
+      },
+      "reason": "修复官方 extend 表格跨物理行续行被生成器截断的问题；字段路径、方向、类型、长度和必填性均未变化。"
+    }
+  ],
+  "fourth_review_path_corrections": [
+    {
+      "operation": "CORRECT_ARRAY_PATH",
+      "interface": "商户详细信息查询",
+      "surface": "响应 data",
+      "before_path": "response.data.qry_wx_conf_list[].pay_channel_id_list",
+      "after_path": "response.data.qry_wx_conf_list[].pay_channel_id_list[]",
+      "reason": "官网将该 String 字段明确说明为“String集合，jsonArray格式”；即使没有 extend 子表，也必须保留标量 JSON 数组层级。"
+    }
+  ]
+}

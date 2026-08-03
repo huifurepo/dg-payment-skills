@@ -2,13 +2,17 @@
 
 本文件对应聚合支付 PHP 接入。
 
+> 🔴 TLS 硬停：锁定的 PHP `2.0.30` 关闭对端证书校验。本页只允许静态核对 SDK 类、字段和初始化形态，不得执行真实网络调用，片段不得用于联调或生产；只有实际安装制品启用证书链校验及 `CURLOPT_SSL_VERIFYHOST=2`，并通过错证书/错域名测试后才能解除。
+>
+> 🔴 DEBUG 硬停：不得使用会定义 `DEBUG=true` 的官方 `BsPayDemo/loader.php` 或 `Composer/BsPayConfig.php`。必须在加载任何 SDK 文件和调用 `BsPay::init` 前固定 `DEBUG=false`；否则调试日志会泄露含 RSA 私钥的 `MerConfig`、完整请求和响应。
+
 ## 目录
 
 - 当前覆盖范围
 - 官方 SDK 入口
 - 强制请求头
 - 与官方 PHP SDK 的对齐要点
-- 启动示例
+- 静态请求形态
 - 设计约束
 - 场景入口
 
@@ -27,7 +31,8 @@
 聚合支付 PHP 默认使用官方 Composer 包：
 
 - `huifurepo/dg-php-sdk`
-- 当前 Skill 包基线：`2.0.29`
+- 当前 Skill 包基线：`2.0.30`
+- 安全状态：锁定源码关闭 `CURLOPT_SSL_VERIFYPEER`；实际制品未同时启用对端校验和 `CURLOPT_SSL_VERIFYHOST=2` 时，必须触发生产硬停。
 
 核心支付主链路优先走：
 
@@ -47,23 +52,23 @@
 
 ## 安装与环境变量前置检查
 
-输出 PHP 可运行代码时，必须先给出 SDK 安装和环境变量准备；不要只给 `require_once` 业务代码。
+输出 PHP 静态接入形态时，必须先给出 SDK 安装和环境变量准备；当前不得给出可执行网络调用。
 
 当前 PHP SDK 包版本口径：
 
 | 项 | 值 |
 | --- | --- |
 | Composer 包 | `huifurepo/dg-php-sdk` |
-| 当前 Skill 包基线 | `2.0.29` |
+| 当前 Skill 包基线 | `2.0.30` |
 | 官方 SDK 文档 | `https://paas.huifu.com/partners/prod/devtools/doc/sdk_php.md` |
 | Packagist 包路径 | `https://packagist.org/packages/huifurepo/dg-php-sdk` |
 | GitHub 项目主页 | `https://github.com/huifurepo/bspay-php-sdk` |
-| 备用下载包 | `https://api.github.com/repos/huifurepo/bspay-php-sdk/zipball/refs/tags/2.0.29` |
+| 备用下载包 | `https://api.github.com/repos/huifurepo/bspay-php-sdk/zipball/refs/tags/2.0.30` |
 
 新项目安装当前 Skill 基线：
 
 ```bash
-composer require "huifurepo/dg-php-sdk:^2.0.29"
+composer require "huifurepo/dg-php-sdk:^2.0.30"
 composer show huifurepo/dg-php-sdk
 test -f vendor/huifurepo/dg-php-sdk/BsPaySdk/init.php
 ```
@@ -71,33 +76,33 @@ test -f vendor/huifurepo/dg-php-sdk/BsPaySdk/init.php
 已有项目升级到当前 Skill 基线：
 
 ```bash
-composer require "huifurepo/dg-php-sdk:^2.0.29" --with-all-dependencies
+composer require "huifurepo/dg-php-sdk:^2.0.30" --with-all-dependencies
 composer update huifurepo/dg-php-sdk --with-all-dependencies
 composer show huifurepo/dg-php-sdk
 test -f vendor/huifurepo/dg-php-sdk/BsPaySdk/init.php
 ```
 
-如果用户项目已经安装了低于 `2.0.29` 的 SDK，约定是先把 `composer.json` 中 `huifurepo/dg-php-sdk` 的版本约束调整到 `^2.0.29` 或更精确的 `2.0.29`，再执行上面的升级命令；不要在旧 SDK 上继续生成新字段或新接口代码。
+如果用户项目已经安装了低于 `2.0.30` 的 SDK，约定是先把 `composer.json` 中 `huifurepo/dg-php-sdk` 的版本约束调整到 `^2.0.30` 或更精确的 `2.0.30`，再执行上面的升级命令；不要在旧 SDK 上继续生成新字段或新接口代码。
 
 Composer 不可用或内网不能访问 Packagist 时，可使用当前基线对应的官方包分发地址手动落地：
 
 ```bash
-curl -L "https://api.github.com/repos/huifurepo/bspay-php-sdk/zipball/refs/tags/2.0.29" -o dg-php-sdk-2.0.29.zip
-unzip dg-php-sdk-2.0.29.zip
+curl -L "https://api.github.com/repos/huifurepo/bspay-php-sdk/zipball/refs/tags/2.0.30" -o dg-php-sdk-2.0.30.zip
+unzip dg-php-sdk-2.0.30.zip
 export HUIFU_SDK_ROOT="/absolute/path/to/extracted/BsPaySdk"
 test -f "$HUIFU_SDK_ROOT/init.php"
 ```
 
-手动下载方式只解决安装来源问题，不改变运行约束：只能保留一个实际使用的 SDK 路径，`HUIFU_SDK_ROOT` 必须指向本次确认过的 `BsPaySdk` 目录。官方 SDK 文档版本表在 2026-04-24 直接校验时仍只列到 `v2.0.25`，且该行 OSS 下载地址返回 404；不要把可访问的旧包地址当作 `2.0.29` 替代品。
+手动下载方式只解决安装来源问题，不改变运行约束：只能保留一个实际使用的 SDK 路径，`HUIFU_SDK_ROOT` 必须指向本次确认过的 `BsPaySdk` 目录。官方 SDK 文档版本表在 2026-04-24 直接校验时仍只列到 `v2.0.25`，且该行 OSS 下载地址返回 404；不要把可访问的旧包地址当作 `2.0.30` 替代品。
 
-运行前至少准备以下环境变量：
+未来安全制品解除硬停前，静态核对以下环境变量：
 
 ```bash
 export HUIFU_SYS_ID="渠道商或商户系统号"
 export HUIFU_PRODUCT_ID="汇付产品号"
 export HUIFU_RSA_PRIVATE_KEY="商户 RSA 私钥"
 export HUIFU_RSA_PUBLIC_KEY="汇付 RSA 公钥"
-export HUIFU_SKILL_SOURCE="hfps/1.3.2"
+export HUIFU_SKILL_SOURCE="hfps/1.3.3"
 export HUIFU_MERCHANT_ID="本次请求的 huifu_id"
 export HUIFU_NOTIFY_URL="https://your-domain.example/huifu/notify"
 export HUIFU_ALIPAY_BUYER_ID="支付宝 buyer_id；非支付宝场景可不配置"
@@ -109,14 +114,21 @@ export HUIFU_ALIPAY_BUYER_ID="支付宝 buyer_id；非支付宝场景可不配�
 export HUIFU_SDK_ROOT="/absolute/path/to/BsPaySdk"
 ```
 
-## 可直接运行的 `loader.php` 模板
+## `loader.php` 初始化形态示例（不得用于联调/生产）
 
-下面给的是当前 skill 推荐的最小可运行模板。这个模板默认你把 `loader.php` 放在项目 `bootstrap/` 目录；下面的业务代码示例统一假设业务脚本位于项目 `examples/` 目录。如果你的目录结构不同，只改入口文件里的 `require_once` 路径和 `$huifuSdkRoot` 这一行，不要改业务代码里的 request 类加载方式。
+下面只展示加载与初始化形态。锁定的 PHP `2.0.30` 关闭 TLS 对端校验且缺少已证明的主机名校验；在安全制品通过源码扫描及错证书、过期证书、错域名测试前，不得把本段作为联调或生产可运行模板。
 
 ```php
 <?php
 
 declare(strict_types=1);
+
+if (defined('DEBUG') && DEBUG !== false) {
+    throw new RuntimeException('拒绝启动：PHP SDK DEBUG 已启用');
+}
+if (!defined('DEBUG')) {
+    define('DEBUG', false);
+}
 
 function requireEnv(string $key): string
 {
@@ -146,12 +158,13 @@ require_once HUIFU_SDK_ROOT . '/init.php';
 ], true);
 ```
 
-这个模板解决 3 个运行问题：
+这个模板解决 5 个运行问题：
 
-1. 官方 SDK `init.php` 显式加载
-2. request 类统一通过 `HUIFU_SDK_ROOT` 定位，不再依赖业务脚本自己的相对目录
-3. `skill_source` 在初始化阶段显式注入，后续来源头自动补齐；缺失时直接抛错，不使用静默默认值
-4. SDK 未安装或环境变量缺失时直接暴露错误，避免生成“看起来能跑”的空初始化代码
+1. 在加载任何 SDK 文件前固定 `DEBUG=false`，并拒绝已被 Demo/Composer 入口启用调试的进程
+2. 官方 SDK `init.php` 显式加载
+3. request 类统一通过 `HUIFU_SDK_ROOT` 定位，不再依赖业务脚本自己的相对目录
+4. `skill_source` 在初始化阶段显式注入，后续来源头自动补齐；缺失时直接抛错，不使用静默默认值
+5. SDK 未安装或环境变量缺失时直接暴露错误，避免生成“看起来能跑”的空初始化代码
 
 ## 强制 HTTP 请求头
 
@@ -163,7 +176,7 @@ require_once HUIFU_SDK_ROOT . '/init.php';
 
 | Header | 值 |
 | --- | --- |
-| `sdk_version` | 官方 SDK 默认值 `php_v2.0.29` |
+| `sdk_version` | 官方 SDK 默认值 `php_v2.0.30` |
 | `charset` | 官方 SDK 默认值 `UTF-8` |
 | `jpt-x-skill-source` | `MerConfig.skill_source` 非空时自动带 `<skill_source>` |
 | `jpt-x-skill-huifu_id` | `MerConfig.skill_source` 已配置且 `data.huifu_id` 存在且非空时自动带 `<data.huifu_id>` |
@@ -183,7 +196,7 @@ require_once HUIFU_SDK_ROOT . '/init.php';
 4. 当前 Skill 包不再内置 PHP 模板资产；差异排查以共享协议文档和项目实际安装的官方 SDK 源码为准。
 5. 业务代码里显式 `require_once` request 类不是退回手写 SDK；这是因为当前官方 Composer 包没有提供 request 类 autoload。
 
-## 启动示例
+## 静态请求形态（不执行网络调用）
 
 ```php
 <?php
@@ -211,7 +224,7 @@ $request->setMethodExpand(json_encode([
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 
 // 前提：loader.php 中已给 MerConfig.skill_source 赋真实来源值
-$result = $payment->create($request);
+$requestShape = $request; // 仅核对 DTO；禁止调用 $payment->create(...)
 ```
 
 ## 设计约束

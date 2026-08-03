@@ -143,17 +143,14 @@ SDK 内置 Apache HttpClient 连接池，默认配置：
 可通过 MerConfig 自定义超时：
 
 ```java
-merConfig.setCustomConnectTimeout(30000);
-merConfig.setCustomSocketTimeout(30000);
-merConfig.setCustomConnectionRequestTimeout(40000);
+merConfig.setCustomConnectTimeout("30000");
+merConfig.setCustomSocketTimeout("30000");
+merConfig.setCustomConnectionRequestTimeout("40000");
 ```
 
 ## 重试策略
 
-SDK 内置重试机制：
-- 最多重试 3 次
-- 可重试场景：`NoHttpResponseException`、非实体请求
-- 不重试场景：SSL 错误、Socket 超时、SSL 握手失败
+SDK 内置 HTTP 处理器最多形成 3 次总尝试，即至多 2 次重试；带实体的支付 POST 请求不自动重试。`NoHttpResponseException` 等条件只适用于处理器允许的非实体请求，不能解释成支付业务自动重试。SSL 错误、Socket 超时和 SSL 握手失败不重试；任何网络不确定结果都先按原请求标识查单，不得另造流水重提。
 
 ## API 版本
 

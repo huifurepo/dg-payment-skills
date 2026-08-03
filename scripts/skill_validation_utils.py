@@ -3,11 +3,11 @@ from __future__ import annotations
 from pathlib import Path
 
 from skill_validation_config import (
-    EXPECTED_SKILL_DIR,
     EXPECTED_SKILL_TOP_LEVEL,
     LOCAL_PATH_PREFIXES,
     REPO_ROOT,
     SKIP_PARTS,
+    SKILL_SPECS,
     ValidationState,
 )
 
@@ -40,15 +40,16 @@ def validate_repo_files(state: ValidationState) -> None:
 
 
 def validate_skill_top_level(state: ValidationState) -> None:
-    actual = {path.name for path in EXPECTED_SKILL_DIR.iterdir()}
-    missing = sorted(EXPECTED_SKILL_TOP_LEVEL - actual)
-    extra = sorted(actual - EXPECTED_SKILL_TOP_LEVEL)
-    if missing:
-        state.error(f"missing skill top-level entries: {', '.join(missing)}")
-    if extra:
-        state.error(f"unexpected skill top-level entries: {', '.join(extra)}")
-    if not missing and not extra:
-        state.ok("skill top-level entries match upload package allowlist")
+    for spec in SKILL_SPECS:
+        actual = {path.name for path in spec.root.iterdir()}
+        missing = sorted(EXPECTED_SKILL_TOP_LEVEL - actual)
+        extra = sorted(actual - EXPECTED_SKILL_TOP_LEVEL)
+        if missing:
+            state.error(f"{spec.skill_id}: missing top-level entries: {', '.join(missing)}")
+        if extra:
+            state.error(f"{spec.skill_id}: unexpected top-level entries: {', '.join(extra)}")
+        if not missing and not extra:
+            state.ok(f"{spec.skill_id}: top-level entries match package allowlist")
 
 
 def strip_quotes(value: str) -> str:

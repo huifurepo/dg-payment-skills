@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "coverage": "selected-high-risk-clauses",
+  "full_review_lock": "maintainer-contracts/reference-transformation-target-lock.json",
+  "baseline_commit": "ff7b6acde574f498fde9c6f0763078b0e2eea3b7",
+  "anchors": [
+    {
+      "id": "payment-notify-not-onboarding",
+      "source_path": "huifu-pay-integration/references/shared-async-notify.md",
+      "source_clause": "商户进件的审核、业务开通和电子协议回调不默认适用本文件：其验签原文、ACK、编码、超时和重试必须以各自原子 reference 的已核验规则为准；未确认时只能标 `[需要官方确认]`，不得生成实现。",
+      "target_path": "huifu-pay-integration/references/shared-async-notify.md",
+      "target_clause": "本文件只适用于支付和退款交易通知。商户进件通知使用 `$huifu-merchant-onboarding`，不能套用本页协议。"
+    },
+    {
+      "id": "payment-notify-finality",
+      "source_path": "huifu-pay-integration/references/hostingpay-async-webhook.md",
+      "source_clause": "- 不要写“`resp_code=00000000` 就直接把订单改成功”这种逻辑。",
+      "target_path": "huifu-pay-integration/references/hostingpay-async-webhook.md",
+      "target_clause": "- 不要写“`resp_code=00000000` 就直接把订单改成功”这种逻辑。"
+    },
+    {
+      "id": "request-field-preservation",
+      "source_path": "huifu-pay-integration/references/shared-request-field-preservation.md",
+      "source_clause": "外部 DTO / Controller 已接收的字段，进入 SDK Request 组装层时必须保留入参或原样映射。不得在 Builder、Service、SDK Request 组装层重新生成并覆盖。",
+      "target_path": "huifu-pay-integration/references/shared-request-field-preservation.md",
+      "target_clause": "外部 DTO / Controller 已接收的字段，进入 SDK Request 组装层时必须保留入参或原样映射。不得在 Builder、Service、SDK Request 组装层重新生成并覆盖。"
+    },
+    {
+      "id": "php-multipart-blocker",
+      "source_path": "huifu-pay-integration/references/shared-request-header-policy.md",
+      "source_clause": "- PHP 传入 `CURLFile` 后进入独立 multipart 分支，该分支缺少 `jpt-x-skill-source`、`jpt-x-skill-huifu_id` 和 `jpt-sdk_version`，且关闭请求签名和响应验签；当前必须阻断，不能用手动补头或手写 HTTP 绕过",
+      "target_path": "huifu-pay-integration/references/shared-request-header-policy.md",
+      "target_clause": "- PHP `2.0.30` 传入 `CURLFile` 后进入独立 multipart 分支；该分支已携带 `jpt-x-skill-source`、`jpt-x-skill-huifu_id` 和 `jpt-sdk_version`，但关闭请求签名和响应验签。当前仍必须阻断，不能因请求头齐全而声称安全，也不能用手动补头、手动签名或手写 HTTP 绕过"
+    },
+    {
+      "id": "onboarding-flag-direction",
+      "source_path": "huifu-pay-integration/references/merchant-onboarding-field-contracts.md",
+      "source_clause": "| 详情查询响应 `data.online_flag/quick_flag/withhold_flag` | `String(1) N`，`1=开通`、`0=未开通`、空=未配置 | 只用于解析，不得复制回业务开通请求。 |",
+      "target_path": "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md",
+      "target_clause": "| 详情查询响应 `data.online_flag/quick_flag/withhold_flag` | `String(1) N`，`1=开通`、`0=未开通`、空=未配置 | 只用于解析，不得复制回业务开通请求。 |"
+    },
+    {
+      "id": "image-upload-mutual-exclusion",
+      "source_path": "huifu-pay-integration/references/merchant-onboarding-image-upload.md",
+      "source_clause": "官网只明确 `file_url` 与本地 `file` 不能同时上传，没有说明二者都空是否合法；不得把互斥改写成官网“必须二选一”。生成实际上传方案时，本 Skill 选择其中一个真实文件来源，没有来源则标 `[需要调用方补充]`。",
+      "target_path": "huifu-merchant-onboarding/references/merchant-onboarding-image-upload.md",
+      "target_clause": "官网只明确 `file_url` 与本地 `file` 不能同时上传，没有说明二者都空是否合法；不得把互斥改写成官网“必须二选一”。生成实际上传方案时，本 Skill 选择其中一个真实文件来源，没有来源则标 `[需要调用方补充]`。"
+    },
+    {
+      "id": "payment-permission-environment-boundary",
+      "source_path": "huifu-pay-integration/references/merchant-onboarding-faq.md",
+      "source_clause": "排查权限类问题时，先确认请求是否真的打到目标环境；同一套 `sys_id/product_id/huifu_id` 不应在测试、生产或不同服务商层级之间混用。",
+      "target_path": "huifu-pay-integration/references/payment-operations-faq.md",
+      "target_clause": "- “数据权限认证失败”时检查 `product_id`、`sys_id`、交易 `huifu_id`、`upper_huifu_id`、请求头和上下级归属关系，不借用其他商户或产品号，也不在测试、生产或不同服务商层级之间混用同一组标识。"
+    },
+    {
+      "id": "payment-permission-secret-configuration",
+      "source_path": "huifu-pay-integration/references/merchant-onboarding-faq.md",
+      "source_clause": "接口权限、产品权限或上级链路权限需要由运营/汇付侧开通；若开通动作伴随密钥或环境配置变更，生产代码和密钥管理必须同步确认，不能由 Skill 自动替换。",
+      "target_path": "huifu-pay-integration/references/payment-operations-faq.md",
+      "target_clause": "- 接口、产品或上级链路权限开通若伴随密钥或环境配置变更，必须同步核对生产配置和密钥管理，不能由 Skill 自动替换。"
+    },
+    {
+      "id": "delayed-split-refund-optionality",
+      "source_path": "huifu-pay-integration/references/merchant-onboarding-faq.md",
+      "source_clause": "| 延时分账退款 | 未确认部分和已确认部分路径不同 | 未确认部分可按交易退款；已确认部分先做确认退款或资金回退后再退原付款方 |",
+      "target_path": "huifu-pay-integration/references/payment-operations-faq.md",
+      "target_clause": "- 延时分账退款要区分未确认部分和已确认部分：未确认部分可按交易退款处理；已确认部分先走确认退款或资金回退，再退回原付款方。"
+    }
+  ]
+}

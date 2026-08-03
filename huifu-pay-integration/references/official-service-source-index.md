@@ -1,8 +1,10 @@
 # 官方服务资料源索引
 
-本文件是 1.3.x 接入副驾驶的本地官方资料源索引。Skill 正常回答只依赖本地 reference；官网 URL 仅用于来源追溯、人工刷新和显式核验，不作为运行时检索入口。
+本文件是支付 Skill 的本地官方资料源索引。Skill 正常回答只依赖本地 reference；官网 URL 仅用于来源追溯、人工刷新和显式核验，不作为运行时检索入口。
 
 只沉淀脱敏摘要、判断规则、路由和必要摘录；不复制官网大图、完整 FAQ 库、真实商户信息、订单号、用户标识或密钥。
+
+本轮 36 个指定接口页的逐页 URL、原子 reference 与 SHA-256 锁定关系见 `references/official-payment-page-lock.md`；快照日期为 `2026-07-28`。
 
 ## 目录
 
@@ -22,8 +24,9 @@
 | 业务指引 | https://paas.huifu.com/open/service/guide/#/ | 2026-05-15 | 产品功能、商户材料、控台配置、业务开通、权限边界 | 李稼祥 | 配置清单、开通前置、人工升级材料 |
 | 联调攻略 | https://paas.huifu.com/open/service/develop/#/ | 2026-05-15 | 支付产品联调步骤、托管支付、分账、异步回调、常见接入顺序 | 李稼祥 | 方案卡、联调步骤、必测项、常见卡点 |
 | FAQ | https://paas.huifu.com/open/service/faq/#/ | 2026-05-15 | 高频错误、权限/配置/状态/流水/回调/签名问题 | 李稼祥 | 问题分类、排查顺序、修复建议、升级人工条件 |
-| API 文档 | https://paas.huifu.com/partners/lightning/api/、https://paas.huifu.com/partners/api/doc/ | 2026-06-10 | 聚合支付下单、查单、关单、退款、对账、托管预下单、抖音直连下单、拆单支付订单查询页面 | 李稼祥 | 字段差异刷新、接口新增/修改确认 |
-| 商户进件 API 文档 | https://paas.huifu.com/partners/api/doc/shgl/shjj/、https://paas.huifu.com/partners/api/doc/shgl/shywkt/、https://paas.huifu.com/navigator/ossApi/api_shjj_shtpsc.json | 2026-07-17 | 企业/个人进件、图片上传、业务开通、商户详情、申请状态的完整字段路径与外部资料 | 李稼祥 | 脱敏字段合同、完整字段目录、外部资料索引和 P0 未确认项 |
+| API 文档 | https://paas.huifu.com/partners/lightning/、https://paas.huifu.com/partners/api/doc/ | 2026-07-28 | 用户指定的极速版介绍/开发指引、聚合支付 API、对账 API 与托管支付 API，共 36 页 | 李稼祥 | 字段差异刷新、接口新增/修改确认；逐页摘要见 `official-payment-page-lock.md` |
+| API 公共资料 | https://paas.huifu.com/partners/api/doc/csfl/api_csfl.md、https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md、https://paas.huifu.com/partners/api/doc/csfl/api_csfl_mcjs.md | 2026-07-29 | 基础参数入口、网关/业务返回码全集、名词解释 | 李稼祥 | 公共编码路由、返回码合并排查、术语释义；不计入 36 个接口字段快照 |
+| 异步消息规范 | https://paas.huifu.com/partners/start/ybxx/jiekouguifan_ybxx.md | 2026-07-29 | 通知传输、验签、ACK、重试与幂等规则 | 李稼祥 | `notify_url` 通用处理；具体字段仍取接口页，聚合下单同时覆盖正扫和反扫通知 |
 | AI 技能包技术支持 | https://paas.huifu.com/docs/devtools/#/skillsv1_0?id=support | 2026-06-12 | 官方 AI 技能包技术支持联系方式 | 李稼祥 | 用户明确要求技术支持或本地排查仍解决不了时给出联系方式 |
 
 ## 运行时规则
@@ -40,16 +43,14 @@
 | 能力/问题表达 | 官方来源类型 | 本地权威 reference | 覆盖状态 | 本地处理口径 | 禁止输出 | 刷新依据与采集日期 |
 | --- | --- | --- | --- | --- | --- | --- |
 | 首次接入、不知道选聚合还是托管 | 业务指引、联调攻略 | `references/copilot-onboarding.md`、`references/copilot-solution-selection.md`、`references/shared-overview.md` | 已覆盖 | 识别用户类型、产品线、阶段、技术栈、端形态和当前目标；输出接入判断卡 | 不直接跳到字段表；不要求访问官网 | 业务指引/联调攻略，2026-05-15 |
-| 聚合支付微信、支付宝、银联常规接入 | 联调攻略、API 文档 | `references/aggregation-order.md`、`references/aggregation-order-method-wechat.md`、`references/aggregation-order-method-alipay.md`、`references/aggregation-order-method-unionpay.md` | 已覆盖 | 按渠道给前置配置、接口顺序、必测项和常见卡点；反扫设备信息、有效期和贴息字段按最新 API 口径处理 | 不复制官网截图；不生成未覆盖渠道完整模板 | 联调攻略/API 文档，2026-06-10 |
-| 聚合支付查单、关单、对账 | 联调攻略、FAQ、API 文档 | `references/aggregation-query.md`、`references/aggregation-query-reconciliation.md`、`references/copilot-troubleshooting-playbooks.md` | 已覆盖 | 区分原交易定位键、合单关单 `merge_flag`、平台流水、对账文件查询和状态确认 | 不把同步受理当终态；不手写 Java HTTP 替代官方 SDK | 联调攻略/FAQ/API 文档，2026-06-10 |
-| 聚合支付退款、退款查询 | 联调攻略、FAQ、API 文档 | `references/aggregation-refund.md`、`references/aggregation-refund-query.md`、`references/copilot-parameter-review.md` | 已覆盖 | 说明退款申请、退款查询、分账/补贴/终端/确认分账/手续费返还字段和流水关系 | 不混用原支付流水和退款流水；不把 `tx_metadata` 当请求包装层上送 | 联调攻略/FAQ/API 文档，2026-06-10 |
-| 托管支付 H5/PC、小程序预下单 | 业务指引、联调攻略、API 文档 | `references/hostingpay-preorder.md`、`references/hostingpay-preorder-h5-pc.md`、`references/hostingpay-preorder-alipay-mini.md`、`references/hostingpay-preorder-wechat-mini.md`、`references/hostingpay-customer-preparation.md` | 已覆盖 | 沉淀 `project_id`、项目状态、预下单、跳转/拉起、异步通知验签/幂等 + 查单补偿的服务端闭环；`hosting_data` 按统一收银台扩展参数集合处理 | 不用聚合正扫冒充 H5/PC 收银台；不猜 `project_id` | 业务指引/联调攻略/API 文档，2026-06-10 |
-| 托管支付抖音直连下单 | API 文档、联调攻略 | `references/hostingpay-preorder-douyin-direct.md`、`references/hostingpay-preorder.md`、`references/hostingpay-async-webhook.md` | 已覆盖 | 固定识别托管预下单 `pre_order_type=4`、`dy_data`、`busi_scene`、`jump_url` 和抖音异步返回；最终状态仍走服务端闭环 | 可以复用托管预下单 request，但不能按 H5/PC `pre_order_type=1` 场景处理；不把 `jump_url` 当终态 | API 文档，2026-06-10 |
-| 托管拆单支付订单查询 | API 文档、FAQ | `references/hostingpay-query-splitpay.md`、`references/hostingpay-query.md`、`references/hostingpay-preorder-wechat-mini.md` | 已覆盖 | 使用原拆单支付 `org_req_date + org_req_seq_id` 查询，并逐条读取 `trans_list[].trans_stat` | 不用普通托管查单替代拆单明细查询；不把订单级 `order_stat` 当所有子交易终态 | API 文档，2026-06-10 |
+| 聚合支付微信、支付宝、银联常规接入 | 联调攻略、API 文档 | `references/aggregation-order.md`、`references/aggregation-order-method-wechat.md`、`references/aggregation-order-method-alipay.md`、`references/aggregation-order-method-unionpay.md` | 已覆盖 | 按渠道给前置配置、接口顺序、必测项和常见卡点；反扫设备信息、有效期和贴息字段按最新 API 口径处理 | 不复制官网截图；不生成未覆盖渠道完整模板 | 指定接口页快照，2026-07-28 |
+| 聚合支付查单、关单、对账 | 联调攻略、FAQ、API 文档 | `references/aggregation-query.md`、`references/aggregation-query-reconciliation.md`、`references/copilot-troubleshooting-playbooks.md` | 已覆盖 | 区分原交易定位键、合单关单 `merge_flag`、平台流水、对账文件查询和状态确认 | 不把同步受理当终态；不手写 Java HTTP 替代官方 SDK | 指定接口页快照，2026-07-28 |
+| 聚合支付退款、退款查询 | 联调攻略、FAQ、API 文档 | `references/aggregation-refund.md`、`references/aggregation-refund-query.md`、`references/copilot-parameter-review.md` | 已覆盖 | 说明退款申请、退款查询、分账/补贴/终端/确认分账/手续费返还字段和流水关系 | 不混用原支付流水和退款流水；不把 `tx_metadata` 当请求包装层上送 | 指定接口页快照，2026-07-28 |
+| 托管支付 H5/PC、小程序预下单 | 业务指引、联调攻略、API 文档 | `references/hostingpay-preorder.md`、`references/hostingpay-preorder-h5-pc.md`、`references/hostingpay-preorder-alipay-mini.md`、`references/hostingpay-preorder-wechat-mini.md`、`references/hostingpay-customer-preparation.md` | 已覆盖 | 沉淀 `project_id`、项目状态、预下单、跳转/拉起、异步通知验签/幂等 + 查单补偿的服务端闭环；`hosting_data` 按统一收银台扩展参数集合处理 | 不用聚合正扫冒充 H5/PC 收银台；不猜 `project_id` | 指定接口页快照，2026-07-28 |
+| 托管支付抖音直连下单 | API 文档、联调攻略 | `references/hostingpay-preorder-douyin-direct.md`、`references/hostingpay-preorder.md`、`references/hostingpay-async-webhook.md` | 已覆盖 | 固定识别托管预下单 `pre_order_type=4`、`dy_data`、`busi_scene`、`jump_url` 和抖音异步返回；最终状态仍走服务端闭环 | 使用当前三语言专属 `V2TradeHostingPaymentPreorderDyRequest`；不把 `jump_url` 当终态 | 指定接口页快照，2026-07-28 |
+| 托管拆单支付订单查询 | API 文档、FAQ | `references/hostingpay-query-splitpay.md`、`references/hostingpay-query.md`、`references/hostingpay-preorder-wechat-mini.md` | 已覆盖 | 使用原拆单支付 `org_req_date + org_req_seq_id` 查询，并逐条读取 `trans_list[].trans_stat` | 不用普通托管查单替代拆单明细查询；不把订单级 `order_stat` 当所有子交易终态 | 指定接口页快照，2026-07-28 |
 | checkout-js 自有页面嵌入 | 联调攻略 | `references/checkout-js.md`、`references/checkout-js-create-preorder-contract.md`、`references/checkout-js-callback-and-confirmation.md` | 已覆盖 | 明确 checkout-js 依赖托管预下单，前端 callback 只做流程回调 | 不在未确认服务端预下单、异步通知和查单补偿闭环时给安装和接法 | 联调攻略，2026-05-15 |
-| 异步通知、验签、幂等、固定回包 | 联调攻略、FAQ | `references/shared-async-notify.md`、`references/shared-signing-v2.md`、`references/shared-webhook-signing.md`、`references/copilot-troubleshooting-playbooks.md` | 已覆盖 | 先验签、再解析、再事件级幂等和状态锁；最终状态通过查单二次确认或补偿查询闭环 | 不提供跳过验签、收到通知即改成功、伪造支付成功代码 | 联调攻略/FAQ，2026-05-15 |
-| 商户进件、接口/数据权限、通道配置、appid/openid、Webhook 高频 FAQ | FAQ、业务指引 | `references/merchant-onboarding-faq.md`、`references/copilot-troubleshooting-playbooks.md`、`references/official-service-source-index.md` | 已覆盖 | 只使用脱敏摘要；按进件结果、接口权限、数据权限、通道路由、appid/openid、授权目录和 Webhook 配置给排查顺序 | 不复制原始 FAQ 目录、截图/base64 或真实数据；不承诺通道准入/审核结果 | FAQ，2026-06-10 |
-| 企业/个人进件、图片上传、业务开通、详情或申请状态 API | API 文档 + 当前生产 SDK 源码 | 六个原子 reference、`references/merchant-onboarding-complete-field-catalog.md`、`references/merchant-onboarding-field-contracts.md`、`references/merchant-onboarding-external-resources.md` | 部分覆盖 | 六接口已有完整字段路径和外部资料索引；五个 JSON 接口已有三语言 SDK 类证据；图片只对 `file_url` 按语言输出受控片段，本地文件与回调标 `[需要官方确认]` | 不生成未证实本地上传/回调代码，不记录证件、银行卡、图片、`token_no` 或签约链接 | API 文档与 SDK，2026-07-17 |
+| 异步通知、验签、幂等、固定回包 | 异步消息规范、联调攻略、FAQ | `references/shared-async-notify.md`、`references/shared-signing-v2.md`、`references/shared-webhook-signing.md`、`references/copilot-troubleshooting-playbooks.md` | 已覆盖 | 先按交易场景选择具体通知字段，再验签、解析、事件级幂等和状态锁；聚合下单 `notify_url` 同时覆盖正扫与反扫通知，最终状态通过查单二次确认或补偿查询闭环 | 不提供跳过验签、收到通知即改成功、伪造支付成功代码；不只实现正扫或反扫其中一套 | 异步消息规范，2026-07-29；联调攻略/FAQ，2026-05-15 |
 | 分账参数、分账退款、分账查询 | 业务指引、联调攻略、FAQ | `references/aggregation-order-tx-metadata.md`、`references/hostingpay-payload-construction.md`、`references/copilot-solution-cards.md` | 部分覆盖 | 覆盖聚合和托管常用分账参数、接收方、金额/比例、退款关系；复杂权限和手续费承担转人工确认 | 不自动判断分账权限、费率或资金合规结论 | 业务指引/联调攻略/FAQ，2026-05-15 |
 | 存量系统新增汇付、改回调、补退款 | 业务指引、FAQ | `references/copilot-existing-system.md`、`references/copilot-go-live-checklist.md`、`references/copilot-troubleshooting-playbooks.md` | 已覆盖 | 建议新增适配层、保留原订单逻辑、补落库字段、做状态映射和回归检查 | 不重写订单系统；不直接替换原状态机 | 业务指引/FAQ，2026-05-15 |
 | 上线检查、灰度、回滚、生产失败材料 | 业务指引、FAQ | `references/copilot-go-live-checklist.md`、`references/copilot-existing-system.md`、`references/official-service-source-index.md` | 已覆盖 | 输出通用上线检查、存量系统检查、必测项、日志脱敏、升级人工材料 | 不对生产问题定责；不把真实密钥写入仓库或前端 | 业务指引/FAQ，2026-05-15 |
@@ -79,21 +80,20 @@
 | 用户问题/报错 | 分类 | 本地权威 reference | 本地处理口径 |
 | --- | --- | --- | --- |
 | URL 未注册、redirect_uri 域名不一致 | 配置/渠道权限 | `references/copilot-troubleshooting-playbooks.md`、`references/hostingpay-customer-preparation.md` | 检查渠道侧域名、appid、回跳地址、`notify_url`/`callback_url` 和控台配置；必要时转运营/商务 |
-| 商户进件是否成功、返回 `huifu_id` 但业务开通失败 | 商户进件/实名 | `references/merchant-onboarding-faq.md`、`references/copilot-troubleshooting-playbooks.md` | `huifu_id` 仅是同步响应可能返回的商户号，不能单独说明账户创建或支付产品可交易；结合 `resp_code`、`resp_desc`、`apply_no` 和申请状态查询，再检查银行卡、结算、取现、渠道开通和 `token_no` |
-| 接口权限认证失败、`20003`、数据权限认证失败 | 接口/数据权限 | `references/merchant-onboarding-faq.md`、`references/copilot-troubleshooting-playbooks.md` | 接口权限看 `sys_id` 和接口路径；数据权限看 `product_id`、`sys_id`、`huifu_id`、`upper_huifu_id` 和层级 |
-| 该路由下未配置可用通道、入驻信息配置有误 | 通道/路由 | `references/merchant-onboarding-faq.md`、`references/copilot-troubleshooting-playbooks.md` | 检查通道开通、线上/线下业务、`pay_channel`、`pay_scene`、`fee_type`；不指定通道时不要传空 `channel_no` |
-| `sub_mch_id` 与 `sub_appid` 不匹配、`sub_openid` 不匹配 | appid/openid | `references/merchant-onboarding-faq.md`、`references/aggregation-customer-preparation.md`、`references/hostingpay-customer-preparation.md` | 检查 appid 绑定、首尾空格、openid 是否来自同一 appid 授权流程 |
+| 接口权限认证失败、`20003`、数据权限认证失败 | 接口/数据权限 | `references/payment-operations-faq.md`、`references/copilot-troubleshooting-playbooks.md` | 支付侧只核对环境、接口、系统/产品号和交易商户归属；涉及材料或进件状态时交接给 `$huifu-merchant-onboarding` |
+| 该路由下未配置可用通道、入驻信息配置有误 | 通道/路由 | `references/payment-operations-faq.md`、`references/copilot-troubleshooting-playbooks.md` | 检查通道开通、线上/线下业务、`pay_channel`、`pay_scene`、`fee_type`；不指定通道时不要传空 `channel_no` |
+| `sub_mch_id` 与 `sub_appid` 不匹配、`sub_openid` 不匹配 | appid/openid | `references/payment-operations-faq.md`、`references/aggregation-customer-preparation.md`、`references/hostingpay-customer-preparation.md` | 检查 appid 绑定、首尾空格、openid 是否来自同一 appid 授权流程 |
 | orderExpireTime 或 time_expire 格式不正确 | 参数格式 | `references/copilot-parameter-review.md`、`references/aggregation-order.md` | 检查时间格式、是否未来时间、是否与接口字段名匹配 |
 | 数据权限认证失败 | 权限/归属 | `references/copilot-troubleshooting-playbooks.md`、`references/shared-request-header-policy.md` | 检查 `product_id`、`sys_id`、`huifu_id`、`upper_huifu_id`、来源头和归属关系 |
 | 重复交易、流水重复 | 流水幂等 | `references/copilot-parameter-review.md`、`references/copilot-troubleshooting-playbooks.md` | 检查 `req_seq_id` 是否重复使用；业务侧必须落库并保证幂等 |
 | 交易成功收到 2 条异步消息 | 异步通知 | `references/shared-async-notify.md`、`references/copilot-troubleshooting-playbooks.md` | 用 `notify_type` 区分交易异步和账务异步，业务必须以平台流水或业务流水做幂等 |
-| Webhook 找不到 `sign`、收不到下属机构交易消息 | Webhook 配置 | `references/shared-webhook-signing.md`、`references/merchant-onboarding-faq.md`、`references/copilot-troubleshooting-playbooks.md` | `sign` 常在 URL query；服务商接子商户事件时检查统一接收下属机构事件配置 |
+| Webhook 找不到 `sign`、收不到下属机构交易消息 | Webhook 配置 | `references/shared-webhook-signing.md`、`references/payment-operations-faq.md`、`references/copilot-troubleshooting-playbooks.md` | `sign` 常在 URL query；服务商接子商户事件时检查统一接收下属机构事件配置 |
 | 支付验证签名失败、前端支付签名验证失败 | 签名/前端拉起 | `references/shared-signing-v2.md`、`references/checkout-js-callback-and-confirmation.md` | 区分 API RSA 验签、前端拉起签名、控台 Webhook MD5，不混用签名材料 |
 | 托管项目信息不存在、非进行中项目不允许交易 | 托管配置 | `references/hostingpay-customer-preparation.md`、`references/hostingpay-preorder.md` | 检查 `project_id`、项目状态、托管权限和支付方式启用状态 |
 | 退款单不存在、原 PA 流水号不能为空 | 退款流水 | `references/aggregation-refund-query.md`、`references/hostingpay-refund-query.md` | 区分原支付流水、退款请求流水、平台流水；退款查询使用退款交易自身定位键 |
-| 退款一直处理中、请求频率过高 | 退款状态/频率 | `references/merchant-onboarding-faq.md`、`references/copilot-troubleshooting-playbooks.md` | 轮询退款查询并等待终态，不换流水并发重试；同商户/同订单请求需要降频 |
+| 退款一直处理中、请求频率过高 | 退款状态/频率 | `references/payment-operations-faq.md`、`references/copilot-troubleshooting-playbooks.md` | 轮询退款查询并等待终态，不换流水并发重试；同商户/同订单请求需要降频 |
 | 分账金额总和必须等于交易金额、比例格式错误 | 分账 | `references/aggregation-order-tx-metadata.md`、`references/hostingpay-payload-construction.md` | 检查分账权限、金额/比例、接收方、手续费承担关系；复杂权限转人工 |
-| 对账文件未生成、DM 取现额度不足、手续费发票未收到 | 对账/资金/税务运营 | `references/merchant-onboarding-faq.md`、`references/official-service-source-index.md` | 对账先查配置和跑批状态；取现、发票、税务和额度问题只整理材料转人工 |
+| 对账文件未生成、DM 取现额度不足、手续费发票未收到 | 对账/资金/税务运营 | `references/payment-operations-faq.md`、`references/official-service-source-index.md` | 对账先查配置和跑批状态；取现、发票、税务和额度问题只整理材料转人工 |
 | 生产失败是否汇付问题 | 升级人工 | `references/copilot-go-live-checklist.md`、`references/official-service-source-index.md` | 不定责，只整理环境、接口、SDK 版本、脱敏请求/响应、流水、时间、日志、影响范围和已做动作 |
 
 ## 字段规范

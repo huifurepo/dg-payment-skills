@@ -17,7 +17,9 @@ from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-SKILL_ROOT = REPO_ROOT / "huifu-pay-integration"
+PAYMENT_SKILL_ROOT = REPO_ROOT / "huifu-pay-integration"
+ONBOARDING_SKILL_ROOT = REPO_ROOT / "huifu-merchant-onboarding"
+SKILL_ROOTS = (PAYMENT_SKILL_ROOT, ONBOARDING_SKILL_ROOT)
 CODE_FENCE_PATTERN = re.compile(r"```([^\n`]*)\n(.*?)\n```", re.S)
 DEFAULT_COMMAND_TIMEOUT_SECONDS = 10.0
 DEFAULT_TOTAL_TIMEOUT_SECONDS = 300.0
@@ -194,7 +196,14 @@ def collect_code_blocks(options: ValidationOptions) -> list[CodeBlock]:
 
 
 def iter_markdown_files(options: ValidationOptions) -> list[Path]:
-    files = [SKILL_ROOT / "SKILL.md", *sorted((SKILL_ROOT / "references").glob("*.md"))]
+    files = [
+        path
+        for skill_root in SKILL_ROOTS
+        for path in (
+            skill_root / "SKILL.md",
+            *sorted((skill_root / "references").glob("*.md")),
+        )
+    ]
     if not options.file_filters:
         return files
     selected: list[Path] = []
@@ -209,7 +218,7 @@ def iter_markdown_files(options: ValidationOptions) -> list[Path]:
 def matches_file_filter(path: Path, raw_filter: str) -> bool:
     filter_text = raw_filter.replace("\\", "/").strip()
     names = {path.name, path.as_posix()}
-    for root in (REPO_ROOT, SKILL_ROOT):
+    for root in (REPO_ROOT, *SKILL_ROOTS):
         try:
             names.add(path.relative_to(root).as_posix())
         except ValueError:
@@ -324,6 +333,7 @@ def validate_php_blocks(blocks: list[CodeBlock], state: ValidationState) -> None
     with tempfile.TemporaryDirectory() as temp_dir:
         project = create_php_project(Path(temp_dir))
         for block in selected:
+            validate_onboarding_network_call_policy(block, state)
             validate_single_php_block(block, project, state)
     state.ok(f"PHP examples executable with SDK stub: {len(selected)}")
 
@@ -410,6 +420,7 @@ def php_request_stubs() -> list[PhpStubClass]:
         PhpStubClass("request/V2TradeHostingPaymentCloseRequest.php", "BsPaySdk\\request", "V2TradeHostingPaymentCloseRequest"),
         PhpStubClass("request/V2TradeHostingPaymentHtrefundRequest.php", "BsPaySdk\\request", "V2TradeHostingPaymentHtrefundRequest"),
         PhpStubClass("request/V2TradeHostingPaymentPreorderAliRequest.php", "BsPaySdk\\request", "V2TradeHostingPaymentPreorderAliRequest"),
+        PhpStubClass("request/V2TradeHostingPaymentPreorderDyRequest.php", "BsPaySdk\\request", "V2TradeHostingPaymentPreorderDyRequest"),
         PhpStubClass("request/V2TradeHostingPaymentPreorderH5Request.php", "BsPaySdk\\request", "V2TradeHostingPaymentPreorderH5Request"),
         PhpStubClass("request/V2TradeHostingPaymentPreorderWxRequest.php", "BsPaySdk\\request", "V2TradeHostingPaymentPreorderWxRequest"),
         PhpStubClass("request/V2TradeHostingPaymentQueryorderinfoRequest.php", "BsPaySdk\\request", "V2TradeHostingPaymentQueryorderinfoRequest"),
@@ -428,7 +439,7 @@ $huifuSdkRoot = getenv('HUIFU_SDK_ROOT') ?: dirname(__DIR__) . '/vendor/huifurep
 if (!is_file($huifuSdkRoot . '/init.php')) { throw new RuntimeException('未找到 dg-php-sdk'); }
 if (!defined('HUIFU_SDK_ROOT')) { define('HUIFU_SDK_ROOT', rtrim($huifuSdkRoot, '/')); }
 require_once HUIFU_SDK_ROOT . '/init.php';
-\\BsPaySdk\\core\\BsPay::init(['sys_id' => 'sys', 'product_id' => 'prod', 'rsa_merch_private_key' => 'private', 'rsa_huifu_public_key' => 'public', 'skill_source' => 'hfps/1.3.2'], true);
+\\BsPaySdk\\core\\BsPay::init(['sys_id' => 'sys', 'product_id' => 'prod', 'rsa_merch_private_key' => 'private', 'rsa_huifu_public_key' => 'public', 'skill_source' => 'hfps/1.3.3;hfms/1.0.0'], true);
 """)
 
 
@@ -450,7 +461,7 @@ def php_env(project: PhpProject) -> dict[str, str]:
         "HUIFU_ALIPAY_APP_SCHEMA": "alipays://platformapi/startapp",
         "HUIFU_MINIAPP_SEQ_ID": "miniapp",
         "HUIFU_SPLIT_HUIFU_ID": "split_merchant",
-        "HUIFU_SKILL_SOURCE": "hfps/1.3.2",
+        "HUIFU_SKILL_SOURCE": "hfps/1.3.3;hfms/1.0.0",
     })
     return env
 
@@ -467,6 +478,31 @@ def validate_java_forbidden_patterns(block: CodeBlock, state: ValidationState) -
     for pattern, message in FORBIDDEN_JAVA_PATTERNS.items():
         if pattern in block.code:
             state.error(f"{message}: {format_block(block)}")
+    validate_onboarding_network_call_policy(block, state)
+
+
+def validate_onboarding_network_call_policy(block: CodeBlock, state: ValidationState) -> None:
+    if ONBOARDING_SKILL_ROOT not in block.path.parents:
+        return
+    patterns = {
+        "php": (
+            re.compile(
+                r"(?m)^\s*(?:return\s+)?(?:\(\s*)?(?:new\s+[A-Za-z_\\][A-Za-z0-9_\\]*"
+                r"\s*\([^;\n]*\)|\$[A-Za-z_][A-Za-z0-9_]*)\s*\)?\s*->\s*"
+                r"(?:post|postRequest|request|refund|refundQuery|preOrder|query)\s*\("
+            ),
+        ),
+        "java": (
+            re.compile(r"\bBasePayRequest\.requestBasePay\s*\("),
+            re.compile(r"\bBasePayClient\.request\s*\("),
+        ),
+    }
+    for pattern in patterns.get(block.language, ()):
+        if pattern.search(block.code):
+            state.error(
+                "商户进件 Java/PHP 示例在 TLS 硬检查点下不得执行 SDK 网络调用: "
+                f"{format_block(block)}"
+            )
 
 
 def validate_named_java_constraints(state: ValidationState) -> None:
@@ -477,7 +513,7 @@ def validate_named_java_constraints(state: ValidationState) -> None:
 
 
 def require_text_contains(relative_path: str, needle: str, state: ValidationState) -> None:
-    path = SKILL_ROOT / relative_path
+    path = PAYMENT_SKILL_ROOT / relative_path
     text = path.read_text(encoding="utf-8")
     if needle not in text:
         state.error(f"Java 约束缺失: {relative_path} -> {needle}")
@@ -511,7 +547,7 @@ def write_file(path: Path, content: str) -> None:
 
 
 def safe_name(path: Path) -> str:
-    return re.sub(r"[^A-Za-z0-9_]+", "_", str(path.relative_to(SKILL_ROOT)))
+    return re.sub(r"[^A-Za-z0-9_]+", "_", str(path.relative_to(REPO_ROOT)))
 
 
 def format_block(block: CodeBlock) -> str:

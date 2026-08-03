@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "review_contract": "The independent 23-document, 235-section review applies to these exact destination bytes. Any body change invalidates the reviewed snapshot; the six semantic anchors are selected high-risk clauses, not the full review corpus.",
+  "baseline_commit": "ff7b6acde574f498fde9c6f0763078b0e2eea3b7",
+  "migration_commit": "e12651efb2ed550af9c632d472cb39499a1746de",
+  "reviewed_source_documents": 23,
+  "reviewed_section_routes": 235,
+  "current_snapshot_review": {
+    "reviewed_head": "2eef0cc0bb2de2d63d26ec7c88f9db99d22641c3",
+    "reviewed_at": "2026-07-29",
+    "scope": "Fifth review follow-up with owner-confirmed contract corrections. Public return codes, base parameters, terms and async-message documentation are registered as auxiliary sources without changing the 36 payment or 11 onboarding API source-lock counts. Aggregation-query method_expand is modeled as one String(JSON Object) decode with scene fields flat at the decoded root; T_*/A_*/U_* table rows remain distinct contract locators but are not wire keys. A_MICROPAY is the formal enum and A_IMICROPAY is retained only as an annotated official success-example error. Aggregation notify_url now explicitly routes by trade_type to both forward-scan and reverse-scan notification tables, while broken return-code anchors map to the public return-code corpus. Skill package versions remain payment 1.3.3 and onboarding 1.0.0.",
+    "reviewers": [
+      {
+        "role": "external-link-review",
+        "identity": "fifth_external_links"
+      },
+      {
+        "role": "payment-contract-review",
+        "identity": "fifth_payment_contracts"
+      },
+      {
+        "role": "onboarding-contract-review",
+        "identity": "fifth_onboarding_skill"
+      },
+      {
+        "role": "review-consolidation-and-remediation",
+        "identity": "root-fifth-review"
+      },
+      {
+        "role": "payment-link-forward-test",
+        "identity": "fifth_forward_links"
+      },
+      {
+        "role": "onboarding-material-forward-test",
+        "identity": "fifth_forward_material"
+      },
+      {
+        "role": "payment-method-expand-forward-test",
+        "identity": "fifth_forward_method"
+      },
+      {
+        "role": "confirmed-common-document-review",
+        "identity": "common_docs_audit"
+      },
+      {
+        "role": "confirmed-method-expand-forward-test",
+        "identity": "forward_query_flat"
+      },
+      {
+        "role": "confirmed-notify-return-code-forward-test",
+        "identity": "forward_notify_codes"
+      },
+      {
+        "role": "confirmed-onboarding-return-code-forward-test",
+        "identity": "forward_onboarding_codes"
+      }
+    ],
+    "result": "approved-after-corrections"
+  },
+  "destination_sha256": {
+    "huifu-merchant-onboarding/references/canonical-regression-prompts.md": "46a566c86a5dad4a7968a13122cbd55b19c99a39e28d6e23b5c3fc0f8500b3cf",
+    "huifu-merchant-onboarding/references/copilot-troubleshooting-playbooks.md": "90b3a09b2f9738602289dbe8146d542e9b7e9bcaff422ef8a8ad1846b3178ff0",
+    "huifu-merchant-onboarding/references/merchant-onboarding-error-codes.md": "37e59eecdeec7175047a82804e17d4ccb49ba8e257ab8e246f175b9ab1cbf73d",
+    "huifu-merchant-onboarding/references/merchant-onboarding-faq.md": "f46cbe11085bd48fbcf0c0fa41e0caf9d9171cba406bf4386c96588f691c4197",
+    "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md": "49b61d6cfe27dbf399b5a07756484a8d3d51e7c6a34affe226207c4401203134",
+    "huifu-merchant-onboarding/references/merchant-onboarding-image-upload.md": "bc81472b08d4e2aff8e9e7bea93af4cf19ff4e3832ec29e9484c4e33ff056c8c",
+    "huifu-merchant-onboarding/references/official-service-source-index.md": "77289d7fcc5270d3041d2c25a2da817ad510f93747af5f60abea0be81a4078e7",
+    "huifu-merchant-onboarding/references/shared-copyright-notice.md": "9e4ac43b5fba8819e3a6eb3b11a8ea6a6b59f7e1f742deea7d565949c2237f15",
+    "huifu-merchant-onboarding/references/shared-credential-boundary.md": "1e3242b62fbe557b0ed61464abe6fbecb0e348e45d2f79642ccd76ec2bced8c2",
+    "huifu-merchant-onboarding/references/shared-overview.md": "d1b65954a420b5fdd0f28e783d2aa00f214c0af6fa58ae43c5ca4d61d1103cb6",
+    "huifu-merchant-onboarding/references/shared-request-field-preservation.md": "9dbec9f9f71caf2c304be88e7b929a02a65ee79ca7b6feaf429e89e8620206b4",
+    "huifu-merchant-onboarding/references/shared-request-header-policy.md": "2052cb8046379e0fe94f7691d9e19308e25ca69500e48d1a03e1de5ee4c20d09",
+    "huifu-merchant-onboarding/references/shared-server-sdk-matrix.md": "e10555a050161bad9c8224bb9a5f29136727e22c05377374208827215d72a921",
+    "huifu-merchant-onboarding/references/shared-signing-v2.md": "95008c22384f596ab9d76e79fd0ca4191c7e1cca719314d4925080806c6e824f",
+    "huifu-merchant-onboarding/references/skill-version-policy.md": "3760fec7e5c6889da3e92e4bdca06078c63a46f3603064c37e9a397369e57518",
+    "huifu-pay-integration/references/aggregation-customer-preparation.md": "535d7d33a78a486c42a1aa8d8198e6d166021855539ca36824b5541f374e6e22",
+    "huifu-pay-integration/references/aggregation-order-method-alipay.md": "5fe5de19a7792fd30e3a19d8951416f61e67606932fde11b000a8303957d90ea",
+    "huifu-pay-integration/references/aggregation-order-method-unionpay.md": "c8cd951659936d0b02ba477293cb2c733cb55d1a2e1a317d0ac0d70d85fd41fc",
+    "huifu-pay-integration/references/aggregation-order-method-wechat.md": "0bf577e484ea2b042ca91d8f88edcae24c29811b5761b22106250a78ac3c500c",
+    "huifu-pay-integration/references/canonical-regression-prompts.md": "8dcd83016f8e0b1a695eb053f3b362b446e485aa1f78a94d634bfeb3d389292b",
+    "huifu-pay-integration/references/copilot-solution-cards.md": "64434acb7516091c77249471b9e67eb4c8dbcc06469d3d708bd88a6024834ddb",
+    "huifu-pay-integration/references/copilot-troubleshooting-playbooks.md": "0ca2abc8c1d0dbbd8ed77b533946ddede58ffc9b2c4ad211ec8a037b8a4de365",
+    "huifu-pay-integration/references/hostingpay-async-webhook.md": "87139a48125f66639304118425edce9b4f40c0dadd1e2889d524a6803081c188",
+    "huifu-pay-integration/references/hostingpay-error-codes.md": "b5d1e6544ba2d0135a1d4c4071eee8b4de1ffa86f75f931a08dd73ee7f202066",
+    "huifu-pay-integration/references/official-service-source-index.md": "3f232964f50715846bc05d8c48b9b097df4b239ba5068df799fe77a5f854063b",
+    "huifu-pay-integration/references/payment-operations-faq.md": "52f0d6b109a6fec8c24d84605751f6619e55a53f703bbee5b6c52963ed4da7b8",
+    "huifu-pay-integration/references/shared-async-notify.md": "87191f8a4696231ef48367ec48b5a21a2945107a6626baf2d7ccca7fd766ac63",
+    "huifu-pay-integration/references/shared-copyright-notice.md": "9e4ac43b5fba8819e3a6eb3b11a8ea6a6b59f7e1f742deea7d565949c2237f15",
+    "huifu-pay-integration/references/shared-credential-boundary.md": "e2c9ebc7e7f284fc944e1f7d7014bf92d77db5c804cf920dcdb89764f41cd46b",
+    "huifu-pay-integration/references/shared-local-sandbox.md": "7efcbac276d1b54b5cf5a586e63f5b74d8005cbc81dd240084182351a5f25284",
+    "huifu-pay-integration/references/shared-overview.md": "e4dca1305d0039d23b2b6047216bc8fc24bb9f3f7536f178597f2059cf932608",
+    "huifu-pay-integration/references/shared-request-field-preservation.md": "17dac4251194511af183a283f45684fb76fdbede087e9475fc4a0db738033046",
+    "huifu-pay-integration/references/shared-request-header-policy.md": "1fab9974e39fe2c7add988e3ecdc5674346376a3070607f925563d98706ebe4b",
+    "huifu-pay-integration/references/shared-server-sdk-matrix.md": "b408267671551ce0837c7dd5596780fdcd9f1db04f98637d79f9d6ad0a9a84ea",
+    "huifu-pay-integration/references/shared-signing-v2.md": "f9d45674828826a11581cb0ed79a5764d0abd5b962c9d96c744459f992103964",
+    "huifu-pay-integration/references/skill-version-policy.md": "c6e994a5a770bdcaba9b7262e4e25470a1f50a08b2899c815b0b4075639d6450"
+  }
+}

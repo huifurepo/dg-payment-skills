@@ -4,12 +4,13 @@
 
 ## 定位
 
-聚合支付下单入口，支持 10 种支付类型（正扫/反扫/JS支付/小程序/APP）。
+聚合支付下单入口。极速版产品接入指引覆盖 9 个正式场景；V4 参数表包含 10 个 `trade_type` 枚举。
 
 ## 核心内容
 
 - **聚合支付下单**：`v4/trade/payment/create`
-- **10 种 trade_type**：T_JSAPI、T_MINIAPP、T_APP、T_MICROPAY、A_JSAPI、A_NATIVE、A_MICROPAY、U_JSAPI、U_NATIVE、U_MICROPAY
+- **9 个正式产品场景**：不含微信 APP。
+- **10 个 API 枚举**：T_JSAPI、T_MINIAPP、T_APP、T_MICROPAY、A_JSAPI、A_NATIVE、A_MICROPAY、U_JSAPI、U_NATIVE、U_MICROPAY；`T_APP` 仅按 API 枚举能力表达。
 - **method_expand 各场景详解**：不同 trade_type 的扩展结构与条件必填关系，且 JSON 内容直接是当前场景对象本身
 - **前端处理与回调**：二维码生成、JS 调起、付款码扫码、异步通知 / webhook
 - **完整型 reference**：按请求、渠道、扩展、响应、错误拆成多个分册，避免单文件过大

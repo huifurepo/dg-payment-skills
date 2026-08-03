@@ -3,7 +3,7 @@ from __future__ import annotations
 from skill_validation_config import EXPECTED_SKILL_DIR, EXPECTED_SKILL_FILE, REPO_ROOT, ValidationState
 
 
-PYTHON_SDK_VERSION = "2.0.23"
+PYTHON_SDK_VERSION = "2.0.24"
 PYTHON_SDK_HEADER_VERSION = f"python_{PYTHON_SDK_VERSION}"
 PYTHON_CONTRACT_FILES = (
     REPO_ROOT / "README.md",
@@ -12,8 +12,8 @@ PYTHON_CONTRACT_FILES = (
     EXPECTED_SKILL_DIR / "references" / "shared-overview.md",
     EXPECTED_SKILL_DIR / "references" / "shared-server-sdk-matrix.md",
     EXPECTED_SKILL_DIR / "references" / "shared-request-header-policy.md",
-    EXPECTED_SKILL_DIR / "references" / "shared-versioning-policy.md",
-    EXPECTED_SKILL_DIR / "references" / "shared-release-checklist.md",
+    REPO_ROOT / "maintainer-contracts" / "shared-versioning-policy.md",
+    REPO_ROOT / "maintainer-contracts" / "shared-release-checklist.md",
     EXPECTED_SKILL_DIR / "references" / "aggregation-python-adapter.md",
     EXPECTED_SKILL_DIR / "references" / "aggregation-python-scenarios.md",
     EXPECTED_SKILL_DIR / "references" / "hostingpay-python-adapter.md",

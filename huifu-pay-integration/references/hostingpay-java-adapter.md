@@ -7,11 +7,13 @@
 
 | 项目 | 内容 |
 | --- | --- |
-| 当前适配 SDK | `dg-java-sdk` `3.0.39`（当前仓库示例基线） |
-| 当前文档口径 | 当前仓库与 Skill 常量统一为 `3.0.39` |
+| 当前适配 SDK | `dg-java-sdk` `3.0.40`（当前仓库示例基线） |
+| 当前文档口径 | 当前仓库与 Skill 常量统一为 `3.0.40` |
 | 最低运行时 | JDK 1.8+ |
 | 初始化入口 | `MerConfig` + `BasePay.initWithMerConfig()` |
 | 主要调用方式 | `BasePayClient.request()` |
+
+通用 Java SDK 同样默认 `BasePay.debug=true`，且锁定源码的 HTTP 客户端信任所有证书并跳过主机名校验。初始化前必须全局设置 `BasePay.debug=false`；在官方安全制品或经批准传输层通过错证书、错域名测试前，不得生成联调或生产可运行代码。
 
 ## 先看哪些文件
 
@@ -23,7 +25,7 @@
 ## Java 特有说明
 
 1. 设置产品号的方法名是 `setProductId()`。
-   `dg-java-sdk 3.0.39` 源码已使用正常拼写，不要再生成旧文档中的 `setProcutId()`。
+   `dg-java-sdk 3.0.40` 源码已使用正常拼写，不要再生成旧文档中的 `setProcutId()`。
 2. Spring Boot 2.x 和 3.x 的 import 不一样。
    2.x 常见是 `javax.*`
    3.x 常见是 `jakarta.*`

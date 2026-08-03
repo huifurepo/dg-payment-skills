@@ -255,6 +255,8 @@
 
 ### quick_online_response
 
+官网只把父字段定义为 `String(6000)`，说明为“新设计的域字段”，没有声明 JSON 编码。下表只保留官网展开的合同定位路径；真实样本或官方确认前，`quick_online_response` 必须标记为 `String（子表编码待确认）`，不得生成固定 JSON decode 路径。
+
 | 参数 | 中文名 | 类型 | 长度 | 必填 | 说明 |
 |------|--------|------|------|------|------|
 | debit_flag | 借贷记标识 | String | 1 | N | `D`=借记卡，`C`=信用卡，`Z`=借贷合一卡 |
@@ -344,7 +346,7 @@
 | acct_split_bunch | 分账对象 | String(JSON Object) | 2048 | N | 见下文 `acct_split_bunch` |
 | is_delay_acct | 是否延时交易 | String | 1 | Y | `Y`=延迟，`N`=不延迟 |
 | trans_fee_allowance_info | 手续费补贴信息 | String(JSON Object) | 6000 | N | 见下文 `trans_fee_allowance_info` |
-| quick_online_response | 快捷网银响应 | String(JSON Object) | 6000 | N | 见下文 `quick_online_response` |
+| quick_online_response | 快捷网银响应 | String（子表编码待确认） | 6000 | N | 官网未声明 JSON；下表仅为合同展示路径 |
 | bank_extend_param | 银行扩展信息 | String(JSON Object) | - | N | 网银返回，见下文 `bank_extend_param` |
 | fee_formula_infos | 手续费费率信息 | String(JSON Array) | - | N | 微信、支付宝、云闪付交易成功时返回 |
 | devs_id | 汇付机具号 | String | 32 | Y | 通过汇付报备的机具必传 |
@@ -402,7 +404,7 @@
 - 官方历史资料中的“业务返回码”说明曾指向旧测试域名；该链接已废弃，当前实现应以正式文档站点为准。
 - 公共返回参数表声明顶层 `sign` 为必返字段，但官方成功示例只展示了 `data`，没有给出 `sign`；接入时仍应按“有签名响应”处理。
 - 官方成功示例里出现了 `product_id`，但同步返回参数表没有定义该字段；当前不将其视为稳定返回字段。
-- `wx_response.cash_fee` 与 `wx_response.coupon_fee` 的类型列写为 `Int`、长度列写为 `100`，但示例值却是金额格式字符串（如 `10.00`、`1.00`）；当前按官方原表保留，并按“金额语义字段”理解。
+- `wx_response.cash_fee` 与 `wx_response.coupon_fee` 的类型列写为 `Int`、长度列写为 `100`，但示例值却是金额格式字符串（如 `10.00`、`1.00`）；当前按官方原表保留并标记 `[官方文档口径冲突]`，在真实样本或官方确认前不得固化为整数或字符串 DTO。
 - 查询条件在原文中分散写在各字段说明里，容易误读成 `huifu_id` 单字段可选；实际应按 `(party_order_id) OR (huifu_id + org_req_date + org_req_seq_id)` 理解。
 - `trans_fee_allowance_info.cur_allowance_config_infos` 在本页定义为 `Object`，而前面几个托管支付异步文档中同名字段常见定义为 `Array`；当前以本页官方定义为准，不做静默改写。
 - `request_ip` 长度写为 `15`，明显仅覆盖 IPv4 形式；如果上游后续支持 IPv6，应以真实返回为准而不是在调用方写死长度校验。
