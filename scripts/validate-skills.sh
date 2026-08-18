@@ -32,12 +32,18 @@ python3 -B scripts/validate_merchant_onboarding_field_catalog_generation.py
 python3 -B scripts/validate_merchant_onboarding_complete_catalog.py
 python3 -B scripts/validate_merchant_onboarding_source_contract.py
 python3 -B scripts/validate_merchant_onboarding_field_contract.py
+python3 -B scripts/generate_user_onboarding_field_catalog.py \
+  --locked-source-dir \
+  --output huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md \
+  --check
+python3 -B scripts/validate_user_onboarding_source_contract.py
 python3 -B scripts/validate_skill_packages.py --allow-dirty
 
 (cd local-sandbox && go test ./... -count=1)
 
 if [[ -n "${HUIFU_SDK_ROOT:-}" ]]; then
   python3 -B scripts/validate_merchant_onboarding_sdk_evidence.py --sdk-root "$HUIFU_SDK_ROOT"
+  python3 -B scripts/validate_user_onboarding_sdk_evidence.py --sdk-root "$HUIFU_SDK_ROOT"
   python3 -B scripts/validate_local_sandbox_golden_vectors.py --strict --sdk-root "$HUIFU_SDK_ROOT"
 elif [[ "${REQUIRE_SDK_EVIDENCE:-0}" == "1" ]]; then
   echo "HUIFU_SDK_ROOT is required when REQUIRE_SDK_EVIDENCE=1." >&2

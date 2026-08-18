@@ -2,7 +2,7 @@
 
 ## 适用范围
 
-用于已进件商户修改主体、证照、联系人、结算、协议、受益人、股东或其他基础资料。官方来源：[商户基本信息修改](https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shjbxxxg_kyc.md)，锁定来源 SHA-256 为 `0f3e6d3491799ca37802e63239dd8f2b382064d41ad2e8a89e6767ae089d35c5`。
+用于已进件商户修改主体、证照、联系人、结算、协议、受益人、股东或其他基础资料。官方来源：[商户基本信息修改](https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shjbxxxg_kyc.md)，锁定来源 SHA-256 为 `458f021fa0e626133d17a65ce1fee21aa445d45b75493c00740562c3c64259c6`。
 
 该接口不是企业/个人首次进件。修改资料可能重新进入审核，不能把同步响应成功解释为资料审核完成或已经具备支付能力。
 
@@ -30,12 +30,12 @@
 3. `data.prov_id/area_id` 是经营省市，`data.card_info.prov_id/area_id` 是银行所在省市；不得按叶字段名合并或遗漏。修改其中一组时只更新对应父路径；本接口 `card_info.area_id` 为 `String(8) Y`，不能套用企业/个人进件的 `String(6) Y`。
 4. 图片字段只接受调用方提供并经图片上传获得的真实材料标识；不得复用官网示例或其他商户材料。
 5. 官网页面的例值、商户号、证件号、手机号、银行卡号和文件标识都不是默认值。
-6. 命中外部编码、文件类型、协议或材料说明时读取 `merchant-onboarding-external-resources.md`，未读取外部正文时要求人工核验。
+6. `data.activated_products` 只允许 `01=一体化收款产品`、`02=账户与资金产品`、`03=业财数通产品`；多值沿用官网格式，不传为空。
+7. 命中外部编码、文件类型、协议或材料说明时读取 `merchant-onboarding-external-resources.md`，未读取外部正文时要求人工核验。
 
 ## 公共请求头
 
-- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.0`，双 Skill 默认 `hfps/1.3.3;hfms/1.0.0`。
-- `jpt-x-skill-huifu_id` 只能取本次请求真实 `data.huifu_id`；不得固定、虚构或写回业务 `data`。
+- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.1`，双 Skill 默认 `hfps/1.3.4;hfms/1.0.1`。
 
 ## SDK 证据
 

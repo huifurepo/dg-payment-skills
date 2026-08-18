@@ -772,7 +772,7 @@ def main() -> int:
     parser.add_argument(
         "--locked-source-dir",
         action="store_true",
-        help="read the snapshot selected by merchant-onboarding-source-lock.json",
+        help="read the snapshot selected by the current merchant-onboarding source lock",
     )
     parser.add_argument(
         "--refresh-source-dir",

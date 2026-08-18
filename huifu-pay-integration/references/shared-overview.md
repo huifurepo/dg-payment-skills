@@ -53,4 +53,4 @@
 
 ## 当前版本
 
-支付 Skill 为 `1.3.3`。Java/PHP/Python 基线分别见 `shared-server-sdk-matrix.md`。`skill_source` 默认值与当前包版本同步为 `hfps/1.3.3`，显式合同值仍优先原样透传。
+支付 Skill 为 `1.3.4`。Java/PHP/Python 基线分别见 `shared-server-sdk-matrix.md`。`skill_source` 默认值与当前包版本同步为 `hfps/1.3.4`，显式合同值仍优先原样透传。

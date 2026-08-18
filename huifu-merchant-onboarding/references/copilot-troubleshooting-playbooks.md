@@ -20,9 +20,10 @@
 | 数据权限认证失败 | `product_id`、`sys_id`、`upper_huifu_id`、`huifu_id` 归属 | 修正层级关系，不猜商户归属 |
 | 业务开通部分失败 | `reg_result_list[]`、逐业务异步和申请状态 | 按业务逐项处理，不把同步成功当整体完成 |
 | 实名状态延迟 | 主体、证件、绑卡/短信、详情与申请状态 | 继续查询或补资料，不重复创建商户 |
-| 图片失败 | 格式、大小、`file_url/file` 互斥、SDK 路径 | 不猜响应文件标识；本地文件流未确认时停止 |
+| 图片失败 | 格式、大小、`file_url/file` 互斥、SDK 语言能力 | Java 走官方图片链路；PHP/Python 专用实现不可用时检查受控 multipart 降级的字段、加签与 TLS；不猜响应文件标识 |
 | 请求头缺失 | `skill_source`、当前请求是否真实含 `huifu_id`、SDK 版本 | 不为补头污染业务 data |
 | 回调实现不确定 | 是否有官方原始样本、签名和 ACK 协议 | 未确认时只整理确认清单 |
+| 出现手写 Java/PHP 客户端 | SDK 版本、Request/Client 类、官方路由，以及是否恰为图片上传 | 常规接口替换为对应官方 SDK 调用；仅 `/v2/supplementary/picture` 的 PHP 可保留满足图片专项合同的 Guzzle/cURL multipart 降级，Java 图片上传仍不得手写 |
 
 ## 升级人工
 

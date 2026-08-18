@@ -13,7 +13,7 @@
 - 读法建议
 - 语言边界提醒
 - 调试日志硬停
-- 传输安全硬停
+- 官方 SDK-only 传输规则
 
 ## 官方语言支持概览
 
@@ -21,12 +21,12 @@
 
 - Lightning 极速版专用 SDK：当前明确发布证据只有 Java `dg-lightning-sdk 1.0.5`。
 - 通用斗拱 SDK：Java/PHP/Python 可以包含 V4 Endpoint 的 Request/facade，但不能因此称为“Lightning 专用 SDK”。
-- HTTP API 本身不限定实现语言；没有专用 SDK 不等于该语言不能接入，但原始 HTTP 路径必须另行验证签名、请求头、TLS 和响应验签。
+- 本 Skill 的 Java、PHP、Python 真实请求统一使用对应官方 SDK；没有专用 SDK 能力证据时报告缺口，不改写原始 HTTP 客户端。
 
 | 语言 | 官方安装方式 | 最低运行时 | 当前说明 |
 | --- | --- | --- | --- |
-| Java | Maven | JDK 8+ | Lightning `1.0.5` 与通用 `3.0.40` 均关闭证书链和主机名校验，联调/生产可运行代码硬停 |
-| PHP | Composer `huifurepo/dg-php-sdk` | PHP 7.4+ | API/Request 能力可核对，但锁定制品关闭 TLS 对端校验，生产代码硬停 |
+| Java | Maven | JDK 8+ | Lightning `1.0.5` 与通用 `3.0.40` 均按官方 SDK 主链路生成真实调用 |
+| PHP | Composer `huifurepo/dg-php-sdk` | PHP 7.4+ | API/Request 能力可核对，按官方 Request/facade/client 生成真实调用 |
 | Python | pip `dg-sdk` | Python 3.x；本地 SDK classifier 只列到 3.7，实际项目需安装验证 | 聚合支付和托管支付核心场景已覆盖，当前 Skill 基线为 `dg-sdk 2.0.24` |
 | C# | NuGet | .NET 4.8+ | 当前只保留入口说明 |
 | Go | go mod | Go 1.16+ | 当前只保留入口说明 |
@@ -95,11 +95,12 @@ Composer 不可用时，可以使用 Packagist 元数据指向的 GitHub 分发�
 - 调试开启后，`BsPayRequestV2` 会记录包含 `rsa_merch_private_key` 的 `MerConfig`、完整请求体和完整响应。
 - PHP 联调/生产必须在加载任何 SDK、Demo/Composer 配置以及调用 `BsPay::init` 之前固定 `DEBUG=false`；不得使用 Demo/Composer loader，启动检查必须拒绝已定义为 `true` 的进程。不能证明时停止生成可运行实现。
 
-## 传输安全硬停
+## 官方 SDK-only 传输规则
 
-- Lightning Java `1.0.5` 与通用 Java `3.0.40` 的实际 `HttpClientUtils` 都安装信任所有证书的 `X509TrustManager`，并让 `HostnameVerifier` 恒返回 `true`；关闭 `BasePay.debug` 只能阻止敏感日志，不能修复 TLS。未取得验证证书链和主机名的官方安全制品或经批准传输层前，不得生成联调或生产可运行代码，且必须以错证书、过期证书和错域名测试证明拒绝连接。
-- 锁定的 PHP `2.0.30` 在 `BsPayRequestV2.php` 中设置 `CURLOPT_SSL_VERIFYPEER=false`。输出可运行代码前必须扫描实际安装源码：对端校验必须启用，`CURLOPT_SSL_VERIFYHOST` 必须为 `2`。
-- 未通过上述检查时，只可解释字段、Request 类、产品边界和升级条件；不得把手写 HTTP、自制 wrapper、关闭校验或信任所有证书称为官方安全方案。
+- 接入方确认官方 Lightning Java `1.0.5`、通用 Java `3.0.40`、PHP `2.0.30` 和 Python `2.0.24` SDK 不存在本 Skill 曾从历史源码快照推断的 TLS 问题；Java/PHP 不再触发 TLS 硬停。
+- 三种语言的真实请求都使用官方 Request/facade/client。禁止以规避 TLS、补齐示例或验证技术链路为由，生成 `HttpClient`、OkHttp、Guzzle、curl 或自实现 HTTP+签名/验签客户端。
+- 没有专属 Request 时先核对官方通用调用入口；仍无官方能力证据则报告缺口并等待确认，不得手写 HTTP 补位。
+- 上线仍应按常规检查证书链和主机名校验，且不得主动关闭校验或信任所有证书；这不是当前官方 Java/PHP SDK 的预设阻断条件。
 
 读取规则：
 

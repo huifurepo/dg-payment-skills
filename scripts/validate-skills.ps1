@@ -52,6 +52,13 @@ Invoke-Validation @("scripts\validate_merchant_onboarding_field_catalog_generati
 Invoke-Validation @("scripts\validate_merchant_onboarding_complete_catalog.py")
 Invoke-Validation @("scripts\validate_merchant_onboarding_source_contract.py")
 Invoke-Validation @("scripts\validate_merchant_onboarding_field_contract.py")
+Invoke-Validation @(
+    "scripts\generate_user_onboarding_field_catalog.py",
+    "--locked-source-dir",
+    "--output", "huifu-merchant-onboarding\references\user-onboarding-complete-field-catalog.md",
+    "--check"
+)
+Invoke-Validation @("scripts\validate_user_onboarding_source_contract.py")
 Invoke-Validation @("scripts\validate_skill_packages.py", "--allow-dirty")
 
 Push-Location (Join-Path $RepoRoot "local-sandbox")
@@ -66,6 +73,7 @@ try {
 
 if ($env:HUIFU_SDK_ROOT) {
     Invoke-Validation @("scripts\validate_merchant_onboarding_sdk_evidence.py", "--sdk-root", $env:HUIFU_SDK_ROOT)
+    Invoke-Validation @("scripts\validate_user_onboarding_sdk_evidence.py", "--sdk-root", $env:HUIFU_SDK_ROOT)
     Invoke-Validation @("scripts\validate_local_sandbox_golden_vectors.py", "--strict", "--sdk-root", $env:HUIFU_SDK_ROOT)
 } elseif ($env:REQUIRE_SDK_EVIDENCE -eq "1") {
     throw "HUIFU_SDK_ROOT is required when REQUIRE_SDK_EVIDENCE=1."

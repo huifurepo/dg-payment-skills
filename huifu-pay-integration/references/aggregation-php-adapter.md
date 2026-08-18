@@ -2,8 +2,6 @@
 
 本文件对应聚合支付 PHP 接入。
 
-> 🔴 TLS 硬停：锁定的 PHP `2.0.30` 关闭对端证书校验。本页只允许静态核对 SDK 类、字段和初始化形态，不得执行真实网络调用，片段不得用于联调或生产；只有实际安装制品启用证书链校验及 `CURLOPT_SSL_VERIFYHOST=2`，并通过错证书/错域名测试后才能解除。
->
 > 🔴 DEBUG 硬停：不得使用会定义 `DEBUG=true` 的官方 `BsPayDemo/loader.php` 或 `Composer/BsPayConfig.php`。必须在加载任何 SDK 文件和调用 `BsPay::init` 前固定 `DEBUG=false`；否则调试日志会泄露含 RSA 私钥的 `MerConfig`、完整请求和响应。
 
 ## 目录
@@ -12,7 +10,7 @@
 - 官方 SDK 入口
 - 强制请求头
 - 与官方 PHP SDK 的对齐要点
-- 静态请求形态
+- 官方 SDK 请求形态
 - 设计约束
 - 场景入口
 
@@ -32,7 +30,7 @@
 
 - `huifurepo/dg-php-sdk`
 - 当前 Skill 包基线：`2.0.30`
-- 安全状态：锁定源码关闭 `CURLOPT_SSL_VERIFYPEER`；实际制品未同时启用对端校验和 `CURLOPT_SSL_VERIFYHOST=2` 时，必须触发生产硬停。
+- 传输规则：真实请求使用官方 `Payment` / `BsPayClient` 主链路；接入方已确认当前官方 SDK 不存在本 Skill 曾推断的 TLS 问题，不得改写 Guzzle、curl 或自实现 HTTP+签名客户端。
 
 核心支付主链路优先走：
 
@@ -52,7 +50,7 @@
 
 ## 安装与环境变量前置检查
 
-输出 PHP 静态接入形态时，必须先给出 SDK 安装和环境变量准备；当前不得给出可执行网络调用。
+输出 PHP 接入代码时，必须先给出 SDK 安装和环境变量准备，并通过官方 SDK 发起真实请求；不得手写 HTTP。
 
 当前 PHP SDK 包版本口径：
 
@@ -95,14 +93,14 @@ test -f "$HUIFU_SDK_ROOT/init.php"
 
 手动下载方式只解决安装来源问题，不改变运行约束：只能保留一个实际使用的 SDK 路径，`HUIFU_SDK_ROOT` 必须指向本次确认过的 `BsPaySdk` 目录。官方 SDK 文档版本表在 2026-04-24 直接校验时仍只列到 `v2.0.25`，且该行 OSS 下载地址返回 404；不要把可访问的旧包地址当作 `2.0.30` 替代品。
 
-未来安全制品解除硬停前，静态核对以下环境变量：
+联调或生产前核对以下环境变量：
 
 ```bash
 export HUIFU_SYS_ID="渠道商或商户系统号"
 export HUIFU_PRODUCT_ID="汇付产品号"
 export HUIFU_RSA_PRIVATE_KEY="商户 RSA 私钥"
 export HUIFU_RSA_PUBLIC_KEY="汇付 RSA 公钥"
-export HUIFU_SKILL_SOURCE="hfps/1.3.3"
+export HUIFU_SKILL_SOURCE="hfps/1.3.4"
 export HUIFU_MERCHANT_ID="本次请求的 huifu_id"
 export HUIFU_NOTIFY_URL="https://your-domain.example/huifu/notify"
 export HUIFU_ALIPAY_BUYER_ID="支付宝 buyer_id；非支付宝场景可不配置"
@@ -114,9 +112,9 @@ export HUIFU_ALIPAY_BUYER_ID="支付宝 buyer_id；非支付宝场景可不配�
 export HUIFU_SDK_ROOT="/absolute/path/to/BsPaySdk"
 ```
 
-## `loader.php` 初始化形态示例（不得用于联调/生产）
+## `loader.php` 初始化示例
 
-下面只展示加载与初始化形态。锁定的 PHP `2.0.30` 关闭 TLS 对端校验且缺少已证明的主机名校验；在安全制品通过源码扫描及错证书、过期证书、错域名测试前，不得把本段作为联调或生产可运行模板。
+下面展示官方 SDK 的加载与初始化形态。联调或生产仍必须先满足本页 DEBUG、凭据和环境检查；不得用手写 HTTP 替代官方 SDK。
 
 ```php
 <?php
@@ -196,7 +194,7 @@ require_once HUIFU_SDK_ROOT . '/init.php';
 4. 当前 Skill 包不再内置 PHP 模板资产；差异排查以共享协议文档和项目实际安装的官方 SDK 源码为准。
 5. 业务代码里显式 `require_once` request 类不是退回手写 SDK；这是因为当前官方 Composer 包没有提供 request 类 autoload。
 
-## 静态请求形态（不执行网络调用）
+## 官方 SDK 请求形态
 
 ```php
 <?php
@@ -224,7 +222,8 @@ $request->setMethodExpand(json_encode([
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 
 // 前提：loader.php 中已给 MerConfig.skill_source 赋真实来源值
-$requestShape = $request; // 仅核对 DTO；禁止调用 $payment->create(...)
+$result = $payment->create($request);
+$response = $result->getRspDatas()['data'] ?? [];
 ```
 
 ## 设计约束

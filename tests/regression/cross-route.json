@@ -130,7 +130,7 @@
     "suite": "cross-route",
     "expected_skill": "both",
     "prompt": "新商户还没开户，但本周要完成微信 JSAPI 收款，请给完整交接顺序；两个 Skill 都存在且没有显式配置 skill_source，请同时给出来源头默认值。",
-    "expected": "先用进件 Skill 完成账户和微信业务准备，再用支付 Skill 完成 JSAPI 下单与终态；jpt-x-skill-source 使用 hfps/1.3.3;hfms/1.0.0。"
+    "expected": "先用进件 Skill 完成账户和微信业务准备，再用支付 Skill 完成 JSAPI 下单与终态；jpt-x-skill-source 使用 hfps/1.3.4;hfms/1.0.1。"
   },
   {
     "id": 1020,
@@ -215,5 +215,33 @@
     "expected_skill": "onboarding",
     "prompt": "我要给商户补开业务，直接告诉我该调用哪个接口。",
     "expected": "路由到进件 Skill，并同时确认具体能力或渠道和当前开通状态；银行卡、银联仍走业务开通，微信、支付宝补开走业务开通修改，不得只按是否首次猜选。"
+  },
+  {
+    "id": 1032,
+    "suite": "cross-route",
+    "expected_skill": "user-onboarding",
+    "prompt": "我要为分账接收方创建一个企业用户，不是创建收款商户，应该使用哪个 Skill？",
+    "expected": "路由到 huifu-merchant-onboarding 内的企业用户开户子域，不得使用商户企业进件 DTO。"
+  },
+  {
+    "id": 1033,
+    "suite": "cross-route",
+    "expected_skill": "user-onboarding",
+    "prompt": "已开户用户要配置结算卡、取现和中信 e 账户，这里的业务入驻该走用户还是商户接口？",
+    "expected": "路由到 huifu-merchant-onboarding 内的 /v2/user/busi/open，不得使用商户支付业务开通 DTO。"
+  },
+  {
+    "id": 1034,
+    "suite": "cross-route",
+    "expected_skill": "user-onboarding",
+    "prompt": "我要查询直属用户的基础资料、结算卡和电子回单，不是查询商户支付配置。",
+    "expected": "路由到用户信息查询，不得复用商户详情查询 DTO。"
+  },
+  {
+    "id": 1035,
+    "suite": "cross-route",
+    "expected_skill": "user-onboarding",
+    "prompt": "用户业务入驻返回 apply_no 后，要查非同名对公卡审核结果。",
+    "expected": "路由到用户申请单状态查询，并保留其仅适用于非同名对公结算卡的范围。"
   }
 ]

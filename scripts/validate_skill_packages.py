@@ -17,7 +17,8 @@ MANIFEST = REPO_ROOT / "skills-manifest.json"
 RELEASE_EVIDENCE_SUITES = {
     "payment": "payment-only",
     "onboarding": "onboarding-only",
-    "cross-route": "both",
+    "user-onboarding": "user-onboarding-only",
+    "cross-route": "all-skills",
 }
 
 

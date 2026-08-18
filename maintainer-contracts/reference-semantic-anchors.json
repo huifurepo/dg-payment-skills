@@ -44,7 +44,7 @@
       "source_path": "huifu-pay-integration/references/merchant-onboarding-image-upload.md",
       "source_clause": "官网只明确 `file_url` 与本地 `file` 不能同时上传，没有说明二者都空是否合法；不得把互斥改写成官网“必须二选一”。生成实际上传方案时，本 Skill 选择其中一个真实文件来源，没有来源则标 `[需要调用方补充]`。",
       "target_path": "huifu-merchant-onboarding/references/merchant-onboarding-image-upload.md",
-      "target_clause": "官网只明确 `file_url` 与本地 `file` 不能同时上传，没有说明二者都空是否合法；不得把互斥改写成官网“必须二选一”。生成实际上传方案时，本 Skill 选择其中一个真实文件来源，没有来源则标 `[需要调用方补充]`。"
+      "target_clause": "- `data.file_url` 与顶层 `file` 文件流互斥；官网未说明二者都空是否合法。生成实际调用时必须选择一个真实文件来源。"
     },
     {
       "id": "payment-permission-environment-boundary",

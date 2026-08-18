@@ -3,15 +3,18 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 import sys
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
-SKILL_ROOTS = (
-    ROOT / "huifu-pay-integration",
-    ROOT / "huifu-merchant-onboarding",
+SKILL_ROOTS = tuple(
+    ROOT / spec["root"]
+    for spec in json.loads((ROOT / "skills-manifest.json").read_text(encoding="utf-8"))[
+        "skills"
+    ].values()
 )
 PUBLISHED_TARGETS = [
     path

@@ -19,7 +19,12 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PAYMENT_SKILL_ROOT = REPO_ROOT / "huifu-pay-integration"
 ONBOARDING_SKILL_ROOT = REPO_ROOT / "huifu-merchant-onboarding"
-SKILL_ROOTS = (PAYMENT_SKILL_ROOT, ONBOARDING_SKILL_ROOT)
+SKILL_ROOTS = tuple(
+    REPO_ROOT / spec["root"]
+    for spec in json.loads(
+        (REPO_ROOT / "skills-manifest.json").read_text(encoding="utf-8")
+    )["skills"].values()
+)
 CODE_FENCE_PATTERN = re.compile(r"```([^\n`]*)\n(.*?)\n```", re.S)
 DEFAULT_COMMAND_TIMEOUT_SECONDS = 10.0
 DEFAULT_TOTAL_TIMEOUT_SECONDS = 300.0
@@ -333,7 +338,7 @@ def validate_php_blocks(blocks: list[CodeBlock], state: ValidationState) -> None
     with tempfile.TemporaryDirectory() as temp_dir:
         project = create_php_project(Path(temp_dir))
         for block in selected:
-            validate_onboarding_network_call_policy(block, state)
+            validate_server_sdk_only_network_policy(block, state)
             validate_single_php_block(block, project, state)
     state.ok(f"PHP examples executable with SDK stub: {len(selected)}")
 
@@ -439,7 +444,7 @@ $huifuSdkRoot = getenv('HUIFU_SDK_ROOT') ?: dirname(__DIR__) . '/vendor/huifurep
 if (!is_file($huifuSdkRoot . '/init.php')) { throw new RuntimeException('未找到 dg-php-sdk'); }
 if (!defined('HUIFU_SDK_ROOT')) { define('HUIFU_SDK_ROOT', rtrim($huifuSdkRoot, '/')); }
 require_once HUIFU_SDK_ROOT . '/init.php';
-\\BsPaySdk\\core\\BsPay::init(['sys_id' => 'sys', 'product_id' => 'prod', 'rsa_merch_private_key' => 'private', 'rsa_huifu_public_key' => 'public', 'skill_source' => 'hfps/1.3.3;hfms/1.0.0'], true);
+\\BsPaySdk\\core\\BsPay::init(['sys_id' => 'sys', 'product_id' => 'prod', 'rsa_merch_private_key' => 'private', 'rsa_huifu_public_key' => 'public', 'skill_source' => 'hfps/1.3.4;hfms/1.0.1'], true);
 """)
 
 
@@ -461,7 +466,7 @@ def php_env(project: PhpProject) -> dict[str, str]:
         "HUIFU_ALIPAY_APP_SCHEMA": "alipays://platformapi/startapp",
         "HUIFU_MINIAPP_SEQ_ID": "miniapp",
         "HUIFU_SPLIT_HUIFU_ID": "split_merchant",
-        "HUIFU_SKILL_SOURCE": "hfps/1.3.3;hfms/1.0.0",
+        "HUIFU_SKILL_SOURCE": "hfps/1.3.4;hfms/1.0.1",
     })
     return env
 
@@ -478,29 +483,35 @@ def validate_java_forbidden_patterns(block: CodeBlock, state: ValidationState) -
     for pattern, message in FORBIDDEN_JAVA_PATTERNS.items():
         if pattern in block.code:
             state.error(f"{message}: {format_block(block)}")
-    validate_onboarding_network_call_policy(block, state)
+    validate_server_sdk_only_network_policy(block, state)
 
 
-def validate_onboarding_network_call_policy(block: CodeBlock, state: ValidationState) -> None:
-    if ONBOARDING_SKILL_ROOT not in block.path.parents:
+def validate_server_sdk_only_network_policy(block: CodeBlock, state: ValidationState) -> None:
+    if not any(root in block.path.parents for root in (PAYMENT_SKILL_ROOT, ONBOARDING_SKILL_ROOT)):
         return
     patterns = {
         "php": (
-            re.compile(
-                r"(?m)^\s*(?:return\s+)?(?:\(\s*)?(?:new\s+[A-Za-z_\\][A-Za-z0-9_\\]*"
-                r"\s*\([^;\n]*\)|\$[A-Za-z_][A-Za-z0-9_]*)\s*\)?\s*->\s*"
-                r"(?:post|postRequest|request|refund|refundQuery|preOrder|query)\s*\("
-            ),
+            (re.compile(r"\bcurl_(?:init|setopt|setopt_array|exec)\s*\("), "curl 出站调用"),
+            (re.compile(r"\bnew\s+(?:\\?GuzzleHttp\\Client|Client)\s*\("), "Guzzle/通用 HTTP 客户端"),
+            (re.compile(r"->\s*(?:request|post)\s*\(\s*['\"](?:GET|POST|https?://)"), "通用 HTTP 方法调用"),
+            (re.compile(r"\bfile_get_contents\s*\(\s*['\"]https?://"), "URL 直连"),
+            (re.compile(r"\bstream_context_create\s*\("), "PHP stream HTTP 客户端"),
         ),
         "java": (
-            re.compile(r"\bBasePayRequest\.requestBasePay\s*\("),
-            re.compile(r"\bBasePayClient\.request\s*\("),
+            (re.compile(r"\bHttpClient\.(?:newHttpClient|newBuilder)\s*\("), "JDK HttpClient"),
+            (re.compile(r"\bHttpRequest\.newBuilder\s*\("), "JDK HttpRequest"),
+            (re.compile(r"\bnew\s+OkHttpClient(?:\.Builder)?\s*\("), "OkHttpClient"),
+            (re.compile(r"\b(?:HttpURLConnection|HttpsURLConnection)\b"), "URLConnection"),
+            (re.compile(r"\b(?:URL|URI)\s*\([^;\n]*\)\.openConnection\s*\("), "URL.openConnection"),
+            (re.compile(r"\bHttpClients\.(?:createDefault|custom)\s*\("), "Apache HttpClient"),
+            (re.compile(r"\b(?:RestTemplate|WebClient\.builder)\b"), "Spring HTTP 客户端"),
         ),
     }
-    for pattern in patterns.get(block.language, ()):
+    for pattern, label in patterns.get(block.language, ()):
         if pattern.search(block.code):
             state.error(
-                "商户进件 Java/PHP 示例在 TLS 硬检查点下不得执行 SDK 网络调用: "
+                "支付/进件 Java/PHP 示例必须使用官方 SDK，不得包含手写 HTTP 调用"
+                f"（{label}）: "
                 f"{format_block(block)}"
             )
 

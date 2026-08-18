@@ -27,8 +27,7 @@
 ## 公共请求头
 
 - Java 与 PHP 使用 Skill 调用时都要求 `jpt-x-skill-source: <skill_source>`；当前 Java `3.0.40` 与 PHP `2.0.30` 的官方 SDK 主链路会在配置来源值后自动补该头。Python `2.0.24` 同样从 `MerConfig.jpt_x_skill_source` 自动补头。
-- 只有当前请求 `data.huifu_id` 存在且非空时，Java、PHP、Python 才应自动补 `jpt-x-skill-huifu_id: <data.huifu_id>`；禁止配置固定商户号。个人基础进件请求本身没有 `data.huifu_id`。
-- **按语言区分处理**：PHP `2.0.30` 在 `MerConfig.skill_source` 非空时直接读取请求参数中的 `huifu_id`，个人进件又没有该字段；这会产生未定义键 warning/空头风险。无论运行环境是否把 warning 提升为异常，本 Skill 都阻断对应 PHP 可运行代码；必须使用已修复 SDK，不能添加虚构/空业务字段、关闭 warning 或吞异常。Python `2.0.24` 会发送空的 `jpt-x-skill-huifu_id`，但这只是 SDK 兼容性告警，不单独阻断个人进件代码。保持业务报文不含 `data.huifu_id`，单列 `SDK 兼容性提示`，在联调/上线前验证网关结果；若因空头被拒绝，再升级或修复 SDK。不得询问客户“是否允许空请求头”。
+- 个人基础进件请求没有 `data.huifu_id`，按官网字段合同生成，不因 SDK 内部请求头增加该业务字段。
 
 ## 状态与数据保护
 

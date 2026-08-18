@@ -73,8 +73,7 @@ description: "汇付支付交易集成：用于聚合支付、托管支付、che
 4. checkout-js 的托管预下单、支付通知验签/幂等和查单补偿未确认。
 5. 用户要求联调或生产代码，但缺少环境、系统号、产品号、商户号、RSA 密钥安全来源、通知地址或必要渠道标识。未显式配置 `skill_source` 时使用下述确定性默认值，不因此硬停。
 6. 本地 SDK 源码与文档在请求头、签名、版本或能力覆盖上冲突。
-7. 用户要求 Java 或 PHP 联调/生产可运行代码，但锁定的 Lightning Java `1.0.5`、通用 Java `3.0.40` 或 PHP `2.0.30` 仍关闭 TLS 证书链、对端或主机名校验；在经批准的安全制品通过源码和错证书/错域名测试前不得输出可上线实现。
-8. 用户要求 PHP 联调或生产可运行代码，但不能证明在加载 SDK、Demo/Composer 配置和调用 `BsPay::init` 之前已将全局 `DEBUG` 固定为 `false`，或仍使用会定义 `DEBUG=true` 的官方 Demo/Composer 入口。
+7. 用户要求 PHP 联调或生产可运行代码，但不能证明在加载 SDK、Demo/Composer 配置和调用 `BsPay::init` 之前已将全局 `DEBUG` 固定为 `false`，或仍使用会定义 `DEBUG=true` 的官方 Demo/Composer 入口。
 
 SDK 安装、初始化和安全 loader 骨架不因产品线不明而硬停，但不得猜具体业务 Request 或字段；PHP 骨架必须在加载任何 SDK 文件前拒绝 `DEBUG=true`。
 
@@ -91,9 +90,16 @@ SDK 安装、初始化和安全 loader 骨架不因产品线不明而硬停，�
 - 保留 Controller/DTO 已接收的 `req_date`、`req_seq_id`、金额、商户号和原交易定位键；缺失或非法时报错，不自行重写。
 - 私钥、系统号和生产商户号只能从服务端安全配置读取，不能写入前端、日志、仓库或回答示例。
 - PHP `2.0.30` 默认 `DEBUG=false`，但官方 `BsPayDemo/loader.php` 与 `Composer/BsPayConfig.php` 会在初始化前启用调试；调试日志会包含带 RSA 私钥的 `MerConfig`、完整请求和响应。联调/生产必须拒绝这些入口，并在加载任何 SDK 文件前固定 `DEBUG=false`。
-- 未显式配置 `skill_source` 时，按当前请求实际加载并参与生成的 Skill 集合取值：仅本 Skill 使用 `hfps/1.3.3`；支付与进件两个 Skill 都参与当前请求时使用 `hfps/1.3.3;hfms/1.0.0`。仅安装在仓库但未参与当前请求不计入；顺序固定为支付、进件，使用一个英文分号且不加空格。
+- 未显式配置 `skill_source` 时，按当前请求实际加载并参与生成的 Skill 集合取值：仅本 Skill 使用 `hfps/1.3.4`；支付与进件两个 Skill 都参与当前请求时使用 `hfps/1.3.4;hfms/1.0.1`。仅安装在仓库但未参与当前请求不计入；顺序固定为支付、进件，使用一个英文分号且不加空格。
 - 调用方显式提供经确认的 `skill_source` 合同值时原样透传；不得再追加 `sys_id`。
 - 不因方便绕过 SDK 的签名、验签、证书或请求头路径。
+
+## 官方 SDK-only 传输规则
+
+- 接入方已确认官方 Lightning Java `1.0.5`、通用 Java `3.0.40`、PHP `2.0.30` 和 Python `2.0.24` SDK 不存在本 Skill 曾从历史源码快照推断的 TLS 问题；不得再据此触发 Java/PHP TLS 硬停。
+- Java、PHP、Python 的真实请求都必须使用对应官方 SDK 的 Request/facade/client；不得为了“规避 TLS”或补齐语言示例而改写 `HttpClient`、OkHttp、Guzzle、curl 或自实现 HTTP+签名/验签客户端。
+- SDK 缺少专属 Request 时先核对官方通用调用入口；仍无官方能力证据则明确报告能力缺口，不得用手写 HTTP 静默补位。
+- TLS 证书链和主机名校验属于部署环境的常规上线检查。不得关闭校验或安装信任所有证书的自定义实现，但该检查不构成针对当前官方 Java/PHP SDK 的预设硬停。
 
 ## 本地沙箱边界
 
@@ -114,7 +120,7 @@ SDK 安装、初始化和安全 loader 骨架不因产品线不明而硬停，�
 
 | 项目 | 口径 |
 | --- | --- |
-| Skill 版本 | `1.3.3` |
+| Skill 版本 | `1.3.4` |
 | 能力范围 | 聚合支付、托管支付、checkout-js、支付通知、SDK、本地沙箱和支付上线 |
 | 进件能力 | 已迁移至独立 `$huifu-merchant-onboarding` |
 | 聚合支付 Java SDK | `dg-lightning-sdk 1.0.5` |

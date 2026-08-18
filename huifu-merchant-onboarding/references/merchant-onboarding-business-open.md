@@ -47,7 +47,6 @@
 ## 公共请求头
 
 - Java 与 PHP 使用 Skill 调用时都要求 `jpt-x-skill-source: <skill_source>`；当前 Java `3.0.40` 与 PHP `2.0.30` 的官方 SDK 主链路会在配置来源值后自动补该头。Python `2.0.24` 同样从 `MerConfig.jpt_x_skill_source` 自动补头。
-- 本接口 `data.huifu_id` 必填，因此三种 SDK 还必须从本次请求自动补 `jpt-x-skill-huifu_id: <data.huifu_id>`；禁止配置固定商户号或复用其他商户的头。
 
 ## 分层状态模型
 

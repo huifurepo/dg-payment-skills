@@ -25,6 +25,9 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 SKILLS_MANIFEST_FILE = REPO_ROOT / "skills-manifest.json"
 PROMPTS_FILE = REPO_ROOT / "scripts" / "huifu-payment-test-prompts.json"
 CROSS_ROUTE_PROMPTS_FILE = REPO_ROOT / "tests" / "regression" / "cross-route.json"
+USER_ONBOARDING_PROMPTS_FILE = (
+    REPO_ROOT / "tests" / "regression" / "user-onboarding.json"
+)
 PAYMENT_SKILL_VERSION = str(
     json.loads(SKILLS_MANIFEST_FILE.read_text(encoding="utf-8"))["skills"][
         "huifu-pay-integration"
@@ -37,8 +40,8 @@ DEFAULT_REASONING_EFFORT = os.environ.get("CODEX_REGRESSION_REASONING_EFFORT", "
 DEFAULT_JOBS = int(os.environ.get("CODEX_REGRESSION_JOBS", "4"))
 SMOKE_CASE_IDS = (
     1, 8, 15, 24, 26, 34, 35, 36, 37, 38, 47, 54, 57, 59, 61, 64, 66,
-    68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84,
-    1001, 1002, 1019, 1025, 1030, 1031,
+    68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 87,
+    201, 205, 207, 208, 211, 1001, 1002, 1019, 1025, 1030, 1031, 1032,
 )
 ASCII_WORKSPACE_MARKER = ".real-model-regression-workspace"
 REGRESSION_WORKSPACE_BASE_ENTRIES = (
@@ -54,6 +57,7 @@ REGRESSION_WORKSPACE_ENTRIES = REGRESSION_WORKSPACE_BASE_ENTRIES + (
 REGRESSION_SOURCE_ENTRIES = REGRESSION_WORKSPACE_ENTRIES + (
     "scripts/run_real_model_regression.py",
     "scripts/huifu-payment-test-prompts.json",
+    "tests/regression/user-onboarding.json",
     "tests/regression/cross-route.json",
 )
 RUN_MANIFEST_NAME = "run-manifest.json"
@@ -118,7 +122,9 @@ INFRASTRUCTURE_FAILURE_PATTERNS = (
 
 
 REFERENCE_EVIDENCE_TERMS = ("本轮实际使用", "实际使用", "实际读取", "本地依据", "已读 references", "已读取 references")
-SKILL_IDS = ("huifu-pay-integration", "huifu-merchant-onboarding")
+SKILL_IDS = tuple(
+    json.loads(SKILLS_MANIFEST_FILE.read_text(encoding="utf-8"))["skills"]
+)
 REFERENCE_FILE_OWNERS = {
     skill_id: frozenset(
         path.name for path in (REPO_ROOT / skill_id / "references").glob("*.md")
@@ -128,7 +134,7 @@ REFERENCE_FILE_OWNERS = {
 REFERENCE_FILE_NAMES = frozenset().union(*REFERENCE_FILE_OWNERS.values())
 REFERENCE_FILE_NAME_LOOKUP = {name.lower(): name for name in REFERENCE_FILE_NAMES}
 REFERENCE_MENTION_PATTERN = re.compile(
-    r"(?:(huifu-pay-integration|huifu-merchant-onboarding)/)?"
+    rf"(?:({'|'.join(map(re.escape, SKILL_IDS))})/)?"
     r"(?:references/)?([A-Za-z0-9_.-]+\.md)"
 )
 MAX_LISTED_REFERENCES = 5
@@ -172,23 +178,56 @@ SENSITIVE_MATERIAL_FORBIDDEN = (
     r"-----BEGIN (?:RSA )?PRIVATE KEY-----",
     r"MIIE(?:vg|ow)[A-Za-z0-9+/=]{80,}",
 )
+ONBOARDING_HANDWRITTEN_HTTP_FORBIDDEN = (
+    r"\bHttpClient\.(?:newHttpClient|newBuilder)\s*\(",
+    r"\bHttpRequest\.newBuilder\s*\(",
+    r"\bnew\s+OkHttpClient(?:\.Builder)?\s*\(",
+    r"\b(?:HttpURLConnection|HttpsURLConnection)\b.{0,160}\b(?:connect|getOutputStream)\s*\(",
+    r"\bHttpClients\.(?:createDefault|custom)\s*\(",
+    r"\b(?:RestTemplate|WebClient\.builder)\b",
+    r"\bcurl_(?:init|setopt|setopt_array|exec)\s*\(",
+    r"\bnew\s+(?:\\?GuzzleHttp\\Client|Client)\s*\(",
+    r"->\s*(?:request|post)\s*\(\s*[`'\"](?:GET|POST|https?://)",
+    r"\bfile_get_contents\s*\(\s*[`'\"]https?://",
+    r"\bstream_context_create\s*\(",
+)
+
+IMAGE_FALLBACK_UNSAFE_FORBIDDEN = (
+    r"\b(?:need_sign|needsign)\s*[=:]\s*false\b",
+    r"curl_setopt\s*\([^,]+,\s*curlopt_ssl_verifypeer\s*,\s*false\s*\)",
+    r"curl_setopt\s*\([^,]+,\s*curlopt_ssl_verifyhost\s*,\s*(?:0|1)\s*\)",
+    r"\bverify\s*=\s*false\b",
+    r"['\"]picture['\"]\s*:\s*\(",
+    r"['\"]picture['\"]\s*=>\s*new\s+\\?curlfile",
+    r"java.{0,80}(?:httpclient|okhttp|httpurlconnection|spring\s+webclient).{0,120}(?:supplementary/picture|图片上传|multipart)",
+)
+
+IMAGE_FALLBACK_UNSAFE_ATTACKS = (
+    "request_post(route, data, files=files, need_sign=False)。",
+    "curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false)。",
+    "curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0)。",
+    "requests.post(url, files=files, verify=False)。",
+    "files = {'picture': (name, stream, mime)}。",
+    "$parts = ['picture' => new CURLFile($path)]。",
+    "Java 改用 HttpClient 手写图片上传 multipart。",
+)
 
 RULES: dict[int, CaseRule] = {
     1: CaseRule((("shared-overview",), ("copilot-onboarding",), ("copilot-solution-selection",), ("Java",), ("聚合支付", "托管支付", "H5"))),
-    2: CaseRule((("aggregation-refund",), ("aggregation-php-adapter",), ("aggregation-query-php-scenarios",), ("Payment::refund", "refundQuery"), ("skill_source", "MerConfig.skill_source"), ("PHP", "2.0.30"), ("TLS", "对端校验", "证书"), ("硬停", "不得输出", "不能给可运行", "不能直接给模板"), ("错证书",), ("错域名",)), PHP_TEMPLATE_FORBIDDEN),
+    2: CaseRule((("aggregation-refund",), ("aggregation-php-adapter",), ("aggregation-query-php-scenarios",), ("Payment::refund", "refundQuery"), ("skill_source", "MerConfig.skill_source"), ("PHP", "2.0.30"), ("官方 SDK",), ("不存在", "不再"), ("TLS",), ("Guzzle", "curl", "手写 HTTP")), PHP_TEMPLATE_FORBIDDEN),
     3: CaseRule((("checkout-js",), ("checkout-js-callback-and-confirmation",), ("hostingpay-query",), ("hostingpay-async-webhook",), ("前端回调不等于", "前端回调不能", "前端 callback 不等于", "前端 `callback` 不等于", "callback 不等于", "不是最终成功", "非支付终态", "均非支付终态", "均不等于最终支付成功", "均不等于最终成功", "callback 只传", "不改终态", "不能直接改已支付", "不要直接改订单为已支付", "不要信前端 callback"))),
     4: CaseRule((("checkout-js",), ("checkout-js-callback-and-confirmation",), ("hostingpay-async-webhook",), ("跳过", "不再读", "暂时不要读", "已完成阶段")), CHECKOUT_CALLBACK_FORBIDDEN),
-    5: CaseRule((REFERENCE_EVIDENCE_TERMS, ("shared-server-sdk-matrix",), ("hostingpay-php-adapter",), ("jpt-x-skill-source",), ("jpt-x-skill-huifu_id",), ("HTTP 请求头", "HTTP 头", "请求头"), ("MerConfig.skill_source", "MerConfig` 配置", "MerConfig 配置", "'skill_source'", '"skill_source"'), ("hfps/1.3.3",), ("仅支付", "只实际加载", "本次仅", "未参与"), ("自动",), ("DEBUG",), ("false",), ("BsPayDemo/loader.php",), ("Composer/BsPayConfig.php",), ("加载任何 SDK", "加载 SDK 前", "SDK 文件前"), ("BsPay::init",), ("私钥",), ("不得复用", "不能复用", "禁止使用", "不得使用"))),
+    5: CaseRule((REFERENCE_EVIDENCE_TERMS, ("shared-server-sdk-matrix",), ("hostingpay-php-adapter",), ("jpt-x-skill-source",), ("jpt-x-skill-huifu_id",), ("HTTP 请求头", "HTTP 头", "请求头"), ("MerConfig.skill_source", "MerConfig` 配置", "MerConfig 配置", "'skill_source'", '"skill_source"'), ("hfps/1.3.4",), ("仅支付", "只实际加载", "本次仅", "未参与"), ("自动",), ("DEBUG",), ("false",), ("BsPayDemo/loader.php",), ("Composer/BsPayConfig.php",), ("加载任何 SDK", "加载 SDK 前", "SDK 文件前"), ("BsPay::init",), ("私钥",), ("不得复用", "不能复用", "禁止使用", "不得使用"))),
     6: CaseRule((("Java",), ("MerConfig.setSkillSource",), ("jpt-x-skill-source",), ("jpt-x-skill-huifu_id",), ("huifu_id",))),
     7: CaseRule((("huifurepo/dg-php-sdk", "dg-php-sdk"), ("BsPayClient::postRequest",), ("request 类", "request类", "V2TradeHostingPaymentPreorderH5Request"), ("skill_source",)), PHP_TEMPLATE_FORBIDDEN),
     8: CaseRule((("硬检查点",), ("checkout-js",), ("不能单独", "不能直接", "不能只靠前端"), ("托管预下单",), ("查单", "异步通知")), CHECKOUT_INSTALL_FORBIDDEN),
     9: CaseRule((("aggregation-order",), ("aggregation-php-adapter",), ("aggregation-query-php-scenarios",), ("Payment::create", "$payment->create", "->create("), ("TradePaymentCreateRequest",)), PHP_TEMPLATE_FORBIDDEN),
     10: CaseRule((("aggregation-query",), ("aggregation-php-adapter",), ("aggregation-query-php-scenarios",), ("Payment::query", "$payment->query", "->query("), ("close()", "closeQuery", "$payment->close", "->close("), ("落库", "持久化")), PHP_TEMPLATE_FORBIDDEN),
     11: CaseRule((("BsPayClient::postRequest", "$client->postRequest"), ("V2TradeCheckFilequeryRequest",), ("aggregation-query",), ("aggregation-php-adapter",), ("aggregation-query-php-scenarios",)), PHP_TEMPLATE_FORBIDDEN),
-    12: CaseRule((("dg-java-sdk",), ("3.0.40",), ("V2TradeCheckFilequeryRequest",), ("aggregation-query",), ("aggregation-query-reconciliation",), ("手写 HTTP", "不要给"), ("TLS", "证书", "主机名"), ("硬停", "不得输出", "不能给可运行"), ("错证书",), ("错域名",)), (r"(?:return\s+|=\s*)HttpClientUtils\.sendPost\(", r"HttpClientUtils\.sendPost\([^)]*\)\s*;")),
+    12: CaseRule((("dg-java-sdk",), ("3.0.40",), ("V2TradeCheckFilequeryRequest",), ("BasePayClient.request",), ("aggregation-query",), ("aggregation-query-reconciliation",), ("手写 HTTP", "不要给"), ("不存在", "不再"), ("TLS",)), (r"(?:return\s+|=\s*)HttpClientUtils\.sendPost\(", r"HttpClientUtils\.sendPost\([^)]*\)\s*;")),
     13: CaseRule((("hostingpay-refund",), ("hostingpay-refund-query",), ("req_date",), ("req_seq_id",), ("huifu_id",), ("ord_amt",), ("org_req_date",), ("loan_flag", "垫资"), ("risk_check_data",), ("bank_info_data", "银行大额"))),
     14: CaseRule((("aggregation-refund",), ("aggregation-refund-query",), ("不传 `tx_metadata`", "不传 tx_metadata", "不要传 `tx_metadata`", "不要包 `tx_metadata`", "不要包 tx_metadata", "不要套 `tx_metadata`", "不要套 tx_metadata", "禁止包在请求 `tx_metadata`", "禁止包在 tx_metadata"), ("acct_split_bunch",), ("combinedpay_data",), ("device_type=4", "device_type`=4", "device_type` 为 `4", 'device_type="4"', "device_type='4'"), ("org_hf_seq_id",), ("org_req_seq_id",), ("mer_ord_id",))),
-    15: CaseRule((("huifurepo/dg-php-sdk",), ("2.0.30",), ("composer require",), ("composer update", "--with-all-dependencies"), ("api.github.com/repos/huifurepo/bspay-php-sdk/zipball", "备用下载", "GitHub"), ("BsPaySdk/init.php", "init.php"), ("BsPay::init",), ("skill_source",), ("HUIFU_SDK_ROOT",), ("HUIFU_SYS_ID",), ("HUIFU_RSA_PRIVATE_KEY",), ("require_once",), ("request 类", "request类", "Request 类", "Request类", "TradePaymentCreateRequest"), ("TLS", "证书", "对端校验", "生产硬停")), PHP_TEMPLATE_FORBIDDEN),
+    15: CaseRule((("huifurepo/dg-php-sdk",), ("2.0.30",), ("composer require",), ("composer update", "--with-all-dependencies"), ("api.github.com/repos/huifurepo/bspay-php-sdk/zipball", "备用下载", "GitHub"), ("BsPaySdk/init.php", "init.php"), ("BsPay::init",), ("skill_source",), ("HUIFU_SDK_ROOT",), ("HUIFU_SYS_ID",), ("HUIFU_RSA_PRIVATE_KEY",), ("require_once",), ("request 类", "request类", "Request 类", "Request类", "TradePaymentCreateRequest"), ("官方 SDK",), ("不存在", "不再"), ("TLS",), ("DEBUG",)), PHP_TEMPLATE_FORBIDDEN),
     16: CaseRule((REFERENCE_EVIDENCE_TERMS, ("接入判断卡",), ("首次接入",), ("聚合支付",), ("Java",), ("用户类型",), ("产品线",), ("阶段",), ("技术栈",), ("端形态",), ("当前目标", "目标：", "目标:"), ("还缺", "缺少", "待补", "补齐"))),
     17: CaseRule((REFERENCE_EVIDENCE_TERMS, ("copilot-existing-system",), ("存量系统", "增量接入"), ("建议新增",), ("建议保留",), ("人工确认",), ("落库字段", "落库"), ("风险点", "风险"), ("回归检查", "回归"), ("不重写", "不直接替换"), ("callback", "前端回调", "同步受理"))),
     18: CaseRule((REFERENCE_EVIDENCE_TERMS, ("托管支付",), ("H5/PC", "H5 / PC"), ("project_id",), ("托管项目状态", "项目状态", "托管项目须已开通", "状态可交易", "托管项目、支付方式配置须处于可用状态"), ("notify_url",), ("callback_url",), ("前端回跳", "前端回调", "页面回跳不代表支付成功", "浏览器跳回", "浏览器支付后回跳", "`callback_url` 只负责", "`callback_url`仅负责"), ("查单", "异步通知"), ("方案卡", "推荐方案", "建议新增"), ("存量系统", "存量"))),
@@ -238,24 +277,37 @@ RULES: dict[int, CaseRule] = {
             r"(?:setreqseqid|set_req_seq_id).{0,500}(?:setreqdate|set_req_date).{0,500}(?:setregname|set_reg_name|setlicensecode|set_license_code|setlegalcertno|set_legal_cert_no)",
         ),
     ),
-    58: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-image-upload",), ("file_url",), ("file", "文件流"), ("互斥", "不能同时", "二选一"), ("JPG", "BMP", "PNG"), ("2MB", "2M"), ("V2SupplementaryPictureRequest",), ("need_sign=False",), ("need_verfy_sign=False",), ("picture",), ("需要官方确认", "[需要官方确认]", "未确认边界", "尚无可核验"), ("不得生成", "不生成", "不能生成", "不能安全生成"))),
+    58: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-image-upload",), ("file_url",), ("file", "文件流"), ("互斥", "不能同时", "二选一"), ("JPG", "BMP", "PNG"), ("2MB", "2M"), ("Java",), ("BasePayClient.upload",), ("PHP",), ("Python",), ("专用",), ("不可直接", "不能直接", "不得直接"), ("通用 POST", "自写 HTTPS", "受控降级"), ("multipart",), ("data",), ("加签", "签名"), ("TLS",), ("需要官方确认", "[需要官方确认]", "未确认边界", "尚无可核验")), IMAGE_FALLBACK_UNSAFE_FORBIDDEN),
     59: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-enterprise",), ("merchant-onboarding-business-open",), ("merchant-onboarding-application-status-query",), ("huifu_id",), ("不等于", "不能", "不代表"), ("可交易",), ("实名", "渠道"), ("电子协议", "con_stat"), ("申请状态", "补偿查询"))),
     60: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-business-open", "merchant-onboarding-field-contracts"), ("ord_id",), ("RECV_ORD_ID_",), ("req_seq_id",), ("审核",), ("电子协议",), ("需要官方确认", "[需要官方确认]"), ("不能", "不得", "不套用"))),
-    61: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-image-upload",), ("shared-request-header-policy",), ("shared-server-sdk-matrix",), ("file_url",), ("file", "本地文件"), ("互斥", "不能同时", "二选一"), ("Java",), ("multipart", "文本字段"), ("BasePay.debug",), ("false",), ("私钥",), ("请求数据", "请求参数", "及 URL", "和 URL", "URL及商户号", "含 `file_url`", "含 file_url"), ("PHP",), ("Python",), ("JSON",), ("DGTools.request_post",), ("默认请求签名", "need_sign=True"), ("默认响应验签", "need_verfy_sign=True"), ("不能混同", "不得混写", "两条路径"), ("hfms/1.0.0",), ("hfps/1.3.3;hfms/1.0.0",), ("仅进件",), ("支付", "两个 Skill", "双 Skill"), ("占位符", "环境变量", "密钥管理", "受控 HTTPS", "禁止记录"), ("不猜测", "不得猜测", "不能推断", "不推断", "不得臆测", "臆测", "实际返回标识", "不得猜字段", "不能猜字段", "不猜字段"))),
-    62: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-image-upload", "shared-request-header-policy", "shared-server-sdk-matrix"), ("jpt_x_skill_source",), ("huifu_id",), ("第五", "5"), ("hfms/1.0.0",), ("仅进件", "只实际使用", "未参与"), ("不能再省略", "不得省略", "必须传", "不能省略"), ("不能", "不可以", "不得")), SENSITIVE_MATERIAL_FORBIDDEN),
-    63: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-image-upload",), ("file_url",), ("file", "本地文件"), ("互斥", "不能同时", "二选一"), ("需要官方确认", "[需要官方确认]"), ("响应", "file_id", "文件标识"), ("重试",), ("不得生成", "不生成", "不能生成", "不能把本地 `file`", "不能把本地 file", "本地二进制上传协议尚需官方确认"))),
+    61: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-image-upload",), ("shared-request-header-policy",), ("shared-server-sdk-matrix",), ("file_url",), ("file", "本地文件"), ("互斥", "不能同时", "二选一"), ("Java",), ("BasePayClient.request",), ("multipart", "文本字段"), ("BasePay.debug",), ("false",), ("PHP",), ("Python",), ("专用",), ("不可直接", "不能直接", "不得直接"), ("通用 POST", "自写 HTTPS", "受控降级"), ("data",), ("加签", "签名"), ("TLS",), ("JSON body", "JSON 请求体", "JSON body"), ("hfms/1.0.1",), ("hfps/1.3.4;hfms/1.0.1",), ("仅进件",), ("支付", "两个 Skill", "双 Skill"), ("不猜测", "不得猜测", "不能推断", "不推断", "不得臆测", "臆测", "实际返回标识", "不得猜字段", "不能猜字段", "不猜字段")), IMAGE_FALLBACK_UNSAFE_FORBIDDEN),
+    62: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-image-upload", "shared-request-header-policy", "shared-server-sdk-matrix"), ("Python",), ("2.0.24",), ("专用",), ("不可直接", "不能直接", "不得直接"), ("DGTools.request_post",), ("need_sign=True", "need_sign = True"), ("file",), ("file_url",), ("multipart",), ("JSON body", "JSON 请求体"), ("jpt_x_skill_source",), ("huifu_id",), ("第五", "5"), ("hfms/1.0.1",), ("仅进件", "只实际使用", "未参与"), ("不能", "不可以", "不得")), IMAGE_FALLBACK_UNSAFE_FORBIDDEN + SENSITIVE_MATERIAL_FORBIDDEN),
+    63: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-image-upload",), ("file_url",), ("file", "本地文件"), ("互斥", "不能同时", "二选一"), ("Java",), ("BasePayClient",), ("PHP",), ("Python",), ("通用 POST", "自写 HTTPS", "受控降级"), ("multipart",), ("data",), ("加签", "签名"), ("TLS",), ("需要官方确认", "[需要官方确认]"), ("响应", "file_id", "文件标识"), ("重试",), ("不得", "不能", "拒绝")), IMAGE_FALLBACK_UNSAFE_FORBIDDEN),
     64: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-detail-query", "merchant-onboarding-field-contracts"), ("req_seq_id", "String(32)"), ("req_date", "String(8)", "北京时间"), ("huifu_id", "String(18)"), ("必填",), ("data",), ("白名单", "最小化")), SENSITIVE_MATERIAL_FORBIDDEN),
     65: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-application-status-query", "merchant-onboarding-field-contracts"), ("req_seq_id", "String(32)"), ("req_date", "String(8)"), ("apply_no", "String(18)"), ("huifu_id", "String(18)"), ("data.apply_status",), ("data.reg_status",), ("reg_result_list[].business_stat",), ("data.bank_card_conf_status", "bank_card_conf_status"), ("bind_card_status",), ("cash_status",), ("settle_status",), ("union_conf_status",), ("out_order_funds_status",), ("P/S/F",), ("处理中",), ("成功",), ("失败",), ("data.wx_zl_config.apply_state",), ("String(32)",), ("data.ali_zl_config[].apply_status",), ("data.agreement_info_list[].con_stat",), ("String(2)",), ("不能", "不要", "不应"), ("合并", "混用", "混为"))),
     66: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-business-open", "merchant-onboarding-field-contracts"), ("data.agreement_info.agreement_async_return_url",), ("ord_id",), ("RECV_ORD_ID_",), ("审核",), ("电子协议",), ("不能", "不得", "不外推"))),
     67: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-individual", "merchant-onboarding-image-upload", "merchant-onboarding-field-contracts"), ("字段", "类型", "file_url"), ("不", "无需", "不应"), ("硬检查点", "硬停", "停止"), ("生成", "提交"), ("主体", "权限", "材料")), (r"(?:纯字段解释|只了解.{0,12}字段).{0,20}(?:必须|需要).{0,8}(?:硬检查点|停止)", r"主体.{0,12}(?:未确认|没确认).{0,20}(?:不能|不可|不得).{0,12}(?:说|解释|说明).{0,12}(?:字段|类型|长度)", r"(?:未确认|没有|缺少).{0,16}(?:主体|权限|材料).{0,24}(?:可|可以|直接|先).{0,16}(?:生成|提交|联调|生产)")),
     68: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-field-contracts",), ("shared-server-sdk-matrix",), ("dg-java-sdk", "3.0.40"), ("AbstractRequest",), ("BasePay.debug",), ("默认", "true", "开箱值", "初始处于开启状态", "初始开启"), ("false",), ("进程初始化", "进程启动", "应用启动", "程序初始化", "JVM 引导", "JVM引导", "JVM 启动", "JVM启动"), ("任何 SDK 请求前", "任何 SDK 请求之前", "首个 SDK 调用前", "首个SDK调用前", "首调前"), ("私钥",), ("签名",), ("请求数据", "请求体", "请求参数"), ("不得", "不能", "禁止", "不可", "不应", "不要", "只写一次", "仅设置一次", "全局一次"), ("并发", "线程", "每次调用", "逐次调用", "每个请求", "静态开关", "全局配置", "全局一次"), ("验签", "签验"), ("不关闭", "不影响", "不会关闭", "不受影响", "不受关闭调试影响", "不受调试开关影响", "照常执行", "照常", "仍会执行", "相互独立", "维持原样", "保持原样"), ("V2MerchantBasicdataEntRequest",), ("V2MerchantBasicdataIndvRequest",), ("V2MerchantBusiOpenRequest",), ("V2MerchantBasicdataQueryRequest",), ("V2MerchantBasicdataStatusQueryRequest",), ("V2MerchantBusiModifyRequest",), ("V2MerchantBasicdataModifyRequest",), ("V2MerchantBusiModifyBusistatusRequest",), ("V2MerchantBasicdataSmsSendRequest",))),
     69: CaseRule(
-        (REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-image-upload",), ("BasePayRequest.requestBasePay",), ("v2/supplementary/picture",), ("default",), ("true",), ("isPage",), ("请求签名保留", "保留请求签名", "仍会请求签名", "仍会加签"), ("响应验签跳过", "跳过响应验签", "跳过 SDK 响应验签", "不执行响应验签")),
-        (r'requestbasepay\s*\([^;]{0,600}[`\'\"]default[`\'\"]\s*,\s*false\s*\)', r"(?:请求|data).{0,16}(?:不签名|不加签|关闭签名)"),
+        (
+            REFERENCE_EVIDENCE_TERMS,
+            ("merchant-onboarding-image-upload",),
+            ("shared-server-sdk-matrix",),
+            ("Java",),
+            ("3.0.40",),
+            ("V2SupplementaryPictureRequest",),
+            ("BasePayClient.request",),
+            ("isPage=true", "isPage = true", "`isPage=true`"),
+            ("请求签名保留", "保留请求签名"),
+            ("响应验签跳过", "跳过响应验签", "跳过 SDK 响应验签"),
+            ("HttpClient",),
+            ("不得", "禁止", "不能"),
+        ),
+        ONBOARDING_HANDWRITTEN_HTTP_FORBIDDEN,
     ),
     70: CaseRule(
-        (REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-image-upload",), ("shared-server-sdk-matrix",), ("PHP",), ("2.0.30",), ("CURLFile",), ("multipart",), ("jpt-x-skill-source",), ("jpt-x-skill-huifu_id",), ("jpt-sdk_version",), ("已携带", "会携带", "已添加"), ("请求签名",), ("响应验签",), ("关闭", "false", "不执行"), ("阻断", "不得生成", "不能生成", "不生成")),
-        (r"multipart.{0,80}(?:请求头|来源头|skill.{0,8}头).{0,40}(?:因此|所以).{0,12}(?:安全|可用|可以生成)", r"curl_init\s*\(", r"postrequest\s*\([^;]{0,600}new\s+\\?curlfile\s*\("),
+        (REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-image-upload",), ("shared-server-sdk-matrix",), ("PHP",), ("2.0.30",), ("BsPayClient::postRequest",), ("CURLFile",), ("请求签名",), ("响应验签",), ("关闭", "false", "不执行"), ("不能直接", "不得直接"), ("通用 POST", "自写 HTTPS"), ("multipart",), ("sys_id",), ("product_id",), ("data",), ("sign",), ("file",), ("TLS",), ("不自动重试", "不得自动重试", "禁止自动重试")),
+        IMAGE_FALLBACK_UNSAFE_FORBIDDEN,
     ),
     71: CaseRule(
         (REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-enterprise",), ("merchant-onboarding-field-contracts",), ("async_return_url",), ("notify_url",), ("extendInfoMap",), ("put",), ("禁止", "不得", "不能", "不是企业进件字段", "支付交易字段")),
@@ -316,20 +368,18 @@ RULES: dict[int, CaseRule] = {
         (
             REFERENCE_EVIDENCE_TERMS,
             ("merchant-onboarding-individual",),
-            ("shared-request-header-policy", "shared-server-sdk-matrix"),
+            ("shared-server-sdk-matrix",),
             ("Python",),
             ("2.0.24",),
+            ("V2MerchantBasicdataIndvRequest",),
             ("data.huifu_id",),
             ("不得", "不能", "禁止"),
-            ("虚构", "补空", "空业务字段"),
-            ("SDK 兼容性提示", "SDK兼容性提示", "兼容性告警"),
-            ("不单独阻断", "不应阻断", "不能单独阻断", "不得仅因此阻断"),
-            ("联调",),
-            ("上线前", "生产前"),
-            ("升级", "修复"),
+            ("虚构", "补空", "合同外"),
+            ("官网合同", "字段合同"),
+            ("不触发", "不应触发", "无需触发", "不得触发"),
+            ("硬检查点", "硬停"),
         ),
         (
-            r"请确认.{0,48}(?:是否)?.{0,8}(?:允许|接受).{0,20}(?:空.{0,12}(?:请求头|jpt)|jpt.{0,12}空)",
             r"🔴\s*checkpoint|hard stop[：:]",
             r"(?:data\s*[.\[]\s*['\"]?huifu_id|['\"]huifu_id['\"]\s*:).{0,12}(?:['\"]{2}|null|none)",
         ),
@@ -502,6 +552,34 @@ RULES: dict[int, CaseRule] = {
             ("状态",),
         ),
     ),
+    87: CaseRule(
+        (
+            REFERENCE_EVIDENCE_TERMS,
+            ("shared-server-sdk-matrix",),
+            ("user-onboarding-shared-server-sdk-matrix",),
+            ("Java",),
+            ("PHP",),
+            ("3.0.40",),
+            ("2.0.30",),
+            ("不存在", "错误前提", "不再"),
+            ("TLS",),
+            ("官方 SDK",),
+            ("Request",),
+            ("Client",),
+            ("手写 HTTP", "手写客户端", "HTTP+签名"),
+            ("不得生成", "不生成", "不能生成"),
+            ("Python",),
+            ("2.0.24",),
+            ("能力缺口", "没有对应接口", "缺少接口"),
+            ("常规接口",),
+            ("/v2/supplementary/picture",),
+            ("唯一例外", "图片例外", "受控降级"),
+            ("multipart",),
+            ("data",),
+            ("加签", "签名"),
+        ),
+        ONBOARDING_HANDWRITTEN_HTTP_FORBIDDEN,
+    ),
     85: CaseRule(
         (
             REFERENCE_EVIDENCE_TERMS,
@@ -546,6 +624,17 @@ RULES: dict[int, CaseRule] = {
             ("主动查询", "查单"),
         ),
     ),
+    201: CaseRule((REFERENCE_EVIDENCE_TERMS, ("user-onboarding-enterprise",), ("/v2/user/basicdata/ent",), ("43",), ("36",), ("7",), ("data.huifu_id",), ("legal_name",), ("legal_cert_no",), ("实名认证",), ("login_password",), ("Y/N",))),
+    202: CaseRule((REFERENCE_EVIDENCE_TERMS, ("user-onboarding-individual",), ("user-onboarding-platform-contracts",), ("/v2/user/basicdata/indv",), ("34",), ("27",), ("cert_end_date",), ("必填列",), ("file_list",), ("String(JSON Array)",), ("示例",), ("实名认证",))),
+    203: CaseRule((REFERENCE_EVIDENCE_TERMS, ("user-onboarding-business-open",), ("user-onboarding-platform-contracts",), ("/v2/user/busi/open",), ("118",), ("83",), ("11",), ("24",), ("upper_huifu_id",), ("constant_amt",), ("fixed_ratio",), ("card_name",), ("card_type",), ("个人",), ("1",), ("0/1/2/4",), ("apply_no",), ("汇付客户号",), ("商户号",), ("Y/P/N",), ("S/F",), ("RECV_ORD_ID_",), ("req_seq_id",), ("5秒", "5 秒"), ("500-599",), ("Webhook",))),
+    204: CaseRule((REFERENCE_EVIDENCE_TERMS, ("user-onboarding-application-status-query",), ("user-onboarding-platform-contracts",), ("/v2/user/apply/query",), ("15",), ("非同名对公",), ("req_seq_id",), ("apply_no",), ("当天唯一",), ("不得外推", "不能外推"), ("apply_reason",), ("apply_status",), ("huifu_id",), ("必填列",), ("Y/P/N/F",), ("成功",), ("返回",))),
+    205: CaseRule((REFERENCE_EVIDENCE_TERMS, ("user-onboarding-detail-query",), ("user-onboarding-complete-field-catalog",), ("user-onboarding-platform-contracts",), ("/v2/user/basicdata/query",), ("144",), ("req_seq_id",), ("当天唯一",), ("String(JSON Object)",), ("String(JSON Array)",), ("ent_base_info.file_list",), ("indv_base_info.file_list",), ("elec_card_list",), ("mp",), ("card_type=1", "card_type = 1"), ("card_type=0", "card_type = 0"), ("out_settle_acct_type",), ("01/02/05",), ("weekday_fix_amt",), ("weekday_fee_rate",), ("不生效",), ("遇工作日",), ("branch_code",), ("基础参数",), ("String(5)",), ("8位", "8 位"), ("官方文档口径冲突",))),
+    206: CaseRule((REFERENCE_EVIDENCE_TERMS, ("shared-overview",), ("user-onboarding-field-contracts",), ("用户号",), ("商户号",), ("/v2/user/",), ("/v2/merchant/",), ("不得共用", "不能共用", "禁止复用"))),
+    207: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-image-upload",), ("user-onboarding-external-resources",), ("/v2/supplementary/picture",), ("data.huifu_id",), ("直属商户",), ("不支持",), ("userHuifuId",), ("Java",), ("PHP",), ("Python",), ("专用",), ("不可直接", "不能直接"), ("通用 POST", "自写 HTTPS", "受控"), ("multipart",))),
+    208: CaseRule((REFERENCE_EVIDENCE_TERMS, ("shared-server-sdk-matrix",), ("user-onboarding-platform-contracts",), ("V2UserBasicdataEntRequest",), ("V2UserBasicdataIndvRequest",), ("V2UserBusiOpenRequest",), ("V2UserApplyQueryRequest",), ("V2UserBasicdataQueryRequest",), ("Y/N/C",), ("条件必填",), ("字段说明", "卡类型矩阵"), ("wire",), ("extendInfos", "extend_infos", "扩展字段"), ("Java",), ("PHP",), ("官方 SDK",), ("不存在", "不再"), ("TLS",), ("DEBUG",), ("手写 HTTP", "Guzzle", "HttpClient"))),
+    209: CaseRule((REFERENCE_EVIDENCE_TERMS, ("user-onboarding-complete-field-catalog",), ("user-onboarding-field-contracts",), ("user-onboarding-platform-contracts",), ("43",), ("34",), ("118",), ("15",), ("144",), ("354",), ("161",), ("169",), ("24",), ("22",), ("26",), ("37",), ("317",), ("父节点", "父对象"), ("叶节点", "叶字段"), ("9",), ("15",), ("说明",), ("长度",), ("必填列",), ("成功",), ("原生",), ("legal_name",), ("legal_cert_no",), ("file_list",), ("实名认证",))),
+    210: CaseRule((REFERENCE_EVIDENCE_TERMS, ("shared-request-header-policy",), ("shared-credential-boundary",), ("hfms/1.0.1",), ("login_password",), ("证件号",), ("银行卡号",), ("手机号",), ("token_no",), ("脱敏",))),
+    211: CaseRule((REFERENCE_EVIDENCE_TERMS, ("user-onboarding-platform-contracts",), ("shared-signing-v2",), ("user-onboarding-business-open",), ("async_return_url",), ("Webhook",), ("POST",), ("UTF-8",), ("data",), ("不排序", "免排序"), ("RSA",), ("HTTP 200",), ("RECV_ORD_ID_",), ("req_seq_id",), ("5秒", "5 秒"), ("500-599",), ("3次", "3 次"), ("幂等",))),
 }
 
 
@@ -665,18 +754,8 @@ SEMANTIC_FORBIDDEN_PATTERNS: dict[int, tuple[str, ...]] = {
         r"(?:下面|以下|这里).{0,16}(?:附|给出|提供|生成).{0,20}(?:可直接)?(?:填值|填写|补值).{0,16}data(?:对象|json|payload)?",
     ),
     58: (
-        r"curl\b(?=[^。；;\n]{0,240}(?:-f|--form)\b)(?=[^。；;\n]{0,240}(?:file\s*=\s*@|file=@))",
-        r"(?:java.{0,16})?(?:httpclient|httpurlconnection|multipartentitybuilder).{0,120}(?:multipart/form-data|boundary|本地文件|本地\s*file|file\s*=)",
-        r"(?:requests|httpx)\s*\.\s*post\s*\([^\n]{0,240}\bfiles\s*=",
-        r"(?:php.{0,16})?(?:guzzle|guzzlehttp).{0,100}(?:multipart|本地文件|本地\s*file|file\s*=)",
-        r"(?:使用|用|通过|调用|构造|组装|创建|写入|添加|加载).{0,120}(?:multipart(?:/form-data)?|multipartbody|formdata|files\s*=).{0,140}(?:本地文件|本地\s*file|open\s*\(|new\s+file|file\s*=@)",
-        r"(?:multipartbody|formdata|bodyinserters|multipart/form-data|files\s*=).{0,160}(?:本地文件|本地\s*file|open\s*\(|new\s+file|file\s*=@)",
-        r"(?:files\s*\.\s*readallbytes|file_get_contents|open\s*\([^\n]{0,80}['\"]rb['\"][^\n]{0,40}\.\s*read\s*\(|(?:证照|图片|文件|本地文件).{0,12}(?:字节(?:流|数组)?|二进制|文件流)).{0,180}(?:requestbody|请求体|post\b|urlopen|表单|form-data|上传|提交|发送)",
-        r"(?:new\s+)?curlfile\s*\(",
         r"(?:签名原文|签名内容).{0,28}(?:已经|已|可以)?(?:确定|确认|明确|固定).{0,12}(?:包含|包括)?.{0,28}(?:本地)?(?:file|文件)(?:字节|内容|流)",
         r"(?:(?:调用方|业务层|接口失败时|失败时).{0,20})?(?:(?:可以|可|应|建议|直接|将|会).{0,12})?(?:业务层自动|自动业务|自动)重试(?:\s*\d+\s*次)?",
-        r"(?:content-type\s*:?\s*multipart/form-data.{0,80}boundary|content-disposition.{0,80}name\s*=\s*['\"]?file|filename\s*=).{0,180}(?:发送|post|提交|上传)",
-        r"(?:证照|图片|文件|image).{0,16}(?:字节(?:流|数组)?|二进制|bytes?|文件流).{0,80}(?:作为|写入|加入|放入).{0,24}(?:file)?(?:表单项|字段|请求体|body).{0,60}(?:提交|发送|post|上传)",
         r"(?:data|response|result|响应|回包|返回).{0,36}(?:[a-z_][a-z0-9_.]*(?:token|key|id|no)|picturekey|filetoken|resource_key|picno).{0,28}(?:就是|当作|作为|视为|写入|读取|用于|继续).{0,16}(?:文件|图片|材料)?(?:标识|编号|进件)?",
         r"(?:http\s*)?200.{0,20}(?:即|就|代表|视为|等于|说明|即可).{0,16}(?:上传)?成功|resp_code\s*(?:=|为|是)\s*[`'\"]?00000000.{0,24}(?:继续|进件|成功|使用)",
         r"(?:超时|失败|网络错误|异常).{0,40}(?:指数退避|backoff|tenacity|stop_after_attempt|for\s+循环|while\s+循环|再次调用|重新调用|重放|重发).{0,24}(?:上传|图片接口|\d+\s*(?:次|遍))?",
@@ -723,11 +802,10 @@ SEMANTIC_FORBIDDEN_PATTERNS: dict[int, tuple[str, ...]] = {
         r"(?:(?:调用方|业务层|接口失败时|失败时).{0,20})?(?:(?:可以|可|应|建议|直接|将|会).{0,12})?(?:业务层自动|自动业务|自动)重试(?:\s*\d+\s*次)?",
         r"(?:失败|异常).{0,20}(?:循环|连续|固定)?(?:重发|重放|再次发送|重试).{0,12}(?:\d+|[一二两三四五六七八九十])次",
         r"(?:同步受理|同步返回|响应).{0,24}(?:直接|即可|就|便).{0,18}(?:继续|提交).{0,8}进件",
-        r"(?:files\s*\.\s*readallbytes|file_get_contents|open\s*\([^\n]{0,80}['\"]rb['\"][^\n]{0,40}(?:\.\s*read\s*\()|(?:证照|图片|文件).{0,12}(?:字节(?:流|数组)?|二进制|文件流)).{0,180}(?:requestbody|请求体|post\b|urlopen|表单|form-data|上传|提交|发送)",
         r"(?:data|response|result|响应|回包|返回).{0,36}(?:[a-z_][a-z0-9_.]*(?:token|key|id|no)|picturekey|filetoken|resource_key|picno).{0,28}(?:就是|当作|作为|视为|写入|读取|用于|继续).{0,16}(?:文件|图片|材料|card_info)?(?:标识|编号|进件)?",
         r"(?:http\s*)?200.{0,20}(?:即|就|代表|视为|等于|说明|即可).{0,16}(?:上传)?成功|resp_code\s*(?:=|为|是)\s*[`'\"]?00000000.{0,24}(?:继续|进件|成功|使用)",
         r"(?:超时|失败|网络错误|异常).{0,40}(?:指数退避|backoff|tenacity|stop_after_attempt|for\s+循环|while\s+循环|再次调用|重新调用|重放|重发).{0,24}(?:上传|图片接口|\d+\s*(?:次|遍))?",
-        r"java.{0,40}(?:改用|使用|发送).{0,20}json.{0,40}(?:v2/supplementary/picture|图片接口)|(?:php|python).{0,40}(?:改用|使用|发送).{0,20}multipart",
+        r"java.{0,40}(?:改用|使用|发送).{0,20}json.{0,40}(?:v2/supplementary/picture|图片接口)",
         r"(?:sdk|图片|java)?请求.{0,28}(?:后|之后|完成后).{0,20}(?:才|再).{0,12}(?:设置|设为).{0,12}basepay\s*\.\s*debug\s*(?:=|为)?\s*false",
         r"basepay\s*\.\s*debug\s*(?:=|为)?\s*false.{0,24}(?:跳过|关闭|停用|不再).{0,16}(?:响应)?验签",
         r"jpt_x_skill_source.{0,20}(?:填|写|设为|使用|传).{0,12}(?:huifu_id|merchant_id|商户号)|(?:huifu_id|merchant_id|商户号).{0,20}(?:写入|放入|填到|传到).{0,16}(?:来源头|jpt_x_skill_source)",
@@ -750,13 +828,9 @@ SEMANTIC_FORBIDDEN_PATTERNS: dict[int, tuple[str, ...]] = {
         r"(?:response|result|data|返回|响应).{0,40}(?:file_?id|img_?id|image_?id|文件标识|图片标识).{0,40}(?:自动重试|继续|后续|直接使用|读取|取|使用|提交|进件)",
         r"(?:固定|直接|默认|假定|猜测|按|取|读取).{0,24}(?:response|result|响应)?.{0,24}(?:file_?id|文件标识)",
         r"(?:(?:调用方|业务层|接口失败时|失败时).{0,20})?(?:(?:可以|可|应|建议|直接|将|会).{0,12})?(?:业务层自动|自动业务|自动)重试(?:\s*\d+\s*次)?",
-        r"(?:curl\b(?=[^。；;\n]{0,240}(?:-f|--form)\b)|(?:httpclient|httpurlconnection|multipartentitybuilder).{0,120}(?:multipart/form-data|boundary|本地文件|本地\s*file)|(?:requests|httpx)\s*\.\s*post\s*\([^\n]{0,240}\bfiles\s*=|(?:guzzle|guzzlehttp).{0,100}(?:multipart|本地文件|本地\s*file)|(?:new\s+)?curlfile\s*\()",
-        r"(?:使用|用|通过|调用|构造|组装|创建|写入|添加|加载).{0,120}(?:multipart(?:/form-data)?|multipartbody|formdata|files\s*=).{0,140}(?:本地文件|本地\s*file|open\s*\(|new\s+file|file\s*=@)",
-        r"(?:multipartbody|formdata|bodyinserters|multipart/form-data|files\s*=).{0,160}(?:本地文件|本地\s*file|open\s*\(|new\s+file|file\s*=@)",
         r"(?:失败|异常).{0,20}(?:循环|连续|固定)?(?:重发|重放|再次发送|重试).{0,12}(?:\d+|[一二两三四五六七八九十])次",
         r"(?:失败|异常|超时).{0,36}(?:for|while|循环|连续|固定|自动|重复)?\s*.{0,20}(?:重发|重放|再次发送|重新调用|重复调用|重试|调用上传|调用接口)",
         r"(?:响应|返回|result|data).{0,24}(?<![a-z0-9_])(?:id|标识)(?![a-z0-9_]).{0,32}(?:继续|后续|提交|进件|使用)",
-        r"(?:files\s*\.\s*readallbytes|file_get_contents|open\s*\([^\n]{0,80}['\"]rb['\"][^\n]{0,40}(?:\.\s*read\s*\()|(?:证照|图片|文件).{0,12}(?:字节(?:流|数组)?|二进制|文件流)).{0,180}(?:requestbody|请求体|post\b|urlopen|表单|form-data|上传|提交|发送)",
         r"(?:data|response|result|响应|回包|返回).{0,36}(?:[a-z_][a-z0-9_.]*(?:token|key|id|no)|picturekey|filetoken|resource_key|picno).{0,28}(?:就是|当作|作为|视为|写入|读取|用于|继续).{0,16}(?:文件|图片|材料|card_info)?(?:标识|编号|进件)?",
         r"(?:http\s*)?200.{0,20}(?:即|就|代表|视为|等于|说明|即可).{0,16}(?:上传)?成功|resp_code\s*(?:=|为|是)\s*[`'\"]?00000000.{0,24}(?:继续|进件|成功|使用)",
         r"(?:超时|网络错误).{0,40}(?:指数退避|backoff|tenacity|stop_after_attempt|再次调用|重新调用|重放|重发).{0,24}(?:上传|图片接口|\d+\s*(?:次|遍))?",
@@ -1006,8 +1080,8 @@ ATOMIC_FORBIDDEN_PATTERNS: dict[int, tuple[str, ...]] = {
 REQUIRED_ASSERTION_GROUPS: dict[int, tuple[tuple[str, ...], ...]] = {
     5: (
         (
-            r"(?:仅支付|只(?:实际)?(?:加载|使用)|本次仅).{0,80}hfps/1\.3\.3",
-            r"hfps/1\.3\.3.{0,80}(?:仅支付|只(?:实际)?(?:加载|使用)|本次仅|进件.{0,20}未参与)",
+            r"(?:仅支付|只(?:实际)?(?:加载|使用)|本次仅).{0,80}hfps/1\.3\.4",
+            r"hfps/1\.3\.4.{0,80}(?:仅支付|只(?:实际)?(?:加载|使用)|本次仅|进件.{0,20}未参与)",
         ),
     ),
     47: (
@@ -1467,18 +1541,13 @@ FORBIDDEN_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
     ),
     58: ForbiddenBoundaryFixture(
         accepted=(
-            "不得生成 curl -F \"file=@license.jpg\" 的可运行命令。",
-            "签名原文是否包含本地文件字节尚未确定。",
+            "Java SDK 对 data 加签，不得把本地文件字节自行拼进签名原文。",
+            "Java 本地文件使用官方 BasePayClient.upload，不自行组装 multipart。",
             "调用方不得自动业务重试。",
-            "不得用 Guzzle multipart 提交本地文件；也不得用 HttpURLConnection 或 httpx 上传。",
-            "不得用 OkHttp MultipartBody 加载本地文件后上传。",
-            "不能用 aiohttp.FormData 添加 open(path, \"rb\") 后提交。",
-            "不得用 Spring WebClient 构造 multipart 并提交本地 file。",
+            "PHP 可用 Guzzle multipart 降级，但必须对 data 加签并保持 TLS 校验。",
+            "Python 可用 requests files 的顶层 file part，并显式保持请求签名。",
         ),
         rejected=(
-            "Files.readAllBytes(path) 后用 RequestBody 构造请求体并 POST 上传。",
-            "Content-Type: multipart/form-data; boundary=x，Content-Disposition name=file 后发送。",
-            "Java 把证照字节作为 file 表单项并发送 POST 请求。",
             "成功响应的 data.pictureKey 就是文件标识，读取后继续进件。",
             "HTTP 200 就代表上传成功。",
             "失败后 for 循环重放上传三次。",
@@ -1488,18 +1557,8 @@ FORBIDDEN_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
             "file_url 放请求顶层。",
             "sign=false，无需签名。",
             "接口路径是 v2/merchant/picture/upload，file_type 可选。",
-            "下面给出可运行命令：curl -F \"file=@license.jpg\" <PICTURE_ENDPOINT>。",
-            "Java 可直接使用 HttpClient 组装 multipart/form-data 并提交本地文件。",
-            "Python 可执行 requests.post(url, files=dict(file=open(path,\"rb\")))。",
-            "PHP 可使用 new CURLFile(path) 提交本地图片。",
-            "Java 使用 HttpURLConnection 写入 multipart/form-data boundary 和本地 file 后提交。",
-            "Python 使用 httpx.post(url, files={\"file\": open(path,\"rb\")}) 上传。",
-            "PHP 直接用 Guzzle 的 multipart 数组提交本地文件。",
             "签名原文已经确定包含本地文件字节，可以自动重试。",
-            "Java 用 OkHttp MultipartBody 加载本地文件后上传。",
-            "Python 用 aiohttp.FormData 添加 open(path, \"rb\") 后提交。",
-            "Java 用 Spring WebClient 构造 multipart 并提交本地 file。",
-        ),
+        ) + IMAGE_FALLBACK_UNSAFE_ATTACKS,
     ),
     59: ForbiddenBoundaryFixture(
         accepted=(
@@ -1535,13 +1594,12 @@ FORBIDDEN_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
             "失败时不得循环重发，也不得取 result.get(\"fileId\") 继续进件。",
             "失败后不得 for 循环调用上传接口三次，也不得读取 data.fileId 继续进件。",
             "遇到异常不得重放请求，也不得读取返回里的 imgId 继续进件。",
-            "只使用已验签实际响应返回的图片标识继续进件。",
-            "Java 不能改发 JSON，PHP/Python 不能改发 multipart。",
+            "Java 返回的是未验签原始响应包装，不得自动提取图片标识继续进件。",
+            "Java 不能改发 JSON；PHP/Python 可按图片专用合同生成受控 multipart 降级。",
             "不得在请求后才设置 BasePay.debug=false，关闭调试不跳过验签。",
             "来源不能填 huifu_id；不得允许任意 HTTP URL 或记录完整 file_url。",
         ),
         rejected=(
-            "Files.readAllBytes(path) 后用 RequestBody 构造请求体并 POST 上传。",
             "data.fileToken 当作材料编号继续进件。",
             "HTTP 200 就代表上传成功。",
             "超时后用 tenacity stop_after_attempt(3) 重试上传。",
@@ -1559,7 +1617,7 @@ FORBIDDEN_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
             "失败时循环重发三次，并取 result.get(\"fileId\") 继续进件。",
             "失败后 for 循环调用上传接口三次，再用 data.fileId 继续进件。",
             "遇到异常就重放请求，然后读取返回里的 imgId 继续进件。",
-        ),
+        ) + IMAGE_FALLBACK_UNSAFE_ATTACKS,
     ),
     62: ForbiddenBoundaryFixture(
         accepted=(
@@ -1574,23 +1632,20 @@ FORBIDDEN_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
             "省略 data.huifu_id，把它放到 MerConfig 末参。",
             "jpt_x_skill_source 填 huifu_id。",
             "商户号写入来源头。",
-        ),
+        ) + IMAGE_FALLBACK_UNSAFE_ATTACKS,
     ),
     63: ForbiddenBoundaryFixture(
         accepted=(
             "不能同时提交 file_url 和本地 file。",
             "不得假定 response.file_id 后继续进件。",
-            "不得生成 curl -F 本地文件命令。",
+            "PHP/Python 可生成带 data 加签与 TLS 校验的 multipart 本地文件代码。",
             "file_url 和 file 不能都放进请求，也不得构造包含两者的 payload。",
             "请求体不能同时包含 data.file_url 与顶层 file。",
             "body 中不得既写 file_url 又写 file 并提交。",
             "失败后不得循环重发，响应 id 也不能直接用于继续进件。",
-            "不得用 OkHttp MultipartBody 加载本地文件后上传。",
-            "不能用 aiohttp.FormData 添加 open(path, \"rb\") 后提交。",
-            "不得用 Spring WebClient 构造 multipart 并提交本地 file。",
+            "Java 仍使用官方 BasePayClient，不改写为手写 HTTP。",
         ),
         rejected=(
-            "Files.readAllBytes(path) 后用 RequestBody 构造请求体并 POST 上传。",
             "HTTP 200 就代表上传成功。",
             "网络错误后用指数退避重试上传三遍。",
             "Content-Type: multipart/form-data; boundary=x，Content-Disposition name=file 后发送。",
@@ -1603,9 +1658,8 @@ FORBIDDEN_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
             "body 中既写 file_url 又写 file 并提交。",
             "失败后循环重发三次，成功就按响应 id 继续进件。",
             "Java 用 OkHttp MultipartBody 加载本地文件后上传。",
-            "Python 用 aiohttp.FormData 添加 open(path, \"rb\") 后提交。",
             "Java 用 Spring WebClient 构造 multipart 并提交本地 file。",
-        ),
+        ) + IMAGE_FALLBACK_UNSAFE_ATTACKS,
     ),
     64: ForbiddenBoundaryFixture(
         accepted=(
@@ -1969,17 +2023,17 @@ CASE_24_IDEMPOTENT_SAFE_RESPONSE = """本轮实际使用 references：copilot-ex
 
 CASE_58_SAFE_RESPONSE = """本轮实际使用 references：merchant-onboarding-image-upload.md。
 file_url 与 file 文件流互斥、必须二选一；支持 JPG/BMP/PNG，最大 2MB。
-Python 专用 V2SupplementaryPictureRequest 的本地文件分支内部字段名为 picture，且 need_sign=False、need_verfy_sign=False；不能据此外推官网顶层 file 协议。本地 multipart、签名原文、响应标识与业务重试均 [需要官方确认]，不得生成可运行上传实现。"""
+Java 3.0.40 使用 V2SupplementaryPictureRequest 和 BasePayClient.upload。PHP/Python 专用生成实现不可直接调用；可仅为 /v2/supplementary/picture 使用受控通用 POST 或自写 HTTPS multipart 降级，文本字段为 sys_id/product_id/data/sign，本地文件键为 file，对 data 加签并保持 TLS 校验。响应标识、响应可信性和业务重试均 [需要官方确认]。"""
 
 CASE_59_SAFE_RESPONSE = """本轮实际使用 references：merchant-onboarding-enterprise.md、merchant-onboarding-business-open.md、merchant-onboarding-application-status-query.md。
 huifu_id 或业务已提交不等于可交易。实名、渠道、电子协议 con_stat 与申请状态应独立判定，通过申请状态补偿查询确认所需能力。"""
 
 CASE_61_SAFE_RESPONSE = """本轮实际使用 references：merchant-onboarding-image-upload.md、shared-request-header-policy.md、shared-server-sdk-matrix.md。
-file_url 与本地 file 互斥、二选一。Java 使用 multipart 文本字段，并在任何 SDK 请求前以 BasePay.debug=false 防止输出私钥和请求数据；PHP/Python 无本地文件时使用 JSON。
-Python file_url 使用 DGTools.request_post，默认 need_sign=True、need_verfy_sign=True，不能混同专用本地文件 Request。未显式配置 skill_source 时，仅进件实际参与默认 hfms/1.0.0；支付与进件都实际参与当前请求时默认 hfps/1.3.3;hfms/1.0.0，仅安装未参与不计入，也可使用显式环境变量覆盖。URL 必须是受控 HTTPS 且禁止记录。不猜测响应标识，只使用已验签的实际返回标识；响应和业务重试 [需要官方确认]。"""
+file_url 与本地 file 互斥、二选一。当前只有 Java 3.0.40 支持：BasePayClient.request(request, true) 对图片 URI 使用 multipart 文本字段，并须在任何 SDK 请求前以 BasePay.debug=false 防止输出私钥和请求数据。
+PHP/Python 专用生成实现不可直接调用，但可仅为图片接口使用受控通用 POST 或自写 HTTPS 降级：file_url 仍发 multipart 文本字段，对 data 加签并启用 TLS 校验，不能走通用 JSON body。未显式配置 skill_source 时，仅进件实际参与默认 hfms/1.0.1；双 Skill 默认 hfps/1.3.4;hfms/1.0.1。URL 使用受控 HTTPS且禁止记录；响应标识和业务重试 [需要官方确认]，不得猜测响应标识或自动重试。"""
 
 CASE_63_SAFE_RESPONSE = """本轮实际使用 references：merchant-onboarding-image-upload.md。
-file_url 与本地 file 互斥、必须二选一。响应 file_id 等文件标识及业务重试均 [需要官方确认]；本地二进制上传协议尚需官方确认，不得生成三语言本地上传或自动重试代码。"""
+file_url 与本地 file 互斥、必须二选一。Java 使用官方 BasePayClient；PHP/Python 可仅为 /v2/supplementary/picture 生成受控通用 POST 或自写 HTTPS multipart 降级，并保持 data 加签与 TLS 校验。不得自动重试或猜测响应 file_id；文件标识及业务重试均 [需要官方确认]。"""
 
 CASE_64_EQUIVALENT_SAFE_RESPONSE = """本轮实际使用 references：merchant-onboarding-detail-query.md、merchant-onboarding-field-contracts.md。
 data 必填：req_seq_id:String(32)、req_date:北京时间 String(8)、huifu_id:String(18)。响应公共字段位于 data；读取边界仅按查询目的白名单读取，不记录高敏原文。"""
@@ -2103,17 +2157,17 @@ FULL_RESPONSE_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
             CASE_32_SAFE_RESPONSE + "\n原 1.3.2 已被当前版本替代。",
             CASE_32_SAFE_RESPONSE + "\n旧文档曾写“当前版本是 1.3.2”，该说法已过期。",
             CASE_32_SAFE_RESPONSE + "\n历史文档中“当前本地 Skill 版本是 1.3.2”已经过期，不应再采用。",
-            CASE_32_SAFE_RESPONSE + "\n历史上的当前本地 Skill 版本是 1.3.2，如今已被 1.3.3 替代。",
-            CASE_32_SAFE_RESPONSE + "\n历史版本曾为 1.3.2，但当前版本仍是 1.3.3。",
+            CASE_32_SAFE_RESPONSE + "\n历史上的当前本地 Skill 版本是 1.3.2，如今已被 1.3.4 替代。",
+            CASE_32_SAFE_RESPONSE + "\n历史版本曾为 1.3.2，但当前版本仍是 1.3.4。",
             CASE_32_SAFE_RESPONSE + "\n1.3.2 不再是当前版本。",
             CASE_32_SAFE_RESPONSE + "\n1.3.2 曾是当前版本，但已被替代。",
-            CASE_32_SAFE_RESPONSE + "\n旧版 1.3.2 现已切换到 1.3.3。",
+            CASE_32_SAFE_RESPONSE + "\n旧版 1.3.2 现已切换到 1.3.4。",
             CASE_32_SAFE_RESPONSE + "\n旧版 1.3.2 现已废弃。",
             CASE_32_SAFE_RESPONSE + "\n文档曾称当前版本为 1.3.2，该表述现已废弃。",
             CASE_32_SAFE_RESPONSE + "\n“最新版本是 1.3.2”属于无效旧说法。",
-            CASE_32_SAFE_RESPONSE + "\n不应使用 1.3.2，应使用 1.3.3。",
-            CASE_32_SAFE_RESPONSE + "\n部署清单不得锁定 1.3.2，应锁定 1.3.3。",
-            CASE_32_SAFE_RESPONSE + "\n版本选择器不应返回 1.3.2，应返回 1.3.3。",
+            CASE_32_SAFE_RESPONSE + "\n不应使用 1.3.2，应使用 1.3.4。",
+            CASE_32_SAFE_RESPONSE + "\n部署清单不得锁定 1.3.2，应锁定 1.3.4。",
+            CASE_32_SAFE_RESPONSE + "\n版本选择器不应返回 1.3.2，应返回 1.3.4。",
         ),
         rejected=(
             CASE_32_SAFE_RESPONSE + "\n不过实际当前版本是 1.3.2，应以这个为准。",
@@ -2133,9 +2187,9 @@ FULL_RESPONSE_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
             CASE_32_SAFE_RESPONSE + "\n真正有效的是 1.3.2。",
             CASE_32_SAFE_RESPONSE + "\n1.3.2 才是正式版本。",
             CASE_32_SAFE_RESPONSE + "\n正确版本应为 1.3.2。",
-            CASE_32_SAFE_RESPONSE + "\n应使用 1.3.2，不要使用 1.3.3。",
-            CASE_32_SAFE_RESPONSE + "\n版本选择器应返回 1.3.2，1.3.3 不要使用。",
-            CASE_32_SAFE_RESPONSE + "\n部署清单必须锁定 1.3.2，不能装载 1.3.3。",
+            CASE_32_SAFE_RESPONSE + "\n应使用 1.3.2，不要使用 1.3.4。",
+            CASE_32_SAFE_RESPONSE + "\n版本选择器应返回 1.3.2，1.3.4 不要使用。",
+            CASE_32_SAFE_RESPONSE + "\n部署清单必须锁定 1.3.2，不能装载 1.3.4。",
             CASE_32_SAFE_RESPONSE + "\n版本口径以旧版 1.3.2 为权威。",
             CASE_32_SAFE_RESPONSE + "\n安装时请选择 1.3.2。",
         ),
@@ -2180,25 +2234,12 @@ FULL_RESPONSE_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
     58: ForbiddenBoundaryFixture(
         accepted=(
             CASE_58_SAFE_RESPONSE,
-            CASE_58_SAFE_RESPONSE + "\n不得给出 curl -F file=@license.jpg 命令。",
-            CASE_58_SAFE_RESPONSE + "\n本地文件是否参与签名原文尚未确定。",
-            CASE_58_SAFE_RESPONSE + "\n不得用 Guzzle multipart 提交本地文件；也不得用 HttpURLConnection 或 httpx 上传。",
-            CASE_58_SAFE_RESPONSE + "\n不得用 OkHttp MultipartBody 加载本地文件后上传。",
-            CASE_58_SAFE_RESPONSE + "\n不能用 aiohttp.FormData 添加 open(path, \"rb\") 后提交。",
-            CASE_58_SAFE_RESPONSE + "\n不得用 Spring WebClient 构造 multipart 并提交本地 file。",
+            CASE_58_SAFE_RESPONSE + "\nJava SDK 对 data 加签，不得把本地文件字节自行拼进签名原文。",
+            CASE_58_SAFE_RESPONSE + "\nPHP 可用 Guzzle multipart，Python 可用 requests/httpx files，但二者必须保留 data 加签和 TLS 校验。",
         ),
         rejected=(
-            CASE_58_SAFE_RESPONSE + "\n下面给出可运行命令：curl -F \"file=@license.jpg\" <PICTURE_ENDPOINT>。",
-            CASE_58_SAFE_RESPONSE + "\nJava 可直接使用 HttpClient 组装 multipart/form-data 并提交本地文件。",
-            CASE_58_SAFE_RESPONSE + "\nPython 可执行 requests.post(url, files=dict(file=open(path, \"rb\")))。",
-            CASE_58_SAFE_RESPONSE + "\nJava 使用 HttpURLConnection 写入 multipart/form-data boundary 和本地 file 后提交。",
-            CASE_58_SAFE_RESPONSE + "\nPython 使用 httpx.post(url, files={\"file\": open(path, \"rb\")}) 上传。",
-            CASE_58_SAFE_RESPONSE + "\nPHP 直接用 Guzzle 的 multipart 数组提交本地文件。",
             CASE_58_SAFE_RESPONSE + "\n签名原文已经确定包含本地文件字节，可以自动重试。",
-            CASE_58_SAFE_RESPONSE + "\nJava 用 OkHttp MultipartBody 加载本地文件后上传。",
-            CASE_58_SAFE_RESPONSE + "\nPython 用 aiohttp.FormData 添加 open(path, \"rb\") 后提交。",
-            CASE_58_SAFE_RESPONSE + "\nJava 用 Spring WebClient 构造 multipart 并提交本地 file。",
-        ),
+        ) + tuple(CASE_58_SAFE_RESPONSE + "\n" + attack for attack in IMAGE_FALLBACK_UNSAFE_ATTACKS),
     ),
     59: ForbiddenBoundaryFixture(
         accepted=(
@@ -2241,9 +2282,7 @@ FULL_RESPONSE_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
             CASE_63_SAFE_RESPONSE + "\n请求体不能同时包含 data.file_url 与顶层 file。",
             CASE_63_SAFE_RESPONSE + "\nbody 中不得既写 file_url 又写 file 并提交。",
             CASE_63_SAFE_RESPONSE + "\n失败后不得循环重发，响应 id 也不能直接用于继续进件。",
-            CASE_63_SAFE_RESPONSE + "\n不得用 OkHttp MultipartBody 加载本地文件后上传。",
-            CASE_63_SAFE_RESPONSE + "\n不能用 aiohttp.FormData 添加 open(path, \"rb\") 后提交。",
-            CASE_63_SAFE_RESPONSE + "\n不得用 Spring WebClient 构造 multipart 并提交本地 file。",
+            CASE_63_SAFE_RESPONSE + "\nPython 可用 aiohttp.FormData，前提是顶层键为 file、data 已加签且 TLS 校验开启。",
         ),
         rejected=(
             CASE_63_SAFE_RESPONSE + "\n以下三语言代码可直接同时提交 file_url 和 file，并按 response.file_id 自动重试继续进件。",
@@ -2254,9 +2293,8 @@ FULL_RESPONSE_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
             CASE_63_SAFE_RESPONSE + "\nbody 中既写 file_url 又写 file 并提交。",
             CASE_63_SAFE_RESPONSE + "\n失败后循环重发三次，成功就按响应 id 继续进件。",
             CASE_63_SAFE_RESPONSE + "\nJava 用 OkHttp MultipartBody 加载本地文件后上传。",
-            CASE_63_SAFE_RESPONSE + "\nPython 用 aiohttp.FormData 添加 open(path, \"rb\") 后提交。",
             CASE_63_SAFE_RESPONSE + "\nJava 用 Spring WebClient 构造 multipart 并提交本地 file。",
-        ),
+        ) + tuple(CASE_63_SAFE_RESPONSE + "\n" + attack for attack in IMAGE_FALLBACK_UNSAFE_ATTACKS),
     ),
     64: ForbiddenBoundaryFixture(
         accepted=(CASE_64_EQUIVALENT_SAFE_RESPONSE,),
@@ -2458,11 +2496,6 @@ INDEPENDENT_REVIEW_ATTACKS: dict[int, tuple[str, ...]] = {
     56: ("local-sandbox 通过等同于具备小流量上线资格。",),
     57: ("可先套用企业字段：req_seq_id、req_date、reg_name、license_code，填完即可提交。",),
     58: (
-        "```java\nbyte[] bytes = Files.readAllBytes(path);\n"
-        "RequestBody body = RequestBody.create(bytes, MediaType.parse(\"image/png\"));\n"
-        "client.newCall(new Request.Builder().url(endpoint).post(body).build()).execute();\n```",
-        "```php\n$bytes = file_get_contents($path);\n"
-        "$client->request('POST', $url, ['body' => $bytes]);\n```",
         "file_url 与 file 可以同时传，以 file 优先。",
     ) + UNKNOWN_IMAGE_SCHEMA_ATTACKS + UNKNOWN_IMAGE_RETRY_ATTACKS + DEEP_IMAGE_SCHEMA_ATTACKS + DEEP_IMAGE_RETRY_ATTACKS + STRUCTURED_IMAGE_SCHEMA_ATTACKS + STRUCTURED_IMAGE_REPLAY_ATTACKS,
     59: (
@@ -2561,7 +2594,7 @@ local-sandbox 本地联调通过不代表官方联调通过，也不代表具备
     60: CASE_60_SAFE_RESPONSE,
     61: CASE_61_SAFE_RESPONSE,
     62: """本轮实际使用 references：merchant-onboarding-image-upload.md、shared-request-header-policy.md、shared-server-sdk-matrix.md。
-Python MerConfig 第五参数是 jpt_x_skill_source，不能传 huifu_id；huifu_id 只放业务 data。未显式配置且本次仅进件实际参与时必须传 hfms/1.0.0；仅安装但未参与的支付 Skill 不计入，不能输出双 Skill 组合，也不能省略第五参数。代码仅使用占位符，不输出真实值。""",
+Python 2.0.24 的图片专用 Request 不可直接使用。本地文件可用 DGTools.request_post，但必须显式 need_sign=True、补齐官网字段且文件键为 file；file_url 必须改用 multipart 文本字段的通用 POST/自写 HTTPS 降级，不能走通用 JSON body。MerConfig 第五参数是 jpt_x_skill_source，不能传 huifu_id；huifu_id 只放业务 data。未显式配置且本次仅进件实际参与时必须传 hfms/1.0.1；仅安装但未参与的支付 Skill 不计入。代码仅使用占位符，不输出真实值。""",
     63: CASE_63_SAFE_RESPONSE,
     64: """本轮实际使用 references：merchant-onboarding-detail-query.md、merchant-onboarding-field-contracts.md。
 req_seq_id 为 String(32) 必填，req_date 为北京时间 String(8) 必填，huifu_id 为 String(18) 必填；请求置于 data。响应从 data 白名单最小化读取，禁止记录高敏原文。""",
@@ -2580,9 +2613,6 @@ INDEPENDENT_REVIEW_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
             "禁止这样处理：" + re.sub(r"^(?:不过|但是|然而|但)", "", attack)
             for attack in attacks
             if not attack.startswith("```")
-        ) + (
-            ("不得读取本地文件字节后构造 RequestBody 或 PHP body 并直接上传。",)
-            if case_id == 58 else ()
         ),
         rejected=attacks,
     )
@@ -2610,6 +2640,7 @@ def main() -> int:
     REGRESSION_SOURCE_ENTRIES = REGRESSION_WORKSPACE_ENTRIES + (
         "scripts/run_real_model_regression.py",
         "scripts/huifu-payment-test-prompts.json",
+        "tests/regression/user-onboarding.json",
         "tests/regression/cross-route.json",
     )
     all_cases = load_cases()
@@ -2674,14 +2705,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--case", type=int, action="append", help="Run only selected case id. Can repeat.")
     parser.add_argument(
         "--suite",
-        choices=("all", "payment", "onboarding", "cross-route"),
+        choices=("all", "payment", "onboarding", "user-onboarding", "cross-route"),
         default="all",
         help="Run one primary-ownership suite or all suites.",
     )
     parser.add_argument(
         "--load-mode",
-        choices=("payment-only", "onboarding-only", "both"),
-        default="both",
+        choices=("payment-only", "onboarding-only", "user-onboarding-only", "both", "all-skills"),
+        default="all-skills",
         help="Choose which Skill directories enter the isolated workspace.",
     )
     parser.add_argument("--smoke", action="store_true", help=f"Run smoke cases only: {', '.join(map(str, SMOKE_CASE_IDS))}.")
@@ -2705,6 +2736,7 @@ def positive_int(value: str) -> int:
 
 def load_cases() -> list[PromptCase]:
     data = json.loads(PROMPTS_FILE.read_text(encoding="utf-8"))
+    data.extend(json.loads(USER_ONBOARDING_PROMPTS_FILE.read_text(encoding="utf-8")))
     data.extend(json.loads(CROSS_ROUTE_PROMPTS_FILE.read_text(encoding="utf-8")))
     return [
         PromptCase(
@@ -2927,7 +2959,7 @@ def validate_rule_definitions(cases: list[PromptCase]) -> list[str]:
         (
             1019,
             "路由结论：both\n先由进件 Skill 开户，再交接支付 Skill 收款。"
-            "\n默认 jpt-x-skill-source：hfps/1.3.3;hfms/1.0.0。"
+            "\n默认 jpt-x-skill-source：hfps/1.3.4;hfms/1.0.1。"
             "\n本轮实际使用 references："
             "huifu-merchant-onboarding/references/shared-overview.md、"
             "huifu-pay-integration/references/shared-overview.md",
@@ -2951,7 +2983,7 @@ def validate_rule_definitions(cases: list[PromptCase]) -> list[str]:
         (
             1019,
             "路由结论：both\n先由进件 Skill 开户，再交接支付 Skill。"
-            "\n正确组合不是 hfps/1.3.3;hfms/1.0.0，而是 hfms/1.0.0;hfps/1.3.3。"
+            "\n正确组合不是 hfps/1.3.4;hfms/1.0.1，而是 hfms/1.0.1;hfps/1.3.4。"
             "\n本轮实际使用 references："
             "huifu-merchant-onboarding/references/shared-overview.md、"
             "huifu-pay-integration/references/shared-overview.md",
@@ -2970,46 +3002,46 @@ def validate_rule_definitions(cases: list[PromptCase]) -> list[str]:
                 f"{'pass' if should_pass else 'reject'}: {text!r}"
             )
     source_policy_fixtures = (
-        (5, "本次仅支付，默认值为 hfps/1.3.3。", True),
-        (5, "本次仅支付，默认值为 `hfps/1.3.3`。", True),
-        (5, '本次仅支付，默认值为 "hfps/1.3.3",', True),
-        (5, "本次仅支付，默认值为 hfps/1.3.3evil。", False),
-        (5, "本次仅支付，默认值为 hfps/1.3.30。", False),
-        (5, "先提 hfps/1.3.3，最终使用 hfps/1.3.3; hfms/1.0.0。", False),
+        (5, "本次仅支付，默认值为 hfps/1.3.4。", True),
+        (5, "本次仅支付，默认值为 `hfps/1.3.4`。", True),
+        (5, '本次仅支付，默认值为 "hfps/1.3.4",', True),
+        (5, "本次仅支付，默认值为 hfps/1.3.4evil。", False),
+        (5, "本次仅支付，默认值为 hfps/1.3.40。", False),
+        (5, "先提 hfps/1.3.4，最终使用 hfps/1.3.4; hfms/1.0.1。", False),
         (
             5,
-            "本次仅支付，先写 hfps/1.3.3，最终使用 hfps/1.3.3;hfms/1.0.0，不能再省略。",
+            "本次仅支付，先写 hfps/1.3.4，最终使用 hfps/1.3.4;hfms/1.0.1，不能再省略。",
             False,
         ),
-        (62, "本次仅进件，默认值为 hfms/1.0.0。", True),
-        (62, "本次仅进件，默认值为 `hfms/1.0.0`。", True),
-        (62, '本次仅进件，默认值为 "hfms/1.0.0",', True),
-        (62, "本次仅进件，默认值为 hfms/1.0.0evil。", False),
-        (62, "本次仅进件，默认值为 hfms/1.0.00。", False),
-        (62, "默认使用 hfps/1.3.3;hfms/1.0.0。", False),
+        (62, "本次仅进件，默认值为 hfms/1.0.1。", True),
+        (62, "本次仅进件，默认值为 `hfms/1.0.1`。", True),
+        (62, '本次仅进件，默认值为 "hfms/1.0.1",', True),
+        (62, "本次仅进件，默认值为 hfms/1.0.1evil。", False),
+        (62, "本次仅进件，默认值为 hfms/1.0.10。", False),
+        (62, "默认使用 hfps/1.3.4;hfms/1.0.1。", False),
         (
             62,
-            "本次仅进件，先写 hfms/1.0.0，最终使用 hfps/1.3.3;hfms/1.0.0，不能再省略。",
+            "本次仅进件，先写 hfms/1.0.1，最终使用 hfps/1.3.4;hfms/1.0.1，不能再省略。",
             False,
         ),
-        (1019, "双 Skill 默认值为 hfps/1.3.3;hfms/1.0.0。", True),
-        (1019, "双 Skill 默认值为 `hfps/1.3.3;hfms/1.0.0`。", True),
-        (1019, '双 Skill 默认值为 "hfps/1.3.3;hfms/1.0.0",', True),
-        (1019, "双 Skill 默认值为 hfps/1.3.3;hfms/1.0.0evil。", False),
-        (1019, "双 Skill 默认值为 hfps/1.3.3;hfms/1.0.00。", False),
+        (1019, "双 Skill 默认值为 hfps/1.3.4;hfms/1.0.1。", True),
+        (1019, "双 Skill 默认值为 `hfps/1.3.4;hfms/1.0.1`。", True),
+        (1019, '双 Skill 默认值为 "hfps/1.3.4;hfms/1.0.1",', True),
+        (1019, "双 Skill 默认值为 hfps/1.3.4;hfms/1.0.1evil。", False),
+        (1019, "双 Skill 默认值为 hfps/1.3.4;hfms/1.0.10。", False),
         (
             1019,
-            "正确组合不是 hfps/1.3.3;hfms/1.0.0，而是 hfms/1.0.0;hfps/1.3.3。",
-            False,
-        ),
-        (
-            1019,
-            "先写 hfps/1.3.3;hfms/1.0.0，最终改为 hfms/1.0.0;hfps/1.3.3，不能再省略。",
+            "正确组合不是 hfps/1.3.4;hfms/1.0.1，而是 hfms/1.0.1;hfps/1.3.4。",
             False,
         ),
         (
             1019,
-            "先写 hfps/1.3.3;hfms/1.0.0，最终改为 hfps/1.3.3; hfms/1.0.0，不能再省略。",
+            "先写 hfps/1.3.4;hfms/1.0.1，最终改为 hfms/1.0.1;hfps/1.3.4，不能再省略。",
+            False,
+        ),
+        (
+            1019,
+            "先写 hfps/1.3.4;hfms/1.0.1，最终改为 hfps/1.3.4; hfms/1.0.1，不能再省略。",
             False,
         ),
     )
@@ -3027,7 +3059,9 @@ def workspace_entries_for(load_mode: str) -> tuple[str, ...]:
     skills = {
         "payment-only": ("huifu-pay-integration",),
         "onboarding-only": ("huifu-merchant-onboarding",),
+        "user-onboarding-only": ("huifu-merchant-onboarding",),
         "both": ("huifu-pay-integration", "huifu-merchant-onboarding"),
+        "all-skills": SKILL_IDS,
     }[load_mode]
     return REGRESSION_WORKSPACE_BASE_ENTRIES + skills
 
@@ -3511,6 +3545,7 @@ def evaluate_case(
         skill_groups = {
             "payment": (("huifu-pay-integration", "支付 Skill", "支付 skill"),),
             "onboarding": (("huifu-merchant-onboarding", "进件 Skill", "进件 skill"),),
+            "user-onboarding": (("huifu-merchant-onboarding", "进件 Skill", "进件 skill"),),
             "both": (
                 ("huifu-pay-integration", "支付 Skill", "支付 skill"),
                 ("huifu-merchant-onboarding", "进件 Skill", "进件 skill"),
@@ -3575,7 +3610,7 @@ def cross_route_policy_errors(
 ) -> list[str]:
     errors = []
     route_values = re.findall(
-        r"(?m)^\s*路由结论\s*[:：]\s*(payment|onboarding|both)\s*$",
+        r"(?m)^\s*路由结论\s*[:：]\s*(payment|onboarding|user-onboarding|both)\s*$",
         text,
         flags=re.I,
     )
@@ -3584,16 +3619,23 @@ def cross_route_policy_errors(
         errors.append(
             f"route conclusion must be exactly {case.expected_skill}, found {normalized_routes}"
         )
-    if case.expected_skill in {"payment", "onboarding"}:
-        wrong_terms = (
-            ("huifu-merchant-onboarding", "进件 Skill", "进件 skill")
-            if case.expected_skill == "payment"
-            else ("huifu-pay-integration", "支付 Skill", "支付 skill")
-        )
-        expected_terms = (
-            ("huifu-pay-integration", "支付 Skill", "支付 skill")
-            if case.expected_skill == "payment"
-            else ("huifu-merchant-onboarding", "进件 Skill", "进件 skill")
+    single_skill_terms = {
+        "payment": ("huifu-pay-integration", "支付 Skill", "支付 skill"),
+        "onboarding": ("huifu-merchant-onboarding", "进件 Skill", "进件 skill"),
+        "user-onboarding": ("huifu-merchant-onboarding", "进件 Skill", "进件 skill"),
+    }
+    if case.expected_skill in single_skill_terms:
+        expected_terms = single_skill_terms[case.expected_skill]
+        route_owner = {
+            "payment": "huifu-pay-integration",
+            "onboarding": "huifu-merchant-onboarding",
+            "user-onboarding": "huifu-merchant-onboarding",
+        }
+        wrong_terms = tuple(
+            term
+            for skill, terms in single_skill_terms.items()
+            if route_owner[skill] != route_owner[case.expected_skill]
+            for term in terms
         )
         wrong_union = "|".join(re.escape(term) for term in wrong_terms)
         expected_union = "|".join(re.escape(term) for term in expected_terms)
@@ -3617,12 +3659,15 @@ def cross_route_policy_errors(
     loaded = {
         "payment-only": {"huifu-pay-integration"},
         "onboarding-only": {"huifu-merchant-onboarding"},
-        "both": set(SKILL_IDS),
+        "user-onboarding-only": {"huifu-merchant-onboarding"},
+        "both": {"huifu-pay-integration", "huifu-merchant-onboarding"},
+        "all-skills": set(SKILL_IDS),
     }[load_mode]
     expected_ids = {
         "payment": {"huifu-pay-integration"},
         "onboarding": {"huifu-merchant-onboarding"},
-        "both": set(SKILL_IDS),
+        "user-onboarding": {"huifu-merchant-onboarding"},
+        "both": {"huifu-pay-integration", "huifu-merchant-onboarding"},
     }[case.expected_skill]
     qualified = {
         path.split("/", 1)[0]
@@ -3688,32 +3733,32 @@ def skill_source_policy_errors(case_id: int, text: str) -> list[str]:
 
     if case_id == 5:
         if not affirmative(
-            r"(?<![a-z0-9._/;-])hfps/1\.3\.3(?![a-z0-9._/-]|\s*;)"
+            r"(?<![a-z0-9._/;-])hfps/1\.3\.4(?![a-z0-9._/-]|\s*;)"
         ):
-            return ["payment-only skill_source must be hfps/1.3.3"]
+            return ["payment-only skill_source must be hfps/1.3.4"]
         if affirmative(
-            r"(?<![a-z0-9._/;-])hfps/1\.3\.3\s*;\s*hfms/1\.0\.0"
+            r"(?<![a-z0-9._/;-])hfps/1\.3\.4\s*;\s*hfms/1\.0\.1"
             r"(?![a-z0-9._/;-])"
         ):
             return ["payment-only skill_source must not include the inactive onboarding Skill"]
     if case_id == 62:
         if not affirmative(
-            r"(?<![a-z0-9._/;-])hfms/1\.0\.0(?![a-z0-9._/-]|\s*;)"
+            r"(?<![a-z0-9._/;-])hfms/1\.0\.1(?![a-z0-9._/-]|\s*;)"
         ):
-            return ["onboarding-only skill_source must be hfms/1.0.0"]
+            return ["onboarding-only skill_source must be hfms/1.0.1"]
         if affirmative(
-            r"(?<![a-z0-9._/;-])hfps/1\.3\.3\s*;\s*hfms/1\.0\.0"
+            r"(?<![a-z0-9._/;-])hfps/1\.3\.4\s*;\s*hfms/1\.0\.1"
             r"(?![a-z0-9._/;-])"
         ):
             return ["onboarding-only skill_source must not include the inactive payment Skill"]
     if case_id == 1019:
         if not affirmative(
-            r"(?<![a-z0-9._/;-])hfps/1\.3\.3;hfms/1\.0\.0"
+            r"(?<![a-z0-9._/;-])hfps/1\.3\.4;hfms/1\.0\.1"
             r"(?![a-z0-9._/;-])"
         ):
-            return ["dual-Skill skill_source must be hfps/1.3.3;hfms/1.0.0"]
+            return ["dual-Skill skill_source must be hfps/1.3.4;hfms/1.0.1"]
         if affirmative(
-            r"(?:hfps/1\.3\.3\s+;|;\s+hfms/1\.0\.0|hfms/1\.0\.0\s*;\s*hfps/1\.3\.3)"
+            r"(?:hfps/1\.3\.4\s+;|;\s+hfms/1\.0\.1|hfms/1\.0\.1\s*;\s*hfps/1\.3\.4)"
         ):
             return ["dual-Skill skill_source order/spacing is invalid"]
     return []

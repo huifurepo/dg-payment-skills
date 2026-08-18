@@ -11,7 +11,7 @@
 
 ## 使用方式与证据边界
 
-本索引是 `huifu-merchant-onboarding 1.0.0` 对十一个官网页面及“商户业务类型”公共编码页的高风险约束速查，不是完整字段目录。完整字段是否存在、嵌套路径、类型、长度、Y/N/C 与官方说明必须读取 `merchant-onboarding-complete-field-catalog.md`；本页负责枚举、默认值、跨方向隔离、官网冲突和安全边界。业务开通或修改仍必须先选定具体能力，不存在跨渠道通用的完整请求模板。来源快照核验日期：`2026-07-29`；企业页新增请求 `material_card_info` 七个路径，其余十页与 `2026-07-28` 快照逐字节一致。企业、个人和详情页当前记录更新时间仍为 `2026-07-28`，业务开通和基本信息修改页为 `2026-07-27`。独立 Skill 包内可从完整字段目录和 `official-service-source-index.md` 核对十一个来源 URL 与 SHA。允许增量的机器门禁保存在维护仓库，不是安装包运行依赖。
+本索引是 `huifu-merchant-onboarding 1.0.1` 对十一个官网页面及“商户业务类型”公共编码页的高风险约束速查，不是完整字段目录。完整字段是否存在、嵌套路径、类型、长度、Y/N/C 与官方说明必须读取 `merchant-onboarding-complete-field-catalog.md`；本页负责枚举、默认值、跨方向隔离、官网冲突和安全边界。业务开通或修改仍必须先选定具体能力，不存在跨渠道通用的完整请求模板。来源快照核验日期：`2026-08-10`；企业进件、个人进件和基本信息修改页当前记录更新时间为 `2026-08-07`，三页仅补全 `activated_products` 的 `01/02/03` 产品说明，字段和结构未变化。此前企业页新增的 `material_card_info` 七个路径及其他高风险裁决继续保留。独立 Skill 包内可从完整字段目录和 `official-service-source-index.md` 核对十一个来源 URL 与 SHA。允许增量的机器门禁保存在维护仓库，不是安装包运行依赖。
 
 - **官网 API 合同**：本页的端点、顶层信封、`data` 第一层字段、类型、最大长度与 Y/N/C 均以所列官网页面为准。
 - **SDK 源码事实**：只读取 `shared-server-sdk-matrix.md`；不能推断材料条件、回调验签、响应枚举或审核结果。
@@ -21,11 +21,11 @@
 
 ## 公共信封
 
-十个 JSON 接口（图片上传之外的接口）的请求顶层均为：`sys_id:String(32), product_id:String(32), sign:String(512), data:Json`，均为 Y。图片上传是特殊合同：接口元数据标记 `sign=true`，但 `requestDemo` 没有顶层 `sign`。Python 专用 `V2SupplementaryPictureRequest` 只实现本地文件路径，且明确传入 `need_sign=False, need_verfy_sign=False`；通用 `DGTools.request_post` 默认两项均为 `True`，可承载无文件的 `file_url` JSON 路径，但不能把它和专用 Request 的免签行为混为一谈。专用本地文件路径继续阻断；手写 HTTP 的签名包络标记 `[需要官方确认]`。顶层 `file` 与 `data.file_url` 不能同时上传；官网未说明两者都空是否合法。
+十个 JSON 接口（图片上传之外的接口）的请求顶层均为：`sys_id:String(32), product_id:String(32), sign:String(512), data:Json`，均为 Y。图片上传是特殊合同：接口元数据标记 `sign=true`，但 `requestDemo` 没有顶层 `sign`。Java `3.0.40` 的图片专用 Request、URI 特判与 `BasePayClient.upload(...)` 已确认满足请求加签和两种来源传输要求；PHP/Python 的专用生成实现不可直接使用，但允许按 Java 已核验 wire 生成图片专用通用 POST/自写 HTTPS multipart 降级。顶层 `file` 与 `data.file_url` 不能同时上传；官网未说明二者都空是否合法。
 
-十一个接口页均执行同一来源头合同：Java、PHP、Python 使用 Skill 调用时要求 `jpt-x-skill-source: <skill_source>`；未显式配置时，仅进件实际参与当前请求默认 `hfms/1.0.0`，支付与进件都实际参与当前请求默认 `hfps/1.3.3;hfms/1.0.0`，仅安装未参与的不计入。当前请求 `data.huifu_id` 存在且非空时还要求 `jpt-x-skill-huifu_id: <data.huifu_id>`。当前 Java、PHP、Python SDK 主链路均能自动补来源头，Java 会条件补商户头；PHP `2.0.30` 对缺失键无保护读取，企业/个人基础进件及图片未传可选 `huifu_id` 时继续阻断对应 PHP 可运行代码。PHP multipart 分支已携带三个 SDK/Skill 头，但 `BsPayClient` 的本地文件路径仍关闭请求签名和响应验签。Python `2.0.24` 在缺失字段时发送空商户头，但只作为 SDK 兼容性提示和联调/上线前验证项，不单独阻断 Python 代码，也不把是否允许空头的问题抛给客户。所有语言都禁止固定、虚构或补空业务字段 `data.huifu_id`。费率查询在锁定 SDK 中没有专属类，不能据此宣称 SDK 会自动补头。
+十一个接口页均执行同一 Skill 来源合同：使用 Skill 调用时要求 `jpt-x-skill-source: <skill_source>`；未显式配置时，仅进件实际参与当前请求默认 `hfms/1.0.1`，支付与进件都实际参与当前请求默认 `hfps/1.3.4;hfms/1.0.1`，仅安装未参与的不计入。其他 SDK 内部请求头由 SDK 自行处理，不进入 Skill 的字段、语言差异或硬停判断。九个已有专属 JSON Request 的 Java、PHP、Python SDK 主链路语言差异仍按 SDK 能力矩阵处理。费率查询在锁定 SDK 中没有专属类，不能据此宣称 SDK 会自动补头。
 
-九个已有专属 Request 类的 JSON 接口和图片 `file_url` 模式的 Java 调用均进入 `dg-java-sdk 3.0.40` 的公共 `AbstractRequest`。其 `BasePay.debug` 默认为 `true`，会打印私钥、签名和请求数据；任何 Java 可运行代码都必须在进程初始化阶段、任何 SDK 请求之前执行一次 `BasePay.debug = false;`，不得在并发请求中临时切换。该设置只关闭调试输出，不改变签名流程；九个已有专属类的 JSON 接口保留请求签名和响应验签，图片 `file_url` 必须使用 `isPage=true`，保留请求签名但跳过响应验签。费率查询没有专属 Request 类，不得用相似类替代。
+九个已有专属 Request 类的 JSON 接口和 Java 图片调用均进入 `dg-java-sdk 3.0.40` 的公共 `AbstractRequest`。其 `BasePay.debug` 默认为 `true`，会打印私钥、签名和请求数据；任何 Java 可运行代码都必须在进程初始化阶段、任何 SDK 请求之前执行一次 `BasePay.debug = false;`，不得在并发请求中临时切换。该设置只关闭调试输出，不改变签名流程；九个已有专属类的 JSON 接口保留请求签名和响应验签，图片 `file_url` 走 `BasePayClient.request(request, true)`，本地文件走 `BasePayClient.upload(request, file)`，两者均保留请求签名但跳过响应验签。费率查询没有专属 Request 类，不得用相似类替代。
 
 PHP `2.0.30` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo/loader.php` 与 `Composer/BsPayConfig.php` 会在 SDK 初始化前启用 `DEBUG=true`。此时 `BsPayRequestV2` 会记录含 `rsa_merch_private_key` 的 `MerConfig`、完整请求体和完整响应。联调/生产必须在加载 SDK、Demo/Composer 配置及调用 `BsPay::init` 前固定 `DEBUG=false`，不得使用 Demo loader，也不得允许后续配置改回 `true`；无法证明时硬停。
 
@@ -66,6 +66,12 @@ PHP `2.0.30` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo
 | `request.data.elec_acct_config.elec_card_list[].prov_id` / `request.data.elec_acct_config.elec_card_list[].area_id` | 电子账户银行卡所在省 / 所在市 | 保留 `elec_card_list[]` 数组父路径 |
 
 企业、个人进件和基本信息修改都存在前两组同名叶字段；企业进件当前还有第三组 `material_card_info` 请求路径。适用时必须同时保留，不得因 `data` 顶层已有 `prov_id/area_id` 而省略任一子对象，也不得把银行卡省市提升到 `data` 顶层。基本信息修改的 `request.data.card_info.area_id` 官网长度为 `8`，企业和个人进件对应路径长度为 `6`，而企业 `request.data.material_card_info.area_id` 官网未给长度；不能跨接口复用长度，也不能跨父对象复用长度。
+
+### 官网空白项
+
+- 当前十一页共有37个目录节点的说明单元为空；完整目录统一保留 `—`。其中包括实名对象、电子协议通知字段、详情费率/卡信息以及股东手机号等路径，不能按中文名或同名字段补写说明。
+- 按“没有子路径的 String 字段”统计，共59个叶字段的长度单元为空；完整目录统一保留 `—`。String(JSON) 父字段不计入这59个叶字段，图片上传未定型顶层字段另按图片合同处理。
+- 空说明和空长度均属于官网未定义，不是 Skill 字段丢失。生成严格 DTO、数据库长度或前端校验前标记 `[需要官方确认]`；不得从 SDK 类型、示例值或其他接口同名路径推断。
 
 同名字段不得跨接口复用值域：
 
@@ -133,7 +139,7 @@ PHP `2.0.30` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo
 | `data.use_head_info_flag` / `head_huifu_id` | `use_head_info_flag` 仅 `Y/N`；`head_office_flag=0` 时 `head_huifu_id` 必填，`head_office_flag=1` 时禁止传。 |
 | `data.reg_acct_pic` / 结算材料 | 企业对公结算时 `reg_acct_pic` 必填；对私时银行卡面、持卡人证件正反面必填；对私非法人或对公非同名时授权委托书必填。 |
 | `data.material_card_info` | `String(JSON Object) N`。非个体工商户的企业商户在 `card_info` 选择对私结算（法人或非法人）时补充对公同名账户；`card_no/area_id/branch_code` 为 Y，`card_type/card_name/prov_id` 为 N；`card_type` 不填默认 `0`。官网类型列 `Object` 与说明列不同，本项目以“jsonObject字符串”说明为 wire 依据；叶字段长度仍为空，不得猜长度。 |
-| `data.activated_products` | 只从 `01=收款产品`、`02=账户与资金产品`、`03=业财数通产品` 选择；多值按官网格式组合，不传为空。 |
+| `data.activated_products` | 只从 `01=一体化收款产品`、`02=账户与资金产品`、`03=业财数通产品` 选择；多值按官网格式组合，不传为空。商户基本信息修改的同名路径使用相同枚举。 |
 
 ### 个人进件约束
 
@@ -150,7 +156,7 @@ PHP `2.0.30` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo
 | `data.store_header_pic/store_indoor_pic/store_cashier_desk_pic` | 均为 C；线下场景至少按官网对应门头、内景/工作区、收银台材料条件提供，不能统一填占位图片。 |
 | `response.data.material_card_info.prov_id/area_id` | 详情响应中的对公卡省市，必须保留在 `material_card_info` 父路径内；不得与 `response.data.prov_id/area_id`、其他卡列表或请求中的同名字段去重。 |
 | `data.card_info.card_no` | 只支持结算借记卡，不支持贷记卡；无法自动识别银行时填写 `bank_code`，官网建议统一填写以提高成功率。 |
-| `data.activated_products` | 只从 `01/02/03` 选择；不传为空。 |
+| `data.activated_products` | 只从 `01=一体化收款产品`、`02=账户与资金产品`、`03=业财数通产品` 选择；不传为空。 |
 
 ### 企业/个人公共资金对象约束
 

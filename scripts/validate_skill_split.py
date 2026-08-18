@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the two self-contained Skill packages and migration conservation."""
+"""Validate self-contained Skill packages and migration conservation."""
 
 from __future__ import annotations
 
@@ -27,7 +27,10 @@ SEMANTIC_ANCHORS = REPO_ROOT / "maintainer-contracts/reference-semantic-anchors.
 TRANSFORMATION_TARGET_LOCK = (
     REPO_ROOT / "maintainer-contracts/reference-transformation-target-lock.json"
 )
-EXPECTED_SKILLS = {"huifu-pay-integration", "huifu-merchant-onboarding"}
+EXPECTED_SKILLS = {
+    "huifu-pay-integration",
+    "huifu-merchant-onboarding",
+}
 EXPECTED_CATEGORY_COUNTS = {
     "KEEP": 78,
     "MOVE": 7,
@@ -459,8 +462,8 @@ def validate_maintainer_contracts(errors: list[str]) -> None:
         if phrase in release:
             error(errors, f"release checklist contains stale phrase: {phrase}")
     for required in (
-        "huifu-pay-integration` | `1.3.3",
-        "huifu-merchant-onboarding` | `1.0.0",
+        "huifu-pay-integration` | `1.3.4",
+        "huifu-merchant-onboarding` | `1.0.1",
     ):
         if required not in versioning:
             error(errors, f"versioning policy missing current fact: {required}")
@@ -497,6 +500,28 @@ def load_domain_boundaries() -> dict[str, dict[str, tuple[str, ...]]]:
             "skill domain boundary merchant catalog must contain "
             f"{expected_field_count} paths, found {len(field_paths)}"
         )
+    user_catalog = payload.get("user_field_catalog")
+    if not isinstance(user_catalog, str) or not user_catalog:
+        raise ValueError("skill domain boundary user field catalog is missing")
+    user_catalog_path = REPO_ROOT / user_catalog
+    if not user_catalog_path.is_file():
+        raise ValueError("skill domain boundary user field catalog does not exist")
+    user_field_paths = re.findall(
+        r"^\| `([^`]+)` \|",
+        user_catalog_path.read_text(encoding="utf-8"),
+        flags=re.MULTILINE,
+    )
+    user_source_lock = json.loads(
+        (REPO_ROOT / "maintainer-contracts/user-onboarding-source-lock.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    expected_user_field_count = user_source_lock["totals"]["fields"]
+    if len(user_field_paths) != expected_user_field_count:
+        raise ValueError(
+            "skill domain boundary user catalog must contain "
+            f"{expected_user_field_count} paths, found {len(user_field_paths)}"
+        )
     merchant_identifiers = {
         part.removesuffix("[]")
         for path in field_paths
@@ -505,7 +530,7 @@ def load_domain_boundaries() -> dict[str, dict[str, tuple[str, ...]]]:
     }
     skills = payload.get("skills")
     if not isinstance(skills, dict) or set(skills) != EXPECTED_SKILLS:
-        raise ValueError("skill domain boundary contract must cover both split skills")
+        raise ValueError("skill domain boundary contract must cover all manifest skills")
     result: dict[str, dict[str, tuple[str, ...]]] = {}
     for skill_id, spec in skills.items():
         literals = spec.get("forbidden_implementation_literals")

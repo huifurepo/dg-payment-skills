@@ -75,7 +75,7 @@ SKILL_FILES = sorted(spec.skill_file for spec in SKILL_SPECS)
 PAYMENT_SPEC = next(spec for spec in SKILL_SPECS if spec.domain == "payment")
 ONBOARDING_SPEC = next(spec for spec in SKILL_SPECS if spec.domain == "onboarding")
 ONBOARDING_SOURCE_LOCK = (
-    REPO_ROOT / "maintainer-contracts/merchant-onboarding-source-lock.json"
+    REPO_ROOT / "maintainer-contracts/merchant-onboarding-source-lock-2026-08-10.json"
 )
 
 

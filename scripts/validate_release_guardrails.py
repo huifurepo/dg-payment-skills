@@ -114,7 +114,7 @@ def validate_release_evidence_profile() -> None:
     with tempfile.TemporaryDirectory(prefix="huifu-fake-model-evidence-") as directory:
         root = Path(directory)
         evidence: list[str] = []
-        for suite in ("payment", "onboarding", "cross-route"):
+        for suite in validate_skill_packages.RELEASE_EVIDENCE_SUITES:
             suite_dir = root / suite
             suite_dir.mkdir()
             manifest = suite_dir / "run-manifest.json"
@@ -290,17 +290,17 @@ def validate_provenance_schema_guard() -> None:
 
 def validate_published_version_guard() -> None:
     validate_skill_package.validate_published_version_facts(
-        "| Skill 版本 | `1.3.3` |",
-        "| Skill | `huifu-pay-integration 1.3.3` |",
+        "| Skill 版本 | `1.3.4` |",
+        "| Skill | `huifu-pay-integration 1.3.4` |",
         "huifu-pay-integration",
-        "1.3.3",
+        "1.3.4",
     )
     expect_value_error(
         lambda: validate_skill_package.validate_published_version_facts(
             "| Skill 版本 | `9.9.9` |",
-            "| Skill | `huifu-pay-integration 1.3.3` |",
+            "| Skill | `huifu-pay-integration 1.3.4` |",
             "huifu-pay-integration",
-            "1.3.3",
+            "1.3.4",
         ),
         "SKILL.md version differs",
     )
@@ -371,13 +371,13 @@ def validate_release_evidence_contract() -> None:
         release_script.index(root_guard) < release_script.index(root_create),
         "release evidence root is checked after creation",
     )
-    for suite in ("payment", "onboarding", "cross-route"):
+    for suite in validate_skill_packages.RELEASE_EVIDENCE_SUITES:
         for artifact in ("run-manifest.json", "summary.json"):
             label = f"real-model/{suite}/{artifact}"
             require(label in release_script, f"release provenance omits {label}")
     require(
-        release_script.count("--skip-run") >= 3,
-        "release gate does not semantically replay all three persisted model suites",
+        release_script.count("--skip-run") >= 4,
+        "release gate does not semantically replay all four persisted model suites",
     )
     require(
         ': "${RELEASE_OUTPUT_DIR:?RELEASE_OUTPUT_DIR is required' in release_script,
@@ -473,7 +473,7 @@ def validate_reproducible_provenance() -> None:
                     stdout=subprocess.DEVNULL,
                 )
                 outputs.append(
-                    output / "huifu-pay-integration-1.3.3.provenance.json"
+                    output / "huifu-pay-integration-1.3.4.provenance.json"
                 )
             if before == source_snapshot():
                 break
@@ -530,7 +530,7 @@ def validate_reproducible_provenance() -> None:
             == {"real-model/all/summary.json": hashlib.sha256(evidence_path.read_bytes()).hexdigest()},
             "labeled external evidence was not bound to provenance",
         )
-        archive = outputs[0].parent / "huifu-pay-integration-1.3.3.zip"
+        archive = outputs[0].parent / "huifu-pay-integration-1.3.4.zip"
         validate_command = [
             sys.executable,
             str(REPO_ROOT / "scripts/validate_skill_package.py"),

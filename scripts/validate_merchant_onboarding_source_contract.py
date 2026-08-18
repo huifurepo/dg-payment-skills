@@ -23,7 +23,7 @@ require_assertions_enabled()
 
 
 ROOT = Path(__file__).resolve().parent.parent
-LOCK = ROOT / "maintainer-contracts/merchant-onboarding-source-lock.json"
+LOCK = ROOT / "maintainer-contracts/merchant-onboarding-source-lock-2026-08-10.json"
 SOURCE_DIR = onboarding_source_dir()
 CATALOG = ROOT / "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md"
 

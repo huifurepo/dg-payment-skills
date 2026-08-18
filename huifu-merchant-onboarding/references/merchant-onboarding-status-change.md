@@ -32,8 +32,7 @@
 
 ## 公共请求头
 
-- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.0`，双 Skill 默认 `hfps/1.3.3;hfms/1.0.0`。
-- `jpt-x-skill-huifu_id` 只能取本次请求真实 `data.huifu_id`；不得固定、虚构或写回业务 `data`。
+- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.1`，双 Skill 默认 `hfps/1.3.4;hfms/1.0.1`。
 
 ## SDK 证据
 

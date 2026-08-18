@@ -1,0 +1,427 @@
+{
+  "schema_version": 1,
+  "refresh_id": "api-refresh-merchant-onboarding-1.0.1-2026-08-10-r3",
+  "requested_at": "2026-08-10",
+  "retrieved_at": "2026-08-10T18:02:14+08:00",
+  "version_state": {
+    "reason": "Add five user onboarding interfaces to the existing merchant onboarding Skill, then re-review all sixteen live pages and synchronize the three activated_products description corrections without changing version 1.0.1.",
+    "huifu-merchant-onboarding": "1.0.1"
+  },
+  "source_locks": {
+    "merchant_onboarding_1_0_1": {
+      "path": "maintainer-contracts/merchant-onboarding-1.0.1-source-lock.json",
+      "sha256": "35ad6549623a7ce78a82291dad067c9062b8a13cbf11f0de694611294f8d45c2"
+    },
+    "merchant_onboarding_base": {
+      "path": "maintainer-contracts/merchant-onboarding-source-lock-2026-08-10.json",
+      "sha256": "d81b7d120466f598ffd114073c0eda7b7f965db3a467121916dc92101b70009e"
+    },
+    "user_onboarding": {
+      "path": "maintainer-contracts/user-onboarding-source-lock.json",
+      "sha256": "870c49a6affb8584284398ddc86befe12ab7d40a94ef491322ea1f5a4d296169"
+    }
+  },
+  "catalog": {
+    "path": "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md",
+    "sha256": "5036636f4d228b6dc3db4e4ef63e102ef398a36e127f183f136edf230fb1093a",
+    "generator": "scripts/generate_user_onboarding_field_catalog.py",
+    "independent_validator": "scripts/validate_user_onboarding_source_contract.py"
+  },
+  "merchant_catalog": {
+    "path": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
+    "sha256": "fd0882f8d6286be0e8811fd8a0eac4df6b616a645f543a7a929f59f3caccf752",
+    "generator": "scripts/generate_merchant_onboarding_field_catalog.py",
+    "independent_validator": "scripts/validate_merchant_onboarding_source_contract.py"
+  },
+  "scope": [
+    "POST /v2/user/basicdata/ent enterprise user account opening",
+    "POST /v2/user/basicdata/indv individual user account opening",
+    "POST /v2/user/busi/open user business onboarding and asynchronous notification",
+    "POST /v2/user/apply/query non-same-name corporate settlement-card application query",
+    "POST /v2/user/basicdata/query user information query"
+  ],
+  "field_delta": {
+    "field_paths_added": 354,
+    "field_paths_removed": 0,
+    "request": 161,
+    "response": 169,
+    "callback": 24,
+    "parent": 37,
+    "leaf": 317,
+    "root_tables": 22,
+    "extend_tables": 26
+  },
+  "official_conflicts_preserved": [
+    {
+      "interface": "企业用户开户与用户业务入驻",
+      "path": "request.data.*[required=C]",
+      "conflict": "The official prose defines C as both conditionally required and conditionally optional; preserve C and apply each field description instead of a global required mapping."
+    },
+    {
+      "interface": "个人用户开户",
+      "path": "request.data.file_list[]",
+      "conflict": "The formal table declares String(JSON Array), while the request example sends a JSON array."
+    },
+    {
+      "interface": "企业用户开户与个人用户开户",
+      "path": "request.data.sms_send_flag",
+      "conflict": "The formal enum is Y/N, while the official request examples use 1."
+    },
+    {
+      "interface": "个人用户开户",
+      "path": "request.data.operator_id",
+      "conflict": "The request example contains operator_id, but the formal individual-user request table does not define it."
+    },
+    {
+      "interface": "企业用户开户与个人用户开户",
+      "path": "response.sign",
+      "conflict": "The common response table marks sign as required, while the official success examples omit it."
+    },
+    {
+      "interface": "用户业务入驻",
+      "path": "request.data.card_info.bank_code|branch_name",
+      "conflict": "The request example contains bank_code and branch_name, but the formal card_info child table does not define them."
+    },
+    {
+      "interface": "用户业务入驻",
+      "path": "request.data.settle_config_list[].constant_amt|fixed_ratio",
+      "conflict": "The request example selects D1 but omits conditionally required constant_amt and supplies fixed_ratio as 2 although the formal description requires two decimal places."
+    },
+    {
+      "interface": "用户业务入驻",
+      "path": "request.data.cash_config[].fee_rate",
+      "conflict": "The request example supplies fee_rate as 2 although the formal description requires two decimal places."
+    },
+    {
+      "interface": "用户业务入驻",
+      "path": "request.data.elec_acct_config.elec_card_list[].card_type",
+      "conflict": "The formal enum is 0/1 while the inline official example is 310100."
+    },
+    {
+      "interface": "用户业务入驻",
+      "path": "response.data",
+      "conflict": "The public response envelope declares String, while the example renders data as an object."
+    },
+    {
+      "interface": "用户业务入驻",
+      "path": "async.data.audit_info.resp_business[]",
+      "conflict": "The formal type is Object while the description declares a JSON array."
+    },
+    {
+      "interface": "用户业务入驻",
+      "path": "async.data.huifu_id",
+      "conflict": "The Chinese label says Huifu customer ID while the description says a Huifu-assigned merchant ID, conflicting with the request-side user ID role."
+    },
+    {
+      "interface": "用户业务入驻",
+      "path": "request.data.elec_acct_config.elec_card_list[]",
+      "conflict": "The formal type is Object while the description declares a JSON-array string."
+    },
+    {
+      "interface": "用户信息查询",
+      "path": "response.data.ent_base_info.file_list[]",
+      "conflict": "The formal type is Object while the description declares a JSON array."
+    },
+    {
+      "interface": "用户信息查询",
+      "path": "response.data.indv_base_info.file_list[]",
+      "conflict": "The formal type is Object while the description declares a JSON array."
+    },
+    {
+      "interface": "用户信息查询",
+      "path": "response.data.elec_acct_config.elec_card_list[]",
+      "conflict": "The formal type is Object while the description declares a JSON-array string."
+    },
+    {
+      "interface": "用户信息查询",
+      "path": "response.data.settle_config_list[].out_settle_acct_type",
+      "conflict": "The formal enum is 01/02/05 while the inline example is 0."
+    },
+    {
+      "interface": "用户信息查询",
+      "path": "response.data.qry_cash_config_list[].weekday_fix_amt|weekday_fee_rate",
+      "conflict": "The same descriptions say the D1 weekday fees are both ineffective and applied on D1 workdays."
+    },
+    {
+      "interface": "用户信息查询",
+      "path": "response.data.resp_code",
+      "conflict": "The table length is 5 while the official success example contains an eight-character code."
+    },
+    {
+      "interface": "用户信息查询",
+      "path": "response.data.sign_user_info",
+      "conflict": "The formal required marker is N while the description says the object is required when enabling electronic receipts."
+    },
+    {
+      "interface": "用户信息查询",
+      "path": "response.data.indv_base_info.prov_id|district_id",
+      "conflict": "The province/district examples are 310101/310000, reversing the level order used elsewhere on the same page."
+    },
+    {
+      "interface": "用户信息查询",
+      "path": "response.data.qry_cash_card_info_list[].area_id|prov_id",
+      "conflict": "The city/province examples are 310000/310100, reversing the level order used elsewhere on the same page."
+    }
+  ],
+  "official_undefined_fields": {
+    "policy": "Preserve the official blank as an em dash, label it [需要官方确认], and never infer a description, scalar length, or conditional trigger from a same-named field.",
+    "blank_descriptions": [
+      {
+        "interface": "用户业务入驻",
+        "path": "request.data.elec_acct_config"
+      },
+      {
+        "interface": "用户业务入驻",
+        "path": "request.data.elec_receipt_config"
+      },
+      {
+        "interface": "用户业务入驻",
+        "path": "request.data.sign_user_info.mobile_no"
+      },
+      {
+        "interface": "用户信息查询",
+        "path": "response.data.elec_acct_config.bank_message"
+      },
+      {
+        "interface": "用户信息查询",
+        "path": "response.data.elec_acct_config.elec_card_list[].mp"
+      },
+      {
+        "interface": "用户信息查询",
+        "path": "response.data.elec_receipt_config"
+      },
+      {
+        "interface": "用户信息查询",
+        "path": "response.data.sign_user_info.cert_no"
+      },
+      {
+        "interface": "用户信息查询",
+        "path": "response.data.sign_user_info.mobile_no"
+      },
+      {
+        "interface": "用户信息查询",
+        "path": "response.data.sign_user_info.name"
+      }
+    ],
+    "blank_scalar_lengths": [
+      {
+        "interface": "用户业务入驻",
+        "path": "async.sign"
+      },
+      {
+        "interface": "用户业务入驻",
+        "path": "request.data.elec_receipt_config.switch_state"
+      },
+      {
+        "interface": "用户业务入驻",
+        "path": "request.data.sign_user_info.cert_no"
+      },
+      {
+        "interface": "用户业务入驻",
+        "path": "request.data.sign_user_info.mobile_no"
+      },
+      {
+        "interface": "用户业务入驻",
+        "path": "request.data.sign_user_info.name"
+      },
+      {
+        "interface": "用户业务入驻",
+        "path": "request.data.sign_user_info.type"
+      },
+      {
+        "interface": "用户信息查询",
+        "path": "response.data.elec_receipt_config.switch_state"
+      },
+      {
+        "interface": "用户信息查询",
+        "path": "response.data.indv_base_info.area_id"
+      },
+      {
+        "interface": "用户信息查询",
+        "path": "response.data.indv_base_info.district_id"
+      },
+      {
+        "interface": "用户信息查询",
+        "path": "response.data.indv_base_info.mcc"
+      },
+      {
+        "interface": "用户信息查询",
+        "path": "response.data.indv_base_info.prov_id"
+      },
+      {
+        "interface": "用户信息查询",
+        "path": "response.data.sign_user_info.cert_no"
+      },
+      {
+        "interface": "用户信息查询",
+        "path": "response.data.sign_user_info.mobile_no"
+      },
+      {
+        "interface": "用户信息查询",
+        "path": "response.data.sign_user_info.name"
+      },
+      {
+        "interface": "用户信息查询",
+        "path": "response.data.sign_user_info.type"
+      }
+    ],
+    "undefined_conditional_triggers": [
+      {
+        "interface": "用户业务入驻",
+        "path": "request.data.card_info.card_name",
+        "required": "C",
+        "integration_resolution": "Conditionally required for every card_type accepted by the subject matrix."
+      },
+      {
+        "interface": "用户信息查询",
+        "path": "response.data.elec_acct_config.elec_card_list[].mp",
+        "required": "C",
+        "integration_resolution": "Required/expected for card_type=1 private cards and not required for card_type=0 corporate cards; tolerate historical response absence."
+      }
+    ]
+  },
+  "official_ambiguous_semantics": [
+    {
+      "interface": "用户业务入驻",
+      "path": "request.data.card_info.card_type",
+      "ambiguity": "The source says individual merchants/users do not support corporate-account or private-non-legal-representative types, while both enum 0 and enum 4 have corporate-account labels; it does not clarify whether enum 4 is excluded.",
+      "integration_resolution": "Individual users accept only card_type=1; enterprise users may use 0/1/2/4 subject to the documented business conditions."
+    }
+  ],
+  "public_sources": [
+    {
+      "name": "异步消息简介",
+      "url": "https://paas.huifu.com/partners/start/ybxx/jiekouguifan_ybxx.md",
+      "sha256": "e5f1ad5d92511c343d6bbf7d5f09ef0eee4a252bdac3b4d53934c177f6805364"
+    },
+    {
+      "name": "开发规范",
+      "url": "https://paas.huifu.com/partners/start/kfgf.md",
+      "sha256": "340ba948aae4cb1fc6b12503b58e24d11c538b5ba70d0728ef374b0d1a4137a5"
+    },
+    {
+      "name": "加签验签",
+      "url": "https://paas.huifu.com/partners/start/api_v2jqyq.md",
+      "sha256": "f3ddf23effad316d247033eb5d2f781e57a8d3d23260387b42470de8e1fd76c5"
+    },
+    {
+      "name": "加密解密",
+      "url": "https://paas.huifu.com/partners/start/api_jiami_jiemi.md",
+      "sha256": "de9c44b0dc59d34a609ea6fde5437cc7d633722cd770ecadf37a13b347f4bb82"
+    },
+    {
+      "name": "获取密钥",
+      "url": "https://paas.huifu.com/partners/start/guide_gsycshq.md",
+      "sha256": "8f79c590233daba14ba2c958ba89d4f6326f624a20bff053d5c5159ec03afab0"
+    },
+    {
+      "name": "开发接入说明",
+      "url": "https://paas.huifu.com/partners/start/api_kfzn.md",
+      "sha256": "a50c162dcbafd71044c1c6687b6b908e050a5e5aa54267336ef75661b1f5410d"
+    },
+    {
+      "name": "基础参数汇总",
+      "url": "https://paas.huifu.com/partners/api/doc/csfl/api_csfl.md",
+      "sha256": "2d8b73e1009da4b2fccfae75b0bc2546acfc105b2219ada12a2af41f2b6da191"
+    },
+    {
+      "name": "Webhook介绍",
+      "url": "https://paas.huifu.com/partners/devtools/doc/webhook/webhook_jieshao.md",
+      "sha256": "8a14a938445d9b7e15f2bce5af27b0a38708a601fbbfd88c3004a045cb333089"
+    }
+  ],
+  "integration_decisions": {
+    "confirmed_at": "2026-08-10",
+    "authority": "Integrator confirmation supplied in the task conversation; preserve separately from official field-table facts.",
+    "conditional_marker": "C means conditionally required.",
+    "card_type_subject_matrix": {
+      "individual": [
+        "1"
+      ],
+      "enterprise": [
+        "0",
+        "1",
+        "2",
+        "4"
+      ]
+    },
+    "successful_response_data": "All five interfaces return a native JSON Object data on successful responses; the official N marker remains for source fidelity and abnormal-envelope compatibility.",
+    "apply_query_fields": "A successful query returns apply_reason, apply_status, and huifu_id for all Y/P/N/F statuses.",
+    "business_open_apply_no": "A successful user business-open response returns apply_no without implying final audit approval.",
+    "wire_contract_reference": "huifu-merchant-onboarding/references/user-onboarding-platform-contracts.md",
+    "interface_async_reference": "Use the public interface asynchronous-notification contract; do not use the control-panel Webhook contract."
+  },
+  "page_field_notes_preserved": [
+    {
+      "interface": "企业用户开户",
+      "path": "request.data.legal_name",
+      "note": "Huifu performs real-name verification on the legal representative name and identity-card number."
+    },
+    {
+      "interface": "企业用户开户",
+      "path": "request.data.legal_cert_no",
+      "note": "Huifu performs real-name verification on the legal representative name and identity-card number."
+    },
+    {
+      "interface": "个人用户开户",
+      "path": "request.data.file_list[]",
+      "note": "When the certificate type is an identity card, Huifu performs real-name verification on the name and identity-card number."
+    }
+  ],
+  "official_incomplete_links": [
+    {
+      "interface": "用户信息查询",
+      "path": "response.data.qry_cash_card_info_list[].branch_code",
+      "description": "The interface row says to click for reference but supplies no link target.",
+      "integration_resolution": "Bind the full path to the official Basic Parameters bank-branch-code downloads supplied by the integrator."
+    }
+  ],
+  "official_request_example_anomalies_guarded": [
+    "enterprise-sms-send-flag-1",
+    "individual-sms-send-flag-1",
+    "individual-file-list-native-array",
+    "individual-operator-id-example-only",
+    "business-card-info-bank-fields-example-only",
+    "business-d1-constant-amt-omitted",
+    "business-fixed-ratio-not-two-decimals",
+    "business-cash-fee-rate-not-two-decimals"
+  ],
+  "official_response_example_anomalies_guarded": [
+    "enterprise-required-sign-omitted",
+    "individual-required-sign-omitted",
+    "business-string-data-rendered-as-object",
+    "detail-resp-code-eight-vs-five"
+  ],
+  "official_example_shape_contract": {
+    "algorithm": "Decode JSON-looking string values, preserve array parents with [], and hash sorted source-key/direction/full-path records.",
+    "per_interface": {
+      "user_enterprise": {
+        "request_paths": 29,
+        "response_paths": 6
+      },
+      "user_individual": {
+        "request_paths": 22,
+        "response_paths": 6
+      },
+      "user_business_open": {
+        "request_paths": 48,
+        "response_paths": 6
+      },
+      "user_apply_query": {
+        "request_paths": 8,
+        "response_paths": 7
+      },
+      "user_detail_query": {
+        "request_paths": 7,
+        "response_paths": 50
+      }
+    },
+    "total_paths": 189,
+    "sha256": "c6aabaa113155fe9effe4bddee6a5d970b909f5e3ca9be8d6bc847268ec0f40e"
+  },
+  "base_merchant_refresh": {
+    "refresh_id": "api-refresh-merchant-onboarding-2026-08-10-r1",
+    "contract": "maintainer-contracts/api-refresh-merchant-onboarding-2026-08-10.json"
+  },
+  "release_rule": "The merchant 2,111-node catalog, five user-interface source digests and 354-node catalog, independent validators, and combined Skill package must pass before publishing huifu-merchant-onboarding 1.0.1. Previously published artifacts must never be overwritten."
+}

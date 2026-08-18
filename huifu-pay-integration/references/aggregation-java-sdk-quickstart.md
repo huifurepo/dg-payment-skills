@@ -59,7 +59,7 @@ mvn clean install
 
 > **[产品号方法名]** Lightning SDK 和当前 `dg-java-sdk 3.0.40` 的 `MerConfig` 产品号方法名都使用 `setProductId(...)`。
 
-> **🔴 传输安全硬停**：下方仅展示初始化形态。锁定的 Lightning Java `1.0.5` 信任所有证书并接受任意主机名；在安全制品通过证书链、主机名以及错证书/过期证书/错域名拒绝测试前，不得用于联调或生产。
+> **官方 SDK-only**：接入方已确认当前官方 Lightning SDK 不存在本 Skill 曾推断的 TLS 问题。下方初始化可用于官方 SDK 调用；不得改写 `HttpClient`、OkHttp 或自实现 HTTP+签名客户端。
 
 ```java
 package com.yourcompany.huifu.config;
@@ -88,7 +88,7 @@ public class HuifuLightningConfig {
     @Value("${huifu.rsa-public-key}")
     private String rsaPublicKey;
 
-    @Value("${huifu.skill-source:hfps/1.3.3}")
+    @Value("${huifu.skill-source:hfps/1.3.4}")
     private String skillSource;
 
     @Value("${huifu.mode:prod}")
@@ -138,12 +138,12 @@ config1.setProductId("MYPAY");
 config1.setSysId("6666000123120001");
 config1.setRsaPrivateKey("...");
 config1.setRsaPublicKey("...");
-config1.setSkillSource("hfps/1.3.3");
+config1.setSkillSource("hfps/1.3.4");
 configs.put("merchant1", config1);
 
 MerConfig config2 = new MerConfig();
 config2.setSysId("6666000123120002");
-config2.setSkillSource("hfps/1.3.3");
+config2.setSkillSource("hfps/1.3.4");
 // ... 配置第二个商户
 configs.put("merchant2", config2);
 
@@ -158,7 +158,7 @@ MerConfig merConfig = new MerConfig();
 merConfig.setCustomConnectTimeout("30000");              // 连接超时 30s（默认 20s），注意是 String 类型
 merConfig.setCustomSocketTimeout("30000");               // 读取超时 30s（默认 20s）
 merConfig.setCustomConnectionRequestTimeout("40000");    // 请求超时 40s（默认 30s）
-merConfig.setSkillSource("hfps/1.3.3");
+merConfig.setSkillSource("hfps/1.3.4");
 ```
 
 ## 步骤 3：验证核心类导入

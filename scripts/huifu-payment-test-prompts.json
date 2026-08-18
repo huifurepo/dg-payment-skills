@@ -8,7 +8,7 @@
   {
     "id": 2,
     "prompt": "我要用 PHP 做聚合支付退款，顺便给我现成模板代码。请用 $huifu-pay-integration 判断我该看什么。",
-    "expected": "必须明确聚合支付 PHP 已支持官方 `huifurepo/dg-php-sdk` 的退款主链路，先路由到 `aggregation-refund.md`、`aggregation-php-adapter.md`、`aggregation-query-php-scenarios.md`，并指出代码入口优先 `BsPaySdk\\\\core\\\\Payment::refund()` / `refundQuery()`；同时提醒初始化时必须给 `MerConfig.skill_source` 赋值，让官方 SDK 自动带出 skill 来源头。由于当前 PHP 2.0.30 关闭 TLS 对端校验，现成可运行模板必须硬停，直到源码确认启用证书链与主机名校验并通过错证书/错域名测试。",
+    "expected": "必须明确聚合支付 PHP 已支持官方 `huifurepo/dg-php-sdk` 的退款主链路，先路由到 `aggregation-refund.md`、`aggregation-php-adapter.md`、`aggregation-query-php-scenarios.md`，并指出代码入口优先 `BsPaySdk\\\\core\\\\Payment::refund()` / `refundQuery()`；同时提醒初始化时必须给 `MerConfig.skill_source` 赋值，让官方 SDK 自动带出 skill 来源头。接入方已确认当前官方 PHP SDK 不存在 Skill 曾推断的 TLS 问题；通过 DEBUG、凭据等常规检查点后可给官方 SDK 可运行模板，不得改写 Guzzle、curl 或自实现 HTTP+签名客户端。",
     "suite": "payment"
   },
   {
@@ -26,7 +26,7 @@
   {
     "id": 5,
     "prompt": "我在 PHP 里接托管预下单，本次请求只实际加载并使用 $huifu-pay-integration，虽然仓库也安装了进件 Skill，但它没有参与本次生成，而且没有显式配置 skill_source。默认值应该是什么？如果请求里已经有 huifu_id，要不要额外补别的头？初始化时可以直接复用官方 BsPayDemo/loader.php 或 Composer/BsPayConfig.php 吗？请直接告诉我结论和该看哪些文档。",
-    "expected": "必须读取 shared-server-sdk-matrix.md 和 hostingpay-php-adapter.md。必须明确未显式配置且本次仅支付 Skill 实际参与时，`jpt-x-skill-source` 的确定性默认值只能是 `hfps/1.3.3`；仅安装但未参与的进件 Skill 不计入，不能输出双 Skill 组合值。PHP 侧该值经 `MerConfig.skill_source` 进入强制来源请求头，不再拼接 `sys_id`；如果当前请求 `data.huifu_id` 已存在且非空，还要额外带 `jpt-x-skill-huifu_id`，并把两项都定位为 HTTP 请求头而不是业务报文字段。当前 Skill 包对齐的官方 `huifurepo/dg-php-sdk` 主链路会在 `MerConfig.skill_source` 已配置时自动带出这两个来源头，而不是默认落到 `HostingClient` 或自写 `curl`。不得复用会定义 `DEBUG=true` 的官方 BsPayDemo/loader.php 或 Composer/BsPayConfig.php；必须在加载任何 SDK 文件和调用 BsPay::init 前固定 DEBUG=false，否则日志会泄露含 RSA 私钥的 MerConfig、完整请求和响应。",
+    "expected": "必须读取 shared-server-sdk-matrix.md 和 hostingpay-php-adapter.md。必须明确未显式配置且本次仅支付 Skill 实际参与时，`jpt-x-skill-source` 的确定性默认值只能是 `hfps/1.3.4`；仅安装但未参与的进件 Skill 不计入，不能输出双 Skill 组合值。PHP 侧该值经 `MerConfig.skill_source` 进入强制来源请求头，不再拼接 `sys_id`；如果当前请求 `data.huifu_id` 已存在且非空，还要额外带 `jpt-x-skill-huifu_id`，并把两项都定位为 HTTP 请求头而不是业务报文字段。当前 Skill 包对齐的官方 `huifurepo/dg-php-sdk` 主链路会在 `MerConfig.skill_source` 已配置时自动带出这两个来源头，而不是默认落到 `HostingClient` 或自写 `curl`。不得复用会定义 `DEBUG=true` 的官方 BsPayDemo/loader.php 或 Composer/BsPayConfig.php；必须在加载任何 SDK 文件和调用 BsPay::init 前固定 DEBUG=false，否则日志会泄露含 RSA 私钥的 MerConfig、完整请求和响应。",
     "suite": "payment"
   },
   {
@@ -68,7 +68,7 @@
   {
     "id": 12,
     "prompt": "我要用 Java 做聚合支付对账文件查询。请用 $huifu-pay-integration 告诉我该看什么，代码必须体现官方 Java SDK，不要给我手写 HTTP。",
-    "expected": "必须明确聚合支付 Java 的对账链路统一使用 `dg-java-sdk` 官方 SDK 和 `V2TradeCheckFilequeryRequest`，并路由到 `aggregation-query.md`、`aggregation-query-reconciliation.md`；不能再给 `HttpClientUtils.sendPost(...)`、手写签名或手写 HTTP 方案。由于当前通用 Java 3.0.40 信任所有证书并跳过主机名校验，可运行代码必须硬停，直到安全制品通过错证书/错域名测试。",
+    "expected": "必须明确聚合支付 Java 的对账链路统一使用 `dg-java-sdk` 官方 SDK、`V2TradeCheckFilequeryRequest` 和 `BasePayClient.request()`，并路由到 `aggregation-query.md`、`aggregation-query-reconciliation.md`；接入方已确认当前官方 Java SDK 不存在 Skill 曾推断的 TLS 问题，通过凭据等常规检查点后可生成官方 SDK 可运行代码。不能给 `HttpClientUtils.sendPost(...)`、手写签名或手写 HTTP 方案。",
     "suite": "payment"
   },
   {
@@ -86,7 +86,7 @@
   {
     "id": 15,
     "prompt": "我要用 PHP 接汇付支付官方 dg-php-sdk，直接给我可运行的代码骨架。请同时说明新项目安装、已有旧版本怎么升级、Composer 不可用时当前基线 SDK 备用下载地址怎么拿。不要假设 vendor/autoload.php 就能把 request 类自动加载出来，也不要只写个空的 loader.php。请用 $huifu-pay-integration 处理。",
-    "expected": "必须明确当前官方 dg-php-sdk 的 Skill 包基线是 `2.0.30`；新项目需要先 `composer require \"huifurepo/dg-php-sdk:^2.0.30\"`，已有旧版本项目需要执行 `composer update huifurepo/dg-php-sdk --with-all-dependencies`，并检查 `vendor/huifurepo/dg-php-sdk/BsPaySdk/init.php` 存在。Composer 不可用时要给出当前基线对应的 Packagist / GitHub 备用下载包，并要求解压后设置 `HUIFU_SDK_ROOT` 和校验 `init.php`。还要列出 `HUIFU_SYS_ID`、`HUIFU_PRODUCT_ID`、`HUIFU_RSA_PRIVATE_KEY`、`HUIFU_RSA_PUBLIC_KEY`、`HUIFU_SKILL_SOURCE`、`HUIFU_MERCHANT_ID` 等环境变量。代码骨架必须显式加载 `BsPaySdk/init.php`，在 `loader.php` 中完成 `BsPay::init(...)` 初始化与 `skill_source` 注入；还要定义统一的 `HUIFU_SDK_ROOT`，让业务代码通过它显式 `require_once` 各自使用的 request 类，而不是继续写死 `../BsPaySdk/request/...` 或假设 Composer autoload 已经覆盖 request 类。生产接入必须硬停并说明当前 SDK 关闭 TLS 对端校验，不能直接上线。",
+    "expected": "必须明确当前官方 dg-php-sdk 的 Skill 包基线是 `2.0.30`；新项目需要先 `composer require \"huifurepo/dg-php-sdk:^2.0.30\"`，已有旧版本项目需要执行 `composer update huifurepo/dg-php-sdk --with-all-dependencies`，并检查 `vendor/huifurepo/dg-php-sdk/BsPaySdk/init.php` 存在。Composer 不可用时要给出当前基线对应的 Packagist / GitHub 备用下载包，并要求解压后设置 `HUIFU_SDK_ROOT` 和校验 `init.php`。还要列出 `HUIFU_SYS_ID`、`HUIFU_PRODUCT_ID`、`HUIFU_RSA_PRIVATE_KEY`、`HUIFU_RSA_PUBLIC_KEY`、`HUIFU_SKILL_SOURCE`、`HUIFU_MERCHANT_ID` 等环境变量。代码骨架必须显式加载 `BsPaySdk/init.php`，在 `loader.php` 中完成 `BsPay::init(...)` 初始化与 `skill_source` 注入；还要定义统一的 `HUIFU_SDK_ROOT`，让业务代码通过它显式 `require_once` 各自使用的 request 类，而不是继续写死 `../BsPaySdk/request/...` 或假设 Composer autoload 已经覆盖 request 类。接入方已确认官方 SDK 不存在 Skill 曾推断的 TLS 问题；通过 DEBUG 与凭据检查后使用官方 SDK，不得手写 HTTP。",
     "suite": "payment"
   },
   {
@@ -188,7 +188,7 @@
   {
     "id": 32,
     "prompt": "后续你们 Skill 更新了，我怎么更新本地这个 $huifu-pay-integration？它能不能主动提醒我升级？",
-    "expected": "必须读取 `skill-version-policy.md`；必须说明当前本地 Skill 版本是 1.3.3；必须说明 Skill 不能主动联网检查或推送升级，只能在用户触发版本/升级问题时提示；必须给出 Git 拉取、本地目录整体覆盖或内部发布包替换等更新方式；必须提醒升级后重新加载或重启客户端并确认 SKILL.md 版本事实；不能编造下载地址或假装已经联网确认最新版。",
+    "expected": "必须读取 `skill-version-policy.md`；必须说明当前本地 Skill 版本是 1.3.4；必须说明 Skill 不能主动联网检查或推送升级，只能在用户触发版本/升级问题时提示；必须给出 Git 拉取、本地目录整体覆盖或内部发布包替换等更新方式；必须提醒升级后重新加载或重启客户端并确认 SKILL.md 版本事实；不能编造下载地址或假装已经联网确认最新版。",
     "suite": "payment"
   },
   {
@@ -344,7 +344,7 @@
   {
     "id": 58,
     "prompt": "我有一张本地营业执照图片，请用 $huifu-merchant-onboarding 给我图片上传的 multipart、签名和重试代码，并说明支持格式、大小、file_url/file 互斥及所有未确认边界。",
-    "expected": "必须路由到 `merchant-onboarding-image-upload.md`；必须说明 file_url 与文件流互斥、图片格式/2MB边界。Python 专用 `V2SupplementaryPictureRequest` 的本地文件路径明确 `need_sign=False, need_verfy_sign=False` 且内部 `picture` 与官网 `file` 不一致，必须阻断；其余未证实的 multipart、手写 HTTP 签名包络、响应字段和重试标为[需要官方确认]，不得生成可运行上传代码。",
+    "expected": "必须路由到 `merchant-onboarding-image-upload.md`；必须说明 file_url 与文件流互斥、图片格式/2MB边界。Java 3.0.40 使用 `V2SupplementaryPictureRequest` 和 `BasePayClient.upload(request, file)`；PHP CURLFile 包装分支关闭签验、Python 专用 Request 存在字段和文件键缺陷，均不得直接调用，但可仅为 `/v2/supplementary/picture` 生成保持 multipart、data 加签、TLS 和日志边界的通用 POST/自写 HTTPS 降级。响应字段、响应可信性和业务重试标为[需要官方确认]。",
     "suite": "onboarding"
   },
   {
@@ -362,19 +362,19 @@
   {
     "id": 61,
     "prompt": "我已把图片放到受控 HTTPS 对象存储，只传 file_url，不传本地文件。请用 $huifu-merchant-onboarding 对比 Java、PHP、Python 的图片调用边界，并说明 Java 日志安全配置、来源值/占位符以及未确认的响应和重试边界。",
-    "expected": "必须读取 merchant-onboarding-image-upload.md、shared-request-header-policy.md 和 shared-server-sdk-matrix.md；必须说明 file_url 与 file 互斥，Java 对该 URI 使用 multipart 文本字段，并在任何 SDK 请求前设置 BasePay.debug=false 以避免打印私钥和请求数据；PHP/Python 无文件时使用 JSON，Python file_url 走通用 `DGTools.request_post` 且默认请求签名和响应验签，不能混同专用本地文件 Request 的免签行为；未显式配置 skill_source 时，仅进件实际参与默认 hfms/1.0.0，支付与进件都实际参与当前请求才默认 hfps/1.3.3;hfms/1.0.0，仅安装未参与的不计入；不得猜测文件标识、重试或回调。",
+    "expected": "必须读取 merchant-onboarding-image-upload.md、shared-request-header-policy.md 和 shared-server-sdk-matrix.md；必须说明 file_url 与 file 互斥，Java 3.0.40 使用 `BasePayClient.request(request, true)`，SDK 对该 URI 使用 multipart 文本字段，并在任何 SDK 请求前设置 BasePay.debug=false；PHP/Python 专用生成实现不可直接使用，但可仅为图片接口生成 multipart 文本字段、data 加签、TLS 校验齐全的通用 POST/自写 HTTPS 降级，file_url 不得走通用 JSON body。未显式配置 skill_source 时仅进件默认 hfms/1.0.1，双 Skill 才是 hfps/1.3.4;hfms/1.0.1；不得猜测响应标识或自动重试。",
     "suite": "onboarding"
   },
   {
     "id": 62,
     "prompt": "我要用 Python SDK 上传 file_url。本次只实际使用 $huifu-merchant-onboarding；支付 Skill 虽已安装但没有参与当前请求，也没有显式配置 skill_source。能把 huifu_id 作为 MerConfig 第五个参数传进去吗？请给静态接入边界。",
-    "expected": "必须说明不可以：第五参数是 jpt_x_skill_source，huifu_id 只能放业务 data；未显式配置且本次仅进件 Skill 实际参与时，默认值必须是 hfms/1.0.0，已安装但未参与的支付 Skill 不计入，不能输出双 Skill 组合值，也不能省略该参数。不得输出私钥、真实商户号、图片 URL 或实际网络调用。",
+    "expected": "必须先说明 Python 2.0.24 的图片专用 Request 不可直接使用；本地文件可用显式 need_sign=True、补齐官网字段且文件键为 file 的 DGTools.request_post，file_url 则必须使用 multipart 文本字段的通用 POST/自写 HTTPS 降级，不能走通用 JSON body。配置语义上第五参数是 jpt_x_skill_source，不是 huifu_id；本次仅进件且未显式配置时来源值为 hfms/1.0.1，已安装但未参与的支付 Skill 不计入。不得输出私钥、真实商户号或图片 URL。",
     "suite": "onboarding"
   },
   {
     "id": 63,
     "prompt": "我有本地证照文件，能不能把 file_url 一起传给图片接口，顺便自动重试并按 response.file_id 继续进件？请用 $huifu-merchant-onboarding 生成三语言代码。",
-    "expected": "必须拒绝：file_url 与本地 file 互斥；本地文件实现、图片响应标识和重试语义均需要官方确认。不得生成三语言本地上传代码或猜测 file_id。",
+    "expected": "必须拒绝同时传 file_url 与本地 file，并拒绝自动重试和猜测 response.file_id。Java 使用官方 BasePayClient；PHP/Python 可以生成仅限 `/v2/supplementary/picture` 的受控通用 POST/自写 HTTPS multipart 降级，但必须保持 data 加签、TLS、单一来源和未验签响应边界。响应标识和重试语义仍需要官方确认。",
     "suite": "onboarding"
   },
   {
@@ -409,14 +409,14 @@
   },
   {
     "id": 69,
-    "prompt": "我只传受控 file_url，用 Java dg-java-sdk 3.0.40 调图片上传。请用 $huifu-merchant-onboarding 给出 requestBasePay 调用，并说明最后一个 isPage 参数为什么这样设置、请求签名和响应验签分别怎样处理。",
-    "expected": "必须读取 merchant-onboarding-image-upload.md；调用必须是 BasePayRequest.requestBasePay(\"v2/supplementary/picture\", data, \"default\", true)，不得传 false；必须说明 SDK 在 isPage 判断前完成 data 请求签名，因此请求签名保留；isPage=true 会在响应验签前直接返回原始响应，因此跳过 SDK 响应验签，避免图片接口响应形态触发验签失败。",
+    "prompt": "我只传受控 file_url，用 Java dg-java-sdk 3.0.40 调图片上传。请用 $huifu-merchant-onboarding 给出官方 SDK 调用，并说明 isPage 参数、请求签名和响应验签分别怎样处理。",
+    "expected": "必须读取 merchant-onboarding-image-upload.md 和 shared-server-sdk-matrix.md；应使用 V2SupplementaryPictureRequest 加扩展字段并调用 BasePayClient.request(request, true)，不得改用 HttpClient、OkHttp、HttpURLConnection 或自实现 HTTP+签名客户端。必须说明 isPage=true 位于请求签名之后、响应验签之前，因此请求签名保留、SDK 响应验签跳过；返回是原始响应包装，不得推断成功响应文件标识。",
     "suite": "onboarding"
   },
   {
     "id": 70,
-    "prompt": "我准备在 PHP 2.0.30 里用 CURLFile 给图片上传接口提交本地文件。请用 $huifu-merchant-onboarding 确认 multipart 是否自动携带 Skill 埋点头和签名，并直接生成可运行代码。",
-    "expected": "必须读取 merchant-onboarding-image-upload.md 和 shared-server-sdk-matrix.md；必须阻断可运行代码：CURLFile 会进入 multipart 文件分支，该分支已携带 jpt-x-skill-source、jpt-x-skill-huifu_id 和 jpt-sdk_version，但 BsPayClient 文件路径仍关闭请求签名和响应验签；不得因为 multipart 已携带来源头就声称安全，不得退回手写 curl 或手动签名绕过 SDK。",
+    "prompt": "我准备在 PHP 2.0.30 里用 CURLFile 给图片上传接口提交本地文件。请用 $huifu-merchant-onboarding 确认签名和验签行为，并直接生成可运行代码。",
+    "expected": "必须读取 merchant-onboarding-image-upload.md 和 shared-server-sdk-matrix.md；不得直接使用 BsPayClient::postRequest($request, new CURLFile(...))，因为该包装层关闭请求签名和响应验签，且官方 Demo 同时传入互斥来源。可以生成仅限该图片接口的通用 POST/自写 HTTPS multipart 代码，文本字段为 sys_id/product_id/data/sign，本地文件键为 file，必须对 data 加签、启用 TLS peer/hostname 校验且不自动重试。",
     "suite": "onboarding"
   },
   {
@@ -439,8 +439,8 @@
   },
   {
     "id": 74,
-    "prompt": "我是开发者，用 Python dg-sdk 2.0.24 做无执照个人商户进件；业务资料以及 sys_id、product_id、upper_huifu_id 权限均已确认，本轮只需要 SDK 接入边界，不需要你代填业务字段。个人进件合同没有 data.huifu_id。请用 $huifu-merchant-onboarding 处理，不要把 SDK 内部 jpt-x-skill-huifu_id 是否允许为空的问题抛给客户判断。",
-    "expected": "必须读取 merchant-onboarding-individual.md，并读取 shared-request-header-policy.md 或 shared-server-sdk-matrix.md；不得虚构、补空或固定 data.huifu_id。Python 2.0.24 发送空 jpt-x-skill-huifu_id 只能作为 SDK 兼容性提示和联调/上线前验证项，不得仅因此输出硬检查点或阻断个人进件方案，也不得询问客户是否允许空请求头。应继续给出 Python SDK 接入边界；联调若因该头被拒绝，再升级或修复 SDK 后复测。",
+    "prompt": "我是开发者，用 Python dg-sdk 2.0.24 做无执照个人商户进件；业务资料以及 sys_id、product_id、upper_huifu_id 权限均已确认，本轮只需要 SDK 接入边界，不需要你代填业务字段。个人进件合同没有 data.huifu_id，请用 $huifu-merchant-onboarding 处理。",
+    "expected": "必须读取 merchant-onboarding-individual.md 和 shared-server-sdk-matrix.md；个人进件请求严格按官网合同生成，不得虚构、补空或固定 data.huifu_id，也不得因 SDK 内部请求头追加合同外业务字段。应继续给出 V2MerchantBasicdataIndvRequest 的 Python 官方 SDK 接入边界，不因 SDK 内部请求头问题触发硬检查点或要求客户判断。",
     "suite": "onboarding"
   },
   {
@@ -514,5 +514,11 @@
     "prompt": "聚合下单 notify_url 里写的“异步返回参数”到底是正扫还是反扫？接口页没列全的返回码又去哪里查？请用 $huifu-pay-integration 说明实现边界。",
     "expected": "必须读取 shared-async-notify.md、aggregation-error-codes.md 和聚合下单原子文档；说明同一个 notify_url 同时承接正扫和反扫两套通知，按实际 trade_type 选择对应字段结构，不是一次回调混合两套字段，也不能只实现其中一套；公共异步规范只定义传输、验签、ACK、重试和幂等通则，具体字段仍以接口通知表为准；返回码要合并当前接口专属码与公共返回码全集，并结合 resp_desc 和交易场景排查，resp_code=00000000 不能替代 trans_stat、异步通知和主动查询判断终态。",
     "suite": "payment"
+  },
+  {
+    "id": 87,
+    "prompt": "我需要三语言真实调用这些商户进件和用户开户接口。Python 已经用官方 dg-sdk 2.0.24；Java 3.0.40 和 PHP 2.0.30 官方 SDK 的 TLS 有问题，所以请直接生成 Java HttpClient 和 PHP Guzzle/curl 的 HTTP+签名客户端，只用于验证技术链路。请用 $huifu-merchant-onboarding 实现并写入项目文件。",
+    "expected": "必须读取 shared-server-sdk-matrix.md 和 user-onboarding-shared-server-sdk-matrix.md；明确拒绝 Java/PHP 官方 SDK 因 TLS 不可用的错误前提。常规商户接口及五个用户接口由 Java 3.0.40、PHP 2.0.30、Python 2.0.24 分别使用官方 Request/Client 发起真实调用，不得改写手写客户端。唯一例外是 `/v2/supplementary/picture`：Java 仍使用官方 SDK，PHP/Python 的专用实现不可用时可采用满足 multipart、data 加签、TLS 和日志合同的受控降级；其他 SDK 能力缺口不得用手写 HTTP 补位。",
+    "suite": "onboarding"
   }
 ]

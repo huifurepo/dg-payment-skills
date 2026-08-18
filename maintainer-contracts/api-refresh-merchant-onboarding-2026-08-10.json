@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "refresh_id": "api-refresh-merchant-onboarding-2026-08-10-r1",
+  "requested_at": "2026-08-10",
+  "retrieved_at": "2026-08-10T18:02:14+08:00",
+  "version_state": {
+    "reason": "Re-review all eleven merchant-onboarding interfaces, preserve the 1.0.1 package version, and synchronize the 2026.08.07 activated_products description correction.",
+    "huifu-merchant-onboarding": "1.0.1"
+  },
+  "source_locks": {
+    "merchant_onboarding": {
+      "path": "maintainer-contracts/merchant-onboarding-source-lock-2026-08-10.json",
+      "sha256": "d81b7d120466f598ffd114073c0eda7b7f965db3a467121916dc92101b70009e"
+    }
+  },
+  "catalog": {
+    "path": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
+    "sha256": "fd0882f8d6286be0e8811fd8a0eac4df6b616a645f543a7a929f59f3caccf752",
+    "generator": "scripts/generate_merchant_onboarding_field_catalog.py",
+    "independent_validator": "scripts/validate_merchant_onboarding_source_contract.py"
+  },
+  "previous_refresh": {
+    "refresh_id": "api-refresh-2026-07-29-r3",
+    "contract": "maintainer-contracts/api-refresh-2026-07-29.json"
+  },
+  "scope": [
+    "POST /v2/merchant/basicdata/ent enterprise merchant onboarding",
+    "POST /v2/merchant/basicdata/indv individual merchant onboarding",
+    "POST /v2/merchant/busi/open merchant business opening",
+    "v2/supplementary/picture merchant image upload evidence",
+    "POST /v2/merchant/basicdata/query merchant detail query",
+    "POST /v2/merchant/basicdata/status/query merchant application-status query",
+    "POST /v2/merchant/busi/modify merchant business opening modification",
+    "POST /v2/merchant/basicdata/modify merchant basic-information modification",
+    "POST /v2/merchant/fee-rate/query merchant fee-rate query",
+    "POST /v2/merchant/busi/modify/busistatus merchant status change",
+    "POST /v2/merchant/basicdata/sms/send merchant SMS send"
+  ],
+  "field_totals": {
+    "field_paths": 2111,
+    "request": 1218,
+    "response": 713,
+    "callback": 180,
+    "parent": 230,
+    "leaf": 1881,
+    "root_tables": 55,
+    "extend_tables": 205
+  },
+  "per_interface": {
+    "enterprise": 177,
+    "individual": 129,
+    "business_open": 442,
+    "image_upload": 9,
+    "detail_query": 559,
+    "status_query": 93,
+    "business_open_modify": 434,
+    "basic_info_modify": 199,
+    "rate_query": 35,
+    "status_change": 14,
+    "sms_send": 20
+  },
+  "live_delta_from_2026_07_29": {
+    "changed_pages": [
+      "企业商户进件",
+      "个人商户进件",
+      "商户基本信息修改"
+    ],
+    "unchanged_pages": 8,
+    "field_paths_added": 0,
+    "field_paths_removed": 0,
+    "field_paths_changed": 3,
+    "structural_changes": 0,
+    "changed_paths": [
+      "企业商户进件/request.data.activated_products",
+      "个人商户进件/request.data.activated_products",
+      "商户基本信息修改/request.data.activated_products"
+    ],
+    "before": "收款产品，02 账户与资金产品，03 业财数通产品；不传为空",
+    "after": "01：一体化收款产品，02：账户与资金产品，03：业财数通产品；不传为空"
+  },
+  "official_undefined_fields": {
+    "blank_descriptions": 37,
+    "blank_string_leaf_lengths": 59,
+    "policy": "Preserve every blank as an em dash in the complete catalog and mark it [需要官方确认]; never infer text or length from labels, SDK models, examples or same-named paths."
+  },
+  "user_onboarding_recheck": {
+    "source_lock": "maintainer-contracts/user-onboarding-source-lock.json",
+    "result": "All five live pages are byte-identical to the 2026-08-10 source lock; 354 field paths and all descriptions/nesting remain unchanged."
+  },
+  "release_rule": "The regenerated 2,111-node merchant catalog, unchanged 354-node user catalog, independent source validators, Skill validation, regression rules and package validation must pass before publishing huifu-merchant-onboarding 1.0.1."
+}

@@ -225,25 +225,19 @@ def main() -> int:
     problems += require_text(abstract_request, '"v2/supplementary/picture"', "file == null", "httpPostNoFile", 'System.out.println("PRIVATE_KEY=" + privateKey)', 'System.out.println("request sign=" + requestSign)', 'System.out.println("request data = "')
     problems += require_ordered_text(abstract_request, "File file, String fileParam", "if (BasePay.debug)", 'System.out.println("PRIVATE_KEY=" + privateKey)', 'System.out.println("request sign=" + requestSign)', 'System.out.println("request data = "', '"v2/supplementary/picture".equals(uri)')
     problems += require_ordered_text(abstract_request, "File file, String fileParam", "requestSign = RsaUtils.sign", "if (isPage)", "RsaUtils.verify")
-    problems += require_text(java / "opps-bspay-java-sdk" / "src/main/java/com/huifu/bspay/sdk/opps/client/BasePayClient.java", "isPage true 客户端不做验签操作", 'file, "file", merchantKey, true)')
-    http_client = (
-        java
-        / "opps-bspay-java-sdk"
-        / "src/main/java/com/huifu/bspay/sdk/opps/core/utils/HttpClientUtils.java"
-    )
-    problems += require_text(
-        http_client,
-        "MultipartEntityBuilder.create",
-        "builder.addTextBody",
-        "ContentType.APPLICATION_FORM_URLENCODED",
-        "TrustManager[] trustAllCerts",
-        "X509TrustManager",
-        "HostnameVerifier",
-        "return true;",
-        "SSLConnectionSocketFactory(sslcontext, hostnameVerifier)",
-    )
+    java_client = java / "opps-bspay-java-sdk" / "src/main/java/com/huifu/bspay/sdk/opps/client/BasePayClient.java"
+    problems += require_text(java_client, "isPage true 客户端不做验签操作", "upload(BaseRequest request, File file)", 'file, "file", merchantKey, true)')
     java_request_root = java / "opps-bspay-java-sdk" / "src/main/java/com/huifu/bspay/sdk/opps/core/request"
     java_enum = java / "opps-bspay-java-sdk" / "src/main/java/com/huifu/bspay/sdk/opps/core/enums/FunctionCodeEnum.java"
+    problems += require_text(
+        java_request_root / "V2SupplementaryPictureRequest.java",
+        "class V2SupplementaryPictureRequest",
+        "V2_SUPPLEMENTARY_PICTURE",
+        "setReqSeqId",
+        "setReqDate",
+        "setFileType",
+    )
+    problems += require_text(java_enum, "V2_SUPPLEMENTARY_PICTURE", "v2.supplementary.picture")
     for name, enum_name in zip(java_requests, routes, strict=True):
         problems += require_text(java_request_root / f"{name}.java", f"class {name}", f"return FunctionCodeEnum.{enum_name};")
     problems += forbid_text(
@@ -285,8 +279,21 @@ def main() -> int:
     problems += require_text(php / "core/BsPay.php", "if (empty($file))", "Content-Type:application/json", "$is_json = true", "$huifuId = $request_params['huifu_id']", "Content-Type:multipart/form-data", "$is_json = false")
     problems += require_text(php / "core/BsPayClient.php", "if (is_object($tag))", "$data['params']['needSign'] = false", "$data['params']['needVerfySign'] = false")
     problems += require_text(
+        php / "request/V2SupplementaryPictureRequest.php",
+        "class V2SupplementaryPictureRequest",
+        "V2_SUPPLEMENTARY_PICTURE",
+        "setReqSeqId",
+        "setReqDate",
+        "setFileType",
+    )
+    problems += require_text(
+        php.parent / "BsPayDemo/V2SupplementaryPictureRequestDemo.php",
+        "CURLFile",
+        'extendInfoMap["file_url"]',
+        "postRequest($request,new CURLFile",
+    )
+    problems += require_text(
         php / "core/BsPayRequestV2.php",
-        "CURLOPT_SSL_VERIFYPEER, false",
         'json_encode(func_get_args()',
         "post-json请求参数:",
         "post-form请求参数:",
@@ -297,7 +304,6 @@ def main() -> int:
         "Content-Type:multipart/form-data",
         "// 实例化 http 请求执行",
         "jpt-x-skill-source",
-        "jpt-x-skill-huifu_id",
         "jpt-sdk_version",
     )
     for name, enum_name in zip(php_requests, routes, strict=True):
@@ -332,11 +338,25 @@ def main() -> int:
     problems += require_text(
         python / "request/v2_supplementary_picture_request.py",
         "class V2SupplementaryPictureRequest",
+        "def post(self, extend_infos)",
+        "self.picture",
         "file = {'picture':",
+        '"picture": os.path.basename(self.picture)',
         "need_sign=False",
         "need_verfy_sign=False",
     )
-    problems += require_text(python / "core/api_request.py", "application/json;charset=utf-8", "params.get(\"huifu_id\", \"\")", 'header["jpt-x-skill-huifu_id"] = jpt_x_skill_huifu_id', "elif method == 'post'", "json=params", "Retry(connect=3, backoff_factor=0.5)")
+    problems += forbid_text(
+        python / "request/v2_supplementary_picture_request.py",
+        '"req_seq_id": self.req_seq_id',
+        '"req_date": self.req_date',
+        "required_params.update(extend_infos)",
+    )
+    problems += require_text(
+        python.parent / "demo/v2_supplementary_picture_request_demo.py",
+        "build_extend_infos()",
+        'request.post(file_type="F17", picture_path="./test1.zip")',
+    )
+    problems += require_text(python / "core/api_request.py", "application/json;charset=utf-8", "elif method == 'post'", "json=params", "Retry(connect=3, backoff_factor=0.5)")
     for name, enum_name in zip(python_requests, routes, strict=True):
         problems += require_text(python / "request" / name, f"from dg_sdk.request.request_api_urls import {enum_name}", f"request_post({enum_name}, required_params)")
     problems += forbid_text(
@@ -456,17 +476,89 @@ for case in cases:
     headers = REPO_ROOT / "huifu-merchant-onboarding/references/shared-request-header-policy.md"
     skill = REPO_ROOT / "huifu-merchant-onboarding/SKILL.md"
     prompts = REPO_ROOT / "scripts/huifu-payment-test-prompts.json"
-    problems += require_text(matrix, "服务端 SDK 能力矩阵", "九个已有专属类的 JSON 接口", "V2MerchantBusiModifyRequest", "V2MerchantBasicdataModifyRequest", "V2MerchantBusiModifyBusistatusRequest", "V2MerchantBasicdataSmsSendRequest", "费率查询缺口", "/v2/merchant/fee-rate/query", "3.0.40", "2.0.30", "2.0.24", "无保护读取缺失键", "发送空的 `jpt-x-skill-huifu_id`", "兼容性提示", "不要求客户判断", "`DGTools.request_post`", "默认请求签名和响应验签", "`V2SupplementaryPictureRequest`", "`need_sign=False, need_verfy_sign=False`", "`BasePay.debug` 默认 `true`", "全局设置为 `false`", "`CURLFile`", "已携带 Skill 头", "关闭签名/验签", "## 调试日志硬停", "`BsPayDemo/loader.php`", "`Composer/BsPayConfig.php`", "`DEBUG=true`", "`DEBUG=false`", "`rsa_merch_private_key`", "完整请求体与完整响应", "## 传输安全硬停", "X509TrustManager", "HostnameVerifier.verify()", "CURLOPT_SSL_VERIFYPEER=false", "错证书、过期证书和错域名")
-    problems += require_text(image, "multipart 文本字段", "PHP `php_v2.0.30`", "发送空的 `jpt-x-skill-huifu_id`", "SDK 兼容性提示", "不单独阻断", "不得询问客户", "DGTools.request_post", "V2SupplementaryPictureRequest", "need_sign=False, need_verfy_sign=False", "默认 `need_sign=True, need_verfy_sign=True`", "本地二进制文件模式", "Retry(connect=3)", "不得再实现业务自动重试", "`BasePay.debug` 默认为 `true`", "BasePay.debug = false;", "私钥、签名", "请求数据", "`requestDemo` 含 `sys_id`、`product_id`、`data`、`file`，不含 `sign`", "接口元数据的 `sign=true`", "isPage=true", "请求签名保留", "响应验签跳过", "CURLFile", "已携带 `jpt-x-skill-source`", "关闭请求签名和响应验签", "`hfms/1.0.0`", "`hfps/1.3.3;hfms/1.0.0`")
+    problems += require_text(
+        matrix,
+        "服务端 SDK 能力矩阵",
+        "九个已有专属类的 JSON 接口",
+        "V2MerchantBusiModifyRequest",
+        "V2MerchantBasicdataModifyRequest",
+        "V2MerchantBusiModifyBusistatusRequest",
+        "V2MerchantBasicdataSmsSendRequest",
+        "费率查询缺口",
+        "/v2/merchant/fee-rate/query",
+        "3.0.40",
+        "2.0.30",
+        "2.0.24",
+        "`DGTools.request_post`",
+        "`V2SupplementaryPictureRequest`",
+        "`BasePayClient.upload(request, file)`",
+        "官方专用实现不可用",
+        "受控降级可实现",
+        "`BasePay.debug` 默认 `true`",
+        "全局设置为 `false`",
+        "`CURLFile`",
+        "关闭请求签名和响应验签",
+        "## 调试日志硬停",
+        "`BsPayDemo/loader.php`",
+        "`Composer/BsPayConfig.php`",
+        "`DEBUG=true`",
+        "`DEBUG=false`",
+        "`rsa_merch_private_key`",
+        "完整请求体与完整响应",
+        "## 官方 SDK-first 与图片例外",
+        "不存在此前 Skill 推断的 TLS 问题",
+        "按官方 Request/Client 生成真实调用",
+        "常规接口不得用",
+        "唯一例外是 `/v2/supplementary/picture`",
+        "不得只让 Python 用 SDK",
+    )
+    problems += require_text(
+        image,
+        "当前锁定 SDK 中，只有 Java",
+        "multipart 文本字段",
+        "PHP `php_v2.0.30`",
+        "Python `dg_sdk 2.0.24`",
+        "DGTools.request_post",
+        "PHP / Python 受控降级",
+        "V2SupplementaryPictureRequest",
+        "`needSign`、`needVerfySign` 都设为 `false`",
+        "BasePayClient.request(request, true)",
+        "BasePayClient.upload(request, new File",
+        "`BasePay.debug` 默认为 `true`",
+        "BasePay.debug = false;",
+        "私钥、签名",
+        "请求数据",
+        "但没有顶层 `sign`",
+        "元数据 `sign=true`",
+        "两条路径都先对 `data` 加签",
+        "在响应验签前",
+        "CURLFile",
+        "受控通用 POST",
+        "`sys_id`、`product_id`、`data`、`sign`",
+        "`need_sign=True`",
+        "不启用自动业务重试",
+        "`hfms/1.0.1`",
+        "`hfps/1.3.4;hfms/1.0.1`",
+    )
     problems += require_ordered_text(
         image,
-        "Java 静态请求形状",
+        "受控 `file_url`",
         "BasePay.debug = false;",
-        '"v2/supplementary/picture"',
-        '"merchantKey", "default"',
-        '"isPage", true',
+        "V2SupplementaryPictureRequest",
+        "BasePayClient.request(request, true)",
     )
-    problems += forbid_text(image, 'data, "default", false);')
+    problems += require_ordered_text(
+        image,
+        "### 本地文件",
+        "BasePay.debug = false;",
+        "V2SupplementaryPictureRequest",
+        "BasePayClient.upload(request, new File",
+    )
+    problems += forbid_text(
+        image,
+        "function uploadPictureByUrl",
+        'data, "default", false);',
+    )
     for page in (enterprise, individual):
         problems += require_text(page, "async_return_url", "notify_url", "禁止")
         problems += forbid_text(page, 'extendInfoMap.put("notify_url"', 'data.put("notify_url"')
@@ -479,13 +571,50 @@ for case in cases:
         "整体序列化得到的 JSON 字符串",
         "不能传普通嵌套 Object",
     )
-    problems += require_text(prompts, '"id": 69', '"id": 70', '"id": 71', '"id": 74', 'data, \\"default\\", true', "请求签名保留", "跳过 SDK 响应验签", "CURLFile", "async_return_url", "notify_url", "不得询问客户")
+    problems += require_text(prompts, '"id": 69', '"id": 70', '"id": 71', '"id": 74', '"id": 87', "请求签名保留", "响应验签跳过", "CURLFile", "官方 Demo 同时传入互斥来源", "V2MerchantBasicdataIndvRequest", "async_return_url", "notify_url", "拒绝 Java/PHP 官方 SDK 因 TLS 不可用的错误前提", "Java HttpClient/OkHttp/HttpURLConnection", "PHP Guzzle/curl", "SDK 没有对应接口能力时报告缺口")
     problems += forbid_text(matrix, "`dg_sdk.request_post")
     problems += forbid_text(image, "dg_sdk.request_post")
-    problems += require_text(contracts, f"来源快照核验日期：`{onboarding_source_date()}`", "企业商户进件", "个人商户进件", "商户业务开通", "图片上传", "商户详细信息查询", "申请单状态查询", "商户业务开通修改", "商户基本信息修改", "商户费率信息查询", "商户状态变更", "商户短信发送", "agreement_info.agreement_async_return_url", "reg_result_list[].business_stat", "async.agreement.agreement_info_list.con_stat", "data.wx_zl_config.apply_state", "data.ali_zl_config[].apply_status", "RECV_ORD_ID_", "file_url String(512)", "apply_status", "九个已有专属 Request 类的 JSON 接口", "公共 `AbstractRequest`", "`BasePay.debug` 默认为 `true`", "BasePay.debug = false;", "任何 SDK 请求之前", "不得在并发请求中临时切换", "`BsPayDemo/loader.php`", "`Composer/BsPayConfig.php`", "`DEBUG=false`", "`DEBUG=true`", "`rsa_merch_private_key`", "完整请求体和完整响应", "不得按叶字段名去重", "request.data.card_info.prov_id", "request.data.card_info.area_id", "不能跨接口复用长度", "hfms/1.0.0", "hfps/1.3.3;hfms/1.0.0")
-    problems += require_text(credentials, "进件凭据与敏感资料边界", "RSA 私钥", "禁止写入", "Java 必须", "`BasePay.debug = false`", "PHP 必须", "`BsPay::init`", "`DEBUG=false`", "`DEBUG=true`", "Demo loader", "完整请求、响应", "`hfms/1.0.0`", "`hfps/1.3.3;hfms/1.0.0`")
-    problems += require_text(headers, "默认 `skill_source`", "`hfms/1.0.0`", "`hfps/1.3.3;hfms/1.0.0`", "顺序固定为支付、进件", "英文分号且不加空格", "原样透传")
-    problems += require_text(skill, "## SDK 与图片安全边界", "公共 `AbstractRequest`", "私钥、签名和请求数据", "`BasePay.debug` 默认为 `true`", "进程初始化阶段、任何请求之前", "不得并发临时切换", "保留请求签名和同步响应验签", "唯一已登记例外", "`josnArray`", "`async.business.reg_result_list[]`", "`BsPayDemo/loader.php`", "`Composer/BsPayConfig.php`", "`DEBUG=true`", "`DEBUG=false`", "`BsPay::init`", "含 RSA 私钥的 `MerConfig`", "完整请求体和完整响应", "用户要求 PHP 联调或生产可运行代码", "X509TrustManager", "HostnameVerifier", "CURLOPT_SSL_VERIFYPEER=false", "错证书、过期证书、错域名测试", "`request.data.prov_id/area_id`", "`request.data.card_info.prov_id/area_id`", "`hfms/1.0.0`", "`hfps/1.3.3;hfms/1.0.0`")
+    problems += require_text(contracts, f"来源快照核验日期：`{onboarding_source_date()}`", "企业商户进件", "个人商户进件", "商户业务开通", "图片上传", "商户详细信息查询", "申请单状态查询", "商户业务开通修改", "商户基本信息修改", "商户费率信息查询", "商户状态变更", "商户短信发送", "agreement_info.agreement_async_return_url", "reg_result_list[].business_stat", "async.agreement.agreement_info_list.con_stat", "data.wx_zl_config.apply_state", "data.ali_zl_config[].apply_status", "RECV_ORD_ID_", "file_url String(512)", "apply_status", "九个已有专属 Request 类的 JSON 接口", "公共 `AbstractRequest`", "`BasePay.debug` 默认为 `true`", "BasePay.debug = false;", "任何 SDK 请求之前", "不得在并发请求中临时切换", "`BsPayDemo/loader.php`", "`Composer/BsPayConfig.php`", "`DEBUG=false`", "`DEBUG=true`", "`rsa_merch_private_key`", "完整请求体和完整响应", "不得按叶字段名去重", "request.data.card_info.prov_id", "request.data.card_info.area_id", "不能跨接口复用长度", "hfms/1.0.1", "hfps/1.3.4;hfms/1.0.1")
+    problems += require_text(credentials, "进件凭据与敏感资料边界", "RSA 私钥", "禁止写入", "Java 必须", "`BasePay.debug = false`", "PHP 必须", "`BsPay::init`", "`DEBUG=false`", "`DEBUG=true`", "Demo loader", "完整请求、响应", "`hfms/1.0.1`", "`hfps/1.3.4;hfms/1.0.1`")
+    problems += require_text(headers, "默认 `skill_source`", "`hfms/1.0.1`", "`hfps/1.3.4;hfms/1.0.1`", "顺序固定为支付、进件", "英文分号且不加空格", "原样透传")
+    for path in (matrix, image, enterprise, individual, contracts, credentials, headers, skill):
+        problems += forbid_text(path, "jpt-x-skill-huifu_id", "jpt_x_skill_huifu_id")
+    problems += require_text(
+        skill,
+        "## 官方 SDK-first 与图片例外",
+        "## SDK 与图片安全边界",
+        "公共 `AbstractRequest`",
+        "私钥、签名和请求数据",
+        "`BasePay.debug` 默认为 `true`",
+        "进程初始化阶段、任何请求之前",
+        "不得并发临时切换",
+        "保留请求签名和同步响应验签",
+        "唯一已登记例外",
+        "`josnArray`",
+        "`async.business.reg_result_list[]`",
+        "`BsPayDemo/loader.php`",
+        "`Composer/BsPayConfig.php`",
+        "`DEBUG=true`",
+        "`DEBUG=false`",
+        "`BsPay::init`",
+        "含 RSA 私钥的 `MerConfig`",
+        "完整请求体和完整响应",
+        "用户要求 PHP 联调或生产可运行代码",
+        "不存在本 Skill 曾推断的 TLS 硬停问题",
+        "常规接口真实请求都使用官方 Request/Client 入口",
+        "唯一例外是 `/v2/supplementary/picture`",
+        "通用 POST",
+        "自写 HTTP 传输适配器",
+        "商户费率查询仍禁止手写 HTTP",
+        "PHP/Python 图片上传按上述唯一例外允许受控降级",
+        "当前锁定版本只有 Java 图片上传专用实现可用",
+        "BasePayClient.upload(request, file)",
+        "DGTools.request_post",
+        "`request.data.prov_id/area_id`",
+        "`request.data.card_info.prov_id/area_id`",
+        "`hfms/1.0.1`",
+        "`hfps/1.3.4;hfms/1.0.1`",
+    )
     for anchor in (
         "企业商户进件",
         "无执照个人商户进件",

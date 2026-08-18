@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SUITES = {
     "payment": ROOT / "huifu-pay-integration/references",
     "onboarding": ROOT / "huifu-merchant-onboarding/references",
+    "user-onboarding": ROOT / "huifu-merchant-onboarding/references",
 }
 REFERENCE_PATTERN = re.compile(r"`([^`/]+\.md)`")
 

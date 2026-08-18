@@ -19,7 +19,7 @@ GENERATOR = ROOT / "scripts/generate_merchant_onboarding_field_catalog.py"
 EXTERNAL_INDEX = (
     ROOT / "huifu-merchant-onboarding/references/merchant-onboarding-external-resources.md"
 )
-SOURCE_LOCK = ROOT / "maintainer-contracts/merchant-onboarding-source-lock.json"
+SOURCE_LOCK = ROOT / "maintainer-contracts/merchant-onboarding-source-lock-2026-08-10.json"
 
 EXPECTED_COUNTS = {
     "企业商户进件": 177,

@@ -11,7 +11,8 @@
 
 - Java `file_url` 模式通过图片 URI 特判发送 multipart 文本字段。
 - 末参必须使用 `isPage=true`：请求签名保留，响应验签跳过。
-- PHP `CURLFile` 和 Python 本地文件路径没有形成安全一致的跨语言证据，不能生成本地文件流实现。
+- PHP/Python 专用生成实现不可直接使用，但允许为 `/v2/supplementary/picture` 生成受控通用 POST 或自写 HTTPS 适配器：对排序后的 `data` JSON 使用 V2 RSA 规则加签，multipart 文本字段固定为 `sys_id`、`product_id`、`data`、`sign`，本地文件额外使用顶层 `file`。
+- 该例外只放开传输实现，不放开免签、关闭 TLS、猜测响应字段或自动重试；响应含 `sign` 时按 V2 规则验签，不含时只保留原始响应边界。
 
 ## 通知例外
 

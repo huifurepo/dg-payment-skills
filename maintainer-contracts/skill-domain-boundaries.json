@@ -1,6 +1,7 @@
 {
   "schema_version": 2,
   "merchant_field_catalog": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
+  "user_field_catalog": "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md",
   "skills": {
     "huifu-pay-integration": {
       "allowed_merchant_field_identifiers": [
@@ -65,7 +66,17 @@
         "V2MerchantBusiModifyBusistatusRequest",
         "V2MerchantBusiModifyRequest",
         "V2MerchantBusiOpenRequest",
-        "V2SupplementaryPictureRequest"
+        "V2SupplementaryPictureRequest",
+        "/v2/user/basicdata/ent",
+        "/v2/user/basicdata/indv",
+        "/v2/user/busi/open",
+        "/v2/user/apply/query",
+        "/v2/user/basicdata/query",
+        "V2UserBasicdataEntRequest",
+        "V2UserBasicdataIndvRequest",
+        "V2UserBusiOpenRequest",
+        "V2UserApplyQueryRequest",
+        "V2UserBasicdataQueryRequest"
       ]
     },
     "huifu-merchant-onboarding": {

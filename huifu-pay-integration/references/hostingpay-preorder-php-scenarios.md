@@ -1,6 +1,6 @@
 # PHP 场景示例
 
-> 🔴 TLS 硬停：锁定的 PHP `2.0.30` 关闭对端证书校验。本页所有片段只用于静态字段/SDK 形态审查，不得执行真实网络调用，不得用于联调或生产；解除条件是启用证书链与主机名校验并通过错证书/错域名测试。
+> 真实请求只使用官方 PHP SDK 的 `BsPayClient::postRequest()`；不得改写 Guzzle、curl 或自实现 HTTP+签名客户端。联调/生产仍须满足共享凭据边界和 DEBUG 硬检查点。
 
 
 ## 目录
@@ -10,7 +10,7 @@
 - 抖音直连下单
 - 支付宝小程序预下单
 - 微信小程序预下单
-- 未来安全制品约束
+- SDK 调用约束
 
 本文件只覆盖托管支付 PHP 场景。
 
@@ -57,7 +57,8 @@ $requestShape = (static function (array $request): array { return $request; })([
     ],
 ]);
 
-$response = []; // 仅展示响应白名单形态；不得伪造网络响应
+$result = $client->postRequest($requestShape);
+$response = $result->getRspDatas()['data'] ?? [];
 $jumpUrl = $response['jump_url'] ?? '';
 ```
 
@@ -106,6 +107,8 @@ $requestShape = (static function (array $request): array { return $request; })([
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
     ],
 ]);
+$result = $client->postRequest($requestShape);
+$response = $result->getRspDatas()['data'] ?? [];
 ```
 
 字段拆分：
@@ -145,6 +148,8 @@ $requestShape = (static function (array $request): array { return $request; })([
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
     ],
 ]);
+$result = $client->postRequest($requestShape);
+$response = $result->getRspDatas()['data'] ?? [];
 ```
 
 可选增强字段：
@@ -209,6 +214,8 @@ $requestShape = (static function (array $request): array { return $request; })([
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
     ],
 ]);
+$result = $client->postRequest($requestShape);
+$response = $result->getRspDatas()['data'] ?? [];
 ```
 
 可选增强字段：
@@ -239,7 +246,7 @@ $optionalPayload = [
 2. 场景必填是 `miniapp_data.seq_id`；如果要走 scheme 回跳，再补 `need_scheme=Y`。
 3. `acct_split_bunch`、`biz_info`、`wx_data.sub_openid` 都属于条件字段，必须来自真实授权或订单上下文，不能照抄 demo 占位值。
 
-## 未来安全制品约束
+## SDK 调用约束
 
 1. 官网 demo 里的 JSON 字段看起来像普通字符串，实际都应由 `json_encode(..., JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)` 编码而来，不要手写拼接 JSON。
 2. `delay_acct_flag`、`acct_split_bunch`、`biz_info` 在官方 demo 里经常出现，但都属于条件字段，只有业务场景需要时才上送。

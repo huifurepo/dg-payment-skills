@@ -57,6 +57,11 @@ DESCRIPTION_REQUIRED_TERMS = {
         "短信",
         "商户详情",
         "申请状态",
+        "企业用户",
+        "个人用户",
+        "用户业务入驻",
+        "用户申请单",
+        "用户信息查询",
         "支付下单",
         "支付终态",
         "huifu-pay-integration",
@@ -73,6 +78,7 @@ def main() -> int:
     validate_agents_files(state)
     validate_entry_docs(state)
     validate_regression_metadata(state)
+    validate_user_onboarding_reference_contract(state)
     validate_python_prod_contract(state)
     validate_reference_navigation(state)
     validate_reference_reachability(state)
@@ -525,10 +531,10 @@ def validate_regression_metadata(state: ValidationState) -> None:
         suite: sum(1 for item in prompts if item.get("suite") == suite)
         for suite in ("payment", "onboarding")
     }
-    if suite_counts != {"payment": 57, "onboarding": 29}:
+    if suite_counts != {"payment": 57, "onboarding": 30}:
         state.error(f"regression ownership/count changed unexpectedly: {suite_counts}")
     else:
-        state.ok("86 cases have unique payment=57/onboarding=29 ownership")
+        state.ok("87 cases have unique payment=57/onboarding=30 ownership")
     expected_suite_files = {
         "payment": [item for item in prompts if item.get("suite") == "payment"],
         "onboarding": [item for item in prompts if item.get("suite") == "onboarding"],
@@ -542,16 +548,32 @@ def validate_regression_metadata(state: ValidationState) -> None:
             state.ok(f"{suite}: generated regression suite matches canonical prompts")
     cross_file = REPO_ROOT / "tests/regression/cross-route.json"
     cross_cases = json.loads(cross_file.read_text(encoding="utf-8"))
-    if len(cross_cases) != 31 or any(item.get("suite") != "cross-route" for item in cross_cases):
-        state.error("cross-route regression suite must contain 31 tagged cases")
+    if len(cross_cases) != 35 or any(item.get("suite") != "cross-route" for item in cross_cases):
+        state.error("cross-route regression suite must contain 35 tagged cases")
     else:
-        state.ok("cross-route regression suite count OK: 31")
+        state.ok("cross-route regression suite count OK: 35")
+
+    user_file = REPO_ROOT / "tests/regression/user-onboarding.json"
+    user_cases = json.loads(user_file.read_text(encoding="utf-8"))
+    user_ids = {int(item["id"]) for item in user_cases}
+    missing_user_rules = sorted(user_ids - rule_ids)
+    if (
+        len(user_cases) != 11
+        or any(item.get("suite") != "user-onboarding" for item in user_cases)
+        or missing_user_rules
+    ):
+        state.error(
+            "user-onboarding regression suite must contain 11 tagged cases "
+            f"with rules; missing={missing_user_rules}"
+        )
+    else:
+        state.ok("user-onboarding regression suite count/rules OK: 11")
 
     smoke_match = re.search(r"SMOKE_CASE_IDS\s*=\s*\(([^)]*)\)", runner_text)
     smoke_ids = set()
     if smoke_match:
         smoke_ids = {int(value) for value in re.findall(r"\d+", smoke_match.group(1))}
-    required_smoke_ids = {34, 35, 36, 37, 38, 1001, 1002, 1019}
+    required_smoke_ids = {34, 35, 36, 37, 38, 201, 205, 207, 208, 1001, 1002, 1019, 1032}
     missing_smoke = sorted(required_smoke_ids - smoke_ids)
     if missing_smoke:
         state.error(f"smoke regression missing required 1.3.0 cases: {', '.join(map(str, missing_smoke))}")
@@ -559,9 +581,13 @@ def validate_regression_metadata(state: ValidationState) -> None:
         state.ok("smoke regression covers 1.3.0 field/API refresh cases")
 
     for spec in SKILL_SPECS:
-        canonical_file = spec.references_dir / "canonical-regression-prompts.md"
-        canonical_count = len(
-            re.findall(r"^### [CO]\d+", canonical_file.read_text(encoding="utf-8"), flags=re.M)
+        canonical_files = [spec.references_dir / "canonical-regression-prompts.md"]
+        user_canonical = spec.references_dir / "user-onboarding-canonical-regression-prompts.md"
+        if user_canonical.is_file():
+            canonical_files.append(user_canonical)
+        canonical_count = sum(
+            len(re.findall(r"^### [COU]\d+", path.read_text(encoding="utf-8"), flags=re.M))
+            for path in canonical_files
         )
         expected_count = spec.canonical_regression_count
         if canonical_count != expected_count:
@@ -585,6 +611,188 @@ def check_required_snippet(path: Path, text: str, snippet: str, state: Validatio
         state.error(f"{path} missing required route snippet: {snippet}")
         return
     state.ok(f"{path} route snippet OK: {snippet}")
+
+
+def validate_user_onboarding_reference_contract(state: ValidationState) -> None:
+    print("\n--- 用户开户冲突保真检查 ---")
+    root = REPO_ROOT / "huifu-merchant-onboarding"
+    required_terms = {
+        root / "SKILL.md": (
+            "条件必填",
+            "9个字段说明为空",
+            "15个标量长度为空",
+            "五页官网都把外层 `response.data`",
+            "父节点整体缺失",
+            "个人用户只允许 `card_type=1`",
+            "RECV_ORD_ID_` + `req_seq_id",
+            "user-onboarding-platform-contracts.md",
+            "官方 SDK-first 与图片例外",
+            "不存在本 Skill 曾推断的 TLS 硬停问题",
+            "常规接口真实请求都使用官方 Request/Client 入口",
+            "SDK 没有专属 Request/路由时",
+            "唯一例外是 `/v2/supplementary/picture`",
+            "PHP/Python 图片上传按上述唯一例外允许受控降级",
+            "商户费率查询仍禁止手写 HTTP",
+        ),
+        root / "references/shared-server-sdk-matrix.md": (
+            "只使用官方 Request/SDK 主链路",
+            "不存在此前 Skill 推断的 TLS 问题",
+            "按官方 Request/Client 生成真实调用",
+            "常规接口不得用",
+            "唯一例外是 `/v2/supplementary/picture`",
+            "受控降级",
+            "不得只让 Python 用 SDK",
+        ),
+        root / "references/user-onboarding-shared-server-sdk-matrix.md": (
+            "官方 SDK-only 传输规则",
+            "不存在此前 Skill 推断的 TLS 问题",
+            "五接口均使用各自官方 Request/Client",
+            "HttpClient",
+            "OkHttp",
+            "Guzzle",
+            "自实现签名/验签客户端",
+            "三语言交付分别使用官方 SDK",
+        ),
+        root / "references/user-onboarding-field-contracts.md": (
+            "五页正式公共返回表都把外层 `response.data` 标为 `N`",
+            "业务入驻类型列为 `String`",
+            "成功响应都包含原生 JSON Object",
+            "async.data.huifu_id:String(18) Y",
+            "条件必填",
+            "response.data.ent_base_info.file_list[]",
+            "response.data.indv_base_info.file_list[]",
+            "elec_acct_config.elec_card_list",
+            "out_settle_acct_type",
+            "weekday_fix_amt",
+            "weekday_fee_rate",
+            "response.data.elec_acct_config.elec_card_list[].mp",
+            "response.data.qry_cash_card_info_list[].branch_code",
+            "response.sign:String(512)",
+            "request.data.legal_name",
+            "request.data.legal_cert_no",
+            "个人用户只允许 `1`",
+            "RECV_ORD_ID_` + `req_seq_id",
+        ),
+        root / "references/user-onboarding-platform-contracts.md": (
+            "异步消息简介",
+            "SHA256WithRSA",
+            "原始 `data` 字符串",
+            "RECV_ORD_ID_` + `async.data.req_seq_id",
+            "控台 Webhook",
+            "个人用户只允许对私法人卡",
+            "成功响应返回 `apply_no`",
+            "wire 矩阵",
+            "response.data.qry_cash_card_info_list",
+        ),
+        root / "references/user-onboarding-business-open.md": (
+            "user-onboarding-complete-field-catalog.md",
+            "汇付客户号",
+            "userHuifuId",
+            "merchantHuifuId",
+            "constant_amt",
+            "fixed_ratio",
+            "card_info.card_name",
+            "response.data:String` 的必填列标为 `N`",
+            "个人用户只允许 `1`",
+            "RECV_ORD_ID_` + `req_seq_id",
+        ),
+        root / "references/user-onboarding-detail-query.md": (
+            "user-onboarding-complete-field-catalog.md",
+            "同一商户号当天唯一",
+            "response.data.ent_base_info.file_list[]",
+            "response.data.indv_base_info.file_list[]",
+            "elec_acct_config.elec_card_list",
+            "out_settle_acct_type",
+            "weekday_fix_amt",
+            "weekday_fee_rate",
+            "elec_card_list[].mp:String(11)",
+            "qry_cash_card_info_list[].branch_code",
+            "response.data:Json` 的官网必填列为 `N`",
+            "String(JSON Object)",
+            "card_type=1",
+        ),
+        root / "references/user-onboarding-individual.md": (
+            "必填列为 `N`",
+            "实名认证",
+            "用户业务入驻修改且电子回单配置开通",
+            "response.data:Json` 的官网必填列为 `N`",
+        ),
+        root / "references/user-onboarding-enterprise.md": (
+            "用户业务入驻修改且电子回单配置开通",
+            "姓名与证件实名认证",
+            "response.data:Json` 的官网必填列为 `N`",
+        ),
+        root / "references/user-onboarding-application-status-query.md": (
+            "user-onboarding-complete-field-catalog.md",
+            "用户信息查询页面也独立声明相同规则",
+            "不能外推成所有用户接口",
+            "`apply_status` | 官网必填列为 `N`",
+            "四种状态均返回",
+            "response.data:Json` 的官网必填列为 `N`",
+        ),
+        root / "references/user-onboarding-external-resources.md": (
+            "request.data.card_info.branch_code",
+            "response.data.elec_acct_config.elec_card_list[].branch_code",
+            "response.data.qry_cash_card_info_list[].branch_code",
+            "基础参数汇总",
+            "不是按同名叶字段猜测",
+        ),
+        root / "references/user-onboarding-shared-request-field-preservation.md": (
+            "申请状态查询和用户信息查询页面",
+            "同一商户号当天唯一",
+            "不得外推成所有用户接口",
+        ),
+        root / "references/user-onboarding-shared-overview.md": (
+            "条件选填",
+            "async.data.huifu_id",
+            "ent_base_info.file_list",
+            "out_settle_acct_type",
+            "weekday_fix_amt",
+            "weekday_fee_rate",
+            "9个空说明路径",
+            "15个空长度标量叶字段",
+        ),
+        REPO_ROOT / "maintainer-contracts/api-refresh-user-onboarding-2026-08-10.json": (
+            "request.data.*[required=C]",
+            "async.data.huifu_id",
+            "response.data.ent_base_info.file_list[]",
+            "response.data.indv_base_info.file_list[]",
+            "response.data.elec_acct_config.elec_card_list[]",
+            "response.data.settle_config_list[].out_settle_acct_type",
+            "response.data.qry_cash_config_list[].weekday_fix_amt|weekday_fee_rate",
+            "official_undefined_fields",
+            "official_request_example_anomalies_guarded",
+            "official_response_example_anomalies_guarded",
+            "official_example_shape_contract",
+            "page_field_notes_preserved",
+            "official_incomplete_links",
+            "official_ambiguous_semantics",
+            "public_sources",
+            "integration_decisions",
+        ),
+    }
+    failures: list[str] = []
+    for path, terms in required_terms.items():
+        text = path.read_text(encoding="utf-8")
+        missing = [term for term in terms if term not in text]
+        if missing:
+            failures.append(
+                f"{path.relative_to(REPO_ROOT)} missing {', '.join(missing)}"
+            )
+    if failures:
+        for failure in failures:
+            state.error(failure)
+        return
+    external_text = (
+        root / "references/user-onboarding-external-resources.md"
+    ).read_text(encoding="utf-8")
+    if "| 银行支行编码 | `branch_code` |" in external_text:
+        state.error(
+            "user-onboarding external resources must not map every branch_code leaf "
+            "to one URL"
+        )
+        return
+    state.ok("user-onboarding conflict, uniqueness and nested-path summaries are preserved")
 
 
 def validate_reference_navigation(state: ValidationState) -> None:

@@ -38,13 +38,13 @@ def main() -> int:
         "3.0.40",
         "2.0.30",
         "2.0.24",
-        "X509TrustManager",
-        "HostnameVerifier",
-        "通用 Java `3.0.40`",
-        "CURLOPT_SSL_VERIFYPEER=false",
-        "CURLOPT_SSL_VERIFYHOST",
+        "官方 SDK-only 传输规则",
+        "不存在本 Skill 曾从历史源码快照推断的 TLS 问题",
+        "三种语言的真实请求都使用官方 Request/facade/client",
+        "不得手写 HTTP 补位",
         "V2TradeHostingPaymentPreorderDyRequest",
     )
+    forbid(matrix, "## 传输安全硬停", "联调/生产可运行代码硬停")
 
     for filename in (
         "aggregation-java-sdk-quickstart.md",
@@ -184,15 +184,18 @@ def main() -> int:
         "Lightning Java `1.0.5`",
         "通用 Java `3.0.40`",
         "PHP `2.0.30`",
-        "错证书/错域名测试",
+        "## 官方 SDK-only 传输规则",
+        "不存在本 Skill 曾从历史源码快照推断的 TLS 问题",
+        "真实请求都必须使用对应官方 SDK",
+        "不得为了“规避 TLS”",
         "完整 DTO、完整响应、嵌套字段或同名字段核对",
         "references/payment-complete-field-catalog.md",
         "合同定位路径",
         "实际 JSON/解码路径",
         "不把官网展示分组当成 wire key",
         "按当前请求实际加载并参与生成的 Skill 集合取值",
-        "仅本 Skill 使用 `hfps/1.3.3`",
-        "两个 Skill 都参与当前请求时使用 `hfps/1.3.3;hfms/1.0.0`",
+        "仅本 Skill 使用 `hfps/1.3.4`",
+        "两个 Skill 都参与当前请求时使用 `hfps/1.3.4;hfms/1.0.1`",
         "顺序固定为支付、进件",
         "官方 `BsPayDemo/loader.php` 与 `Composer/BsPayConfig.php`",
         "加载任何 SDK 文件前固定 `DEBUG=false`",
@@ -201,8 +204,8 @@ def main() -> int:
     header_policy = read("shared-request-header-policy.md")
     require(
         header_policy,
-        "仅支付：hfps/1.3.3",
-        "支付 + 进件：hfps/1.3.3;hfms/1.0.0",
+        "仅支付：hfps/1.3.4",
+        "支付 + 进件：hfps/1.3.4;hfms/1.0.1",
         "双 Skill 顺序固定为支付、进件",
         "英文分号且不加空格",
         "原样透传该值，不再追加默认值",
@@ -349,20 +352,14 @@ def main() -> int:
         "hostingpay-refund-php-scenarios.md",
     ):
         text = read(filename)
-        require(
-            text,
-            "TLS 硬停",
-            "不得执行真实网络调用",
-            "不得用于联调或生产",
-            "错证书/错域名测试",
-        )
+        require(text, "官方", "SDK", "不得")
         executable_lines = [
             line
             for line in text.splitlines()
             if php_network_call.search(line.split("//", 1)[0])
         ]
-        assert not executable_lines, (
-            f"{filename}: executable PHP network calls remain: {executable_lines}"
+        assert executable_lines, (
+            f"{filename}: missing official PHP SDK network call"
         )
 
     print("payment first-review contract validated: security, routing and high-risk fields")

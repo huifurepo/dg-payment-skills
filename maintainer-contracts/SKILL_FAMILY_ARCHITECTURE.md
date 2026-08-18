@@ -3,7 +3,7 @@
 状态：已接受
 实施基线：`ff7b6acde574f498fde9c6f0763078b0e2eea3b7`
 首次拆分提交：`e12651efb2ed550af9c632d472cb39499a1746de`
-当前家族：支付 `1.3.3`、商户进件 `1.0.0`
+当前家族：支付 `1.3.4`、商户进件（含用户开户与入驻）`1.0.1`
 
 ## 决策
 
@@ -12,7 +12,7 @@
 ```text
 skills-manifest.json
 ├── huifu-pay-integration/          # 支付交易
-└── huifu-merchant-onboarding/      # 商户进件
+└── huifu-merchant-onboarding/      # 商户进件、用户开户与业务入驻
 ```
 
 用户只安装当前任务所需的完整 Skill 目录。跨域任务可以同时安装多个 Skill，但每个 Skill 必须独立完成入口路由、领域约束、reference 导航、版本说明和安全边界。
@@ -23,7 +23,7 @@ skills-manifest.json
 
 - 降低单个入口和 references 的认知负担。
 - 支付与进件可以独立加载、升级、回滚和发布。
-- 用户不必为纯支付问题加载 2,111 个进件字段节点。
+- 用户不必为纯支付问题加载2,465个进件与用户开户字段节点。
 - 领域通知、终态、安全规则不会被错误复用。
 - 新模块可以沿同一注册、打包和验证接口加入，不需要重新合并旧 Skill。
 
@@ -38,7 +38,7 @@ skills-manifest.json
 | 领域 | 所属 Skill | 不得承担 |
 | --- | --- | --- |
 | 支付下单、查询、关单、退款、对账、checkout-js、支付通知 | `huifu-pay-integration` | 企业/个人开户、材料、业务开通、进件状态 |
-| 企业/个人进件、图片上传、业务开通与修改、基础资料修改、费率、状态、短信和进件通知边界 | `huifu-merchant-onboarding` | 支付终态、退款、对账、支付 Webhook |
+| 企业/个人商户进件、图片上传、业务开通与修改，以及企业/个人用户开户、结算/取现/e账户业务入驻和用户查询 | `huifu-merchant-onboarding` | 支付终态、退款、对账、支付 Webhook；内部不得混用用户号与商户号 |
 
 跨域交接必须显式分段。例如“新商户接 JSAPI”先由进件 Skill 完成主体和业务准备，再由支付 Skill 完成交易接入；不能把进件同步响应当成可交易终态。
 
@@ -97,7 +97,7 @@ REPO_ONLY 2
 - `<skill-id>-<version>.zip.sha256`
 - `<skill-id>-<version>.provenance.json`
 
-验证器强制检查三者同时存在，并核对 archive SHA、Skill/版本、源提交、仓库状态、manifest SHA、reference manifest SHA、逐文件 SHA 和发布测试证据摘要。正式发布时，两个 provenance 都必须绑定三个真实模型 suite 的 `run-manifest.json` 与 `summary.json`，且带证据的包必须由发布门禁保留在全新的 `RELEASE_OUTPUT_DIR`；临时目录或另行手工打出的无证据包都不是正式发布物。缺少 sidecar、来源为 dirty 或包内出现另一个 Skill 都不能作为发布物。
+验证器强制检查三者同时存在，并核对 archive SHA、Skill/版本、源提交、仓库状态、manifest SHA、reference manifest SHA、逐文件 SHA 和发布测试证据摘要。正式发布时，两个 Skill 的 provenance 都必须绑定四个真实模型 suite 的 `run-manifest.json` 与 `summary.json`，且带证据的包必须由发布门禁保留在全新的 `RELEASE_OUTPUT_DIR`；临时目录或另行手工打出的无证据包都不是正式发布物。缺少 sidecar、来源为 dirty 或包内出现另一个 Skill 都不能作为发布物。
 
 ## 回归矩阵
 
@@ -105,7 +105,8 @@ REPO_ONLY 2
 | --- | --- | --- |
 | `payment` | `payment-only` | 纯支付问题可独立回答 |
 | `onboarding` | `onboarding-only` | 十一个进件接口可独立回答 |
-| `cross-route` | `both` | 正确选择 payment/onboarding/both |
+| `user-onboarding` | `user-onboarding-only`（加载进件 Skill） | 五个用户开户与入驻接口可独立回答 |
+| `cross-route` | `all-skills` | 正确选择 payment/onboarding/both，并在 onboarding 内区分 merchant/user 路由 |
 
 跨路由输出使用结构化 `路由结论`，并要求 reference 证据携带 Skill ID。单领域用例不能把另一个 Skill 误判为主路由；双领域用例必须为两个 Skill 分配独立子目标。
 
@@ -123,10 +124,10 @@ REPO_ONLY 2
 
 ## 发布与回滚
 
-- 支付和进件分别打 tag、生成包和记录 provenance。
+- 支付与商户进件分别打 tag、生成包和记录 provenance；用户开户能力随 `huifu-merchant-onboarding` 一同发布和回滚。
 - 仅某一领域变化时，只发布该 Skill。
 - 回滚以完整目录替换为单位，不混合新旧 references。
-- `skill_source` 显式合同时原样透传；缺失时按当前请求实际参与生成的 Skill 组合使用默认值：仅支付 `hfps/1.3.3`、仅进件 `hfms/1.0.0`、两者都实际参与时 `hfps/1.3.3;hfms/1.0.0`；仅安装或加载但未参与本次生成的不计入。
+- `skill_source` 显式合同时原样透传；缺失时支付使用 `hfps/1.3.4`，商户或用户接口都使用 `hfms/1.0.1`，两个 Skill 同时参与时使用 `hfps/1.3.4;hfms/1.0.1`；仅安装或加载但未参与本次生成的不计入。
 - 冻结沙箱 `huifu-pay-integration-1.3.0-r4` 不随拆分改名或重算。
 
 ## 评审结论
@@ -139,6 +140,6 @@ REPO_ONLY 2
 - provenance 和 SHA sidecar 必须是验证必需项；
 - 通用验证与打包必须由 manifest 驱动；
 - 独立包不能承诺读取包外维护文件；
-- 官方原文必须能机械重生成 2,111 字段目录，并由独立解析器全属性复核。
+- 官方原文必须能分别机械重生成商户2,111条和用户354条字段目录，并由独立解析器全属性复核。
 
 这些要求已作为当前架构的持续约束，而不是一次性人工检查。

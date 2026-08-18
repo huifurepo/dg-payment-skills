@@ -13,7 +13,7 @@
 | 初始化入口 | `MerConfig` + `BasePay.initWithMerConfig()` |
 | 主要调用方式 | `BasePayClient.request()` |
 
-通用 Java SDK 同样默认 `BasePay.debug=true`，且锁定源码的 HTTP 客户端信任所有证书并跳过主机名校验。初始化前必须全局设置 `BasePay.debug=false`；在官方安全制品或经批准传输层通过错证书、错域名测试前，不得生成联调或生产可运行代码。
+通用 Java SDK 默认 `BasePay.debug=true`。初始化前必须全局设置 `BasePay.debug=false`，真实请求统一使用官方 `BasePayClient` / Request 主链路；接入方已确认当前官方 SDK 不存在本 Skill 曾推断的 TLS 问题，不得改写 `HttpClient`、OkHttp 或自实现 HTTP+签名客户端。
 
 ## 先看哪些文件
 

@@ -46,7 +46,7 @@
 ## 企业商户进件
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_qyshjbxxrz_kyc.md>
-- SHA-256：`ce61c1f138252b0d7d29302db8d75ebc9337a25f75e38d3ec9a186d7c4e26e28`
+- SHA-256：`38e7958dd7370796f713558325f33ea92aff34c303f3430bc329c7b611f20e78`
 - 说明：下表保留官方字段类型、长度、必填标记和字段说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -207,7 +207,7 @@
 | `request.data.extended_material_list[]` | 扩展资料包 | `String` | `—` | `N` | jsonArray字符串；根据要求上传补充相关材料 |
 | `request.data.extended_material_list[].file_id` | 文件id | `String` | `64` | `Y` | 请填写图片file_id，可通过 [商户图片上传](https://paas.huifu.com/open/doc/api/#/shgl/shjj/api_shjj_shtpsc) 接口获取；示例值：57cc7f00-600a-33ab-b614-6221bbf2e529 |
 | `request.data.extended_material_list[].file_type` | 文件类型 | `String` | `64` | `Y` | [参见文件类型说明](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_wjlx)；示例值：F01 |
-| `request.data.activated_products` | 产品大类 | `String` | `—` | `N` | 收款产品，02 账户与资金产品，03 业财数通产品；不传为空示例值：01,02,03 |
+| `request.data.activated_products` | 产品大类 | `String` | `—` | `N` | 01：一体化收款产品，02：账户与资金产品，03：业财数通产品；不传为空 示例值：01,02,03 |
 | `request.data.material_card_info` | 对公卡信息 | `Object` | `—` | `N` | jsonObject字符串；商户对公账户信息配置，当非个体工商户的企业商户，card_info选择对私结算（含法人、非法人）时，需补充对公同名账户信息 |
 | `request.data.material_card_info.card_type` | 银行账户类型 | `String` | `—` | `N` | 对公，不填默认 0 |
 | `request.data.material_card_info.card_name` | 银行账户名称 | `String` | `—` | `N` | 账户名必须与营业执照名称一致 |
@@ -259,7 +259,7 @@
 ## 个人商户进件
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_grshjbxxrz_kyc.md>
-- SHA-256：`7d9f610e9df63c35b6f6c31a3e1e724c4fb2b4261acddf1c7a022228d6ca3321`
+- SHA-256：`3b3f9b47fd55120a4c8f2b4876cc1bdbd4ada9e15d2995bc261d74b88dba1867`
 - 说明：下表保留官方字段类型、长度、必填标记和字段说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -379,7 +379,7 @@
 | `request.data.extended_material_list[]` | 扩展资料包 | `String` | `—` | `N` | jsonArray字符串；根据要求上传补充相关材料 |
 | `request.data.extended_material_list[].file_id` | 文件id | `String` | `64` | `Y` | 请填写图片file_id，可通过 [商户图片上传](https://paas.huifu.com/open/doc/api/#/shgl/shjj/api_shjj_shtpsc) 接口获取；示例值：57cc7f00-600a-33ab-b614-6221bbf2e529 |
 | `request.data.extended_material_list[].file_type` | 文件类型 | `String` | `64` | `Y` | [参见文件类型说明](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_wjlx)；示例值：F01 |
-| `request.data.activated_products` | 产品大类 | `String` | `—` | `N` | 收款产品，02 账户与资金产品，03 业财数通产品；不传为空示例值：01,02,03 |
+| `request.data.activated_products` | 产品大类 | `String` | `—` | `N` | 01：一体化收款产品，02：账户与资金产品，03：业财数通产品；不传为空 示例值：01,02,03 |
 
 ### 同步响应 data
 
@@ -2117,7 +2117,7 @@
 ## 商户基本信息修改
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shjbxxxg_kyc.md>
-- SHA-256：`0f3e6d3491799ca37802e63239dd8f2b382064d41ad2e8a89e6767ae089d35c5`
+- SHA-256：`458f021fa0e626133d17a65ce1fee21aa445d45b75493c00740562c3c64259c6`
 - 说明：下表保留官方字段类型、长度、必填标记和字段说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -2299,7 +2299,7 @@
 | `request.data.share_holder_info_list[].mobile_no` | 股东手机号 | `String` | `11` | `N` | — |
 | `request.data.ext_mer_id` | 外部商户号 | `String` | `64` | `N` | 支持关联外部商户系统中的商户号；示例值：HF100001 |
 | `request.data.remark` | 备注 | `String` | `300` | `N` | 备注内容；示例值：华东分公司 |
-| `request.data.activated_products` | 产品大类 | `String` | `—` | `N` | 收款产品，02 账户与资金产品，03 业财数通产品；不传为空示例值：01,02,03 |
+| `request.data.activated_products` | 产品大类 | `String` | `—` | `N` | 01：一体化收款产品，02：账户与资金产品，03：业财数通产品；不传为空 示例值：01,02,03 |
 
 ### 同步响应 data
 

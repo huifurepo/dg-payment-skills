@@ -17,7 +17,7 @@ require_assertions_enabled()
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-LOCK = REPO_ROOT / "maintainer-contracts/merchant-onboarding-source-lock.json"
+LOCK = REPO_ROOT / "maintainer-contracts/merchant-onboarding-source-lock-2026-08-10.json"
 CATALOG_PATH = "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md"
 CATALOG = REPO_ROOT / CATALOG_PATH
 SOURCE_DIR = onboarding_source_dir()
@@ -70,9 +70,10 @@ def main() -> int:
         / "maintainer-contracts/official-sources/merchant-onboarding"
         / lock["previous_snapshot_date"]
     )
-    changed_titles = set(lock["api_refresh"]["changed_pages"])
-    assert len(changed_titles) == 1, (
-        f"expected one changed onboarding page, found {len(changed_titles)}"
+    latest_refresh = lock["latest_refresh"]
+    changed_titles = set(latest_refresh["changed_pages"])
+    assert len(changed_titles) == 3, (
+        f"expected three changed onboarding pages, found {len(changed_titles)}"
     )
     for source in lock["sources"]:
         previous = previous_dir / source["filename"]
@@ -83,7 +84,7 @@ def main() -> int:
             )
         else:
             assert previous.read_bytes() == current.read_bytes(), (
-                f"{source['title']}: page changed outside the five approved changed pages"
+                f"{source['title']}: page changed outside the three approved changed pages"
             )
 
     baseline = subprocess.check_output(
@@ -154,6 +155,10 @@ def main() -> int:
         (item["interface"], item["surface"], item["path"])
         for item in lock["api_refresh"]["changed_fields"]
     }
+    latest_refresh_changes = {
+        (item["interface"], item["surface"], item["path"]): item
+        for item in latest_refresh["changed_fields"]
+    }
     material_changes = {
         (item["interface"], item["surface"], item["path"]): item
         for item in lock["api_refresh"]["conditional_material_changes"]
@@ -168,10 +173,12 @@ def main() -> int:
         )
     }
     legacy_refresh_keys = refresh_keys & set(before)
+    latest_legacy_refresh_keys = set(latest_refresh_changes) & set(before)
     assert set(deleted) == renamed_before, f"unexpected deleted fields: {deleted}"
     assert set(changed) == (
         set(corrections)
         | legacy_refresh_keys
+        | latest_legacy_refresh_keys
         | set(material_changes)
         | link_normalized_changes
     ), (
@@ -204,6 +211,21 @@ def main() -> int:
         )
         if key in before:
             assert before[key][3] == "Y", f"{key}: prior required marker is not Y"
+    for key, contract in latest_refresh_changes.items():
+        current = after[key]
+        assert current[4] == normalize_description(contract["after_description"]), (
+            f"{key}: refreshed activated_products description changed"
+        )
+        assert current[1:4] == ("String", "—", "N"), (
+            f"{key}: activated_products type/length/required changed: {current[1:4]}"
+        )
+        if key in before:
+            assert before[key][4] == normalize_description(contract["before_description"]), (
+                f"{key}: prior activated_products description changed"
+            )
+            assert before[key][:4] == current[:4], (
+                f"{key}: latest refresh changed more than the description"
+            )
     material_rule = lock["api_refresh"]["conditional_material_rule"]
     for key, contract in material_changes.items():
         assert before[key][3] == contract["required_before"], (
@@ -234,12 +256,13 @@ def main() -> int:
             f"{source['title']}: expected {source['field_count']} fields, found {actual}"
         )
     print(
-        "onboarding source refresh validated: legacy 1393 -> 1402 with "
+        "onboarding source refresh validated: live 2026-08-10 snapshot keeps "
+        "all 2111 paths and changes only three activated_products descriptions; "
+        "historical baseline remains legacy 1393 -> 1402 with "
         "exactly 16 approved additions, 1 recorded parser correction, "
         "4 upper_huifu_id Y-to-C changes, and 6 conditional material updates "
         "plus 1 scalar jsonArray path correction "
-        f"at {onboarding_source_date()}; only enterprise changed from the "
-        "2026-07-28 snapshot; 5 new interfaces add 702 fields for 2111 total"
+        "at the 2026-07-29 snapshot; 5 new interfaces add 702 fields for 2111 total"
     )
     return 0
 

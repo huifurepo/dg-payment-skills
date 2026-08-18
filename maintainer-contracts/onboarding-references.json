@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "skill": "huifu-merchant-onboarding",
-  "reference_count": 27,
+  "reference_count": 46,
   "references": [
     "canonical-regression-prompts.md",
     "copilot-troubleshooting-playbooks.md",
@@ -29,6 +29,25 @@
     "shared-request-header-policy.md",
     "shared-server-sdk-matrix.md",
     "shared-signing-v2.md",
-    "skill-version-policy.md"
+    "skill-version-policy.md",
+    "user-onboarding-application-status-query.md",
+    "user-onboarding-business-open.md",
+    "user-onboarding-canonical-regression-prompts.md",
+    "user-onboarding-complete-field-catalog.md",
+    "user-onboarding-copilot-troubleshooting-playbooks.md",
+    "user-onboarding-detail-query.md",
+    "user-onboarding-enterprise.md",
+    "user-onboarding-error-codes.md",
+    "user-onboarding-external-resources.md",
+    "user-onboarding-faq.md",
+    "user-onboarding-field-contracts.md",
+    "user-onboarding-individual.md",
+    "user-onboarding-official-service-source-index.md",
+    "user-onboarding-platform-contracts.md",
+    "user-onboarding-shared-credential-boundary.md",
+    "user-onboarding-shared-overview.md",
+    "user-onboarding-shared-request-field-preservation.md",
+    "user-onboarding-shared-server-sdk-matrix.md",
+    "user-onboarding-shared-signing-v2.md"
   ]
 }

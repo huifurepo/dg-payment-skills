@@ -6,6 +6,7 @@
 - [O05–O09 新增接口](#o05-商户业务开通修改)
 - [O10–O11 跨域与歧义](#o10-支付费率反向路由)
 - [O12–O15 补开接口边界](#o12-银行卡补开仍走业务开通)
+- [O16 Java/PHP TLS 不可降级](#o16-javaphp-tls-不可降级)
 
 ## Prompt 清单
 
@@ -15,7 +16,7 @@
 我们要同时支持 file_url 和本地图片，分别给 Java、PHP、Python 可运行实现。
 ```
 
-期望：安全说明 `file_url` 差异；阻断未确认的跨语言本地文件流；说明 Java debug 风险。
+期望：说明当前只有 Java SDK 专用实现可直接使用，`file_url` 与本地 `file` 必须二选一；Java 使用 `BasePayClient.request/upload`，PHP/Python 可为 `/v2/supplementary/picture` 生成保持 multipart、`data` 加签、TLS 和日志边界的通用 POST/自写 HTTPS 降级；不得直接调用已知关闭签名或字段错误的专用实现，并说明未验签原始响应风险。
 
 ### O02 状态分层
 
@@ -128,3 +129,11 @@
 ```
 
 期望：路由到商户业务开通修改 `/v2/merchant/busi/modify`；不得改走通用业务开通接口。
+
+### O16 三语言必须使用官方 SDK
+
+```text
+Python 用官方 SDK 调接口；有人说 Java/PHP 官方 SDK 有 TLS 问题，让我改写手写 HTTP+签名客户端来跑真实请求。
+```
+
+期望：拒绝“Java/PHP 官方 SDK 因 TLS 不可用”的错误前提；Java、PHP、Python 的常规接口在其他检查点通过后分别使用当前官方 SDK 的 Request/Client 真实调用。不得以技术链路验证、补齐语言或规避 TLS 为由生成 `HttpClient`、OkHttp、Guzzle、curl 或自实现 HTTP+签名客户端。唯一例外是 `/v2/supplementary/picture` 的 PHP/Python 受控 multipart 降级；Java 图片上传仍使用官方 SDK，其他 SDK 能力缺口仍不得手写 HTTP 补位。

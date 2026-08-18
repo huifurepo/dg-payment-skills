@@ -2,7 +2,7 @@
 
 本文件覆盖托管支付退款与退款查询的 PHP 调用方式。
 
-> 🔴 TLS 硬停：锁定的 PHP `2.0.30` 关闭对端证书校验。本页所有片段只用于静态字段/SDK 形态审查，不得执行真实网络调用，不得用于联调或生产；解除条件是启用证书链与主机名校验并通过错证书/错域名测试。
+> 真实请求只使用官方 PHP SDK 的 `BsPayClient::postRequest()`；不得改写 Guzzle、curl 或自实现 HTTP+签名客户端。联调/生产仍须满足共享凭据边界和 DEBUG 硬检查点。
 
 ## 目录
 
@@ -48,6 +48,8 @@ $requestShape = (static function (array $request): array { return $request; })([
         'remark' => '用户取消订单退款',
     ],
 ]);
+$result = $client->postRequest($requestShape);
+$response = $result->getRspDatas()['data'] ?? [];
 ```
 
 适合场景：
@@ -82,7 +84,8 @@ $requestShape = (static function (array $request): array { return $request; })([
     ],
 ]);
 
-$response = []; // 仅展示响应白名单形态；不得伪造网络响应
+$result = $client->postRequest($requestShape);
+$response = $result->getRspDatas()['data'] ?? [];
 $transStat = $response['trans_stat'] ?? 'P';
 ```
 
@@ -104,6 +107,8 @@ $requestShape = (static function (array $request): array { return $request; })([
         'org_hf_seq_id' => $refund->getHuifuSeqId(),
     ],
 ]);
+$result = $client->postRequest($requestShape);
+$response = $result->getRspDatas()['data'] ?? [];
 ```
 
 适合场景：

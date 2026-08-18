@@ -11,7 +11,7 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$REPO_ROOT"
 
 : "${HUIFU_SDK_ROOT:?HUIFU_SDK_ROOT is required for release validation}"
-: "${REAL_MODEL_EVIDENCE_ROOT:?REAL_MODEL_EVIDENCE_ROOT is required for the 115-case release evidence}"
+: "${REAL_MODEL_EVIDENCE_ROOT:?REAL_MODEL_EVIDENCE_ROOT is required for release evidence}"
 : "${RELEASE_OUTPUT_DIR:?RELEASE_OUTPUT_DIR is required for durable release packages}"
 
 if [[ -e "$RELEASE_OUTPUT_DIR" ]]; then
@@ -55,7 +55,8 @@ run_release_suite() {
 
 run_release_suite payment payment-only
 run_release_suite onboarding onboarding-only
-run_release_suite cross-route both
+run_release_suite user-onboarding user-onboarding-only
+run_release_suite cross-route all-skills
 
 # Re-evaluate the exact persisted outputs and validate source commit, clean
 # state, suite/load-mode case sets, per-case digests and final pass counts.
@@ -63,7 +64,9 @@ python3 -B "${regression_common_args[@]}" --suite payment --load-mode payment-on
   --output-dir "$REAL_MODEL_EVIDENCE_ROOT/payment" --skip-run
 python3 -B "${regression_common_args[@]}" --suite onboarding --load-mode onboarding-only \
   --output-dir "$REAL_MODEL_EVIDENCE_ROOT/onboarding" --skip-run
-python3 -B "${regression_common_args[@]}" --suite cross-route --load-mode both \
+python3 -B "${regression_common_args[@]}" --suite user-onboarding --load-mode user-onboarding-only \
+  --output-dir "$REAL_MODEL_EVIDENCE_ROOT/user-onboarding" --skip-run
+python3 -B "${regression_common_args[@]}" --suite cross-route --load-mode all-skills \
   --output-dir "$REAL_MODEL_EVIDENCE_ROOT/cross-route" --skip-run
 
 release_evidence=(
@@ -71,6 +74,8 @@ release_evidence=(
   --evidence "real-model/payment/summary.json=$REAL_MODEL_EVIDENCE_ROOT/payment/summary.json"
   --evidence "real-model/onboarding/run-manifest.json=$REAL_MODEL_EVIDENCE_ROOT/onboarding/run-manifest.json"
   --evidence "real-model/onboarding/summary.json=$REAL_MODEL_EVIDENCE_ROOT/onboarding/summary.json"
+  --evidence "real-model/user-onboarding/run-manifest.json=$REAL_MODEL_EVIDENCE_ROOT/user-onboarding/run-manifest.json"
+  --evidence "real-model/user-onboarding/summary.json=$REAL_MODEL_EVIDENCE_ROOT/user-onboarding/summary.json"
   --evidence "real-model/cross-route/run-manifest.json=$REAL_MODEL_EVIDENCE_ROOT/cross-route/run-manifest.json"
   --evidence "real-model/cross-route/summary.json=$REAL_MODEL_EVIDENCE_ROOT/cross-route/summary.json"
 )
