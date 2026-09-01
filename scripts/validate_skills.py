@@ -531,10 +531,10 @@ def validate_regression_metadata(state: ValidationState) -> None:
         suite: sum(1 for item in prompts if item.get("suite") == suite)
         for suite in ("payment", "onboarding")
     }
-    if suite_counts != {"payment": 57, "onboarding": 30}:
+    if suite_counts != {"payment": 58, "onboarding": 32}:
         state.error(f"regression ownership/count changed unexpectedly: {suite_counts}")
     else:
-        state.ok("87 cases have unique payment=57/onboarding=30 ownership")
+        state.ok("90 cases have unique payment=58/onboarding=32 ownership")
     expected_suite_files = {
         "payment": [item for item in prompts if item.get("suite") == "payment"],
         "onboarding": [item for item in prompts if item.get("suite") == "onboarding"],
@@ -558,22 +558,22 @@ def validate_regression_metadata(state: ValidationState) -> None:
     user_ids = {int(item["id"]) for item in user_cases}
     missing_user_rules = sorted(user_ids - rule_ids)
     if (
-        len(user_cases) != 11
+        len(user_cases) != 15
         or any(item.get("suite") != "user-onboarding" for item in user_cases)
         or missing_user_rules
     ):
         state.error(
-            "user-onboarding regression suite must contain 11 tagged cases "
+            "user-onboarding regression suite must contain 15 tagged cases "
             f"with rules; missing={missing_user_rules}"
         )
     else:
-        state.ok("user-onboarding regression suite count/rules OK: 11")
+        state.ok("user-onboarding regression suite count/rules OK: 15")
 
     smoke_match = re.search(r"SMOKE_CASE_IDS\s*=\s*\(([^)]*)\)", runner_text)
     smoke_ids = set()
     if smoke_match:
         smoke_ids = {int(value) for value in re.findall(r"\d+", smoke_match.group(1))}
-    required_smoke_ids = {34, 35, 36, 37, 38, 201, 205, 207, 208, 1001, 1002, 1019, 1032}
+    required_smoke_ids = {34, 35, 36, 37, 38, 89, 90, 201, 205, 207, 208, 212, 213, 214, 1001, 1002, 1019, 1032}
     missing_smoke = sorted(required_smoke_ids - smoke_ids)
     if missing_smoke:
         state.error(f"smoke regression missing required 1.3.0 cases: {', '.join(map(str, missing_smoke))}")
@@ -605,6 +605,34 @@ def validate_regression_metadata(state: ValidationState) -> None:
     else:
         state.ok("README.md regression claims avoid stale fixed totals")
 
+    regression_counts = {
+        "payment": suite_counts["payment"],
+        "onboarding": suite_counts["onboarding"],
+        "user-onboarding": len(user_cases),
+        "cross-route": len(cross_cases),
+    }
+    expected_release_counts = (
+        f"执行{regression_counts['payment']}、{regression_counts['onboarding']}、"
+        f"{regression_counts['user-onboarding']}、{regression_counts['cross-route']}个真实模型案例"
+    )
+    expected_regression_summary = (
+        f"当前共{sum(regression_counts.values())}个真实模型案例："
+        f"支付{regression_counts['payment']}、商户进件{regression_counts['onboarding']}、"
+        f"用户开户{regression_counts['user-onboarding']}、跨域路由{regression_counts['cross-route']}。"
+    )
+    missing_readme_counts = [
+        claim
+        for claim in (expected_release_counts, expected_regression_summary)
+        if claim not in readme_text
+    ]
+    if missing_readme_counts:
+        state.error(
+            "README.md regression suite counts differ from suite files: "
+            + " | ".join(missing_readme_counts)
+        )
+    else:
+        state.ok(f"README.md regression suite counts match suite files: {regression_counts}")
+
 
 def check_required_snippet(path: Path, text: str, snippet: str, state: ValidationState) -> None:
     if snippet not in text:
@@ -619,9 +647,9 @@ def validate_user_onboarding_reference_contract(state: ValidationState) -> None:
     required_terms = {
         root / "SKILL.md": (
             "条件必填",
-            "9个字段说明为空",
-            "15个标量长度为空",
-            "五页官网都把外层 `response.data`",
+            "只有业务入驻修改 `async.data` 的说明为空",
+            "已没有长度为空的标量叶字段",
+            "九页官网都把外层 `response.data`",
             "父节点整体缺失",
             "个人用户只允许 `card_type=1`",
             "RECV_ORD_ID_` + `req_seq_id",
@@ -646,7 +674,10 @@ def validate_user_onboarding_reference_contract(state: ValidationState) -> None:
         root / "references/user-onboarding-shared-server-sdk-matrix.md": (
             "官方 SDK-only 传输规则",
             "不存在此前 Skill 推断的 TLS 问题",
-            "五接口均使用各自官方 Request/Client",
+            "九接口均使用各自官方 Request/Client",
+            "V2UserBasicdataIndvModifyRequest",
+            "V2UserBusiModifyRequest",
+            "V2UserListQueryRequest",
             "HttpClient",
             "OkHttp",
             "Guzzle",
@@ -654,9 +685,9 @@ def validate_user_onboarding_reference_contract(state: ValidationState) -> None:
             "三语言交付分别使用官方 SDK",
         ),
         root / "references/user-onboarding-field-contracts.md": (
-            "五页正式公共返回表都把外层 `response.data` 标为 `N`",
-            "业务入驻类型列为 `String`",
-            "成功响应都包含原生 JSON Object",
+            "九页正式公共返回表都把外层 `response.data` 标为 `N`",
+            "用户业务入驻修改仍为 `String`，其余为 `Json`",
+            "成功码下缺少 `data` 按协议异常处理",
             "async.data.huifu_id:String(18) Y",
             "条件必填",
             "response.data.ent_base_info.file_list[]",
@@ -673,6 +704,48 @@ def validate_user_onboarding_reference_contract(state: ValidationState) -> None:
             "个人用户只允许 `1`",
             "RECV_ORD_ID_` + `req_seq_id",
         ),
+        root / "references/user-onboarding-individual-modify.md": (
+            "/v2/user/basicdata/indv/modify",
+            "V2UserBasicdataIndvModifyRequest",
+            "共26个字段路径",
+            "请求21、同步响应5、异步0",
+            "直属汇付客户 ID",
+            "cert_validity_type:String(1) N",
+            "正式枚举只有 1=长期有效、0=非长期有效",
+            "String(JSON Array)",
+            "file_id:String(64)",
+            "file_name:String(64)",
+            "dict.update",
+        ),
+        root / "references/user-onboarding-business-modify.md": (
+            "/v2/user/busi/modify",
+            "V2UserBusiModifyRequest",
+            "共120个字段路径",
+            "请求85、同步响应11、异步24",
+            "只声明一次 `file_list`",
+            "elec_receipt_config",
+            "Object",
+            "jsonObject字符串",
+            "sign_user_info",
+            "exact-key",
+            "RECV_ORD_ID_` + `req_seq_id",
+        ),
+        root / "references/user-onboarding-list-query.md": (
+            "/v2/user/list/query",
+            "V2UserListQueryRequest",
+            "共17个完整字段路径",
+            "请求8、同步响应9",
+            "user_list_info_list` 修正为 `Object N",
+            "原生 JSON Array",
+            "user_list_info_list[].huifu_id`",
+            "user_list_info_list[].upper_huifu_id`",
+            "`String(18) N`",
+            "上限为18",
+            "`sign:String(512) Y`",
+            "legal_cert_no/req_date/req_seq_id",
+            "upper_huifu_id",
+            "exact-key",
+        ),
         root / "references/user-onboarding-platform-contracts.md": (
             "异步消息简介",
             "SHA256WithRSA",
@@ -688,11 +761,11 @@ def validate_user_onboarding_reference_contract(state: ValidationState) -> None:
             "user-onboarding-complete-field-catalog.md",
             "汇付客户号",
             "userHuifuId",
-            "merchantHuifuId",
+            "两个角色不得交换",
             "constant_amt",
             "fixed_ratio",
             "card_info.card_name",
-            "response.data:String` 的必填列标为 `N`",
+            "`response.data` 定义为 `Json N`",
             "个人用户只允许 `1`",
             "RECV_ORD_ID_` + `req_seq_id",
         ),
@@ -749,8 +822,8 @@ def validate_user_onboarding_reference_contract(state: ValidationState) -> None:
             "out_settle_acct_type",
             "weekday_fix_amt",
             "weekday_fee_rate",
-            "9个空说明路径",
-            "15个空长度标量叶字段",
+            "只有业务入驻修改 `async.data` 的说明为空",
+            "已没有长度为空的标量叶字段",
         ),
         REPO_ROOT / "maintainer-contracts/api-refresh-user-onboarding-2026-08-10.json": (
             "request.data.*[required=C]",

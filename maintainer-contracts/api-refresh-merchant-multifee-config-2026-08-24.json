@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "refresh_id": "api-refresh-merchant-multifee-config-2026-08-24-r1",
+  "requested_at": "2026-08-24",
+  "retrieved_at": "2026-08-24T15:35:54+08:00",
+  "version_state": {
+    "reason": "Add merchant multi-fee configuration as a new supported scenario with complete field and three-language SDK evidence.",
+    "huifu-merchant-onboarding": "1.0.2"
+  },
+  "source_locks": {
+    "merchant_onboarding_1_0_2": {
+      "path": "maintainer-contracts/merchant-onboarding-1.0.2-source-lock.json",
+      "sha256": "36e9a894da902298564ec50ea3c331ef45e33b43c266c242cbeea82e9535071a"
+    },
+    "merchant_onboarding_current": {
+      "path": "maintainer-contracts/merchant-onboarding-source-lock-2026-08-24.json",
+      "sha256": "3fc098c66e3018f0cb81ff424220bd4c21c3894ba602e39728aeed6a4791507e"
+    },
+    "user_onboarding_unchanged": {
+      "path": "maintainer-contracts/user-onboarding-source-lock.json",
+      "sha256": "870c49a6affb8584284398ddc86befe12ab7d40a94ef491322ea1f5a4d296169"
+    }
+  },
+  "catalogs": {
+    "merchant": {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
+      "sha256": "bad1a6dc68c90d7fa544e1478b43a18f3a30c7e8fd15b7fb328795a5aa7c83f6",
+      "generator": "scripts/generate_merchant_onboarding_field_catalog.py",
+      "independent_validator": "scripts/validate_merchant_onboarding_source_contract.py"
+    },
+    "user": {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md",
+      "sha256": "5036636f4d228b6dc3db4e4ef63e102ef398a36e127f183f136edf230fb1093a",
+      "field_paths_changed": 0
+    }
+  },
+  "scope": [
+    "POST /v2/merchant/busi/multiFee/config merchant multi-fee configuration",
+    "Java 3.0.40 V2MerchantBusiMultifeeConfigRequest",
+    "PHP 2.0.30 V2MerchantBusiMultifeeConfigRequest",
+    "Python 2.0.24 V2MerchantBusiMultifeeConfigRequest"
+  ],
+  "field_delta": {
+    "field_paths_added": 27,
+    "field_paths_removed": 0,
+    "request": 15,
+    "response": 12,
+    "callback": 0,
+    "parent": 5,
+    "leaf": 22,
+    "root_tables": 4,
+    "extend_tables": 3
+  },
+  "official_conflicts_preserved": [
+    {
+      "interface": "商户多费率配置",
+      "paths": [
+        "response.data.conf_list.pay_scene",
+        "response.data.conf_list.pay_way"
+      ],
+      "conflict": "pay_scene documents T for WeChat while pay_way documents W for WeChat; preserve the source conflict and do not generate T."
+    }
+  ],
+  "release_rule": "The 2,138-node merchant catalog, unchanged 354-node user catalog, both independent validators, SDK evidence, Skill validation, regression rules and package validation must pass before publishing huifu-merchant-onboarding 1.0.2. Previously published artifacts must never be overwritten."
+}

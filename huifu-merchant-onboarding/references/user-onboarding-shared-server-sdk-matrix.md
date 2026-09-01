@@ -4,13 +4,13 @@
 
 结论来自用户提供且由维护仓库锁定的本地 SDK 源码。类和 URI 的存在不证明官方分发来源、接口权限、材料条件、审核结果或通知协议。
 
-| SDK | 版本 | 五接口专属类 | 生产结论 |
+| SDK | 版本 | 九接口专属类 | 生产结论 |
 | --- | --- | --- | --- |
 | Java `dg-java-sdk` | `3.0.40` | 已找到 | 使用官方 Request/Client；先关闭敏感调试 |
 | PHP `huifurepo/dg-php-sdk` | `2.0.30` | 已找到 | 使用官方 Request/Client；DEBUG/Demo 入口仍需独立检查 |
 | Python `dg-sdk` / `dg_sdk` | `2.0.24` | 已找到 | 使用官方 Request；仍需字段与网关探针 |
 
-## 五个精确类与 URI
+## 九个精确类与 URI
 
 三语言均应只使用对应专属 Request，不得按后缀复用 merchant 类：
 
@@ -21,14 +21,22 @@
 | `V2UserBusiOpenRequest` | `/v2/user/busi/open` |
 | `V2UserApplyQueryRequest` | `/v2/user/apply/query` |
 | `V2UserBasicdataQueryRequest` | `/v2/user/basicdata/query` |
+| `V2UserBasicdataEntModifyRequest` | `/v2/user/basicdata/ent/modify` |
+| `V2UserBasicdataIndvModifyRequest` | `/v2/user/basicdata/indv/modify` |
+| `V2UserBusiModifyRequest` | `/v2/user/busi/modify` |
+| `V2UserListQueryRequest` | `/v2/user/list/query` |
 
 共同要求：保留 SDK 请求签名和同步响应验签；显式传入业务流水和日期。SDK 连接重试不能解释成开户或入驻业务重试。
 
 ## 官方合同优先与运行探针
 
 - 生成类可能把官方 `C` 字段建模成 required 或发送空字符串，例如开户有效期/国籍/地址、企业登录名以及业务入驻 `sign_user_info`。以官方 Y/N/C 和条件说明为准。
-- `file_list`、`elec_card_list`、`resp_business`、公共返回 `data` 的来源类型曾冲突；wire 已由说明与接入方矩阵裁决，不要仅靠类属性名决定，也不得偏离 `user-onboarding-platform-contracts.md`。
+- `file_list`、`elec_card_list`、`resp_business`、公共返回 `data` 的来源类型曾冲突；当前仅部分 wire 已裁决，业务入驻新增/修改的 `elec_card_list` 及新增接口的 `elec_receipt_config` 仍须硬停确认。不要仅靠类属性名决定，也不得偏离 `user-onboarding-platform-contracts.md`。
 - `sign_user_info` 官网类型为 Object，部分 SDK定义或序列化边界可能不同。使用 exact-key 扩展字段时必须保持键名，在脱敏运行探针中记录最终 JSON 类型、签名输入和网关结果。
+- 企业用户基本信息修改类只声明 `req_date/req_seq_id/huifu_id/legal_cert_nationality`。其余正式可选字段通过 exact-key 扩展传入；Java `putAll`、PHP `array_merge`、Python `dict.update` 都会后写覆盖同名显式字段，因此必须拒绝扩展覆盖这四个键，并拒绝所有合同外键。
+- 个人用户基本信息修改类只声明 `req_date/req_seq_id/huifu_id`。其余正式可选字段通过 exact-key 扩展传入；三语言的后写合并同样会覆盖显式字段，因此必须拒绝扩展覆盖这三个键，并拒绝所有合同外键。
+- 用户业务入驻修改类只声明 `req_date/req_seq_id/huifu_id/sign_user_info`。官网 `sign_user_info` 是 Object：Java setter 静态接收 String，必须用 exact-key 扩展受控覆盖为原生 Object；PHP setter 无类型约束可直接传数组，Python 动态属性可直接赋 dict，两者也可使用仓库统一的受控 exact-key 策略。三语言均以运行探针锁定最终类型，三个定位键禁止被扩展覆盖。
+- 用户列表查询类只声明 `legal_cert_no/req_date/req_seq_id`。官网可选 `upper_huifu_id` 使用白名单 exact-key 扩展；三语言后写合并会覆盖显式字段，因此必须拒绝扩展中的 `legal_cert_no/req_date/req_seq_id`。
 - 探针不能绕过签名、验签、TLS 或敏感日志安全要求。
 
 ## 调试日志硬停
@@ -39,7 +47,7 @@
 
 ## 官方 SDK-only 传输规则
 
-- 接入方确认官方 Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` SDK 不存在此前 Skill 推断的 TLS 问题；Java/PHP 不再因 TLS 硬停，五接口均使用各自官方 Request/Client。
+- 接入方确认官方 Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` SDK 不存在此前 Skill 推断的 TLS 问题；Java/PHP 不再因 TLS 硬停，九接口均使用各自官方 Request/Client。
 - 保持 SDK/运行时正常的证书链和主机名校验，不设置 trust-all、`verify=false` 或关闭校验；TLS 作为共同上线检查，不阻断官方 SDK 代码生成。
 - 禁止用 `HttpClient`、OkHttp、`HttpURLConnection`、Guzzle、`curl_*`、通用 POST 或自实现签名/验签客户端替代官方 SDK。三语言交付分别使用官方 SDK，不允许只让 Python 使用 SDK。
 

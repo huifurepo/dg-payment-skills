@@ -8,13 +8,14 @@ import json
 from pathlib import Path
 
 from validation_runtime import require_assertions_enabled
+from skill_validation_config import PAYMENT_SOURCE_LOCK
 
 
 require_assertions_enabled()
 
 
 ROOT = Path(__file__).resolve().parent.parent
-LOCK = ROOT / "maintainer-contracts/payment-source-lock.json"
+LOCK = PAYMENT_SOURCE_LOCK
 OUTPUT = ROOT / "huifu-pay-integration/references/official-payment-page-lock.md"
 
 

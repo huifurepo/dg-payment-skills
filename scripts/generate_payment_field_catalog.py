@@ -15,13 +15,14 @@ from generate_merchant_onboarding_field_catalog import (
     parse_markdown_tables,
 )
 from validation_runtime import require_assertions_enabled
+from skill_validation_config import PAYMENT_SOURCE_LOCK, payment_source_dir
 
 
 require_assertions_enabled()
 
 
 ROOT = Path(__file__).resolve().parent.parent
-LOCK = ROOT / "maintainer-contracts/payment-source-lock.json"
+LOCK = PAYMENT_SOURCE_LOCK
 DEFAULT_OUTPUT = (
     ROOT / "huifu-pay-integration/references/payment-complete-field-catalog.md"
 )
@@ -148,6 +149,12 @@ SURFACES: dict[str, tuple[tuple[str, str], ...]] = {
         ("同步响应信封", "response"),
         ("同步响应 data", "response.data"),
     ),
+    "split-detail-query": (
+        ("请求信封", "request"),
+        ("同步响应信封", "response"),
+        ("请求 data", "request.data"),
+        ("同步响应 data", "response.data"),
+    ),
 }
 
 
@@ -229,6 +236,15 @@ def transport_paths(
             surface_prefix,
             "—（[需要官方确认]：外层 data 的 JSON/String(JSON) 编码）",
         )
+    if source_key == "split-detail-query" and (
+        actual == "response.data.split_trans_responses[]"
+        or actual.startswith("response.data.split_trans_responses[].")
+    ):
+        suffix = actual[len("response.data.split_trans_responses[]") :]
+        return (
+            "response.data.split_trans_responses",
+            "$[]" + suffix + "（String(JSON Array) 解码结果）",
+        )
 
     containers: dict[str, bool] = {}
     if surface in KNOWN_STRING_JSON_SURFACES:
@@ -304,7 +320,7 @@ def reviewed_description(source_key: str, path: str, description: str) -> str:
         return (
             description
             + "；[接入方确认勘误] 官网说明中第二个 `A_NATIVE: 支付宝付款码` "
-            "应为 `A_MICROPAY: 支付宝付款码`；成功示例的 `A_IMICROPAY` 也是文档错误"
+            "应为 `A_MICROPAY: 支付宝付款码`；当前成功示例已使用正确值 `A_MICROPAY`"
         )
     return description
 
@@ -312,7 +328,7 @@ def reviewed_description(source_key: str, path: str, description: str) -> str:
 def load_sources() -> tuple[str, Path, tuple[PaymentSource, ...]]:
     lock = json.loads(LOCK.read_text(encoding="utf-8"))
     source_date = lock["source_date"]
-    source_dir = ROOT / "maintainer-contracts/official-sources/payment" / source_date
+    source_dir = payment_source_dir()
     by_key = {item["key"]: item for item in lock["sources"]}
     if set(SURFACES) - set(by_key):
         raise ValueError(f"payment source lock missing API keys: {sorted(set(SURFACES) - set(by_key))}")
@@ -357,6 +373,18 @@ def render_source(source: PaymentSource, source_dir: Path) -> tuple[str, dict[st
     ]
     for (label, prefix), fields in zip(source.surfaces, roots, strict=True):
         flattened = flatten_fields(fields, nested, prefix, used)
+        if source.key == "split-detail-query" and prefix == "response.data":
+            split_parent = "response.data.split_trans_responses"
+            flattened = [
+                (
+                    split_parent + "[]" + path[len(split_parent) :]
+                    if path == split_parent or path.startswith(split_parent + ".")
+                    else path,
+                    field,
+                    depth,
+                )
+                for path, field, depth in flattened
+            ]
         display_paths = {
             path
             for path, field, _depth in flattened
@@ -427,7 +455,7 @@ def render_catalog() -> str:
     header = [
         "# 支付接口完整字段路径目录",
         "",
-        f"> 生成来源：`payment-source-lock.json` 锁定的 `{source_date}` 官方快照；共 "
+        f"> 生成来源：`{LOCK.name}` 锁定的 `{source_date}` 官方快照；共 "
         f"{len(summaries)} 个 API、{total:,} 个接口内完整路径。",
         "",
         "## 目录",

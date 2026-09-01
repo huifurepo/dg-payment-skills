@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Verify source-backed SDK claims for the five user-onboarding endpoints."""
+"""Verify source-backed SDK claims for the user-onboarding endpoints."""
 from __future__ import annotations
 
 import argparse
 import json
 import os
+import re
 import sys
 import tempfile
 from pathlib import Path
@@ -30,6 +31,10 @@ ROUTES = {
     "V2_USER_BUSI_OPEN": "v2/user/busi/open",
     "V2_USER_APPLY_QUERY": "v2/user/apply/query",
     "V2_USER_BASICDATA_QUERY": "v2/user/basicdata/query",
+    "V2_USER_BASICDATA_ENT_MODIFY": "v2/user/basicdata/ent/modify",
+    "V2_USER_BASICDATA_INDV_MODIFY": "v2/user/basicdata/indv/modify",
+    "V2_USER_BUSI_MODIFY": "v2/user/busi/modify",
+    "V2_USER_LIST_QUERY": "v2/user/list/query",
 }
 REQUEST_CLASSES = (
     "V2UserBasicdataEntRequest",
@@ -37,6 +42,10 @@ REQUEST_CLASSES = (
     "V2UserBusiOpenRequest",
     "V2UserApplyQueryRequest",
     "V2UserBasicdataQueryRequest",
+    "V2UserBasicdataEntModifyRequest",
+    "V2UserBasicdataIndvModifyRequest",
+    "V2UserBusiModifyRequest",
+    "V2UserListQueryRequest",
 )
 PYTHON_FILES = (
     "v2_user_basicdata_ent_request.py",
@@ -44,6 +53,10 @@ PYTHON_FILES = (
     "v2_user_busi_open_request.py",
     "v2_user_apply_query_request.py",
     "v2_user_basicdata_query_request.py",
+    "v2_user_basicdata_ent_modify_request.py",
+    "v2_user_basicdata_indv_modify_request.py",
+    "v2_user_busi_modify_request.py",
+    "v2_user_list_query_request.py",
 )
 
 
@@ -111,6 +124,187 @@ def validate_static_routes(java: Path, php: Path, python: Path) -> list[str]:
         python / "request/v2_user_busi_open_request.py",
         "required_params.update(extend_infos)",
     )
+    enterprise_modify_java = (
+        java_requests / "V2UserBasicdataEntModifyRequest.java"
+    ).read_text(encoding="utf-8")
+    declared = set(re.findall(r'@JSONField\(name = "([^"]+)"\)', enterprise_modify_java))
+    expected_declared = {
+        "req_date",
+        "req_seq_id",
+        "huifu_id",
+        "legal_cert_nationality",
+    }
+    if declared != expected_declared:
+        problems.append(
+            "enterprise modify Java declared-field set differs: "
+            f"{sorted(declared)} != {sorted(expected_declared)}"
+        )
+    enterprise_modify_php_path = php / "request/V2UserBasicdataEntModifyRequest.php"
+    problems += require_text(
+        enterprise_modify_php_path,
+        "private $reqDate;",
+        "private $reqSeqId;",
+        "private $huifuId;",
+        "private $legalCertNationality;",
+    )
+    enterprise_modify_php = enterprise_modify_php_path.read_text(encoding="utf-8")
+    php_declared = set(re.findall(r"^\s+private \$(\w+);", enterprise_modify_php, re.M))
+    expected_php_declared = {
+        "reqDate",
+        "reqSeqId",
+        "huifuId",
+        "legalCertNationality",
+    }
+    if php_declared != expected_php_declared:
+        problems.append(
+            "enterprise modify PHP declared-field set differs: "
+            f"{sorted(php_declared)} != {sorted(expected_php_declared)}"
+        )
+    enterprise_modify_python_path = (
+        python / "request/v2_user_basicdata_ent_modify_request.py"
+    )
+    problems += require_text(
+        enterprise_modify_python_path,
+        '"legal_cert_nationality":self.legal_cert_nationality',
+        "required_params.update(extend_infos)",
+    )
+    enterprise_modify_python = enterprise_modify_python_path.read_text(encoding="utf-8")
+    python_declared = set(
+        re.findall(r'^    ([a-z][a-z0-9_]*) = ""$', enterprise_modify_python, re.M)
+    )
+    expected_wire_fields = {
+        "req_date",
+        "req_seq_id",
+        "huifu_id",
+        "legal_cert_nationality",
+    }
+    required_block = re.search(
+        r"required_params = \{(?P<body>.*?)\n        \}",
+        enterprise_modify_python,
+        re.S,
+    )
+    python_required = (
+        set(re.findall(r'"([a-z][a-z0-9_]*)"\s*:', required_block.group("body")))
+        if required_block
+        else set()
+    )
+    if python_declared != expected_wire_fields or python_required != expected_wire_fields:
+        problems.append(
+            "enterprise modify Python declared/required field sets differ: "
+            f"class={sorted(python_declared)}, required={sorted(python_required)}, "
+            f"expected={sorted(expected_wire_fields)}"
+        )
+    individual_java_path = java_requests / "V2UserBasicdataIndvModifyRequest.java"
+    individual_java = individual_java_path.read_text(encoding="utf-8")
+    individual_java_fields = set(
+        re.findall(r'@JSONField\(name = "([^"]+)"\)', individual_java)
+    )
+    individual_wire_fields = {"req_seq_id", "req_date", "huifu_id"}
+    if individual_java_fields != individual_wire_fields:
+        problems.append(
+            "individual modify Java declared-field set differs: "
+            f"{sorted(individual_java_fields)} != {sorted(individual_wire_fields)}"
+        )
+    individual_php = (
+        php / "request/V2UserBasicdataIndvModifyRequest.php"
+    ).read_text(encoding="utf-8")
+    individual_php_fields = set(
+        re.findall(r"^\s+private \$(\w+);", individual_php, re.M)
+    )
+    if individual_php_fields != {"reqSeqId", "reqDate", "huifuId"}:
+        problems.append(
+            "individual modify PHP declared-field set differs: "
+            f"{sorted(individual_php_fields)}"
+        )
+    individual_python = (
+        python / "request/v2_user_basicdata_indv_modify_request.py"
+    ).read_text(encoding="utf-8")
+    individual_python_fields = set(
+        re.findall(r'^    ([a-z][a-z0-9_]*) = ""$', individual_python, re.M)
+    )
+    individual_required_block = re.search(
+        r"required_params = \{(?P<body>.*?)\n        \}", individual_python, re.S
+    )
+    individual_python_required = (
+        set(
+            re.findall(
+                r'"([a-z][a-z0-9_]*)"\s*:',
+                individual_required_block.group("body"),
+            )
+        )
+        if individual_required_block
+        else set()
+    )
+    if (
+        individual_python_fields != individual_wire_fields
+        or individual_python_required != individual_wire_fields
+    ):
+        problems.append(
+            "individual modify Python declared/required field sets differ: "
+            f"class={sorted(individual_python_fields)}, "
+            f"required={sorted(individual_python_required)}"
+        )
+    business_modify_wire = {"req_seq_id", "req_date", "huifu_id", "sign_user_info"}
+    business_modify_java = (
+        java_requests / "V2UserBusiModifyRequest.java"
+    ).read_text(encoding="utf-8")
+    if set(re.findall(r'@JSONField\(name = "([^"]+)"\)', business_modify_java)) != business_modify_wire:
+        problems.append("business modify Java declared-field set differs")
+    for token in ("private String signUserInfo;", "setSignUserInfo(String signUserInfo)"):
+        if token not in business_modify_java:
+            problems.append(f"business modify Java sign_user_info type differs: missing {token}")
+    business_modify_php = (
+        php / "request/V2UserBusiModifyRequest.php"
+    ).read_text(encoding="utf-8")
+    if set(re.findall(r"^\s+private \$(\w+);", business_modify_php, re.M)) != {
+        "reqSeqId", "reqDate", "huifuId", "signUserInfo"
+    }:
+        problems.append("business modify PHP declared-field set differs")
+    if "setSignUserInfo($signUserInfo)" not in business_modify_php:
+        problems.append("business modify PHP sign_user_info setter is no longer untyped")
+    business_modify_python = (
+        python / "request/v2_user_busi_modify_request.py"
+    ).read_text(encoding="utf-8")
+    business_modify_python_fields = set(
+        re.findall(r'^    ([a-z][a-z0-9_]*) = ""$', business_modify_python, re.M)
+    )
+    business_modify_required = re.search(
+        r"required_params = \{(?P<body>.*?)\n        \}", business_modify_python, re.S
+    )
+    business_modify_required_fields = (
+        set(re.findall(r'"([a-z][a-z0-9_]*)"\s*:', business_modify_required.group("body")))
+        if business_modify_required else set()
+    )
+    if business_modify_python_fields != business_modify_wire or business_modify_required_fields != business_modify_wire:
+        problems.append("business modify Python declared/required field sets differ")
+    list_query_wire = {"legal_cert_no", "req_date", "req_seq_id"}
+    list_query_java = (
+        java_requests / "V2UserListQueryRequest.java"
+    ).read_text(encoding="utf-8")
+    if set(re.findall(r'@JSONField\(name = "([^"]+)"\)', list_query_java)) != list_query_wire:
+        problems.append("user list-query Java declared-field set differs")
+    list_query_php = (
+        php / "request/V2UserListQueryRequest.php"
+    ).read_text(encoding="utf-8")
+    if set(re.findall(r"^\s+private \$(\w+);", list_query_php, re.M)) != {
+        "legalCertNo", "reqDate", "reqSeqId"
+    }:
+        problems.append("user list-query PHP declared-field set differs")
+    list_query_python = (
+        python / "request/v2_user_list_query_request.py"
+    ).read_text(encoding="utf-8")
+    list_query_python_fields = set(
+        re.findall(r'^    ([a-z][a-z0-9_]*) = ""$', list_query_python, re.M)
+    )
+    list_query_required = re.search(
+        r"required_params = \{(?P<body>.*?)\n        \}", list_query_python, re.S
+    )
+    list_query_required_fields = (
+        set(re.findall(r'"([a-z][a-z0-9_]*)"\s*:', list_query_required.group("body")))
+        if list_query_required else set()
+    )
+    if list_query_python_fields != list_query_wire or list_query_required_fields != list_query_wire:
+        problems.append("user list-query Python declared/required field sets differ")
     return problems
 
 
@@ -135,12 +329,46 @@ public class UserOnboardingSdkProbe {
     route(new V2UserBusiOpenRequest(), "v2.user.busi.open");
     route(new V2UserApplyQueryRequest(), "v2.user.apply.query");
     route(new V2UserBasicdataQueryRequest(), "v2.user.basicdata.query");
+    route(new V2UserBasicdataEntModifyRequest(), "v2.user.basicdata.ent.modify");
+    route(new V2UserBasicdataIndvModifyRequest(), "v2.user.basicdata.indv.modify");
+    route(new V2UserBusiModifyRequest(), "v2.user.busi.modify");
+    route(new V2UserListQueryRequest(), "v2.user.list.query");
     V2UserBusiOpenRequest request = new V2UserBusiOpenRequest();
     request.setSignUserInfo("stale-string");
     request.addExtendInfo("sign_user_info", Map.of("type", "LEGAL"));
     Map<String,Object> params = ObjectUtils.objectToMap(request);
     params.putAll(request.getExtendInfos());
     if (!(params.get("sign_user_info") instanceof Map)) throw new RuntimeException("object override failed");
+    V2UserBasicdataEntModifyRequest modify = new V2UserBasicdataEntModifyRequest();
+    modify.setReqSeqId("original");
+    modify.addExtendInfo("req_seq_id", "overridden");
+    modify.addExtendInfo("reg_name", "updated-name");
+    Map<String,Object> modifyParams = ObjectUtils.objectToMap(modify);
+    modifyParams.putAll(modify.getExtendInfos());
+    if (!"overridden".equals(modifyParams.get("req_seq_id"))) throw new RuntimeException("locator override behavior changed");
+    if (!"updated-name".equals(modifyParams.get("reg_name"))) throw new RuntimeException("optional extension missing");
+    V2UserBasicdataIndvModifyRequest indvModify = new V2UserBasicdataIndvModifyRequest();
+    indvModify.setReqSeqId("original");
+    indvModify.addExtendInfo("req_seq_id", "overridden");
+    indvModify.addExtendInfo("mobile_no", "masked-probe");
+    Map<String,Object> indvParams = ObjectUtils.objectToMap(indvModify);
+    indvParams.putAll(indvModify.getExtendInfos());
+    if (!"overridden".equals(indvParams.get("req_seq_id"))) throw new RuntimeException("individual locator override behavior changed");
+    if (!"masked-probe".equals(indvParams.get("mobile_no"))) throw new RuntimeException("individual optional extension missing");
+    V2UserBusiModifyRequest busiModify = new V2UserBusiModifyRequest();
+    busiModify.setSignUserInfo("stale-string");
+    busiModify.addExtendInfo("sign_user_info", Map.of("type", "LEGAL"));
+    Map<String,Object> busiModifyParams = ObjectUtils.objectToMap(busiModify);
+    busiModifyParams.putAll(busiModify.getExtendInfos());
+    if (!(busiModifyParams.get("sign_user_info") instanceof Map)) throw new RuntimeException("business modify object override failed");
+    V2UserListQueryRequest listQuery = new V2UserListQueryRequest();
+    listQuery.setReqSeqId("original");
+    listQuery.addExtendInfo("req_seq_id", "overridden");
+    listQuery.addExtendInfo("upper_huifu_id", "6666000123120000");
+    Map<String,Object> listQueryParams = ObjectUtils.objectToMap(listQuery);
+    listQueryParams.putAll(listQuery.getExtendInfos());
+    if (!"overridden".equals(listQueryParams.get("req_seq_id"))) throw new RuntimeException("list-query locator override behavior changed");
+    if (!"6666000123120000".equals(listQueryParams.get("upper_huifu_id"))) throw new RuntimeException("list-query optional extension missing");
   }
 }
 """
@@ -201,6 +429,25 @@ public class UserOnboardingSdkProbe {
             rf'$c = new \BsPaySdk\core\BsPayClient();',
             '$wire = $c->objectToArray($r)["params"];',
             'if (!is_array($wire["sign_user_info"]) || $wire["sign_user_info"]["type"] !== "LEGAL") exit(4);',
+            rf'$r = new \BsPaySdk\request\V2UserBasicdataEntModifyRequest();',
+            '$r->setReqSeqId("original");',
+            '$r->setExtendInfo(array("req_seq_id" => "overridden", "reg_name" => "updated-name"));',
+            '$wire = $c->objectToArray($r)["params"];',
+            'if ($wire["req_seq_id"] !== "overridden" || $wire["reg_name"] !== "updated-name") exit(5);',
+            rf'$r = new \BsPaySdk\request\V2UserBasicdataIndvModifyRequest();',
+            '$r->setReqSeqId("original");',
+            '$r->setExtendInfo(array("req_seq_id" => "overridden", "mobile_no" => "masked-probe"));',
+            '$wire = $c->objectToArray($r)["params"];',
+            'if ($wire["req_seq_id"] !== "overridden" || $wire["mobile_no"] !== "masked-probe") exit(6);',
+            rf'$r = new \BsPaySdk\request\V2UserBusiModifyRequest();',
+            '$r->setSignUserInfo(array("type" => "LEGAL"));',
+            '$wire = $c->objectToArray($r)["params"];',
+            'if (!is_array($wire["sign_user_info"]) || $wire["sign_user_info"]["type"] !== "LEGAL") exit(7);',
+            rf'$r = new \BsPaySdk\request\V2UserListQueryRequest();',
+            '$r->setReqSeqId("original");',
+            '$r->setExtendInfo(array("req_seq_id" => "overridden", "upper_huifu_id" => "6666000123120000"));',
+            '$wire = $c->objectToArray($r)["params"];',
+            'if ($wire["req_seq_id"] !== "overridden" || $wire["upper_huifu_id"] !== "6666000123120000") exit(8);',
         )
     )
     problems += run_checked(["php", "-r", " ".join(php_script)])
@@ -229,11 +476,37 @@ for case in cases:
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     request = getattr(module, case["class"])()
-    extend = {"sign_user_info": {"type": "LEGAL"}} if case["class"] == "V2UserBusiOpenRequest" else {}
+    if case["class"] == "V2UserBusiOpenRequest":
+        extend = {"sign_user_info": {"type": "LEGAL"}}
+    elif case["class"] == "V2UserBusiModifyRequest":
+        request.sign_user_info = {"type": "LEGAL"}
+        extend = {}
+    elif case["class"] == "V2UserBasicdataEntModifyRequest":
+        request.req_seq_id = "original"
+        extend = {"req_seq_id": "overridden", "reg_name": "updated-name"}
+    elif case["class"] == "V2UserBasicdataIndvModifyRequest":
+        request.req_seq_id = "original"
+        extend = {"req_seq_id": "overridden", "mobile_no": "masked-probe"}
+    elif case["class"] == "V2UserListQueryRequest":
+        request.req_seq_id = "original"
+        extend = {"req_seq_id": "overridden", "upper_huifu_id": "6666000123120000"}
+    else:
+        extend = {}
     route, params = request.post(extend)
     assert route == "/" + case["route"]
-    if extend:
+    if case["class"] == "V2UserBusiModifyRequest":
         assert isinstance(params["sign_user_info"], dict)
+    if extend:
+        if case["class"] == "V2UserBusiOpenRequest":
+            assert isinstance(params["sign_user_info"], dict)
+        else:
+            assert params["req_seq_id"] == "overridden"
+            if case["class"] == "V2UserBasicdataEntModifyRequest":
+                assert params["reg_name"] == "updated-name"
+            elif case["class"] == "V2UserListQueryRequest":
+                assert params["upper_huifu_id"] == "6666000123120000"
+            else:
+                assert params["mobile_no"] == "masked-probe"
 '''
     cases = [
         {"file": filename, "class": request_class, "enum": enum_name, "route": route}
@@ -258,11 +531,14 @@ def validate_published_contracts() -> list[str]:
         *REQUEST_CLASSES,
         "sign_user_info",
         "exact-key",
+        "Java setter 静态接收 String",
+        "PHP setter 无类型约束",
+        "Python 动态属性可直接赋 dict",
         "TLS",
         "DEBUG",
         "官方 SDK-only 传输规则",
         "不存在此前 Skill 推断的 TLS 问题",
-        "五接口均使用各自官方 Request/Client",
+        "九接口均使用各自官方 Request/Client",
         "HttpClient",
         "OkHttp",
         "Guzzle",
@@ -271,10 +547,10 @@ def validate_published_contracts() -> list[str]:
     )
     problems += require_text(
         root / "SKILL.md",
-        "用户五个专属",
+        "用户九个专属",
         "用户号",
         "商户号",
-        "hfms/1.0.1",
+        "hfms/1.0.2",
         "官方 SDK-only 传输规则",
         "不存在本 Skill 曾推断的 TLS 硬停问题",
         "真实请求都使用官方 Request/Client",

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Generate the complete eleven-interface merchant-onboarding field catalog.
+"""Generate the complete twelve-interface merchant-onboarding field catalog.
 
 The official Markdown uses span IDs plus detached ``extend-table`` blocks for
 nested objects. This generator resolves that graph and emits every reachable
 field path. Use ``--source-dir`` with downloaded source files for reproducible
-local generation, or omit it to fetch the eleven official URLs directly.
+local generation, or omit it to fetch the twelve official URLs directly.
 """
 
 from __future__ import annotations
@@ -181,6 +181,32 @@ SOURCES = (
         "商户短信发送",
         "sms-send.md",
         "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shdxfs.md",
+        (
+            ("请求信封", "request"),
+            ("响应信封", "response"),
+            ("请求 data", "request.data"),
+            ("响应 data", "response.data"),
+        ),
+        4,
+    ),
+    SourceSpec(
+        "multifee_config",
+        "商户多费率配置",
+        "multifee-config.md",
+        "https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflpz.md",
+        (
+            ("请求信封", "request"),
+            ("响应信封", "response"),
+            ("请求 data", "request.data"),
+            ("响应 data", "response.data"),
+        ),
+        4,
+    ),
+    SourceSpec(
+        "multifee_query",
+        "商户多费率配置查询",
+        "multifee-query.md",
+        "https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflcx.md",
         (
             ("请求信封", "request"),
             ("响应信封", "response"),
@@ -699,9 +725,9 @@ def build_catalog(source_dir: Path | None) -> tuple[str, dict[str, dict[str, obj
     sections.insert(3, image_section)
     summary["image_upload"] = image_summary
 
-    header = """# 商户进件十一接口完整字段目录
+    header = """# 商户进件十三接口完整字段目录
 
-本文件由仓库维护脚本从十一份官方原文机械生成。它负责“字段不遗漏”；高风险枚举、默认值、条件冲突和输出边界仍同时读取 `merchant-onboarding-field-contracts.md` 及对应接口 reference。
+本文件由仓库维护脚本从十三份官方原文机械生成。它负责“字段不遗漏”；高风险枚举、默认值、条件冲突和输出边界仍同时读取 `merchant-onboarding-field-contracts.md` 及对应接口 reference。
 
 安全说明：官方说明中的商户号、证件号、手机号、长流水和示例图片 URL 已机械脱敏；这些示例本来就不是默认值。字段规则、枚举、条件、材料编号和外部资料地址不做脱敏。
 
@@ -719,6 +745,8 @@ def build_catalog(source_dir: Path | None) -> tuple[str, dict[str, dict[str, obj
 - [商户费率信息查询](#商户费率信息查询)
 - [商户状态变更](#商户状态变更)
 - [商户短信发送](#商户短信发送)
+- [商户多费率配置](#商户多费率配置)
+- [商户多费率配置查询](#商户多费率配置查询)
 
 使用规则：
 
@@ -745,6 +773,8 @@ def build_catalog(source_dir: Path | None) -> tuple[str, dict[str, dict[str, obj
         "rate_query",
         "status_change",
         "sms_send",
+        "multifee_config",
+        "multifee_query",
     )
     title_by_key = {spec.key: spec.title for spec in SOURCES} | {"image_upload": "图片上传"}
     summary_lines = []

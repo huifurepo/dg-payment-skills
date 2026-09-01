@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "skill": "huifu-pay-integration",
-  "reference_count": 101,
+  "reference_count": 102,
   "references": [
     "aggregation-async-webhook.md",
     "aggregation-base.md",
@@ -103,6 +103,7 @@
     "shared-server-sdk-matrix.md",
     "shared-signing-v2.md",
     "shared-webhook-signing.md",
-    "skill-version-policy.md"
+    "skill-version-policy.md",
+    "trade-split-detail-query.md"
   ]
 }

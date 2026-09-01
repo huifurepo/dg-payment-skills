@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "refresh_id": "api-refresh-user-enterprise-modify-2026-08-24-r3",
+  "requested_at": "2026-08-24",
+  "retrieved_at": "2026-08-24T18:30:00+08:00",
+  "version_state": {
+    "reason": "Add enterprise user basic-information modification while retaining the user-requested huifu-merchant-onboarding version 1.0.2.",
+    "huifu-merchant-onboarding": "1.0.2"
+  },
+  "previous_refresh": {
+    "path": "maintainer-contracts/api-refresh-merchant-multifee-query-2026-08-24.json",
+    "sha256": "a50b499bc27df26639534940849695f2ed839f57f029cf3b9202556a03e8629d",
+    "refresh_id": "api-refresh-merchant-multifee-query-2026-08-24-r2"
+  },
+  "source_locks": {
+    "onboarding_1_0_2_r3": {
+      "path": "maintainer-contracts/merchant-onboarding-1.0.2-r3-source-lock.json",
+      "sha256": "acf608d8c7e2f534ae7383f40befcc26307c431a6bd18a1a9625c1bb97c7e6c3"
+    },
+    "merchant_onboarding_unchanged": {
+      "path": "maintainer-contracts/merchant-onboarding-source-lock-2026-08-24-r2.json",
+      "sha256": "e785229f04f8010344e8c41acd31b6f8c143c6d263ce743292fcdb12ecec7134"
+    },
+    "user_onboarding_current": {
+      "path": "maintainer-contracts/user-onboarding-source-lock-2026-08-24-r1.json",
+      "sha256": "82d08b1a7a588fb22173720c79ec3992d0481c80abeaa044a3b37e90a83582e9"
+    },
+    "user_onboarding_historical": {
+      "path": "maintainer-contracts/user-onboarding-source-lock.json",
+      "sha256": "870c49a6affb8584284398ddc86befe12ab7d40a94ef491322ea1f5a4d296169"
+    }
+  },
+  "catalogs": {
+    "merchant": {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
+      "sha256": "ae56d08f67ab6971f90efc630ce38ff0a8b2124c777e6412a951ae5290eebeee",
+      "field_paths_changed": 0
+    },
+    "user": {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md",
+      "sha256": "46d79b8f8ad1cb4d578680b653fcc0b8344106f184c372bee1836a4b7f3b193f",
+      "generator": "scripts/generate_user_onboarding_field_catalog.py",
+      "independent_validator": "scripts/validate_user_onboarding_source_contract.py"
+    }
+  },
+  "scope": [
+    "POST /v2/user/basicdata/ent/modify enterprise user basic-information modification",
+    "Java 3.0.40 V2UserBasicdataEntModifyRequest",
+    "PHP 2.0.30 V2UserBasicdataEntModifyRequest",
+    "Python 2.0.24 V2UserBasicdataEntModifyRequest"
+  ],
+  "field_delta": {
+    "field_paths_added": 37,
+    "field_paths_removed": 0,
+    "request": 32,
+    "response": 5,
+    "callback": 0,
+    "parent": 3,
+    "leaf": 34,
+    "root_tables": 4,
+    "extend_tables": 1
+  },
+  "preserved_boundaries": [
+    "the five 2026-08-10 user sources and the merchant r2 evidence remain byte-identical",
+    "file_list is String(JSON Array) although catalog child paths use []",
+    "four legal certificate type and validity fields must be supplied together when modifying legal certificate data",
+    "request.data.huifu_id has an unresolved enterprise-user versus direct-merchant role conflict and blocks production generation",
+    "SDK extension maps can overwrite req_date, req_seq_id, huifu_id and legal_cert_nationality and must be filtered"
+  ],
+  "release_rule": "The unchanged 2,155-node merchant catalog and current 391-node user catalog, both independent source validators, SDK evidence, Skill validation, regression rules and package validation must pass. Historical locks remain immutable."
+}

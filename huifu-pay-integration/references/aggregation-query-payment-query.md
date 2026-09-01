@@ -137,7 +137,7 @@
 - 线上字段名是 `response.data.trade_type`；若业务 DTO 使用 `pay_type` 等别名，必须保留原始 `trade_type` 并显式映射。真实报文只有 `pay_type` 时按合同漂移处理，不得直接据此路由。
 - 对 `method_expand` 做且只做一次严格 JSON Object 解码；中间件已预解码成 Object 时可直接进入同一字段读取逻辑，但必须记录原始类型。出现 `A_JSAPI` 等场景包装 key 时按合同漂移处理，不得把官网展示分组固化为 DTO 层级。
 - 非法 JSON、解码后不是 Object、超过本地大小或嵌套深度限制时必须显式报解析错误，不得回退为空对象。保留原始值和规范化视图，禁止用重新序列化结果覆盖原始审计证据。
-- 路由只对接口概览中的正式枚举做精确匹配。支付宝付款码交易的正式值是 `A_MICROPAY`；官网成功示例中的 `A_IMICROPAY` 是文档错误，不得复制到请求、枚举或生成代码。真实线上响应若仍出现 `A_IMICROPAY`，保留原值并按合同漂移告警，不得静默改写后掩盖证据。
+- 路由只对接口概览中的正式枚举做精确匹配。支付宝付款码交易的正式值是 `A_MICROPAY`；当前官网成功示例已经使用该正确值。参数说明仍把支付宝付款码重复写成 `A_NATIVE`，该行按已确认勘误解释为 `A_MICROPAY`。真实线上响应若出现其他拼写，保留原值并按合同漂移告警，不得静默改写后掩盖证据。
 - `buyer_logon_id` 属于账号信息，不得写入普通日志；其他未知键只在受控扩展 map 中原样保留，不能驱动结算、退款或渠道特有核心逻辑。
 
 #### 微信类交易
@@ -382,7 +382,7 @@
     "resp_code": "00000000",
     "resp_desc": "查询成功",
     "settlement_amt": "0.03",
-    "trade_type": "A_IMICROPAY",
+    "trade_type": "A_MICROPAY",
     "trans_amt": "0.03",
     "trans_stat": "S",
     "freeze_time": "20091225091010",
@@ -406,7 +406,7 @@
 
 ## 实现备注与文档勘误
 
-1. 官方成功示例中的 `trade_type=A_IMICROPAY` 是文档错误；支付宝付款码交易的正式枚举为 `A_MICROPAY`。生成请求、DTO 枚举、校验器和业务路由必须使用 `A_MICROPAY`。若线上响应实际返回错误拼写，保留原始值并按合同漂移告警。
+1. 官方成功示例已把 `trade_type` 修正为 `A_MICROPAY`；参数说明仍把支付宝付款码重复写成 `A_NATIVE`。生成请求、DTO 枚举、校验器和业务路由必须使用 `A_MICROPAY`。若线上响应出现其他拼写，保留原始值并按合同漂移告警。
 2. 官方“应用场景”段出现 `U_JSAP` 拼写，结合参数表与上下文应按 `U_JSAPI` 处理。
 3. 官方时间格式在 `end_time`、`freeze_time`、`unfreeze_time` 等位置混用了 `yyyyMMddHHMMSS`；实现中建议统一按 14 位时间串 `yyyyMMddHHmmss` 解析。
 4. `method_expand`、`tx_metadata`、`payment_fee` 均为 JSON 字符串，不是外层响应里的嵌套对象；落库或读取子字段前应先反序列化。其中 `method_expand` 解码后为单层平铺对象，文档里的渠道包装行不参与解码。

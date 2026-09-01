@@ -7,7 +7,7 @@
 ## 已确认的请求合同
 
 - Endpoint：`POST https://api.huifu.com/v2/merchant/basicdata/query`；顶层使用 `sys_id`、`product_id`、`sign`、`data`。
-- 请求与响应 559 个具名路径（含父容器）的类型、长度、Y/N/C 和官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户详细信息查询”；本页的字段白名单策略不能替代完整目录。
+- 请求与响应 567 个具名路径（含父容器）的类型、长度、Y/N/C 和官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户详细信息查询”；本页的字段白名单策略不能替代完整目录。
 - `data` 必填新的 `req_seq_id:String(32)`（当天同商户唯一）、`req_date:String(8)`（`yyyyMMdd`、北京时间）、目标 `huifu_id:String(18)`；高风险约束见 `merchant-onboarding-field-contracts.md`。
 - 响应可能覆盖主体、证照、图片、结算卡、结算/取现、协议、渠道配置和账户资料；按查询目的字段白名单读取，禁止沉淀完整响应表或完整原文。
 - 若白名单字段说明带 MCC/地区/证件/银行编码表、图片上传文档、签约规则或线上材料 XLSX，必须同时读取 `merchant-onboarding-external-resources.md`，并按响应完整路径单列 `外部资料提示`、给出未经改写的原始地址；不得把响应中的示例/运行时 URL 当资料或请求默认值。
@@ -23,6 +23,8 @@
 - 请求与响应 DTO 分开建模。企业请求 `reg_name:String(64)`、个人请求 `reg_name:String(32)`，本接口响应 `reg_name:String(128)`，不得共享同一长度校验。
 - `response.data.material_card_info:String(JSON Object) N` 是独立的对公卡信息；官网类型列原文为 `Object`，本项目以说明列“jsonObject字符串”为 wire 依据。先严格反序列化，再读取 `card_type/card_name/card_no/prov_id/area_id/branch_code` 六个子字段；其中省市不得与响应顶层或其他卡对象的同名字段合并。
 - 官网 `2026-07-28` 锁定页面将 `service_phone` 标为 `String(11)`，但固话示例长度超过 11；严格校验该字段前标记 `[需要官方确认]`，不要截断或擅自放宽。
+- 捷行付响应新增 `response.data.jxf_conf_info.bank_name:String(8) N`；线上费率新增 `response.data.online_fee_conf_list[].fee_formula_type:String N`。支付宝、微信配置各新增 `out_fee_flag:String(1) N`、`out_fee_huifu_id:String(18) N`、`out_fee_acct_type:String(2) N`，三项都必须按各自父数组隔离，不能与顶层公共外扣字段合并；渠道内字段优先级高于同名公共参数。
+- `response.data.qry_cash_config_list[].weekday_fix_amt` 与 `weekday_fee_rate` 的官网说明已统一为 `cash_type=D1` 时生效，并用于 D1 工作日结算；旧版“不生效/生效”冲突已关闭，不再触发硬停。
 
 ## 公共请求头
 

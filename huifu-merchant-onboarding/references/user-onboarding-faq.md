@@ -18,7 +18,7 @@
 
 ## `file_list` 应发送数组还是 JSON 字符串？
 
-类型列/说明是 String(jsonArray)，个人开户示例却是普通数组。接入方已确认按说明发送 String(JSON Array)；示例登记为错误，SDK 探针只验证没有再次序列化。
+当前企业/个人开户的类型列均为 Object，说明为 jsonArray格式，按原生 JSON Array 发送。不得把修改或业务入驻接口中的 String(JSON Array) 口径外推到开户接口。
 
 ## 同步成功是否表示业务入驻全部完成？
 

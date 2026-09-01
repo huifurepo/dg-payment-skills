@@ -10,6 +10,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+from skill_validation_config import ONBOARDING_SOURCE_LOCK
 from validation_runtime import require_assertions_enabled
 
 
@@ -462,12 +463,13 @@ def validate_maintainer_contracts(errors: list[str]) -> None:
         if phrase in release:
             error(errors, f"release checklist contains stale phrase: {phrase}")
     for required in (
-        "huifu-pay-integration` | `1.3.4",
-        "huifu-merchant-onboarding` | `1.0.1",
+        "huifu-pay-integration` | `1.3.5",
+        "huifu-merchant-onboarding` | `1.0.2",
+        "企业/个人用户开户、企业/个人用户基本信息修改、用户业务入驻及修改",
     ):
         if required not in versioning:
             error(errors, f"versioning policy missing current fact: {required}")
-    for required in ("manifest", "新增模块流程", "2,111"):
+    for required in ("manifest", "新增模块流程", "2,737"):
         if required not in architecture:
             error(errors, f"Skill family architecture missing: {required}")
 
@@ -491,7 +493,7 @@ def load_domain_boundaries() -> dict[str, dict[str, tuple[str, ...]]]:
     )
     source_lock = json.loads(
         (
-            REPO_ROOT / "maintainer-contracts/merchant-onboarding-source-lock.json"
+            ONBOARDING_SOURCE_LOCK
         ).read_text(encoding="utf-8")
     )
     expected_field_count = source_lock["totals"]["fields"]
@@ -512,7 +514,7 @@ def load_domain_boundaries() -> dict[str, dict[str, tuple[str, ...]]]:
         flags=re.MULTILINE,
     )
     user_source_lock = json.loads(
-        (REPO_ROOT / "maintainer-contracts/user-onboarding-source-lock.json").read_text(
+        (REPO_ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-08-24-r4.json").read_text(
             encoding="utf-8"
         )
     )

@@ -12,15 +12,16 @@ from validate_merchant_onboarding_source_contract import (
     split_catalog_row,
 )
 from validation_runtime import require_assertions_enabled
+from skill_validation_config import PAYMENT_SOURCE_LOCK, payment_source_dir
 
 
 require_assertions_enabled()
 
 
 ROOT = Path(__file__).resolve().parent.parent
-LOCK = ROOT / "maintainer-contracts/payment-source-lock.json"
+LOCK = PAYMENT_SOURCE_LOCK
 CATALOG = ROOT / "huifu-pay-integration/references/payment-complete-field-catalog.md"
-EXPECTED_TOTAL = 2627
+EXPECTED_TOTAL = 2656
 COMMON_RETURN_CODES_URL = (
     "https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md"
 )
@@ -141,6 +142,12 @@ VALIDATION_SURFACES: dict[str, tuple[tuple[str, str], ...]] = {
         ("同步响应信封", "response"),
         ("同步响应 data", "response.data"),
     ),
+    "split-detail-query": (
+        ("请求信封", "request"),
+        ("同步响应信封", "response"),
+        ("请求 data", "request.data"),
+        ("同步响应 data", "response.data"),
+    ),
 }
 
 
@@ -204,7 +211,7 @@ def expected_description(
     if source_key == "aggregation-query" and path == "response.data.trade_type":
         description += (
             "；[接入方确认勘误] 官网说明中第二个 `A_NATIVE: 支付宝付款码` "
-            "应为 `A_MICROPAY: 支付宝付款码`；成功示例的 `A_IMICROPAY` 也是文档错误"
+            "应为 `A_MICROPAY: 支付宝付款码`；当前成功示例已使用正确值 `A_MICROPAY`"
         )
     return description
 
@@ -244,6 +251,15 @@ def expected_transport(
         return (
             surface_prefix,
             "—（[需要官方确认]：外层 data 的 JSON/String(JSON) 编码）",
+        )
+    if source_key == "split-detail-query" and (
+        actual == "response.data.split_trans_responses[]"
+        or actual.startswith("response.data.split_trans_responses[].")
+    ):
+        decoded = "$[]" if actual == "response.data.split_trans_responses[]" else "$[]" + actual.split("[]", 1)[1]
+        return (
+            "response.data.split_trans_responses",
+            f"{decoded}（String(JSON Array) 解码结果）",
         )
 
     containers: dict[str, bool] = {}
@@ -316,9 +332,7 @@ def expected_records() -> dict[
     tuple[str, str, str], tuple[str, str, str, str, str, str]
 ]:
     lock = json.loads(LOCK.read_text(encoding="utf-8"))
-    source_dir = (
-        ROOT / "maintainer-contracts/official-sources/payment" / lock["source_date"]
-    )
+    source_dir = payment_source_dir()
     records: dict[tuple[str, str, str], tuple[str, str, str, str]] = {}
     for source in lock["sources"]:
         key = source["key"]
@@ -333,6 +347,17 @@ def expected_records() -> dict[
         used: set[str] = set()
         for (surface, prefix), fields in zip(surfaces, roots, strict=True):
             flattened = list(flatten(fields, nested, prefix, used))
+            if key == "split-detail-query" and prefix == "response.data":
+                split_parent = "response.data.split_trans_responses"
+                flattened = [
+                    (
+                        split_parent + "[]" + path[len(split_parent) :]
+                        if path == split_parent or path.startswith(split_parent + ".")
+                        else path,
+                        field,
+                    )
+                    for path, field in flattened
+                ]
             display_paths = {
                 path for path, field in flattened if DISPLAY_NOTE in field.description
             }
@@ -430,7 +455,7 @@ def main() -> int:
         target.startswith(("http://", "https://"))
         for target in field_link_targets
     ), "generated payment field descriptions contain relative or fragment-only links"
-    assert catalog_text.count("官网相对地址原文：`#") == 27
+    assert catalog_text.count("官网相对地址原文：`#") == 29
     assert catalog_text.count("官网原始锚点在当前快照无同名标题") == 0
     assert catalog_text.count("公共返回码全集：[返回码]") >= 8
     assert catalog_text.count("已确认同时指向[聚合正扫异步返回参数]") == 1
@@ -517,6 +542,37 @@ def main() -> int:
         "N",
         "已确认",
     )
+
+    detail = "交易分账明细查询"
+    detail_records = {
+        path: contract
+        for (interface, _surface, path), contract in actual.items()
+        if interface == detail
+    }
+    assert len(detail_records) == 29
+    assert sum(path.startswith("request") for path in detail_records) == 7
+    assert sum(path.startswith("response") for path in detail_records) == 22
+    assert set(path for path in detail_records if path.startswith("request.data.")) == {
+        "request.data.hf_seq_id",
+        "request.data.huifu_id",
+        "request.data.ord_type",
+    }
+    assert "response.data.huifu_id" not in detail_records
+    assert detail_records["request.data.ord_type"][2:5] == ("String", "20", "Y")
+    assert detail_records["response.data.split_trans_responses[]"][2:5] == (
+        "String",
+        "—",
+        "N",
+    )
+    split_paths = {
+        path: contract for path, contract in detail_records.items()
+        if path == "response.data.split_trans_responses[]"
+        or path.startswith("response.data.split_trans_responses[].")
+    }
+    assert len(split_paths) == 17
+    assert all(contract[0] == "response.data.split_trans_responses" for contract in split_paths.values())
+    assert split_paths["response.data.split_trans_responses[]"][1] == "$[]（String(JSON Array) 解码结果）"
+    assert all("String(JSON Array) 解码结果" in contract[1] for contract in split_paths.values())
 
     for interface in ("聚合支付下单", "聚合交易退款"):
         for (record_interface, _surface, path), contract in actual.items():

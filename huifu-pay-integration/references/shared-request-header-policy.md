@@ -1,6 +1,6 @@
 # 请求头策略
 
-本文件定义支付 Skill `1.3.4` 已覆盖支付接口的统一请求头约束。`hfps/1.3.4` 是支付来源合同值；商户进件 Skill 的默认来源值为 `hfms/1.0.1`。
+本文件定义支付 Skill `1.3.5` 已覆盖支付接口的统一请求头约束。`hfps/1.3.5` 是支付来源合同值；商户进件 Skill 的默认来源值为 `hfms/1.0.2`。
 
 ## 目录
 
@@ -19,13 +19,13 @@
 `HUIFU_SKILL_SOURCE` 的最终上送值优先使用业务显式配置的 `<skill_source>`，不再自动拼接 `sys_id`。未显式配置时按当前请求实际加载并参与生成的 Skill 集合确定默认值；仅安装在仓库但未参与当前请求不计入：
 
 ```text
-仅支付：hfps/1.3.4
-支付 + 进件：hfps/1.3.4;hfms/1.0.1
+仅支付：hfps/1.3.5
+支付 + 进件：hfps/1.3.5;hfms/1.0.2
 ```
 
 双 Skill 顺序固定为支付、进件，中间只使用一个英文分号且不加空格；不得漏掉任一来源或重复追加。业务方显式配置 `HUIFU_SKILL_SOURCE`、`skill_source` 或 `jpt_x_skill_source` 时，HTTP 层原样透传该值，不再追加默认值。聚合支付里的 `sys_id` 由各官方 SDK 按自己的实现上送：Java Lightning SDK 会放到独立请求头 `sys_id` / `jpt-sys_id`，PHP 官方 SDK 则仍放在签名前请求体顶层字段，Python 官方 SDK 由 `MerConfig` 管理。
 
-local-sandbox `1.0.1` 的冻结 r4 快照使用 `hfps/1.3.1;sandbox/1.0.1`。官方联调或生产环境使用 `hfps/1.3.4`，不要携带 `;sandbox/...` 后缀。
+local-sandbox `1.0.1` 的冻结 r4 快照使用 `hfps/1.3.1;sandbox/1.0.1`。官方联调或生产环境使用 `hfps/1.3.5`，不要携带 `;sandbox/...` 后缀。
 
 `jpt-x-skill-source` 属于 HTTP 请求头，不属于业务报文字段本身，不要把它写进 `data`。
 

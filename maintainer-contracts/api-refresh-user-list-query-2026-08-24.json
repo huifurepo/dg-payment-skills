@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "refresh_id": "api-refresh-user-list-query-2026-08-24-r6",
+  "requested_at": "2026-08-24",
+  "retrieved_at": "2026-08-24T23:00:00+08:00",
+  "version_state": {
+    "reason": "Add user list query while retaining the user-requested huifu-merchant-onboarding version 1.0.2.",
+    "huifu-merchant-onboarding": "1.0.2"
+  },
+  "previous_refresh": {
+    "path": "maintainer-contracts/api-refresh-user-business-modify-2026-08-24.json",
+    "sha256": "f63220556555711b9c5a30fa8b748690ceca5e6f43d3f5a7354137309516d590",
+    "refresh_id": "api-refresh-user-business-modify-2026-08-24-r5"
+  },
+  "source_locks": {
+    "onboarding_1_0_2_r6": {
+      "path": "maintainer-contracts/merchant-onboarding-1.0.2-r6-source-lock.json",
+      "sha256": "ba1d358b5b8aa8bfce595facea8258e29ebf1fe7f0983042dbffbdd3ea25f243"
+    },
+    "merchant_onboarding_unchanged": {
+      "path": "maintainer-contracts/merchant-onboarding-source-lock-2026-08-24-r2.json",
+      "sha256": "e785229f04f8010344e8c41acd31b6f8c143c6d263ce743292fcdb12ecec7134"
+    },
+    "user_onboarding_current": {
+      "path": "maintainer-contracts/user-onboarding-source-lock-2026-08-24-r4.json",
+      "sha256": "f756ce79673a52b526f242edf2517078ff3025d94fede6c6c9a44406c9fc64dd"
+    },
+    "user_onboarding_historical": {
+      "path": "maintainer-contracts/user-onboarding-source-lock.json",
+      "sha256": "870c49a6affb8584284398ddc86befe12ab7d40a94ef491322ea1f5a4d296169"
+    }
+  },
+  "catalogs": {
+    "merchant": {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
+      "sha256": "ae56d08f67ab6971f90efc630ce38ff0a8b2124c777e6412a951ae5290eebeee",
+      "field_paths_changed": 0
+    },
+    "user": {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md",
+      "sha256": "aa85e018e0290ec9782ae29ae98c05f865dd68cb0436ca8da292f279808bbcc9",
+      "generator": "scripts/generate_user_onboarding_field_catalog.py",
+      "independent_validator": "scripts/validate_user_onboarding_source_contract.py"
+    }
+  },
+  "scope": [
+    "POST /v2/user/list/query user list query",
+    "Java 3.0.40 V2UserListQueryRequest",
+    "PHP 2.0.30 V2UserListQueryRequest",
+    "Python 2.0.24 V2UserListQueryRequest"
+  ],
+  "field_delta": {
+    "field_paths_added": 17,
+    "field_paths_removed": 0,
+    "request": 8,
+    "response": 9,
+    "callback": 0,
+    "parent": 3,
+    "leaf": 14,
+    "root_tables": 4,
+    "extend_tables": 1
+  },
+  "preserved_boundaries": [
+    "the eight 2026-08-24-r3 user sources and the merchant r2 evidence remain byte-identical",
+    "user_list_info_list is formally String with a child table while the success example is a native JSON array; the response wire conflict remains unresolved",
+    "list-item huifu_id and upper_huifu_id are formally String(2) while the success example uses 16-digit values; production length validation and truncation remain forbidden until confirmation",
+    "request.sign remains formally required although the request example omits it, so request signing remains mandatory",
+    "response.sign remains formally required although the success example omits it, so response verification remains mandatory",
+    "cust_type is limited to the documented 1 enterprise-user and 2 individual-user values",
+    "all SDKs declare only legal_cert_no, req_date and req_seq_id; upper_huifu_id uses an allowlisted exact-key extension and locator-key overrides are rejected"
+  ],
+  "release_rule": "The unchanged 2,155-node merchant catalog and current 554-node user catalog, both independent source validators, SDK evidence, Skill validation, regression rules and package validation must pass. Historical locks remain immutable."
+}

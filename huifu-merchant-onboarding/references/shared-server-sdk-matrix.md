@@ -3,7 +3,7 @@
 ## 目录
 
 - [版本基线](#版本基线)
-- [九个已有专属类的 JSON 接口](#九个已有专属类的-json-接口)
+- [十一个已有专属类的 JSON 接口](#十一个已有专属类的-json-接口)
 - [费率查询缺口](#费率查询缺口)
 - [图片上传](#图片上传)
 - [调试日志硬停](#调试日志硬停)
@@ -16,11 +16,11 @@
 
 | SDK | 核验版本 | 结论 |
 | --- | --- | --- |
-| Java `dg-java-sdk` | `3.0.40` | 九个 JSON Request 类可用；图片接口有专用 Request、URI 特判和 `upload(...)` 入口 |
-| PHP `huifurepo/dg-php-sdk` | `2.0.30` | 九个 JSON Request 类可用；图片生成产物存在，但没有满足合同的可用调用路径 |
-| Python `dg-sdk` / `dg_sdk` | `2.0.24` | 九个 JSON Request 模块可用；图片生成产物存在实现缺陷，不可用 |
+| Java `dg-java-sdk` | `3.0.40` | 十一个 JSON Request 类可用；图片接口有专用 Request、URI 特判和 `upload(...)` 入口 |
+| PHP `huifurepo/dg-php-sdk` | `2.0.30` | 十一个 JSON Request 类可用；图片生成产物存在，但没有满足合同的可用调用路径 |
+| Python `dg-sdk` / `dg_sdk` | `2.0.24` | 十一个 JSON Request 模块可用；图片生成产物存在实现缺陷，不可用 |
 
-## 九个已有专属类的 JSON 接口
+## 十一个已有专属类的 JSON 接口
 
 三语言均包含以下 Request：
 
@@ -33,6 +33,8 @@
 - `V2MerchantBasicdataModifyRequest`
 - `V2MerchantBusiModifyBusistatusRequest`
 - `V2MerchantBasicdataSmsSendRequest`
+- `V2MerchantBusiMultifeeConfigRequest`：精确路由 `/v2/merchant/busi/multiFee/config`
+- `V2MerchantBusiMultifeeQueryRequest`：精确路由 `/v2/merchant/busi/multiFee/query`
 
 共同规则：
 
@@ -40,6 +42,8 @@
 - 业务侧提供当天唯一的 `req_date/req_seq_id`。
 - 请求 `data` 保留签名；同步响应有 `sign` 时验签。
 - SDK 类存在不证明接口权限、材料条件或审核结果。
+- 多费率配置类只声明 `req_seq_id/req_date/huifu_id`；`wx_conf_list/ali_conf_list` 使用 exact-key 扩展映射，值必须是各自只序列化一次的 JSON Array 字符串。Java/PHP/Python 的扩展合并都可能覆盖声明字段，扩展映射必须拒绝这三个定位键。
+- 多费率配置查询类同样只声明三个定位字段；可选 `fee_sign` 使用 exact-key 扩展映射，并且扩展映射只能包含该键，不能传入配置接口的数组字段或覆盖定位字段。
 
 ## 费率查询缺口
 

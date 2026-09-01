@@ -38,6 +38,7 @@ description: "汇付支付交易集成：用于聚合支付、托管支付、che
 | 托管预下单 | `references/hostingpay-preorder.md`、`references/payment-complete-field-catalog.md`，再按端形态补一个原子文档 |
 | 抖音直连、`pre_order_type=4` | `references/hostingpay-preorder.md`、`references/hostingpay-preorder-douyin-direct.md` |
 | 拆单支付查询、`splitpay/query` | `references/hostingpay-query.md`、`references/hostingpay-query-splitpay.md`；完整 DTO 同时执行下方完整字段目录路由 |
+| 交易分账明细、`trade/trans/split/query` | `references/trade-split-detail-query.md`、`references/payment-complete-field-catalog.md`；代码任务再补对应 Java/PHP/Python adapter |
 | 托管退款 | `references/hostingpay-refund.md`；完整 DTO 同时执行下方完整字段目录路由，Java setter 问题补 `references/hostingpay-faq.md` |
 | 托管普通交易查询 | `references/hostingpay-query.md`、`references/hostingpay-query-payment-status-query.md` |
 | 托管交易关单 | `references/hostingpay-query.md`、`references/hostingpay-query-trade-close.md` |
@@ -90,7 +91,7 @@ SDK 安装、初始化和安全 loader 骨架不因产品线不明而硬停，�
 - 保留 Controller/DTO 已接收的 `req_date`、`req_seq_id`、金额、商户号和原交易定位键；缺失或非法时报错，不自行重写。
 - 私钥、系统号和生产商户号只能从服务端安全配置读取，不能写入前端、日志、仓库或回答示例。
 - PHP `2.0.30` 默认 `DEBUG=false`，但官方 `BsPayDemo/loader.php` 与 `Composer/BsPayConfig.php` 会在初始化前启用调试；调试日志会包含带 RSA 私钥的 `MerConfig`、完整请求和响应。联调/生产必须拒绝这些入口，并在加载任何 SDK 文件前固定 `DEBUG=false`。
-- 未显式配置 `skill_source` 时，按当前请求实际加载并参与生成的 Skill 集合取值：仅本 Skill 使用 `hfps/1.3.4`；支付与进件两个 Skill 都参与当前请求时使用 `hfps/1.3.4;hfms/1.0.1`。仅安装在仓库但未参与当前请求不计入；顺序固定为支付、进件，使用一个英文分号且不加空格。
+- 未显式配置 `skill_source` 时，按当前请求实际加载并参与生成的 Skill 集合取值：仅本 Skill 使用 `hfps/1.3.5`；支付与进件两个 Skill 都参与当前请求时使用 `hfps/1.3.5;hfms/1.0.2`。仅安装在仓库但未参与当前请求不计入；顺序固定为支付、进件，使用一个英文分号且不加空格。
 - 调用方显式提供经确认的 `skill_source` 合同值时原样透传；不得再追加 `sys_id`。
 - 不因方便绕过 SDK 的签名、验签、证书或请求头路径。
 
@@ -120,7 +121,7 @@ SDK 安装、初始化和安全 loader 骨架不因产品线不明而硬停，�
 
 | 项目 | 口径 |
 | --- | --- |
-| Skill 版本 | `1.3.4` |
+| Skill 版本 | `1.3.5` |
 | 能力范围 | 聚合支付、托管支付、checkout-js、支付通知、SDK、本地沙箱和支付上线 |
 | 进件能力 | 已迁移至独立 `$huifu-merchant-onboarding` |
 | 聚合支付 Java SDK | `dg-lightning-sdk 1.0.5` |

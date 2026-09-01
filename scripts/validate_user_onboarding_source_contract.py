@@ -23,7 +23,12 @@ require_assertions_enabled()
 
 
 ROOT = Path(__file__).resolve().parent.parent
-LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock.json"
+LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-08-31.json"
+HISTORICAL_LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock.json"
+R1_LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-08-24-r1.json"
+R2_LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-08-24-r2.json"
+R3_LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-08-24-r3.json"
+R4_LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-08-24-r4.json"
 CATALOG = (
     ROOT
     / "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md"
@@ -88,10 +93,11 @@ SENSITIVE_EXAMPLE_FIELDS = frozenset(
 
 
 def source_dir(lock: dict[str, object]) -> Path:
+    snapshot_id = lock.get("source_snapshot_id", lock["source_date"])
     return (
         ROOT
         / "maintainer-contracts/official-sources/user-onboarding"
-        / lock["source_date"]
+        / snapshot_id
     )
 
 
@@ -129,6 +135,24 @@ def source_explicit_page_field_notes(
     source_key: str, text: str
 ) -> dict[str, str]:
     """Independently bind an unlabelled note to its two named fields."""
+    if source_key == "user_enterprise_modify":
+        matches = [
+            normalize(line.strip().removeprefix("- "))
+            for line in visible_lines(text)
+            if line.strip().startswith("- 如要修改法人证件")
+        ]
+        assert len(matches) == 1, (
+            "enterprise modify legal-certificate note must occur exactly once"
+        )
+        return {
+            f"request.data.{name}": matches[0]
+            for name in (
+                "legal_cert_type",
+                "legal_cert_validity_type",
+                "legal_cert_begin_date",
+                "legal_cert_end_date",
+            )
+        }
     if source_key != "user_enterprise":
         return {}
     matches = [
@@ -499,8 +523,6 @@ def validate_official_undefined_fields(
     records: dict[RecordKey, RecordValue],
     node_structure: dict[RecordKey, str],
 ) -> tuple[int, int]:
-    refresh = json.loads(REFRESH.read_text(encoding="utf-8"))
-    contract = refresh["official_undefined_fields"]
     blank_descriptions = {
         (title, path)
         for (title, _surface, path), value in records.items()
@@ -511,14 +533,8 @@ def validate_official_undefined_fields(
         for key, value in records.items()
         if node_structure[key] == "leaf" and value[3] == "—"
     }
-    expected_descriptions = {
-        (item["interface"], item["path"])
-        for item in contract["blank_descriptions"]
-    }
-    expected_lengths = {
-        (item["interface"], item["path"])
-        for item in contract["blank_scalar_lengths"]
-    }
+    expected_descriptions = {("用户业务入驻修改", "async.data")}
+    expected_lengths: set[tuple[str, str]] = set()
     assert blank_descriptions == expected_descriptions, (
         "official blank-description set changed: "
         f"missing={sorted(expected_descriptions - blank_descriptions)}, "
@@ -535,8 +551,6 @@ def validate_official_undefined_fields(
 def validate_refresh_semantic_contracts(
     records: dict[RecordKey, RecordValue],
 ) -> tuple[int, int, int, int]:
-    refresh = json.loads(REFRESH.read_text(encoding="utf-8"))
-
     def find(interface: str, path: str) -> RecordValue:
         matches = [
             value
@@ -546,51 +560,41 @@ def validate_refresh_semantic_contracts(
         assert len(matches) == 1, f"semantic field lookup failed: {interface} {path}"
         return matches[0]
 
-    undefined_triggers = refresh["official_undefined_fields"][
-        "undefined_conditional_triggers"
-    ]
-    for item in undefined_triggers:
-        value = find(item["interface"], item["path"])
-        assert value[4] == item["required"] == "C"
+    conditional_fields = (
+        ("用户业务入驻", "request.data.settle_config_list[].constant_amt"),
+        ("用户业务入驻修改", "request.data.settle_config_list[].is_priority_receipt"),
+    )
+    for interface, path in conditional_fields:
+        assert find(interface, path)[4] == "C"
     detail_mp = find(
         "用户信息查询", "response.data.elec_acct_config.elec_card_list[].mp"
     )
     business_card_name = find(
         "用户业务入驻", "request.data.card_info.card_name"
     )
-    assert detail_mp[5] == "—"
+    assert "11位数字" in detail_mp[5]
     assert "必填" not in business_card_name[5] and "选填" not in business_card_name[5]
 
-    page_notes = refresh["page_field_notes_preserved"]
-    assert len(page_notes) == 3
-    page_note_keys = {(item["interface"], item["path"]) for item in page_notes}
-    assert len(page_note_keys) == len(page_notes), "duplicate page-field note binding"
-    for item in page_notes:
-        value = find(item["interface"], item["path"])
-        assert "官网页内注意" in value[5] and "实名认证" in value[5]
-
-    incomplete_links = refresh["official_incomplete_links"]
-    assert len(incomplete_links) == 1
-    for item in incomplete_links:
-        value = find(item["interface"], item["path"])
-        assert "点击查看" in value[5] and "](" not in value[5]
-
-    ambiguous_semantics = refresh["official_ambiguous_semantics"]
-    assert len(ambiguous_semantics) == 1
-    ambiguous_keys = {
-        (item["interface"], item["path"]) for item in ambiguous_semantics
-    }
-    assert len(ambiguous_keys) == len(ambiguous_semantics), (
-        "duplicate official-ambiguity binding"
+    page_notes = (
+        ("企业用户开户", "request.data.legal_name"),
+        ("企业用户开户", "request.data.legal_cert_no"),
+        ("个人用户开户", "request.data.file_list[]"),
+        ("企业用户基本信息修改", "request.data.legal_cert_type"),
+        ("企业用户基本信息修改", "request.data.legal_cert_validity_type"),
+        ("企业用户基本信息修改", "request.data.legal_cert_begin_date"),
+        ("企业用户基本信息修改", "request.data.legal_cert_end_date"),
     )
-    for item in ambiguous_semantics:
-        value = find(item["interface"], item["path"])
-        assert "0：对公" in value[5]
-        assert "4：对公非同名" in value[5]
-        assert "个人商户/用户不支持对公类型，对私非法人类型" in value[5]
+    for index, (interface, path) in enumerate(page_notes):
+        value = find(interface, path)
+        assert "官网页内注意" in value[5]
+        assert ("实名认证" if index < 3 else "同步填写") in value[5]
+    incomplete_links: tuple[tuple[str, str], ...] = ()
+    ambiguous_semantics = (("用户业务入驻", "request.data.card_info.card_type"),)
+    value = find(*ambiguous_semantics[0])
+    assert "0：对公" in value[5] and "4：对公非同名" in value[5]
 
     return (
-        len(undefined_triggers),
+        len(conditional_fields),
         len(page_notes),
         len(incomplete_links),
         len(ambiguous_semantics),
@@ -652,6 +656,17 @@ def validate_official_example_shape_contract(lock: dict[str, object]) -> int:
     base = source_dir(lock)
     per_interface: dict[str, dict[str, int]] = {}
     fingerprints: list[str] = []
+    expected_counts = {
+        "user_enterprise": {"request_paths": 29, "response_paths": 7},
+        "user_individual": {"request_paths": 21, "response_paths": 7},
+        "user_business_open": {"request_paths": 66, "response_paths": 6},
+        "user_apply_query": {"request_paths": 8, "response_paths": 7},
+        "user_detail_query": {"request_paths": 7, "response_paths": 50},
+        "user_enterprise_modify": {"request_paths": 28, "response_paths": 5},
+        "user_individual_modify": {"request_paths": 12, "response_paths": 5},
+        "user_business_modify": {"request_paths": 49, "response_paths": 6},
+        "user_list_query": {"request_paths": 7, "response_paths": 9},
+    }
     for source in lock["sources"]:
         text = (base / source["filename"]).read_text(encoding="utf-8-sig")
         request_paths = flatten_example_paths(official_request_example(text), "request")
@@ -667,13 +682,11 @@ def validate_official_example_shape_contract(lock: dict[str, object]) -> int:
             f"{source['key']}|response|{path}" for path in sorted(response_paths)
         )
     digest = hashlib.sha256("\n".join(fingerprints).encode("utf-8")).hexdigest()
-    refresh = json.loads(REFRESH.read_text(encoding="utf-8"))
-    contract = refresh["official_example_shape_contract"]
-    assert per_interface == contract["per_interface"], (
+    assert per_interface == expected_counts, (
         f"official example path counts changed: {per_interface}"
     )
-    assert len(fingerprints) == contract["total_paths"]
-    assert digest == contract["sha256"], (
+    assert len(fingerprints) == 329
+    assert digest == "9f1bc2b6164256aba3fae4274b267faa7d12e4ea0d3f18db36242d31dd315d31", (
         f"official example path fingerprint changed: {digest}"
     )
     return len(fingerprints)
@@ -775,8 +788,10 @@ def validate_official_request_example_anomalies(
         text = (base / source["filename"]).read_text(encoding="utf-8-sig")
         return official_request_example(text)
 
-    enterprise = load("user_enterprise")["data"]
-    individual = load("user_individual")["data"]
+    enterprise_request = load("user_enterprise")
+    individual_request = load("user_individual")
+    enterprise = enterprise_request["data"]
+    individual = individual_request["data"]
     business = load("user_business_open")["data"]
     assert isinstance(enterprise, dict)
     assert isinstance(individual, dict)
@@ -815,53 +830,35 @@ def validate_official_request_example_anomalies(
     )
 
     checks = {
-        "enterprise-sms-send-flag-1": enterprise.get("sms_send_flag") == "1"
+        "enterprise-sms-send-flag-y": enterprise.get("sms_send_flag") == "Y"
         and "Y" in enterprise_sms[5]
         and "N" in enterprise_sms[5],
-        "individual-sms-send-flag-1": individual.get("sms_send_flag") == "1"
+        "individual-sms-send-flag-y": individual.get("sms_send_flag") == "Y"
         and "Y" in individual_sms[5]
         and "N" in individual_sms[5],
         "individual-file-list-native-array": isinstance(individual.get("file_list"), list)
-        and individual_file_list[2] == "String"
+        and individual_file_list[2] == "Object"
         and "jsonArray" in individual_file_list[5],
-        "individual-operator-id-example-only": "operator_id" in individual
+        "individual-operator-id-absent": "operator_id" not in individual
         and ("个人用户开户", "request.data.operator_id") not in formal_paths,
-        "business-card-info-bank-fields-example-only": {
-            "bank_code",
-            "branch_name",
-        }
-        <= set(card_info)
-        and (
-            "用户业务入驻",
-            "request.data.card_info.bank_code",
-        )
-        not in formal_paths
+        "business-card-info-branch-name-example-only": "bank_code" not in card_info
+        and "branch_name" in card_info
         and (
             "用户业务入驻",
             "request.data.card_info.branch_name",
         )
         not in formal_paths,
-        "business-d1-constant-amt-omitted": settle[0].get("settle_cycle") == "D1"
-        and "constant_amt" not in settle[0]
+        "business-d1-constant-amt-present": settle[0].get("settle_cycle") == "D1"
+        and settle[0].get("constant_amt") == "1.00"
         and constant_amt[4] == "C"
         and "D1时必填" in constant_amt[5],
-        "business-fixed-ratio-not-two-decimals": settle[0].get("fixed_ratio") == "2"
+        "business-fixed-ratio-two-decimals": settle[0].get("fixed_ratio") == "2.00"
         and "两位" in fixed_ratio[5],
-        "business-cash-fee-rate-not-two-decimals": cash[0].get("fee_rate") == "2"
+        "business-cash-fee-rate-two-decimals": cash[0].get("fee_rate") == "2.00"
         and "两位" in cash_fee_rate[5],
     }
     failed = sorted(name for name, matched in checks.items() if not matched)
     assert not failed, f"official request-example anomaly changed: {failed}"
-    refresh = json.loads(REFRESH.read_text(encoding="utf-8"))
-    expected_list = refresh["official_request_example_anomalies_guarded"]
-    assert len(expected_list) == len(set(expected_list)), (
-        "request-example anomaly guard list contains duplicates"
-    )
-    expected = set(expected_list)
-    assert set(checks) == expected, (
-        "request-example anomaly guard list mismatch: "
-        f"missing={sorted(expected - set(checks))}, extra={sorted(set(checks) - expected)}"
-    )
     return len(checks)
 
 
@@ -896,27 +893,59 @@ def validate_official_response_example_anomalies(
     assert isinstance(detail.get("data"), dict)
 
     checks = {
-        "enterprise-required-sign-omitted": "sign" not in enterprise
+        "enterprise-required-sign-present": "sign" in enterprise
         and enterprise_sign[4] == "Y",
-        "individual-required-sign-omitted": "sign" not in individual
+        "individual-required-sign-present": "sign" in individual
         and individual_sign[4] == "Y",
-        "business-string-data-rendered-as-object": isinstance(business.get("data"), dict)
-        and business_data[2] == "String",
-        "detail-resp-code-eight-vs-five": len(detail["data"].get("resp_code", "")) == 8
-        and detail_resp_code[3] == "5",
+        "business-json-data-rendered-as-object": isinstance(business.get("data"), dict)
+        and business_data[2] == "Json",
+        "detail-resp-code-eight": len(detail["data"].get("resp_code", "")) == 8
+        and detail_resp_code[3] == "8",
     }
     failed = sorted(name for name, matched in checks.items() if not matched)
     assert not failed, f"official response-example anomaly changed: {failed}"
-    refresh = json.loads(REFRESH.read_text(encoding="utf-8"))
-    expected_list = refresh["official_response_example_anomalies_guarded"]
-    assert len(expected_list) == len(set(expected_list)), (
-        "response-example anomaly guard list contains duplicates"
+    return len(checks)
+
+
+def validate_list_query_conflicts(
+    lock: dict[str, object], records: dict[RecordKey, RecordValue]
+) -> int:
+    source = next(item for item in lock["sources"] if item["key"] == "user_list_query")
+    text = (source_dir(lock) / source["filename"]).read_text(encoding="utf-8-sig")
+    request_example = official_request_example(text)
+    example = official_response_example(text)
+    data = example.get("data")
+    assert isinstance(data, dict), "user-list success example data must remain an object"
+    users = data.get("user_list_info_list")
+    assert isinstance(users, list) and users, (
+        "user-list success example must retain a non-empty native array"
     )
-    expected = set(expected_list)
-    assert set(checks) == expected, (
-        "response-example anomaly guard list mismatch: "
-        f"missing={sorted(expected - set(checks))}, extra={sorted(set(checks) - expected)}"
-    )
+
+    def formal(path: str) -> RecordValue:
+        matches = [
+            value
+            for (title, _surface, record_path), value in records.items()
+            if title == "用户列表查询" and record_path == path
+        ]
+        assert len(matches) == 1, f"user-list formal lookup failed: {path}"
+        return matches[0]
+
+    list_field = formal("response.data.user_list_info_list[]")
+    huifu_id = formal("response.data.user_list_info_list[].huifu_id")
+    upper_huifu_id = formal("response.data.user_list_info_list[].upper_huifu_id")
+    request_sign = formal("request.sign")
+    sign = formal("response.sign")
+    checks = {
+        "list-object-native-array": list_field[2] == "Object"
+        and isinstance(users, list),
+        "list-huifu-id-length-eighteen": huifu_id[3] == "18",
+        "list-upper-huifu-id-length-eighteen": upper_huifu_id[3] == "18",
+        "list-required-request-sign-present": request_sign[4] == "Y"
+        and "sign" in request_example,
+        "list-required-sign-present": sign[4] == "Y" and "sign" in example,
+    }
+    failed = sorted(name for name, matched in checks.items() if not matched)
+    assert not failed, f"user-list official conflict changed: {failed}"
     return len(checks)
 
 
@@ -931,6 +960,168 @@ def main() -> int:
         "保留|说明",
     ]
     lock = json.loads(LOCK.read_text(encoding="utf-8"))
+    historical = json.loads(HISTORICAL_LOCK.read_text(encoding="utf-8"))
+    r1 = json.loads(R1_LOCK.read_text(encoding="utf-8"))
+    r2 = json.loads(R2_LOCK.read_text(encoding="utf-8"))
+    r3 = json.loads(R3_LOCK.read_text(encoding="utf-8"))
+    r4 = json.loads(R4_LOCK.read_text(encoding="utf-8"))
+    assert hashlib.sha256(HISTORICAL_LOCK.read_bytes()).hexdigest() == (
+        "870c49a6affb8584284398ddc86befe12ab7d40a94ef491322ea1f5a4d296169"
+    ), "historical five-interface user lock must remain immutable"
+    assert hashlib.sha256(R1_LOCK.read_bytes()).hexdigest() == (
+        "82d08b1a7a588fb22173720c79ec3992d0481c80abeaa044a3b37e90a83582e9"
+    ), "enterprise-modify r1 user lock must remain immutable"
+    assert hashlib.sha256(R2_LOCK.read_bytes()).hexdigest() == (
+        "6c79cd8079d155df243681b2f206ded1af9a65095839946584c6cde008ed0d72"
+    ), "individual-modify r2 user lock must remain immutable"
+    assert hashlib.sha256(R3_LOCK.read_bytes()).hexdigest() == (
+        "72d1a2d677a929ca5d073b96f508e79c0803cccfb9e5b36dc5593e9bac5a1e74"
+    ), "business-modify r3 user lock must remain immutable"
+    assert hashlib.sha256(R4_LOCK.read_bytes()).hexdigest() == (
+        "f756ce79673a52b526f242edf2517078ff3025d94fede6c6c9a44406c9fc64dd"
+    ), "list-query r4 user lock must remain immutable"
+    assert set(lock) == {
+        "schema_version",
+        "source_date",
+        "source_snapshot_id",
+        "previous_source_lock",
+        "verified_at",
+        "sources",
+        "totals",
+        "api_refresh",
+    }, "current user source lock has unexpected or missing top-level keys"
+    assert {
+        key: lock[key]
+        for key in (
+            "schema_version",
+            "source_date",
+            "source_snapshot_id",
+            "previous_source_lock",
+        )
+    } == {
+        "schema_version": 1,
+        "source_date": "2026-08-31",
+        "source_snapshot_id": "2026-08-31",
+        "previous_source_lock": {
+            "path": "maintainer-contracts/user-onboarding-source-lock-2026-08-24-r4.json",
+            "sha256": "f756ce79673a52b526f242edf2517078ff3025d94fede6c6c9a44406c9fc64dd",
+        },
+    }
+    assert re.fullmatch(r"2026-08-31T\d{2}:\d{2}:\d{2}\+08:00", lock["verified_at"])
+    assert [item["key"] for item in lock["sources"]] == [
+        item["key"] for item in r4["sources"]
+    ], "current user source set or order changed"
+    previous_by_key = {item["key"]: item for item in r4["sources"]}
+    current_by_key = {item["key"]: item for item in lock["sources"]}
+    changed_keys = {
+        key
+        for key in current_by_key
+        if current_by_key[key]["sha256"] != previous_by_key[key]["sha256"]
+    }
+    assert changed_keys == {
+        "user_enterprise",
+        "user_individual",
+        "user_business_open",
+        "user_detail_query",
+        "user_enterprise_modify",
+        "user_individual_modify",
+        "user_business_modify",
+        "user_list_query",
+    }
+    current_dir = source_dir(lock)
+    historical_dir = (
+        ROOT / "maintainer-contracts/official-sources/user-onboarding/2026-08-10"
+    )
+    r1_dir = ROOT / "maintainer-contracts/official-sources/user-onboarding/2026-08-24-r1"
+    r2_dir = ROOT / "maintainer-contracts/official-sources/user-onboarding/2026-08-24-r2"
+    r3_dir = ROOT / "maintainer-contracts/official-sources/user-onboarding/2026-08-24-r3"
+    r4_dir = ROOT / "maintainer-contracts/official-sources/user-onboarding/2026-08-24-r4"
+    assert (current_dir / "application-status-query.md").read_bytes() == (
+        r4_dir / "application-status-query.md"
+    ).read_bytes(), "unchanged user apply-query source drifted in the current snapshot"
+    snapshots = (
+        ("2026-08-10", historical, historical_dir),
+        ("2026-08-24-r1", r1, r1_dir),
+        ("2026-08-24-r2", r2, r2_dir),
+        ("2026-08-24-r3", r3, r3_dir),
+        ("2026-08-24-r4", r4, r4_dir),
+        ("2026-08-31", lock, current_dir),
+    )
+    for snapshot_name, snapshot_lock, snapshot_dir in snapshots:
+        expected_files = {source["filename"] for source in snapshot_lock["sources"]}
+        actual_files = {path.name for path in snapshot_dir.iterdir() if path.is_file()}
+        assert actual_files == expected_files, (
+            f"{snapshot_name} user source snapshot file set differs: "
+            f"missing={sorted(expected_files - actual_files)}, "
+            f"extra={sorted(actual_files - expected_files)}"
+        )
+        for source in snapshot_lock["sources"]:
+            actual_sha = hashlib.sha256(
+                (snapshot_dir / source["filename"]).read_bytes()
+            ).hexdigest()
+            assert actual_sha == source["sha256"], (
+                f"{snapshot_name} user source SHA changed: {source['filename']}"
+            )
+    for previous_name, previous_lock, previous_dir, current_name, current_snapshot_dir in (
+        ("2026-08-10", historical, historical_dir, "2026-08-24-r1", r1_dir),
+        ("2026-08-24-r1", r1, r1_dir, "2026-08-24-r2", r2_dir),
+        ("2026-08-24-r2", r2, r2_dir, "2026-08-24-r3", r3_dir),
+        ("2026-08-24-r3", r3, r3_dir, "2026-08-24-r4", r4_dir),
+    ):
+        for source in previous_lock["sources"]:
+            assert (current_snapshot_dir / source["filename"]).read_bytes() == (
+                previous_dir / source["filename"]
+            ).read_bytes(), (
+                f"{current_name} changed {previous_name} inherited user source: "
+                f"{source['filename']}"
+            )
+    business_modify_text = (current_dir / "business-modify.md").read_text(encoding="utf-8")
+    business_modify_example = re.search(
+        r"#### 请求示例\s*```json\s*(?P<payload>.*?)\s*```",
+        business_modify_text,
+        flags=re.S,
+    )
+    assert business_modify_example, "business-modify request example is missing"
+    example_payload_text = business_modify_example.group("payload")
+    example_payload = json.loads(example_payload_text)
+    assert set(example_payload) == {"sys_id", "data", "sign", "product_id"}
+    assert set(example_payload["data"]) == {
+        "req_seq_id",
+        "req_date",
+        "huifu_id",
+        "async_return_url",
+        "card_info",
+        "settle_config_list",
+        "cash_config",
+        "file_list",
+    }
+    assert example_payload_text.count('"file_list"') == 1, (
+        "business-modify request example must contain exactly one file_list key"
+    )
+    assert lock["api_refresh"] == {
+        "refresh_id": "api-refresh-user-online-review-2026-08-31",
+        "changed_source_keys": [
+            "user_enterprise",
+            "user_individual",
+            "user_business_open",
+            "user_detail_query",
+            "user_enterprise_modify",
+            "user_individual_modify",
+            "user_business_modify",
+            "user_list_query",
+        ],
+        "field_paths_added": 5,
+        "field_paths_removed": 5,
+        "field_paths_changed": 43,
+        "document_conflicts": [
+            "user business modify response.data is String while the success example is a JSON object",
+            "user business open elec_receipt_config is Object while its description says jsonObject string",
+            "user business modify elec_receipt_config is Object while its description says jsonObject string",
+            "user business open and modify elec_card_list are Object while their descriptions say jsonArray string",
+            "user business modify is_priority_receipt is C while its P0 description says optional",
+            "user business modify weekday_fix_amt and weekday_fee_rate still contain contradictory D1 behavior",
+        ],
+    }
     base = source_dir(lock)
     for source in lock["sources"]:
         raw = (base / source["filename"]).read_bytes()
@@ -979,6 +1170,7 @@ def main() -> int:
     guarded_response_example_anomalies = validate_official_response_example_anomalies(
         lock, actual
     )
+    list_query_conflicts = validate_list_query_conflicts(lock, actual)
     official_example_paths = validate_official_example_shape_contract(lock)
     public_sources, integration_decisions = validate_public_platform_contract()
     direction_counts = {
@@ -989,6 +1181,16 @@ def main() -> int:
         name: sum(value == name for value in node_structure.values())
         for name in ("parent", "leaf")
     }
+    assert lock["totals"] == {
+        "fields": 554,
+        "request": 307,
+        "response": 199,
+        "callback": 48,
+        "parent": 61,
+        "leaf": 493,
+        "root_tables": 40,
+        "extend_tables": 41,
+    }, "current user source lock totals changed"
     assert len(actual) == lock["totals"]["fields"]
     assert direction_counts == {
         name: lock["totals"][name]
@@ -1012,6 +1214,7 @@ def main() -> int:
         f"official_ambiguous_semantics={ambiguous_semantics}; "
         f"guarded_request_example_anomalies={guarded_request_example_anomalies}; "
         f"guarded_response_example_anomalies={guarded_response_example_anomalies}; "
+        f"list_query_conflicts={list_query_conflicts}; "
         f"official_example_paths={official_example_paths}; "
         f"public_sources={public_sources}; "
         f"integration_decisions={integration_decisions}"

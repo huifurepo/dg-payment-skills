@@ -6,11 +6,13 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import shutil
 import subprocess
+import tempfile
 from pathlib import Path
 
-from skill_validation_config import onboarding_source_date, onboarding_source_dir
 from validation_runtime import require_assertions_enabled
+from generate_merchant_onboarding_field_catalog import build_catalog
 
 
 require_assertions_enabled()
@@ -20,7 +22,10 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 LOCK = REPO_ROOT / "maintainer-contracts/merchant-onboarding-source-lock-2026-08-10.json"
 CATALOG_PATH = "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md"
 CATALOG = REPO_ROOT / CATALOG_PATH
-SOURCE_DIR = onboarding_source_dir()
+SOURCE_DIR = (
+    REPO_ROOT
+    / "maintainer-contracts/official-sources/merchant-onboarding/2026-08-10"
+)
 
 
 def normalize_description(value: str) -> str:
@@ -93,7 +98,31 @@ def main() -> int:
         text=True,
     )
     before = parse_fields(baseline)
-    after = parse_fields(CATALOG.read_text(encoding="utf-8"))
+    # Rebuild the historical pages with the current parser.  The generator has
+    # two later source specs, so provide those files only to satisfy its input
+    # surface and filter them back out below.
+    with tempfile.TemporaryDirectory(prefix="huifu-onboarding-history-") as temp:
+        composite = Path(temp)
+        for path in SOURCE_DIR.iterdir():
+            if path.is_file():
+                shutil.copyfile(path, composite / path.name)
+        current_dir = (
+            REPO_ROOT
+            / "maintainer-contracts/official-sources/merchant-onboarding/2026-08-31"
+        )
+        for filename in ("multifee-config.md", "multifee-query.md"):
+            shutil.copyfile(current_dir / filename, composite / filename)
+        historical_catalog, _ = build_catalog(composite)
+    active_catalog = parse_fields(historical_catalog)
+    locked_titles = {source["title"] for source in lock["sources"]}
+    # This validator proves the historical 2026-08-10 refresh. Later interfaces
+    # may be appended to the active catalog and are validated by the current
+    # source-contract validator instead of being treated as historical drift.
+    after = {
+        key: value
+        for key, value in active_catalog.items()
+        if key[0] in locked_titles
+    }
     extension = lock["extension_from_1_0_0"]
     source_by_key = {item["key"]: item for item in lock["sources"]}
     new_titles = {

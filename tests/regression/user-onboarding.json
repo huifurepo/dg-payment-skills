@@ -7,14 +7,14 @@
   },
   {
     "id": 202,
-    "prompt": "个人用户开户的证件有效期和 file_list 应该怎样编码？请用 $huifu-merchant-onboarding 说明官网冲突。",
-    "expected": "必须读取 `user-onboarding-individual.md`、`user-onboarding-field-contracts.md` 和 `user-onboarding-platform-contracts.md`；使用 POST /v2/user/basicdata/indv，说明34个节点、请求27、同步响应7、无通知；cert_end_date 的必填列为 N 但非长期证件时说明要求提供；file_list 正式类型/说明是 String(JSON Array)，接入决策按说明序列化一次，普通数组示例登记为示例错误而不是未知 wire；官网表外注意还声明证件类型为身份证时会对姓名和身份证号做实名认证。",
+    "prompt": "个人用户开户的证件有效期和 file_list 应该怎样编码？请用 $huifu-merchant-onboarding 说明当前官网合同。",
+    "expected": "必须读取 `user-onboarding-individual.md`、`user-onboarding-field-contracts.md` 和 `user-onboarding-platform-contracts.md`；使用 POST /v2/user/basicdata/indv，说明34个节点、请求27、同步响应7、无通知；cert_end_date 的必填列为 N 但非长期证件时说明要求提供；file_list 正式为 Object/jsonArray格式，按原生 JSON Array 发送且不能沿用旧版 String(JSON Array)；官网表外注意还声明证件类型为身份证时会对姓名和身份证号做实名认证。",
     "suite": "user-onboarding"
   },
   {
     "id": 203,
     "prompt": "用户业务入驻要配置结算、取现和中信 e 账户，并接收回调。请用 $huifu-merchant-onboarding 给出状态和通知边界。",
-    "expected": "必须读取 `user-onboarding-business-open.md`、`user-onboarding-field-contracts.md` 和 `user-onboarding-platform-contracts.md`；使用 POST /v2/user/busi/open，说明118个节点、请求83、同步响应11、通知24；upper_huifu_id 必填；个人用户只允许 card_type=1，企业按条件允许0/1/2/4，所有接受类型都要求 card_name；D1 要求 fixed_ratio/constant_amt 两位小数；成功响应 data 必有并返回 apply_no，但不代表审核通过；接口通知使用配置类 data，原始 data 免排序 RSA 验签，成功返回HTTP 200与RECV_ORD_ID_+req_seq_id，5秒超时且超时/500-599默认重试3次并做状态感知幂等；不得混用控台Webhook；异步 huifu_id 的汇付客户号/商户号角色冲突仍不得直接映射；审核Y/P/N、配置S/F、银行S/F分层。",
+    "expected": "必须读取 `user-onboarding-business-open.md`、`user-onboarding-field-contracts.md` 和 `user-onboarding-platform-contracts.md`；使用 POST /v2/user/busi/open，说明118个节点、请求83、同步响应11、通知24；upper_huifu_id 必填；个人用户只允许 card_type=1，企业按条件允许0/1/2/4，所有接受类型都要求 card_name；D1 要求 fixed_ratio/constant_amt 两位小数；启用elec_card_list或elec_receipt_config时，因Object与jsonArray/jsonObject字符串说明冲突必须硬停确认wire；成功响应 data 必有并返回 apply_no，但不代表审核通过；接口通知使用配置类 data，原始 data 免排序 RSA 验签，成功返回HTTP 200与RECV_ORD_ID_+req_seq_id，5秒超时且超时/500-599默认重试3次并做状态感知幂等；不得混用控台Webhook；异步 huifu_id 按汇付客户号映射为用户号；审核Y/P/N、配置S/F、银行S/F分层。",
     "suite": "user-onboarding"
   },
   {
@@ -26,7 +26,7 @@
   {
     "id": 205,
     "prompt": "用户信息查询的 req_seq_id 怎么校验，响应应该解几层 JSON？file_list、elec_card_list 和 resp_code 有哪些官网冲突？",
-    "expected": "必须读取 `user-onboarding-detail-query.md`、`user-onboarding-complete-field-catalog.md` 和 `user-onboarding-platform-contracts.md`；使用 POST /v2/user/basicdata/query，说明144个节点、请求7、同步响应137、无通知；成功response.data必有，异常响应可缺；ent_base_info/indv_base_info/card_info/elec_acct_config是String(JSON Object)，三个配置列表是String(JSON Array)，elec_receipt_config/sign_user_info是原生Object；两组file_list是各自父对象内原生数组，elec_card_list是父对象内String(JSON Array)，mp在card_type=1时要求、0时不要求；branch_code读取官方基础参数汇总；仍保留out_settle_acct_type枚举/示例、D1工作日费率、resp_code 5/8位和地区示例冲突，不复用商户DTO。",
+    "expected": "必须读取 `user-onboarding-detail-query.md`、`user-onboarding-complete-field-catalog.md` 和 `user-onboarding-platform-contracts.md`；使用 POST /v2/user/basicdata/query，说明144个节点、请求7、同步响应137、无通知；成功response.data必有，异常响应可缺；ent_base_info/indv_base_info/card_info/elec_acct_config是String(JSON Object)，三个配置列表是String(JSON Array)，elec_receipt_config/sign_user_info是原生Object；两组file_list是各自父对象内原生数组，elec_card_list是父对象内String(JSON Array)，mp在card_type=1时要求、0时不要求；branch_code读取当前正式链接；resp_code已为8位，out_settle_acct_type示例已为01，D1工作日字段已统一为生效；只保留地区示例不可作为默认编码的边界，不复用商户DTO。",
     "suite": "user-onboarding"
   },
   {
@@ -43,26 +43,50 @@
   },
   {
     "id": 208,
-    "prompt": "请用 $huifu-merchant-onboarding 说明五个用户接口在 Java/PHP/Python SDK 中的类、Object 扩展字段和上线安全条件。",
-    "expected": "必须读取 `user-onboarding-shared-server-sdk-matrix.md`、`user-onboarding-field-contracts.md` 和 `user-onboarding-platform-contracts.md`；列出五个 V2User 专属 Request 类及精确 /v2/user/* 路由；接入方确认 C 为条件必填，按字段说明和主体/卡类型矩阵触发，不能无条件全局必填；Object与String(JSON)按wire矩阵通过exact-key和探针验证没有再次序列化；接入方已确认 Java 3.0.40 与 PHP 2.0.30 不存在 Skill 曾推断的 TLS 问题，三语言均使用对应官方 SDK，禁止 HttpClient/Guzzle/curl 等手写 HTTP；PHP DEBUG 仍是独立硬检查点。",
+    "prompt": "请用 $huifu-merchant-onboarding 说明九个用户接口在 Java/PHP/Python SDK 中的类、Object/扩展字段和上线安全条件。",
+    "expected": "必须读取 `user-onboarding-shared-server-sdk-matrix.md`、`user-onboarding-field-contracts.md` 和 `user-onboarding-platform-contracts.md`；列出九个 V2User 专属 Request 类及精确 /v2/user/* 路由；企业修改类、业务入驻修改类只声明四字段，个人修改类与列表查询类只声明三字段；列表查询可选upper_huifu_id走受控exact-key扩展；业务入驻修改的sign_user_info最终必须是原生Object，Java String setter必须受控exact-key覆盖，PHP可直接传数组，Python可直接赋dict；扩展不得覆盖定位字段；接入方确认 C 为条件必填，按字段说明和主体/卡类型矩阵触发，不能无条件全局必填；Object与String(JSON)按wire矩阵通过语言对应赋值或exact-key和探针验证没有再次序列化；接入方已确认 Java 3.0.40 与 PHP 2.0.30 不存在 Skill 曾推断的 TLS 问题，三语言均使用对应官方 SDK，禁止 HttpClient/Guzzle/curl 等手写 HTTP；PHP DEBUG 仍是独立硬检查点。",
     "suite": "user-onboarding"
   },
   {
     "id": 209,
-    "prompt": "请核对用户开户与入驻五接口的机械字段目录统计，不能只给总数。",
-    "expected": "必须读取 `user-onboarding-complete-field-catalog.md`、`user-onboarding-field-contracts.md` 和 `user-onboarding-platform-contracts.md`；逐项给出43=36+7、34=27+7、118=83+11+24、15=8+7、144=7+137；合计354=161请求+169同步响应+24通知，并说明22根表、26扩展表、37父节点、317叶节点；官网五接口外层data必填列均为N且业务入驻类型列为String，但接入方确认成功wire是必有原生对象；官网9个空说明、15个空长度继续以破折号保留；三个表外实名认证注记必须保留。",
+    "prompt": "请核对用户开户、入驻、查询和四个新增接口的九接口机械字段目录统计，不能只给总数。",
+    "expected": "必须读取 `user-onboarding-complete-field-catalog.md`、`user-onboarding-field-contracts.md` 和 `user-onboarding-platform-contracts.md`；逐项给出43=36+7、34=27+7、118=83+11+24、15=8+7、144=7+137、37=32+5、26=21+5、120=85+11+24、17=8+9；合计554=307请求+199同步响应+48通知，并说明40根表、41扩展表、61父节点、493叶节点；官网九接口外层data必填列均为N且仅业务入驻修改仍为String；当前只有业务入驻修改async.data一个空说明、没有空长度标量叶字段；七个表外注记绑定必须保留。",
     "suite": "user-onboarding"
   },
   {
     "id": 210,
     "prompt": "本次只使用商户进件 Skill 的用户开户能力，skill_source 默认值是什么？哪些响应字段不能出现在日志和前端？",
-    "expected": "必须读取 `shared-request-header-policy.md` 和 `user-onboarding-shared-credential-boundary.md`；仅本 Skill 参与时默认 skill_source 为 hfms/1.0.1，显式合同值原样透传；login_password、证件号、银行卡号、手机号、地址、邮箱、token_no 和文件 ID 均须白名单提取与脱敏，不得写日志、前端或回答示例。",
+    "expected": "必须读取 `shared-request-header-policy.md` 和 `user-onboarding-shared-credential-boundary.md`；仅本 Skill 参与时默认 skill_source 为 hfms/1.0.2，显式合同值原样透传；login_password、证件号、银行卡号、手机号、地址、邮箱、token_no 和文件 ID 均须白名单提取与脱敏，不得写日志、前端或回答示例。",
     "suite": "user-onboarding"
   },
   {
     "id": 211,
     "prompt": "用户业务入驻的 async_return_url 回调和控台 Webhook 是一套协议吗？签名、回包和重试怎么做？",
     "expected": "必须读取 `user-onboarding-platform-contracts.md`、`user-onboarding-shared-signing-v2.md` 和 `user-onboarding-business-open.md`；明确接口async_return_url与控台Webhook是两套协议；接口配置类通知使用POST/UTF-8和data参数，原始data不排序、用汇付RSA公钥SHA256WithRSA验签，处理成功返回精确HTTP 200与RECV_ORD_ID_+req_seq_id，默认5秒超时，超时与500-599默认重试3次，重复消息状态感知幂等；Webhook使用控台端点/终端密钥、任意2xx及独立补发规则，不能混用。",
+    "suite": "user-onboarding"
+  },
+  {
+    "id": 212,
+    "prompt": "用 PHP SDK 修改企业用户法人证件、注册地址和 file_list；能否把 req_seq_id 也放进 extendInfos？",
+    "expected": "必须读取 `user-onboarding-enterprise-modify.md`、`user-onboarding-complete-field-catalog.md`、`user-onboarding-field-contracts.md` 和 `user-onboarding-shared-server-sdk-matrix.md`；使用 POST /v2/user/basicdata/ent/modify 和 V2UserBasicdataEntModifyRequest；说明37节点=请求32+响应5、无通知；huifu_id 使用企业用户号；修改法人证件时 legal_cert_type/legal_cert_validity_type/legal_cert_begin_date/legal_cert_end_date 四字段同步填写，外国人居留证时国籍条件必填；file_list 发送 String(JSON Array)；SDK 类只声明 req_date/req_seq_id/huifu_id/legal_cert_nationality，其余正式字段走 exact-key 扩展，但 PHP array_merge 会覆盖显式字段，因此拒绝扩展中的四个声明键，尤其不能覆盖 req_seq_id。",
+    "suite": "user-onboarding"
+  },
+  {
+    "id": 213,
+    "prompt": "用 Python SDK 修改个人用户证件有效期、手机号和 file_list；cert_validity_type 按当前官网示例传1可以吗？",
+    "expected": "必须读取 `user-onboarding-individual-modify.md`、`user-onboarding-complete-field-catalog.md`、`user-onboarding-field-contracts.md` 和 `user-onboarding-shared-server-sdk-matrix.md`；使用 POST /v2/user/basicdata/indv/modify 和 V2UserBasicdataIndvModifyRequest；说明26节点=请求21+响应5、无通知；huifu_id 使用个人用户号；cert_validity_type 正式枚举只有0/1，当前示例1有效；file_list 发送 String(JSON Array)，file_id/file_name 长度为64；当前成功示例包含response.sign，仍必须验签；SDK 类只声明 req_date/req_seq_id/huifu_id，其余正式字段走 exact-key 扩展，但 Python dict.update 会覆盖显式字段，因此拒绝扩展中的三个声明键。",
+    "suite": "user-onboarding"
+  },
+  {
+    "id": 214,
+    "prompt": "用 Java SDK 修改用户结算、e账户和电子回单配置，可以直接照官网请求示例生成吗？",
+    "expected": "必须读取 `user-onboarding-business-modify.md`、`user-onboarding-complete-field-catalog.md`、`user-onboarding-field-contracts.md` 和 `user-onboarding-shared-server-sdk-matrix.md`；使用 POST /v2/user/busi/modify 和 V2UserBusiModifyRequest；说明120节点=请求85+同步响应11+异步24；说明请求示例是合法JSON且只有一个file_list，但示例不构成默认值或正式合同；settle_config_list/cash_config/file_list为String(JSON Array)，card_info/elec_acct_config为String(JSON Object)；sign_user_info最终必须是原生Object，Java String setter必须用受控exact-key覆盖，PHP可直接传数组，Python可直接赋dict，扩展拒绝覆盖req_seq_id/req_date/huifu_id；elec_receipt_config存在Object/jsonObject字符串冲突，启用电子回单时必须硬停确认wire；保留elec_card_list、weekday_fix_amt/weekday_fee_rate和同步response.data冲突；异步data为Json、resp_business为原生数组、huifu_id为用户号，delay_flag与async_return_url示例已修正；异步仍需验签、正确回包、重试和状态感知幂等。",
+    "suite": "user-onboarding"
+  },
+  {
+    "id": 215,
+    "prompt": "用 Python SDK 按法人证件号查询用户列表，数组层级、两个 ID 长度和签名怎样建模？",
+    "expected": "必须读取 `user-onboarding-list-query.md`、`user-onboarding-complete-field-catalog.md`、`user-onboarding-field-contracts.md` 和 `user-onboarding-shared-server-sdk-matrix.md`；使用 POST /v2/user/list/query 和 V2UserListQueryRequest；说明17节点=请求8+同步响应9、无异步通知；response.data.user_list_info_list正式为Object N/jsonArray格式，按原生数组和[]子路径解析；子项huifu_id/upper_huifu_id正式长度均为18；cust_type只使用正式枚举1=企业/2=个人；当前请求与成功响应示例均包含sign:String(512) Y，生产仍必须加签并验签；三语言类只声明legal_cert_no/req_date/req_seq_id，可选upper_huifu_id走受控exact-key扩展并拒绝覆盖三个声明字段。",
     "suite": "user-onboarding"
   }
 ]

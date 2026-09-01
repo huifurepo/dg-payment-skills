@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "refresh_id": "api-refresh-user-business-modify-2026-08-24-r5",
+  "requested_at": "2026-08-24",
+  "retrieved_at": "2026-08-24T22:00:00+08:00",
+  "version_state": {
+    "reason": "Add user business-onboarding modification while retaining the user-requested huifu-merchant-onboarding version 1.0.2.",
+    "huifu-merchant-onboarding": "1.0.2"
+  },
+  "previous_refresh": {
+    "path": "maintainer-contracts/api-refresh-user-individual-modify-2026-08-24.json",
+    "sha256": "dfa97a88addcc9392353a2ed22c9861207578f92a04b71610c49320319802016",
+    "refresh_id": "api-refresh-user-individual-modify-2026-08-24-r4"
+  },
+  "source_locks": {
+    "onboarding_1_0_2_r5": {
+      "path": "maintainer-contracts/merchant-onboarding-1.0.2-r5-source-lock.json",
+      "sha256": "d2e96353e2ede50758030836fd0a11ebcab7e08b1855ebc02de30a2f5390f90d"
+    },
+    "merchant_onboarding_unchanged": {
+      "path": "maintainer-contracts/merchant-onboarding-source-lock-2026-08-24-r2.json",
+      "sha256": "e785229f04f8010344e8c41acd31b6f8c143c6d263ce743292fcdb12ecec7134"
+    },
+    "user_onboarding_current": {
+      "path": "maintainer-contracts/user-onboarding-source-lock-2026-08-24-r3.json",
+      "sha256": "72d1a2d677a929ca5d073b96f508e79c0803cccfb9e5b36dc5593e9bac5a1e74"
+    },
+    "user_onboarding_historical": {
+      "path": "maintainer-contracts/user-onboarding-source-lock.json",
+      "sha256": "870c49a6affb8584284398ddc86befe12ab7d40a94ef491322ea1f5a4d296169"
+    }
+  },
+  "catalogs": {
+    "merchant": {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
+      "sha256": "ae56d08f67ab6971f90efc630ce38ff0a8b2124c777e6412a951ae5290eebeee",
+      "field_paths_changed": 0
+    },
+    "user": {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md",
+      "sha256": "153d720a52ec2f01c3252b185df5a84cf0e8a4798a4fdce2a1945ccc3e6b9422",
+      "generator": "scripts/generate_user_onboarding_field_catalog.py",
+      "independent_validator": "scripts/validate_user_onboarding_source_contract.py"
+    }
+  },
+  "scope": [
+    "POST /v2/user/busi/modify user business-onboarding modification",
+    "Java 3.0.40 V2UserBusiModifyRequest",
+    "PHP 2.0.30 V2UserBusiModifyRequest",
+    "Python 2.0.24 V2UserBusiModifyRequest"
+  ],
+  "field_delta": {
+    "field_paths_added": 120,
+    "field_paths_removed": 0,
+    "request": 85,
+    "response": 11,
+    "callback": 24,
+    "parent": 15,
+    "leaf": 105,
+    "root_tables": 6,
+    "extend_tables": 12
+  },
+  "preserved_boundaries": [
+    "the seven 2026-08-24-r2 user sources and the merchant r2 evidence remain byte-identical",
+    "the request example is valid JSON but remains non-normative and cannot override the formal parameter tables",
+    "response.data is formally String but the success example uses a JSON Object; the wire conflict remains unresolved",
+    "elec_receipt_config Object versus jsonObject-string description remains a production hard stop",
+    "elec_card_list and async resp_business preserve Object-versus-jsonArray-string source conflicts",
+    "weekday_fix_amt and weekday_fee_rate preserve the contradictory D1 effectiveness descriptions, and async huifu_id preserves its customer-versus-merchant role conflict",
+    "delay_flag accepts Y/N although its example is a date, and async_return_url has a malformed example",
+    "Java sign_user_info requires an exact-key Object override; PHP arrays and Python dicts may be assigned directly or use the controlled exact-key policy; locator-key overrides are rejected"
+  ],
+  "release_rule": "The unchanged 2,155-node merchant catalog and current 537-node user catalog, both independent source validators, SDK evidence, Skill validation, regression rules and package validation must pass. Historical locks remain immutable."
+}

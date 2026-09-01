@@ -204,6 +204,8 @@ def main() -> int:
         "V2_MERCHANT_BASICDATA_MODIFY": "v2/merchant/basicdata/modify",
         "V2_MERCHANT_BUSI_MODIFY_BUSISTATUS": "v2/merchant/busi/modify/busistatus",
         "V2_MERCHANT_BASICDATA_SMS_SEND": "v2/merchant/basicdata/sms/send",
+        "V2_MERCHANT_BUSI_MULTIFEE_CONFIG": "v2/merchant/busi/multiFee/config",
+        "V2_MERCHANT_BUSI_MULTIFEE_QUERY": "v2/merchant/busi/multiFee/query",
     }
 
     java_requests = (
@@ -216,6 +218,8 @@ def main() -> int:
         "V2MerchantBasicdataModifyRequest",
         "V2MerchantBusiModifyBusistatusRequest",
         "V2MerchantBasicdataSmsSendRequest",
+        "V2MerchantBusiMultifeeConfigRequest",
+        "V2MerchantBusiMultifeeQueryRequest",
     )
     problems += require_text(java / "opps-bspay-java-sdk" / "pom.xml", "<version>3.0.40</version>")
     java_source = java / "opps-bspay-java-sdk" / "src/main/java/com/huifu/bspay/sdk/opps/core"
@@ -240,6 +244,33 @@ def main() -> int:
     problems += require_text(java_enum, "V2_SUPPLEMENTARY_PICTURE", "v2.supplementary.picture")
     for name, enum_name in zip(java_requests, routes, strict=True):
         problems += require_text(java_request_root / f"{name}.java", f"class {name}", f"return FunctionCodeEnum.{enum_name};")
+    problems += require_text(
+        java_request_root / "V2MerchantBusiMultifeeConfigRequest.java",
+        "setReqSeqId",
+        "setReqDate",
+        "setHuifuId",
+    )
+    problems += forbid_text(
+        java_request_root / "V2MerchantBusiMultifeeConfigRequest.java",
+        "wx_conf_list",
+        "ali_conf_list",
+    )
+    problems += require_text(
+        java_client,
+        "params.putAll(request.getExtendInfos())",
+    )
+    problems += require_text(
+        java_request_root / "V2MerchantBusiMultifeeQueryRequest.java",
+        "setReqSeqId",
+        "setReqDate",
+        "setHuifuId",
+    )
+    problems += forbid_text(
+        java_request_root / "V2MerchantBusiMultifeeQueryRequest.java",
+        "fee_sign",
+        "wx_conf_list",
+        "ali_conf_list",
+    )
     problems += forbid_text(
         java_request_root / "V2MerchantBasicdataEntRequest.java",
         "material_card_info",
@@ -309,6 +340,21 @@ def main() -> int:
     for name, enum_name in zip(php_requests, routes, strict=True):
         problems += require_text(php / "request" / f"{name}.php", f"class {name}", f"return FunctionCodeEnum::${enum_name};")
     problems += forbid_text(
+        php / "request/V2MerchantBusiMultifeeConfigRequest.php",
+        "wx_conf_list",
+        "ali_conf_list",
+    )
+    problems += require_text(
+        php / "core/BsPayClient.php",
+        "array_merge($arrayData, $extendInfos)",
+    )
+    problems += forbid_text(
+        php / "request/V2MerchantBusiMultifeeQueryRequest.php",
+        "fee_sign",
+        "wx_conf_list",
+        "ali_conf_list",
+    )
+    problems += forbid_text(
         php / "request/V2MerchantBasicdataEntRequest.php",
         "material_card_info",
     )
@@ -330,6 +376,8 @@ def main() -> int:
         "v2_merchant_basicdata_modify_request.py",
         "v2_merchant_busi_modify_busistatus_request.py",
         "v2_merchant_basicdata_sms_send_request.py",
+        "v2_merchant_busi_multifee_config_request.py",
+        "v2_merchant_busi_multifee_query_request.py",
     )
     problems += require_text(python / "dg_client.py", "__version__ = '2.0.24'")
     problems += require_text(python / "__init__.py", "from dg_sdk.dg_tools import DGTools")
@@ -359,6 +407,14 @@ def main() -> int:
     problems += require_text(python / "core/api_request.py", "application/json;charset=utf-8", "elif method == 'post'", "json=params", "Retry(connect=3, backoff_factor=0.5)")
     for name, enum_name in zip(python_requests, routes, strict=True):
         problems += require_text(python / "request" / name, f"from dg_sdk.request.request_api_urls import {enum_name}", f"request_post({enum_name}, required_params)")
+    problems += require_text(
+        python / "request/v2_merchant_busi_multifee_config_request.py",
+        "required_params.update(extend_infos)",
+    )
+    problems += require_text(
+        python / "request/v2_merchant_busi_multifee_query_request.py",
+        "required_params.update(extend_infos)",
+    )
     problems += forbid_text(
         python / "request/v2_merchant_basicdata_ent_request.py",
         "material_card_info",
@@ -479,11 +535,16 @@ for case in cases:
     problems += require_text(
         matrix,
         "服务端 SDK 能力矩阵",
-        "九个已有专属类的 JSON 接口",
+        "十一个已有专属类的 JSON 接口",
         "V2MerchantBusiModifyRequest",
         "V2MerchantBasicdataModifyRequest",
         "V2MerchantBusiModifyBusistatusRequest",
         "V2MerchantBasicdataSmsSendRequest",
+        "V2MerchantBusiMultifeeConfigRequest",
+        "/v2/merchant/busi/multiFee/config",
+        "V2MerchantBusiMultifeeQueryRequest",
+        "/v2/merchant/busi/multiFee/query",
+        "扩展映射必须拒绝这三个定位键",
         "费率查询缺口",
         "/v2/merchant/fee-rate/query",
         "3.0.40",
@@ -537,8 +598,8 @@ for case in cases:
         "`sys_id`、`product_id`、`data`、`sign`",
         "`need_sign=True`",
         "不启用自动业务重试",
-        "`hfms/1.0.1`",
-        "`hfps/1.3.4;hfms/1.0.1`",
+        "`hfms/1.0.2`",
+        "`hfps/1.3.5;hfms/1.0.2`",
     )
     problems += require_ordered_text(
         image,
@@ -565,18 +626,18 @@ for case in cases:
     problems += require_text(
         enterprise,
         'extendInfoMap.put("async_return_url", request.asyncReturnUrl());',
-        "三个锁定版本均没有新增 `material_card_info` 的专属字段或 setter",
+        "三个锁定版本均没有 `material_card_info` 或新 `head_type` 的专属字段/setter",
         "exact-key 扩展字段能力",
         "键必须保持 `material_card_info`",
         "整体序列化得到的 JSON 字符串",
-        "不能传普通嵌套 Object",
+        "不得发送普通嵌套 Object",
     )
-    problems += require_text(prompts, '"id": 69', '"id": 70', '"id": 71', '"id": 74', '"id": 87', "请求签名保留", "响应验签跳过", "CURLFile", "官方 Demo 同时传入互斥来源", "V2MerchantBasicdataIndvRequest", "async_return_url", "notify_url", "拒绝 Java/PHP 官方 SDK 因 TLS 不可用的错误前提", "Java HttpClient/OkHttp/HttpURLConnection", "PHP Guzzle/curl", "SDK 没有对应接口能力时报告缺口")
+    problems += require_text(prompts, '"id": 69', '"id": 70', '"id": 71', '"id": 74', '"id": 87', '"id": 88', '"id": 89', "请求签名保留", "响应验签跳过", "CURLFile", "官方 Demo 同时传入互斥来源", "V2MerchantBasicdataIndvRequest", "V2MerchantBusiMultifeeConfigRequest", "V2MerchantBusiMultifeeQueryRequest", "async_return_url", "notify_url", "拒绝 Java/PHP 官方 SDK 因 TLS 不可用的错误前提", "Java HttpClient/OkHttp/HttpURLConnection", "PHP Guzzle/curl", "SDK 没有对应接口能力时报告缺口")
     problems += forbid_text(matrix, "`dg_sdk.request_post")
     problems += forbid_text(image, "dg_sdk.request_post")
-    problems += require_text(contracts, f"来源快照核验日期：`{onboarding_source_date()}`", "企业商户进件", "个人商户进件", "商户业务开通", "图片上传", "商户详细信息查询", "申请单状态查询", "商户业务开通修改", "商户基本信息修改", "商户费率信息查询", "商户状态变更", "商户短信发送", "agreement_info.agreement_async_return_url", "reg_result_list[].business_stat", "async.agreement.agreement_info_list.con_stat", "data.wx_zl_config.apply_state", "data.ali_zl_config[].apply_status", "RECV_ORD_ID_", "file_url String(512)", "apply_status", "九个已有专属 Request 类的 JSON 接口", "公共 `AbstractRequest`", "`BasePay.debug` 默认为 `true`", "BasePay.debug = false;", "任何 SDK 请求之前", "不得在并发请求中临时切换", "`BsPayDemo/loader.php`", "`Composer/BsPayConfig.php`", "`DEBUG=false`", "`DEBUG=true`", "`rsa_merch_private_key`", "完整请求体和完整响应", "不得按叶字段名去重", "request.data.card_info.prov_id", "request.data.card_info.area_id", "不能跨接口复用长度", "hfms/1.0.1", "hfps/1.3.4;hfms/1.0.1")
-    problems += require_text(credentials, "进件凭据与敏感资料边界", "RSA 私钥", "禁止写入", "Java 必须", "`BasePay.debug = false`", "PHP 必须", "`BsPay::init`", "`DEBUG=false`", "`DEBUG=true`", "Demo loader", "完整请求、响应", "`hfms/1.0.1`", "`hfps/1.3.4;hfms/1.0.1`")
-    problems += require_text(headers, "默认 `skill_source`", "`hfms/1.0.1`", "`hfps/1.3.4;hfms/1.0.1`", "顺序固定为支付、进件", "英文分号且不加空格", "原样透传")
+    problems += require_text(contracts, f"来源快照核验日期：`{onboarding_source_date()}`", "企业商户进件", "个人商户进件", "商户业务开通", "图片上传", "商户详细信息查询", "申请单状态查询", "商户业务开通修改", "商户基本信息修改", "商户费率信息查询", "商户状态变更", "商户短信发送", "商户多费率配置", "商户多费率配置查询", "fee_sign:String(32) N", "wx_conf_list/ali_conf_list", "响应 `conf_list:String N`", "旧 `T=微信` 冲突已关闭", "agreement_info.agreement_async_return_url", "reg_result_list[].business_stat", "async.agreement.agreement_info_list.con_stat", "data.wx_zl_config.apply_state", "data.ali_zl_config[].apply_status", "RECV_ORD_ID_", "file_url String(512)", "apply_status", "十一个已有专属 Request 类的 JSON 接口", "公共 `AbstractRequest`", "`BasePay.debug` 默认为 `true`", "BasePay.debug = false;", "任何 SDK 请求之前", "不得在并发请求中临时切换", "`BsPayDemo/loader.php`", "`Composer/BsPayConfig.php`", "`DEBUG=false`", "`DEBUG=true`", "`rsa_merch_private_key`", "完整请求体和完整响应", "不得按叶字段名去重", "request.data.card_info.prov_id", "request.data.card_info.area_id", "不能跨接口复用长度", "hfms/1.0.2", "hfps/1.3.5;hfms/1.0.2")
+    problems += require_text(credentials, "进件凭据与敏感资料边界", "RSA 私钥", "禁止写入", "Java 必须", "`BasePay.debug = false`", "PHP 必须", "`BsPay::init`", "`DEBUG=false`", "`DEBUG=true`", "Demo loader", "完整请求、响应", "`hfms/1.0.2`", "`hfps/1.3.5;hfms/1.0.2`")
+    problems += require_text(headers, "默认 `skill_source`", "`hfms/1.0.2`", "`hfps/1.3.5;hfms/1.0.2`", "顺序固定为支付、进件", "英文分号且不加空格", "原样透传")
     for path in (matrix, image, enterprise, individual, contracts, credentials, headers, skill):
         problems += forbid_text(path, "jpt-x-skill-huifu_id", "jpt_x_skill_huifu_id")
     problems += require_text(
@@ -610,10 +671,15 @@ for case in cases:
         "当前锁定版本只有 Java 图片上传专用实现可用",
         "BasePayClient.upload(request, file)",
         "DGTools.request_post",
+        "商户多费率配置",
+        "`wx_conf_list/ali_conf_list`",
+        "旧版 `T=微信` 冲突已关闭",
+        "商户多费率配置查询",
+        "`fee_sign:String(32) N`",
         "`request.data.prov_id/area_id`",
         "`request.data.card_info.prov_id/area_id`",
-        "`hfms/1.0.1`",
-        "`hfps/1.3.4;hfms/1.0.1`",
+        "`hfms/1.0.2`",
+        "`hfps/1.3.5;hfms/1.0.2`",
     )
     for anchor in (
         "企业商户进件",
@@ -626,11 +692,13 @@ for case in cases:
         "商户费率信息查询",
         "商户状态开通或关闭",
         "商户短信发送或验证码核实",
+        "商户多费率配置",
+        "查询商户多费率配置或按 `fee_sign` 定位配置",
     ):
         problems += require_same_line(skill, anchor, "merchant-onboarding-field-contracts.md")
     problems += require_same_line(
         skill,
-        "九个已有专属类的 JSON 接口 SDK",
+        "十一个已有专属类的 JSON 接口 SDK",
         "merchant-onboarding-field-contracts.md",
         "shared-server-sdk-matrix.md",
     )

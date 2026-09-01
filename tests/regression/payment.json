@@ -26,7 +26,7 @@
   {
     "id": 5,
     "prompt": "我在 PHP 里接托管预下单，本次请求只实际加载并使用 $huifu-pay-integration，虽然仓库也安装了进件 Skill，但它没有参与本次生成，而且没有显式配置 skill_source。默认值应该是什么？如果请求里已经有 huifu_id，要不要额外补别的头？初始化时可以直接复用官方 BsPayDemo/loader.php 或 Composer/BsPayConfig.php 吗？请直接告诉我结论和该看哪些文档。",
-    "expected": "必须读取 shared-server-sdk-matrix.md 和 hostingpay-php-adapter.md。必须明确未显式配置且本次仅支付 Skill 实际参与时，`jpt-x-skill-source` 的确定性默认值只能是 `hfps/1.3.4`；仅安装但未参与的进件 Skill 不计入，不能输出双 Skill 组合值。PHP 侧该值经 `MerConfig.skill_source` 进入强制来源请求头，不再拼接 `sys_id`；如果当前请求 `data.huifu_id` 已存在且非空，还要额外带 `jpt-x-skill-huifu_id`，并把两项都定位为 HTTP 请求头而不是业务报文字段。当前 Skill 包对齐的官方 `huifurepo/dg-php-sdk` 主链路会在 `MerConfig.skill_source` 已配置时自动带出这两个来源头，而不是默认落到 `HostingClient` 或自写 `curl`。不得复用会定义 `DEBUG=true` 的官方 BsPayDemo/loader.php 或 Composer/BsPayConfig.php；必须在加载任何 SDK 文件和调用 BsPay::init 前固定 DEBUG=false，否则日志会泄露含 RSA 私钥的 MerConfig、完整请求和响应。",
+    "expected": "必须读取 shared-server-sdk-matrix.md 和 hostingpay-php-adapter.md。必须明确未显式配置且本次仅支付 Skill 实际参与时，`jpt-x-skill-source` 的确定性默认值只能是 `hfps/1.3.5`；仅安装但未参与的进件 Skill 不计入，不能输出双 Skill 组合值。PHP 侧该值经 `MerConfig.skill_source` 进入强制来源请求头，不再拼接 `sys_id`；如果当前请求 `data.huifu_id` 已存在且非空，还要额外带 `jpt-x-skill-huifu_id`，并把两项都定位为 HTTP 请求头而不是业务报文字段。当前 Skill 包对齐的官方 `huifurepo/dg-php-sdk` 主链路会在 `MerConfig.skill_source` 已配置时自动带出这两个来源头，而不是默认落到 `HostingClient` 或自写 `curl`。不得复用会定义 `DEBUG=true` 的官方 BsPayDemo/loader.php 或 Composer/BsPayConfig.php；必须在加载任何 SDK 文件和调用 BsPay::init 前固定 DEBUG=false，否则日志会泄露含 RSA 私钥的 MerConfig、完整请求和响应。",
     "suite": "payment"
   },
   {
@@ -188,7 +188,7 @@
   {
     "id": 32,
     "prompt": "后续你们 Skill 更新了，我怎么更新本地这个 $huifu-pay-integration？它能不能主动提醒我升级？",
-    "expected": "必须读取 `skill-version-policy.md`；必须说明当前本地 Skill 版本是 1.3.4；必须说明 Skill 不能主动联网检查或推送升级，只能在用户触发版本/升级问题时提示；必须给出 Git 拉取、本地目录整体覆盖或内部发布包替换等更新方式；必须提醒升级后重新加载或重启客户端并确认 SKILL.md 版本事实；不能编造下载地址或假装已经联网确认最新版。",
+    "expected": "必须读取 `skill-version-policy.md`；必须说明当前本地 Skill 版本是 1.3.5；必须说明 Skill 不能主动联网检查或推送升级，只能在用户触发版本/升级问题时提示；必须给出 Git 拉取、本地目录整体覆盖或内部发布包替换等更新方式；必须提醒升级后重新加载或重启客户端并确认 SKILL.md 版本事实；不能编造下载地址或假装已经联网确认最新版。",
     "suite": "payment"
   },
   {
@@ -331,14 +331,20 @@
   },
   {
     "id": 85,
-    "prompt": "聚合交易查询返回的 method_expand 到底要解码几次？参数表里 A_JSAPI、A_NATIVE、A_MICROPAY 下都有 buyer_logon_id，成功示例又写了 trade_type=A_IMICROPAY。请用 $huifu-pay-integration 给出准确解析合同。",
-    "expected": "必须读取 aggregation-query-payment-query.md 和 payment-complete-field-catalog.md；说明 response.data.method_expand 是 String(JSON Object)，只解码一次，字段位于解码后根层平铺；A_JSAPI/A_NATIVE/A_MICROPAY 是文档场景分组而不是 wire key，重复 buyer_logon_id 仍按不同合同定位路径保留但运行时都读取 $.buyer_logon_id；正式支付宝付款码枚举是 A_MICROPAY，A_IMICROPAY 是官网成功示例错误，不得生成成合法枚举或请求值，线上若实际出现则保留原值并按合同漂移告警。",
+    "prompt": "聚合交易查询返回的 method_expand 到底要解码几次？参数表里 A_JSAPI、A_NATIVE、A_MICROPAY 下都有 buyer_logon_id，支付类型说明又重复写了 A_NATIVE=支付宝付款码。请用 $huifu-pay-integration 给出准确解析合同。",
+    "expected": "必须读取 aggregation-query-payment-query.md 和 payment-complete-field-catalog.md；说明 response.data.method_expand 是 String(JSON Object)，只解码一次，字段位于解码后根层平铺；A_JSAPI/A_NATIVE/A_MICROPAY 是文档场景分组而不是 wire key，重复 buyer_logon_id 仍按不同合同定位路径保留但运行时都读取 $.buyer_logon_id；正式支付宝付款码枚举是 A_MICROPAY，说明中第二个 A_NATIVE 是官网重复笔误；当前成功示例已使用 A_MICROPAY，不得接受重复说明中的错误枚举。",
     "suite": "payment"
   },
   {
     "id": 86,
     "prompt": "聚合下单 notify_url 里写的“异步返回参数”到底是正扫还是反扫？接口页没列全的返回码又去哪里查？请用 $huifu-pay-integration 说明实现边界。",
     "expected": "必须读取 shared-async-notify.md、aggregation-error-codes.md 和聚合下单原子文档；说明同一个 notify_url 同时承接正扫和反扫两套通知，按实际 trade_type 选择对应字段结构，不是一次回调混合两套字段，也不能只实现其中一套；公共异步规范只定义传输、验签、ACK、重试和幂等通则，具体字段仍以接口通知表为准；返回码要合并当前接口专属码与公共返回码全集，并结合 resp_desc 和交易场景排查，resp_code=00000000 不能替代 trans_stat、异步通知和主动查询判断终态。",
+    "suite": "payment"
+  },
+  {
+    "id": 90,
+    "prompt": "我要用 Java、PHP、Python 官方 SDK 查询一笔180天内的实时或延时分账明细。请用 $huifu-pay-integration 核对请求字段、29个完整节点、split_trans_responses 编码和成功示例多出的 huifu_id。",
+    "expected": "必须读取 trade-split-detail-query.md、payment-complete-field-catalog.md 和 shared-server-sdk-matrix.md；说明 POST /v2/trade/trans/split/query 共29节点、请求7、响应22、无通知，只支持已开通分账能力商户的180天内记录。请求 data 只有必填 hf_seq_id、huifu_id、ord_type，ord_type 仅 consume/refund。三语言均使用 V2TradeTransSplitQueryRequest 和官方 Request/Client；SDK 只声明三个请求字段且官网无可选请求字段，扩展映射必须为空并拒绝覆盖。split_trans_responses 正式为 String(JSON Array)，只解码一次，16个子字段都保留 response.data.split_trans_responses[] 数组层级；成功示例独有的顶层 response.data.huifu_id 未被响应参数表声明，不进入字段目录或 DTO。",
     "suite": "payment"
   }
 ]

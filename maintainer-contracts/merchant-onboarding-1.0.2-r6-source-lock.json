@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "skill": "huifu-merchant-onboarding",
+  "version": "1.0.2",
+  "refresh_revision": "r6",
+  "scope": "Combined immutable source evidence for thirteen merchant onboarding and management interfaces plus nine user onboarding interfaces.",
+  "source_locks": {
+    "merchant_onboarding": {
+      "path": "maintainer-contracts/merchant-onboarding-source-lock-2026-08-24-r2.json",
+      "sha256": "e785229f04f8010344e8c41acd31b6f8c143c6d263ce743292fcdb12ecec7134",
+      "field_paths": 2155
+    },
+    "user_onboarding": {
+      "path": "maintainer-contracts/user-onboarding-source-lock-2026-08-24-r4.json",
+      "sha256": "f756ce79673a52b526f242edf2517078ff3025d94fede6c6c9a44406c9fc64dd",
+      "field_paths": 554
+    }
+  },
+  "catalogs": {
+    "merchant": {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
+      "sha256": "ae56d08f67ab6971f90efc630ce38ff0a8b2124c777e6412a951ae5290eebeee"
+    },
+    "user": {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md",
+      "sha256": "aa85e018e0290ec9782ae29ae98c05f865dd68cb0436ca8da292f279808bbcc9"
+    }
+  },
+  "totals": {
+    "interfaces": 22,
+    "field_paths": 2709
+  }
+}

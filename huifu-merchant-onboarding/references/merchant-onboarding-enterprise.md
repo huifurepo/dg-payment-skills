@@ -12,9 +12,10 @@
 - 最小资料按主体、营业执照、注册地址/经营地址、法人、联系人、结算卡和门店资料分组校验。图片字段只接收图片上传接口返回的标识。
 - `scene_type=OFFLINE` 或 `ALL` 时，经营详细地址是条件必填；证照非长期时必须提供结束日期。
 - `store_header_pic`、`store_indoor_pic`、`store_cashier_desk_pic` 均为 `String(64) C`，仅当 `scene_type` 含线下场景时必填；不得继续按旧版无条件 `Y` 处理。
+- `head_office_flag=1` 时 `head_type:String N` 按说明条件必填：`0=集团客户`、`1=大型商业综合体`、`2=品牌连锁客户`。总部按类型提交 F718-F724；下级商户按对应总部客群及加盟/直营性质提交 F725-F727。字段列的 `N` 不能覆盖说明中的条件必填，材料也不能只传父标识而遗漏。
 - `card_info` 是 SDK 边界的 JSON 字符串：业务层先校验对公/对私卡条件，再统一序列化；不得手拼或使用示例卡号。
 - `data.prov_id/area_id` 表示经营省市，`data.card_info.prov_id/area_id` 表示结算银行卡省市，`data.material_card_info.prov_id/area_id` 表示补充对公同名账户省市。三组叶字段同名但父路径不同，适用时必须分别生成；不能按叶字段名合并或把任一子对象字段提升到 `data` 顶层。
-- `data.material_card_info:String(JSON Object) N` 是当前新增的对公卡信息：官网类型列原文为 `Object`，本项目已确认以说明列“jsonObject字符串”为 wire 依据。非个体工商户的企业商户在 `card_info` 选择对私结算（含法人、非法人）时需要补对公同名账户；先校验全部适用叶字段，再整体 JSON 序列化。其 `card_no/area_id/branch_code` 为 `Y`，`card_type/card_name/prov_id` 为 `N`；`card_type` 不填默认 `0`，但默认值只属于该完整路径，不得复制给 `card_info.card_type`。
+- `data.material_card_info:String(JSON Object) N` 是补充对公同名账户信息：官网类型列原文为 `Object`，本项目以说明列“jsonObject字符串”为 wire 依据。非个体工商户的企业商户在 `card_info` 选择对私结算（含法人、非法人）时需要补充，并通过图片上传接口提交 F08 对公账户证明。先校验全部适用叶字段，再整体 JSON 序列化。当前官网已经删除旧的 `material_card_info.card_type`；不得继续生成该键或套用“默认0”。
 - 生成字段时必须同时读取 `merchant-onboarding-field-contracts.md` 的企业值域表：`ent_type`、`busi_type`、`scene_type`、证照/证件有效期、`sms_send_flag`、总部/下级商户标识、结算/取现枚举均按各自字符串值域处理。官网示例值不是默认值，禁止把所有开关写成 `1`。
 - String(JSON) 和路径树类型列为 Object 的对象只能在 `merchant-onboarding-complete-field-catalog.md` 中沿父路径加载到全部相关叶子且调用方提供真实选择后生成；`card_info` 与 `material_card_info` 均按 String(JSON Object) 处理。完整字段目录继续原样显示 `material_card_info` 的官网 `Object` 类型列，但生成 wire 值时以说明列为准：业务对象校验通过后整体序列化一次，不得发送普通嵌套 Object，也不得二次序列化。受益人、电子账户、股东和扩展材料对象不得只写父字段，也不得猜值。
 - 涉及 MCC、地区、证件类型、图片上传、银行编码、结算批次或补充材料等带外部资料的字段时，必须同时读取 `merchant-onboarding-external-resources.md`，并按完整字段路径单列 `外部资料提示`，给出未经改写的原始地址；示例 URL 不是资料或默认值。
@@ -46,7 +47,7 @@ sdkRequest.setExtendInfo(extendInfoMap);
 
 ## SDK 证据边界
 
-Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` 都有 `V2MerchantBasicdataEntRequest` 作为可选封装，但三个锁定版本均没有新增 `material_card_info` 的专属字段或 setter。使用各语言 Request 的 exact-key 扩展字段能力时，键必须保持 `material_card_info`，值必须是已校验业务对象整体序列化得到的 JSON 字符串；不能传普通嵌套 Object、改名或声称 SDK 已原生覆盖。三语言真实请求均使用对应官方 SDK；PHP 仍受独立 DEBUG 硬停约束。该 Request 只证明 URI、已有字段序列化和 SDK 默认的请求/同步响应处理路径；不替代本页资料、权限和条件必填校验，也不证明实际审核结果或回调协议。每次调用显式传入新的当天唯一 `req_seq_id` / `req_date`，Python 不会自动生成。
+Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` 都有 `V2MerchantBasicdataEntRequest` 作为可选封装，但三个锁定版本均没有 `material_card_info` 或新 `head_type` 的专属字段/setter。使用各语言 Request 的 exact-key 扩展字段能力时，键必须保持 `material_card_info`、`head_type`；前者值必须是已校验业务对象整体序列化得到的 JSON 字符串，后者保持枚举字符串。不能改名、传合同外子键或声称 SDK 已原生覆盖。三语言真实请求均使用对应官方 SDK；PHP 仍受独立 DEBUG 硬停约束。该 Request 只证明 URI、已有字段序列化和 SDK 默认的请求/同步响应处理路径；不替代本页资料、权限和条件必填校验，也不证明实际审核结果或回调协议。每次调用显式传入新的当天唯一 `req_seq_id` / `req_date`，Python 不会自动生成。
 
 ## 回调边界
 

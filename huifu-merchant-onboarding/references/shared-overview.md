@@ -23,6 +23,8 @@
 | 查询商户费率配置 | `merchant-onboarding-rate-query.md` |
 | 开通或关闭商户状态 | `merchant-onboarding-status-change.md` |
 | 发送或核验商户短信验证码 | `merchant-onboarding-sms-send.md` |
+| 配置或修改微信、支付宝多场景底价 | `merchant-onboarding-multifee-config.md` |
+| 查询多费率配置或按 `fee_sign` 定位 | `merchant-onboarding-multifee-query.md` |
 | 完整字段和嵌套路径 | `merchant-onboarding-complete-field-catalog.md` |
 | 条件、互斥、冲突和 SDK 边界 | `merchant-onboarding-field-contracts.md` |
 | 外部编码、XLSX、协议和第三方资料 | `merchant-onboarding-external-resources.md` |
@@ -43,4 +45,4 @@
 
 ## 当前来源
 
-当前字段快照复审于 `2026-08-10`，十一接口共 2,111 个字段路径。企业进件、个人进件和基本信息修改页仅补全 `activated_products` 的 `01=一体化收款产品`、`02=账户与资金产品`、`03=业财数通产品` 说明，字段、类型、必填性和嵌套均未变化；此前同步的 `upper_huifu_id:String(18) C`、门店图片条件及 `material_card_info` 路径继续保留。官网 URL 只用于来源追溯和维护刷新，不计入普通回答的本轮 references。
+当前商户字段快照为 `2026-08-31`，十三接口共2,183个字段路径。本轮在线复审新增 `head_type`、捷行付/线上费率和详情响应字段，删除企业请求旧 `material_card_info.card_type`，并修正多费率长度、String(JSON) 与支付场景说明。`upper_huifu_id:String(18) C`、门店图片条件和其余 `material_card_info` 路径继续保留。官网 URL 只用于来源追溯和维护刷新，不计入普通回答的本轮 references。

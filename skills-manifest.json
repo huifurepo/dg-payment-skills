@@ -4,35 +4,35 @@
     "huifu-pay-integration": {
       "root": "huifu-pay-integration",
       "domain": "payment",
-      "version": "1.3.4",
+      "version": "1.3.5",
       "agents_file": "agents/openai.yaml",
       "reference_manifest": "maintainer-contracts/payment-references.json",
-      "max_reference_mentions": 60,
-      "canonical_regression_count": 6,
+      "max_reference_mentions": 64,
+      "canonical_regression_count": 7,
       "regression_suites": [
         "payment",
         "cross-route"
       ],
       "package_profile": "payment",
-      "source_lock": "maintainer-contracts/payment-source-lock.json",
-      "refresh_contract": "maintainer-contracts/api-refresh-2026-07-29.json"
+      "source_lock": "maintainer-contracts/payment-source-lock-2026-08-31.json",
+      "refresh_contract": "maintainer-contracts/api-refresh-payment-online-review-2026-08-31.json"
     },
     "huifu-merchant-onboarding": {
       "root": "huifu-merchant-onboarding",
       "domain": "onboarding",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "agents_file": "agents/openai.yaml",
       "reference_manifest": "maintainer-contracts/onboarding-references.json",
-      "max_reference_mentions": 72,
-      "canonical_regression_count": 31,
+      "max_reference_mentions": 84,
+      "canonical_regression_count": 37,
       "regression_suites": [
         "onboarding",
         "user-onboarding",
         "cross-route"
       ],
       "package_profile": "onboarding",
-      "source_lock": "maintainer-contracts/merchant-onboarding-1.0.1-source-lock.json",
-      "refresh_contract": "maintainer-contracts/api-refresh-user-onboarding-2026-08-10.json"
+      "source_lock": "maintainer-contracts/merchant-onboarding-1.0.2-r7-source-lock.json",
+      "refresh_contract": "maintainer-contracts/api-refresh-onboarding-online-review-2026-08-31.json"
     }
   },
   "frozen_assets": [

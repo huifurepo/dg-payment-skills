@@ -15,7 +15,7 @@ import urllib.parse
 from dataclasses import dataclass
 from pathlib import Path
 
-from skill_validation_config import onboarding_source_dir
+from skill_validation_config import ONBOARDING_SOURCE_LOCK, onboarding_source_dir
 from validation_runtime import require_assertions_enabled
 
 
@@ -23,9 +23,26 @@ require_assertions_enabled()
 
 
 ROOT = Path(__file__).resolve().parent.parent
-LOCK = ROOT / "maintainer-contracts/merchant-onboarding-source-lock-2026-08-10.json"
+LOCK = ONBOARDING_SOURCE_LOCK
 SOURCE_DIR = onboarding_source_dir()
 CATALOG = ROOT / "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md"
+PREVIOUS_LOCK = (
+    ROOT / "maintainer-contracts/merchant-onboarding-source-lock-2026-08-24-r2.json"
+)
+PREVIOUS_LOCK_SHA256 = "e785229f04f8010344e8c41acd31b6f8c143c6d263ce743292fcdb12ecec7134"
+PREVIOUS_SOURCE_DIR = (
+    ROOT
+    / "maintainer-contracts/official-sources/merchant-onboarding/2026-08-24-r2"
+)
+CHANGED_SOURCE_KEYS = {
+    "enterprise",
+    "individual",
+    "business_open",
+    "detail_query",
+    "business_open_modify",
+    "multifee_config",
+    "multifee_query",
+}
 
 
 @dataclass(frozen=True)
@@ -110,6 +127,18 @@ SURFACES: dict[str, tuple[tuple[str, str], ...]] = {
         ("同步响应 data", "response.data"),
     ),
     "sms_send": (
+        ("请求信封", "request"),
+        ("响应信封", "response"),
+        ("请求 data", "request.data"),
+        ("响应 data", "response.data"),
+    ),
+    "multifee_config": (
+        ("请求信封", "request"),
+        ("响应信封", "response"),
+        ("请求 data", "request.data"),
+        ("响应 data", "response.data"),
+    ),
+    "multifee_query": (
         ("请求信封", "request"),
         ("响应信封", "response"),
         ("请求 data", "request.data"),
@@ -693,6 +722,126 @@ def main() -> int:
     )
     assert not route_errors, "onboarding route contract mismatch: " + "; ".join(route_errors)
     lock = json.loads(LOCK.read_text(encoding="utf-8"))
+    assert set(lock) == {
+        "schema_version",
+        "source_date",
+        "source_snapshot_id",
+        "previous_source_lock",
+        "verified_at",
+        "sources",
+        "totals",
+        "api_refresh",
+    }, "current merchant source lock schema changed"
+    assert {
+        key: lock[key]
+        for key in ("schema_version", "source_date", "source_snapshot_id", "verified_at")
+    } == {
+        "schema_version": 1,
+        "source_date": "2026-08-31",
+        "source_snapshot_id": "2026-08-31",
+        "verified_at": "2026-08-31T10:18:56+08:00",
+    }, "current merchant source metadata changed"
+    assert lock["previous_source_lock"] == {
+        "path": "maintainer-contracts/merchant-onboarding-source-lock-2026-08-24-r2.json",
+        "sha256": PREVIOUS_LOCK_SHA256,
+    }
+    assert lock["totals"] == {
+        "fields": 2183,
+        "request": 1261,
+        "response": 742,
+        "callback": 180,
+        "parent": 240,
+        "leaf": 1943,
+        "root_tables": 63,
+        "extend_tables": 211,
+    }
+    assert lock["api_refresh"] == {
+        "refresh_id": "api-refresh-merchant-online-review-2026-08-31",
+        "changed_source_keys": [
+            "enterprise",
+            "individual",
+            "business_open",
+            "detail_query",
+            "business_open_modify",
+            "multifee_config",
+            "multifee_query",
+        ],
+        "field_paths_added": 29,
+        "field_paths_removed": 1,
+        "field_paths_changed": 45,
+        "document_conflicts": [
+            "response.data.conf_list is String with a child table but the document does not define object-versus-array encoding",
+            "request.data.jxf_conf_info.jxf_fee_info.fee_charge_type appears only in examples and is excluded from the formal catalog",
+            "request.data.jxf_conf_info.jxf_fee_info.quota_issue_fee_rate says two decimals while the example uses four",
+        ],
+    }, "current merchant refresh delta changed"
+
+    current_source_schema = {
+        "key",
+        "title",
+        "filename",
+        "url",
+        "endpoint",
+        "official_page_update",
+        "sha256",
+        "field_count",
+        "request_fields",
+        "response_fields",
+        "callback_fields",
+        "root_tables",
+        "extend_tables",
+    }
+    assert all(set(source) == current_source_schema for source in lock["sources"]), (
+        "current merchant source entry schema changed"
+    )
+    expected_current_files = {source["filename"] for source in lock["sources"]}
+    actual_current_files = {path.name for path in SOURCE_DIR.iterdir() if path.is_file()}
+    assert actual_current_files == expected_current_files, (
+        "current merchant source snapshot file set changed"
+    )
+
+    previous_raw = PREVIOUS_LOCK.read_bytes()
+    assert hashlib.sha256(previous_raw).hexdigest() == PREVIOUS_LOCK_SHA256, (
+        "previous merchant source lock changed"
+    )
+    previous = json.loads(previous_raw)
+    previous_by_key = {source["key"]: source for source in previous["sources"]}
+    current_by_key = {source["key"]: source for source in lock["sources"]}
+    assert set(current_by_key) == set(previous_by_key), "merchant source keys changed"
+    expected_previous_files = {
+        source["filename"] for source in previous["sources"]
+    }
+    actual_previous_files = {
+        path.name for path in PREVIOUS_SOURCE_DIR.iterdir() if path.is_file()
+    }
+    assert actual_previous_files == expected_previous_files, (
+        "previous merchant source snapshot file set changed"
+    )
+    for source in previous["sources"]:
+        raw = (PREVIOUS_SOURCE_DIR / source["filename"]).read_bytes()
+        assert hashlib.sha256(raw).hexdigest() == source["sha256"], (
+            f"previous merchant source SHA changed: {source['filename']}"
+        )
+
+    actual_changed = {
+        key
+        for key in current_by_key
+        if current_by_key[key]["sha256"] != previous_by_key[key]["sha256"]
+    }
+    assert actual_changed == CHANGED_SOURCE_KEYS, (
+        f"merchant changed-source set differs: {sorted(actual_changed)}"
+    )
+    inherited_keys = set(current_by_key) - CHANGED_SOURCE_KEYS
+    inherited_projection = {"key", "title", "filename", "url", "sha256", "field_count"}
+    for key in inherited_keys:
+        assert {
+            field: current_by_key[key][field] for field in inherited_projection
+        } == previous_by_key[key], f"inherited merchant source metadata changed: {key}"
+        filename = current_by_key[key]["filename"]
+        assert (SOURCE_DIR / filename).read_bytes() == (
+            PREVIOUS_SOURCE_DIR / filename
+        ).read_bytes(), f"inherited merchant source bytes changed: {key}"
+
     for source in lock["sources"]:
         raw = (SOURCE_DIR / source["filename"]).read_bytes()
         assert hashlib.sha256(raw).hexdigest() == source["sha256"], (

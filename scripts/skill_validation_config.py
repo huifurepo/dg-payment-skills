@@ -74,9 +74,26 @@ SKILL_SPECS = load_skill_specs()
 SKILL_FILES = sorted(spec.skill_file for spec in SKILL_SPECS)
 PAYMENT_SPEC = next(spec for spec in SKILL_SPECS if spec.domain == "payment")
 ONBOARDING_SPEC = next(spec for spec in SKILL_SPECS if spec.domain == "onboarding")
-ONBOARDING_SOURCE_LOCK = (
-    REPO_ROOT / "maintainer-contracts/merchant-onboarding-source-lock-2026-08-10.json"
+PAYMENT_SOURCE_LOCK = (
+    REPO_ROOT / "maintainer-contracts/payment-source-lock-2026-08-31.json"
 )
+ONBOARDING_SOURCE_LOCK = (
+    REPO_ROOT / "maintainer-contracts/merchant-onboarding-source-lock-2026-08-31.json"
+)
+
+
+def load_payment_source_lock() -> dict[str, object]:
+    return json.loads(PAYMENT_SOURCE_LOCK.read_text(encoding="utf-8"))
+
+
+def payment_source_dir() -> Path:
+    lock = load_payment_source_lock()
+    snapshot_id = lock.get("source_snapshot_id", lock.get("source_date"))
+    if not isinstance(snapshot_id, str) or not re.fullmatch(
+        r"\d{4}-\d{2}-\d{2}(?:-r\d+)?", snapshot_id
+    ):
+        raise ValueError("payment source lock has no valid source snapshot id")
+    return REPO_ROOT / "maintainer-contracts/official-sources/payment" / snapshot_id
 
 
 def load_onboarding_source_lock() -> dict[str, object]:
@@ -95,10 +112,16 @@ def onboarding_source_date() -> str:
 
 
 def onboarding_source_dir() -> Path:
+    lock = load_onboarding_source_lock()
+    snapshot_id = lock.get("source_snapshot_id", onboarding_source_date())
+    if not isinstance(snapshot_id, str) or not re.fullmatch(
+        r"\d{4}-\d{2}-\d{2}(?:-r\d+)?", snapshot_id
+    ):
+        raise ValueError("merchant onboarding source lock has no valid source snapshot id")
     return (
         REPO_ROOT
         / "maintainer-contracts/official-sources/merchant-onboarding"
-        / onboarding_source_date()
+        / snapshot_id
     )
 
 # Backward-compatible names for payment-only validators. New code should use

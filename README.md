@@ -4,8 +4,8 @@
 
 | Skill | 版本 | 使用场景 |
 | --- | --- | --- |
-| `huifu-pay-integration` | `1.3.4` | 聚合支付、托管支付、checkout-js、下单、查单、关单、退款、对账、支付通知、本地沙箱和支付上线 |
-| `huifu-merchant-onboarding` | `1.0.1` | 企业/个人商户进件，以及企业/个人用户开户、用户业务入驻、申请状态和用户信息查询 |
+| `huifu-pay-integration` | `1.3.5` | 聚合支付、托管支付、checkout-js、下单、查单、关单、退款、对账、支付通知、本地沙箱和支付上线 |
+| `huifu-merchant-onboarding` | `1.0.2` | 企业/个人商户进件、商户多费率配置及查询，以及企业/个人用户开户、用户业务入驻及修改、申请状态、用户信息查询和企业/个人用户基本信息修改 |
 
 用户只需加载当前任务相关的 Skill。商户进件与分账/结算用户开户都由同一个进件 Skill 路由；只有跨到支付交易领域时才组合加载支付 Skill。
 
@@ -27,12 +27,12 @@
 huifu-pay-integration/
 ├── SKILL.md
 ├── agents/openai.yaml
-└── references/                  # 支付专属，101 份
+└── references/                  # 支付专属，102 份
 
 huifu-merchant-onboarding/
 ├── SKILL.md
 ├── agents/openai.yaml
-└── references/                  # 商户进件及用户开户入驻，46 份
+└── references/                  # 商户进件及用户开户入驻，52 份
 
 maintainer-contracts/            # 仓库维护证据，不进入任何 Skill ZIP
 ├── payment-references.json
@@ -40,13 +40,29 @@ maintainer-contracts/            # 仓库维护证据，不进入任何 Skill ZI
 ├── reference-migration-ledger.json
 ├── reference-transformation-review.json
 ├── merchant-onboarding-source-lock.json             # 2026-07-29 历史锁
-├── merchant-onboarding-source-lock-2026-08-10.json  # 当前商户接口锁
+├── merchant-onboarding-source-lock-2026-08-10.json  # 历史十一接口锁
+├── merchant-onboarding-source-lock-2026-08-24.json  # 十二接口历史锁（r1）
+├── merchant-onboarding-source-lock-2026-08-24-r2.json # 历史十三接口锁
+├── merchant-onboarding-source-lock-2026-08-31.json # 当前十三接口锁
+├── merchant-onboarding-1.0.2-source-lock.json       # 1.0.2 r1 历史组合锁
+├── merchant-onboarding-1.0.2-r2-source-lock.json    # 历史组合发布锁
+├── user-onboarding-source-lock.json                 # 历史五接口锁
+├── user-onboarding-source-lock-2026-08-24-r1.json  # 六接口历史锁
+├── user-onboarding-source-lock-2026-08-24-r2.json  # 七接口历史锁
+├── user-onboarding-source-lock-2026-08-24-r3.json  # 八接口历史锁
+├── user-onboarding-source-lock-2026-08-24-r4.json  # 历史九接口锁
+├── user-onboarding-source-lock-2026-08-31.json     # 当前九接口锁
+├── merchant-onboarding-1.0.2-r3-source-lock.json    # 六用户接口历史组合锁
+├── merchant-onboarding-1.0.2-r4-source-lock.json    # 七用户接口历史组合锁
+├── merchant-onboarding-1.0.2-r5-source-lock.json    # 八用户接口历史组合锁
+├── merchant-onboarding-1.0.2-r6-source-lock.json    # 历史组合发布锁
+├── merchant-onboarding-1.0.2-r7-source-lock.json       # 当前组合发布锁
 └── official-sources/
 
 tests/regression/
-├── payment.json                 # 57 个支付主用例
-├── onboarding.json              # 20 个历史用例 + 10 个新增接口/路由/安全用例
-├── user-onboarding.json         # 11 个用户开户与入驻用例
+├── payment.json                 # 58 个支付主用例
+├── onboarding.json              # 20 个历史用例 + 12 个新增接口/路由/安全用例
+├── user-onboarding.json         # 15 个用户开户、入驻、查询与维护用例
 └── cross-route.json             # 支付、商户进件与用户开户跨域路由用例
 ```
 
@@ -78,23 +94,25 @@ tests/regression/
 | --- | --- | ---: |
 | 企业商户进件 | `merchant-onboarding-enterprise.md` | 177 |
 | 个人商户进件 | `merchant-onboarding-individual.md` | 129 |
-| 商户业务开通 | `merchant-onboarding-business-open.md` | 442 |
+| 商户业务开通 | `merchant-onboarding-business-open.md` | 452 |
 | 图片上传 | `merchant-onboarding-image-upload.md` | 9 |
-| 商户详细信息查询 | `merchant-onboarding-detail-query.md` | 559 |
+| 商户详细信息查询 | `merchant-onboarding-detail-query.md` | 567 |
 | 申请单状态查询 | `merchant-onboarding-application-status-query.md` | 93 |
-| 商户业务开通修改 | `merchant-onboarding-business-open-modify.md` | 434 |
+| 商户业务开通修改 | `merchant-onboarding-business-open-modify.md` | 444 |
 | 商户基本信息修改 | `merchant-onboarding-basic-info-modify.md` | 199 |
 | 商户费率信息查询 | `merchant-onboarding-rate-query.md` | 35 |
 | 商户状态变更 | `merchant-onboarding-status-change.md` | 14 |
 | 商户短信发送 | `merchant-onboarding-sms-send.md` | 20 |
+| 商户多费率配置 | `merchant-onboarding-multifee-config.md` | 27 |
+| 商户多费率配置查询 | `merchant-onboarding-multifee-query.md` | 17 |
 
-完整目录共 2,111 个节点，包括 1,218 个请求、713 个同步响应和 180 个通知节点。父对象、数组、类型、长度、Y/N/C、说明和来源 SHA 见：
+完整目录共 2,183 个节点，包括 1,261 个请求、742 个同步响应和 180 个通知节点。父对象、数组、类型、长度、Y/N/C、说明和来源 SHA 见：
 
 - `huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md`
 - `huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md`
 - `huifu-merchant-onboarding/references/merchant-onboarding-external-resources.md`
 
-当前官方来源快照复审于 `2026-08-10`。十一接口仍为 2,111 个节点；企业进件、个人进件和基本信息修改页仅补全 `activated_products` 的 `01=一体化收款产品`、`02=账户与资金产品`、`03=业财数通产品` 说明，字段数量、类型、Y/N/C 和嵌套均未变化。此前四页的 `request.data.upper_huifu_id:String(18) C`、线下场景门店图片条件及 `material_card_info` 路径继续保留。相比 1.3.2 的 1,393 字段，旧六接口新增：
+当前商户来源快照复审于 `2026-08-31`。十三接口合计2,183个节点；相对上一快照新增 `head_type`、捷行付/线上费率和详情响应字段，删除企业请求旧 `material_card_info.card_type`，并修正多费率长度、String(JSON) 与场景说明。`request.data.upper_huifu_id:String(18) C`、线下场景门店图片条件和其余 `material_card_info` 路径继续保留。相比 1.3.2 的 1,393 字段，旧六接口新增：
 
 - `request.data.share_holder_info_list[].mobile_no`
 - `response.data.share_holder_info_list[].mobile_no`
@@ -102,7 +120,7 @@ tests/regression/
 另有一项已记录的历史说明纠正：详情查询
 `response.data.mer_config_info.online_fee_conf_list[].bus_type` 补回官方表格跨物理行中的
 `5/6` 枚举和示例值；路径、方向、类型、长度和必填性均未变化。
-新增五接口机械展开 702 个节点；详情刷新与本轮企业请求刷新各新增 7 个节点，总数变为 2,111。`scripts/validate_onboarding_source_refresh.py` 会拒绝旧六接口字段删除、未登记的新增及任何未在来源锁中登记的属性或说明修改；独立解析器还会逐项比较全部十一接口的字段属性。
+历史新增五接口机械展开702个节点；后续每轮历史来源锁继续保持不可变。`scripts/validate_onboarding_source_refresh.py` 守护历史刷新，当前独立解析器逐项比较全部十三接口的字段属性。
 
 ## 用户开户与入驻能力（同属商户进件 Skill）
 
@@ -112,17 +130,21 @@ tests/regression/
 | --- | --- | ---: |
 | 企业用户开户 | `POST /v2/user/basicdata/ent` | 43 |
 | 个人用户开户 | `POST /v2/user/basicdata/indv` | 34 |
+| 企业用户基本信息修改 | `POST /v2/user/basicdata/ent/modify` | 37 |
+| 个人用户基本信息修改 | `POST /v2/user/basicdata/indv/modify` | 26 |
 | 用户业务入驻 | `POST /v2/user/busi/open` | 118 |
+| 用户业务入驻修改 | `POST /v2/user/busi/modify` | 120 |
 | 非同名对公结算卡申请状态查询 | `POST /v2/user/apply/query` | 15 |
 | 用户信息查询 | `POST /v2/user/basicdata/query` | 144 |
+| 用户列表查询 | `POST /v2/user/list/query` | 17 |
 
-用户子域完整目录共354个节点，包括161个请求、169个同步响应和24个通知节点。进件 Skill 在内部强制区分 `userHuifuId` 与 `merchantHuifuId`，不得因 wire 键同为 `huifu_id` 而复用 DTO。图片上传的 `data.huifu_id` 只支持直属商户号，不支持用户开户返回的用户号。
+用户子域完整目录共554个节点，包括307个请求、199个同步响应和48个通知节点。进件 Skill 在内部强制区分 `userHuifuId` 与 `merchantHuifuId`，不得因 wire 键同为 `huifu_id` 而复用 DTO。图片上传的 `data.huifu_id` 只支持直属商户号，不支持用户开户返回的用户号。
 
-五份官方来源冻结于 `2026-08-10`，由独立生成器和独立解析器逐节点核对。用户业务入驻是五接口中唯一声明异步通知的接口；公共规范已补齐 RSA 验签、ACK、超时、特定重试和幂等边界。
+当前九接口活动快照为 `2026-08-31`；字段总数仍为554，但官网已修正开户文件数组、业务入驻及详情字段、用户号角色、用户列表数组与 ID 长度等合同。独立生成器和独立解析器逐节点核对；用户业务入驻及其修改是两个声明异步通知的接口。
 
 ## 官方来源
 
-本次进件快照来自用户指定的十一个汇付官方地址：
+当前商户进件快照来自用户指定的十三个汇付官方地址：
 
 - 企业商户进件：<https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_qyshjbxxrz_kyc.md>
 - 个人商户进件：<https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_grshjbxxrz_kyc.md>
@@ -135,16 +157,22 @@ tests/regression/
 - 商户费率信息查询：<https://paas.huifu.com/partners/api/doc/shgl/shjj/api_merchant_conf_search_cx.md>
 - 商户状态变更：<https://paas.huifu.com/partners/api/doc/shgl/api_shgl_shztbg.md>
 - 商户短信发送：<https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shdxfs.md>
+- 商户多费率配置：<https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflpz.md>
+- 商户多费率配置查询：<https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflcx.md>
 
-同一进件 Skill 中用户开户与入驻能力的五个官方地址：
+同一进件 Skill 中用户开户、入驻、查询与维护能力的九个官方地址：
 
 - 企业用户开户：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_qyyhjbxxzc.md>
 - 个人用户开户：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_gryhjbxxzc.md>
 - 用户业务入驻：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_ywrz.md>
 - 用户申请单状态查询：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhsqdzt.md>
 - 用户信息查询：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhywcx.md>
+- 企业用户基本信息修改：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_qyyhjbxxxg.md>
+- 个人用户基本信息修改：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_gryhjbxxxg.md>
+- 用户业务入驻修改：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_ywrzxg.md>
+- 用户列表查询：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhlbcx.md>
 
-原始字节和 SHA 锁保存在 `maintainer-contracts/official-sources/`、两个子域来源锁及 `merchant-onboarding-1.0.1-source-lock.json`，不会进入 Skill ZIP。
+原始字节和 SHA 锁保存在 `maintainer-contracts/official-sources/`、两个子域来源锁及 `merchant-onboarding-1.0.2-r7-source-lock.json`，不会进入 Skill ZIP。
 
 ## 安装与更新
 
@@ -171,11 +199,11 @@ Codex 会从仓库级 `.agents/skills/` 和用户级 `~/.agents/skills/` 发现 
 
 升级和回滚按 Skill 独立进行：
 
-- 支付 `1.3.4` 可以单独回滚到旧支付包。
-- 进件 `1.0.1` 可以整体回滚到不含五个用户接口的 `1.0.0`。
+- 支付 `1.3.5` 可以单独回滚到旧支付包。
+- 进件 `1.0.2` 可以整体回滚到更早包。
 - 旧 `1.3.2` 作为归档回退，不继续作为长期路由 Skill。
 
-`skill_source` 优先使用显式合同值。未配置时，支付使用 `hfps/1.3.4`；商户接口和用户接口均使用 `hfms/1.0.1`；两 Skill 同时参与时使用 `hfps/1.3.4;hfms/1.0.1`。
+`skill_source` 优先使用显式合同值。未配置时，支付使用 `hfps/1.3.5`；商户接口和用户接口均使用 `hfms/1.0.2`；两 Skill 同时参与时使用 `hfps/1.3.5;hfms/1.0.2`。
 
 ## 本地沙箱
 
@@ -202,9 +230,9 @@ powershell -ExecutionPolicy Bypass -File scripts\validate-skills.ps1
 - 两个 Skill 的结构、frontmatter、agents 元数据和 reference manifest。
 - 110 份旧 reference 的迁移守恒及原样移动 SHA。
 - 无跨 Skill 相对路径、无孤儿 reference。
-- 2,111 字段目录、十一份官方来源 SHA、旧六接口守恒和独立全属性比较。
-- 354 字段用户目录、五份官方来源 SHA 和独立双解析器全属性比较。
-- 支付 36 页官方来源锁、16 个 API 的 2,627 条完整字段路径及独立全属性比较。
+- 2,183 字段目录、十三份官方来源 SHA、历史刷新守恒和独立全属性比较。
+- 554 字段用户目录、九份官方来源 SHA 和独立双解析器全属性比较。
+- 支付 37 页官方来源锁、17 个 API 的 2,656 条完整字段路径及独立全属性比较；交易分账明细查询按 String(JSON Array) 解码并锁定全部数组子路径。
 - 支付示例代码、字段保留、敏感信息扫描和三语言官方 SDK-first 门禁；仅图片 `/v2/supplementary/picture` 对 PHP/Python 开放受控通用 POST/自写 HTTPS 降级。
 - 三个独立 ZIP 的构建、文件白名单和内容 SHA。
 
@@ -223,7 +251,7 @@ RELEASE_OUTPUT_DIR=/path/to/new/release-directory \
 scripts/validate-release.sh
 ```
 
-发布门禁会分别以 `payment-only`、`onboarding-only`、`user-onboarding-only` 和 `all-skills` 加载模式执行57、30、11、35个真实模型案例；证据根目录必须在命令启动前不存在，脚本会原子创建它并拒绝复用旧输出。`RELEASE_OUTPUT_DIR` 也必须在命令启动前不存在，脚本最终在该目录保留并校验两个正式 ZIP、SHA 和 provenance。四个 suite 的 `run-manifest.json` 与 `summary.json` 会先被独立重放校验，再把摘要写入正式发布包的 provenance。
+发布门禁会分别以 `payment-only`、`onboarding-only`、`user-onboarding-only` 和 `all-skills` 加载模式执行58、32、15、35个真实模型案例；证据根目录必须在命令启动前不存在，脚本会原子创建它并拒绝复用旧输出。`RELEASE_OUTPUT_DIR` 也必须在命令启动前不存在，脚本最终在该目录保留并校验两个正式 ZIP、SHA 和 provenance。四个 suite 的 `run-manifest.json` 与 `summary.json` 会先被独立重放校验，再把摘要写入正式发布包的 provenance。
 
 ## 回归测试
 
@@ -249,7 +277,7 @@ python3 scripts/run_real_model_regression.py \
   --suite cross-route --load-mode all-skills --timeout 300
 ```
 
-当前共133个真实模型案例：支付57、商户进件30、用户开户11、跨域路由35。用户开户套件仍单独运行，但加载的是同一个 `huifu-merchant-onboarding` Skill。
+当前共140个真实模型案例：支付58、商户进件32、用户开户15、跨域路由35。用户开户套件仍单独运行，但加载的是同一个 `huifu-merchant-onboarding` Skill。
 
 ## 打包
 
@@ -264,7 +292,7 @@ python3 scripts/package_skill.py \
 
 ```
 
-每次构建输出 ZIP、SHA-256 和 provenance sidecar。ZIP 文件集合严格等于对应 Skill 的 `SKILL.md`、`agents/openai.yaml` 和 reference manifest 登记的直属 Markdown；维护合同、其他 Skill、沙箱、嵌套目录和测试脚本均不会进入。以上单独的 `package_skill.py` 命令只适合开发构建；正式上传物必须来自 `validate-release.sh` 的 `RELEASE_OUTPUT_DIR`，其 provenance 会把133-case四个 suite 的运行清单和汇总文件摘要绑定到 `test_evidence`。
+每次构建输出 ZIP、SHA-256 和 provenance sidecar。ZIP 文件集合严格等于对应 Skill 的 `SKILL.md`、`agents/openai.yaml` 和 reference manifest 登记的直属 Markdown；维护合同、其他 Skill、沙箱、嵌套目录和测试脚本均不会进入。以上单独的 `package_skill.py` 命令只适合开发构建；正式上传物必须来自 `validate-release.sh` 的 `RELEASE_OUTPUT_DIR`，其 provenance 会把140-case四个 suite 的运行清单和汇总文件摘要绑定到 `test_evidence`。
 
 ## 安全边界
 

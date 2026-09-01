@@ -27,15 +27,17 @@ SOURCE_DIR = onboarding_source_dir()
 EXPECTED_COUNTS = {
     "企业商户进件": 177,
     "个人商户进件": 129,
-    "商户业务开通": 442,
+    "商户业务开通": 452,
     "图片上传": 9,
-    "商户详细信息查询": 559,
+    "商户详细信息查询": 567,
     "申请单状态查询": 93,
-    "商户业务开通修改": 434,
+    "商户业务开通修改": 444,
     "商户基本信息修改": 199,
     "商户费率信息查询": 35,
     "商户状态变更": 14,
     "商户短信发送": 20,
+    "商户多费率配置": 27,
+    "商户多费率配置查询": 17,
 }
 
 
@@ -132,7 +134,7 @@ def main() -> int:
             line.startswith("| `") for line in section_text(text, title).splitlines()
         )
         assert actual == expected, f"{title}: expected {expected} paths, found {actual}"
-    assert sum(EXPECTED_COUNTS.values()) == 2111
+        assert sum(EXPECTED_COUNTS.values()) == 2183
 
     target = next(
         line
@@ -156,7 +158,7 @@ def main() -> int:
     )
     print(
         "merchant-onboarding field-catalog generation validated: "
-        "2111 paths, wrapped descriptions and relative links preserved"
+        "2183 paths, wrapped descriptions and relative links preserved"
     )
     return 0
 

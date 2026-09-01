@@ -21,6 +21,7 @@ import package_skill  # noqa: E402
 import run_real_model_regression  # noqa: E402
 import scan_sensitive_examples  # noqa: E402
 import generate_merchant_onboarding_field_catalog  # noqa: E402
+import refresh_onboarding_sources  # noqa: E402
 import validate_merchant_onboarding_source_contract  # noqa: E402
 import validate_skill_package  # noqa: E402
 import validate_skill_packages  # noqa: E402
@@ -286,21 +287,31 @@ def validate_provenance_schema_guard() -> None:
         lambda: validate_skill_package.validate_provenance_schema({}),
         "missing required provenance fields",
     )
+    for lock_name in (
+        "merchant-onboarding-source-lock-2026-08-31.json",
+        "user-onboarding-source-lock-2026-08-31.json",
+    ):
+        expect_value_error(
+            lambda name=lock_name: refresh_onboarding_sources.ensure_new_lock_paths(
+                REPO_ROOT / "maintainer-contracts" / name
+            ),
+            "refusing to overwrite versioned onboarding source lock",
+        )
 
 
 def validate_published_version_guard() -> None:
     validate_skill_package.validate_published_version_facts(
-        "| Skill 版本 | `1.3.4` |",
-        "| Skill | `huifu-pay-integration 1.3.4` |",
+        "| Skill 版本 | `1.3.5` |",
+        "| Skill | `huifu-pay-integration 1.3.5` |",
         "huifu-pay-integration",
-        "1.3.4",
+        "1.3.5",
     )
     expect_value_error(
         lambda: validate_skill_package.validate_published_version_facts(
             "| Skill 版本 | `9.9.9` |",
-            "| Skill | `huifu-pay-integration 1.3.4` |",
+            "| Skill | `huifu-pay-integration 1.3.5` |",
             "huifu-pay-integration",
-            "1.3.4",
+            "1.3.5",
         ),
         "SKILL.md version differs",
     )
@@ -363,6 +374,26 @@ def validate_domain_boundary_guard() -> None:
 
 def validate_release_evidence_contract() -> None:
     release_script = (REPO_ROOT / "scripts/validate-release.sh").read_text(encoding="utf-8")
+    validate_skills_sh = (REPO_ROOT / "scripts/validate-skills.sh").read_text(
+        encoding="utf-8"
+    )
+    validate_skills_ps1 = (REPO_ROOT / "scripts/validate-skills.ps1").read_text(
+        encoding="utf-8-sig"
+    )
+    payment_sdk_command = "scripts/validate_payment_sdk_evidence.py"
+    require(
+        payment_sdk_command in validate_skills_sh,
+        "bash validation chain omits payment SDK evidence",
+    )
+    require(
+        payment_sdk_command.replace("/", "\\") in validate_skills_ps1,
+        "PowerShell validation chain omits payment SDK evidence",
+    )
+    require(
+        "REQUIRE_SDK_EVIDENCE=1" in release_script
+        and "scripts/validate-skills.sh" in release_script,
+        "release gate does not require the SDK evidence chain",
+    )
     root_guard = 'if [[ -e "$REAL_MODEL_EVIDENCE_ROOT" ]]'
     root_create = 'mkdir "$REAL_MODEL_EVIDENCE_ROOT"'
     require(root_guard in release_script, "release gate does not reject an existing evidence root")
@@ -473,7 +504,7 @@ def validate_reproducible_provenance() -> None:
                     stdout=subprocess.DEVNULL,
                 )
                 outputs.append(
-                    output / "huifu-pay-integration-1.3.4.provenance.json"
+                    output / "huifu-pay-integration-1.3.5.provenance.json"
                 )
             if before == source_snapshot():
                 break
@@ -492,17 +523,17 @@ def validate_reproducible_provenance() -> None:
         validate_skill_package.validate_refresh_source_bindings(payload, payment_spec)
         require(payload["schema_version"] == 3, "provenance schema 3 missing")
         require(
-            payload["refresh_id"] == "api-refresh-2026-07-29-r3",
+            payload["refresh_id"] == "api-refresh-payment-online-review-2026-08-31",
             "refresh ID was not bound to provenance",
         )
         require(
             payload["refresh_contract"]
-            == "maintainer-contracts/api-refresh-2026-07-29.json",
+            == "maintainer-contracts/api-refresh-payment-online-review-2026-08-31.json",
             "refresh contract path was not bound to provenance",
         )
         require(
             set(payload["source_locks"])
-            == {"maintainer-contracts/payment-source-lock.json"},
+            == {"maintainer-contracts/payment-source-lock-2026-08-31.json"},
             "payment source lock was not bound to provenance",
         )
         tampered_refresh = json.loads(json.dumps(payload))
@@ -515,7 +546,7 @@ def validate_reproducible_provenance() -> None:
         )
         tampered_lock = json.loads(json.dumps(payload))
         tampered_lock["source_locks"][
-            "maintainer-contracts/payment-source-lock.json"
+            "maintainer-contracts/payment-source-lock-2026-08-31.json"
         ] = "0" * 64
         expect_value_error(
             lambda: validate_skill_package.validate_refresh_source_bindings(
@@ -530,7 +561,7 @@ def validate_reproducible_provenance() -> None:
             == {"real-model/all/summary.json": hashlib.sha256(evidence_path.read_bytes()).hexdigest()},
             "labeled external evidence was not bound to provenance",
         )
-        archive = outputs[0].parent / "huifu-pay-integration-1.3.4.zip"
+        archive = outputs[0].parent / "huifu-pay-integration-1.3.5.zip"
         validate_command = [
             sys.executable,
             str(REPO_ROOT / "scripts/validate_skill_package.py"),

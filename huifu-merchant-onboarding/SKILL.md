@@ -36,17 +36,23 @@ description: "汇付支付/斗拱支付（Huifu Payment）商户进件、开户�
 | 商户费率信息查询 | `references/merchant-onboarding-rate-query.md`、`references/merchant-onboarding-field-contracts.md` |
 | 商户状态开通或关闭 | `references/merchant-onboarding-status-change.md`、`references/merchant-onboarding-field-contracts.md` |
 | 商户短信发送或验证码核实 | `references/merchant-onboarding-sms-send.md`、`references/merchant-onboarding-field-contracts.md` |
+| 商户多费率配置或修改微信/支付宝场景底价 | `references/merchant-onboarding-multifee-config.md`、`references/merchant-onboarding-field-contracts.md` |
+| 查询商户多费率配置或按 `fee_sign` 定位配置 | `references/merchant-onboarding-multifee-query.md`、`references/merchant-onboarding-field-contracts.md` |
 | 企业用户开户 | `references/user-onboarding-enterprise.md`、`references/user-onboarding-field-contracts.md` |
+| 企业用户基本信息修改 | `references/user-onboarding-enterprise-modify.md`、`references/user-onboarding-field-contracts.md` |
 | 个人用户开户 | `references/user-onboarding-individual.md`、`references/user-onboarding-field-contracts.md` |
+| 个人用户基本信息修改 | `references/user-onboarding-individual-modify.md`、`references/user-onboarding-field-contracts.md` |
 | 用户业务入驻 | `references/user-onboarding-business-open.md`、`references/user-onboarding-field-contracts.md`、`references/user-onboarding-platform-contracts.md` |
+| 用户业务入驻修改 | `references/user-onboarding-business-modify.md`、`references/user-onboarding-field-contracts.md`、`references/user-onboarding-platform-contracts.md` |
+| 用户列表查询 | `references/user-onboarding-list-query.md`、`references/user-onboarding-field-contracts.md`、`references/user-onboarding-platform-contracts.md` |
 | 用户非同名对公结算卡申请状态 | `references/user-onboarding-application-status-query.md`、`references/user-onboarding-field-contracts.md` |
 | 用户基本信息和业务配置查询 | `references/user-onboarding-detail-query.md`、`references/user-onboarding-field-contracts.md` |
 | 完整商户 DTO、响应或嵌套字段 | 商户原子页、`references/merchant-onboarding-complete-field-catalog.md`、`references/merchant-onboarding-field-contracts.md` |
 | 完整用户 DTO、响应或嵌套字段 | 用户原子页、`references/user-onboarding-complete-field-catalog.md`、`references/user-onboarding-field-contracts.md` |
 | 字段说明命中网页、编码表、XLSX 或协议 | 上一行基础上补 `references/merchant-onboarding-external-resources.md` |
 | 用户字段命中地区、MCC、证件、银行或文件编码 | 用户原子页、`references/user-onboarding-external-resources.md` |
-| 商户九个已有专属类的 JSON 接口 SDK | `references/shared-server-sdk-matrix.md`、`references/merchant-onboarding-field-contracts.md` |
-| 五个用户接口 SDK | `references/user-onboarding-shared-server-sdk-matrix.md`、用户原子页 |
+| 商户十一个已有专属类的 JSON 接口 SDK | `references/shared-server-sdk-matrix.md`、`references/merchant-onboarding-field-contracts.md` |
+| 九个用户接口 SDK | `references/user-onboarding-shared-server-sdk-matrix.md`、用户原子页 |
 | 费率查询 SDK 可用性 | `references/merchant-onboarding-rate-query.md`、`references/shared-server-sdk-matrix.md` |
 | 图片上传 SDK 可用性与语言差异 | `references/merchant-onboarding-image-upload.md`、`references/shared-server-sdk-matrix.md` |
 | `skill_source` 与 SDK 请求头边界 | `references/shared-request-header-policy.md` |
@@ -65,27 +71,29 @@ description: "汇付支付/斗拱支付（Huifu Payment）商户进件、开户�
 
 ## 字段完整性规则
 
-- 当前商户接口官方冻结来源日期为 `2026-08-10`。
-- 十一接口字段路径数量为 `177 / 129 / 442 / 9 / 559 / 93 / 434 / 199 / 35 / 14 / 20`，合计 `2,111`。
-- 字段方向合计为 1,218 个请求、713 个同步响应和 180 个通知节点。
+- 当前商户十三接口官方冻结来源日期为 `2026-08-31`；历史快照保持不可变，本轮在线复审更新七页来源。
+- 十三接口字段路径数量为 `177 / 129 / 452 / 9 / 567 / 93 / 444 / 199 / 35 / 14 / 20 / 27 / 17`，合计 `2,183`。
+- 字段方向合计为 1,261 个请求、742 个同步响应和 180 个通知节点。
 - `2026-08-10` 复审中，企业进件、个人进件和基本信息修改页的官网更新时间变为 `2026.08.07`；三页仅将 `activated_products` 的说明补全为 `01：一体化收款产品，02：账户与资金产品，03：业财数通产品`，字段、类型、长度、必填性和嵌套均未变化。此前企业进件新增的 `material_card_info` 七个路径、线下场景门店图片条件及详情响应同名路径继续保留。
 - 父对象也计入路径；数组按官方 `Array/jsonArray` 定义判断，不按 `*_list` 名称猜测。唯一已登记例外是业务开通修改逐业务通知的 `reg_result_list`：官网误拼为 `josnArray`，且同一行明确“集合可能有多条数据”，因此保留 `async.business.reg_result_list[]`；不得把该例外外推到其他 `_list` 字段。
 - 不得按叶字段名去重。企业、个人进件及基本信息修改中的 `request.data.prov_id/area_id` 是经营省市，`request.data.card_info.prov_id/area_id` 是结算卡省市；企业进件还新增 `request.data.material_card_info.prov_id/area_id` 作为补充对公同名账户，详情响应另有 `response.data.material_card_info.prov_id/area_id`。适用时各完整父路径分别生成，不能合并或提升。`card_info` 是 String(JSON)；`material_card_info` 的官网类型列虽为 Object，本项目已确认以“jsonObject字符串”说明为准，request/response wire 均按 String(JSON Object) 整体序列化或反序列化，类型列差异只作为官网勘误保留。
 - 详情响应的 `response.data.material_card_info.prov_id/area_id` 又是一组独立的银行省市路径；先反序列化 `response.data.material_card_info` 字符串，再只在该父对象内解析，不能与响应顶层或其他卡列表中的同名字段合并。
 - 官网示例值不是默认值。没有本地约束的字段标记 `[需要官方确认]` 并停止赋值。
-- 商户十一页官网有37个字段说明为空、59个String叶字段长度为空；完整目录以 `—` 原样保留。不得根据字段中文名、同名路径、SDK 类型或示例补写，生成严格 DTO 前标记 `[需要官方确认]`。
+- 当前十三页官网有37个字段说明为空、58个 String 标量叶字段长度为空。完整目录以 `—` 原样保留。不得根据字段中文名、同名路径、SDK 类型或示例补写，生成严格 DTO 前标记 `[需要官方确认]`。
+- 商户多费率配置的 `wx_conf_list/ali_conf_list` 已修正为 `String/jsonArray格式`，请求路径保留 `[]`，wire 各发送一层 String(JSON Array)。响应 `conf_list:String N` 挂载子表但未说明编码为单对象还是数组；启用生产响应模型前必须确认编码，不得因 `_list` 名称自行添加 `[]`。`pay_way` 当前只允许 `A=支付宝/W=微信`，旧版 `T=微信` 冲突已关闭。
+- 商户多费率配置查询的可选 `fee_sign:String(32) N` 由 exact-key 扩展传入；官网未定义省略后的精确返回范围、数量或分页语义，不得承诺返回全部配置。其响应 `conf_list:String N` 同样未说明对象/数组编码，生产解析前必须确认。
 - 企业进件和详情查询的股东列表分别包含 `request.data.share_holder_info_list[].mobile_no` 和 `response.data.share_holder_info_list[].mobile_no`。
 - 详情查询的 `online_flag/quick_flag/withhold_flag=1/0` 只用于解析；业务开通请求对应字段只能使用字符串 `Y/N`。
 - 命中字段说明中的外部文档或文件时，单列“外部资料提示”，给出完整字段路径、触发条件和未经改写的原始地址；官网只给相对地址时，同时给出相对原文与按已登记官方文档命名空间（无例外时按来源页）解析后的绝对地址，不能把解析结果冒充原文。未读取正文时要求人工核验；回调、跳转、下载、二维码或图片裸 URL 示例不是资料或默认值。
 
-### 用户开户五接口
+### 用户开户与维护接口
 
-- 用户接口冻结日期为 `2026-08-10`；字段路径为 `43 / 34 / 118 / 15 / 144`，合计354，其中请求161、同步响应169、异步通知24。与商户目录合计2,465个字段路径，但两个目录必须分别校验，不能按叶字段名合并。
-- 五页官网都把外层 `response.data` 标为 `N`；接入方确认成功 wire 一定包含原生 JSON Object，成功缺失按协议异常，网关或异常响应 DTO 仍允许父节点整体缺失。
+- 用户接口活动快照为 `2026-08-31`；字段路径为 `43 / 34 / 118 / 15 / 144 / 37 / 26 / 120 / 17`，合计554，其中请求307、同步响应199、异步通知48。与商户目录合计2,737个字段路径，但两个目录必须分别校验，不能按叶字段名合并。
+- 九页官网都把外层 `response.data` 标为 `N`；业务入驻修改仍为 String，其余为 Json。用户列表查询的 `user_list_info_list` 已修正为 Object/jsonArray格式，按原生数组解析；成功缺失按协议异常，网关或异常响应 DTO 仍允许父节点整体缺失。
 - `C` 统一按条件必填执行。个人用户只允许 `card_type=1`，企业用户按条件允许 `0/1/2/4`；合法 `card_info` 中 `card_name` 必填，e账户卡 `mp` 在 `card_type=1` 时要求、`card_type=0` 时不要求。
 - String(JSON) 必须按 `user-onboarding-platform-contracts.md` 的完整路径矩阵逐层编码/解码；不得把嵌套对象全部扁平化、把原生 Object 变成字符串或对 String(JSON) 二次序列化。
-- 用户五页官网有9个字段说明为空、15个标量长度为空；保留 `—` 并标记 `[需要官方确认]`。仍未裁决的详情冲突包括 D1工作日费率“生效/不生效”、`out_settle_acct_type` 枚举 `01/02/05` 与示例 `0`、`resp_code:String(5)` 与8位示例。
-- 企业/个人用户开户、用户申请状态和用户详情没有官方异步方向；只有用户业务入驻声明接口异步通知。
+- 用户九页官网当前只有业务入驻修改 `async.data` 的说明为空，已没有长度为空的标量叶字段；结构父节点的空长度仍保留 `—`。列表查询已修正为原生数组、两个 ID 长度18，且请求/响应示例均包含 `sign`；用户详情的 D1、外扣账户类型、8位响应码以及个人修改证件示例等旧冲突也已关闭。
+- 企业/个人用户开户、企业/个人用户基本信息修改、用户申请状态和用户详情没有官方异步方向；用户业务入驻及其修改接口声明异步通知。
 - 领域层必须区分表示用户号的 `userHuifuId` 与表示商户号的 `merchantHuifuId`。用户开户返回的 ID 不能写入图片上传 `data.huifu_id`；图片上传该字段只支持直属商户号。
 
 ## 🔴 CHECKPOINT · HARD STOP
@@ -99,10 +107,13 @@ description: "汇付支付/斗拱支付（Huifu Payment）商户进件、开户�
 5. 要实现商户审核、逐业务或电子协议通知，但外层包装、验签原文、ACK、HTTP、超时或重试协议未确认；用户业务入驻通知按已确认公共异步合同执行，不套用该未知边界。
 6. 本地 SDK 源码与官方文档在请求头、签名、版本或字段上冲突。
 7. 用户要求 PHP 联调或生产可运行代码，但不能证明在加载 SDK、Demo/Composer 配置和调用 `BsPay::init` 之前已将全局 `DEBUG` 固定为 `false`，或仍使用会定义 `DEBUG=true` 的官方 Demo/Composer 入口。
+8. 要生成用户业务入驻新增或修改的联调/生产请求并启用 `elec_receipt_config` 或 `elec_card_list`，但尚未确认官网 `Object` 类型列与 jsonObject/jsonArray字符串说明中哪一个代表真实 wire。
 
 纯字段解释、状态分层、详情/申请状态查询、图片 SDK 能力说明、Java 官方图片调用及满足图片专用合同的 PHP/Python 受控降级实现不硬停。
 
 ## 官方 SDK-first 与图片例外
+
+用户接口遵循 `user-onboarding-shared-server-sdk-matrix.md` 的官方 SDK-only 传输规则；下述图片上传是唯一受控例外。
 
 - 接入方已确认官方 Java、PHP、Python SDK 不存在本 Skill 曾推断的 TLS 硬停问题；不得再以历史本地源码片段触发 Java/PHP TLS 硬检查点。
 - Java `dg-java-sdk 3.0.40`、PHP `huifurepo/dg-php-sdk 2.0.30`、Python `dg-sdk 2.0.24` 的常规接口真实请求都使用官方 Request/Client 入口。唯一例外是 `/v2/supplementary/picture`：PHP/Python 的专用生成实现不可用时，可生成通用 POST 或自写 HTTP 传输适配器，但必须严格复刻图片专项 reference 的 multipart、签名、TLS 和日志合同；不得把例外扩散到其他接口。
@@ -112,13 +123,13 @@ description: "汇付支付/斗拱支付（Huifu Payment）商户进件、开户�
 
 ## SDK 与图片安全边界
 
-- Java/PHP/Python 的商户九个已有专属 Request 类使用公共 `AbstractRequest` 合同；用户五个专属 Request 类沿用同一公共调用骨架。两者必须按精确 `/v2/merchant/*` 或 `/v2/user/*` 路由使用，保留请求签名和同步响应验签；不得因后缀相似复用 DTO。
+- Java 的商户十一个已有专属 Request 类使用公共 `AbstractRequest` 合同，PHP/Python 对应类使用各自公共请求骨架；用户九个专属 Request 类沿用相同的语言内公共骨架。两者必须按精确 `/v2/merchant/*` 或 `/v2/user/*` 路由使用，保留请求签名和同步响应验签；不得因后缀相似复用 DTO。
 - Java `BasePay.debug` 默认为 `true`，会记录私钥、签名和请求数据；必须在进程初始化阶段、任何请求之前全局设为 `false`，不得并发临时切换。
 - 当前锁定版本只有 Java 图片上传专用实现可用：`file_url` 使用官方 `BasePayClient.request(request, true)`，本地文件使用 `BasePayClient.upload(request, file)`；两种来源互斥。两条路径均保留请求签名，`isPage=true` 会在响应验签前返回原始响应包装，不得假定文件标识字段。PHP/Python 仅按受控降级合同实现，不得宣称其专用 SDK 已支持。
-- PHP 九个已有专属 Request 类的 JSON 接口走官方无文件 JSON 路径。
+- PHP 十一个已有专属 Request 类的 JSON 接口走官方无文件 JSON 路径。
 - PHP `2.0.30` 的 SDK 默认 `DEBUG=false`，但官方 `BsPayDemo/loader.php` 和 `Composer/BsPayConfig.php` 会在初始化前启用 `DEBUG=true`。调试开启时 SDK 会记录含 RSA 私钥的 `MerConfig`、完整请求体和完整响应；联调/生产必须在加载这些入口与 `BsPay::init` 前固定 `DEBUG=false`，不得使用 Demo loader，且启动检查不能允许它被后续配置改回 `true`。
 - PHP `2.0.30` 虽有图片 Request/路由，但 `BsPayClient::postRequest($request, new CURLFile(...))` 会关闭请求签名和响应验签，官方 Demo 还同时传互斥来源；不得直接使用该方法。可改用保持请求加签的通用 POST 或自写 HTTPS multipart 适配器。
-- Python 九个已有专属 Request 类的 JSON 接口使用对应 request 模块。图片专用 Request 存在方法签名、字段、文件键和签验开关缺陷，不得直接调用；本地文件模式可使用显式 `need_sign=True` 的底层 `DGTools.request_post` 或自写 HTTPS multipart 适配器，并自行补齐官网字段与顶层 `file` 键；`file_url` 模式不得走该方法的通用 JSON 分支，必须发送图片合同规定的 multipart 文本字段。
+- Python 十一个已有专属 Request 类的 JSON 接口使用对应 request 模块。图片专用 Request 存在方法签名、字段、文件键和签验开关缺陷，不得直接调用；本地文件模式可使用显式 `need_sign=True` 的底层 `DGTools.request_post` 或自写 HTTPS multipart 适配器，并自行补齐官网字段与顶层 `file` 键；`file_url` 模式不得走该方法的通用 JSON 分支，必须发送图片合同规定的 multipart 文本字段。
 - 三语言常规接口必须逐语言使用官方 SDK；禁止把 Python 官方 SDK 产物复制成 Java/PHP 手写 HTTP 等价实现。仅 PHP/Python 图片上传允许按本节受控降级，Java 图片上传仍必须使用官方 SDK。
 - 商户费率信息查询在锁定的三语言 SDK 中没有专属路由或 Request 类；不得声称 SDK 已支持或用相似类替代。
 - Python SDK 的连接重试不能当成进件业务重试。
@@ -135,7 +146,7 @@ description: "汇付支付/斗拱支付（Huifu Payment）商户进件、开户�
 
 - 保留调用方已经提供的 `req_date`、`req_seq_id`、申请单号和商户号；缺失或非法时报错。
 - 私钥、身份证、银行卡、手机号和图片资料不得写入前端、日志、仓库或回答示例。
-- 未显式配置 `skill_source` 时，商户或用户接口只要由本 Skill 生成，都使用 `hfms/1.0.1`；支付与本 Skill 都参与当前请求时使用 `hfps/1.3.4;hfms/1.0.1`。仅安装在仓库但未参与当前请求不计入；顺序固定为支付、进件，使用一个英文分号且不加空格，不得去重掉任一已参与 Skill。
+- 未显式配置 `skill_source` 时，商户或用户接口只要由本 Skill 生成，都使用 `hfms/1.0.2`；支付与本 Skill 都参与当前请求时使用 `hfps/1.3.5;hfms/1.0.2`。仅安装在仓库但未参与当前请求不计入；顺序固定为支付、进件，使用一个英文分号且不加空格，不得去重掉任一已参与 Skill。
 - 调用方显式提供经确认的 `skill_source` 合同值时原样透传；不得再追加 `sys_id`，也不得把来源头写进业务 `data`。
 
 ## 输出要求
@@ -152,9 +163,9 @@ description: "汇付支付/斗拱支付（Huifu Payment）商户进件、开户�
 
 | 项目 | 口径 |
 | --- | --- |
-| Skill 版本 | `1.0.1` |
-| Skill 来源标识 | `hfms/1.0.1` |
-| 官方来源快照 | 商户十一接口与用户五接口均复审于 `2026-08-10`；分别为2,111条和354条 |
+| Skill 版本 | `1.0.2` |
+| Skill 来源标识 | `hfms/1.0.2` |
+| 官方来源快照 | 商户十三接口与用户九接口活动快照均为 `2026-08-31`；分别为2,183条和554条 |
 | Java SDK 证据基线 | `3.0.40` |
 | PHP SDK 证据基线 | `2.0.30` |
 | Python SDK 证据基线 | `2.0.24` |

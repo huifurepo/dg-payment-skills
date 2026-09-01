@@ -42,6 +42,7 @@ python3 -B scripts/validate_skill_packages.py --allow-dirty
 (cd local-sandbox && go test ./... -count=1)
 
 if [[ -n "${HUIFU_SDK_ROOT:-}" ]]; then
+  python3 -B scripts/validate_payment_sdk_evidence.py --sdk-root "$HUIFU_SDK_ROOT"
   python3 -B scripts/validate_merchant_onboarding_sdk_evidence.py --sdk-root "$HUIFU_SDK_ROOT"
   python3 -B scripts/validate_user_onboarding_sdk_evidence.py --sdk-root "$HUIFU_SDK_ROOT"
   python3 -B scripts/validate_local_sandbox_golden_vectors.py --strict --sdk-root "$HUIFU_SDK_ROOT"

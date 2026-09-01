@@ -1,7 +1,7 @@
 # 支付官方接口页来源锁
 
-- 来源快照日期：`2026-07-28`
-- 页面数：`36`
+- 来源快照日期：`2026-08-31`
+- 页面数：`37`
 - 用途：复核字段、类型、长度、必填条件和接口边界；普通接入回答仍使用对应原子 reference。
 
 | 页面 | 官方 URL | 本地原子 reference | SHA-256 |
@@ -27,7 +27,7 @@
 | 银联付款码支付-产品介绍 | https://paas.huifu.com/partners/lightning/jsb/zf/yl_fkm_intro.md | `aggregation-order-method-unionpay.md` | `e29f34244e3e862a6f97817eac7826a4eca880563c1dd592ccd3f4dd84f379be` |
 | 银联付款码支付-开发指引 | https://paas.huifu.com/partners/lightning/jsb/zf/yl_fkm_kfzy.md | `aggregation-order-method-unionpay.md` | `2f554275f351d3c304c93321411b726f9c44ea3e7d04f12bba0607193e9233fb` |
 | 聚合支付下单 | https://paas.huifu.com/partners/lightning/api/jhzfxd.md | `aggregation-order-request.md` | `8412cf1c21eaba1164e281fbf4b881e98c7bd9524a1d5def920ff00d4247d8a5` |
-| 聚合交易查询 | https://paas.huifu.com/partners/lightning/api/jyddcx.md | `aggregation-query-payment-query.md` | `2ad7a8dc933913c83803dc7ea0a5b64dc6f56a5b8ccd11a0bd36ffe3104e57f5` |
+| 聚合交易查询 | https://paas.huifu.com/partners/lightning/api/jyddcx.md | `aggregation-query-payment-query.md` | `9e714b3db5c041bbc4732dec8db3b084f0d1f0464b67f759986cf40276747b92` |
 | 聚合交易关单 | https://paas.huifu.com/partners/lightning/api/jygd.md | `aggregation-query-trade-close.md` | `acb6416d691ad8e3692fd823210be97f9c1addd9c9e53a41053ae901188edc7c` |
 | 聚合交易关单查询 | https://paas.huifu.com/partners/lightning/api/jygdcx.md | `aggregation-query-close-query.md` | `57fa894392eab458c7031020c47232269c08f62aed272ee4834c7629e302184c` |
 | 聚合交易退款 | https://paas.huifu.com/partners/lightning/api/jytk.md | `aggregation-refund.md` | `ed632a82bcc7d5c706c51f651fdede9e63ef7e359d2f6e2d1195c1185f55225e` |
@@ -42,6 +42,7 @@
 | 托管交易退款查询 | https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingtkcx.md | `hostingpay-refund-query.md` | `1f982a42ef9e149ef64db96256fc3b3033c7e0c5551ba0547e27f995eb88d1dd` |
 | 托管交易关单 | https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostinggd.md | `hostingpay-query-trade-close.md` | `97b61f7e7725b4cf999a8a05ad3eb332a2183cc56100d558c2499ebe57574f51` |
 | 拆单支付订单查询 | https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingcdzf.md | `hostingpay-query-splitpay.md` | `ed42e854f5a90b5a30c6365e724a0add02546984121a80d08a7bf7261094ff78` |
+| 交易分账明细查询 | https://paas.huifu.com/partners/api/doc/smzf/api_fzmxcx.md | `trade-split-detail-query.md` | `dcab5eb128a7987742ea339631add74ad771227d3ce557c1154d6d6a27266270` |
 
 ## 使用规则
 

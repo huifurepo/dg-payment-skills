@@ -2,7 +2,7 @@
 
 ## 业务返回码
 
-五接口页面不内嵌完整业务码表，只将 `resp_code` / `sub_resp_code` 链接到官方业务返回码：`https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_ywm`。未读取该码表正文时，不得猜测具体码值的可重试性、失败责任方或修复动作。
+九接口页面不内嵌完整业务码表，只将 `resp_code` / `sub_resp_code` 链接到官方业务返回码：`https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_ywm`。未读取该码表正文时，不得猜测具体码值的可重试性、失败责任方或修复动作。
 
 同步处理顺序：
 
@@ -26,4 +26,4 @@
 
 ## 文档异常
 
-官方类型/示例冲突不是运行时错误码。`resp_code:String(5)` 与8位示例仍进入合同告警；String(JSON)/Object 按 `user-onboarding-platform-contracts.md` 的 wire 矩阵解析，不能在业务层伪造成功码或吞掉解析异常。
+官方类型/示例冲突不是运行时错误码。用户详情的 `resp_code` 当前已修正为 `String(8)`；String(JSON)/Object 按 `user-onboarding-platform-contracts.md` 的 wire 矩阵解析，不能在业务层伪造成功码或吞掉解析异常。

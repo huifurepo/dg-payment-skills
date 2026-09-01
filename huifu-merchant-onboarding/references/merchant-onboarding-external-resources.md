@@ -1,11 +1,11 @@
 # 商户进件字段外部资料索引
 
-本页只处理十一个商户进件接口字段说明中出现的外部文档、编码表、下载文件和固定协议地址。字段的类型、长度、必填性、枚举、默认值和条件仍以 `merchant-onboarding-field-contracts.md` 为准。
+本页只处理十三个商户进件接口字段说明中出现的外部文档、编码表、下载文件和固定协议地址。字段的类型、长度、必填性、枚举、默认值和条件仍以 `merchant-onboarding-field-contracts.md` 为准。
 
 ## 目录
 
 - [强制输出合同](#强制输出合同)
-- [十一个接口原始来源](#十一个接口原始来源)
+- [十三个接口原始来源](#十三个接口原始来源)
 - [公共资料映射](#公共资料映射)
 - [商户业务开通专项资料](#商户业务开通专项资料)
 - [详情与申请状态专项资料](#详情与申请状态专项资料)
@@ -39,7 +39,7 @@
 
 固定协议地址是字段值约束，不只是阅读资料。命中 `request.data.agreement_info.agreement_type=3` 时，必须把完整路径 `request.data.agreement_info.agreement_url` 和本页的 `PaymentServiceAgreement.htm` 原始地址同时写入参数建议和 `外部资料提示`；不得把路径缩短成 `data.agreement_info.agreement_url` 或 `agreement_url`，也不得替换成任意商户网页。
 
-## 十一个接口原始来源
+## 十三个接口原始来源
 
 这些地址用于说明映射来源。它们不代替下面字段级资料地址。
 
@@ -56,6 +56,8 @@
 | 商户费率信息查询 | `https://paas.huifu.com/partners/api/doc/shgl/shjj/api_merchant_conf_search_cx.md` |
 | 商户状态变更 | `https://paas.huifu.com/partners/api/doc/shgl/api_shgl_shztbg.md` |
 | 商户短信发送 | `https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shdxfs.md` |
+| 商户多费率配置 | `https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflpz.md` |
+| 商户多费率配置查询 | `https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflcx.md` |
 
 ## 公共资料映射
 
@@ -63,7 +65,7 @@
 
 | 命中接口与字段路径 | 资料 / 用途 | 原始地址 |
 | --- | --- | --- |
-| 十个 Markdown JSON 接口顶层 `sign`（不含图片上传） | 接口加签验签说明 | `https://paas.huifu.com/open/doc/guide/#/api_v2jqyq` |
+| 十三个接口中的十二个 Markdown JSON 接口顶层 `sign`（不含图片上传） | 接口加签验签说明 | `https://paas.huifu.com/open/doc/guide/#/api_v2jqyq` |
 | 企业 `data.mcc`；个人 `data.mcc` | 汇付 MCC 编码 | `https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_hfmccbm` |
 | 企业 `data.license_pic/legal_cert_back_pic/legal_cert_front_pic/reg_acct_pic/settle_card_front_pic/settle_cert_back_pic/settle_cert_front_pic/auth_entrust_pic/store_header_pic/store_indoor_pic/store_cashier_desk_pic/extended_material_list[].file_id`；个人的图片材料与 `extended_material_list[].file_id`；业务开通 `data.online_media_info_list[].media_front_page/media_service_page/media_order_page/media_pay_page/other_material`、`data.extended_material_list[].file_id`；详情响应图片材料；图片上传前置 | 商户图片上传接口 | `https://paas.huifu.com/open/doc/api/#/shgl/shjj/api_shjj_shtpsc` |
 | 企业 `data.license_type`；详情响应 `data.license_type` | 机构证照类型 | `https://paas.huifu.com/open/doc/api/#/api_ggcsbm?id=%E6%9C%BA%E6%9E%84%E8%AF%81%E7%85%A7%E7%B1%BB%E5%9E%8B` |

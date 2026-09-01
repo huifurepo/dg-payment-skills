@@ -2,7 +2,7 @@
 
 ## 适用范围
 
-用于企业或小微商户进行微信/支付宝补开、部分线上业务开通，或修改已开通支付能力的参数和费率。官方来源：[商户业务开通修改](https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywktxg_kyc.md)，锁定来源 SHA-256 为 `fdeaaa0a40556046d817c70a46c2fe1c71756f8648ffe640db6585ca6f5963a3`。银联、银行卡业务开通仍使用 `merchant-onboarding-business-open.md`；不能把所有“已开通后的补开”统一路由到本接口。
+用于企业或小微商户进行微信/支付宝补开、部分线上业务开通，或修改已开通支付能力的参数和费率。官方来源：[商户业务开通修改](https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywktxg_kyc.md)，锁定来源 SHA-256 为 `51a11858b9d312a3e6112f6abf91e1b9a1dbb1db4ed4f4dd27fa14950094d1d9`。银联、银行卡业务开通仍使用 `merchant-onboarding-business-open.md`；不能把所有“已开通后的补开”统一路由到本接口。
 
 本接口不是首次基础进件，也不是支付下单接口。首次业务开通以及银联、银行卡业务开通使用 `merchant-onboarding-business-open.md`；支付交易交给 `$huifu-pay-integration`。
 
@@ -11,7 +11,7 @@
 - Endpoint：`POST https://api.huifu.com/v2/merchant/busi/modify`。
 - 请求顶层为 `sys_id:String(32) Y`、`product_id:String(32) Y`、`sign:String(512) Y`、`data:Json Y`。
 - 同步响应顶层为 `sign:String(512) Y`、`data:Json N`。
-- 完整目录共 434 个节点：请求 372、同步响应 6、异步通知 56。50 组嵌套表、完整路径、类型、长度、Y/N/C 和经过固定规范化、敏感示例脱敏的官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户业务开通修改”；下载原始字节保存在仓库维护来源锁中，不进入发布包。
+- 完整目录共 444 个节点：请求 382、同步响应 6、异步通知 56。51 组嵌套表、完整路径、类型、长度、Y/N/C 和经过固定规范化、敏感示例脱敏的官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户业务开通修改”；下载原始字节保存在仓库维护来源锁中，不进入发布包。
 - 请求 `data.req_seq_id:String(32) Y`、`data.req_date:String(8) Y`、`data.huifu_id:String(18) Y`。其余能力、费率、协议、材料和渠道配置必须按调用方实际修改目标取值，不得从首次开通请求或详情响应整包复制。
 
 ## 修改语义与方向隔离
@@ -32,10 +32,12 @@
 3. `online_flag/quick_flag/withhold_flag` 仍使用字符串 `Y/N`；不得复制详情查询响应中的 `1/0/空`。
 4. 费率、MCC、商户简称、外扣承担方、渠道配置和材料均由调用方或运营提供；官网示例不是默认值。
 5. 字段说明命中编码表、XLSX、协议或其他页面时，同时读取 `merchant-onboarding-external-resources.md` 并输出未经改写的原始地址。
+6. 捷行付新增字段与首次业务开通保持同路径合同：`bank_name`、`jxf_fee_info` 五个叶字段、`pay_confirm_flag/pay_confirm_req_url` 必须完整读取；四个 `jxf_bank_info` 字段仅在银行非平安时条件必填。示例独有 `fee_charge_type` 不进入 DTO，`quota_issue_fee_rate` 按两位小数正式说明校验。
+7. `online_fee_conf_list[].fee_formula_type:String N` 只在代扣开通时传入，枚举限 `01/02/03/04`，不得从其他费率对象复制同名字段。
 
 ## 公共请求头
 
-- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.1`，双 Skill 默认 `hfps/1.3.4;hfms/1.0.1`。
+- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.2`，双 Skill 默认 `hfps/1.3.5;hfms/1.0.2`。
 
 ## SDK 证据
 
@@ -45,6 +47,8 @@
 - Python：`V2MerchantBusiModifyRequest`，模块 `v2_merchant_busi_modify_request.py`
 
 SDK 类存在只证明路由和请求封装可用，不证明商户权限、费率、材料或审核结果。Java 代码仍必须在任何 SDK 请求前全局设置 `BasePay.debug = false;`。
+
+三个生成类均未声明 `jxf_conf_info` 和 `online_fee_conf_list`，通过请求字段白名单的 exact-key 扩展传入；扩展后合并会覆盖已声明定位字段，必须先拒绝覆盖再发送。
 
 ## 通知边界
 

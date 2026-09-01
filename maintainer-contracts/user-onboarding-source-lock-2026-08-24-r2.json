@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "migration_baseline_commit": "d514aa56b0a3bd5e8bc71e38db6498b08c498d63",
+  "source_date": "2026-08-24",
+  "source_snapshot_id": "2026-08-24-r2",
+  "previous_snapshot_date": "2026-08-24-r1",
+  "verified_at": "2026-08-24T20:00:00+08:00",
+  "sources": [
+    {
+      "key": "user_enterprise",
+      "title": "企业用户开户",
+      "filename": "enterprise.md",
+      "url": "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_qyyhjbxxzc.md",
+      "endpoint": "POST /v2/user/basicdata/ent",
+      "official_page_update": "2026.02.05",
+      "sha256": "c224c78370903d00b06dd85abc45700f0e63154b4a4e397849641bf6ae01153f",
+      "field_count": 43,
+      "request_fields": 36,
+      "response_fields": 7,
+      "callback_fields": 0,
+      "root_tables": 4,
+      "extend_tables": 1
+    },
+    {
+      "key": "user_individual",
+      "title": "个人用户开户",
+      "filename": "individual.md",
+      "url": "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_gryhjbxxzc.md",
+      "endpoint": "POST /v2/user/basicdata/indv",
+      "official_page_update": "2026.01.26",
+      "sha256": "219b94e71c37764b6ce9261c4e345f26a9afeefef50541fc30937364c4608605",
+      "field_count": 34,
+      "request_fields": 27,
+      "response_fields": 7,
+      "callback_fields": 0,
+      "root_tables": 4,
+      "extend_tables": 1
+    },
+    {
+      "key": "user_business_open",
+      "title": "用户业务入驻",
+      "filename": "business-open.md",
+      "url": "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_ywrz.md",
+      "endpoint": "POST /v2/user/busi/open",
+      "official_page_update": "2026.06.26",
+      "sha256": "093ff1605bbf2eb9934e28a85b0458b06e75ad7124a432badee5dad6dacf8b20",
+      "field_count": 118,
+      "request_fields": 83,
+      "response_fields": 11,
+      "callback_fields": 24,
+      "root_tables": 6,
+      "extend_tables": 12
+    },
+    {
+      "key": "user_apply_query",
+      "title": "用户申请单状态查询",
+      "filename": "application-status-query.md",
+      "url": "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhsqdzt.md",
+      "endpoint": "POST /v2/user/apply/query",
+      "official_page_update": "2025.04.24",
+      "sha256": "f7894c5e2bc3544a9501922d4e3d5bb8b1f054704a80c36405a51ef2ad768e56",
+      "field_count": 15,
+      "request_fields": 8,
+      "response_fields": 7,
+      "callback_fields": 0,
+      "root_tables": 4,
+      "extend_tables": 0
+    },
+    {
+      "key": "user_detail_query",
+      "title": "用户信息查询",
+      "filename": "detail-query.md",
+      "url": "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhywcx.md",
+      "endpoint": "POST /v2/user/basicdata/query",
+      "official_page_update": "2026.06.26",
+      "sha256": "27b1627a928c1457766ce2e494f7d749a65666d1d0237af25cdf33fc7e28104d",
+      "field_count": 144,
+      "request_fields": 7,
+      "response_fields": 137,
+      "callback_fields": 0,
+      "root_tables": 4,
+      "extend_tables": 12
+    },
+    {
+      "key": "user_enterprise_modify",
+      "title": "企业用户基本信息修改",
+      "filename": "enterprise-modify.md",
+      "url": "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_qyyhjbxxxg.md",
+      "endpoint": "POST /v2/user/basicdata/ent/modify",
+      "official_page_update": "2026.02.05",
+      "sha256": "a2b64bfa4f55ffb140e45b8685fb1bd61ca0bc76de34cfb94160342d1707dce2",
+      "field_count": 37,
+      "request_fields": 32,
+      "response_fields": 5,
+      "callback_fields": 0,
+      "root_tables": 4,
+      "extend_tables": 1
+    },
+    {
+      "key": "user_individual_modify",
+      "title": "个人用户基本信息修改",
+      "filename": "individual-modify.md",
+      "url": "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_gryhjbxxxg.md",
+      "endpoint": "POST /v2/user/basicdata/indv/modify",
+      "official_page_update": "2026.01.26",
+      "sha256": "ed308741025a986a86e23c8d4ef09d9361703ee50f2d87289caade9df6698f75",
+      "field_count": 26,
+      "request_fields": 21,
+      "response_fields": 5,
+      "callback_fields": 0,
+      "root_tables": 4,
+      "extend_tables": 1
+    }
+  ],
+  "totals": {
+    "fields": 417,
+    "request": 214,
+    "response": 179,
+    "callback": 24,
+    "parent": 43,
+    "leaf": 374,
+    "root_tables": 30,
+    "extend_tables": 28
+  },
+  "api_refresh": {
+    "refresh_id": "api-refresh-user-individual-modify-2026-08-24-r2",
+    "retrieved_at": "2026-08-24T20:00:00+08:00",
+    "previous_refresh_id": "api-refresh-user-enterprise-modify-2026-08-24-r1",
+    "new_source_keys": ["user_individual_modify"],
+    "field_paths_added": 26,
+    "field_paths_removed": 0,
+    "document_conflicts": [
+      "request.data.huifu_id is labelled Huifu customer ID on an individual-user modification interface, but its description says direct merchant ID",
+      "request.data.cert_validity_type defines only 0/1 while the official request example uses 2",
+      "response.sign is formally required while the official success example omits it"
+    ],
+    "inherited_extension": {
+      "refresh_id": "api-refresh-user-enterprise-modify-2026-08-24-r1",
+      "source_key": "user_enterprise_modify",
+      "field_paths_added": 37,
+      "document_conflicts": [
+        "request.data.huifu_id is labelled Huifu customer ID on an enterprise-user modification interface, but its description says direct merchant ID; response.data.huifu_id says enterprise user ID"
+      ]
+    },
+    "rule": "Preserve the six 2026-08-24-r1 sources byte-for-byte and append only individual user basic-information modification."
+  }
+}

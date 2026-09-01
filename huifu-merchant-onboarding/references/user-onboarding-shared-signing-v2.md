@@ -2,7 +2,7 @@
 
 ## 已确认范围
 
-五份接口页确认请求与公共响应 `sign:String(512) Y`，业务入驻异步外层另声明 `sign`。接入方补充并已核验伙伴平台公共原文：[加签验签](https://paas.huifu.com/partners/start/api_v2jqyq.md)、[获取密钥](https://paas.huifu.com/partners/start/guide_gsycshq.md)、[异步消息简介](https://paas.huifu.com/partners/start/ybxx/jiekouguifan_ybxx.md)。
+九份接口页确认请求与公共响应 `sign:String(512) Y`，业务入驻及其修改的异步外层另声明 `sign`。接入方补充并已核验伙伴平台公共原文：[加签验签](https://paas.huifu.com/partners/start/api_v2jqyq.md)、[获取密钥](https://paas.huifu.com/partners/start/guide_gsycshq.md)、[异步消息简介](https://paas.huifu.com/partners/start/ybxx/jiekouguifan_ybxx.md)。
 
 ## 实现规则
 
@@ -16,6 +16,6 @@
 
 - 汇付公钥：验证同步响应/异步通知，并加密接口明确要求加密的请求敏感字段。
 - 商户私钥：请求加签，并解密接口明确返回的密文敏感字段。
-- 仅在具体字段说明要求时执行 RSA 加解密；不能仅凭“手机号/卡号/证件号”名称对五接口全部字段盲目加密。
+- 仅在具体字段说明要求时执行 RSA 加解密；不能仅凭“手机号/卡号/证件号”名称对九接口全部字段盲目加密。
 
 接口通知的 POST、UTF-8、ACK、超时、重试和幂等合同读取 `user-onboarding-platform-contracts.md`；控台 Webhook 是独立协议，不使用本页 RSA 通知合同。

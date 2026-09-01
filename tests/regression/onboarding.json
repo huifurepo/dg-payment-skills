@@ -32,13 +32,13 @@
   {
     "id": 61,
     "prompt": "我已把图片放到受控 HTTPS 对象存储，只传 file_url，不传本地文件。请用 $huifu-merchant-onboarding 对比 Java、PHP、Python 的图片调用边界，并说明 Java 日志安全配置、来源值/占位符以及未确认的响应和重试边界。",
-    "expected": "必须读取 merchant-onboarding-image-upload.md、shared-request-header-policy.md 和 shared-server-sdk-matrix.md；必须说明 file_url 与 file 互斥，Java 3.0.40 使用 `BasePayClient.request(request, true)`，SDK 对该 URI 使用 multipart 文本字段，并在任何 SDK 请求前设置 BasePay.debug=false；PHP/Python 专用生成实现不可直接使用，但可仅为图片接口生成 multipart 文本字段、data 加签、TLS 校验齐全的通用 POST/自写 HTTPS 降级，file_url 不得走通用 JSON body。未显式配置 skill_source 时仅进件默认 hfms/1.0.1，双 Skill 才是 hfps/1.3.4;hfms/1.0.1；不得猜测响应标识或自动重试。",
+    "expected": "必须读取 merchant-onboarding-image-upload.md、shared-request-header-policy.md 和 shared-server-sdk-matrix.md；必须说明 file_url 与 file 互斥，Java 3.0.40 使用 `BasePayClient.request(request, true)`，SDK 对该 URI 使用 multipart 文本字段，并在任何 SDK 请求前设置 BasePay.debug=false；PHP/Python 专用生成实现不可直接使用，但可仅为图片接口生成 multipart 文本字段、data 加签、TLS 校验齐全的通用 POST/自写 HTTPS 降级，file_url 不得走通用 JSON body。未显式配置 skill_source 时仅进件默认 hfms/1.0.2，双 Skill 才是 hfps/1.3.5;hfms/1.0.2；不得猜测响应标识或自动重试。",
     "suite": "onboarding"
   },
   {
     "id": 62,
     "prompt": "我要用 Python SDK 上传 file_url。本次只实际使用 $huifu-merchant-onboarding；支付 Skill 虽已安装但没有参与当前请求，也没有显式配置 skill_source。能把 huifu_id 作为 MerConfig 第五个参数传进去吗？请给静态接入边界。",
-    "expected": "必须先说明 Python 2.0.24 的图片专用 Request 不可直接使用；本地文件可用显式 need_sign=True、补齐官网字段且文件键为 file 的 DGTools.request_post，file_url 则必须使用 multipart 文本字段的通用 POST/自写 HTTPS 降级，不能走通用 JSON body。配置语义上第五参数是 jpt_x_skill_source，不是 huifu_id；本次仅进件且未显式配置时来源值为 hfms/1.0.1，已安装但未参与的支付 Skill 不计入。不得输出私钥、真实商户号或图片 URL。",
+    "expected": "必须先说明 Python 2.0.24 的图片专用 Request 不可直接使用；本地文件可用显式 need_sign=True、补齐官网字段且文件键为 file 的 DGTools.request_post，file_url 则必须使用 multipart 文本字段的通用 POST/自写 HTTPS 降级，不能走通用 JSON body。配置语义上第五参数是 jpt_x_skill_source，不是 huifu_id；本次仅进件且未显式配置时来源值为 hfms/1.0.2，已安装但未参与的支付 Skill 不计入。不得输出私钥、真实商户号或图片 URL。",
     "suite": "onboarding"
   },
   {
@@ -176,7 +176,19 @@
   {
     "id": 87,
     "prompt": "我需要三语言真实调用这些商户进件和用户开户接口。Python 已经用官方 dg-sdk 2.0.24；Java 3.0.40 和 PHP 2.0.30 官方 SDK 的 TLS 有问题，所以请直接生成 Java HttpClient 和 PHP Guzzle/curl 的 HTTP+签名客户端，只用于验证技术链路。请用 $huifu-merchant-onboarding 实现并写入项目文件。",
-    "expected": "必须读取 shared-server-sdk-matrix.md 和 user-onboarding-shared-server-sdk-matrix.md；明确拒绝 Java/PHP 官方 SDK 因 TLS 不可用的错误前提。常规商户接口及五个用户接口由 Java 3.0.40、PHP 2.0.30、Python 2.0.24 分别使用官方 Request/Client 发起真实调用，不得改写手写客户端。唯一例外是 `/v2/supplementary/picture`：Java 仍使用官方 SDK，PHP/Python 的专用实现不可用时可采用满足 multipart、data 加签、TLS 和日志合同的受控降级；其他 SDK 能力缺口不得用手写 HTTP 补位。",
+    "expected": "必须读取 shared-server-sdk-matrix.md 和 user-onboarding-shared-server-sdk-matrix.md；明确拒绝 Java/PHP 官方 SDK 因 TLS 不可用的错误前提。常规商户接口及九个用户接口由 Java 3.0.40、PHP 2.0.30、Python 2.0.24 分别使用官方 Request/Client 发起真实调用，不得改写 Java HttpClient/OkHttp/HttpURLConnection 或 PHP Guzzle/curl 手写客户端。唯一例外是 `/v2/supplementary/picture`：Java 仍使用官方 SDK，PHP/Python 的专用实现不可用时可采用满足 multipart、data 加签、TLS 和日志合同的受控降级；其他接口必须坚持 SDK 没有对应接口能力时报告缺口，不得用手写 HTTP 补位。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 88,
+    "prompt": "商户已开通微信和支付宝，要用三语言 SDK 配置多费率；两个请求列表和响应 conf_list 应怎样编码？",
+    "expected": "路由到商户多费率配置；请求 `wx_conf_list/ali_conf_list` 各按 String(JSON Array) 编码且不能同时为空；响应 `conf_list:String` 缺少对象/数组编码说明，生产解析前硬停确认；三语言均使用 `V2MerchantBusiMultifeeConfigRequest`，扩展映射不得覆盖定位字段；只允许 `A/W`，禁止旧版 `T`。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 89,
+    "prompt": "商户已配置多费率，要用三语言 SDK 按可选 fee_sign 查询；响应 conf_list 应怎样解析？",
+    "expected": "路由到商户多费率配置查询；请求共8节点、响应共9节点，`conf_list:String` 挂载四个子字段但缺少对象/数组编码说明，生产解析前硬停确认；三语言均使用 `V2MerchantBusiMultifeeQueryRequest`，`fee_sign` 通过 exact-key 扩展传入且不得覆盖三个声明字段；使用 `W=微信`，也不承诺省略 `fee_sign` 后返回全部。",
     "suite": "onboarding"
   }
 ]

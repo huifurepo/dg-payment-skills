@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Download and lock the 36 official payment documents used by the payment Skill."""
+"""Download and lock the 37 official payment documents used by the payment Skill."""
 
 from __future__ import annotations
 
@@ -69,6 +69,7 @@ SOURCES = (
     source("hosting-refund-query", "托管交易退款查询", "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingtkcx.md", "hostingpay-refund-query.md"),
     source("hosting-close", "托管交易关单", "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostinggd.md", "hostingpay-query-trade-close.md"),
     source("hosting-splitpay-query", "拆单支付订单查询", "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingcdzf.md", "hostingpay-query-splitpay.md"),
+    source("split-detail-query", "交易分账明细查询", "https://paas.huifu.com/partners/api/doc/smzf/api_fzmxcx.md", "trade-split-detail-query.md"),
 )
 
 
@@ -96,6 +97,16 @@ def page_update(raw: bytes) -> str | None:
     return f"{year}-{int(month):02d}-{int(day):02d}"
 
 
+def default_lock_path(source_date: str) -> Path:
+    return ROOT / f"maintainer-contracts/payment-source-lock-{source_date}.json"
+
+
+def ensure_mutable_lock(path: Path) -> None:
+    historical_lock = ROOT / "maintainer-contracts/payment-source-lock.json"
+    if path.resolve() == historical_lock.resolve():
+        raise ValueError("the unversioned 2026-07-28 payment source lock is immutable")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-date", required=True)
@@ -103,9 +114,14 @@ def main() -> int:
     parser.add_argument(
         "--lock",
         type=Path,
-        default=ROOT / "maintainer-contracts/payment-source-lock.json",
+        help="Versioned lock output; defaults to payment-source-lock-<source-date>.json.",
     )
     args = parser.parse_args()
+    lock_path = args.lock or default_lock_path(args.source_date)
+    try:
+        ensure_mutable_lock(lock_path)
+    except ValueError as exc:
+        parser.error(str(exc))
 
     output_dir = args.output_dir or (
         ROOT / "maintainer-contracts/official-sources/payment" / args.source_date
@@ -129,14 +145,35 @@ def main() -> int:
             }
         )
 
+    previous_lock = ROOT / "maintainer-contracts/payment-source-lock-2026-08-24.json"
     payload = {
         "schema_version": 1,
         "source_date": args.source_date,
+        "source_snapshot_id": args.source_date,
         "verified_at": datetime.now(ZoneInfo("Asia/Shanghai")).isoformat(timespec="seconds"),
         "source_count": len(locked),
+        "previous_source_lock": {
+            "path": str(previous_lock.relative_to(ROOT)),
+            "sha256": hashlib.sha256(previous_lock.read_bytes()).hexdigest(),
+        },
         "sources": locked,
+        "current_extension": {
+            "refresh_id": f"api-refresh-payment-online-review-{args.source_date}",
+            "changed_source_keys": ["aggregation-query", "split-detail-query"],
+            "field_paths_added": 0,
+            "field_paths_removed": 0,
+            "field_paths_changed": 18,
+            "document_conflicts": [
+                "aggregation-query still duplicates A_NATIVE for Alipay micropay even though the success example now uses A_MICROPAY",
+                "split-detail-query example-only response.data.huifu_id is excluded from the formal catalog",
+            ],
+            "preserved_boundaries": [
+                "split_trans_responses is String(JSON Array) and all sixteen decoded child paths retain []",
+                "the twenty lightning guide pages and fifteen other formal API pages are byte-identical to the previous snapshot",
+            ],
+        },
     }
-    args.lock.write_text(
+    lock_path.write_text(
         json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     print(f"locked {len(locked)} payment sources in {output_dir}")

@@ -50,6 +50,7 @@
 | --- | --- | --- | --- | --- |
 | 抖音直连下单 `pre_order_type=4` | `V2TradeHostingPaymentPreorderDyRequest` | `V2TradeHostingPaymentPreorderDyRequest` | `V2TradeHostingPaymentPreorderDyRequest` | 当前三语言基线均有专属类，功能码仍指向共用 preorder Endpoint；`dy_data` 必须是 JSON 字符串 |
 | 拆单支付订单查询 `splitpay/query` | `V2TradeHostingPaymentSplitpayQueryRequest` | `V2TradeHostingPaymentSplitpayQueryRequest` | `V2TradeHostingPaymentSplitpayQueryRequest` | 三语言均可生成官方 request 类代码；字段为 `req_date`、`req_seq_id`、`huifu_id`、`org_req_date`、`org_req_seq_id`，不要用普通 `queryorderinfo` 替代 |
+| 交易分账明细查询 `trade/trans/split/query` | `V2TradeTransSplitQueryRequest` | `V2TradeTransSplitQueryRequest` | `V2TradeTransSplitQueryRequest` | 三语言均有专属类且只声明 `hf_seq_id`、`huifu_id`、`ord_type`；官网无可选请求字段，扩展映射必须为空 |
 
 ## 当前版本口径
 
@@ -109,6 +110,7 @@ Composer 不可用时，可以使用 Packagist 元数据指向的 GitHub 分发�
 - 核对控台 Webhook 验签时读 `references/shared-webhook-signing.md`
 - 需要确认官方 SDK 实现细节时，检查项目实际安装的 `huifurepo/dg-php-sdk` 源码
 - 拆单支付订单查询可使用官方 `V2TradeHostingPaymentSplitpayQueryRequest`
+- 交易分账明细查询使用官方 `V2TradeTransSplitQueryRequest`；不能用拆单支付查询替代
 - 抖音直连下单使用 `V2TradeHostingPaymentPreorderDyRequest`；旧基线才回退到 H5 Request + `pre_order_type=4`
 - 不要回到历史自维护 PHP client 方案
 
@@ -169,7 +171,7 @@ Python SDK 的来源头来自 `MerConfig` 和最终请求参数：
 - 托管支付 PHP 已有拆单支付查询和抖音直连专属 request 类
 - PHP 受支持场景如果需要输出代码，必须体现官方 `huifurepo/dg-php-sdk`
 - 聚合支付 Python 已覆盖下单、扫码交易查询、关单、关单查询、退款、退款查询、对账
-- 托管支付 Python 已覆盖预下单、查询、关单、退款、退款查询、对账、拆单支付订单查询
+- 通用 Python SDK 已覆盖预下单、查询、关单、退款、退款查询、对账、拆单支付订单查询和交易分账明细查询
 - 托管支付 Python 抖音直连使用 `V2TradeHostingPaymentPreorderDyRequest`
 - Python 受支持场景如果需要输出代码，必须体现官方 `dg-sdk` / `dg_sdk`
 - Java 仍是聚合支付和托管支付的完整基线实现

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the complete five-interface user-onboarding field catalog.
+"""Generate the complete user-onboarding field catalog.
 
 The official Markdown stores nested schemas in detached ``extend-table``
 blocks.  This generator resolves that graph, emits every reachable field path,
@@ -27,7 +27,7 @@ require_assertions_enabled()
 
 
 ROOT = Path(__file__).resolve().parent.parent
-LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock.json"
+LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-08-31.json"
 DEFAULT_OUTPUT = (
     ROOT
     / "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md"
@@ -106,6 +106,56 @@ SOURCES = (
             ("同步响应 data", "response.data"),
         ),
     ),
+    SourceSpec(
+        "user_enterprise_modify",
+        "企业用户基本信息修改",
+        "enterprise-modify.md",
+        "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_qyyhjbxxxg.md",
+        (
+            ("请求信封", "request"),
+            ("响应信封", "response"),
+            ("请求 data", "request.data"),
+            ("同步响应 data", "response.data"),
+        ),
+    ),
+    SourceSpec(
+        "user_individual_modify",
+        "个人用户基本信息修改",
+        "individual-modify.md",
+        "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_gryhjbxxxg.md",
+        (
+            ("请求信封", "request"),
+            ("响应信封", "response"),
+            ("请求 data", "request.data"),
+            ("同步响应 data", "response.data"),
+        ),
+    ),
+    SourceSpec(
+        "user_business_modify",
+        "用户业务入驻修改",
+        "business-modify.md",
+        "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_ywrzxg.md",
+        (
+            ("请求信封", "request"),
+            ("响应信封", "response"),
+            ("请求 data", "request.data"),
+            ("同步响应 data", "response.data"),
+            ("异步通知信封", "async"),
+            ("异步通知 data", "async.data"),
+        ),
+    ),
+    SourceSpec(
+        "user_list_query",
+        "用户列表查询",
+        "list-query.md",
+        "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhlbcx.md",
+        (
+            ("请求信封", "request"),
+            ("响应信封", "response"),
+            ("请求 data", "request.data"),
+            ("同步响应 data", "response.data"),
+        ),
+    ),
 )
 
 
@@ -162,16 +212,19 @@ def fetch(url: str) -> bytes:
 
 def locked_source_dir() -> Path:
     lock = json.loads(LOCK.read_text(encoding="utf-8"))
+    snapshot_id = lock.get("source_snapshot_id", lock["source_date"])
     return (
         ROOT
         / "maintainer-contracts/official-sources/user-onboarding"
-        / lock["source_date"]
+        / snapshot_id
     )
 
 
-def refresh_sources(target: Path) -> None:
+def refresh_sources(target: Path, source_key: str | None = None) -> None:
     target.mkdir(parents=True, exist_ok=True)
     for source in SOURCES:
+        if source_key is not None and source.key != source_key:
+            continue
         (target / source.filename).write_bytes(fetch(source.url))
 
 
@@ -206,6 +259,25 @@ def parse_page_field_notes(text: str) -> dict[str, str]:
 
 def parse_explicit_page_field_notes(source_key: str, text: str) -> dict[str, str]:
     """Resolve unlabelled official notes whose target fields are unambiguous."""
+    if source_key == "user_enterprise_modify":
+        matches = [
+            clean(line.strip().removeprefix("- "))
+            for line in visible_lines(text)
+            if line.strip().startswith("- 如要修改法人证件")
+        ]
+        if len(matches) != 1:
+            raise ValueError(
+                "enterprise modify legal-certificate note must occur exactly once"
+            )
+        return {
+            f"request.data.{name}": matches[0]
+            for name in (
+                "legal_cert_type",
+                "legal_cert_validity_type",
+                "legal_cert_begin_date",
+                "legal_cert_end_date",
+            )
+        }
     if source_key != "user_enterprise":
         return {}
     matches = [
@@ -509,9 +581,9 @@ def build_catalog(source_dir: Path) -> tuple[str, dict[str, dict[str, object]]]:
         f"{summaries[spec.key]['extend_tables']} | {summaries[spec.key]['max_depth']} |"
         for spec in SOURCES
     ]
-    header = """# 用户进件五接口完整字段目录
+    header = """# 用户进件完整字段目录
 
-本文件由仓库维护脚本从五份锁定的官方原文机械生成，负责保证字段路径不遗漏。条件必填、官方口径冲突、路由和安全边界仍需同时读取对应的原子接口 reference。
+本文件由仓库维护脚本从锁定的官方原文机械生成，负责保证字段路径不遗漏。条件必填、官方口径冲突、路由和安全边界仍需同时读取对应的原子接口 reference。
 
 安全说明：官网说明中的用户号、证件号、手机号、邮箱、长流水和示例图片地址已机械脱敏；字段枚举、条件、材料编号和资料链接保持原文。
 
@@ -524,6 +596,10 @@ def build_catalog(source_dir: Path) -> tuple[str, dict[str, dict[str, object]]]:
 - 用户业务入驻
 - 用户申请单状态查询
 - 用户信息查询
+- 企业用户基本信息修改
+- 个人用户基本信息修改
+- 用户业务入驻修改
+- 用户列表查询
 
 ## 使用规则
 
@@ -531,7 +607,7 @@ def build_catalog(source_dir: Path) -> tuple[str, dict[str, dict[str, object]]]:
 2. `huifu_id` 必须结合接口与路径解释为用户号、渠道号或商户号，不得统一称为商户号。
 3. String(JSON) 的对象/数组边界以完整路径保留；不得扁平化后复用商户进件 DTO。
 4. 官网类型、长度、必填和示例互相冲突时，目录保留表格原值并标记为官方证据，不自行修正。
-5. 异步通知仅来自用户业务入驻；本目录不补写官网未定义的 ACK、重试、去重或超时规则。
+5. 异步通知仅来自用户业务入驻及其修改；本目录不补写官网未定义的 ACK、重试、去重或超时规则。
 
 ## 生成覆盖摘要
 
@@ -569,6 +645,7 @@ def main() -> int:
     parser.add_argument("--source-dir", type=Path)
     parser.add_argument("--locked-source-dir", action="store_true")
     parser.add_argument("--refresh-source-dir", type=Path)
+    parser.add_argument("--refresh-source-key", choices=[source.key for source in SOURCES])
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
@@ -580,8 +657,10 @@ def main() -> int:
         parser.error("source selection options are mutually exclusive")
     source_dir = args.source_dir or locked_source_dir()
     if args.refresh_source_dir is not None:
-        refresh_sources(args.refresh_source_dir)
+        refresh_sources(args.refresh_source_dir, args.refresh_source_key)
         source_dir = args.refresh_source_dir
+    elif args.refresh_source_key is not None:
+        parser.error("--refresh-source-key requires --refresh-source-dir")
     catalog, summary = build_catalog(source_dir)
     validate_summary(summary)
     if args.check:

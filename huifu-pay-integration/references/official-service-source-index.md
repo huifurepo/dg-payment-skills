@@ -4,7 +4,7 @@
 
 只沉淀脱敏摘要、判断规则、路由和必要摘录；不复制官网大图、完整 FAQ 库、真实商户信息、订单号、用户标识或密钥。
 
-本轮 36 个指定接口页的逐页 URL、原子 reference 与 SHA-256 锁定关系见 `references/official-payment-page-lock.md`；快照日期为 `2026-07-28`。
+本轮 37 个指定接口页的逐页 URL、原子 reference 与 SHA-256 锁定关系见 `references/official-payment-page-lock.md`；活跃快照日期为 `2026-08-31`，其中聚合交易查询和交易分账明细查询发生修订，其余35页与上一快照逐字节一致。
 
 ## 目录
 
@@ -24,8 +24,8 @@
 | 业务指引 | https://paas.huifu.com/open/service/guide/#/ | 2026-05-15 | 产品功能、商户材料、控台配置、业务开通、权限边界 | 李稼祥 | 配置清单、开通前置、人工升级材料 |
 | 联调攻略 | https://paas.huifu.com/open/service/develop/#/ | 2026-05-15 | 支付产品联调步骤、托管支付、分账、异步回调、常见接入顺序 | 李稼祥 | 方案卡、联调步骤、必测项、常见卡点 |
 | FAQ | https://paas.huifu.com/open/service/faq/#/ | 2026-05-15 | 高频错误、权限/配置/状态/流水/回调/签名问题 | 李稼祥 | 问题分类、排查顺序、修复建议、升级人工条件 |
-| API 文档 | https://paas.huifu.com/partners/lightning/、https://paas.huifu.com/partners/api/doc/ | 2026-07-28 | 用户指定的极速版介绍/开发指引、聚合支付 API、对账 API 与托管支付 API，共 36 页 | 李稼祥 | 字段差异刷新、接口新增/修改确认；逐页摘要见 `official-payment-page-lock.md` |
-| API 公共资料 | https://paas.huifu.com/partners/api/doc/csfl/api_csfl.md、https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md、https://paas.huifu.com/partners/api/doc/csfl/api_csfl_mcjs.md | 2026-07-29 | 基础参数入口、网关/业务返回码全集、名词解释 | 李稼祥 | 公共编码路由、返回码合并排查、术语释义；不计入 36 个接口字段快照 |
+| API 文档 | https://paas.huifu.com/partners/lightning/、https://paas.huifu.com/partners/api/doc/ | 2026-08-31 | 用户指定的极速版介绍/开发指引、聚合支付 API、对账 API、托管支付 API 与交易分账明细查询，共 37 页 | 李稼祥 | 字段差异刷新、接口新增/修改确认；逐页摘要见 `official-payment-page-lock.md` |
+| API 公共资料 | https://paas.huifu.com/partners/api/doc/csfl/api_csfl.md、https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md、https://paas.huifu.com/partners/api/doc/csfl/api_csfl_mcjs.md | 2026-07-29 | 基础参数入口、网关/业务返回码全集、名词解释 | 李稼祥 | 公共编码路由、返回码合并排查、术语释义；不计入 37 个接口字段快照 |
 | 异步消息规范 | https://paas.huifu.com/partners/start/ybxx/jiekouguifan_ybxx.md | 2026-07-29 | 通知传输、验签、ACK、重试与幂等规则 | 李稼祥 | `notify_url` 通用处理；具体字段仍取接口页，聚合下单同时覆盖正扫和反扫通知 |
 | AI 技能包技术支持 | https://paas.huifu.com/docs/devtools/#/skillsv1_0?id=support | 2026-06-12 | 官方 AI 技能包技术支持联系方式 | 李稼祥 | 用户明确要求技术支持或本地排查仍解决不了时给出联系方式 |
 
@@ -49,6 +49,7 @@
 | 托管支付 H5/PC、小程序预下单 | 业务指引、联调攻略、API 文档 | `references/hostingpay-preorder.md`、`references/hostingpay-preorder-h5-pc.md`、`references/hostingpay-preorder-alipay-mini.md`、`references/hostingpay-preorder-wechat-mini.md`、`references/hostingpay-customer-preparation.md` | 已覆盖 | 沉淀 `project_id`、项目状态、预下单、跳转/拉起、异步通知验签/幂等 + 查单补偿的服务端闭环；`hosting_data` 按统一收银台扩展参数集合处理 | 不用聚合正扫冒充 H5/PC 收银台；不猜 `project_id` | 指定接口页快照，2026-07-28 |
 | 托管支付抖音直连下单 | API 文档、联调攻略 | `references/hostingpay-preorder-douyin-direct.md`、`references/hostingpay-preorder.md`、`references/hostingpay-async-webhook.md` | 已覆盖 | 固定识别托管预下单 `pre_order_type=4`、`dy_data`、`busi_scene`、`jump_url` 和抖音异步返回；最终状态仍走服务端闭环 | 使用当前三语言专属 `V2TradeHostingPaymentPreorderDyRequest`；不把 `jump_url` 当终态 | 指定接口页快照，2026-07-28 |
 | 托管拆单支付订单查询 | API 文档、FAQ | `references/hostingpay-query-splitpay.md`、`references/hostingpay-query.md`、`references/hostingpay-preorder-wechat-mini.md` | 已覆盖 | 使用原拆单支付 `org_req_date + org_req_seq_id` 查询，并逐条读取 `trans_list[].trans_stat` | 不用普通托管查单替代拆单明细查询；不把订单级 `order_stat` 当所有子交易终态 | 指定接口页快照，2026-07-28 |
+| 交易分账明细查询 | API 文档 | `references/trade-split-detail-query.md`、`references/payment-complete-field-catalog.md`、`references/shared-server-sdk-matrix.md` | 已覆盖 | 使用 `hf_seq_id + huifu_id + ord_type` 查询 180 天内记录；`split_trans_responses` 按 String(JSON Array) 解码；三语言均走专属 Request | 不把拆单支付查询替代本接口；不把成功示例独有的顶层 `huifu_id` 提升为正式字段 | 指定接口页快照，2026-08-31 |
 | checkout-js 自有页面嵌入 | 联调攻略 | `references/checkout-js.md`、`references/checkout-js-create-preorder-contract.md`、`references/checkout-js-callback-and-confirmation.md` | 已覆盖 | 明确 checkout-js 依赖托管预下单，前端 callback 只做流程回调 | 不在未确认服务端预下单、异步通知和查单补偿闭环时给安装和接法 | 联调攻略，2026-05-15 |
 | 异步通知、验签、幂等、固定回包 | 异步消息规范、联调攻略、FAQ | `references/shared-async-notify.md`、`references/shared-signing-v2.md`、`references/shared-webhook-signing.md`、`references/copilot-troubleshooting-playbooks.md` | 已覆盖 | 先按交易场景选择具体通知字段，再验签、解析、事件级幂等和状态锁；聚合下单 `notify_url` 同时覆盖正扫与反扫通知，最终状态通过查单二次确认或补偿查询闭环 | 不提供跳过验签、收到通知即改成功、伪造支付成功代码；不只实现正扫或反扫其中一套 | 异步消息规范，2026-07-29；联调攻略/FAQ，2026-05-15 |
 | 分账参数、分账退款、分账查询 | 业务指引、联调攻略、FAQ | `references/aggregation-order-tx-metadata.md`、`references/hostingpay-payload-construction.md`、`references/copilot-solution-cards.md` | 部分覆盖 | 覆盖聚合和托管常用分账参数、接收方、金额/比例、退款关系；复杂权限和手续费承担转人工确认 | 不自动判断分账权限、费率或资金合规结论 | 业务指引/联调攻略/FAQ，2026-05-15 |

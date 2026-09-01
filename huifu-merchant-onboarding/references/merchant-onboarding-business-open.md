@@ -7,7 +7,7 @@
 ## 已确认的请求合同
 
 - Endpoint：`POST https://api.huifu.com/v2/merchant/busi/open`；顶层使用 `sys_id`、`product_id`、`sign`、`data`。
-- 请求 51 组扩展表及同步、审核、逐业务、电子协议结果的完整父子路径、类型、长度、Y/N/C 与官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户业务开通”；本页不能替代完整字段目录。
+- 完整目录共 452 个节点（请求387、同步响应9、异步56）和 52 组扩展表；全部父子路径、类型、长度、Y/N/C 与官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户业务开通”，本页不能替代完整字段目录。
 - `data` 至少需新的当日唯一 `req_seq_id`、`req_date` 和真实 `huifu_id`。`upper_huifu_id:String(18) C`：`sys_id` 主体为渠道商时填写，总部商户主体时选填。
 - 微信、支付宝、银联、银行卡、线上业务、协议、分账等配置按业务分组条件填写；不能用一个通用模板猜填渠道字段或费率。
 - `async_return_url` 是申请审核结果入口；`busi_async_return_url` 是逐支付业务结果入口；电子协议地址的路径为 `data.agreement_info.agreement_async_return_url`（`agreement_info` 是 String(JSON) 条件对象）。字段合同见 `merchant-onboarding-field-contracts.md`。
@@ -28,6 +28,9 @@
 | `data.online_refund/platform_refund/support_revoke/fund_collection_flag/half_pay_host_flag/online_recharge_flag/refund_mend_open_flag/bill_payment_flag` | 各自仅字符串 `Y/N`；不得统一填 `1`。 |
 | `data.enter_fee_flag` | 仅 `1=一次性开户费`、`2=平台套餐费`。 |
 | `data.withhold_pay_scene` | `withhold_flag=Y` 时必填，仅 `1..6`，具体语义见字段合同。 |
+| `data.online_fee_conf_list[].fee_formula_type` | `String N`；代扣开通时才可传，`01/02/03/04` 分别为百分比无封顶保底、百分比有保底、固定、固定+百分比，空值默认 `04`。 |
+
+捷行付 `data.jxf_conf_info` 新增合同必须整组读取：`bank_name:String(8) Y` 仅 `PINGAN/BOC`；`jxf_bank_info.operator_phone/user_name/sign_start_date/sign_end_date` 已从无条件 `Y` 改为 `C`，银行不是平安时必填。`jxf_fee_info:Object N` 下包含 `open_card_fix_fee:String(11) N`、`quota_issue_fee_rate:String(6) N`、`out_fee_flag:String(1) N`、`out_fee_huifuid:String(18) C`、`out_fee_acct_type:String(2) C`；`pay_confirm_flag:String(1) N` 为 `Y/N`，为 `Y` 时 `pay_confirm_req_url:String(256) C` 必填。官网示例独有 `jxf_fee_info.fee_charge_type`，参数表未声明，禁止加入 DTO；`quota_issue_fee_rate` 说明要求两位小数而示例为四位，按正式说明校验并保留官网示例冲突。
 
 方向隔离是硬规则：商户详情查询响应的 `online_flag/quick_flag/withhold_flag/pre_authorization_flag` 使用 `1/0/空`，只表示查询到的当前配置；不得把这些响应值复制到本接口请求。本接口的预授权请求字段名也是 `alipay_pre_auth_flag` / `wechatpay_pre_auth_flag`，不是响应字段 `pre_authorization_flag`。
 
@@ -57,7 +60,7 @@
 
 ## SDK 证据边界
 
-Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` 都有 `V2MerchantBusiOpenRequest` 作为可选封装，并覆盖 `sign_user_info`、`agreement_info` 等 String(JSON) 边界。它不替代支付业务、费率、协议、实名和渠道权限的人工确认；每次调用显式传入新的当天唯一 `req_seq_id` / `req_date`。
+Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` 都有 `V2MerchantBusiOpenRequest` 作为可选封装。三个生成类没有 `jxf_conf_info` 或 `online_fee_conf_list` 的专属字段；它们必须通过正式请求字段白名单的 exact-key 扩展传入，嵌套对象按完整目录构造。扩展后合并会覆盖显式字段，因此拒绝覆盖各语言生成类已经声明的定位键。SDK 不替代支付业务、费率、协议、实名和渠道权限的人工确认；每次调用显式传入新的当天唯一 `req_seq_id` / `req_date`。
 
 ## 已确认与未确认回调规则
 

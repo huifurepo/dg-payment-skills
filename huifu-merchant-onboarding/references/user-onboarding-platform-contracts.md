@@ -1,6 +1,6 @@
 # 用户开户公共平台合同
 
-本页补充五个接口页共同引用的开发、签名、加密、密钥、异步通知、公共参数和 Webhook 规范。具体业务字段仍以接口页和完整字段目录为准；接入方明确确认的冲突裁决标记为“接入方确认”，不改写官网原始字段目录。
+本页补充当前九个接口页共同引用的开发、签名、加密、密钥、异步通知、公共参数和 Webhook 规范。具体业务字段仍以接口页和完整字段目录为准；接入方明确确认的冲突裁决标记为“接入方确认”，不改写官网原始字段目录。用户业务入驻修改的 `elec_receipt_config` wire 仍未裁决；用户列表查询的 `user_list_info_list` 已由官网修正为 Object/jsonArray格式。
 
 ## 官方公共来源
 
@@ -25,9 +25,9 @@
 - 私钥只能从服务端密钥管理或受控挂载读取；不得进入源码、日志、前端、异常文本、回答示例或工单。公共参数 `sys_id/product_id` 从开放平台开发者工作台取得，不从示例或用户号推导。
 - 官方“基础参数汇总”是地区、银行、银行支行、MCC 和文件类型的公共入口。`response.data.qry_cash_card_info_list[].branch_code` 的接口行虽缺链接，现按接入方提供的该公共来源读取银行支行编码 XLSX/JSON/CSV；这不改变字段本身的 String(12) N 合同。
 
-## 用户业务入驻接口异步通知
+## 用户业务入驻类接口异步通知
 
-`request.data.async_return_url` 触发的是接口异步通知，不是控台 Webhook。用户业务入驻属于配置类接口，业务体参数名使用 `data`，不能使用支付交易通知的 `resp_data`。
+`request.data.async_return_url` 触发的是接口异步通知，不是控台 Webhook。用户业务入驻及其修改属于配置类接口，业务体参数名使用 `data`，不能使用支付交易通知的 `resp_data`。
 
 - 汇付以 HTTP(S) POST 推送，编码 UTF-8，默认超时5秒；URL 不带查询参数、不支持重定向，自定义端口使用8000-9005。
 - 超时默认重试3次；HTTP 500-599 默认重试3次。其他非成功状态会被视为错误，但公共页没有承诺统一重试次数。
@@ -48,7 +48,7 @@
 | 成功响应 | HTTP 200 + `RECV_ORD_ID_` + 请求流水 | 任意2xx |
 | 重推 | 超时和部分5xx默认3次 | 失败后1秒一次共3次，之后每小时一次直至成功，也可控台手工重推 |
 
-禁止把 Webhook 的终端密钥、2xx应答或重推规则套到用户业务入驻接口通知，也禁止把接口通知的 RSA、`RECV_ORD_ID_` 套到 Webhook。
+禁止把 Webhook 的终端密钥、2xx应答或重推规则套到用户业务入驻及其修改接口通知，也禁止把接口通知的 RSA、`RECV_ORD_ID_` 套到 Webhook。
 
 ## 接入方确认的字段裁决（2026-08-10）
 
@@ -58,22 +58,31 @@
 - e账户卡 `elec_card_list[].mp` 按卡类型区分：`card_type=1` 对私法人卡要求存在有效手机号；`card_type=0` 对公卡不要求该手机号。查询响应仍按字段存在性解析，不能因历史数据缺失判整单失败。
 - 申请状态查询成功返回 `data` 时，`apply_reason/apply_status/huifu_id` 在 `Y/P/N/F` 四种状态均返回；`apply_status` 值域为 `Y/P/N/F`。
 - 用户业务入驻成功响应返回 `apply_no`。该结论不表示审核已通过；仍按同步配置结果和异步审核状态分别持久化。
-- 五个接口成功响应都包含外层 `response.data`。官网的 `N` 继续保留为原始字段事实，用于兼容网关或异常响应缺少 `data`；成功响应缺少 `data` 按协议异常处理。
+- 当时五个接口成功响应都包含外层 `response.data`。官网的 `N` 继续保留为原始字段事实，用于兼容网关或异常响应缺少 `data`；成功响应缺少 `data` 按协议异常处理。企业修改成功示例同样包含原生对象，但不把示例提升为接入方确认事实。
 
 ## 接入方确认的 wire 矩阵（2026-08-10）
 
 | 完整路径 | wire 形态 |
 | --- | --- |
-| `request.data`、所有成功 `response.data` | 原生 JSON Object |
-| 个人开户 `request.data.file_list` | String(JSON Array) |
+| `request.data`、`2026-08-10` 已裁决五接口的成功 `response.data` | 原生 JSON Object |
+| 企业/个人开户 `request.data.file_list` | 原生 JSON Array |
 | 业务入驻 `request.data.settle_config_list/cash_config/file_list` | String(JSON Array) |
 | 业务入驻 `request.data.card_info/elec_acct_config` | String(JSON Object) |
-| 业务入驻 `request.data.elec_acct_config.elec_card_list` | 外层对象解码后的 String(JSON Array) |
-| 业务入驻 `request.data.elec_receipt_config/sign_user_info` | 原生 JSON Object |
+| 业务入驻 `request.data.elec_acct_config.elec_card_list` | `[需要官方确认]`：类型列 Object、说明为 jsonArray字符串，示例在已字符串化父对象内使用原生数组 |
+| 业务入驻 `request.data.elec_receipt_config` | `[需要官方确认]`：类型列 Object 与 jsonObject字符串说明冲突 |
+| 业务入驻 `request.data.sign_user_info` | 原生 JSON Object |
 | 业务入驻 `response.data.resp_business` | 外层对象中的 String(JSON Array) |
 | 业务入驻 `async.data` | 原始 String(JSON Object)，先验签再解码 |
 | 业务入驻 `async.data.audit_info/elec_acct_result` | 解码异步 data 后的 String(JSON Object) |
 | 业务入驻 `async.data.audit_info.resp_business` | 解码 audit_info 后的原生 JSON Array |
+| 业务入驻修改 `request.data.settle_config_list/cash_config/file_list` | String(JSON Array) |
+| 业务入驻修改 `request.data.card_info/elec_acct_config` | String(JSON Object) |
+| 业务入驻修改 `request.data.sign_user_info` | 原生 JSON Object；Java 用受控 exact-key 修正 String setter，PHP 可直接传数组，Python 可直接赋 dict |
+| 业务入驻修改 `request.data.elec_receipt_config` | `[需要官方确认]`：类型列 Object 与 jsonObject字符串说明冲突 |
+| 业务入驻修改 `request.data.elec_acct_config.elec_card_list` | `[需要官方确认]`：类型列 Object 与 jsonArray说明冲突 |
+| 业务入驻修改 `response.data` | 正式表 String N，成功示例原生 JSON Object；保留冲突 |
+| 业务入驻修改 `async.data.audit_info.resp_business` | 解码 audit_info 后的原生 JSON Array；正式类型与说明已统一为 Object/jsonArray格式 |
+| 用户列表查询 `response.data.user_list_info_list` | 原生 JSON Array |
 | 详情 `response.data.ent_base_info/indv_base_info/card_info/elec_acct_config` | String(JSON Object) |
 | 详情 `response.data.settle_config_list/qry_cash_config_list/qry_cash_card_info_list` | String(JSON Array) |
 | 详情 `ent_base_info.file_list/indv_base_info.file_list` | 解码各自父对象后的原生 JSON Array |

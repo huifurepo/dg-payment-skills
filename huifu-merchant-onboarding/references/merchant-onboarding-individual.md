@@ -11,6 +11,7 @@
 - `data` 使用当日唯一的 `req_seq_id`、`req_date`。`upper_huifu_id:String(18) C`：`sys_id` 主体为渠道商时填写真实渠道商号，总部商户主体时选填；其余资料按负责人、证件、经营信息、联系人、结算卡、结算/取现规则分组校验。
 - `scene_type=OFFLINE` 或 `ALL` 时必须提供经营详细地址。身份证、银行卡和门店图片字段只接收图片上传后的文件标识。
 - `store_header_pic`、`store_indoor_pic`、`store_cashier_desk_pic` 均为 `String(64) C`，`scene_type` 含线下场景时必填。
+- `head_office_flag=0` 表示下级商户；必须按对应总部 `head_type` 补材料：集团客户 F725，大型商业综合体 F726，品牌连锁客户按加盟/直营提交 F727。个人商户接口本身没有 `head_type` 请求字段，不能为满足说明而补造该键。
 - `card_info`、`settle_config`、`cash_config` 是 String(JSON) 边界：先建对象、校验条件字段、统一序列化；不直接透传未经校验的字符串。
 - `data.prov_id/area_id` 是经营省市，`data.card_info.prov_id/area_id` 是银行所在省市。不得按 `prov_id/area_id` 叶字段名去重；适用时两组都保留，并把银行卡省市序列化在 `card_info` 内。
 - 受益人、电子账户、扩展材料等多层对象必须从完整字段目录沿父路径读到全部相关叶子；不得只写父字段或根据字段名猜结构。

@@ -1,6 +1,6 @@
-# 商户进件十一接口完整字段目录
+# 商户进件十三接口完整字段目录
 
-本文件由仓库维护脚本从十一份官方原文机械生成。它负责“字段不遗漏”；高风险枚举、默认值、条件冲突和输出边界仍同时读取 `merchant-onboarding-field-contracts.md` 及对应接口 reference。
+本文件由仓库维护脚本从十三份官方原文机械生成。它负责“字段不遗漏”；高风险枚举、默认值、条件冲突和输出边界仍同时读取 `merchant-onboarding-field-contracts.md` 及对应接口 reference。
 
 安全说明：官方说明中的商户号、证件号、手机号、长流水和示例图片 URL 已机械脱敏；这些示例本来就不是默认值。字段规则、枚举、条件、材料编号和外部资料地址不做脱敏。
 
@@ -18,6 +18,8 @@
 - [商户费率信息查询](#商户费率信息查询)
 - [商户状态变更](#商户状态变更)
 - [商户短信发送](#商户短信发送)
+- [商户多费率配置](#商户多费率配置)
+- [商户多费率配置查询](#商户多费率配置查询)
 
 使用规则：
 
@@ -33,20 +35,22 @@
 | --- | ---: | ---: | ---: |
 | 企业商户进件 | 177 | 10 | 5 |
 | 个人商户进件 | 129 | 7 | 5 |
-| 商户业务开通 | 442 | 51 | 7 |
+| 商户业务开通 | 452 | 52 | 7 |
 | 图片上传 | 9 | 0 | 3 |
-| 商户详细信息查询 | 559 | 63 | 5 |
+| 商户详细信息查询 | 567 | 63 | 5 |
 | 申请单状态查询 | 93 | 8 | 4 |
-| 商户业务开通修改 | 434 | 50 | 8 |
+| 商户业务开通修改 | 444 | 51 | 8 |
 | 商户基本信息修改 | 199 | 12 | 5 |
 | 商户费率信息查询 | 35 | 4 | 4 |
 | 商户状态变更 | 14 | 0 | 3 |
 | 商户短信发送 | 20 | 0 | 3 |
+| 商户多费率配置 | 27 | 3 | 4 |
+| 商户多费率配置查询 | 17 | 1 | 4 |
 
 ## 企业商户进件
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_qyshjbxxrz_kyc.md>
-- SHA-256：`38e7958dd7370796f713558325f33ea92aff34c303f3430bc329c7b611f20e78`
+- SHA-256：`ae2744b9142fe463010b4a9d66a89b0c5ef3e84576f87a553bc59331dd868415`
 - 说明：下表保留官方字段类型、长度、必填标记和字段说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -167,7 +171,7 @@
 | `request.data.cash_config[].out_fee_huifu_id` | 手续费承担方 | `String` | `18` | `C` | 手续费外扣时必需指定手续费承担方ID ；示例值：[官网示例已脱敏] |
 | `request.data.cash_config[].out_fee_acct_type` | 手续费外扣的账户类型 | `String` | `2` | `N` | 01-基本户，02-现金户，05-充值户，09-营销户；示例值：01不填默认01 |
 | `request.data.cash_config[].is_priority_receipt` | 是否优先到账 | `String` | `1` | `N` | Y：是 ，N：否。不填，默认值为否。仅在cash_type为D1 和 T1 时生效。示例值：Y |
-| `request.data.head_office_flag` | 商户身份 | `String` | `1` | `N` | 1：总部商户， 0：下级商户；不传默认普通商户。示例值：0；开通下级商户时，所选的上级商户需要有开通商户权限，需先调用“[开通下级商户权限配置接口](https://paas.huifu.com/open/doc/api/#/shgl/shywkt/api_shjj_shywkt_xjshpz)” |
+| `request.data.head_office_flag` | 商户身份 | `String` | `1` | `N` | 1：总部商户， 0：下级商户；不传默认普通商户。示例值：0；开通下级商户时，所选的上级商户需要有开通商户权限，需先调用“[开通下级商户权限配置接口](https://paas.huifu.com/open/doc/api/#/shgl/shywkt/api_shjj_shywkt_xjshpz)”； 当head_office_flag为1时，head_type必填，且需通过图片上传接口上传材料；（1）若head_type为0时，需要补充F718,F719,F720（工商截图、至少两个分公司或分支机构的办公地门头照）；（2）若head_type为1时，需要补充F721（行业综合许可证）；（3）若head_type为2时，加盟性质需要补充F722,F723,F724（至少两家门店的门头照、加盟协议），直营性质需要补充F722,F723,F724（提供至少两家门店的门头照、总部盖章说明函）；当head_office_flag为0时，需通过图片上传接口上传材料 ；（1）若对应总部的客群类型为0集团客户，需要补充F725 （集团盖章说明函）；（2）若对应总部的客群类型为1，需要补充F726 （下级商户入驻大型商业综合体的合作协议）；（3）若对应总部的客群类型为2，加盟性质需要补充F727（加盟协议），直营性质需要补充F727（总部盖章说明函） |
 | `request.data.use_head_info_flag` | 使用上级资料信息 | `String` | `1` | `N` | Y:是 N：否；示例值：Y；选Y则部分信息复用上级，复用字段：；license_code-营业执照编号,；license_validity_type-营业执照有效期类型,；license_begin_date-营业执照有效期开始日期,；license_end_date-营业执照有效期截止日期,；reg_prov_id-注册省,；reg_area_id-注册市,；reg_district_id-注册区,；reg_detail- 注册详细地址,；legal_name- 法人姓名,；legal_cert_type-法人证件类型,；legal_cert_no-法人证件号码,；legal_cert_validity_type-法人证件有效期类型,；legal_cert_begin_date-法人证件有效期开始日期,；legal_cert_end_date-法人证件有效期截止日期,；busi_type-经营类型,；ent_type-公司类型,；mcc-所属行业 |
 | `request.data.head_huifu_id` | 上级汇付Id | `String` | `18` | `C` | 如果head_office_flag=0，则字段必填，如果head_office_flag=1，上级汇付Id不可传；如果headOfficeFlag=0，useHeadInfoFlag=Y,且head_huifu_id不为空则基本信息部分复用上级的基本信息。；示例值：[官网示例已脱敏] |
 | `request.data.mer_url` | 商户主页URL | `String` | `256` | `N` | 商户主页URL ；示例值：https://paas.huifu.com/ |
@@ -208,13 +212,13 @@
 | `request.data.extended_material_list[].file_id` | 文件id | `String` | `64` | `Y` | 请填写图片file_id，可通过 [商户图片上传](https://paas.huifu.com/open/doc/api/#/shgl/shjj/api_shjj_shtpsc) 接口获取；示例值：57cc7f00-600a-33ab-b614-6221bbf2e529 |
 | `request.data.extended_material_list[].file_type` | 文件类型 | `String` | `64` | `Y` | [参见文件类型说明](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_wjlx)；示例值：F01 |
 | `request.data.activated_products` | 产品大类 | `String` | `—` | `N` | 01：一体化收款产品，02：账户与资金产品，03：业财数通产品；不传为空 示例值：01,02,03 |
-| `request.data.material_card_info` | 对公卡信息 | `Object` | `—` | `N` | jsonObject字符串；商户对公账户信息配置，当非个体工商户的企业商户，card_info选择对私结算（含法人、非法人）时，需补充对公同名账户信息 |
-| `request.data.material_card_info.card_type` | 银行账户类型 | `String` | `—` | `N` | 对公，不填默认 0 |
+| `request.data.material_card_info` | 对公卡信息 | `Object` | `—` | `N` | jsonObject字符串；商户对公账户信息配置，当非个体工商户的企业商户，card_info选择对私结算（含法人、非法人）时，需补充对公同名账户信息，包括对公账户证明图片信息，通过图片上传接口上传材料；文件类型：F08 |
 | `request.data.material_card_info.card_name` | 银行账户名称 | `String` | `—` | `N` | 账户名必须与营业执照名称一致 |
 | `request.data.material_card_info.card_no` | 对公银行账号 | `String` | `—` | `Y` | 对公银行账号 |
 | `request.data.material_card_info.prov_id` | 银行所在省 | `String` | `—` | `N` | [参考省市区编码表；](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) 示例值：310000 |
 | `request.data.material_card_info.area_id` | 银行所在市 | `String` | `—` | `Y` | [参考省市区编码表；](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) 示例值：310100 |
 | `request.data.material_card_info.branch_code` | 支行联行号 | `String` | `—` | `Y` | 参考：[银行支行编码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_yhzhbm)；示例值：102290026507 |
+| `request.data.head_type` | 总部客群 | `String` | `—` | `N` | 当head_office_flag为1时，必填；枚举值包含，0 集团客户，1大型商业综合体，2品牌连锁客户 |
 
 ### 同步响应 data
 
@@ -259,7 +263,7 @@
 ## 个人商户进件
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_grshjbxxrz_kyc.md>
-- SHA-256：`3b3f9b47fd55120a4c8f2b4876cc1bdbd4ada9e15d2995bc261d74b88dba1867`
+- SHA-256：`03c5059bc4ad2aea832fe98bee356bf199e28bc27c74be22ef641e84af0d7d36`
 - 说明：下表保留官方字段类型、长度、必填标记和字段说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -353,7 +357,7 @@
 | `request.data.ext_mer_id` | 外部商户号 | `String` | `64` | `N` | 支持关联外部商户系统中的商户号；示例值：HF100001 |
 | `request.data.remarks` | 备注 | `String` | `300` | `N` | 备注内容；示例值：华东分公司 |
 | `request.data.async_return_url` | 异步通知地址 | `String` | `120` | `N` | 审核结果消息接收地址，为空时不推送消息 ；示例值：http://service.example.com/to/path |
-| `request.data.head_office_flag` | 商户身份 | `String` | `1` | `N` | 0：下级商户，不传默认普通商户。示例值：0；开通下级商户时，所选的上级商户需要有开通商户权限，需先调用“[开通下级商户权限配置接口](https://paas.huifu.com/open/doc/api/#/shgl/shywkt/api_shjj_shywkt_xjshpz)” |
+| `request.data.head_office_flag` | 商户身份 | `String` | `1` | `N` | 0：下级商户，不传默认普通商户。示例值：0；开通下级商户时，所选的上级商户需要有开通商户权限，需先调用“[开通下级商户权限配置接口](https://paas.huifu.com/open/doc/api/#/shgl/shywkt/api_shjj_shywkt_xjshpz)”；（1）若对应总部的客群类型为0，需要补充F725 （集团盖章说明函）；（2）若对应总部的客群类型为1，需要补充F726 （下级商户入驻大型商业综合体的合作协议）；（3）若对应总部的客群类型为2，加盟性质需要补充F727（加盟协议），直营性质需要补充F727（总部盖章说明函） |
 | `request.data.head_huifu_id` | 上级商户汇付ID | `String` | `18` | `C` | 如果head_office_flag=0，则字段必填；示例值：[官网示例已脱敏] |
 | `request.data.elec_acct_config` | 斗拱e账户功能配置 | `String` | `—` | `N` | 用于下级商户开通斗拱E账户功能 |
 | `request.data.elec_acct_config.switch_state` | 电子账户开关 | `String` | `1` | `Y` | 电子账户开通总开关；0:关闭 1:开通；示例值：1 |
@@ -424,7 +428,7 @@
 ## 商户业务开通
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_kyc.md>
-- SHA-256：`1ef4ed0e644a0631e144dbb280482e03f596c1f470f43a26b59d3e063e56490c`
+- SHA-256：`9b62bba487f981bbdd293f0328a68b3c8c526b1fa1d47a8ab7b8912b427b6ec5`
 - 说明：下表保留官方字段类型、长度、必填标记和字段说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -637,6 +641,7 @@
 | `request.data.online_fee_conf_list[].fix_amt` | 手续费（固定/元） | `String` | `16` | `N` | 必须填写一种收费方式；保留两位小数；示例值：1.00 |
 | `request.data.online_fee_conf_list[].fee_rate` | 费率（%） | `String` | `6` | `N` | 必须填写一种收费方式；保留两位小数；示例值：0.38 |
 | `request.data.online_fee_conf_list[].fee_min_amt` | 手续费最小值（元） | `String` | `6` | `N` | 必须填写一种收费方式；保留两位小数；示例值：1.00 |
+| `request.data.online_fee_conf_list[].fee_formula_type` | 代扣手续费计费模式 | `String` | `—` | `N` | withhold_flag为Y时，才可传入；01: 百分比手续费，无封顶值或保底值；02: 百分比手续费，有保底值；03: 固定手续费；04: 固定手续费+百分比手续费；为空默认04 示例值：04 |
 | `request.data.online_pay_fee_conf_list[]` | 线上手续费承担方配置 | `String` | `—` | `N` | jsonArray格式 |
 | `request.data.online_pay_fee_conf_list[].pay_type` | 业务类型 | `String` | `25` | `N` | ONLINE_PERSON:个人网银；ONLINE_ENT:企业网银；QUICK:快捷；WAP:手机WAP支付；ONLINE_ENT_TOP_UP:B2B网银充值；ONLINE_PERSON_TOP_UP:B2C网银充值；WITHHOLD:代扣支付；示例值：WAP |
 | `request.data.online_pay_fee_conf_list[].out_fee_acct_type` | 手续费外扣时的账户类型 | `String` | `2` | `N` | 01-基本户（不填默认01），02-现金户，05-充值户，09-营销户；示例值：01 |
@@ -801,18 +806,27 @@
 | `request.data.refund_mend_open_flag` | 是否开通垫资退款 | `String` | `1` | `N` | Y:是 N:否 ；示例值：Y |
 | `request.data.jxf_conf_info` | 捷行付配置 | `Object` | `—` | `N` | jsonObject字符串 |
 | `request.data.jxf_conf_info.acct_type` | 账户类型 | `String` | `1` | `Y` | 2:银行账户 |
+| `request.data.jxf_conf_info.bank_name` | 银行名称 | `String` | `8` | `Y` | PINGAN-平安银行 BOC-中国银行；示例值：PINGAN |
 | `request.data.jxf_conf_info.jxf_bank_info` | 银行账户信息 | `Object` | `—` | `C` | 当账户类型为银行账户时必填 |
-| `request.data.jxf_conf_info.jxf_bank_info.user_name` | 操作人姓名 | `String` | `16` | `Y` | 示例：张三 |
-| `request.data.jxf_conf_info.jxf_bank_info.operator_phone` | 操作人手机号 | `String` | `11` | `Y` | 示例：[官网示例已脱敏] |
+| `request.data.jxf_conf_info.jxf_bank_info.user_name` | 操作人姓名 | `String` | `16` | `C` | 银行名称非平安银行时，需填写；示例：张三 |
+| `request.data.jxf_conf_info.jxf_bank_info.operator_phone` | 操作人手机号 | `String` | `11` | `C` | 银行名称非平安银行时，需填写；示例：[官网示例已脱敏] |
 | `request.data.jxf_conf_info.jxf_bank_info.acct_type` | 付款方账户类型 | `String` | `2` | `N` | 00：单位结算卡，不填默认单位结算卡 |
 | `request.data.jxf_conf_info.jxf_bank_info.acct_no` | 付款方账号 | `String` | `50` | `Y` | 示例：[官网示例已脱敏] |
 | `request.data.jxf_conf_info.jxf_bank_info.acct_name` | 付款方账户名称 | `String` | `25` | `Y` | 示例：上海汇付支付有限公司 |
 | `request.data.jxf_conf_info.jxf_bank_info.bank_branch_code` | 开户行联行号 | `String` | `50` | `Y` | 示例：991290000099 |
 | `request.data.jxf_conf_info.jxf_bank_info.bank_branch_name` | 开户行行名 | `String` | `25` | `Y` | 示例：中国银行 |
-| `request.data.jxf_conf_info.jxf_bank_info.sign_start_date` | 签约申请生效日期 | `String` | `8` | `Y` | 示例：20251219 |
-| `request.data.jxf_conf_info.jxf_bank_info.sign_end_date` | 签约申请失效日期 | `String` | `8` | `Y` | 示例：20261219 |
+| `request.data.jxf_conf_info.jxf_bank_info.sign_start_date` | 签约申请生效日期 | `String` | `8` | `C` | 银行名称非平安银行时，需填写；示例：20251219 |
+| `request.data.jxf_conf_info.jxf_bank_info.sign_end_date` | 签约申请失效日期 | `String` | `8` | `C` | 银行名称非平安银行时，需填写；示例：20261219 |
 | `request.data.jxf_conf_info.jxf_bank_info.remark` | 附言 | `String` | `128` | `N` | 示例：附言 |
 | `request.data.jxf_conf_info.jxf_bank_info.org_code` | 机构编码 | `String` | `64` | `Y` | 示例：12133 |
+| `request.data.jxf_conf_info.jxf_fee_info` | 手续费信息 | `Object` | `—` | `N` | jsonObject字符串 |
+| `request.data.jxf_conf_info.jxf_fee_info.open_card_fix_fee` | 虚拟卡开卡手续费（元） | `String` | `11` | `N` | 单位元，支持小数点后两位；示例值：1.00 虚拟卡开卡手续费收取方式为发放数量*固定手续费 |
+| `request.data.jxf_conf_info.jxf_fee_info.quota_issue_fee_rate` | 虚拟卡额度发放手续费（%） | `String` | `6` | `N` | 百分比，支持两位小数；示例值：1.00 虚拟卡发放额度手续费收取方式为交易金额*费率手续费 |
+| `request.data.jxf_conf_info.jxf_fee_info.out_fee_flag` | 捷行付手续费内外扣标记 | `String` | `1` | `N` | 捷行付手续费只支持外扣；1:外扣；示例值：1 |
+| `request.data.jxf_conf_info.jxf_fee_info.out_fee_huifuid` | 捷行付手续费外扣汇付ID | `String` | `18` | `C` | 捷行付设置手续费时必填；示例值：[官网示例已脱敏] |
+| `request.data.jxf_conf_info.jxf_fee_info.out_fee_acct_type` | 捷行付手续费扣款账户类型 | `String` | `2` | `C` | 捷行付手续费外扣时必填；01-基本户(默认)，05-充值户；示例值：01 |
+| `request.data.jxf_conf_info.pay_confirm_flag` | 付款确认标识 | `String` | `1` | `N` | Y:是 N:否 ；示例值：Y |
+| `request.data.jxf_conf_info.pay_confirm_req_url` | 付款确认请求URL | `String` | `256` | `C` | 付款确认标识为Y时，该字段必填 |
 | `request.data.merge_pay_config_info` | 合单支付配置信息 | `Object` | `—` | `N` | jsonObject字符串 |
 | `request.data.merge_pay_config_info.merge_pay_flag` | 合单支付开关 | `String` | `—` | `Y` | 合单支付开关 Y：开通 N：关闭 |
 | `request.data.merge_pay_config_info.merge_pay_config` | 合单支付配置 | `Object` | `—` | `C` | 合单支付配置 （当合单支付开关为开时必填） |
@@ -933,7 +947,7 @@
 ## 商户详细信息查询
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shxxxxcx_kyc.md>
-- SHA-256：`36d713243329871a4703aa414e9edb2e06e84ea6be484eecae3eaace46ea3d8d`
+- SHA-256：`8f1b46ae924919fac886d9f96ad3da3b2fbb7d48aae892e8ac236ea15bb1e66a`
 - 说明：下表保留官方字段类型、长度、必填标记和字段说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -1044,8 +1058,8 @@
 | `response.data.qry_cash_config_list[].switch_state` | 开关状态 | `String` | `1` | `Y` | 0:关闭 1:开通；示例值：1 |
 | `response.data.qry_cash_config_list[].fix_amt` | 提现手续费（固定/元） | `String` | `6` | `C` | fix_amt与fee_rate至少填写一项， 需保留小数点后两位，不收费请填写0.00；示例值：1.00；注：当cash_type=D1时为节假日取现手续费 |
 | `response.data.qry_cash_config_list[].fee_rate` | 提现手续费率（%） | `String` | `6` | `C` | fix_amt与fee_rate至少填写一项，需保留小数点后两位，取值范围[0.00,100.00]，不收费请填写0.00；示例值：0.05；注：1、如果fix_amt与fee_rate都填写了则手续费=fix_amt+支付金额\*fee_rate；2、当cash_type=D1时为节假日取现手续费 |
-| `response.data.qry_cash_config_list[].weekday_fix_amt` | D1工作日取现手续费固定金额 | `String` | `6` | `C` | 单位元，需保留小数点后两位。不收费请填写0.00；示例值：1.00；cash_type=D1时，不生效 ；cash_type取现类型为D1时，遇工作日按此费率结算，若未配置则默认按照节假日手续费计算 |
-| `response.data.qry_cash_config_list[].weekday_fee_rate` | D1工作日取现手续费率 | `String` | `6` | `C` | 单位%，需保留小数点后两位。取值范围[0.00，100.00]，不收费请填写0.00；示例值：0.05；cash_type=D1时，不生效 ；cash_type取现类型为D1时，遇工作日按此费率结算 ，若未配置则默认按照节假日手续费计算 |
+| `response.data.qry_cash_config_list[].weekday_fix_amt` | D1工作日取现手续费固定金额 | `String` | `6` | `C` | 单位元，需保留小数点后两位。不收费请填写0.00；示例值：1.00；cash_type=D1时，生效 ；cash_type取现类型为D1时，遇工作日按此费率结算，若未配置则默认按照节假日手续费计算 |
+| `response.data.qry_cash_config_list[].weekday_fee_rate` | D1工作日取现手续费率 | `String` | `6` | `C` | 单位%，需保留小数点后两位。取值范围[0.00，100.00]，不收费请填写0.00；示例值：0.05；cash_type=D1时，生效 ；cash_type取现类型为D1时，遇工作日按此费率结算 ，若未配置则默认按照节假日手续费计算 |
 | `response.data.qry_cash_config_list[].out_cash_flag` | 手续费外扣标记 | `String` | `1` | `N` | 1:外扣：取现时，从out_cash_huifuid账户扣手续费，2:内扣：从取现金额中扣手续费；示例值：1 |
 | `response.data.qry_cash_config_list[].out_fee_huifuid` | 手续费承担方 | `String` | `18` | `N` | 手续费外扣时必需指定手续费承担方ID；示例值：[官网示例已脱敏] |
 | `response.data.qry_cash_config_list[].out_cash_acct_type` | 取现手续费外扣时的账户类型 | `String` | `—` | `N` | 01-基本户，02-现金户， 05-充值户，out_cash_flag=1时有值；示例值：01 |
@@ -1139,6 +1153,7 @@
 | `response.data.online_fee_conf_list[].bank_short_chn` | 银行中文简称 | `String` | `50` | `N` | 示例值：工行上海市中北支行 |
 | `response.data.online_fee_conf_list[].stat_flag` | 费率状态 | `String` | `1` | `Y` | 1开，0关；示例值：1 |
 | `response.data.online_fee_conf_list[].fee_min_amt` | 手续费最小值（元） | `String` | `—` | `N` | 必须填写一种收费方式；保留两位小数；示例值：1.00 |
+| `response.data.online_fee_conf_list[].fee_formula_type` | 代扣手续费计费模式 | `String` | `—` | `N` | withhold_flag为Y时；01: 百分比手续费，无封顶值或保底值； 02: 百分比手续费，有保底值； 03: 固定手续费； 04: 固定手续费+百分比手续费； 为空默认04 示例值：04 |
 | `response.data.delay_flag` | 是否开通延迟入账 | `String` | `1` | `N` | N：否 Y：是，为空则为否；示例值：Y |
 | `response.data.forced_delay_flag` | 商户开通强制延迟标记 | `String` | `—` | `N` | Y:开通,N:关闭；示例值：N |
 | `response.data.out_fee_flag` | 交易手续费外扣标记 | `String` | `1` | `N` | 1：外扣，2：内扣；（默认2内扣）；示例值：2 |
@@ -1156,6 +1171,9 @@
 | `response.data.qry_wx_conf_list[].pay_channel_id_list[]` | 子渠道号 | `String` | `—` | `N` | String集合，jsonArray格式；示例值：["JQF00001","JQF00002"] |
 | `response.data.qry_wx_conf_list[].pay_scene` | 支付场景 | `String` | `2` | `Y` | 参见《[微信支付场景](https://paas.huifu.com/partners/api/doc/api_ggcsbm.md#微信支付场景)（官网相对地址原文：`api_ggcsbm.md#微信支付场景`）》说明；示例值：1 |
 | `response.data.qry_wx_conf_list[].fee_charge_type` | 交易手续费收取类型 | `String` | `1` | `Y` | 1:实收,2:后收；示例值：1 |
+| `response.data.qry_wx_conf_list[].out_fee_flag` | 交易手续费外扣标记 | `String` | `1` | `N` | 1：外扣，2：内扣；（默认2内扣）；示例值：2 |
+| `response.data.qry_wx_conf_list[].out_fee_huifu_id` | 交易手续费外扣汇付ID | `String` | `18` | `N` | 开通交易手续费外扣业务时必填，示例值：[官网示例已脱敏]；优先级高于相同名称的公共参数 |
+| `response.data.qry_wx_conf_list[].out_fee_acct_type` | 交易手续费外扣时的账户类型 | `String` | `2` | `N` | 01-基本户（不填默认01），02-现金户，05-充值户，09-营销户，示例值：01；优先级高于相同名称的公共参数 |
 | `response.data.qry_ali_conf_list[]` | 支付宝支付配置信息 | `String` | `—` | `N` | jsonArray格式 |
 | `response.data.qry_ali_conf_list[].ali_mer_infos` | 支付宝商户信息 | `Object` | `—` | `N` | — |
 | `response.data.qry_ali_conf_list[].ali_mer_infos.bank_mer_code` | 银联商户号 | `String` | `32` | `N` | 商户在银联开通的支付宝(或微信)商户号；示例值：2234544 |
@@ -1168,6 +1186,9 @@
 | `response.data.qry_ali_conf_list[].pay_scene` | 支付场景 | `String` | `2` | `Y` | 1、线下扫码（正扫&反扫&台牌），2、线上扫码，3、非盈利费率；示例值：1 |
 | `response.data.qry_ali_conf_list[].fee_charge_type` | 交易手续费收取类型 | `String` | `1` | `Y` | 1：实收,2：后收；示例值：1 |
 | `response.data.qry_ali_conf_list[].pay_channel_id_list` | 子渠道号 | `String` | `—` | `N` | String集合；示例值：["JQF00001","JQF00002"] |
+| `response.data.qry_ali_conf_list[].out_fee_flag` | 交易手续费外扣标记 | `String` | `1` | `N` | 1：外扣，2：内扣；（默认2内扣）；示例值：2 |
+| `response.data.qry_ali_conf_list[].out_fee_huifu_id` | 交易手续费外扣汇付ID | `String` | `18` | `N` | 开通交易手续费外扣业务时必填，示例值：[官网示例已脱敏]；优先级高于相同名称的公共参数 |
+| `response.data.qry_ali_conf_list[].out_fee_acct_type` | 交易手续费外扣时的账户类型 | `String` | `2` | `N` | 01-基本户（不填默认01），02-现金户，05-充值户，09-营销户，示例值：01；优先级高于相同名称的公共参数 |
 | `response.data.qry_bank_card_conf` | 银行卡支付配置信息 | `String` | `—` | `N` | jsonObject格式；只有企业商户有值 |
 | `response.data.qry_bank_card_conf.bank_mer_code` | 银联商户号 | `String` | `18` | `N` | 银联报备生成的银行商户号；示例值：66345234544 |
 | `response.data.qry_bank_card_conf.charge_cate_code` | 银行业务手续费类型 | `String` | `2` | `N` | 01-减免类 02-优惠类 03-标准类（默认）；示例值：03 |
@@ -1485,6 +1506,7 @@
 | `response.data.refund_mend_open_flag` | 是否开通垫资退款 | `String` | `1` | `N` | Y:是 N:否 ；示例值：Y |
 | `response.data.jxf_conf_info` | 捷行付配置 | `Object` | `—` | `N` | jsonObject字符串 |
 | `response.data.jxf_conf_info.acct_type` | 账户类型 | `String` | `1` | `N` | 2:银行账户 |
+| `response.data.jxf_conf_info.bank_name` | 银行名称 | `String` | `8` | `N` | PINGAN-平安银行 BOC-中国银行；示例值：PINGAN |
 | `response.data.jxf_conf_info.jxf_bank_info` | 银行账户信息 | `Object` | `—` | `N` | jsonObject字符串 |
 | `response.data.jxf_conf_info.jxf_bank_info.user_name` | 操作人姓名 | `String` | `16` | `N` | 示例：张三 |
 | `response.data.jxf_conf_info.jxf_bank_info.operator_phone` | 操作人手机号 | `String` | `11` | `N` | 示例：[官网示例已脱敏] |
@@ -1637,7 +1659,7 @@
 ## 商户业务开通修改
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywktxg_kyc.md>
-- SHA-256：`fdeaaa0a40556046d817c70a46c2fe1c71756f8648ffe640db6585ca6f5963a3`
+- SHA-256：`51a11858b9d312a3e6112f6abf91e1b9a1dbb1db4ed4f4dd27fa14950094d1d9`
 - 说明：下表保留官方字段类型、长度、必填标记和字段说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -1691,6 +1713,7 @@
 | `request.data.online_fee_conf_list[].bank_short_chn` | 银行中文简称 | `String` | `50` | `N` | 示例值：工行上海市中北支行 |
 | `request.data.online_fee_conf_list[].stat_flag` | 费率状态 | `String` | `1` | `Y` | 1开，0关；示例值：1 |
 | `request.data.online_fee_conf_list[].fee_min_amt` | 手续费最小值（元） | `String` | `6` | `N` | 必须填写一种收费方式；保留两位小数；保留两位小数；示例值：1.00 |
+| `request.data.online_fee_conf_list[].fee_formula_type` | 代扣手续费计费模式 | `String` | `—` | `N` | withhold_flag为Y时，才可传入；01: 百分比手续费，无封顶值或保底值；02: 百分比手续费，有保底值；03: 固定手续费；04: 固定手续费+百分比手续费；为空默认04 示例值：04 |
 | `request.data.ali_conf_list[]` | 支付宝配置对象 | `String` | `—` | `N` | jsonArray格式字符串 |
 | `request.data.ali_conf_list[].fee_rate` | 手续费（%） | `String` | `9` | `Y` | 数字类型，大于0,保留2位小数；示例值：0.38 |
 | `request.data.ali_conf_list[].fee_min_amt` | 最低收取手续费（元） | `String` | `6` | `N` | 固定金额保留2位小数；大于0。需要渠道商开通此功能。示例值：0.38 |
@@ -2009,18 +2032,27 @@
 | `request.data.jxf_conf_info` | 捷行付配置 | `Object` | `—` | `N` | jsonObject字符串 |
 | `request.data.jxf_conf_info.acct_type` | 账户类型 | `String` | `1` | `Y` | 2:银行账户 |
 | `request.data.jxf_conf_info.open_flag` | 开通状态 | `String` | `1` | `Y` | Y:开 N:关 |
+| `request.data.jxf_conf_info.bank_name` | 银行名称 | `String` | `8` | `Y` | PINGAN-平安银行 BOC-中国银行；示例值：PINGAN |
 | `request.data.jxf_conf_info.jxf_bank_info` | 银行账户信息 | `Object` | `—` | `C` | 当账户类型为银行账户时必填 |
-| `request.data.jxf_conf_info.jxf_bank_info.user_name` | 操作人姓名 | `String` | `16` | `Y` | 示例：张三 |
-| `request.data.jxf_conf_info.jxf_bank_info.operator_phone` | 操作人手机号 | `String` | `11` | `Y` | 示例：[官网示例已脱敏] |
+| `request.data.jxf_conf_info.jxf_bank_info.user_name` | 操作人姓名 | `String` | `16` | `C` | 银行名称非平安银行时，需填写；示例：张三 |
+| `request.data.jxf_conf_info.jxf_bank_info.operator_phone` | 操作人手机号 | `String` | `11` | `C` | 银行名称非平安银行时，需填写；示例：[官网示例已脱敏] |
 | `request.data.jxf_conf_info.jxf_bank_info.acct_type` | 付款方账户类型 | `String` | `2` | `N` | 00：单位结算卡，不填默认单位结算卡 |
 | `request.data.jxf_conf_info.jxf_bank_info.acct_no` | 付款方账号 | `String` | `50` | `Y` | 示例：[官网示例已脱敏] |
 | `request.data.jxf_conf_info.jxf_bank_info.acct_name` | 付款方账户名称 | `String` | `25` | `Y` | 示例：上海汇付支付有限公司 |
 | `request.data.jxf_conf_info.jxf_bank_info.bank_branch_code` | 开户行联行号 | `String` | `50` | `Y` | 示例：991290000099 |
 | `request.data.jxf_conf_info.jxf_bank_info.bank_branch_name` | 开户行行名 | `String` | `25` | `Y` | 示例：中国银行 |
-| `request.data.jxf_conf_info.jxf_bank_info.sign_start_date` | 签约申请生效日期 | `String` | `8` | `Y` | 示例：20251219 |
-| `request.data.jxf_conf_info.jxf_bank_info.sign_end_date` | 签约申请失效日期 | `String` | `8` | `Y` | 示例：20261219 |
+| `request.data.jxf_conf_info.jxf_bank_info.sign_start_date` | 签约申请生效日期 | `String` | `8` | `C` | 银行名称非平安银行时，需填写；示例：20251219 |
+| `request.data.jxf_conf_info.jxf_bank_info.sign_end_date` | 签约申请失效日期 | `String` | `8` | `C` | 银行名称非平安银行时，需填写；示例：20261219 |
 | `request.data.jxf_conf_info.jxf_bank_info.remark` | 附言 | `String` | `128` | `N` | 示例：附言 |
 | `request.data.jxf_conf_info.jxf_bank_info.org_code` | 机构编码 | `String` | `64` | `Y` | 示例：12133 |
+| `request.data.jxf_conf_info.jxf_fee_info` | 手续费信息 | `Object` | `—` | `N` | jsonObject字符串 |
+| `request.data.jxf_conf_info.jxf_fee_info.open_card_fix_fee` | 虚拟卡开卡手续费（元） | `String` | `11` | `N` | 单位元，支持小数点后两位；示例值：1.00 虚拟卡开卡手续费收取方式为发放数量*固定手续费 |
+| `request.data.jxf_conf_info.jxf_fee_info.quota_issue_fee_rate` | 虚拟卡额度发放手续费（%） | `String` | `6` | `N` | 百分比，支持两位小数；示例值：1.00 虚拟卡发放额度手续费收取方式为交易金额*费率手续费 |
+| `request.data.jxf_conf_info.jxf_fee_info.out_fee_flag` | 捷行付手续费内外扣标记 | `String` | `1` | `N` | 捷行付手续费只支持外扣；1:外扣；示例值：1 |
+| `request.data.jxf_conf_info.jxf_fee_info.out_fee_huifuid` | 捷行付手续费外扣汇付ID | `String` | `18` | `C` | 捷行付设置手续费时必填；示例值：[官网示例已脱敏] |
+| `request.data.jxf_conf_info.jxf_fee_info.out_fee_acct_type` | 捷行付手续费扣款账户类型 | `String` | `2` | `C` | 捷行付手续费外扣时必填；01-基本户(默认)，05-充值户；示例值：01 |
+| `request.data.jxf_conf_info.pay_confirm_flag` | 付款确认标识 | `String` | `1` | `N` | Y:是 N:否 ；示例值：Y |
+| `request.data.jxf_conf_info.pay_confirm_req_url` | 付款确认请求URL | `String` | `256` | `C` | 付款确认标识为Y时，该字段必填 |
 | `request.data.merge_pay_config_info` | 合单支付配置信息 | `Object` | `—` | `N` | jsonObject字符串 |
 | `request.data.merge_pay_config_info.merge_pay_flag` | 合单支付开关 | `String` | `—` | `Y` | 合单支付开关 Y：开通 N：关闭 |
 | `request.data.merge_pay_config_info.merge_pay_config` | 合单支付配置 | `Object` | `—` | `C` | 合单支付配置 （当合单支付开关为开时必填） |
@@ -2495,3 +2527,99 @@
 | `response.data.operation_type` | 操作类型 | `String` | `—` | `N` | 枚举值：sendSmsCode-发送验证码；identitySmsCode-验证码核实；示例值：sendSmsCode |
 | `response.data.elec_acct_sign_seq_id` | 中信签约短信流水号 | `String` | `64` | `N` | verify_type='elecAcctSign'且operation_type='sendSmsCode'时；中信E管家签约发送短信时返回值；示例值：EMSSBPG[官网示例已脱敏] |
 | `response.data.phone` | 手机号 | `String` | `—` | `N` | 手机号；示例值：[官网示例已脱敏] |
+
+## 商户多费率配置
+
+- 原始地址：<https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflpz.md>
+- SHA-256：`0536049a616e68929341d4176cf1c5348b1bcf8fabeff3ceb384945fa5dce987`
+- 说明：下表保留官方字段类型、长度、必填标记和字段说明；数组父路径以 `[]` 标记。
+
+### 请求信封
+
+| 完整字段路径 | 中文名 | 类型 | 长度 | 必填 | 官方说明 |
+| --- | --- | --- | ---: | :---: | --- |
+| `request.sys_id` | 系统号 | `String` | `32` | `Y` | 渠道商或商户的huifu_id；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为总部商户时，此字段填写商户huifu_id |
+| `request.product_id` | 产品号 | `String` | `32` | `Y` | 汇付分配的产品号，示例值：YYZY |
+| `request.sign` | 加签结果 | `String` | `512` | `Y` | [接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
+| `request.data` | 数据 | `Json` | `—` | `Y` | 业务请求参数，具体值参考API文档 |
+
+### 响应信封
+
+| 完整字段路径 | 中文名 | 类型 | 长度 | 必填 | 官方说明 |
+| --- | --- | --- | ---: | :---: | --- |
+| `response.sign` | 签名 | `String` | `512` | `Y` | [接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
+| `response.data` | 响应内容体 | `Json` | `—` | `N` | 业务返回参数 |
+
+### 请求 data
+
+| 完整字段路径 | 中文名 | 类型 | 长度 | 必填 | 官方说明 |
+| --- | --- | --- | ---: | :---: | --- |
+| `request.data.req_seq_id` | 请求流水号 | `String` | `32` | `Y` | 请求流水号，同一商户号当天唯一 |
+| `request.data.req_date` | 请求日期 | `String` | `8` | `Y` | 日期格式：yyyyMMdd，以北京时间为准 |
+| `request.data.huifu_id` | 汇付商户号 | `String` | `18` | `Y` | 渠道与一级代理商的直属商户ID |
+| `request.data.wx_conf_list[]` | 微信配置对象列表 | `String` | `—` | `N` | jsonArray格式，微信配置对象列表、支付宝配置对象列表不可同时为空 |
+| `request.data.wx_conf_list[].pay_scene` | 支付场景 | `String` | `2` | `Y` | 1：线下反扫； 2：线下公众号； 3：线下小程序； 4：线上公众号； 5：线上小程序； 12：线上反扫； 示例值：1 |
+| `request.data.wx_conf_list[].fee_rate` | 手续费底价（%） | `String` | `6` | `Y` | 数字类型，大于等于0,保留2位小数；示例值：0.38 |
+| `request.data.wx_conf_list[].fee_sign` | 手续费场景标识 | `String` | `32` | `N` | 支付功能+场景维度生成的费率唯一标识，传入时支持修改 示例值：155677 |
+| `request.data.ali_conf_list[]` | 支付宝配置对象列表 | `String` | `—` | `N` | jsonArray格式，微信配置对象列表、支付宝配置对象列表不可同时为空 |
+| `request.data.ali_conf_list[].pay_scene` | 支付场景 | `String` | `2` | `Y` | 1：线下扫码； 2：线上扫码； 示例值：1 |
+| `request.data.ali_conf_list[].fee_rate` | 手续费底价（%） | `String` | `6` | `Y` | 数字类型，大于等于0,保留2位小数；示例值：0.38 |
+| `request.data.ali_conf_list[].fee_sign` | 手续费场景标识 | `String` | `32` | `N` | 支付功能+场景维度生成的费率唯一标识，传入时支持修改 示例值：155677 |
+
+### 响应 data
+
+| 完整字段路径 | 中文名 | 类型 | 长度 | 必填 | 官方说明 |
+| --- | --- | --- | ---: | :---: | --- |
+| `response.data.resp_code` | 业务响应码 | `String` | `8` | `Y` | [业务返回码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_ywm) |
+| `response.data.resp_desc` | 业务响应信息 | `String` | `512` | `Y` | [业务返回描述](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_ywm) |
+| `response.data.req_seq_id` | 请求流水号 | `String` | `32` | `Y` | 原样返回请求参数的请求流水号；示例值：[官网示例已脱敏] |
+| `response.data.req_date` | 请求日期 | `String` | `8` | `Y` | 原请求时间yyyyMMdd；示例值：20220912 |
+| `response.data.conf_status` | 配置状态 | `String` | `1` | `Y` | Y：成功 F：失败 |
+| `response.data.conf_list` | 配置信息 | `String` | `—` | `N` | 配置成功时返回 |
+| `response.data.conf_list.pay_scene` | 支付场景 | `String` | `2` | `Y` | 支付功能为W：微信时返回 1：线下反扫； 2：线下公众号； 3：线下小程序； 4：线上公众号； 5：线上小程序； 12：线上反扫； 支付功能为A：支付宝时返回 1：线下扫码； 2：线上扫码； 示例值：1 |
+| `response.data.conf_list.fee_rate` | 手续费底价（%） | `String` | `6` | `Y` | 数字类型，大于等于0,保留2位小数；示例值：0.38 |
+| `response.data.conf_list.fee_sign` | 手续费场景标识 | `String` | `32` | `Y` | 支付功能+场景维度生成的费率唯一标识，交易时支持传入 示例值：155677 |
+| `response.data.conf_list.pay_way` | 支付功能 | `String` | `1` | `Y` | A：支付宝 W：微信 示例值：A |
+
+## 商户多费率配置查询
+
+- 原始地址：<https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflcx.md>
+- SHA-256：`6a5b970177f67985f1ce20c6b2900580117496f870c97c3391055afaaa66438f`
+- 说明：下表保留官方字段类型、长度、必填标记和字段说明；数组父路径以 `[]` 标记。
+
+### 请求信封
+
+| 完整字段路径 | 中文名 | 类型 | 长度 | 必填 | 官方说明 |
+| --- | --- | --- | ---: | :---: | --- |
+| `request.sys_id` | 系统号 | `String` | `32` | `Y` | 渠道商或商户的huifu_id；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为总部商户时，此字段填写商户huifu_id |
+| `request.product_id` | 产品号 | `String` | `32` | `Y` | 汇付分配的产品号，示例值：YYZY |
+| `request.sign` | 加签结果 | `String` | `512` | `Y` | [接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
+| `request.data` | 数据 | `Json` | `—` | `Y` | 业务请求参数，具体值参考API文档 |
+
+### 响应信封
+
+| 完整字段路径 | 中文名 | 类型 | 长度 | 必填 | 官方说明 |
+| --- | --- | --- | ---: | :---: | --- |
+| `response.sign` | 签名 | `String` | `512` | `Y` | [接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
+| `response.data` | 响应内容体 | `Json` | `—` | `N` | 业务返回参数 |
+
+### 请求 data
+
+| 完整字段路径 | 中文名 | 类型 | 长度 | 必填 | 官方说明 |
+| --- | --- | --- | ---: | :---: | --- |
+| `request.data.req_seq_id` | 请求流水号 | `String` | `32` | `Y` | 请求流水号，同一商户号当天唯一 |
+| `request.data.req_date` | 请求日期 | `String` | `8` | `Y` | 日期格式：yyyyMMdd，以北京时间为准 |
+| `request.data.huifu_id` | 汇付商户号 | `String` | `18` | `Y` | 渠道与一级代理商的直属商户ID |
+| `request.data.fee_sign` | 手续费场景标识 | `String` | `32` | `N` | 支付功能+场景维度生成的费率唯一标识，交易时支持传入 示例值：155677 |
+
+### 响应 data
+
+| 完整字段路径 | 中文名 | 类型 | 长度 | 必填 | 官方说明 |
+| --- | --- | --- | ---: | :---: | --- |
+| `response.data.resp_code` | 业务响应码 | `String` | `8` | `Y` | [业务返回码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_ywm) |
+| `response.data.resp_desc` | 业务响应信息 | `String` | `512` | `Y` | [业务返回描述](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_ywm) |
+| `response.data.conf_list` | 配置信息 | `String` | `—` | `N` | 配置成功时返回 |
+| `response.data.conf_list.pay_scene` | 支付场景 | `String` | `2` | `Y` | 支付功能为W：微信时返回 1：线下反扫； 2：线下公众号； 3：线下小程序； 4：线上公众号； 5：线上小程序； 12：线上反扫； 支付功能为A：支付宝时返回 1：线下扫码； 2：线上扫码； 示例值：1 |
+| `response.data.conf_list.fee_rate` | 手续费底价（%） | `String` | `6` | `Y` | 数字类型，大于等于0,保留2位小数；示例值：0.38 |
+| `response.data.conf_list.fee_sign` | 手续费场景标识 | `String` | `32` | `Y` | 支付功能+场景维度生成的费率唯一标识，交易时支持传入 示例值：155677 |
+| `response.data.conf_list.pay_way` | 支付功能 | `String` | `1` | `Y` | A：支付宝 W：微信 示例值：A |

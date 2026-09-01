@@ -1,6 +1,57 @@
 # Changelog
 
+## Unreleased online-document refresh — `2026-08-31`
+
+- 重新锁定并逐字段复审支付37页、商户13页和用户9页在线接口文档；历史来源锁保持不可变。
+- 支付目录仍为2,656节点：聚合查询成功示例已使用 `A_MICROPAY`，仅保留正式说明中重复 `A_NATIVE` 的笔误；交易分账明细 `split_trans_responses` 修正为 String(JSON Array)，16个子字段保留数组层级。
+- 商户目录由2,155增至2,183节点：新增企业 `head_type`、业务开通及修改的捷行付/线上费率字段、详情查询响应字段；删除企业请求旧 `material_card_info.card_type`；多费率长度、String(JSON) 与 `A/W` 场景口径同步官网。
+- 用户目录保持554节点，但关闭开户 `file_list`、响应签名、用户号角色、个人证件示例、详情返回码/D1/外扣账户示例和列表 String/数组/ID长度等已被官网修正的旧冲突；仍保留业务入驻修改的真实未决编码与条件冲突。
+- 二次复审关闭开户短信标识、业务入驻 D1 示例和修改通知数组的过期冲突；将业务入驻新增的 `elec_receipt_config/elec_card_list` 未决 wire 纳入硬停，并修正商户 String 空长度叶字段统计为58。
+- 本轮尚未发布，不升级 Skill 版本：支付继续使用 `1.3.5` / `hfps/1.3.5`，进件继续使用 `1.0.2` / `hfms/1.0.2`；新增的来源与刷新证明链作为同版本候选更新。
+
 所有重要变更记录在此文件中，格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/)。
+
+## Payment Skill `1.3.5` — `2026-08-24`
+
+### 新增
+
+- 新增交易分账明细查询 `POST /v2/trade/trans/split/query`，冻结官方原文与 SHA-256，机械生成29个完整路径：请求7、同步响应22、无异步通知。
+- 锁定 Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` 的 `V2TradeTransSplitQueryRequest`、精确路由和仅三个声明字段；官网无可选请求字段，扩展映射必须为空。
+- 新增原子 reference、入口路由、SDK 矩阵、来源锁增量门禁和回归用例；支付 Skill 升级为 `1.3.5`，默认来源标识同步为 `hfps/1.3.5`。
+
+### 修复
+
+- 保留 `split_trans_responses` 参数表 `Array` 与成功示例 `String(JSON Array)` 的官方冲突，在正式编码确认前禁止生成生产解析。
+- 成功示例独有的顶层 `response.data.huifu_id` 不进入字段目录或 DTO；查询边界锁定为已开通分账能力商户的180天内记录。
+
+## Merchant onboarding Skill `1.0.2` — `2026-08-24`
+
+### 新增
+
+- 新增商户多费率配置 `POST /v2/merchant/busi/multiFee/config`，冻结官方原文与 SHA-256，机械生成27个完整路径：请求15、同步响应12、无异步通知。
+- 锁定 Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` 的 `V2MerchantBusiMultifeeConfigRequest` 与精确路由；三个 SDK 只声明定位字段，微信/支付宝配置必须通过 exact-key 扩展写入并禁止覆盖声明字段。
+- 新增原子 reference、入口路由、SDK 矩阵、字段合同和回归用例；进件 Skill 版本升级为 `1.0.2`，默认来源标识同步为 `hfms/1.0.2`。
+- 新增商户多费率配置查询 `POST /v2/merchant/busi/multiFee/query`，冻结第二轮官方快照并机械生成17个完整路径：请求8、同步响应9、无异步通知；锁定三语言 `V2MerchantBusiMultifeeQueryRequest`、精确路由和 `fee_sign` exact-key 扩展边界。
+- 新增企业用户基本信息修改 `POST /v2/user/basicdata/ent/modify`，在不覆盖历史五接口锁的前提下追加官方原文，机械生成37个完整路径：请求32、同步响应5、无异步通知；用户子域当前合计391个节点。
+- 锁定三语言 `V2UserBasicdataEntModifyRequest` 与精确路由；生成类只声明 `req_date/req_seq_id/huifu_id/legal_cert_nationality`，其余正式字段通过 exact-key 扩展传入并拒绝覆盖四个声明字段。
+- 新增个人用户基本信息修改 `POST /v2/user/basicdata/indv/modify`，在企业修改 r1 快照后仅追加一份官方原文，机械生成26个完整路径：请求21、同步响应5、无异步通知；用户子域当前合计417个节点。
+- 锁定三语言 `V2UserBasicdataIndvModifyRequest` 与精确路由；生成类只声明 `req_date/req_seq_id/huifu_id`，其余正式字段通过 exact-key 扩展传入并拒绝覆盖三个声明字段。
+- 新增用户业务入驻修改 `POST /v2/user/busi/modify`，在个人修改 r2 快照后仅追加一份官方原文，机械生成120个完整路径：请求85、同步响应11、异步通知24；用户子域当前合计537个节点。
+- 锁定三语言 `V2UserBusiModifyRequest` 与精确路由；生成类只声明 `req_date/req_seq_id/huifu_id/sign_user_info`，最终 `sign_user_info` 为官网 Object：Java 的 String setter 用受控 exact-key 覆盖，PHP 可直接传数组，Python 可直接赋 dict；其余扩展拒绝覆盖三个定位字段。
+- 新增用户列表查询 `POST /v2/user/list/query`，在业务入驻修改 r3 快照后仅追加一份官方原文，机械生成17个完整路径：请求8、同步响应9、无异步通知；用户子域当前合计554个节点。
+- 锁定三语言 `V2UserListQueryRequest` 与精确路由；生成类只声明 `legal_cert_no/req_date/req_seq_id`，可选 `upper_huifu_id` 通过 exact-key 扩展传入并拒绝覆盖三个声明字段。
+
+### 修复
+
+- 请求 `wx_conf_list/ali_conf_list` 按官网 `Object` 类型列与 `jsonArray` 说明保留数组 wire；响应 `conf_list` 按单个 `Object` 解析，不因 `_list` 名称添加数组层级。
+- 保留响应 `pay_scene` 的 `T=微信` 与 `pay_way` 的 `W=微信` 官方冲突，执行层禁止生成 `T`，等待官方澄清。
+- 多费率配置的 `req_date` 官网长度为空，保留 `String Y / —`，不从其他接口复制 `String(8)`。
+- 多费率查询响应 `conf_list:Object N` 按单对象解析；查询页明确 `pay_way=W` 为微信，不继承配置页 `pay_scene=T` 的文档冲突，也不虚构省略 `fee_sign` 后的返回数量或分页语义。
+- 企业用户修改保留法人证件类型与有效期四字段同步填写要求；`file_list` 继续按 String(JSON Array) 传输，不因字段目录的 `[]` 路径改成原生数组。
+- 保留企业用户修改请求 `huifu_id` 的企业用户接口/“汇付客户Id”与“直属商户ID”说明冲突；正式请求在角色确认前硬停。
+- 保留个人用户修改请求 `huifu_id` 的个人用户接口/“汇付客户Id”与“直属商户ID”说明冲突；正式请求在角色确认前硬停。正式 `cert_validity_type` 仅允许 `0/1`，拒绝请求示例中的 `2`；文件子项长度保持本页64位口径。
+- 保留用户业务入驻修改的 `elec_receipt_config` Object/jsonObject字符串、`elec_card_list` 与异步 `resp_business` Object/jsonArray、`delay_flag` 枚举/日期示例及无效回调地址示例冲突；电子回单 wire 未确认前硬停，合法请求示例仍不得提升为 fixture 或默认合同。
+- 保留用户列表查询 `user_list_info_list` 正式 `String` 与成功示例原生数组的冲突，不擅自增加 `[]` 或选择 wire；列表项两个 ID 的正式长度2与示例16位冲突同样等待官方确认，请求与成功响应示例分别缺少正式必填的 `request.sign/response.sign`，生产仍必须加签并验签。
 
 ## Payment Skill `1.3.4` — `2026-08-16`
 
