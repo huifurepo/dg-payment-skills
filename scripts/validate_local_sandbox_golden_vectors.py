@@ -15,11 +15,13 @@ from pathlib import Path
 SIGNING_PROFILE = "sdk-v2-sorted-json"
 GOLDEN_VECTOR_VERSION = "1.0"
 JAVA_SDK_CANDIDATES = (
+    Path("bspay-java-sdk/opps-bspay-java-sdk"),
     Path("bspay-java-sdk-parent-main/bspay-java-sdk-parent-main/opps-bspay-java-sdk"),
     Path("bspay-java-sdk-parent-generator-sdk/opps-bspay-java-sdk"),
     Path("opps-bspay-java-sdk"),
 )
 PHP_TOOL_CANDIDATES = (
+    Path("bspay-php-sdk/BsPaySdk/core/BsPayTools.php"),
     Path("bspay-php-sdk-master/bspay-php-sdk-master/BsPaySdk/core/BsPayTools.php"),
     Path("bspay-php-sdk-feature_generator_sdk/BsPaySdk/core/BsPayTools.php"),
     Path("BsPaySdk/core/BsPayTools.php"),

@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-09-22",
+  "provenance": {
+    "status": "USER_PROVIDED_SOURCE_TREE",
+    "sdk_root_hint": "../sdk",
+    "official_tag_or_commit": null,
+    "note": "用户指定本地源码为本轮能力与风险证据；不证明远程包分发或生产联调通过，不改写旧证据锁。"
+  },
+  "tree_digest_algorithm": "sha256 over sorted records: uint32be(path_utf8_length) + path_utf8 + uint64be(file_length) + file_bytes; java pom.xml/**/*.java, php **/*.php, python **/*.py; exclude target,__pycache__,.git",
+  "components": {
+    "java": {
+      "version": "3.0.41",
+      "relative_root": "bspay-java-sdk",
+      "version_file": "opps-bspay-java-sdk/pom.xml",
+      "file_count": 675,
+      "tree_sha256": "6fba7762256b8b336178526859d0b6d73628834b27aa3d5fba75ad39c1b9c281",
+      "selected_sources": [
+        {
+          "path": "opps-bspay-java-sdk/pom.xml",
+          "sha256": "7b666a0e378e18af36c6b80d48b21405ada00dbbb20a2b3640adfac840a18e83"
+        },
+        {
+          "path": "opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/net/AbstractRequest.java",
+          "sha256": "766b66d85519e4472ec5bab588794cecf83ff74226f34f7cb994f2b8b5c3d4db"
+        },
+        {
+          "path": "opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/utils/HttpClientUtils.java",
+          "sha256": "13bf5f8a17e9fd7f8a58612a242640e1e6a84a0382dfa7b1283fc08324a81382"
+        },
+        {
+          "path": "opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/enums/FunctionCodeEnum.java",
+          "sha256": "6ec9ea53eb2acb6a8b09ec6b6582ab18335f7f9ffd62167518a2a0170a14db28"
+        }
+      ]
+    },
+    "lightning": {
+      "version": "1.0.6",
+      "relative_root": "dg-lightning-sdk-java",
+      "version_file": "dg-lightning-sdk/pom.xml",
+      "file_count": 110,
+      "tree_sha256": "9034fd67f93ab75f59820b99d1dab2850da35b7ffe45af0556eb2f8c52dec0ea",
+      "selected_sources": [
+        {
+          "path": "dg-lightning-sdk/pom.xml",
+          "sha256": "3be92e871fab7fb2ab3da732467b2c29ebc6a8abb2a348c1925cd99faa3892e7"
+        },
+        {
+          "path": "dg-lightning-sdk/src/main/java/com/huifu/dg/lightning/biz/net/AbstractRequest.java",
+          "sha256": "4e3187a4d2c15f7bb71913fde98049be94a3f3201b432382fc6138f3b54926d9"
+        },
+        {
+          "path": "dg-lightning-sdk/src/main/java/com/huifu/dg/lightning/utils/HttpClientUtils.java",
+          "sha256": "b67100d489a0433f59f958182ba797e630f6d6576bff82652a7f2d3fe3d79d2a"
+        }
+      ]
+    },
+    "php": {
+      "version": "2.0.31",
+      "relative_root": "bspay-php-sdk/BsPaySdk",
+      "version_file": "init.php",
+      "file_count": 359,
+      "tree_sha256": "31f97a1293182164ffed7a13c4038ce2bccf68bb06945d866daa08a1c26030aa",
+      "selected_sources": [
+        {
+          "path": "init.php",
+          "sha256": "b17a47bdf1ffee7a88b6d4dec6d22bc083e72dbd0e3d3a442ff72d948a9a5ac0"
+        },
+        {
+          "path": "core/BsPay.php",
+          "sha256": "df5bd43954d8e2df5625cdcdcec3d5c6060db4f625af20edc40e1dda1db5fbb5"
+        },
+        {
+          "path": "core/BsPayClient.php",
+          "sha256": "c8f16e31e24734ef6582d51036010b6633b9f92c620cfa62c2b3aa9ef57f9be9"
+        },
+        {
+          "path": "core/BsPayRequestV2.php",
+          "sha256": "5cea68c4f1ba786cdd28bed69a81e8472fdab7cde5fe6ccd1865638fe04c189e"
+        },
+        {
+          "path": "enums/FunctionCodeEnum.php",
+          "sha256": "441d8dba62f7b0cc820c80fe6172bdd2889a304202d01f52b61914c7950e9d9d"
+        }
+      ]
+    },
+    "python": {
+      "version": "2.0.25",
+      "relative_root": "bspay-python-sdk/dg_sdk",
+      "version_file": "dg_client.py",
+      "file_count": 348,
+      "tree_sha256": "48ee88e310b9665cee0c092ed7b64d385818e4ab773c71615bc058ec206fc9bc",
+      "selected_sources": [
+        {
+          "path": "dg_client.py",
+          "sha256": "bb022ad8b2047e50237ab3f444543cc7ed6739f9be182dd4c19ba7bc67d73970"
+        },
+        {
+          "path": "core/mer_config.py",
+          "sha256": "4a6b0ac13f840d2d3e68fc103e386288ca8f90ea8b27cc300c6fcc75899a84f7"
+        },
+        {
+          "path": "core/api_request.py",
+          "sha256": "1ca28fb8faa12f765dc30722cc49d891d4187a385c87c103cc84b162c30b4525"
+        },
+        {
+          "path": "core/request_tools.py",
+          "sha256": "b711e2eb86c7027937201d46d5524b695adbe3eb45717bdec09df8c95ec23e2e"
+        },
+        {
+          "path": "request/request_api_urls.py",
+          "sha256": "6377acc67b95abe357a48ec9d7dcd5975aa026b22e81dc4b79079ee15a50c607"
+        }
+      ]
+    }
+  },
+  "transport_findings": {
+    "java": "Default SSLConnectionSocketFactory.getSocketFactory() in inspected main path",
+    "lightning": "Empty X509TrustManager checks and unconditional HostnameVerifier; production use requires verified remediation",
+    "php": "CURLOPT_SSL_VERIFYPEER=false in BsPayRequestV2; production use requires verified remediation",
+    "python": "requests session retains default TLS verification"
+  },
+  "python_constructor": "MerConfig(private_key, public_key, sys_id, product_id, sign_type=\"RSA\", jpt_x_skill_source=\"\")",
+  "observed_legacy_invoice_requests": [
+    "V2InvoiceContractrepeatRequest",
+    "V2InvoiceQueryecmsapplylistRequest",
+    "V2InvoiceRejectsignRequest"
+  ],
+  "current_contract_routes": {
+    "resend": "/v2/agreement/elect/signurl/resend",
+    "list": "/v2/agreement/apply/list",
+    "reject": "/v2/agreement/elect/rejectsign"
+  },
+  "current_contract_support": "No dedicated request for current agreement routes; use verified official SDK generic entry and current API fields. Legacy invoice classes are not substitutes."
+}

@@ -16,7 +16,7 @@
 
 ## 公共包络
 
-九个接口均为 HTTPS POST JSON。请求外层为 `sys_id:String(32) Y`、`product_id:String(32) Y`、`sign:String(512) Y`、`data:Json Y`；同步响应外层包含 `sign:String(512) Y` 和业务 `data`。九页正式公共返回表都把外层 `response.data` 标为 `N`：用户业务入驻修改仍为 `String`，其余为 `Json`。用户列表查询的 `user_list_info_list` 已修正为 `Object/jsonArray格式`，按原生 JSON Array 建模。成功码下缺少 `data` 按协议异常处理，同时 DTO 允许网关或异常响应整体缺失。这些是 JSON 包络参数，不是 HTTP 请求头。
+九个接口均为 HTTPS POST JSON。请求外层为 `sys_id:String(32) Y`、`product_id:String(32) Y`、`sign:String(512) Y`、`data:Json Y`；同步响应外层包含 `sign:String(512) Y` 和业务 `data`。九页正式公共返回表都把外层 `response.data` 标为 `N`：用户业务入驻修改仍为 `String`，其余为 `Json`。用户列表查询的 `user_list_info_list` 当前为 `String/jsonArray格式`，按 String(JSON Array) 解码；成功示例使用原生数组，保留冲突。成功码下缺少 `data` 按协议异常处理，同时 DTO 允许网关或异常响应整体缺失。这些是 JSON 包络参数，不是 HTTP 请求头。
 
 `sys_id` 表示调用主体：渠道商填写渠道商号，直连/总部商户填写商户号。它不是本次开户生成的用户号。`jpt-x-skill-source` 是本地 Skill/SDK 合同，不是九份官网页面声明的业务字段；其他 SDK 内部请求头不进入本 Skill 的字段合同。
 
@@ -30,7 +30,9 @@
 
 ## 官网未定义项
 
-完整目录对官网空白单元格统一保留 `—`，不代表值为空字符串，也不授权从同名字段或 SDK 推断。当前官网正式参数表只有用户业务入驻修改的 `async.data` 仍为空说明；当前已没有长度为空的标量叶字段。对象、数组及 String(JSON) 父节点长度为空是结构字段的正常口径，不得把 `—` 改成 `0` 或空字符串。
+这些缺口按 `shared-overview.md` 的“文档疑义与开发提醒”处理：指出完整路径及原子页的对应官方文档，不清楚时建议咨询汇付官方或汇付开发者交流沟通群。继续已明确部分，争议约束与序列化用 TODO/待填配置隔离，不等待答复才开始整体开发。
+
+完整目录对官网空白单元格统一保留 `—`，不代表值为空字符串，也不授权从同名字段或 SDK 推断。当前新增account_info及充值账户字段也有空说明；仍不得从查询字段、示例或SDK补齐，详见机械目录；当前已没有长度为空的标量叶字段。对象、数组及 String(JSON) 父节点长度为空是结构字段的正常口径，不得把 `—` 改成 `0` 或空字符串。
 
 官网没有写出两个 `C` 字段的触发条件，接入方现已补充裁决：所有通过主体校验的 `request.data.card_info.card_type` 都条件必填 `card_name`；`response.data.elec_acct_config.elec_card_list[].mp` 在 `card_type=1` 对私法人卡时要求存在，在 `card_type=0` 对公卡时不要求。官网空说明仍在机械目录保留为 `—`，语义校验读取接入决策，不从同名字段推断。
 
@@ -40,8 +42,8 @@
 - 企业页在参数表外明确：系统会对 `request.data.legal_name` 与 `request.data.legal_cert_no` 做法人姓名和身份证号实名认证；完整目录把同一注记绑定到两个字段，不能只保留其中一个。
 - 个人证件：`cert_end_date:String(8)` 的必填列为 `N`，说明却要求非长期有效时必填；保留为“官网 N + 条件必填”。外国人居留证触发国籍。
 - 企业 `mcc` 以及个人 `mcc/prov_id/area_id/district_id` 的必填列均为 `N`，但说明明确“用户业务入驻修改且电子回单配置开通时需填写”；必须保留该完整触发条件。
-- 企业和个人开户的 `file_list:Object/jsonArray格式` 均按原生 JSON Array 发送。个人页的表外注意说明仍要求：证件类型为身份证时，汇付会对姓名和身份证号做实名认证。
-- 两个开户接口的 `sms_send_flag` 只使用 `Y/N`，默认不发送。企业要发送时 `login_name` 必填；当前两个请求示例均已使用 `"Y"`。
+- 企业和个人开户的 `file_list:String/jsonArray格式` 均按一层 String(JSON Array) 发送。个人页的表外注意说明仍要求：证件类型为身份证时，汇付会对姓名和身份证号做实名认证。
+- 两个开户接口的 `sms_send_flag` 只使用 `Y/N`，默认不发送。企业要发送或升级LV3时 `login_name` 必填；企业ent_type现在Y；当前两个请求示例均已使用 `"Y"`。
 - 企业注册省/市/区长度分别为6/8/12；个人电子回单相关省/市/区字段为6位口径。不得统一截断或补齐。
 - 两个开户请求都没有 `data.huifu_id` 或 `upper_huifu_id`，也没有异步通知。
 - 传 `login_name` 时可能返回 `login_password`；该字段按一次性高敏凭据处理。
@@ -77,19 +79,37 @@
 - `settle_cycle=D1` 时正式说明要求 `fixed_ratio`、`constant_amt` 必填且费率/金额保留两位小数；当前请求示例已包含 `constant_amt:"1.00"`，并使用 `fixed_ratio:"2.00"`、`cash_config.fee_rate:"2.00"`。仍只执行正式字段规则，不把示例值当默认值。
 - `elec_acct_config.elec_card_list[].card_type` 正式枚举为 `0/1`，当前示例已修正为 `0`。
 - `cash_config:String(JSON Array)` 中 `fix_amt` 与 `fee_rate` 至少一项；`out_fee_flag=1/2`，默认2；账户类型只按正式枚举处理。
-- `delay_flag` 仅 `Y/N`。电子回单开通时 `sign_user_info` 条件必填；wire 按 Object 发送原生 JSON Object。
+- `delay_flag` 仅 `Y/N`。电子回单开通时 `sign_user_info` 条件必填；当前正式类型为 String，wire 按 String(JSON Object) 发送。
 - 同步成功 `response.data:Json` 是原生对象，`resp_business:String(JSON Array)` 解一层后读取 `type=1/2/3/5`、`code=S/F`；接入方确认成功响应返回 `apply_no`，但这不等同审核最终通过。
 
 ## 用户业务入驻修改合同
 
-- 使用 `POST /v2/user/busi/modify`；完整目录精确120个节点：请求85、同步响应11、异步24，包含6个根表、12个扩展表、15个父节点和105个叶节点。`request.data.huifu_id:String(18) Y` 明确填写开户返回的用户ID，不得替换为商户号。
-- `settle_config_list`、`cash_config`、`file_list` 按 String(JSON Array) 发送；`card_info`、`elec_acct_config` 按 String(JSON Object) 发送；`sign_user_info` 的官方类型为 Object，必须以原生 JSON Object 进入最终 `data`。
-- `request.data.elec_receipt_config` 的正式类型为 Object，说明却写 jsonObject 字符串。该冲突尚未裁决：启用或修改电子回单配置时生产生成必须硬停，取得接口级 wire 确认后才能发送，不能照搬业务入驻新增接口的原生对象决策。
-- `request.data.elec_acct_config.elec_card_list` 的正式类型为 Object，说明却写 jsonArray，保留 `[需要官方确认]`，不得仅凭子路径中的 `[]` 决定 wire。`async.data.audit_info.resp_business` 已修正为 `Object/jsonArray格式`，解码 `audit_info` 后按原生 JSON Array 解析。
-- `request.data.settle_config_list[].is_priority_receipt` 的必填列为 `C`，说明只写 P0 可选，未给出完整触发条件；不得无条件必填或随意省略。当前 `delay_flag` 示例已修正为 `N`，`async_return_url` 示例也已修正为合法 HTTP URL。
+- 使用 `POST /v2/user/busi/modify`；完整目录精确138个节点：请求98、同步响应11、异步29，包含6个根表、16个扩展表。`request.data.huifu_id:String(18) Y` 明确填写开户返回的用户ID，不得替换为商户号。
+- `settle_config_list`、`cash_config`、`file_list` 按 String(JSON Array) 发送；`card_info`、`elec_acct_config`、`elec_receipt_config`、`sign_user_info` 按 String(JSON Object) 发送。
+- `request.data.elec_acct_config.elec_card_list` 当前正式类型为 String 且说明为 jsonArray字符串；先序列化子数组，再放入父对象并对父对象序列化一次。
+- `request.data.settle_config_list[].is_priority_receipt` 的必填列为 `C`，说明明确 `settle_pattern=P0` 时必填，但又描述空值默认；按 P0 条件执行必填，默认描述作为官方矛盾保留。当前 `delay_flag` 示例已修正为 `N`，`async_return_url` 示例也已修正为合法 HTTP URL。
 - 官网请求示例是合法 JSON，且只声明一次 `file_list`；示例仍不构成默认值或正式字段合同，不得用示例覆盖参数表。
-- 三语言 `V2UserBusiModifyRequest` 都只声明 `req_seq_id/req_date/huifu_id/sign_user_info`，路由精确为 `/v2/user/busi/modify`。Java 的 `sign_user_info` setter 静态接收 String，必须用受控 exact-key 覆盖成官网 Object；PHP setter 无类型约束，可直接传数组；Python 动态属性可直接赋 dict，PHP/Python 也可采用统一 exact-key 策略。生成类的扩展后合并都能覆盖已声明键，因此扩展必须拒绝 `req_seq_id/req_date/huifu_id`，并对白名单内其余正式字段逐项放行。
-- 同步公共表把 `response.data` 写成 `String N`，成功示例却返回原生 JSON Object；本接口没有独立 wire 裁决，DTO 需隔离两种形态并容忍异常响应缺失，生产联调前不得自行固定成任一形态。异步仍使用24节点配置类通知合同，不能因修改接口而省略验签、回包、重试或状态感知幂等。
+- 三语言 `V2UserBusiModifyRequest` 都只声明 `req_seq_id/req_date/huifu_id/sign_user_info`，路由精确为 `/v2/user/busi/modify`。当前官网与 Java 的 String setter 对 `sign_user_info` 已一致，三语言均传一层 JSON Object 字符串。生成类的扩展后合并都能覆盖已声明键，因此扩展必须拒绝 `req_seq_id/req_date/huifu_id/sign_user_info`，并对白名单内其余正式字段逐项放行。
+- 同步公共表把 `response.data` 写成 `String N`，成功示例却返回原生 JSON Object；本接口没有独立 wire 裁决，DTO 需隔离两种形态并容忍异常响应缺失，解析形态通过明确的 TODO/可配置策略隔离，不静默认定任一示例为官方结论；这不阻断其余 SDK/业务实现。异步现在使用29节点配置类通知合同，不能因修改接口而省略验签、回包、重试或状态感知幂等。
+
+## 用户等级与新资金配置（2026-09-22）
+
+业务入驻与修改的 `request.data.account_level:String(6) N` 为LV1/LV2/LV3，不填默认LV1。余额支付、账户充值、延迟支付配置只在LV3开通；个人用户不支持LV3。不要把这些开户配置路由到实际支付交易。
+
+| 完整路径 | 方向与wire | 关键条件 |
+| --- | --- | --- |
+| `request.data.balance_pay_config` | 入驻/修改 String(JSON Object) | fee_rate/fee_fix_amt均String(9) Y，但说明要求至少一项；存在必填列冲突，严格校验策略留 TODO/待填配置，同时继续其余 DTO 与 SDK 开发。两者都有时费用相加。 |
+| `request.data.account_recharge_config` | 入驻/修改 String(JSON Object) | 同上手续费冲突；仅正式fee_rate/fee_fix_amt两个子字段，不能复制查询switch_state或充值账户字段。 |
+| `request.data.delay_pay_config` | 入驻/修改 String(JSON Object) | switch_state:String(1) Y，1开通/0关闭。不同于delay_flag Y/N。 |
+| `async.data.account_info` | 入驻/修改原生Object N | account_level/face_url/trans_status/verify_ord_id；入驻页父对象说明为空，修改页写用户升级信息，各自保留原文。 |
+| `response.data.account_info/balance_pay_config/account_recharge_config/delay_pay_config` | 用户详情原生Object N | 只解析状态，不能按请求String(JSON)重复解码，或把查询独有字段回填请求。 |
+
+- 余额扣费charge_mode：内扣01/02/03，默认01；外扣10/11/12，默认10。out_fee_acct_type为01/02/05/09，默认01。请求out_fee_flag说明未给枚举，不能把查询的1外扣/2内扣反向提升为请求合同；外扣时out_fee_huifuid条件必填。
+- LV2企业需营业执照F07，对公结算F08及相应法人证件；LV2个人需对应身份证明。LV3仅企业，另按对公/对私法人提供F08/F13，并提供F22门头、F105收银台、F371办公环境；法定证件材料按完整目录，不能只保留card_type=4规则。
+- 升级LV3并开通取现、余额、充值、延迟支付任一功能时sign_user_info必填，电子回单开通条件继续有效。
+- 对公打款验证trans_status=1打款中/2打款成功验证中/3打款失败/4通过/5失败；法人活体验证只有1/4/5。与审核Y/P/N、配置S/F及支付终态分开。
+- face_url为敏感不透明活体链接，不能回显或写日志。verify_ord_id用于另一个打款验证接口；本次文档未覆盖该接口，不虚构端点、金额或调用实现。
+- 本轮用户路径611=请求333+响应220+通知58；新增57、删除0、修改6。
 
 ## 业务入驻异步合同
 
@@ -107,10 +127,10 @@
 - 申请状态查询必须带真实用户号、当日唯一流水、日期和 `apply_no`；仅用于非同名对公结算卡审核。官网必填列把 `apply_reason/apply_status/huifu_id` 标为 `N`；接入方确认成功查询在 `apply_status=Y/P/N/F` 四种状态都会返回这三个字段。该裁决不能泛化为其他用户申请状态接口。
 - 用户信息查询请求只有用户号、流水和日期；官网同样明确 `req_seq_id` 在同一商户号当天唯一。响应大部分字段可选，不能把缺失父对象解释为未开户或失败。
 - 用户信息查询的 `ent_base_info`、`indv_base_info`、`card_info`、`settle_config_list`、`qry_cash_config_list`、`qry_cash_card_info_list` 是 String(JSON)；先解一层字符串，再在各自父路径内解析。
-- `elec_acct_config` 按接入方确认解为 String(JSON Object)；`elec_receipt_config` 和 `sign_user_info` 为原生 JSON Object。
-- `response.data.ent_base_info.file_list[]` 与 `response.data.indv_base_info.file_list[]` 按说明和接入方确认，是解码各自 String(JSON Object) 父字段后的原生 JSON Array；完整目录分别保留两组 `file_list[]` 子路径，不得合并。
+- `elec_acct_config`、`elec_receipt_config` 和 `sign_user_info` 均按 String(JSON Object) 解码。
+- `response.data.ent_base_info.file_list[]` 与 `response.data.indv_base_info.file_list[]` 当前为 String/jsonArray格式，是解码各自 String(JSON Object) 父字段后仍需再解一层的 String(JSON Array)；完整目录分别保留两组 `file_list[]` 子路径，不得合并。
 - `elec_acct_config.elec_card_list` 是解码 `elec_acct_config` 父字符串后的 String(JSON Array)，需要再解一层；保留 `elec_card_list[]` 及子路径，不得按普通对象或直接数组解析。
-- `sign_user_info` 的必填列为 `N`，说明却写“开通电子回单必填”；保留为官网 N 与说明条件必填，不得把响应中缺少该父对象直接判为失败。
+- `sign_user_info` 的必填列为 `C`，说明为“开通电子回单必填”；按条件和字段存在性解析，不得把响应中缺少该父对象直接判为失败。
 - 个人基础信息的省/区示例分别为 `310101/310000`，取现卡的市/省示例分别为 `310000/310100`，与同页其他省市区样例顺序相反。示例不能作为默认编码，必须用外部地区编码表校验。
 - `response.data.qry_cash_card_info_list[].branch_code` 原接口行没有链接目标；接入方提供的官方“基础参数汇总”明确给出银行支行编码 XLSX/JSON/CSV 下载入口，现按完整路径绑定该公共编码来源。
 - `settle_config_list[].out_settle_acct_type` 正式枚举为 `01/02/05`，当前示例已修正为 `01`。
@@ -120,7 +140,7 @@
 ## 用户列表查询合同
 
 - `POST /v2/user/list/query` 精确17个节点：请求8、同步响应9、无异步；请求必填 `legal_cert_no/req_date/req_seq_id`，`upper_huifu_id:String(18) N` 仅用于限定上级范围。
-- `response.data.user_list_info_list:Object N` 注明 `jsonArray格式`，按 `response.data.user_list_info_list[]` 原生数组解析。
+- `response.data.user_list_info_list:String N` 注明 `jsonArray格式`，按一层 String(JSON Array) 解码并保留 `response.data.user_list_info_list[]` 子路径；成功示例使用原生数组，与正式类型冲突。
 - 列表项 `huifu_id/upper_huifu_id` 当前正式长度均为18；16位成功示例在上限内，不得沿用旧版长度2。
 - 当前请求与成功响应示例均包含正式 `sign:String(512) Y`；生产仍必须加签并验签。`cust_type` 只解析 `1=企业用户` 和 `2=个人用户`。
 - 三语言 `V2UserListQueryRequest` 只声明 `legal_cert_no/req_date/req_seq_id`；`upper_huifu_id` 走白名单 exact-key 扩展，且扩展拒绝覆盖三个已声明键。

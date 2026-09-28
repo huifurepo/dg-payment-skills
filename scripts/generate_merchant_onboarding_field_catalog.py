@@ -253,6 +253,7 @@ def refresh_sources(target_dir: Path) -> None:
 
 
 def clean_cell(value: str) -> str:
+    value = re.sub(r"\b(Array)<(string)>", r"\1&lt;\2&gt;", value, flags=re.I)
     value = re.sub(r"<br\s*/?>", "；", value, flags=re.I)
     value = re.sub(r"</?font[^>]*>", "", value, flags=re.I)
     value = re.sub(r"</?(?:span|div)[^>]*>", "", value, flags=re.I)
@@ -422,7 +423,7 @@ def parse_field_row(
     # Do not infer an array from a ``*_list`` name. The business-open source
     # explicitly defines some such fields as Object (for example
     # contact_file_list and sales_scenes_file_list).
-    is_array = field_type_is_array = clean_cell(cells[2]).lower() == "array"
+    is_array = field_type_is_array = bool(re.fullmatch(r"array(?:<[^>]+>)?", clean_cell(cells[2]), re.I))
     normalized_description = description.lower()
     is_array = field_type_is_array or "jsonarray" in normalized_description
     return Field(
@@ -752,7 +753,7 @@ def build_catalog(source_dir: Path | None) -> tuple[str, dict[str, dict[str, obj
 
 1. 回答任一接口字段问题时，先在本文件定位完整路径，再读取对应接口 reference 的约束说明。
 2. 不得只读取顶层字段后推断嵌套对象；必须沿 `[]` / 对象路径读到叶子层。
-3. 不得按叶字段名去重：`request.data.prov_id/area_id` 是经营省市，`request.data.card_info.prov_id/area_id` 是结算卡省市；适用时两组都保留，后者只能位于 String(JSON) `card_info` 内。企业进件新增的 `request.data.material_card_info.prov_id/area_id` 属于补充对公同名账户；路径树原样保留官网 `Object` 类型列，但本项目已确认以“jsonObject字符串”说明为 wire 依据，request/response 的 `material_card_info` 均整体序列化或反序列化为 String(JSON Object)。详情响应的 `response.data.material_card_info.prov_id/area_id` 是独立响应路径。四组字段均不得合并。基本信息修改的 `card_info.area_id` 长度为 `8`，企业/个人进件对应路径长度为 `6`，新增请求 `material_card_info` 叶字段长度为空时保留 `—`。
+3. 不得按叶字段名去重：`request.data.prov_id/area_id` 是经营省市，`request.data.card_info.prov_id/area_id` 是结算卡省市；适用时两组都保留，后者只能位于 String(JSON) `card_info` 内。企业进件 `request.data.material_card_info.prov_id/area_id` 属于补充对公同名账户，当前 request/response 的 `material_card_info` 均正式定义为 String(JSON Object)，整体序列化或反序列化。详情响应的 `response.data.material_card_info.prov_id/area_id` 是独立响应路径。四组字段均不得合并。基本信息修改的 `card_info.area_id` 长度为 `8`，企业/个人进件对应路径长度为 `6`；当前材料账户请求支行长度8、详情响应12，各自保留，不得静默统一。
 4. 官方表格自身冲突时保留原始类型、长度、必填和说明，不自行“修正”；在答案中明确标记 `[官方文档口径冲突]`。
 5. 字段说明引用外部网页或文件时，再读取 `merchant-onboarding-external-resources.md` 并给出原始地址。绝对链接保持官网值；相对链接按已登记的官方文档命名空间（无例外时按来源页）解析成可点击地址，同时保留官网相对地址原文。回调、跳转、下载、二维码或图片裸 URL 示例不是资料或默认值。
 

@@ -10,7 +10,7 @@
 
 - Endpoint：`POST https://api.huifu.com/v2/merchant/busi/modify/busistatus`。
 - 请求顶层为 `sys_id:String(32) Y`、`product_id:String(32) Y`、`sign:String(512) Y`、`data:Json Y`；同步响应顶层为 `sign:String(512) Y`、`data:Json N`。
-- 完整目录共 14 个节点：请求 9、同步响应 5、无异步通知。完整路径、类型、长度、Y/N/C 和官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户状态变更”。
+- 完整目录共14个节点：请求9、同步响应5、无异步通知。完整路径、类型、长度、Y/N/C 和官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户状态变更”。
 - 请求 `data` 精确包含 `req_date:string(8) Y`、`req_seq_id:string(32) Y`、`huifu_id:String(18) Y`、`status:String(1) Y`、`upd_status_reason:String(512) Y`。
 - `status` 仅允许字符串 `1=开通`、`0=关闭`；官方说明支持关闭后再次打开。
 - 同步响应 `data` 包含 `resp_code:String(8) Y`、`resp_desc:String(512) Y`、`apply_no:String(128) N`。
@@ -32,11 +32,11 @@
 
 ## 公共请求头
 
-- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.2`，双 Skill 默认 `hfps/1.3.5;hfms/1.0.2`。
+- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.4`，双 Skill 默认 `hfps/1.3.5;hfms/1.0.4`。
 
 ## SDK 证据
 
-用户提供且已锁定源码树摘要的 Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` 均存在对应封装：
+用户提供且已锁定源码树摘要的 Java `3.0.41`、PHP `2.0.31`、Python `2.0.28` 均存在对应封装：
 
 - Java / PHP：`V2MerchantBusiModifyBusistatusRequest`
 - Python：`V2MerchantBusiModifyBusistatusRequest`，模块 `v2_merchant_busi_modify_busistatus_request.py`

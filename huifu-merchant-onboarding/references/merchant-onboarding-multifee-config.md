@@ -2,7 +2,7 @@
 
 ## 适用范围
 
-用于商户成功开通微信、支付宝支付功能后，按支付功能与场景配置或修改手续费底价。官方来源：[商户多费率配置](https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflpz.md)，锁定来源 SHA-256 为 `0536049a616e68929341d4176cf1c5348b1bcf8fabeff3ceb384945fa5dce987`。
+用于商户成功开通微信、支付宝支付功能后，按支付功能与场景配置或修改手续费底价。官方来源：[商户多费率配置](https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflpz.md)，官网更新时间 `2026-09-20`，本地活动快照 `2026-09-22`，原文 SHA-256 为 `e4b23cb9bfaf59e9a88448a890f539d7ee9cbf7002d763a7d078294053aa7473`。
 
 本接口是商户业务配置接口，不是商户费率信息查询、支付下单费率覆盖或实际手续费结算结果。调用前必须已有真实 `huifu_id`，且目标微信或支付宝能力已经开通成功；接口存在不证明调用方拥有配置权限。
 
@@ -10,7 +10,7 @@
 
 - Endpoint：`POST https://api.huifu.com/v2/merchant/busi/multiFee/config`。
 - 请求顶层为 `sys_id:String(32) Y`、`product_id:String(32) Y`、`sign:String(512) Y`、`data:Json Y`；响应顶层为 `sign:String(512) Y`、`data:Json N`。
-- 完整目录共 27 个节点：请求 15、同步响应 12、无异步通知。完整路径、官网类型、长度、Y/N/C 和说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户多费率配置”。
+- 完整目录共27个节点：请求15、同步响应12、无异步通知。完整路径、官网类型、长度、Y/N/C 和说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户多费率配置”。
 - 请求定位字段为 `data.req_seq_id:String(32) Y`、`data.req_date:String(8) Y`、`data.huifu_id:String(18) Y`。`req_seq_id` 在同一商户号当天唯一，`req_date` 使用北京时间 `yyyyMMdd`，`huifu_id` 为渠道或一级代理商的直属商户 ID。
 - `data.wx_conf_list:String N` 与 `data.ali_conf_list:String N` 的说明均明确为 `jsonArray`，因此 wire 上分别发送 String(JSON Array)；两者不能同时为空。先构造并校验数组，再各序列化一次，不得发送原生数组或二次序列化。
 
@@ -31,12 +31,12 @@
 
 - `data.resp_code:String(8) Y`、`data.resp_desc:String(512) Y`、`data.req_seq_id:String(32) Y`、`data.req_date:String(8) Y`、`data.conf_status:String(1) Y`。
 - `data.conf_status` 仅 `Y=成功`、`F=失败`。HTTP 成功、签名通过或 `resp_code` 存在都不能替代该状态判断。
-- `data.conf_list:String N` 仅配置成功时返回，并展开 `pay_scene:String(2) Y`、`fee_rate:String(6) Y`、`fee_sign:String(32) Y`、`pay_way:String(1) Y`。官网未说明该 String 子表是 JSON Object 还是 JSON Array，也没有成功示例；取得官方或生产 wire 证据前，生产解析必须硬停，不能按字段名猜数组，也不能沿用旧版单 Object 假设。
+- `data.conf_list:String N` 仅配置成功时返回，说明已明确为 jsonArray格式；解一层 String(JSON Array) 后按存在性读取 `pay_scene:String(2) N`、`fee_rate:String(6) N`、`fee_sign:String(32) N`、`pay_way:String(1) N`。不得沿用旧响应必填标记，也不能把响应 N 回填到请求校验。
 - `pay_way` 仅 `A=支付宝`、`W=微信`；官网已把旧版 `T=微信` 修正为 `W=微信`。旧 T/W 冲突已关闭，禁止继续接受或生成 `T`。
 
 ## 三语言 SDK 边界
 
-用户提供且已锁定源码树摘要的 Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` 均有本接口专属类和精确路由：
+用户提供且已锁定源码树摘要的 Java `3.0.41`、PHP `2.0.31`、Python `2.0.28` 均有本接口专属类和精确路由：
 
 | 语言 | Request / 模块 | 路由证据 | 扩展字段方式 |
 | --- | --- | --- | --- |
@@ -53,8 +53,8 @@ Java 可运行代码仍须在进程初始化、任何 SDK 请求前全局执行�
 1. 确认目标 `huifu_id`、微信/支付宝已开通状态和配置权限。
 2. 确认至少一个配置数组非空，并逐元素校验渠道专属 `pay_scene`、两位小数字符串 `fee_rate` 与可选真实 `fee_sign`。
 3. 确认扩展映射没有覆盖 `req_seq_id`、`req_date`、`huifu_id`，也没有合同外键。
-4. 响应先完成 SDK 验签，再判断 `resp_code` 与 `conf_status`；`conf_list` 的 String 子表编码确认前停止生产解析，确认后 `pay_way` 只接受 `A/W`。
+4. 响应先完成 SDK 验签，再判断 `resp_code` 与 `conf_status`；`conf_list` 按 String(JSON Array) 解码，`pay_way` 只接受 `A/W`。
 
 ## 公共请求头
 
-`jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.2`，同时使用支付与进件 Skill 时默认 `hfps/1.3.5;hfms/1.0.2`。
+`jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.4`，同时使用支付与进件 Skill 时默认 `hfps/1.3.5;hfms/1.0.4`。

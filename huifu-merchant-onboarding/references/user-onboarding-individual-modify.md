@@ -7,7 +7,7 @@
 ## 接口与字段面
 
 - Endpoint：POST https://api.huifu.com/v2/user/basicdata/indv/modify。
-- 官网更新时间：2026-08-25；本地活动快照：2026-08-31；原文 SHA-256：f78db9dc5401496265b7836eb1dc3cdf6cce47263a0de366f29c0008c33ce23c。
+- 官网更新时间：2026-09-04；本地活动快照：2026-09-22；原文 SHA-256：b1495f896cfc12f8e8324c8aa1f97655c0c87d41c626ea636eda54b7b3aa741c。
 - 共26个字段路径：请求21、同步响应5、异步0；4个根表、1个扩展表、3个父节点、23个叶节点。完整字段读取 user-onboarding-complete-field-catalog.md。
 - 定位字段是 req_seq_id:String(32) Y、req_date:String(8) Y、huifu_id:String(18) Y；流水要求同一商户号当天唯一，日期按北京时间 yyyyMMdd。
 
@@ -27,7 +27,7 @@
 
 ## SDK 边界
 
-Java 3.0.40、PHP 2.0.30、Python 2.0.24 都使用 V2UserBasicdataIndvModifyRequest，精确路由 /v2/user/basicdata/indv/modify。三语言生成类恰好只声明 req_seq_id/req_date/huifu_id；其余14个正式请求字段通过 exact-key 扩展映射传入。
+已核验源码基线 Java 3.0.41、PHP 2.0.31、Python 2.0.28 都使用 V2UserBasicdataIndvModifyRequest，精确路由 /v2/user/basicdata/indv/modify。三语言生成类恰好只声明 req_seq_id/req_date/huifu_id；其余14个正式请求字段通过 exact-key 扩展映射传入。
 
 Java putAll、PHP array_merge、Python dict.update 都会后写覆盖声明字段。接入层必须拒绝扩展中的 req_seq_id/req_date/huifu_id，只允许本页正式可选键，拒绝未知键、响应键与包络键。file_list 在扩展中仍是一层 JSON Array 字符串。
 

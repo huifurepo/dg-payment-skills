@@ -36,6 +36,7 @@ Invoke-Validation @("scripts\validate_request_field_preservation.py")
 Invoke-Validation @("scripts\validate_code_examples.py", "--timeout", "600")
 Invoke-Validation @("scripts\scan_sensitive_examples.py")
 Invoke-Validation @("scripts\validate_release_guardrails.py")
+Invoke-Validation @("scripts\test_independent_onboarding_release.py")
 Invoke-Validation @("scripts\generate_payment_source_index.py", "--check")
 Invoke-Validation @("scripts\validate_payment_source_contract.py")
 Invoke-Validation @("scripts\validate_payment_review_contract.py")
@@ -59,6 +60,13 @@ Invoke-Validation @(
     "--check"
 )
 Invoke-Validation @("scripts\validate_user_onboarding_source_contract.py")
+Invoke-Validation @(
+    "scripts\generate_onboarding_extension_field_catalog.py",
+    "--locked-source-dir",
+    "--output", "huifu-merchant-onboarding\references\onboarding-extension-complete-field-catalog.md",
+    "--check"
+)
+Invoke-Validation @("scripts\validate_onboarding_extension_source_contract.py")
 Invoke-Validation @("scripts\validate_skill_packages.py", "--allow-dirty")
 
 Push-Location (Join-Path $RepoRoot "local-sandbox")

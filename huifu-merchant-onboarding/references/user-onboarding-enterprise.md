@@ -7,7 +7,7 @@
 ## 接口与字段面
 
 - Endpoint：`POST https://api.huifu.com/v2/user/basicdata/ent`。
-- 快照更新时间：官网 `2026-08-25`，本地冻结 `2026-08-31`；原文 SHA-256：`4d0d3921368a9f536007a17a6efe8ed1d9c7d9eea40d9a3a4fd5dc8eef07baaf`。
+- 快照更新时间：官网 `2026-09-21`，本地冻结 `2026-09-22`；原文 SHA-256：`b95f8659579a89b4cda719d63922cd99458cc58351c7505b6e3c2b0c8b0fa674`。
 - 共43个字段路径：请求36、同步响应7、异步0。完整路径、类型、长度、必填性和说明读取 `user-onboarding-complete-field-catalog.md`。
 - 请求业务 `data` 不包含 `huifu_id`、`upper_huifu_id` 或异步地址；不得为请求头或 SDK 填充虚构字段。
 
@@ -19,9 +19,9 @@
 | 企业证照 | 企业名称、18位营业执照编号、有效期类型及起止日；非长期有效时结束日必填 |
 | 注册地址 | `reg_prov_id:String(6)`、`reg_area_id:String(8)`、`reg_district_id:String(12)` 和详细地址均必填 |
 | 法人 | 姓名、证件类型/号码、有效期；系统执行姓名与证件实名认证；外国人居留证触发国籍 |
-| 管理员 | 姓名和手机号必填；邮箱可选；短信通知时 `login_name` 必填 |
-| 材料 | `file_list:Object(JSON Array)`，wire 为原生 JSON Array；子项 `file_type/file_id` 必填，`file_name` 可选 |
-| 业务补充 | `ent_type`、扩展方和操作员按官方 N/C 条件处理；`mcc` 必填列为 N，但用户业务入驻修改且电子回单配置开通时说明要求填写 |
+| 管理员 | 姓名和手机号必填；邮箱可选；短信通知或升级LV3时 `login_name` 必填 |
+| 材料 | `file_list:String(JSON Array)`；子项 `file_type/file_id` 必填，`file_name` 可选，校验后整体序列化一层 |
+| 业务补充 | `ent_type` 当前Y必填，扩展方和操作员仍按自身N/C条件处理；`mcc` 必填列为 N，但用户业务入驻修改且电子回单配置开通时说明要求填写 |
 
 `sms_send_flag` 正式值域为 `Y/N`，默认不发送；当前官网请求示例已使用 `"Y"`。长期有效的示例仍带结束日期，也不改变条件合同。
 

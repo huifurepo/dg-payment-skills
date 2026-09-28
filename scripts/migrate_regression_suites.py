@@ -15,7 +15,7 @@ require_assertions_enabled()
 REPO_ROOT = Path(__file__).resolve().parent.parent
 LEGACY = REPO_ROOT / "scripts/huifu-payment-test-prompts.json"
 OUTPUT_DIR = REPO_ROOT / "tests/regression"
-ONBOARDING_IDS = {52, *range(57, 85), 87, 88, 89}
+ONBOARDING_IDS = {52, *range(57, 85), 87, 88, 89, *range(301, 313)}
 
 
 def main() -> int:
@@ -37,7 +37,7 @@ def main() -> int:
         else:
             payment.append(item)
     assert len(payment) == 58
-    assert len(onboarding) == 32
+    assert len(onboarding) == 44
     LEGACY.write_text(
         json.dumps(cases, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
@@ -48,7 +48,7 @@ def main() -> int:
             json.dumps(selected, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",
         )
-    print("regression suites generated: payment=58, onboarding=32, primary ownership=90")
+    print("regression suites generated: payment=58, onboarding=44, primary ownership=102")
     return 0
 
 

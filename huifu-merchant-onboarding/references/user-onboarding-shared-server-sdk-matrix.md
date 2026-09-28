@@ -4,11 +4,13 @@
 
 结论来自用户提供且由维护仓库锁定的本地 SDK 源码。类和 URI 的存在不证明官方分发来源、接口权限、材料条件、审核结果或通知协议。
 
-| SDK | 版本 | 九接口专属类 | 生产结论 |
+Python 当前 SDK 为 `2.0.28`，来自 `../sdk/dg_sdk-2.0.28/dg_sdk/`；本页九接口类、字段、构造器与传输边界已按该源码复核，API 来源仍为 `2026-09-22`。源码和离线探针不代替真实网关联调；其他版本差异按 `shared-server-sdk-matrix.md` 核对，继续已明确部分，不新增硬检查点。
+
+| SDK | 当前版本 | 九接口专属类 | 使用规则 |
 | --- | --- | --- | --- |
-| Java `dg-java-sdk` | `3.0.40` | 已找到 | 使用官方 Request/Client；先关闭敏感调试 |
-| PHP `huifurepo/dg-php-sdk` | `2.0.30` | 已找到 | 使用官方 Request/Client；DEBUG/Demo 入口仍需独立检查 |
-| Python `dg-sdk` / `dg_sdk` | `2.0.24` | 已找到 | 使用官方 Request；仍需字段与网关探针 |
+| Java `dg-java-sdk` | `3.0.41` | 已找到 | 使用官方 Request/Client；先关闭敏感调试 |
+| PHP `huifurepo/dg-php-sdk` | `2.0.31` | 已找到 | 使用官方 Request/Client；DEBUG/Demo 入口仍需独立检查 |
+| Python `dg-sdk` / `dg_sdk` | `2.0.28` | 已找到 | 使用官方 Request；仍需按业务授权完成字段与网关联调 |
 
 ## 九个精确类与 URI
 
@@ -31,13 +33,13 @@
 ## 官方合同优先与运行探针
 
 - 生成类可能把官方 `C` 字段建模成 required 或发送空字符串，例如开户有效期/国籍/地址、企业登录名以及业务入驻 `sign_user_info`。以官方 Y/N/C 和条件说明为准。
-- `file_list`、`elec_card_list`、`resp_business`、公共返回 `data` 的来源类型曾冲突；当前仅部分 wire 已裁决，业务入驻新增/修改的 `elec_card_list` 及新增接口的 `elec_receipt_config` 仍须硬停确认。不要仅靠类属性名决定，也不得偏离 `user-onboarding-platform-contracts.md`。
-- `sign_user_info` 官网类型为 Object，部分 SDK定义或序列化边界可能不同。使用 exact-key 扩展字段时必须保持键名，在脱敏运行探针中记录最终 JSON 类型、签名输入和网关结果。
+- `file_list`、`elec_card_list`、`sign_user_info` 和 `elec_receipt_config` 当前正式类型均已改为 String；按 `user-onboarding-platform-contracts.md` 的逐层 String(JSON) 矩阵处理。公共返回 `data` 与用户列表成功示例冲突仍须保留，不得仅靠类属性名决定。
+- `sign_user_info` 当前官网类型为 String，与生成类 String setter 一致；传一层合法 JSON Object 字符串，并在脱敏运行探针中记录最终 JSON 类型、签名输入和网关结果。
 - 企业用户基本信息修改类只声明 `req_date/req_seq_id/huifu_id/legal_cert_nationality`。其余正式可选字段通过 exact-key 扩展传入；Java `putAll`、PHP `array_merge`、Python `dict.update` 都会后写覆盖同名显式字段，因此必须拒绝扩展覆盖这四个键，并拒绝所有合同外键。
 - 个人用户基本信息修改类只声明 `req_date/req_seq_id/huifu_id`。其余正式可选字段通过 exact-key 扩展传入；三语言的后写合并同样会覆盖显式字段，因此必须拒绝扩展覆盖这三个键，并拒绝所有合同外键。
-- 用户业务入驻修改类只声明 `req_date/req_seq_id/huifu_id/sign_user_info`。官网 `sign_user_info` 是 Object：Java setter 静态接收 String，必须用 exact-key 扩展受控覆盖为原生 Object；PHP setter 无类型约束可直接传数组，Python 动态属性可直接赋 dict，两者也可使用仓库统一的受控 exact-key 策略。三语言均以运行探针锁定最终类型，三个定位键禁止被扩展覆盖。
+- 用户业务入驻修改类只声明 `req_date/req_seq_id/huifu_id/sign_user_info`。`sign_user_info` 当前按官网 String(JSON Object) 传输；三语言均以运行探针锁定只序列化一次，四个直接字段禁止被扩展覆盖。
 - 用户列表查询类只声明 `legal_cert_no/req_date/req_seq_id`。官网可选 `upper_huifu_id` 使用白名单 exact-key 扩展；三语言后写合并会覆盖显式字段，因此必须拒绝扩展中的 `legal_cert_no/req_date/req_seq_id`。
-- 探针不能绕过签名、验签、TLS 或敏感日志安全要求。
+- 探针不能绕过签名、验签或敏感日志安全要求；本地 SDK 的既有 TLS 风险按下方非阻断提醒处理，新代码不主动关闭正常校验。
 
 ## 调试日志硬停
 
@@ -47,8 +49,10 @@
 
 ## 官方 SDK-only 传输规则
 
-- 接入方确认官方 Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` SDK 不存在此前 Skill 推断的 TLS 问题；Java/PHP 不再因 TLS 硬停，九接口均使用各自官方 Request/Client。
-- 保持 SDK/运行时正常的证书链和主机名校验，不设置 trust-all、`verify=false` 或关闭校验；TLS 作为共同上线检查，不阻断官方 SDK 代码生成。
+- 九接口均使用各自官方 Request/Client。通用 Java `3.0.41` 使用默认 TLS 工厂，Python `2.0.28` 保留 requests 默认校验；PHP `2.0.31` 本地源码仍设置 `CURLOPT_SSL_VERIFYPEER=false`。按本轮要求仅作非阻断提醒，继续已明确的 SDK 接入，不要求先提供修复证明或官方答复。
+- 建议开发者核对对应 SDK/官方文档，疑问可咨询汇付官方或汇付开发者交流沟通群；详见 `shared-server-sdk-matrix.md`。新代码不主动加入 trust-all、`verify=false`，不擅自修改 SDK，不把离线验证或本轮策略说成风险已修复。字段疑义按 `shared-overview.md` 继续明确部分并用 TODO/配置隔离。
 - 禁止用 `HttpClient`、OkHttp、`HttpURLConnection`、Guzzle、`curl_*`、通用 POST 或自实现签名/验签客户端替代官方 SDK。三语言交付分别使用官方 SDK，不允许只让 Python 使用 SDK。
 
 企业/个人开户的业务合同没有 `data.huifu_id`，请求 DTO 按官网字段生成，不增加合同外业务字段。
+
+Python 2.0.28 初始化必须显式使用 `sign_type="RSA", jpt_x_skill_source=skill_source`；第五位置参数已是算法，不再是来源。SDK 的共享类级请求状态需串行或进程隔离，不承诺多用户并发线程安全。

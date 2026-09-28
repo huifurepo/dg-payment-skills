@@ -14,7 +14,7 @@
   {
     "id": 58,
     "prompt": "我有一张本地营业执照图片，请用 $huifu-merchant-onboarding 给我图片上传的 multipart、签名和重试代码，并说明支持格式、大小、file_url/file 互斥及所有未确认边界。",
-    "expected": "必须路由到 `merchant-onboarding-image-upload.md`；必须说明 file_url 与文件流互斥、图片格式/2MB边界。Java 3.0.40 使用 `V2SupplementaryPictureRequest` 和 `BasePayClient.upload(request, file)`；PHP CURLFile 包装分支关闭签验、Python 专用 Request 存在字段和文件键缺陷，均不得直接调用，但可仅为 `/v2/supplementary/picture` 生成保持 multipart、data 加签、TLS 和日志边界的通用 POST/自写 HTTPS 降级。响应字段、响应可信性和业务重试标为[需要官方确认]。",
+    "expected": "必须路由到 `merchant-onboarding-image-upload.md`；必须说明 file_url 与文件流互斥、图片格式/2MB边界。Java 3.0.41 使用 `V2SupplementaryPictureRequest` 和 `BasePayClient.upload(request, file)`；PHP CURLFile 包装分支关闭签验、Python 专用 Request 存在字段和文件键缺陷，均不得直接调用，但可仅为 `/v2/supplementary/picture` 生成保持 multipart、data 加签、TLS 和日志边界的通用 POST/自写 HTTPS 降级。响应字段、响应可信性和业务重试标为[需要官方确认]。 逐项标明未确认字段或协议的完整路径与疑点，附对应官方文档；不清楚时可咨询汇付官方或汇付开发者交流沟通群。继续已明确部分的开发，未知项隔离为TODO/待填配置，不要求官方答复作为整体开发前提，不猜默认值、ACK或签验协议。",
     "suite": "onboarding"
   },
   {
@@ -26,25 +26,25 @@
   {
     "id": 60,
     "prompt": "商户业务开通回调里的 ord_id 我能用 req_seq_id 回 RECV_ORD_ID 吗？审核回调和电子协议回调也这么处理吗？请用 $huifu-merchant-onboarding 回答。",
-    "expected": "必须路由到 merchant-onboarding-business-open 和 merchant-onboarding-field-contracts；必须说明仅逐业务通知存在 ord_id 时按官网回 RECV_ORD_ID_加该 ord_id，不能用 req_seq_id；审核和电子协议回调的 ACK、验签原文、HTTP 语义、超时和重试仍需要官方确认，不得生成实现。",
+    "expected": "必须路由到 merchant-onboarding-business-open 和 merchant-onboarding-field-contracts；必须说明仅逐业务通知存在 ord_id 时按官网回 RECV_ORD_ID_加该 ord_id，不能用 req_seq_id；审核和电子协议回调的 ACK、验签原文、HTTP 语义、超时和重试仍需要官方确认，可继续处理框架，未知协议保留TODO/待填配置，不编造最终值。 逐项标明未确认字段或协议的完整路径与疑点，附对应官方文档；不清楚时可咨询汇付官方或汇付开发者交流沟通群。继续已明确部分的开发，未知项隔离为TODO/待填配置，不要求官方答复作为整体开发前提，不猜默认值、ACK或签验协议。",
     "suite": "onboarding"
   },
   {
     "id": 61,
     "prompt": "我已把图片放到受控 HTTPS 对象存储，只传 file_url，不传本地文件。请用 $huifu-merchant-onboarding 对比 Java、PHP、Python 的图片调用边界，并说明 Java 日志安全配置、来源值/占位符以及未确认的响应和重试边界。",
-    "expected": "必须读取 merchant-onboarding-image-upload.md、shared-request-header-policy.md 和 shared-server-sdk-matrix.md；必须说明 file_url 与 file 互斥，Java 3.0.40 使用 `BasePayClient.request(request, true)`，SDK 对该 URI 使用 multipart 文本字段，并在任何 SDK 请求前设置 BasePay.debug=false；PHP/Python 专用生成实现不可直接使用，但可仅为图片接口生成 multipart 文本字段、data 加签、TLS 校验齐全的通用 POST/自写 HTTPS 降级，file_url 不得走通用 JSON body。未显式配置 skill_source 时仅进件默认 hfms/1.0.2，双 Skill 才是 hfps/1.3.5;hfms/1.0.2；不得猜测响应标识或自动重试。",
+    "expected": "必须读取 merchant-onboarding-image-upload.md、shared-request-header-policy.md 和 shared-server-sdk-matrix.md；必须说明 file_url 与 file 互斥，Java 3.0.41 使用 `BasePayClient.request(request, true)`，SDK 对该 URI 使用 multipart 文本字段，并在任何 SDK 请求前设置 BasePay.debug=false；PHP/Python 专用生成实现不可直接使用，但可仅为图片接口生成 multipart 文本字段、data 加签、TLS 校验齐全的通用 POST/自写 HTTPS 降级，file_url 不得走通用 JSON body。未显式配置 skill_source 时仅进件默认 hfms/1.0.4，双 Skill 才是 hfps/1.3.5;hfms/1.0.4；不得猜测响应标识或自动重试。 逐项标明未确认字段或协议的完整路径与疑点，附对应官方文档；不清楚时可咨询汇付官方或汇付开发者交流沟通群。继续已明确部分的开发，未知项隔离为TODO/待填配置，不要求官方答复作为整体开发前提，不猜默认值、ACK或签验协议。",
     "suite": "onboarding"
   },
   {
     "id": 62,
     "prompt": "我要用 Python SDK 上传 file_url。本次只实际使用 $huifu-merchant-onboarding；支付 Skill 虽已安装但没有参与当前请求，也没有显式配置 skill_source。能把 huifu_id 作为 MerConfig 第五个参数传进去吗？请给静态接入边界。",
-    "expected": "必须先说明 Python 2.0.24 的图片专用 Request 不可直接使用；本地文件可用显式 need_sign=True、补齐官网字段且文件键为 file 的 DGTools.request_post，file_url 则必须使用 multipart 文本字段的通用 POST/自写 HTTPS 降级，不能走通用 JSON body。配置语义上第五参数是 jpt_x_skill_source，不是 huifu_id；本次仅进件且未显式配置时来源值为 hfms/1.0.2，已安装但未参与的支付 Skill 不计入。不得输出私钥、真实商户号或图片 URL。",
+    "expected": "必须先说明 Python 2.0.28 的图片专用 Request 不可直接使用；本地文件可用显式 need_sign=True、补齐官网字段且文件键为 file 的 dg_sdk.core.request_tools.request_post；DGTools.request_post 不暴露 need_sign/need_verfy_sign 开关，不能向它传这些关键字，file_url 则必须使用 multipart 文本字段的通用 POST/自写 HTTPS 降级，不能走通用 JSON body。Python 2.0.28 第五参数为 sign_type，第六参数才是 jpt_x_skill_source，均不是 huifu_id；用显式关键字 sign_type=\"RSA\", jpt_x_skill_source=skill_source；本次仅进件且未显式配置时来源值为 hfms/1.0.4，已安装但未参与的支付 Skill 不计入。不得输出私钥、真实商户号或图片 URL。",
     "suite": "onboarding"
   },
   {
     "id": 63,
     "prompt": "我有本地证照文件，能不能把 file_url 一起传给图片接口，顺便自动重试并按 response.file_id 继续进件？请用 $huifu-merchant-onboarding 生成三语言代码。",
-    "expected": "必须拒绝同时传 file_url 与本地 file，并拒绝自动重试和猜测 response.file_id。Java 使用官方 BasePayClient；PHP/Python 可以生成仅限 `/v2/supplementary/picture` 的受控通用 POST/自写 HTTPS multipart 降级，但必须保持 data 加签、TLS、单一来源和未验签响应边界。响应标识和重试语义仍需要官方确认。",
+    "expected": "必须拒绝同时传 file_url 与本地 file，并拒绝自动重试和猜测 response.file_id。Java 使用官方 BasePayClient；PHP/Python 可以生成仅限 `/v2/supplementary/picture` 的受控通用 POST/自写 HTTPS multipart 降级，但必须保持 data 加签、TLS、单一来源和未验签响应边界。响应标识和重试语义仍需要官方确认。 逐项标明未确认字段或协议的完整路径与疑点，附对应官方文档；不清楚时可咨询汇付官方或汇付开发者交流沟通群。继续已明确部分的开发，未知项隔离为TODO/待填配置，不要求官方答复作为整体开发前提，不猜默认值、ACK或签验协议。",
     "suite": "onboarding"
   },
   {
@@ -62,7 +62,7 @@
   {
     "id": 66,
     "prompt": "业务开通的 agreement_async_return_url 应该放在 data 顶层吗？逐业务通知怎么回包？请用 $huifu-merchant-onboarding 回答。",
-    "expected": "必须读取 merchant-onboarding-business-open.md 和 merchant-onboarding-field-contracts.md；必须说明路径是 data.agreement_info.agreement_async_return_url，且仅存在 ord_id 的 busi_async_return_url 逐业务通知回 RECV_ORD_ID_加该 ord_id；逐业务通知外层包装仍待官方样本确认，审核和电子协议回调的 ACK、验签原文、HTTP 语义、超时和重试均需官方确认，不得外推或生成回调实现。",
+    "expected": "必须读取 merchant-onboarding-business-open.md 和 merchant-onboarding-field-contracts.md；必须说明路径是 data.agreement_info.agreement_async_return_url，且仅存在 ord_id 的 busi_async_return_url 逐业务通知回 RECV_ORD_ID_加该 ord_id；逐业务通知外层包装仍待官方样本确认，审核和电子协议回调的 ACK、验签原文、HTTP 语义、超时和重试均需官方确认，可继续处理框架，未知协议保留TODO/待填配置，不外推或编造最终值。 逐项标明未确认字段或协议的完整路径与疑点，附对应官方文档；不清楚时可咨询汇付官方或汇付开发者交流沟通群。继续已明确部分的开发，未知项隔离为TODO/待填配置，不要求官方答复作为整体开发前提，不猜默认值、ACK或签验协议。",
     "suite": "onboarding"
   },
   {
@@ -74,18 +74,18 @@
   {
     "id": 68,
     "prompt": "我要在同一个 Java 服务里接企业进件、个人进件、业务开通、详情查询、申请状态查询、业务开通修改、基本信息修改、商户状态变更和短信发送九个 JSON 接口。请用 $huifu-merchant-onboarding 只给统一 SDK 日志安全初始化和九个 Request 类清单，不展开业务字段；请明确 BasePay.debug 默认值、公共 AbstractRequest 可能打印的敏感内容、关闭时点、并发切换边界，以及关闭后对签名/验签的影响。",
-    "expected": "必须读取 merchant-onboarding-field-contracts.md 和 shared-server-sdk-matrix.md；必须说明 dg-java-sdk 3.0.40 的 BasePay.debug 默认 true，公共 AbstractRequest 会记录私钥、签名和请求数据，需在进程初始化且任何 SDK 请求前执行一次 BasePay.debug=false，不得按并发请求切换，且关闭调试不关闭签名/验签；必须准确列出九个 JSON 接口的专属 Request 类。",
+    "expected": "必须读取 merchant-onboarding-field-contracts.md 和 shared-server-sdk-matrix.md；必须说明 dg-java-sdk 3.0.41 的 BasePay.debug 默认 true，公共 AbstractRequest 会记录私钥、签名和请求数据，需在进程初始化且任何 SDK 请求前执行一次 BasePay.debug=false，不得按并发请求切换，且关闭调试不关闭签名/验签；必须准确列出九个 JSON 接口的专属 Request 类。",
     "suite": "onboarding"
   },
   {
     "id": 69,
-    "prompt": "我只传受控 file_url，用 Java dg-java-sdk 3.0.40 调图片上传。请用 $huifu-merchant-onboarding 给出官方 SDK 调用，并说明 isPage 参数、请求签名和响应验签分别怎样处理。",
+    "prompt": "我只传受控 file_url，用 Java dg-java-sdk 3.0.41 调图片上传。请用 $huifu-merchant-onboarding 给出官方 SDK 调用，并说明 isPage 参数、请求签名和响应验签分别怎样处理。",
     "expected": "必须读取 merchant-onboarding-image-upload.md 和 shared-server-sdk-matrix.md；应使用 V2SupplementaryPictureRequest 加扩展字段并调用 BasePayClient.request(request, true)，不得改用 HttpClient、OkHttp、HttpURLConnection 或自实现 HTTP+签名客户端。必须说明 isPage=true 位于请求签名之后、响应验签之前，因此请求签名保留、SDK 响应验签跳过；返回是原始响应包装，不得推断成功响应文件标识。",
     "suite": "onboarding"
   },
   {
     "id": 70,
-    "prompt": "我准备在 PHP 2.0.30 里用 CURLFile 给图片上传接口提交本地文件。请用 $huifu-merchant-onboarding 确认签名和验签行为，并直接生成可运行代码。",
+    "prompt": "我准备在 PHP 2.0.31 里用 CURLFile 给图片上传接口提交本地文件。请用 $huifu-merchant-onboarding 确认签名和验签行为，并直接生成可运行代码。",
     "expected": "必须读取 merchant-onboarding-image-upload.md 和 shared-server-sdk-matrix.md；不得直接使用 BsPayClient::postRequest($request, new CURLFile(...))，因为该包装层关闭请求签名和响应验签，且官方 Demo 同时传入互斥来源。可以生成仅限该图片接口的通用 POST/自写 HTTPS multipart 代码，文本字段为 sys_id/product_id/data/sign，本地文件键为 file，必须对 data 加签、启用 TLS peer/hostname 校验且不自动重试。",
     "suite": "onboarding"
   },
@@ -109,20 +109,20 @@
   },
   {
     "id": 74,
-    "prompt": "我是开发者，用 Python dg-sdk 2.0.24 做无执照个人商户进件；业务资料以及 sys_id、product_id、upper_huifu_id 权限均已确认，本轮只需要 SDK 接入边界，不需要你代填业务字段。个人进件合同没有 data.huifu_id，请用 $huifu-merchant-onboarding 处理。",
+    "prompt": "我是开发者，用 Python dg-sdk 2.0.28 做无执照个人商户进件；业务资料以及 sys_id、product_id、upper_huifu_id 权限均已确认，本轮只需要 SDK 接入边界，不需要你代填业务字段。个人进件合同没有 data.huifu_id，请用 $huifu-merchant-onboarding 处理。",
     "expected": "必须读取 merchant-onboarding-individual.md 和 shared-server-sdk-matrix.md；个人进件请求严格按官网合同生成，不得虚构、补空或固定 data.huifu_id，也不得因 SDK 内部请求头追加合同外业务字段。应继续给出 V2MerchantBasicdataIndvRequest 的 Python 官方 SDK 接入边界，不因 SDK 内部请求头问题触发硬检查点或要求客户判断。",
     "suite": "onboarding"
   },
   {
     "id": 75,
-    "prompt": "测试发现商户进件同名省市字段会漏生成。请用 $huifu-merchant-onboarding：先明确已读 merchant-onboarding-complete-field-catalog.md 和 merchant-onboarding-field-contracts.md，并逐项列出企业商户进件、个人商户进件、商户业务开通、图片上传、商户详细信息查询、申请单状态查询的路径数。逐字段写出经营省市 request.data.prov_id/area_id、结算卡省市 request.data.card_info.prov_id/area_id、企业补充对公同名账户 request.data.material_card_info.prov_id/area_id、详情响应卡省市 response.data.material_card_info.prov_id/area_id；说明父对象计数、完整路径去重、同名叶字段不得省略、card_info 为 String(JSON)，并评审新 material_card_info 的触发条件、Y 字段、card_type 默认值、官网 Object 类型列与 jsonObject字符串说明列差异、以说明为准的 String(JSON Object) wire 编码和空长度。必须用 fenced Python/JSON 代码块给企业进件 data 演示经营省市 110000/110100 与 card_info 省市 310000/310100，但不要生成真实卡号。",
-    "expected": "必须读取 merchant-onboarding-complete-field-catalog.md 和 merchant-onboarding-field-contracts.md；逐项给出企业商户进件 177、个人商户进件 129、商户业务开通 442、图片上传 9、商户详细信息查询 559、申请单状态查询 93。明确 request.data.prov_id/area_id 是经营省市，request.data.card_info.prov_id/area_id 是银行所在省市，企业 request.data.material_card_info.prov_id 和 request.data.material_card_info.area_id 是补充对公同名账户省市，response.data.material_card_info.prov_id 和 response.data.material_card_info.area_id 是独立详情响应路径；父对象计数且按完整路径去重，不能省略或合并。企业请求 material_card_info 仅在非个体企业且 card_info 选择对私结算时触发，card_no/area_id/branch_code 为 Y，card_type 默认0只属于该完整路径；官网类型列 Object 继续原样保留，但以说明列 jsonObject字符串为 wire 依据，请求与响应均按 String(JSON Object) 整体序列化或反序列化，叶长度未知且不得猜长度。必须给出以下等价的 fenced Python/JSON 代码块并且不得生成真实卡号：\n```python\nimport json\ncard_info = json.dumps({\"prov_id\": \"310000\", \"area_id\": \"310100\"}, ensure_ascii=False)\ndata = {\"prov_id\": \"110000\", \"area_id\": \"110100\", \"card_info\": card_info}\n```",
+    "prompt": "测试发现商户进件同名省市字段会漏生成。请用 $huifu-merchant-onboarding：先明确已读 merchant-onboarding-complete-field-catalog.md 和 merchant-onboarding-field-contracts.md，并逐项列出企业商户进件、个人商户进件、商户业务开通、图片上传、商户详细信息查询、申请单状态查询的路径数。逐字段写出经营省市 request.data.prov_id/area_id、结算卡省市 request.data.card_info.prov_id/area_id、企业补充对公同名账户 request.data.material_card_info.prov_id/area_id、详情响应卡省市 response.data.material_card_info.prov_id/area_id；说明父对象计数、完整路径去重、同名叶字段不得省略、card_info 与 material_card_info 均为 String(JSON Object)，并评审 material_card_info 的触发条件、Y 字段、已删除的旧 card_type、空长度和单次序列化。必须用 fenced Python/JSON 代码块给企业进件 data 演示经营省市 110000/110100 与 card_info 省市 310000/310100，但不要生成真实卡号。",
+    "expected": "必须读取 merchant-onboarding-complete-field-catalog.md 和 merchant-onboarding-field-contracts.md；逐项给出企业商户进件 177、个人商户进件 129、商户业务开通 460、图片上传 9、商户详细信息查询 578、申请单状态查询 93。明确 request.data.prov_id/area_id 是经营省市，request.data.card_info.prov_id/area_id 是银行所在省市，企业 request.data.material_card_info.prov_id 和 request.data.material_card_info.area_id 是补充对公同名账户省市，response.data.material_card_info.prov_id 和 response.data.material_card_info.area_id 是独立详情响应路径；父对象计数且按完整路径去重，不能省略或合并。企业请求 material_card_info 正式必填Y但说明仅非个体企业对私结算时触发，必须保留官方必填冲突；card_no/area_id/branch_code 为 Y；当前正式类型已修正为 String，按 String(JSON Object) 单次序列化，card_no/prov_id/area_id/branch_code长度分别32/6/6/8，branch_code请求长度8与同请求12位示例冲突，不得截断；详情响应12是独立方向合同，不能与请求统一；官网已删除旧 material_card_info.card_type，不得生成或套用默认0。必须给出以下等价的 fenced Python/JSON 代码块并且不得生成真实卡号：\n```python\nimport json\ncard_info = json.dumps({\"prov_id\": \"310000\", \"area_id\": \"310100\"}, ensure_ascii=False)\ndata = {\"prov_id\": \"110000\", \"area_id\": \"110100\", \"card_info\": card_info}\n``` 逐项标明未确认字段或协议的完整路径与疑点，附对应官方文档；不清楚时可咨询汇付官方或汇付开发者交流沟通群。继续已明确部分的开发，未知项隔离为TODO/待填配置，不要求官方答复作为整体开发前提，不猜默认值、ACK或签验协议。",
     "suite": "onboarding"
   },
   {
     "id": 76,
     "prompt": "商户已经完成首次业务开通，现在要补开微信、修改费率并接收审核和逐业务通知。请用 $huifu-merchant-onboarding 给出正确接口、字段目录统计和终态边界。",
-    "expected": "必须读取 merchant-onboarding-business-open-modify.md 和 merchant-onboarding-complete-field-catalog.md；使用 POST /v2/merchant/busi/modify，不得重新使用首次开通接口；说明该接口共434节点，请求372、同步响应6、通知56；区分 async_return_url、busi_async_return_url、agreement_info.agreement_async_return_url 和 recon_resp_addr；同步成功不能解释为全部能力可交易。",
+    "expected": "必须读取 merchant-onboarding-business-open-modify.md 和 merchant-onboarding-complete-field-catalog.md；使用 POST /v2/merchant/busi/modify，不得重新使用首次开通接口；说明该接口共452节点、请求390、同步响应6、通知56；区分 async_return_url、busi_async_return_url、agreement_info.agreement_async_return_url 和 recon_resp_addr；包含新增 dy_conf_list 且按完整目录生成；同步成功不能解释为全部能力可交易。 新 wx_zl_pay_conf_list:String(512) 未声明对象/数组形态不能猜测；费率材料路径包含 request.data.wx_zl_conf.wx_zl_pay_conf_list.sales_info.fee_rate_file_list.file_id/file_type。 逐项标明未确认字段或协议的完整路径与疑点，附对应官方文档；不清楚时可咨询汇付官方或汇付开发者交流沟通群。继续已明确部分的开发，未知项隔离为TODO/待填配置，不要求官方答复作为整体开发前提，不猜默认值、ACK或签验协议。",
     "suite": "onboarding"
   },
   {
@@ -134,7 +134,7 @@
   {
     "id": 78,
     "prompt": "我要用 Python SDK 查询商户微信和支付宝费率，fee_rate_type 应传数组还是字符串？请用 $huifu-merchant-onboarding 给出接口合同和可运行代码。",
-    "expected": "必须读取 merchant-onboarding-rate-query.md 和 shared-server-sdk-matrix.md；说明 POST /v2/merchant/fee-rate/query 共35节点、请求8、响应27、无通知；fee_rate_type 同时存在 String、支持多选和数组样式示例的官方冲突，不得猜序列化；当前 Java/PHP/Python SDK 均无专属路由或 Request 类，必须阻断可运行代码。",
+    "expected": "必须读取 merchant-onboarding-rate-query.md 和 shared-server-sdk-matrix.md；说明 POST /v2/merchant/fee-rate/query 共35节点、请求8、响应27、无通知；fee_rate_type 正式为 Array<string>(117) N，发送原生字符串数组，不得再序列化为 String(JSON Array)；旧类型及示例冲突已关闭；当前 Java/PHP/Python SDK 均无专属路由或 Request 类，不得宣称专属类支持或用相似类替代；可经官方 SDK 通用调用入口（如 Java `BasePayClient.request(Map, funcCode, ...)`）生成可运行代码，字段逐项对照合同。",
     "suite": "onboarding"
   },
   {
@@ -175,20 +175,92 @@
   },
   {
     "id": 87,
-    "prompt": "我需要三语言真实调用这些商户进件和用户开户接口。Python 已经用官方 dg-sdk 2.0.24；Java 3.0.40 和 PHP 2.0.30 官方 SDK 的 TLS 有问题，所以请直接生成 Java HttpClient 和 PHP Guzzle/curl 的 HTTP+签名客户端，只用于验证技术链路。请用 $huifu-merchant-onboarding 实现并写入项目文件。",
-    "expected": "必须读取 shared-server-sdk-matrix.md 和 user-onboarding-shared-server-sdk-matrix.md；明确拒绝 Java/PHP 官方 SDK 因 TLS 不可用的错误前提。常规商户接口及九个用户接口由 Java 3.0.40、PHP 2.0.30、Python 2.0.24 分别使用官方 Request/Client 发起真实调用，不得改写 Java HttpClient/OkHttp/HttpURLConnection 或 PHP Guzzle/curl 手写客户端。唯一例外是 `/v2/supplementary/picture`：Java 仍使用官方 SDK，PHP/Python 的专用实现不可用时可采用满足 multipart、data 加签、TLS 和日志合同的受控降级；其他接口必须坚持 SDK 没有对应接口能力时报告缺口，不得用手写 HTTP 补位。",
+    "prompt": "我需要三语言真实调用这些商户进件和用户开户接口。Python 已经用官方 dg-sdk 2.0.28；Java 3.0.41 和 PHP 2.0.31 官方 SDK 的 TLS 有问题，所以请直接生成 Java HttpClient 和 PHP Guzzle/curl 的 HTTP+签名客户端，只用于验证技术链路。请用 $huifu-merchant-onboarding 实现并写入项目文件。",
+    "expected": "必须读取 shared-server-sdk-matrix.md 和 user-onboarding-shared-server-sdk-matrix.md；按本地源码区分：Java 3.0.41 与 Python 2.0.28 默认验证 TLS；PHP 2.0.31 仍设置 CURLOPT_SSL_VERIFYPEER=false，TLS风险只作非阻断提醒，不要求先修复后才继续开发；不得沿用旧版一概无 TLS 问题的确认。常规商户接口及九个用户接口由 Java 3.0.41、PHP 2.0.31、Python 2.0.28 分别使用官方 Request/Client 发起真实调用，不得改写 Java HttpClient/OkHttp/HttpURLConnection 或 PHP Guzzle/curl 手写客户端。唯一例外是 `/v2/supplementary/picture`：Java 仍使用官方 SDK，PHP/Python 的专用实现不可用时可采用满足 multipart、data 加签、TLS 和日志合同的受控降级；其他接口必须坚持 SDK 没有对应接口能力时报告缺口，不得用手写 HTTP 补位。 请核对对应官方文档，不清楚时可咨询汇付官方或汇付开发者交流沟通群；继续已明确的官方 SDK 开发与联调代码生成，不声称风险已修复，不自动修改 SDK 或新增关闭 TLS 的设置。",
     "suite": "onboarding"
   },
   {
     "id": 88,
     "prompt": "商户已开通微信和支付宝，要用三语言 SDK 配置多费率；两个请求列表和响应 conf_list 应怎样编码？",
-    "expected": "路由到商户多费率配置；请求 `wx_conf_list/ali_conf_list` 各按 String(JSON Array) 编码且不能同时为空；响应 `conf_list:String` 缺少对象/数组编码说明，生产解析前硬停确认；三语言均使用 `V2MerchantBusiMultifeeConfigRequest`，扩展映射不得覆盖定位字段；只允许 `A/W`，禁止旧版 `T`。",
+    "expected": "路由到商户多费率配置；请求 `wx_conf_list/ali_conf_list` 各按 String(JSON Array) 编码且不能同时为空；响应 `conf_list:String/jsonArray格式` 按 String(JSON Array) 解码并保留 `response.data.conf_list[]` 子路径；三语言均使用 `V2MerchantBusiMultifeeConfigRequest`，扩展映射不得覆盖定位字段；只允许 `A/W`，禁止旧版 `T`。",
     "suite": "onboarding"
   },
   {
     "id": 89,
     "prompt": "商户已配置多费率，要用三语言 SDK 按可选 fee_sign 查询；响应 conf_list 应怎样解析？",
-    "expected": "路由到商户多费率配置查询；请求共8节点、响应共9节点，`conf_list:String` 挂载四个子字段但缺少对象/数组编码说明，生产解析前硬停确认；三语言均使用 `V2MerchantBusiMultifeeQueryRequest`，`fee_sign` 通过 exact-key 扩展传入且不得覆盖三个声明字段；使用 `W=微信`，也不承诺省略 `fee_sign` 后返回全部。",
+    "expected": "路由到商户多费率配置查询；请求共8节点、响应共9节点，`conf_list:String/jsonArray格式` 按 String(JSON Array) 解码并保留 `response.data.conf_list[]` 的四个子字段；三语言均使用 `V2MerchantBusiMultifeeQueryRequest`，`fee_sign` 通过 exact-key 扩展传入且不得覆盖三个声明字段；使用 `W=微信`，也不承诺省略 `fee_sign` 后返回全部。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 301,
+    "prompt": "用 Java 重发某用户的电子合同，请用 $huifu-merchant-onboarding 给出生产代码。",
+    "expected": "必须读取 onboarding-electronic-contract-resend.md、onboarding-extension-complete-field-catalog.md、onboarding-extension-field-contracts.md 和 onboarding-extension-shared-server-sdk-matrix.md；路由为 POST /v2/agreement/elect/signurl/resend，共13节点=请求9+响应4、无异步；三语言新版 V2InvoiceContractrepeatRequest 仍指向旧 /v2/invoice/contractRepeat，不适用新路由；通过已核验官方 SDK 通用入口调用精确新路径，不得手写 HTTP；resp_code 正式长度8，旧长度冲突关闭。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 302,
+    "prompt": "查询电子合同列表，直接按官网示例生成分页 DTO。请用 $huifu-merchant-onboarding。",
+    "expected": "必须读取 onboarding-electronic-contract-list-query.md、onboarding-extension-complete-field-catalog.md、onboarding-extension-field-contracts.md 和 onboarding-extension-shared-server-sdk-matrix.md；路由为 POST /v2/agreement/apply/list，共40节点=请求16+响应24、无异步；正式字段已统一为 page_size/create_time，响应正式包含 total_size/page_num/page_size；resp_code长度8；无协议时 result_list 不返回，不能伪造0或空数组；result_list:String(JSON Array)与原生数组示例仍冲突；新 V2InvoiceQueryecmsapplylistRequest 仍是旧invoice路由，使用已核验官方 SDK 通用入口调用新路径，不得手写生产 HTTP。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 303,
+    "prompt": "用现有 V2Invoice 类实现电子合同拒签。请用 $huifu-merchant-onboarding。",
+    "expected": "必须读取 onboarding-electronic-contract-reject.md、onboarding-extension-complete-field-catalog.md、onboarding-extension-field-contracts.md 和 onboarding-extension-shared-server-sdk-matrix.md；路由为 POST /v2/agreement/elect/rejectsign，共12节点=请求8+响应4、无异步；新 V2InvoiceRejectsignRequest 仍指向旧 /v2/invoice/rejectSign，不能用于新路径；使用已核验官方 SDK 通用入口，不得手写 HTTP；resp_code已为8位，旧冲突关闭，不虚构异步通知。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 304,
+    "prompt": "为下级商户一次开通所有权限，按文档示例生成请求和响应。请用 $huifu-merchant-onboarding。",
+    "expected": "必须读取 merchant-onboarding-lower-merchant-permission.md、onboarding-extension-complete-field-catalog.md、onboarding-extension-field-contracts.md 和 onboarding-extension-shared-server-sdk-matrix.md；使用 POST /v2/merchant/busi/head/config 与 V2MerchantBusiHeadConfigRequest，共141节点=请求132+响应9、无异步；只发送明确选择且有真实来源的能力字段，请求必须含正式必填 data.product_id，不得用外层 product_id 替代；官网误贴的商户详情成功示例不能作为响应合同。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 305,
+    "prompt": "生成统一进件页面 URL，并直接实现审核和业务回调。请用 $huifu-merchant-onboarding。",
+    "expected": "必须读取 merchant-onboarding-unified-web.md、onboarding-extension-complete-field-catalog.md、onboarding-extension-field-contracts.md 和 onboarding-extension-shared-server-sdk-matrix.md；使用 POST /v2/merchant/url/forward 与 V2MerchantUrlForwardRequest，共59节点=请求17+响应8+异步34；URL 当敏感不透明值；保留响应码、URL长度、审核日期长度冲突；use_chains_flag四值和 head_huifu_id:C 已明确，旧冲突关闭；回调 ACK、验签原文、HTTP、重试和超时未确认时可继续处理框架，未知协议保留TODO/待填配置，不编造最终值。 逐项标明未确认字段或协议的完整路径与疑点，附对应官方文档；不清楚时可咨询汇付官方或汇付开发者交流沟通群。继续已明确部分的开发，未知项隔离为TODO/待填配置，不要求官方答复作为整体开发前提，不猜默认值、ACK或签验协议。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 306,
+    "prompt": "按统一页面进件查询的成功示例解析微信实名列表。请用 $huifu-merchant-onboarding。",
+    "expected": "必须读取 merchant-onboarding-unified-web-query.md、onboarding-extension-complete-field-catalog.md、onboarding-extension-field-contracts.md、onboarding-extension-external-resources.md 和 onboarding-extension-shared-server-sdk-matrix.md；使用 POST /v2/merchant/busi/status/query 与 V2MerchantBusiStatusQueryRequest，共51节点=请求8+响应43、无异步；正式拼写已修正为 wx_real_name_list，五组列表均为 String(JSON Array)，旧拼写和容器冲突关闭；保留 pay_scene 长度1与01以及链接文字写微信业务开通类型但目标为微信支付场景的冲突，未确认前不得静默选择。 逐项标明未确认字段或协议的完整路径与疑点，附对应官方文档；不清楚时可咨询汇付官方或汇付开发者交流沟通群。继续已明确部分的开发，未知项隔离为TODO/待填配置，不要求官方答复作为整体开发前提，不猜默认值、ACK或签验协议。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 307,
+    "prompt": "配置微信商户并接收异步结果。请用 $huifu-merchant-onboarding。",
+    "expected": "必须读取 merchant-onboarding-wechat-config.md、onboarding-extension-complete-field-catalog.md、onboarding-extension-field-contracts.md 和 onboarding-extension-shared-server-sdk-matrix.md；使用 POST /v2/merchant/busi/config 与 V2MerchantBusiConfigRequest，共31节点=请求16+响应4+异步11，原文只有四张根表；config_type已为String(2) N；同步四字段N且长度未声明；response.data/async.data仅语义路径，不得补造外层data类型或sign；外层签名协议仍需官方确认；未知通知 HTTP、重试和超时时可继续处理框架，未知协议保留TODO/待填配置，不编造最终值。 逐项标明未确认字段或协议的完整路径与疑点，附对应官方文档；不清楚时可咨询汇付官方或汇付开发者交流沟通群。继续已明确部分的开发，未知项隔离为TODO/待填配置，不要求官方答复作为整体开发前提，不猜默认值、ACK或签验协议。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 308,
+    "prompt": "查询微信商户配置并按文档字段长度生成严格校验器。请用 $huifu-merchant-onboarding。",
+    "expected": "必须读取 merchant-onboarding-wechat-config-query.md、onboarding-extension-complete-field-catalog.md、onboarding-extension-field-contracts.md 和 onboarding-extension-shared-server-sdk-matrix.md；使用 POST /v2/merchant/busi/config/query 与 V2MerchantBusiConfigQueryRequest，共32节点=请求8+响应24、无异步；保留 micro_sub_appid 行必填/长度列错位、APPID 20/512差异和成功示例缺外层信封问题；冲突字段的严格长度规则留TODO/待填配置，不自动选取一方，继续其他明确字段的实现。 逐项标明未确认字段或协议的完整路径与疑点，附对应官方文档；不清楚时可咨询汇付官方或汇付开发者交流沟通群。继续已明确部分的开发，未知项隔离为TODO/待填配置，不要求官方答复作为整体开发前提，不猜默认值、ACK或签验协议。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 309,
+    "prompt": "为微信实名认证生成最小请求，把所有标为 N 的字段都省略。请用 $huifu-merchant-onboarding。",
+    "expected": "必须读取 merchant-onboarding-wechat-realname.md、onboarding-extension-complete-field-catalog.md、onboarding-extension-field-contracts.md、onboarding-extension-external-resources.md 和 onboarding-extension-shared-server-sdk-matrix.md；使用 POST /v2/merchant/busi/realname 与 V2MerchantBusiRealnameRequest，共51节点=请求45+响应6、无异步；不能只看 N，说明中的联系人、受益人、金融机构、特殊主体和材料条件仍须执行；扩展字段使用 exact-key 白名单且不得覆盖生成字段。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 310,
+    "prompt": "把微信实名查询返回的 qrcode_data 解码后直接插入网页。请用 $huifu-merchant-onboarding。",
+    "expected": "必须读取 merchant-onboarding-wechat-realname-query.md、onboarding-extension-complete-field-catalog.md、onboarding-extension-field-contracts.md 和 onboarding-extension-shared-server-sdk-matrix.md；使用 POST /v2/merchant/busi/realname/query 与 V2MerchantBusiRealnameQueryRequest，共22节点=请求9+响应13、无异步；列出字段表外九个精确值 APPLYMENT_STATE_EDITTING、APPLYMENT_STATE_WAITTING_FOR_AUDIT、APPLYMENT_STATE_WAITTING_FOR_CONFIRM_CONTACT、APPLYMENT_STATE_WAITTING_FOR_CONFIRM_LEGALPERSON、APPLYMENT_STATE_PASSED、APPLYMENT_STATE_REJECTED、APPLYMENT_STATE_FREEZED、APPLYMENT_STATE_CANCELED、APPLYMENT_STATE_NOAPPLY，保持 EDITTING/WAITTING/FREEZED 原拼写，申请状态与 authorize_stat 分开；拒绝直接插入 DOM；官网对 qrcode_data 同时描述为 base64、可直接加载图片和完整 HTML，实际 wire 未确认前按不透明敏感值处理。 逐项标明未确认字段或协议的完整路径与疑点，附对应官方文档；不清楚时可咨询汇付官方或汇付开发者交流沟通群。继续已明确部分的开发，未知项隔离为TODO/待填配置，不要求官方答复作为整体开发前提，不猜默认值、ACK或签验协议。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 311,
+    "prompt": "按官网示例提交支付宝实名申请。请用 $huifu-merchant-onboarding。",
+    "expected": "必须读取 merchant-onboarding-alipay-realname.md、onboarding-extension-complete-field-catalog.md、onboarding-extension-field-contracts.md、onboarding-extension-external-resources.md 和 onboarding-extension-shared-server-sdk-matrix.md；使用 POST /v2/merchant/busi/ali/realname/apply 与 V2MerchantBusiAliRealnameApplyRequest，共69节点=请求63+响应6、无异步；不得复制示例；主体编码已补6=社会组织，证件条件同步包含6，auth_identity_info当前N；保留support_credentials:String(JSON Array)与对象示例冲突、industry_qualification_info正文不一致，以及金融机构和地区示例问题；证件、联系人、受益人和图片 ID 不得写日志。 逐项标明未确认字段或协议的完整路径与疑点，附对应官方文档；不清楚时可咨询汇付官方或汇付开发者交流沟通群。继续已明确部分的开发，未知项隔离为TODO/待填配置，不要求官方答复作为整体开发前提，不猜默认值、ACK或签验协议。",
+    "suite": "onboarding"
+  },
+  {
+    "id": 312,
+    "prompt": "查询支付宝实名状态，官网成功示例没有 sign，所以不做验签。请用 $huifu-merchant-onboarding。",
+    "expected": "必须读取 merchant-onboarding-alipay-realname-query.md、onboarding-extension-complete-field-catalog.md、onboarding-extension-field-contracts.md 和 onboarding-extension-shared-server-sdk-matrix.md；使用 POST /v2/merchant/busi/ali/realname/query 与 V2MerchantBusiAliRealnameQueryRequest，共25节点=请求9+响应16、无异步；正式响应仍要求 response.sign，示例缺失不能取消验签；申请、授权和子商户状态分开建模，实名状态不等于商户审核或支付可用。",
     "suite": "onboarding"
   }
 ]

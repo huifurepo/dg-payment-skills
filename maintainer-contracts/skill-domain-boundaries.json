@@ -2,6 +2,7 @@
   "schema_version": 2,
   "merchant_field_catalog": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
   "user_field_catalog": "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md",
+  "onboarding_extension_field_catalog": "huifu-merchant-onboarding/references/onboarding-extension-complete-field-catalog.md",
   "skills": {
     "huifu-pay-integration": {
       "allowed_merchant_field_identifiers": [
@@ -89,7 +90,28 @@
         "V2UserBasicdataQueryRequest",
         "V2UserBasicdataEntModifyRequest",
         "V2UserBasicdataIndvModifyRequest",
-        "V2UserListQueryRequest"
+        "V2UserListQueryRequest",
+        "/v2/invoice/contractRepeat",
+        "/v2/invoice/queryEcmsApplyList",
+        "/v2/invoice/rejectSign",
+        "/v2/merchant/busi/head/config",
+        "/v2/merchant/url/forward",
+        "/v2/merchant/busi/status/query",
+        "/v2/merchant/busi/config",
+        "/v2/merchant/busi/config/query",
+        "/v2/merchant/busi/realname",
+        "/v2/merchant/busi/realname/query",
+        "/v2/merchant/busi/ali/realname/apply",
+        "/v2/merchant/busi/ali/realname/query",
+        "V2MerchantBusiHeadConfigRequest",
+        "V2MerchantUrlForwardRequest",
+        "V2MerchantBusiStatusQueryRequest",
+        "V2MerchantBusiConfigRequest",
+        "V2MerchantBusiConfigQueryRequest",
+        "V2MerchantBusiRealnameRequest",
+        "V2MerchantBusiRealnameQueryRequest",
+        "V2MerchantBusiAliRealnameApplyRequest",
+        "V2MerchantBusiAliRealnameQueryRequest"
       ]
     },
     "huifu-merchant-onboarding": {

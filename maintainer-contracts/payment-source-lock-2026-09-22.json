@@ -1,0 +1,402 @@
+{
+  "schema_version": 1,
+  "source_date": "2026-09-22",
+  "source_snapshot_id": "2026-09-22",
+  "verified_at": "2026-09-22T14:47:26+08:00",
+  "source_count": 37,
+  "previous_source_lock": {
+    "path": "maintainer-contracts/payment-source-lock-2026-08-31.json",
+    "sha256": "e66925bfb04bcb1b7ef4024f3e5d50f13f8cc1ac2f9bb08c33227f6d324fa288"
+  },
+  "sources": [
+    {
+      "key": "lightning-intro",
+      "title": "极速版介绍",
+      "filename": "lightning-intro.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/jsbjs.md",
+      "local_reference": "aggregation-base.md",
+      "page_updated_at": null,
+      "sha256": "a9d31276659a2396ef70f920dd11dc4ba4fb1e954b6b6bdbb2b9b41c4508f4f9",
+      "semantic_sha256": "3f38af2e547fe2c98a0043d30ad9e1fd4686b757e6eccc8aa267f2a81060a401"
+    },
+    {
+      "key": "lightning-quickstart",
+      "title": "极速版快速开始",
+      "filename": "lightning-quickstart.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/ksks.md",
+      "local_reference": "aggregation-quickstart.md",
+      "page_updated_at": null,
+      "sha256": "07686d8481661ecfa318a769c219c223d54ede76077afedae78d38731c84b06b",
+      "semantic_sha256": "7eb55f8d34af8cec60c1e27a9108f1d7195b85cfd71a34edf663763df81ac26a"
+    },
+    {
+      "key": "wx-jsapi-intro",
+      "title": "微信公众号支付-产品介绍",
+      "filename": "wx-jsapi-intro.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/wx_gzh_intro.md",
+      "local_reference": "aggregation-order-method-wechat.md",
+      "page_updated_at": null,
+      "sha256": "c969e19cbef6e0744888c4a8e3a74b9d3aaf06e6196b1be0c8bae259c0db963e",
+      "semantic_sha256": "bf37885aef50221e22fc3ae01d5f01185fce7122ffc08c170c4cd90c7f88c8e0"
+    },
+    {
+      "key": "wx-jsapi-guide",
+      "title": "微信公众号支付-开发指引",
+      "filename": "wx-jsapi-guide.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/wx_gzh_kfzy.md",
+      "local_reference": "aggregation-order-method-wechat.md",
+      "page_updated_at": null,
+      "sha256": "4dc7474e5f9568e612e088a89100b63631b54a70491fe3d5ed3ab601fad1bb86",
+      "semantic_sha256": "2413fbbb41e1826c56a40e863448b9edfbde36672bd2d7b3902947e6fbfa74e6"
+    },
+    {
+      "key": "wx-mini-intro",
+      "title": "微信小程序支付-产品介绍",
+      "filename": "wx-mini-intro.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/wx_xcx_intro.md",
+      "local_reference": "aggregation-order-method-wechat.md",
+      "page_updated_at": null,
+      "sha256": "e8b62b2cc432f2a525255d9ca6fd7526d88e1d77e03a9cdcd8e059b1f9cafe3b",
+      "semantic_sha256": "3fcc40825f8a41e968ed30d2f6b9a31187cc6ccc1d865ea8b1c25d0f6abbc538"
+    },
+    {
+      "key": "wx-mini-guide",
+      "title": "微信小程序支付-开发指引",
+      "filename": "wx-mini-guide.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/wx_xcx_kfzy.md",
+      "local_reference": "aggregation-order-method-wechat.md",
+      "page_updated_at": null,
+      "sha256": "4fa3b7b19f6e4a8ea09a2629314756e5365a598307bac552ebc8714747a90a97",
+      "semantic_sha256": "0588af39515a550a5d44eeb34b809482e308ad52e85c85dd6d4893b5e4243ac7"
+    },
+    {
+      "key": "wx-micropay-intro",
+      "title": "微信付款码支付-产品介绍",
+      "filename": "wx-micropay-intro.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/wx_fkm_intro.md",
+      "local_reference": "aggregation-order-method-wechat.md",
+      "page_updated_at": null,
+      "sha256": "33d05ad1e374c346cdb1fb623ae347fbf76c9987ac446890ac187337a24f2d4d",
+      "semantic_sha256": "706e4a8f37b5e79f0383ba4fd6f442157660d3d590afdc9e1c4e0c5d6ce2546a"
+    },
+    {
+      "key": "wx-micropay-guide",
+      "title": "微信付款码支付-开发指引",
+      "filename": "wx-micropay-guide.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/wx_fkm_kfzy.md",
+      "local_reference": "aggregation-order-method-wechat.md",
+      "page_updated_at": null,
+      "sha256": "6cb6ed61dde8e55234d4ef40a4020944ab4be084b08a31a962cd3efc15343e3d",
+      "semantic_sha256": "d6c8bdeef456bf132231b62293821652cf7c3595a44eef5a82727807d238870b"
+    },
+    {
+      "key": "alipay-js-intro",
+      "title": "支付宝JS支付-产品介绍",
+      "filename": "alipay-js-intro.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/zfb_js_intro.md",
+      "local_reference": "aggregation-order-method-alipay.md",
+      "page_updated_at": null,
+      "sha256": "33ea95ef68e0ff267c3d3713b260c30d77f50ebe518ed2f1f1ba544695844d9f",
+      "semantic_sha256": "091e83329b8b1ecb3c7f4c80d857117fb68f3c2741244d04b9a5da4e0ddfd6f0"
+    },
+    {
+      "key": "alipay-js-guide",
+      "title": "支付宝JS支付-开发指引",
+      "filename": "alipay-js-guide.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/zfb_js_kfzy.md",
+      "local_reference": "aggregation-order-method-alipay.md",
+      "page_updated_at": null,
+      "sha256": "0bb46e538061309c60ab55656d78f00814daf1f3fb913dde7b77af553af7023d",
+      "semantic_sha256": "e50f74a8222b8ae05060df0264c24ca11a5dbf893bb783de364762d3b12f3bcf"
+    },
+    {
+      "key": "alipay-native-intro",
+      "title": "支付宝正扫支付-产品介绍",
+      "filename": "alipay-native-intro.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/zfb_zs_intro.md",
+      "local_reference": "aggregation-order-method-alipay.md",
+      "page_updated_at": null,
+      "sha256": "9cf564f226821fae08e8b38452cf23a91aa97d01047060d2bad9dca0393e657f",
+      "semantic_sha256": "73b9149e8f48e75478d43f6e23dde9468f87718896297a5a079d99681874692a"
+    },
+    {
+      "key": "alipay-native-guide",
+      "title": "支付宝正扫支付-开发指引",
+      "filename": "alipay-native-guide.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/zfb_zs_kfzy.md",
+      "local_reference": "aggregation-order-method-alipay.md",
+      "page_updated_at": null,
+      "sha256": "0469ff4dd5f6ba45452abe113b6d220ce430cb9f4395495decae48d9f51108b7",
+      "semantic_sha256": "76ee258e0e9d95100aa64878ea65608af57ccb41fd2ce01032b94be6298e216c"
+    },
+    {
+      "key": "alipay-micropay-intro",
+      "title": "支付宝付款码支付-产品介绍",
+      "filename": "alipay-micropay-intro.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/zfb_fkm_intro.md",
+      "local_reference": "aggregation-order-method-alipay.md",
+      "page_updated_at": null,
+      "sha256": "e59ebefa25e7154c281405a366bb9aab6ff7ebfdb13dd1c2b3d776c5553dbcbd",
+      "semantic_sha256": "45ec89bab9e071d254011d8555aa565f1ed830ad9a57040d33377ae73ce45d54"
+    },
+    {
+      "key": "alipay-micropay-guide",
+      "title": "支付宝付款码支付-开发指引",
+      "filename": "alipay-micropay-guide.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/zfb_fkm_kfzy.md",
+      "local_reference": "aggregation-order-method-alipay.md",
+      "page_updated_at": null,
+      "sha256": "96c83e68b38beb7913b4d503e3e536e00e0952e31221055068b663a3ae8f0011",
+      "semantic_sha256": "b647f9ed51995d4a780019eb09f37d1640d695520f2903616a0d0d2e31f1c9cc"
+    },
+    {
+      "key": "unionpay-js-intro",
+      "title": "银联JS支付-产品介绍",
+      "filename": "unionpay-js-intro.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/yl_js_intro.md",
+      "local_reference": "aggregation-order-method-unionpay.md",
+      "page_updated_at": null,
+      "sha256": "2433c10e107cc337515720c8b21ec23e30794fd23582b7b1c5adf0ccc2b9a968",
+      "semantic_sha256": "ce466639e856ed31dd36d1b527163910410a99411a95725674fead332b0d99c0"
+    },
+    {
+      "key": "unionpay-js-guide",
+      "title": "银联JS支付-开发指引",
+      "filename": "unionpay-js-guide.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/yl_js_kfzy.md",
+      "local_reference": "aggregation-order-method-unionpay.md",
+      "page_updated_at": null,
+      "sha256": "5a3d29611f3b341295a9166a83ccedfad92c89e8b0e306d3562a1b733fc8ddd1",
+      "semantic_sha256": "8167701f3a2bfbb5a2b55440dd0ce0ec12f08d0de3e115f3d4c614eb69edebdf"
+    },
+    {
+      "key": "unionpay-native-intro",
+      "title": "银联正扫支付-产品介绍",
+      "filename": "unionpay-native-intro.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/yl_zs_intro.md",
+      "local_reference": "aggregation-order-method-unionpay.md",
+      "page_updated_at": null,
+      "sha256": "00758a10b66a00b907c003a61c6dfb0be8b660a91b5478f6e7563f8bec3f022d",
+      "semantic_sha256": "ff044f673ec4fdf9137fb735d85d2a0c208ee91d60b0b1f5bef5ce2075096024"
+    },
+    {
+      "key": "unionpay-native-guide",
+      "title": "银联正扫支付-开发指引",
+      "filename": "unionpay-native-guide.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/yl_zs_kfzy.md",
+      "local_reference": "aggregation-order-method-unionpay.md",
+      "page_updated_at": null,
+      "sha256": "f81ea381a8b12343a3f83ff784b4153ea93d4d39c202a3b4b9960beb9cbeef06",
+      "semantic_sha256": "47563f5daeb84815a2b86e5d406a81f925d4399adb1b9cd2224a706d10babded"
+    },
+    {
+      "key": "unionpay-micropay-intro",
+      "title": "银联付款码支付-产品介绍",
+      "filename": "unionpay-micropay-intro.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/yl_fkm_intro.md",
+      "local_reference": "aggregation-order-method-unionpay.md",
+      "page_updated_at": null,
+      "sha256": "e29f34244e3e862a6f97817eac7826a4eca880563c1dd592ccd3f4dd84f379be",
+      "semantic_sha256": "dbc2873ea9c3e80c8d5830aa80068b11c80bf0dd57ed3a7b3311ac561a8521b3"
+    },
+    {
+      "key": "unionpay-micropay-guide",
+      "title": "银联付款码支付-开发指引",
+      "filename": "unionpay-micropay-guide.md",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/yl_fkm_kfzy.md",
+      "local_reference": "aggregation-order-method-unionpay.md",
+      "page_updated_at": null,
+      "sha256": "2f554275f351d3c304c93321411b726f9c44ea3e7d04f12bba0607193e9233fb",
+      "semantic_sha256": "d784b271791eb1924cbece0d0eb4d28b102707f0440c25e05fc772c65676a92a"
+    },
+    {
+      "key": "aggregation-create",
+      "title": "聚合支付下单",
+      "filename": "aggregation-create.md",
+      "url": "https://paas.huifu.com/partners/lightning/api/jhzfxd.md",
+      "local_reference": "aggregation-order-request.md",
+      "page_updated_at": "2025-11-05",
+      "sha256": "8412cf1c21eaba1164e281fbf4b881e98c7bd9524a1d5def920ff00d4247d8a5",
+      "semantic_sha256": "9bee83cd4c38fdc33e0f7b057dad1b326611dda4f3fdb7518d8b4a80b13a0891"
+    },
+    {
+      "key": "aggregation-query",
+      "title": "聚合交易查询",
+      "filename": "aggregation-query.md",
+      "url": "https://paas.huifu.com/partners/lightning/api/jyddcx.md",
+      "local_reference": "aggregation-query-payment-query.md",
+      "page_updated_at": "2026-05-28",
+      "sha256": "9e714b3db5c041bbc4732dec8db3b084f0d1f0464b67f759986cf40276747b92",
+      "semantic_sha256": "175c3580aa04f2a8bdc40b80a92cfdd9003e62af03b99f437c2608201ff8c319"
+    },
+    {
+      "key": "aggregation-close",
+      "title": "聚合交易关单",
+      "filename": "aggregation-close.md",
+      "url": "https://paas.huifu.com/partners/lightning/api/jygd.md",
+      "local_reference": "aggregation-query-trade-close.md",
+      "page_updated_at": "2026-05-28",
+      "sha256": "acb6416d691ad8e3692fd823210be97f9c1addd9c9e53a41053ae901188edc7c",
+      "semantic_sha256": "7880fc01056c8393b0cd1eb6d1914192139defb5cfd52eb192f7c2a715771ada"
+    },
+    {
+      "key": "aggregation-close-query",
+      "title": "聚合交易关单查询",
+      "filename": "aggregation-close-query.md",
+      "url": "https://paas.huifu.com/partners/lightning/api/jygdcx.md",
+      "local_reference": "aggregation-query-close-query.md",
+      "page_updated_at": "2026-05-28",
+      "sha256": "57fa894392eab458c7031020c47232269c08f62aed272ee4834c7629e302184c",
+      "semantic_sha256": "a64d35dd8cea9f0a1f92f3ce1067abaa2f8c517e1a62cc624987607899465585"
+    },
+    {
+      "key": "aggregation-refund",
+      "title": "聚合交易退款",
+      "filename": "aggregation-refund.md",
+      "url": "https://paas.huifu.com/partners/lightning/api/jytk.md",
+      "local_reference": "aggregation-refund.md",
+      "page_updated_at": "2026-06-05",
+      "sha256": "ed632a82bcc7d5c706c51f651fdede9e63ef7e359d2f6e2d1195c1185f55225e",
+      "semantic_sha256": "d67013a3eae32669b2885fac83e2c0e61fb48aeb164d34e8846884c08bf43ecc"
+    },
+    {
+      "key": "aggregation-refund-query",
+      "title": "聚合交易退款查询",
+      "filename": "aggregation-refund-query.md",
+      "url": "https://paas.huifu.com/partners/lightning/api/jytkcx.md",
+      "local_reference": "aggregation-refund-query.md",
+      "page_updated_at": "2026-05-28",
+      "sha256": "9775730d9b922e856e36dd5dc3cdbc0cb37d3c29fe11049339bb8cfa3bcd7ee1",
+      "semantic_sha256": "f48cc05ad86fc8487aac28be0d2315907d7c5aebf6f056186fe9c68f54c897d2"
+    },
+    {
+      "key": "reconciliation-v2",
+      "title": "对账单-v2详细API",
+      "filename": "reconciliation-v2.md",
+      "url": "https://paas.huifu.com/partners/api/doc/jyjs/api_jyjs_wjcx.md",
+      "local_reference": "aggregation-query-reconciliation.md",
+      "page_updated_at": "2026-05-07",
+      "sha256": "4ca6260c74f5f74820b645dd58935c777bea007795599bf41e974195dc2fc55f",
+      "semantic_sha256": "5719d5675ded1cea13387bfda3d52b3182907bca3a21e2d4e586088f025bd1a8"
+    },
+    {
+      "key": "hosting-h5",
+      "title": "H5/PC预下单",
+      "filename": "hosting-h5.md",
+      "url": "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hosting.md",
+      "local_reference": "hostingpay-preorder-h5-pc.md",
+      "page_updated_at": "2026-09-02",
+      "sha256": "70acf5da71db0fa013d332231f0415275dedf5efd7f0a3a3a77885f1e79ab84e",
+      "semantic_sha256": "eef723c65bbe0805e650c3b6247755635e45a0a696feee8d8948a3a1369c37f0"
+    },
+    {
+      "key": "hosting-alipay-mini",
+      "title": "支付宝小程序预下单",
+      "filename": "hosting-alipay-mini.md",
+      "url": "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_zfbpreorder.md",
+      "local_reference": "hostingpay-preorder-alipay-mini.md",
+      "page_updated_at": "2026-09-03",
+      "sha256": "7e87b990aaad008b6bda53ef05bc52e86f4324adfa7f59489d4bfb6e4d34425e",
+      "semantic_sha256": "6994ed3db690ccd2f54c113d0f30bcf0112cd1856b59a259da6cd6d61429ee9d"
+    },
+    {
+      "key": "hosting-wechat-mini",
+      "title": "微信小程序预下单",
+      "filename": "hosting-wechat-mini.md",
+      "url": "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_wxpreorder.md",
+      "local_reference": "hostingpay-preorder-wechat-mini.md",
+      "page_updated_at": "2026-06-29",
+      "sha256": "e2f96340d3d6becb3c27217c987c205bbb386887f9990d1e6cf22e575d2ce692",
+      "semantic_sha256": "9811c696fad4f2af80749d61eaeafdc43433b2b0d7412eec1d19b2145b118850"
+    },
+    {
+      "key": "hosting-douyin",
+      "title": "抖音直连下单",
+      "filename": "hosting-douyin.md",
+      "url": "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_dypreorder.md",
+      "local_reference": "hostingpay-preorder-douyin-direct.md",
+      "page_updated_at": "2026-04-17",
+      "sha256": "affd2c8f4031e569f335ab2fb2e6ed045fa60037dbf69c80b49e949df16bfab4",
+      "semantic_sha256": "ccd80006fa1179a4ad94b04ca152ac8ad314e888e0d70dffebbff3a5954c4b6c"
+    },
+    {
+      "key": "hosting-query",
+      "title": "托管交易查询",
+      "filename": "hosting-query.md",
+      "url": "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingcx.md",
+      "local_reference": "hostingpay-query-payment-status-query.md",
+      "page_updated_at": "2026-05-27",
+      "sha256": "14dd71066df958ed2ac8a76a01cebadb9b39bdb01961ee16866c0e0a94706869",
+      "semantic_sha256": "2f12debb5c8a9161cdde072de57e9ea7268719c2b18861582fefa1c09917c608"
+    },
+    {
+      "key": "hosting-refund",
+      "title": "托管交易退款",
+      "filename": "hosting-refund.md",
+      "url": "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingtk.md",
+      "local_reference": "hostingpay-refund.md",
+      "page_updated_at": "2026-05-22",
+      "sha256": "7bb8a4fa1bf2a7c38b547ebf58d9024f9cfb0525a617372d170e00e59789bb20",
+      "semantic_sha256": "3b66322bafeb067e6ece5c12fd612393f15c1acf4ed6bfb39ae2dbac8ede8278"
+    },
+    {
+      "key": "hosting-refund-query",
+      "title": "托管交易退款查询",
+      "filename": "hosting-refund-query.md",
+      "url": "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingtkcx.md",
+      "local_reference": "hostingpay-refund-query.md",
+      "page_updated_at": "2026-05-22",
+      "sha256": "1f982a42ef9e149ef64db96256fc3b3033c7e0c5551ba0547e27f995eb88d1dd",
+      "semantic_sha256": "35a92872a414adbb702aeb44e53886262103dfc1c500870709076e2d3cd79ebc"
+    },
+    {
+      "key": "hosting-close",
+      "title": "托管交易关单",
+      "filename": "hosting-close.md",
+      "url": "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostinggd.md",
+      "local_reference": "hostingpay-query-trade-close.md",
+      "page_updated_at": "2026-04-22",
+      "sha256": "97b61f7e7725b4cf999a8a05ad3eb332a2183cc56100d558c2499ebe57574f51",
+      "semantic_sha256": "6d7a50e715f09b0e1397a4398a81a34b002d7c74e8ca3cbdf3e37b2930e50011"
+    },
+    {
+      "key": "hosting-splitpay-query",
+      "title": "拆单支付订单查询",
+      "filename": "hosting-splitpay-query.md",
+      "url": "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingcdzf.md",
+      "local_reference": "hostingpay-query-splitpay.md",
+      "page_updated_at": "2025-12-30",
+      "sha256": "ed42e854f5a90b5a30c6365e724a0add02546984121a80d08a7bf7261094ff78",
+      "semantic_sha256": "ce6c36fcfc6ccaa3406a2d941c7d26c0386ab7a16e4ccb373ff2f5185f574ce2"
+    },
+    {
+      "key": "split-detail-query",
+      "title": "交易分账明细查询",
+      "filename": "split-detail-query.md",
+      "url": "https://paas.huifu.com/partners/api/doc/smzf/api_fzmxcx.md",
+      "local_reference": "trade-split-detail-query.md",
+      "page_updated_at": "2024-12-20",
+      "sha256": "dcab5eb128a7987742ea339631add74ad771227d3ce557c1154d6d6a27266270",
+      "semantic_sha256": "3234017656cab6ee37a6194a98ca38bf9a252b70f6a5dd665c6bef0f8769e5b5"
+    }
+  ],
+  "current_extension": {
+    "refresh_id": "api-refresh-payment-online-review-2026-09-22",
+    "changed_source_keys": [
+      "hosting-h5",
+      "hosting-alipay-mini"
+    ],
+    "field_paths_added": 2,
+    "field_paths_removed": 0,
+    "field_paths_changed": 0,
+    "document_conflicts": [
+      "aggregation-query still duplicates A_NATIVE for Alipay micropay even though the success example now uses A_MICROPAY",
+      "split-detail-query example-only response.data.huifu_id is excluded from the formal catalog",
+      "hosting H5/PC and Alipay mini fq_mer_discount_flag length and partial-subsidy activity parameters remain unspecified"
+    ],
+    "preserved_boundaries": [
+      "split_trans_responses is String(JSON Array) and all sixteen decoded child paths retain []",
+      "website child-table UUID changes are not business-field changes; unnamed rows never generate wire keys"
+    ]
+  }
+}

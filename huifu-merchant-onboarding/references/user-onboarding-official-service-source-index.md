@@ -1,20 +1,20 @@
 # 用户开户官方来源索引
 
-当前活动快照：`2026-08-31`；九份接口原文已逐页重新下载并锁定。历史 `2026-08-10` 与 `2026-08-24-r1..r4` 快照保持不可变。
+当前活动快照：`2026-09-22`；九份接口原文已逐页重新下载并锁定。相对 `2026-09-15` 四页原文字节变化，新增57路径、同路径属性变化6项，总计611条（请求333、响应220、异步58）；新增用户等级与资金配置合同，历史快照保持不可变。
 
 | 接口 | 官方页面 | 页面更新时间 | SHA-256 |
 | --- | --- | --- | --- |
-| 企业用户开户 | https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_qyyhjbxxzc.md | 2026.08.25 | `4d0d3921368a9f536007a17a6efe8ed1d9c7d9eea40d9a3a4fd5dc8eef07baaf` |
-| 个人用户开户 | https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_gryhjbxxzc.md | 2026.08.25 | `0bcf5b8e085d7c6e760f7452d2fe7d3bb7879812de6a7953d41a4b44c53cee8c` |
-| 用户业务入驻 | https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_ywrz.md | 2026.08.25 | `71fbf48ce46923034ac973488d1c73f1d376735028e13144839cb0031ff64249` |
+| 企业用户开户 | https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_qyyhjbxxzc.md | 2026.09.21 | `b95f8659579a89b4cda719d63922cd99458cc58351c7505b6e3c2b0c8b0fa674` |
+| 个人用户开户 | https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_gryhjbxxzc.md | 2026.09.04 | `e12fd6d81d185b6f9467ed837cc69f64485461fb12dbc943db487fbc9a751759` |
+| 用户业务入驻 | https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_ywrz.md | 2026.09.22 | `a0f6f864f7b50312b8bf6757ffa35ca9617a70e53c4e549837d11db3ef7cefda` |
 | 用户申请单状态查询 | https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhsqdzt.md | 2025.04.24 | `f7894c5e2bc3544a9501922d4e3d5bb8b1f054704a80c36405a51ef2ad768e56` |
-| 用户信息查询 | https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhywcx.md | 2026.08.25 | `2d1099e1af4af840d108a9f81d23b01119776ab494f893b45a0873805a072906` |
-| 企业用户基本信息修改 | https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_qyyhjbxxxg.md | 2026.08.25 | `55f762001ed26859412b98248b71dc8aaecc3e508ec6669bc6e0bec92c6eb90d` |
-| 个人用户基本信息修改 | https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_gryhjbxxxg.md | 2026.08.25 | `f78db9dc5401496265b7836eb1dc3cdf6cce47263a0de366f29c0008c33ce23c` |
-| 用户业务入驻修改 | https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_ywrzxg.md | 2026.08.25 | `e8abc91b15587be26552d8989c408769246e4686fcdde02b74efec581344faf9` |
-| 用户列表查询 | https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhlbcx.md | 2026.08.25 | `606b95a1188cb64ed34daad76ebdb678225d3589fbbf7bea9e02f83698bf7f5f` |
+| 用户信息查询 | https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhywcx.md | 2026.09.22 | `3b11a53bb0cb52c086a93346fd6788c015ed0e60a3d8ffbd8e9bfb31c73634b6` |
+| 企业用户基本信息修改 | https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_qyyhjbxxxg.md | 2026.09.04 | `bb0b2a7339463d9731243e7d91ec9bfd729180d844646bb119b68655a11a5df8` |
+| 个人用户基本信息修改 | https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_gryhjbxxxg.md | 2026.09.04 | `b1495f896cfc12f8e8324c8aa1f97655c0c87d41c626ea636eda54b7b3aa741c` |
+| 用户业务入驻修改 | https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_ywrzxg.md | 2026.09.22 | `ca3c5d4430cba1827c806c87d7dee3417b3f78bd4883ce1e88ea90149e5d9c78` |
+| 用户列表查询 | https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhlbcx.md | 2026.09.04 | `b10ab1529c58d5739cae0f38b5f385a105e3f2d6b3348400f6882328b7421d9d` |
 
-辅助公共资料（读取于 `2026-08-10`，不计入当前九接口554个字段节点）：
+辅助公共资料（读取于 `2026-08-10`，不计入当前九接口611个字段节点）：
 
 | 资料 | 官方页面 | SHA-256 |
 | --- | --- | --- |

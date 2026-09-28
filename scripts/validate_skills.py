@@ -531,10 +531,10 @@ def validate_regression_metadata(state: ValidationState) -> None:
         suite: sum(1 for item in prompts if item.get("suite") == suite)
         for suite in ("payment", "onboarding")
     }
-    if suite_counts != {"payment": 58, "onboarding": 32}:
+    if suite_counts != {"payment": 58, "onboarding": 44}:
         state.error(f"regression ownership/count changed unexpectedly: {suite_counts}")
     else:
-        state.ok("90 cases have unique payment=58/onboarding=32 ownership")
+        state.ok("102 cases have unique payment=58/onboarding=44 ownership")
     expected_suite_files = {
         "payment": [item for item in prompts if item.get("suite") == "payment"],
         "onboarding": [item for item in prompts if item.get("suite") == "onboarding"],
@@ -585,8 +585,11 @@ def validate_regression_metadata(state: ValidationState) -> None:
         user_canonical = spec.references_dir / "user-onboarding-canonical-regression-prompts.md"
         if user_canonical.is_file():
             canonical_files.append(user_canonical)
+        extension_canonical = spec.references_dir / "onboarding-extension-canonical-regression-prompts.md"
+        if extension_canonical.is_file():
+            canonical_files.append(extension_canonical)
         canonical_count = sum(
-            len(re.findall(r"^### [COU]\d+", path.read_text(encoding="utf-8"), flags=re.M))
+            len(re.findall(r"^### [CEOU]\d+", path.read_text(encoding="utf-8"), flags=re.M))
             for path in canonical_files
         )
         expected_count = spec.canonical_regression_count
@@ -647,15 +650,17 @@ def validate_user_onboarding_reference_contract(state: ValidationState) -> None:
     required_terms = {
         root / "SKILL.md": (
             "条件必填",
-            "只有业务入驻修改 `async.data` 的说明为空",
-            "已没有长度为空的标量叶字段",
+            "account_info",
+            "account_recharge_config",
+            "account_level",
+            "LV3",
             "九页官网都把外层 `response.data`",
             "父节点整体缺失",
             "个人用户只允许 `card_type=1`",
             "RECV_ORD_ID_` + `req_seq_id",
             "user-onboarding-platform-contracts.md",
             "官方 SDK-first 与图片例外",
-            "不存在本 Skill 曾推断的 TLS 硬停问题",
+            "CURLOPT_SSL_VERIFYPEER=false",
             "常规接口真实请求都使用官方 Request/Client 入口",
             "SDK 没有专属 Request/路由时",
             "唯一例外是 `/v2/supplementary/picture`",
@@ -664,8 +669,8 @@ def validate_user_onboarding_reference_contract(state: ValidationState) -> None:
         ),
         root / "references/shared-server-sdk-matrix.md": (
             "只使用官方 Request/SDK 主链路",
-            "不存在此前 Skill 推断的 TLS 问题",
-            "按官方 Request/Client 生成真实调用",
+            "CURLOPT_SSL_VERIFYPEER=false",
+            "按官方 Request/Client 生成调用",
             "常规接口不得用",
             "唯一例外是 `/v2/supplementary/picture`",
             "受控降级",
@@ -673,7 +678,7 @@ def validate_user_onboarding_reference_contract(state: ValidationState) -> None:
         ),
         root / "references/user-onboarding-shared-server-sdk-matrix.md": (
             "官方 SDK-only 传输规则",
-            "不存在此前 Skill 推断的 TLS 问题",
+            "CURLOPT_SSL_VERIFYPEER=false",
             "九接口均使用各自官方 Request/Client",
             "V2UserBasicdataIndvModifyRequest",
             "V2UserBusiModifyRequest",
@@ -720,11 +725,15 @@ def validate_user_onboarding_reference_contract(state: ValidationState) -> None:
         root / "references/user-onboarding-business-modify.md": (
             "/v2/user/busi/modify",
             "V2UserBusiModifyRequest",
-            "共120个字段路径",
-            "请求85、同步响应11、异步24",
+            "共138个字段路径",
+            "请求98、同步响应11、异步29",
+            "account_level",
+            "balance_pay_config",
+            "account_recharge_config",
+            "delay_pay_config",
             "只声明一次 `file_list`",
             "elec_receipt_config",
-            "Object",
+            "String(JSON Object)",
             "jsonObject字符串",
             "sign_user_info",
             "exact-key",
@@ -735,8 +744,9 @@ def validate_user_onboarding_reference_contract(state: ValidationState) -> None:
             "V2UserListQueryRequest",
             "共17个完整字段路径",
             "请求8、同步响应9",
-            "user_list_info_list` 修正为 `Object N",
-            "原生 JSON Array",
+            "user_list_info_list` 定义为 `String N",
+            "String(JSON Array)",
+            "成功示例使用原生数组",
             "user_list_info_list[].huifu_id`",
             "user_list_info_list[].upper_huifu_id`",
             "`String(18) N`",
@@ -822,8 +832,10 @@ def validate_user_onboarding_reference_contract(state: ValidationState) -> None:
             "out_settle_acct_type",
             "weekday_fix_amt",
             "weekday_fee_rate",
-            "只有业务入驻修改 `async.data` 的说明为空",
-            "已没有长度为空的标量叶字段",
+            "account_info",
+            "account_recharge_config",
+            "account_level",
+            "LV3",
         ),
         REPO_ROOT / "maintainer-contracts/api-refresh-user-onboarding-2026-08-10.json": (
             "request.data.*[required=C]",

@@ -27,21 +27,46 @@ LOCK = ONBOARDING_SOURCE_LOCK
 SOURCE_DIR = onboarding_source_dir()
 CATALOG = ROOT / "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md"
 PREVIOUS_LOCK = (
-    ROOT / "maintainer-contracts/merchant-onboarding-source-lock-2026-08-24-r2.json"
+    ROOT / "maintainer-contracts/merchant-onboarding-source-lock-2026-08-31.json"
 )
-PREVIOUS_LOCK_SHA256 = "e785229f04f8010344e8c41acd31b6f8c143c6d263ce743292fcdb12ecec7134"
+PREVIOUS_LOCK_SHA256 = "3b1155fc59f188900dafb5a76c145e4fadc7af32390eeae2254496ff8ca91939"
 PREVIOUS_SOURCE_DIR = (
     ROOT
-    / "maintainer-contracts/official-sources/merchant-onboarding/2026-08-24-r2"
+    / "maintainer-contracts/official-sources/merchant-onboarding/2026-08-31"
 )
 CHANGED_SOURCE_KEYS = {
     "enterprise",
-    "individual",
     "business_open",
     "detail_query",
+    "status_query",
     "business_open_modify",
+    "basic_info_modify",
+    "rate_query",
+    "sms_send",
     "multifee_config",
     "multifee_query",
+}
+
+EXPECTED_ENDPOINTS = {
+    "enterprise": "POST /v2/merchant/basicdata/ent",
+    "individual": "POST /v2/merchant/basicdata/indv",
+    "business_open": "POST /v2/merchant/busi/open",
+    "image_upload": "POST /v2/supplementary/picture",
+    "detail_query": "POST /v2/merchant/basicdata/query",
+    "status_query": "POST /v2/merchant/basicdata/status/query",
+    "business_open_modify": "POST /v2/merchant/busi/modify",
+    "basic_info_modify": "POST /v2/merchant/basicdata/modify",
+    "rate_query": "POST /v2/merchant/fee-rate/query",
+    "status_change": "POST /v2/merchant/busi/modify/busistatus",
+    "sms_send": "POST /v2/merchant/basicdata/sms/send",
+    "multifee_config": "POST /v2/merchant/busi/multiFee/config",
+    "multifee_query": "POST /v2/merchant/busi/multiFee/query",
+}
+
+PREVIOUS_ENDPOINT_METADATA_ERRORS = {
+    "rate_query": "POST /v2/merchant/busi/config/query",
+    "status_change": "POST /v2/merchant/status/change",
+    "sms_send": "POST /v2/merchant/sms/send",
 }
 
 
@@ -170,6 +195,7 @@ def classify_root(fields: list[RawField]) -> str:
 
 
 def normalize(value: str) -> str:
+    value = re.sub(r"\b(Array)<(string)>", r"\1&lt;\2&gt;", value, flags=re.I)
     value = re.sub(r"<br\s*/?>", "；", value, flags=re.I)
     value = re.sub(r"</?font[^>]*>", "", value, flags=re.I)
     value = re.sub(r"</?(?:span|div)[^>]*>", "", value, flags=re.I)
@@ -329,6 +355,7 @@ def source_field(
         # ``flatten``; do not make ``josnArray`` a global synonym here.
         array=(
             kind.lower() == "array"
+            or re.fullmatch(r"array<\s*string\s*>", kind, flags=re.I) is not None
             or "jsonarray" in description.lower()
         ),
     )
@@ -549,6 +576,37 @@ def split_catalog_row(line: str) -> list[str]:
     return [cell.strip().replace("\\|", "|") for cell in cells]
 
 
+def validate_current_merchant_contract(
+    records: dict[tuple[str, str, str], tuple[str, ...]],
+) -> None:
+    """Protect the new wire shape without borrowing old or response contracts."""
+    fields = {(title, path): value for (title, _surface, path), value in records.items()}
+    assert fields["商户费率信息查询", "request.data.fee_rate_type[]"][2:5] == ("Array<string>", "117", "N")
+    assert ("商户费率信息查询", "request.data.fee_rate_type") not in fields
+    assert fields["企业商户进件", "request.data.material_card_info"][4] == "Y"
+    assert fields["企业商户进件", "request.data.material_card_info.branch_code"][3] == "8"
+    assert fields["商户详细信息查询", "response.data.material_card_info.branch_code"][3] == "12"
+    assert fields["商户详细信息查询", "response.data.service_phone"][3] == "32"
+    assert ("商户详细信息查询", "response.data.share_holder_info_list[].cert_no") not in fields
+    assert fields["商户业务开通修改", "request.data.wx_zl_conf.wx_zl_pay_conf_list"][2:5] == ("String", "512", "Y")
+    assert not any(title == "商户业务开通修改" and "wx_zl_pay_conf_list[]" in path for title, path in fields)
+    assert fields["商户业务开通修改", "request.data.dy_conf_list[]"][2] == "String"
+    assert "jsonArray" in fields["商户业务开通修改", "request.data.dy_conf_list[]"][5]
+    for title in ("商户多费率配置", "商户多费率配置查询"):
+        for name in ("pay_scene", "fee_rate", "fee_sign", "pay_way"):
+            assert fields[title, f"response.data.conf_list[].{name}"][4] == "N"
+    for parent in ("wx_conf_list", "ali_conf_list"):
+        for name in ("pay_scene", "fee_rate"):
+            assert fields["商户多费率配置", f"request.data.{parent}[].{name}"][4] == "Y"
+    for title, config_parent in (
+        ("商户业务开通", "request.data.wx_zl_conf"),
+        ("商户业务开通修改", "request.data.wx_zl_conf.wx_zl_pay_conf_list"),
+    ):
+        for leaf in ("file_id", "file_type"):
+            assert (title, f"{config_parent}.sales_info.fee_rate_file_list.{leaf}") in fields
+        assert (title, "request.data.jxf_conf_info.jxf_fee_info.fee_charge_type") not in fields
+
+
 def actual_records(lock: dict[str, object]) -> dict[tuple[str, str, str], tuple[str, ...]]:
     sources = {source["title"]: source for source in lock["sources"]}
     result: dict[tuple[str, str, str], tuple[str, ...]] = {}
@@ -638,7 +696,7 @@ def onboarding_route_contract_errors(
         ),
         "official modify WeChat/Alipay rule": (
             official_modify,
-            "商户微信、支付宝业务补开",
+            "商户微信、支付宝、抖音业务补开",
         ),
         "Skill open route": (
             skill_text,
@@ -646,7 +704,7 @@ def onboarding_route_contract_errors(
         ),
         "Skill modify route": (
             skill_text,
-            "微信、支付宝补开走 `/v2/merchant/busi/modify`",
+            "微信、支付宝、抖音补开走 `/v2/merchant/busi/modify`",
         ),
         "Skill ambiguity rule": (
             skill_text,
@@ -662,7 +720,7 @@ def onboarding_route_contract_errors(
         ),
         "business-open-modify WeChat/Alipay rule": (
             modify_reference,
-            "微信/支付宝补开",
+            "微信/支付宝/抖音补开",
         ),
         "business-open-modify UnionPay/card exception": (
             modify_reference,
@@ -734,45 +792,53 @@ def main() -> int:
     }, "current merchant source lock schema changed"
     assert {
         key: lock[key]
-        for key in ("schema_version", "source_date", "source_snapshot_id", "verified_at")
+        for key in ("schema_version", "source_date", "source_snapshot_id")
     } == {
         "schema_version": 1,
-        "source_date": "2026-08-31",
-        "source_snapshot_id": "2026-08-31",
-        "verified_at": "2026-08-31T10:18:56+08:00",
+        "source_date": "2026-09-22",
+        "source_snapshot_id": "2026-09-22",
     }, "current merchant source metadata changed"
+    assert re.fullmatch(r"2026-09-22T\d{2}:\d{2}:\d{2}\+08:00", lock["verified_at"])
+    september_lock = ROOT / "maintainer-contracts/merchant-onboarding-source-lock-2026-09-15.json"
+    september_sha = "1352b7064563a8447ded0ccc369fd570c72883b83628d46d7cc7408720bb196d"
+    assert hashlib.sha256(september_lock.read_bytes()).hexdigest() == september_sha, "2026-09-15 merchant lock must remain immutable"
     assert lock["previous_source_lock"] == {
-        "path": "maintainer-contracts/merchant-onboarding-source-lock-2026-08-24-r2.json",
-        "sha256": PREVIOUS_LOCK_SHA256,
+        "path": september_lock.relative_to(ROOT).as_posix(),
+        "sha256": september_sha,
     }
     assert lock["totals"] == {
-        "fields": 2183,
-        "request": 1261,
-        "response": 742,
+        "fields": 2210,
+        "request": 1277,
+        "response": 753,
         "callback": 180,
-        "parent": 240,
-        "leaf": 1943,
+        "parent": 246,
+        "leaf": 1964,
         "root_tables": 63,
-        "extend_tables": 211,
+        "extend_tables": 217,
     }
     assert lock["api_refresh"] == {
-        "refresh_id": "api-refresh-merchant-online-review-2026-08-31",
+        "refresh_id": "api-refresh-merchant-online-review-2026-09-22",
         "changed_source_keys": [
             "enterprise",
-            "individual",
             "business_open",
             "detail_query",
+            "status_query",
             "business_open_modify",
+            "basic_info_modify",
+            "rate_query",
+            "sms_send",
             "multifee_config",
             "multifee_query",
         ],
-        "field_paths_added": 29,
-        "field_paths_removed": 1,
-        "field_paths_changed": 45,
+        "field_paths_added": 82,
+        "field_paths_removed": 79,
+        "field_paths_changed": 194,
         "document_conflicts": [
-            "response.data.conf_list is String with a child table but the document does not define object-versus-array encoding",
-            "request.data.jxf_conf_info.jxf_fee_info.fee_charge_type appears only in examples and is excluded from the formal catalog",
-            "request.data.jxf_conf_info.jxf_fee_info.quota_issue_fee_rate says two decimals while the example uses four",
+            "enterprise request.data.material_card_info is Y while its description limits requiredness to enterprise private settlement",
+            "enterprise request.data.material_card_info.branch_code length is 8 while its example has 12 characters",
+            "several Object types (including jxf_fee_info and business-open wx_zl_conf certificate_info/sales_info) still describe jsonObject strings",
+            "business-modify wx_zl_pay_conf_list is String with no declared JSON shape although it has nested fields",
+            "business-modify async.business.huifu_id still describes and exemplifies a product ID",
         ],
     }, "current merchant refresh delta changed"
 
@@ -799,6 +865,27 @@ def main() -> int:
     assert actual_current_files == expected_current_files, (
         "current merchant source snapshot file set changed"
     )
+    assert [source["key"] for source in lock["sources"]] == list(EXPECTED_ENDPOINTS), (
+        "current merchant source order or endpoint coverage changed"
+    )
+    for source in lock["sources"]:
+        expected_endpoint = EXPECTED_ENDPOINTS[source["key"]]
+        assert source["endpoint"] == expected_endpoint, (
+            f"{source['key']}: source-lock endpoint differs from official page: "
+            f"{source['endpoint']} != {expected_endpoint}"
+        )
+        source_path = SOURCE_DIR / source["filename"]
+        endpoint_path = expected_endpoint.removeprefix("POST ")
+        if source["key"] == "image_upload":
+            payload = json.loads(source_path.read_text(encoding="utf-8"))
+            assert "/" + payload["uri"].lstrip("/") == endpoint_path, (
+                "image-upload source URI differs from source lock"
+            )
+        else:
+            official_text = source_path.read_text(encoding="utf-8-sig")
+            assert f"api.huifu.com{endpoint_path}" in official_text, (
+                f"{source['key']}: official source does not contain {endpoint_path}"
+            )
 
     previous_raw = PREVIOUS_LOCK.read_bytes()
     assert hashlib.sha256(previous_raw).hexdigest() == PREVIOUS_LOCK_SHA256, (
@@ -808,6 +895,12 @@ def main() -> int:
     previous_by_key = {source["key"]: source for source in previous["sources"]}
     current_by_key = {source["key"]: source for source in lock["sources"]}
     assert set(current_by_key) == set(previous_by_key), "merchant source keys changed"
+    assert {
+        key: previous_by_key[key]["endpoint"]
+        for key in PREVIOUS_ENDPOINT_METADATA_ERRORS
+    } == PREVIOUS_ENDPOINT_METADATA_ERRORS, (
+        "historical endpoint-metadata error set changed"
+    )
     expected_previous_files = {
         source["filename"] for source in previous["sources"]
     }
@@ -823,6 +916,14 @@ def main() -> int:
             f"previous merchant source SHA changed: {source['filename']}"
         )
 
+    september = json.loads(september_lock.read_text(encoding="utf-8"))
+    previous_by_key = {source["key"]: source for source in september["sources"]}
+    september_dir = ROOT / "maintainer-contracts/official-sources/merchant-onboarding/2026-09-15"
+    assert {path.name for path in september_dir.iterdir() if path.is_file()} == {
+        source["filename"] for source in september["sources"]
+    }
+    for source in september["sources"]:
+        assert hashlib.sha256((september_dir / source["filename"]).read_bytes()).hexdigest() == source["sha256"]
     actual_changed = {
         key
         for key in current_by_key
@@ -832,14 +933,18 @@ def main() -> int:
         f"merchant changed-source set differs: {sorted(actual_changed)}"
     )
     inherited_keys = set(current_by_key) - CHANGED_SOURCE_KEYS
-    inherited_projection = {"key", "title", "filename", "url", "sha256", "field_count"}
     for key in inherited_keys:
-        assert {
-            field: current_by_key[key][field] for field in inherited_projection
-        } == previous_by_key[key], f"inherited merchant source metadata changed: {key}"
+        current_metadata = dict(current_by_key[key])
+        previous_metadata = dict(previous_by_key[key])
+        if key in PREVIOUS_ENDPOINT_METADATA_ERRORS:
+            current_metadata.pop("endpoint")
+            previous_metadata.pop("endpoint")
+        assert current_metadata == previous_metadata, (
+            f"inherited merchant source metadata changed: {key}"
+        )
         filename = current_by_key[key]["filename"]
         assert (SOURCE_DIR / filename).read_bytes() == (
-            PREVIOUS_SOURCE_DIR / filename
+            september_dir / filename
         ).read_bytes(), f"inherited merchant source bytes changed: {key}"
 
     for source in lock["sources"]:
@@ -860,6 +965,7 @@ def main() -> int:
         if expected[key] != actual[key]
     ]
     assert not changed, f"node property mismatches: {changed}"
+    validate_current_merchant_contract(actual)
     expected_structure = parent_and_array_properties(expected)
     actual_structure = parent_and_array_properties(actual)
     assert expected_structure == actual_structure, "parent/array/node-type properties differ"

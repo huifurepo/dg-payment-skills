@@ -6,7 +6,7 @@
 - [O05–O09 新增接口](#o05-商户业务开通修改)
 - [O10–O11 跨域与歧义](#o10-支付费率反向路由)
 - [O12–O15 补开接口边界](#o12-银行卡补开仍走业务开通)
-- [O16 Java/PHP TLS 不可降级](#o16-javaphp-tls-不可降级)
+- [O16 三语言必须使用官方 SDK](#o16-三语言必须使用官方-sdk)
 
 ## Prompt 清单
 
@@ -40,7 +40,7 @@
 直接生成商户业务开通逐业务通知和电子协议通知 Controller。
 ```
 
-期望：在缺少官方外层包装、验签、ACK、HTTP、超时和重试样本时硬停。
+期望：列出缺失的外层包装、验签、ACK、HTTP、超时和重试合同及对应官方文档，建议开发者核对或咨询汇付官方、汇付开发者交流沟通群；继续 Controller、状态处理和测试骨架，用 TODO/配置隔离未知协议，不伪造 ACK/验签/重试，也不等待官方答复才继续开发。
 
 ### O05 已开通商户补开
 
@@ -64,7 +64,7 @@
 查询这个商户当前配置的微信和支付宝费率。
 ```
 
-期望：路由到商户费率信息查询；指出 `fee_rate_type` 官方序列化口径冲突和当前 SDK 专属类缺口。
+期望：路由到商户费率信息查询；使用 `fee_rate_type:Array<string>` 原生数组，指出当前 SDK 专属类缺口；说明可经官方 SDK 通用调用入口生成可运行代码，但不得宣称已有专属类。
 
 ### O08 商户状态变更
 
@@ -136,7 +136,7 @@
 Python 用官方 SDK 调接口；有人说 Java/PHP 官方 SDK 有 TLS 问题，让我改写手写 HTTP+签名客户端来跑真实请求。
 ```
 
-期望：拒绝“Java/PHP 官方 SDK 因 TLS 不可用”的错误前提；Java、PHP、Python 的常规接口在其他检查点通过后分别使用当前官方 SDK 的 Request/Client 真实调用。不得以技术链路验证、补齐语言或规避 TLS 为由生成 `HttpClient`、OkHttp、Guzzle、curl 或自实现 HTTP+签名客户端。唯一例外是 `/v2/supplementary/picture` 的 PHP/Python 受控 multipart 降级；Java 图片上传仍使用官方 SDK，其他 SDK 能力缺口仍不得手写 HTTP 补位。
+期望：按当前源码分别判断：Java 3.0.41 和 Python 2.0.28 默认验证 TLS；PHP 2.0.31 仍关闭 CURLOPT_SSL_VERIFYPEER，但按本轮要求仅作非阻断提醒，继续官方 SDK Request/Client 和明确部分的开发，不要求先证明修复或取得官方答复。不能宣称风险已修复；可建议查阅对应文档，疑问咨询汇付官方或汇付开发者交流沟通群。签验、DEBUG 敏感日志及调用授权保护不变。不得以技术链路验证、补齐语言或规避 TLS 为由生成 `HttpClient`、OkHttp、Guzzle、curl 或自实现 HTTP+签名客户端。唯一例外是 `/v2/supplementary/picture` 的 PHP/Python 受控 multipart 降级；Java 图片上传仍使用官方 SDK，其他 SDK 能力缺口仍不得手写 HTTP 补位。
 
 ### O17 商户多费率配置
 
@@ -144,7 +144,7 @@ Python 用官方 SDK 调接口；有人说 Java/PHP 官方 SDK 有 TLS 问题，
 商户已开通微信和支付宝，要用三语言 SDK 配置多费率；两个请求列表和响应 conf_list 应怎样编码？
 ```
 
-期望：路由到商户多费率配置；请求 `wx_conf_list/ali_conf_list` 各按 String(JSON Array) 编码且不能同时为空；响应 `conf_list:String` 缺少对象/数组编码说明，生产解析前硬停确认；三语言均使用 `V2MerchantBusiMultifeeConfigRequest`，扩展映射不得覆盖定位字段；只允许 `A/W`，禁止旧版 `T`。
+期望：路由到商户多费率配置；请求 `wx_conf_list/ali_conf_list` 各按 String(JSON Array) 编码且不能同时为空；响应 `conf_list:String/jsonArray格式` 按 String(JSON Array) 解码并保留 `[]` 子路径；三语言均使用 `V2MerchantBusiMultifeeConfigRequest`，扩展映射不得覆盖定位字段；只允许 `A/W`，禁止旧版 `T`。
 
 ### O18 商户多费率配置查询
 
@@ -152,4 +152,4 @@ Python 用官方 SDK 调接口；有人说 Java/PHP 官方 SDK 有 TLS 问题，
 商户已配置多费率，要用三语言 SDK 按可选 fee_sign 查询；响应 conf_list 应怎样解析？
 ```
 
-期望：路由到商户多费率配置查询；请求共8节点、响应共9节点，`conf_list:String` 挂载四个子字段但缺少对象/数组编码说明，生产解析前硬停确认；三语言均使用 `V2MerchantBusiMultifeeQueryRequest`，`fee_sign` 通过 exact-key 扩展传入且不得覆盖三个声明字段；使用 `W=微信`，也不承诺省略 `fee_sign` 后返回全部。
+期望：路由到商户多费率配置查询；请求共8节点、响应共9节点，`conf_list:String/jsonArray格式` 按 String(JSON Array) 解码并保留四个 `[]` 子字段；三语言均使用 `V2MerchantBusiMultifeeQueryRequest`，`fee_sign` 通过 exact-key 扩展传入且不得覆盖三个声明字段；使用 `W=微信`，也不承诺省略 `fee_sign` 后返回全部。

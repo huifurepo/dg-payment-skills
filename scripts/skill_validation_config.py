@@ -4,6 +4,7 @@ import json
 import re
 from dataclasses import dataclass
 from pathlib import Path
+from typing import TypedDict
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -26,6 +27,51 @@ MIN_SHORT_DESCRIPTION_LENGTH = 25
 MAX_SHORT_DESCRIPTION_LENGTH = 64
 LONG_REFERENCE_TOC_LINE_LIMIT = 100
 LOCAL_PATH_PREFIXES = ("references/", "agents/", "scripts/")
+
+
+class SourceDigest(TypedDict):
+    path: str
+    sha256: str
+
+
+class SDKComponent(TypedDict):
+    version: str
+    relative_root: str
+    version_file: str
+    file_count: int
+    tree_sha256: str
+    selected_sources: list[SourceDigest]
+
+
+class SDKSourceLock(TypedDict):
+    schema_version: int
+    verified_at: str
+    components: dict[str, SDKComponent]
+
+
+SDK_SOURCE_LOCK = REPO_ROOT / json.loads(MANIFEST_FILE.read_text(encoding="utf-8"))["sdk_source_lock"]
+
+
+def load_sdk_source_lock() -> SDKSourceLock:
+    """Read the manifest-selected local-source evidence, not a remote SDK registry."""
+    payload = json.loads(SDK_SOURCE_LOCK.read_text(encoding="utf-8"))
+    if payload.get("schema_version") != 1 or not isinstance(payload.get("components"), dict):
+        raise ValueError("invalid active SDK source lock")
+    for name, component in payload["components"].items():
+        if not isinstance(component.get("version"), str) or not re.fullmatch(r"\d+\.\d+\.\d+", component["version"]):
+            raise ValueError(f"{name}: invalid SDK source version")
+        root = component.get("relative_root")
+        if not isinstance(root, str) or not root or Path(root).is_absolute() or ".." in Path(root).parts:
+            raise ValueError(f"{name}: invalid SDK relative root")
+    return payload
+
+
+def sdk_version(name: str) -> str:
+    return load_sdk_source_lock()["components"][name]["version"]
+
+
+def sdk_root_relative(name: str) -> str:
+    return load_sdk_source_lock()["components"][name]["relative_root"]
 
 
 @dataclass(frozen=True)
@@ -78,7 +124,13 @@ PAYMENT_SOURCE_LOCK = (
     REPO_ROOT / "maintainer-contracts/payment-source-lock-2026-08-31.json"
 )
 ONBOARDING_SOURCE_LOCK = (
-    REPO_ROOT / "maintainer-contracts/merchant-onboarding-source-lock-2026-08-31.json"
+    REPO_ROOT / "maintainer-contracts/merchant-onboarding-source-lock-2026-09-22.json"
+)
+USER_ONBOARDING_SOURCE_LOCK = (
+    REPO_ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-09-22.json"
+)
+ONBOARDING_EXTENSION_SOURCE_LOCK = (
+    REPO_ROOT / "maintainer-contracts/onboarding-extension-source-lock-2026-09-22.json"
 )
 
 
@@ -123,6 +175,34 @@ def onboarding_source_dir() -> Path:
         / "maintainer-contracts/official-sources/merchant-onboarding"
         / snapshot_id
     )
+
+
+def load_user_onboarding_source_lock() -> dict[str, object]:
+    return json.loads(USER_ONBOARDING_SOURCE_LOCK.read_text(encoding="utf-8"))
+
+
+def user_onboarding_source_dir() -> Path:
+    lock = load_user_onboarding_source_lock()
+    snapshot_id = lock.get("source_snapshot_id", lock.get("source_date"))
+    if not isinstance(snapshot_id, str) or not re.fullmatch(
+        r"\d{4}-\d{2}-\d{2}(?:-r\d+)?", snapshot_id
+    ):
+        raise ValueError("user onboarding source lock has no valid snapshot id")
+    return REPO_ROOT / "maintainer-contracts/official-sources/user-onboarding" / snapshot_id
+
+
+def load_onboarding_extension_source_lock() -> dict[str, object]:
+    return json.loads(ONBOARDING_EXTENSION_SOURCE_LOCK.read_text(encoding="utf-8"))
+
+
+def onboarding_extension_source_dir() -> Path:
+    lock = load_onboarding_extension_source_lock()
+    snapshot_id = lock.get("source_snapshot_id", lock.get("source_date"))
+    if not isinstance(snapshot_id, str) or not re.fullmatch(
+        r"\d{4}-\d{2}-\d{2}(?:-r\d+)?", snapshot_id
+    ):
+        raise ValueError("onboarding extension source lock has no valid snapshot id")
+    return REPO_ROOT / "maintainer-contracts/official-sources/onboarding-extension" / snapshot_id
 
 # Backward-compatible names for payment-only validators. New code should use
 # SkillSpec and an explicit domain.

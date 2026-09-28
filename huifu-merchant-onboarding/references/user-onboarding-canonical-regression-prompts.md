@@ -1,5 +1,7 @@
 # 用户开户规范回归提示
 
+文档字段或协议有疑义时，预期行为均遵循 `shared-overview.md` 的开发提醒：给出对应官方文档，不清楚时建议咨询汇付官方或汇付开发者交流沟通群，继续已明确 SDK/业务实现，未知约束留 TODO/配置，不要求先取得答复。明确非法输入、签验、敏感日志与操作授权仍需保护。
+
 以下提示用于验证路由、字段、SDK、安全和未知协议边界。每项都应输出本轮实际 references，不能泄露真实敏感值。
 
 ## 目录
@@ -14,7 +16,7 @@
 
 提示：`用 Java 给一家企业创建分账用户，帮我写联调代码。`
 
-预期：路由 `/v2/user/basicdata/ent`；先确认材料、主体角色和密钥来源；说明 `legal_name/legal_cert_no` 会触发法人实名认证；通过官方 `V2UserBasicdataEntRequest` 生成 Java SDK 调用，不手写 HTTP；不添加 `data.huifu_id`。
+预期：路由 `/v2/user/basicdata/ent`；先确认材料、主体角色和密钥来源；说明 `legal_name/legal_cert_no` 会触发法人实名认证；通过官方 `V2UserBasicdataEntRequest` 生成 Java SDK 调用，不手写 HTTP；不添加 `data.huifu_id`；`ent_type` 当前Y，`login_name` 在发送短信或升级LV3时条件必填。
 
 ### U02 个人用户开户
 
@@ -32,7 +34,7 @@
 
 提示：`已有用户号，为它配置 D1 结算、结算卡和取现。`
 
-预期：路由 `/v2/user/busi/open`；确认真实上级号和企业/个人主体；个人用户只允许 `card_type=1`，企业按条件使用0/1/2/4；接受的卡类型都要求 `card_name`；读取 wire 矩阵并逐层序列化；D1 传 `fixed_ratio/constant_amt` 两位小数；若启用 `elec_card_list` 或 `elec_receipt_config`，因 Object 与 jsonArray/jsonObject字符串说明冲突而硬停确认 wire；成功响应要求 `data` 和 `apply_no`，但不声称取得申请单号即审核通过。
+预期：路由 `/v2/user/busi/open`；确认真实上级号和企业/个人主体；个人用户只允许 `card_type=1`，企业按条件使用0/1/2/4；接受的卡类型都要求 `card_name`；读取 wire 矩阵，将 `elec_card_list`、`elec_receipt_config`、`sign_user_info` 按当前 String(JSON) 合同逐层各序列化一次；D1 传 `fixed_ratio/constant_amt` 两位小数；成功响应要求 `data` 和 `apply_no`，但不声称取得申请单号即审核通过；新增 `account_level` 和 `balance_pay_config/account_recharge_config/delay_pay_config` 按用户资金合同处理，LV3仅企业，余额/充值费用双Y与至少一项冲突保留。
 
 ### U05 申请状态范围
 
@@ -44,7 +46,7 @@
 
 提示：`用户详情查询的 req_seq_id 怎么校验，card_info、file_list 和 elec_card_list 怎样建 DTO？`
 
-预期：`req_seq_id` 按同一商户号当天唯一校验；成功 `response.data` 必有且先验签；按 wire 矩阵解码各 String(JSON)，两组 `file_list` 是各自父对象内原生数组，`elec_card_list` 是父对象内 String(JSON Array)；`mp` 在 card_type=1 时要求、0时不要求；支行编码读取基础参数汇总；`resp_code` 已统一为8位、`out_settle_acct_type` 示例已修正为 `01`、D1 工作日字段已统一为生效，只保留地区示例不可作为默认编码的边界。
+预期：`req_seq_id` 按同一商户号当天唯一校验；成功 `response.data` 必有且先验签；按 wire 矩阵解码各 String(JSON)，两组 `file_list` 和 `elec_card_list` 都是在各自父对象内再解一层的 String(JSON Array)；`mp` 在 card_type=1 时要求、0时不要求；支行编码读取基础参数汇总；`resp_code` 已统一为8位、`out_settle_acct_type` 示例已修正为 `01`、D1 工作日字段已统一为生效，只保留地区示例不可作为默认编码的边界。 新 `response.data.account_info/balance_pay_config/account_recharge_config/delay_pay_config` 为原生Object，不套用请求String(JSON)；等级验证状态独立，活体链接不得回显或写日志。
 
 ### U07 图片上传用户号
 
@@ -66,9 +68,9 @@
 
 ### U10 Java 生产代码
 
-提示：`直接给我 Java 3.0.40 的生产可运行用户查询代码。`
+提示：`直接给我 Java 3.0.41 的生产可运行用户查询代码。`
 
-预期：接入方已确认官方 Java `3.0.40` 不存在本 Skill 曾推断的 TLS 问题；在凭据等常规检查点通过后，使用 `V2UserBasicdataQueryRequest` 和官方 Java SDK 生成真实调用。不得改用 `HttpClient`、OkHttp、`HttpURLConnection` 或手写 HTTP+签名客户端。
+预期：本地官方 Java `3.0.41` 源码已恢复默认 TLS 校验；在凭据等常规检查点通过后，使用 `V2UserBasicdataQueryRequest` 和官方 Java SDK 生成真实调用。不得改用 `HttpClient`、OkHttp、`HttpURLConnection` 或手写 HTTP+签名客户端。
 
 ### U11 PHP 生产代码
 
@@ -98,7 +100,7 @@
 
 提示：`个人开户的 file_list 已经是数组，所以所有接口都改成普通数组。`
 
-预期：拒绝外推；企业/个人开户的 `file_list:Object/jsonArray格式` 按原生 JSON Array 发送，并保留个人页表外身份证实名认证注记；修改与业务入驻接口的同名字段仍逐项读取 wire 矩阵。官网当前只有业务入驻修改 `async.data` 的说明为空，已没有长度为空的标量叶字段。
+预期：拒绝外推；企业/个人开户的 `file_list:String/jsonArray格式` 按 String(JSON Array) 发送，并保留个人页表外身份证实名认证注记；修改与业务入驻接口的同名字段仍逐项读取 wire 矩阵。官网当前有5处空说明：业务入驻修改 `async.data`、入驻 `async.data.account_info`、详情 `response.data.account_info` 及充值收款账号/名称；空说明保留原文，已没有长度为空的标量叶字段。
 
 ### U16 企业用户基本信息修改
 
@@ -116,10 +118,10 @@
 
 提示：`用 Java SDK 修改用户结算、e账户和电子回单配置，直接照官网请求示例生成。`
 
-预期：路由 `/v2/user/busi/modify`，使用 `V2UserBusiModifyRequest`；说明120节点=请求85+同步响应11+异步24；说明请求示例是合法 JSON 且只有一个 `file_list`，但示例不构成默认值或正式合同；`settle_config_list/cash_config/file_list` 为 String(JSON Array)，`card_info/elec_acct_config` 为 String(JSON Object)；`sign_user_info` 最终必须是原生 Object，Java 因 String setter必须用受控 exact-key 覆盖，PHP 可直接传数组，Python 可直接赋 dict；因 `elec_receipt_config` 的 Object/jsonObject字符串冲突，在启用电子回单时硬停确认 wire；扩展拒绝覆盖 `req_seq_id/req_date/huifu_id`；只保留 `elec_card_list`、`weekday_fix_amt/weekday_fee_rate` D1 说明和同步 `response.data` 冲突，异步 `data/resp_business/huifu_id` 及 `delay_flag/async_return_url` 按当前正式合同处理，并执行完整异步验签与幂等合同。
+预期：路由 `/v2/user/busi/modify`，使用 `V2UserBusiModifyRequest`；说明138节点=请求98+同步响应11+异步29；同时覆盖 account_level=LV1/LV2/LV3（LV3仅企业）、新资金配置 String(JSON) 与异步 account_info:Object；余额收费两字段Y与至少一项的说明冲突不得擅自裁决；说明请求示例是合法 JSON 且只有一个 `file_list`，但示例不构成默认值或正式合同；`settle_config_list/cash_config/file_list/elec_card_list` 为 String(JSON Array)，`card_info/elec_acct_config/elec_receipt_config/sign_user_info` 为 String(JSON Object)，逐层各编码一次；扩展拒绝覆盖 `req_seq_id/req_date/huifu_id/sign_user_info`；保留 `is_priority_receipt` 条件必填与空值默认文案矛盾、同步 `response.data` 冲突，异步 `data/resp_business/huifu_id` 及 `delay_flag/async_return_url` 按当前正式合同处理，并执行完整异步验签与幂等合同。
 
 ### U19 用户列表查询
 
 提示：`用 Python SDK 按法人证件号查询用户列表，数组层级、两个 ID 长度和签名应怎样建模？`
 
-预期：路由 `/v2/user/list/query`，使用 `V2UserListQueryRequest`；说明17节点=请求8+同步响应9、无异步通知。`response.data.user_list_info_list:Object N` 注明 jsonArray格式，按原生数组及 `[]` 子路径解析；子项 `huifu_id/upper_huifu_id` 正式长度均为18。`cust_type` 只使用正式枚举 `1=企业/2=个人`；当前请求与成功响应示例均包含 `sign:String(512) Y`，生产仍必须加签并验签。三语言生成类只声明 `legal_cert_no/req_date/req_seq_id`，可选 `upper_huifu_id` 通过受控 exact-key 扩展传入并拒绝覆盖三个声明字段。
+预期：路由 `/v2/user/list/query`，使用 `V2UserListQueryRequest`；说明17节点=请求8+同步响应9、无异步通知。`response.data.user_list_info_list:String N` 注明 jsonArray格式，按 String(JSON Array) 及 `[]` 子路径解析；成功示例为原生数组，保留冲突。子项 `huifu_id/upper_huifu_id` 正式长度均为18。`cust_type` 只使用正式枚举 `1=企业/2=个人`；当前请求与成功响应示例均包含 `sign:String(512) Y`，生产仍必须加签并验签。三语言生成类只声明 `legal_cert_no/req_date/req_seq_id`，可选 `upper_huifu_id` 通过受控 exact-key 扩展传入并拒绝覆盖三个声明字段。

@@ -13,6 +13,11 @@ from pathlib import Path
 
 from validation_runtime import require_assertions_enabled
 from generate_merchant_onboarding_field_catalog import build_catalog
+from skill_validation_config import (
+    ONBOARDING_SOURCE_LOCK,
+    USER_ONBOARDING_SOURCE_LOCK,
+    ONBOARDING_EXTENSION_SOURCE_LOCK,
+)
 
 
 require_assertions_enabled()
@@ -63,7 +68,42 @@ def parse_fields(text: str) -> dict[tuple[str, str, str], tuple[str, str, str, s
     return fields
 
 
+def validate_active_endpoint_metadata() -> None:
+    """Independently read every current source endpoint, including image JSON."""
+    count = 0
+    expected_contract_routes = {
+        "contract_resend": "POST /v2/agreement/elect/signurl/resend",
+        "contract_list_query": "POST /v2/agreement/apply/list",
+        "contract_reject": "POST /v2/agreement/elect/rejectsign",
+    }
+    for lock_path, group in (
+        (ONBOARDING_SOURCE_LOCK, "merchant-onboarding"),
+        (USER_ONBOARDING_SOURCE_LOCK, "user-onboarding"),
+        (ONBOARDING_EXTENSION_SOURCE_LOCK, "onboarding-extension"),
+    ):
+        current = json.loads(lock_path.read_text(encoding="utf-8"))
+        source_dir = REPO_ROOT / "maintainer-contracts/official-sources" / group / current["source_snapshot_id"]
+        for source in current["sources"]:
+            path = source_dir / source["filename"]
+            raw = path.read_text(encoding="utf-8-sig")
+            if path.suffix == ".json":
+                # Image metadata states the URI, not an independent HTTP method.
+                uri = "/" + json.loads(raw)["uri"].lstrip("/")
+                assert source["endpoint"] == "POST " + uri, source["key"]
+            else:
+                urls = set(re.findall(r"https://api\.huifu\.com(/v[0-9]+/[A-Za-z0-9/_-]+)", raw))
+                assert len(urls) == 1, (source["key"], urls)
+                assert re.search(r"POST", raw), f"{source['key']}: missing declared POST method"
+                assert source["endpoint"] == "POST " + urls.pop(), f"{source['key']}: stale endpoint metadata"
+            if source["key"] in expected_contract_routes:
+                assert source["endpoint"] == expected_contract_routes[source["key"]]
+            count += 1
+    assert count == 34, count
+    print("active onboarding endpoint audit passed: 34 sources; three agreement routes verified")
+
+
 def main() -> int:
+    validate_active_endpoint_metadata()
     lock = json.loads(LOCK.read_text(encoding="utf-8"))
     for source in lock["sources"]:
         path = SOURCE_DIR / source["filename"]

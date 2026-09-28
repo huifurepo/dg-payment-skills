@@ -1,5 +1,6 @@
 {
   "schema_version": 1,
+  "sdk_source_lock": "maintainer-contracts/local-sdk-source-lock-2026-09-24.json",
   "skills": {
     "huifu-pay-integration": {
       "root": "huifu-pay-integration",
@@ -20,19 +21,20 @@
     "huifu-merchant-onboarding": {
       "root": "huifu-merchant-onboarding",
       "domain": "onboarding",
-      "version": "1.0.2",
+      "version": "1.0.4",
       "agents_file": "agents/openai.yaml",
       "reference_manifest": "maintainer-contracts/onboarding-references.json",
-      "max_reference_mentions": 84,
-      "canonical_regression_count": 37,
+      "max_reference_mentions": 120,
+      "canonical_regression_count": 49,
       "regression_suites": [
         "onboarding",
         "user-onboarding",
         "cross-route"
       ],
       "package_profile": "onboarding",
-      "source_lock": "maintainer-contracts/merchant-onboarding-1.0.2-r7-source-lock.json",
-      "refresh_contract": "maintainer-contracts/api-refresh-onboarding-online-review-2026-08-31.json"
+      "source_lock": "maintainer-contracts/merchant-onboarding-1.0.3-source-lock-2026-09-22.json",
+      "refresh_contract": "maintainer-contracts/api-refresh-onboarding-1.0.4-sdk-2.0.28-2026-09-24.json",
+      "sdk_source_lock": "maintainer-contracts/local-sdk-source-lock-2026-09-24.json"
     }
   },
   "frozen_assets": [

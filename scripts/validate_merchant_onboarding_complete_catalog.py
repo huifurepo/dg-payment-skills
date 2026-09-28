@@ -8,7 +8,7 @@ import re
 import json
 from pathlib import Path
 
-from skill_validation_config import ONBOARDING_SOURCE_LOCK
+from skill_validation_config import ONBOARDING_SOURCE_LOCK, USER_ONBOARDING_SOURCE_LOCK, ONBOARDING_EXTENSION_SOURCE_LOCK, SDK_SOURCE_LOCK, load_sdk_source_lock
 from validation_runtime import require_assertions_enabled
 
 
@@ -65,12 +65,20 @@ R6_COMBINED_SOURCE_LOCK = (
 R6_REFRESH_CONTRACT = (
     ROOT / "maintainer-contracts/api-refresh-user-list-query-2026-08-24.json"
 )
-COMBINED_SOURCE_LOCK = (
+PREVIOUS_COMBINED_SOURCE_LOCK = (
     ROOT / "maintainer-contracts/merchant-onboarding-1.0.2-r7-source-lock.json"
 )
-REFRESH_CONTRACT = (
+PREVIOUS_REFRESH_CONTRACT = (
     ROOT / "maintainer-contracts/api-refresh-onboarding-online-review-2026-08-31.json"
 )
+COMBINED_SOURCE_LOCK = (
+    ROOT / "maintainer-contracts/merchant-onboarding-1.0.3-source-lock-2026-09-22.json"
+)
+REFRESH_CONTRACT = (
+    ROOT / "maintainer-contracts/api-refresh-onboarding-online-review-2026-09-22.json"
+)
+SEPTEMBER_COMBINED_SOURCE_LOCK = ROOT / "maintainer-contracts/merchant-onboarding-1.0.3-source-lock.json"
+SEPTEMBER_REFRESH_CONTRACT = ROOT / "maintainer-contracts/api-refresh-onboarding-1.0.3-2026-09-15.json"
 MANIFEST = ROOT / "skills-manifest.json"
 HISTORICAL_USER_SOURCE_LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock.json"
 R1_USER_SOURCE_LOCK = (
@@ -85,9 +93,13 @@ R3_USER_SOURCE_LOCK = (
 R4_USER_SOURCE_LOCK = (
     ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-08-24-r4.json"
 )
-USER_SOURCE_LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-08-31.json"
+USER_SOURCE_LOCK = USER_ONBOARDING_SOURCE_LOCK
+EXTENSION_SOURCE_LOCK = ONBOARDING_EXTENSION_SOURCE_LOCK
 USER_CATALOG = (
     ROOT / "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md"
+)
+EXTENSION_CATALOG = (
+    ROOT / "huifu-merchant-onboarding/references/onboarding-extension-complete-field-catalog.md"
 )
 R1_SOURCE_DIR = (
     ROOT / "maintainer-contracts/official-sources/merchant-onboarding/2026-08-24"
@@ -99,11 +111,11 @@ R2_SOURCE_DIR = (
 EXPECTED_COUNTS = {
     "企业商户进件": 177,
     "个人商户进件": 129,
-    "商户业务开通": 452,
+    "商户业务开通": 460,
     "图片上传": 9,
-    "商户详细信息查询": 567,
+    "商户详细信息查询": 578,
     "申请单状态查询": 93,
-    "商户业务开通修改": 444,
+    "商户业务开通修改": 452,
     "商户基本信息修改": 199,
     "商户费率信息查询": 35,
     "商户状态变更": 14,
@@ -133,7 +145,7 @@ REQUIRED_PATHS = (
     "request.data.elec_acct_sign_seq_id",
     "request.data.wx_conf_list[].fee_sign",
     "request.data.ali_conf_list[].fee_rate",
-    "response.data.conf_list.pay_way",
+    "response.data.conf_list[].pay_way",
 )
 
 SOURCE_URLS = (
@@ -275,143 +287,156 @@ def validate_release_provenance() -> None:
         },
     }
 
+    assert sha256(PREVIOUS_COMBINED_SOURCE_LOCK) == (
+        "4c4bd2fc134e16cf3851969f210561d689c7b0c9ccf68e7ffb573485c20ad70d"
+    ), "the 2026-08-31 combined source lock must remain immutable"
+    assert sha256(PREVIOUS_REFRESH_CONTRACT) == (
+        "85d0bab42cbdb43310103cebab829371054f3f8de1a4aa89fab9e495a10b34fe"
+    ), "the 2026-08-31 refresh contract must remain immutable"
+    assert sha256(SEPTEMBER_COMBINED_SOURCE_LOCK) == (
+        "a3d8e9486b017038d3aff37ec82c5199652dc44f02dfc05969f0b67de45cc655"
+    ), "the 2026-09-15 combined source lock must remain immutable"
+    assert sha256(SEPTEMBER_REFRESH_CONTRACT) == (
+        "04aa737a83156e75aa8a4adcfa793b87e52510140dd2ba2cbcbb0ad6c6b80632"
+    ), "the 2026-09-15 refresh contract must remain immutable"
+
     combined = json.loads(COMBINED_SOURCE_LOCK.read_text(encoding="utf-8"))
     assert set(combined) == {
-        "schema_version",
-        "skill",
-        "version",
-        "refresh_revision",
-        "scope",
-        "previous_combined_lock",
-        "source_locks",
-        "catalogs",
-        "totals",
+        "schema_version", "skill", "version", "refresh_revision", "scope",
+        "previous_combined_lock", "source_locks", "catalogs", "totals",
     }
     assert combined["schema_version"] == 1
     assert combined["skill"] == "huifu-merchant-onboarding"
-    assert combined["version"] == "1.0.2"
-    assert combined["refresh_revision"] == "2026-08-31"
-    assert combined["scope"] == (
-        "Combined immutable source evidence for thirteen merchant onboarding and "
-        "management interfaces plus nine user onboarding interfaces after the "
-        "2026-08-31 online review."
-    )
+    assert combined["version"] == "1.0.3"
+    assert combined["refresh_revision"] == "2026-09-22"
     assert combined["previous_combined_lock"] == {
-        "path": "maintainer-contracts/merchant-onboarding-1.0.2-r6-source-lock.json",
-        "sha256": sha256(R6_COMBINED_SOURCE_LOCK),
+        "path": SEPTEMBER_COMBINED_SOURCE_LOCK.relative_to(ROOT).as_posix(),
+        "sha256": sha256(SEPTEMBER_COMBINED_SOURCE_LOCK),
     }
-    assert combined["source_locks"] == {
-        "merchant_onboarding": {
-            "path": "maintainer-contracts/merchant-onboarding-source-lock-2026-08-31.json",
-            "sha256": sha256(SOURCE_LOCK),
-            "field_paths": 2183,
-        },
-        "user_onboarding": {
-            "path": "maintainer-contracts/user-onboarding-source-lock-2026-08-31.json",
-            "sha256": sha256(USER_SOURCE_LOCK),
-            "field_paths": 554,
-        },
+    source_expectations = {
+        "merchant_onboarding": (SOURCE_LOCK, 2210),
+        "user_onboarding": (USER_SOURCE_LOCK, 611),
+        "onboarding_extension": (EXTENSION_SOURCE_LOCK, 546),
     }
-    assert combined["catalogs"] == {
-        "merchant": {
-            "path": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
-            "sha256": sha256(CATALOG),
-        },
-        "user": {
-            "path": "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md",
-            "sha256": sha256(USER_CATALOG),
-        },
+    for key, (path, fields) in source_expectations.items():
+        assert combined["source_locks"][key]["sha256"] == sha256(path)
+        assert combined["source_locks"][key]["field_paths"] == fields
+    catalog_expectations = {
+        "merchant": CATALOG,
+        "user": USER_CATALOG,
+        "extension": EXTENSION_CATALOG,
     }
-    assert combined["totals"] == {"interfaces": 22, "field_paths": 2737}
+    for key, path in catalog_expectations.items():
+        assert combined["catalogs"][key]["sha256"] == sha256(path)
+    assert combined["totals"] == {"interfaces": 34, "field_paths": 3367}
 
     refresh = json.loads(REFRESH_CONTRACT.read_text(encoding="utf-8"))
     assert set(refresh) == {
-        "schema_version",
-        "refresh_id",
-        "requested_at",
-        "retrieved_at",
-        "version_state",
-        "previous_refresh",
-        "source_locks",
-        "catalogs",
-        "scope",
-        "field_delta",
-        "preserved_boundaries",
-        "release_rule",
+        "schema_version", "refresh_id", "requested_at", "retrieved_at",
+        "version_state", "previous_refresh", "source_locks", "catalogs", "scope",
+        "field_delta", "cross_skill_review", "preserved_boundaries", "release_rule",
     }
     assert refresh["schema_version"] == 1
-    assert refresh["refresh_id"] == "api-refresh-onboarding-online-review-2026-08-31"
-    assert refresh["requested_at"] == "2026-08-31"
-    assert re.fullmatch(r"2026-08-31T\d{2}:\d{2}:\d{2}\+08:00", refresh["retrieved_at"])
-    assert refresh["version_state"] == {
-        "reason": "Refresh all current merchant and user onboarding pages in the unpublished huifu-merchant-onboarding 1.0.2 candidate without changing its version.",
-        "huifu-merchant-onboarding": "1.0.2",
-        "huifu-pay-integration": "1.3.5",
-    }
+    assert refresh["refresh_id"] == "api-refresh-onboarding-online-review-2026-09-22"
+    assert refresh["requested_at"] == "2026-09-22"
+    assert re.fullmatch(r"2026-09-22T\d{2}:\d{2}:\d{2}\+08:00", refresh["retrieved_at"])
+    assert refresh["version_state"]["huifu-merchant-onboarding"] == "1.0.3"
+    assert refresh["version_state"]["huifu-pay-integration"] == "1.3.5"
     assert refresh["previous_refresh"] == {
-        "path": "maintainer-contracts/api-refresh-user-list-query-2026-08-24.json",
-        "sha256": sha256(R6_REFRESH_CONTRACT),
-        "refresh_id": "api-refresh-user-list-query-2026-08-24-r6",
+        "path": SEPTEMBER_REFRESH_CONTRACT.relative_to(ROOT).as_posix(),
+        "sha256": sha256(SEPTEMBER_REFRESH_CONTRACT),
+        "refresh_id": "api-refresh-onboarding-1.0.3-2026-09-15",
     }
-    assert refresh["source_locks"] == {
-        "onboarding_1_0_2": {
-            "path": "maintainer-contracts/merchant-onboarding-1.0.2-r7-source-lock.json",
-            "sha256": sha256(COMBINED_SOURCE_LOCK),
-        },
-        "merchant_onboarding_current": {
-            "path": "maintainer-contracts/merchant-onboarding-source-lock-2026-08-31.json",
-            "sha256": sha256(SOURCE_LOCK),
-        },
-        "user_onboarding_current": {
-            "path": "maintainer-contracts/user-onboarding-source-lock-2026-08-31.json",
-            "sha256": sha256(USER_SOURCE_LOCK),
-        },
-    }
-    assert refresh["catalogs"] == {
-        "merchant": {
-            "path": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
-            "sha256": sha256(CATALOG),
-            "field_paths": 2183,
-        },
-        "user": {
-            "path": "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md",
-            "sha256": sha256(USER_CATALOG),
-            "field_paths": 554,
-        },
-    }
-    assert refresh["scope"] == [
-        "thirteen merchant onboarding and management interfaces",
-        "nine user onboarding and management interfaces",
-        "Java 3.0.40, PHP 2.0.30 and Python 2.0.24 SDK evidence",
-    ]
-    assert refresh["field_delta"] == {
-        "merchant_paths_added": 29,
-        "merchant_paths_removed": 1,
-        "merchant_paths_changed": 45,
-        "user_paths_added": 5,
-        "user_paths_removed": 5,
-        "user_paths_changed": 43,
-        "merchant_catalog_total": 2183,
-        "user_catalog_total": 554,
-        "combined_total": 2737,
-    }
-    assert refresh["preserved_boundaries"] == [
-        "historical merchant, user and combined source locks remain byte-identical",
-        "merchant multifee conf_list remains String with unresolved object-versus-array encoding",
-        "user business open elec_receipt_config/elec_card_list and business modify response.data/elec_receipt_config/elec_card_list encoding conflicts remain unresolved",
-        "all current field names, directions, paths, array layers, types, lengths, Y/N/C markers and descriptions are generated from the 2026-08-31 source locks",
-    ]
-    assert refresh["release_rule"] == (
-        "The 2,183-node merchant and 554-node user catalogs, immutable historical sources, "
-        "independent source and catalog validators, SDK evidence, Skill validation, regression "
-        "rules and package validation must pass before publishing huifu-merchant-onboarding 1.0.2."
+    assert refresh["source_locks"]["onboarding_1_0_3"]["sha256"] == sha256(
+        COMBINED_SOURCE_LOCK
     )
+    for key, (catalog_path, fields) in {
+        "merchant": (CATALOG, 2210),
+        "user": (USER_CATALOG, 611),
+        "extension": (EXTENSION_CATALOG, 546),
+    }.items():
+        assert refresh["catalogs"][key]["sha256"] == sha256(catalog_path)
+        assert refresh["catalogs"][key]["field_paths"] == fields
+    assert refresh["field_delta"]["combined_total"] == 3367
+    assert refresh["cross_skill_review"]["changed"] is False
+    assert refresh["cross_skill_review"]["version_action"] == (
+        "keep huifu-pay-integration at 1.3.5"
+    )
+    assert "huifu-merchant-onboarding 1.0.3" in refresh["release_rule"]
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))["skills"][
         "huifu-merchant-onboarding"
     ]
-    assert manifest["version"] == "1.0.2"
+    assert manifest["version"] == "1.0.4"
     assert manifest["source_lock"] == COMBINED_SOURCE_LOCK.relative_to(ROOT).as_posix()
-    assert manifest["refresh_contract"] == REFRESH_CONTRACT.relative_to(ROOT).as_posix()
+    assert manifest["refresh_contract"] == "maintainer-contracts/api-refresh-onboarding-1.0.4-sdk-2.0.28-2026-09-24.json"
+    release = json.loads((ROOT / manifest["refresh_contract"]).read_text(encoding="utf-8"))
+    validate_current_release_contract(release)
+
+
+def validate_previous_release_contract(release: dict) -> None:
+    """Retain the earlier 1.0.4 candidate's actual target/evidence split."""
+    assert release["schema_version"] == 1
+    assert release["refresh_id"] == "api-refresh-onboarding-1.0.4-2026-09-24"
+    assert release["source_review_id"] == "api-refresh-onboarding-online-review-2026-09-22"
+    assert release["requested_at"] == "2026-09-24"
+    assert release["version_state"]["huifu-merchant-onboarding"] == "1.0.4"
+    assert release["version_state"]["huifu-pay-integration"] == "1.3.6"
+    assert release["previous_refresh"] == {
+        "path": REFRESH_CONTRACT.relative_to(ROOT).as_posix(),
+        "sha256": "c09a12f3a2edf4a346d5c204f25bf9e4cc1c9c3b81ddacc17e1530c94214798a",
+        "refresh_id": release["source_review_id"],
+    }
+    assert sha256(REFRESH_CONTRACT) == release["previous_refresh"]["sha256"]
+    assert sha256(COMBINED_SOURCE_LOCK) == "1faa14779d2577f635c2328050b7cc23eb7976e3b04ca416245763b63badc6be"
+    reviewed = json.loads(REFRESH_CONTRACT.read_text(encoding="utf-8"))
+    assert release["retrieved_at"] == reviewed["retrieved_at"]
+    for key in ("source_locks", "catalogs", "field_delta"):
+        assert release[key] == reviewed[key], f"version-only release changed reviewed {key}"
+    assert release["version_bump_field_delta"] == {"field_paths_added": 0, "field_paths_removed": 0, "field_paths_changed": 0}
+    assert release["python_sdk"] == {"target_version": "2.0.26", "verified_source_version": "2.0.25", "target_source_verified": False}
+    for item in (*release["source_locks"].values(), *release["catalogs"].values()):
+        assert sha256(ROOT / item["path"]) == item["sha256"], item["path"]
+    # IDs and companion versions in source-review records are historical facts.
+    assert reviewed["version_state"]["huifu-merchant-onboarding"] == "1.0.3"
+    assert reviewed["version_state"]["huifu-pay-integration"] == "1.3.5"
+
+
+def validate_current_release_contract(release: dict) -> None:
+    """Bind the SDK-only candidate to independent API and SDK evidence chains."""
+    assert release["schema_version"] == 1
+    assert release["refresh_id"] == "api-refresh-onboarding-1.0.4-sdk-2.0.28-2026-09-24"
+    assert release["requested_at"] == release["sdk_reviewed_at"] == "2026-09-24"
+    assert release["api_source_date"] == "2026-09-22"
+    assert release["version_state"]["huifu-merchant-onboarding"] == "1.0.4"
+    assert release["version_state"]["huifu-pay-integration"] == "1.3.6"
+    assert release["previous_refresh"] == {
+        "path": "maintainer-contracts/api-refresh-onboarding-1.0.4-2026-09-24.json",
+        "sha256": "1adfb151fb0a35c02bd09f8f9985f62d790426752a9d7ce54af2e4326a352426",
+        "refresh_id": "api-refresh-onboarding-1.0.4-2026-09-24",
+    }
+    previous_path = ROOT / release["previous_refresh"]["path"]
+    assert sha256(previous_path) == release["previous_refresh"]["sha256"]
+    previous = json.loads(previous_path.read_text(encoding="utf-8"))
+    validate_previous_release_contract(previous)
+    assert release["source_review"] == previous["previous_refresh"]
+    assert release["source_review_id"] == previous["source_review_id"]
+    reviewed = json.loads(REFRESH_CONTRACT.read_text(encoding="utf-8"))
+    assert release["retrieved_at"] == reviewed["retrieved_at"]
+    sdk = load_sdk_source_lock()
+    assert release["sdk_reviewed_at"] == sdk["verified_at"]
+    versions = {name: item["version"] for name, item in sdk["components"].items()}
+    assert release["sdk_versions"] == versions
+    assert release["python_sdk"] == {"target_version": versions["python"], "verified_source_version": versions["python"], "target_source_verified": True}
+    assert release["source_locks"] == {
+        **reviewed["source_locks"],
+        "local_sdk_current": {"path": SDK_SOURCE_LOCK.relative_to(ROOT).as_posix(), "sha256": sha256(SDK_SOURCE_LOCK)},
+    }
+    for key in ("catalogs", "field_delta"):
+        assert release[key] == reviewed[key], f"SDK-only refresh changed reviewed {key}"
+    for key in ("version_bump_field_delta", "sdk_refresh_field_delta"):
+        assert release[key] == {"field_paths_added": 0, "field_paths_removed": 0, "field_paths_changed": 0}
+    for item in (*release["source_locks"].values(), *release["catalogs"].values()):
+        assert sha256(ROOT / item["path"]) == item["sha256"], item["path"]
 
 
 def main() -> int:
@@ -483,16 +508,14 @@ def main() -> int:
     multifee_config = section_text(text, "商户多费率配置")
     assert "request.data.wx_conf_list[].pay_scene" in multifee_config
     assert "request.data.ali_conf_list[].pay_scene" in multifee_config
-    assert "response.data.conf_list.pay_way" in multifee_config
-    assert "response.data.conf_list[].pay_way" not in multifee_config
+    assert "response.data.conf_list[].pay_way" in multifee_config
     assert "支付功能为W：微信" in multifee_config
     assert "支付功能为T：微信" not in multifee_config
     assert "A：支付宝 W：微信" in multifee_config
 
     multifee_query = section_text(text, "商户多费率配置查询")
     assert "request.data.fee_sign" in multifee_query
-    assert "response.data.conf_list.pay_way" in multifee_query
-    assert "response.data.conf_list[].pay_way" not in multifee_query
+    assert "response.data.conf_list[].pay_way" in multifee_query
     assert "支付功能为W：微信" in multifee_query
     assert "支付功能为T：微信" not in multifee_query
     for undeclared in (
@@ -504,12 +527,11 @@ def main() -> int:
 
     source_lock = json.loads(SOURCE_LOCK.read_text(encoding="utf-8"))
     documented_conflicts = source_lock["api_refresh"]["document_conflicts"]
-    assert documented_conflicts == [
-        "response.data.conf_list is String with a child table but the document does not define object-versus-array encoding",
-        "request.data.jxf_conf_info.jxf_fee_info.fee_charge_type appears only in examples and is excluded from the formal catalog",
-        "request.data.jxf_conf_info.jxf_fee_info.quota_issue_fee_rate says two decimals while the example uses four",
-    ]
-    assert not any("conf_list[]" in item for item in documented_conflicts)
+    assert len(documented_conflicts) == 5
+    assert any("material_card_info is Y" in item for item in documented_conflicts)
+    assert any("branch_code length is 8" in item for item in documented_conflicts)
+    assert any("wx_zl_pay_conf_list is String" in item for item in documented_conflicts)
+    assert not any("fee_rate_type" in item or "fee_charge_type appears only" in item for item in documented_conflicts), "resolved historical conflicts were reintroduced"
 
     assert "字段说明引用外部网页或文件时" in text
     assert "[官方文档口径冲突]" in text

@@ -18,6 +18,7 @@ python3 -B scripts/validate_request_field_preservation.py
 python3 -B scripts/validate_code_examples.py
 python3 -B scripts/scan_sensitive_examples.py
 python3 -B scripts/validate_release_guardrails.py
+python3 -B scripts/test_independent_onboarding_release.py
 python3 -B scripts/generate_payment_source_index.py --check
 python3 -B scripts/validate_payment_source_contract.py
 python3 -B scripts/validate_payment_review_contract.py
@@ -37,6 +38,11 @@ python3 -B scripts/generate_user_onboarding_field_catalog.py \
   --output huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md \
   --check
 python3 -B scripts/validate_user_onboarding_source_contract.py
+python3 -B scripts/generate_onboarding_extension_field_catalog.py \
+  --locked-source-dir \
+  --output huifu-merchant-onboarding/references/onboarding-extension-complete-field-catalog.md \
+  --check
+python3 -B scripts/validate_onboarding_extension_source_contract.py
 python3 -B scripts/validate_skill_packages.py --allow-dirty
 
 (cd local-sandbox && go test ./... -count=1)

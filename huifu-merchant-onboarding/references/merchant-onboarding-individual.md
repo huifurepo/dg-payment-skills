@@ -7,6 +7,7 @@
 ## 已确认的请求合同
 
 - Endpoint：`POST https://api.huifu.com/v2/merchant/basicdata/indv`；顶层包含 `sys_id`、`product_id`、`sign`、`data`。
+- 官网更新时间 `2026-09-04`；本地活动快照 `2026-09-22`；原文 SHA-256：`09862a3923b114abcf7dbc9e7545798481abc37f88b6eb64911ce7d53f9f5437`。
 - 请求、同步响应和审核异步的完整父子路径、类型、长度、Y/N/C 与官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“个人商户进件”；本页不能替代完整字段目录。
 - `data` 使用当日唯一的 `req_seq_id`、`req_date`。`upper_huifu_id:String(18) C`：`sys_id` 主体为渠道商时填写真实渠道商号，总部商户主体时选填；其余资料按负责人、证件、经营信息、联系人、结算卡、结算/取现规则分组校验。
 - `scene_type=OFFLINE` 或 `ALL` 时必须提供经营详细地址。身份证、银行卡和门店图片字段只接收图片上传后的文件标识。
@@ -27,7 +28,7 @@
 
 ## 公共请求头
 
-- Java 与 PHP 使用 Skill 调用时都要求 `jpt-x-skill-source: <skill_source>`；当前 Java `3.0.40` 与 PHP `2.0.30` 的官方 SDK 主链路会在配置来源值后自动补该头。Python `2.0.24` 同样从 `MerConfig.jpt_x_skill_source` 自动补头。
+- 在已核验源码基线中，Java 与 PHP 使用 Skill 调用时都要求 `jpt-x-skill-source: <skill_source>`；Java `3.0.41` 与 PHP `2.0.31` 的官方 SDK 主链路会在配置来源值后自动补该头。Python `2.0.28` 同样从 `MerConfig.jpt_x_skill_source` 自动补头。
 - 个人基础进件请求没有 `data.huifu_id`，按官网字段合同生成，不因 SDK 内部请求头增加该业务字段。
 
 ## 状态与数据保护
@@ -38,7 +39,7 @@
 
 ## SDK 证据边界
 
-Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` 都有 `V2MerchantBasicdataIndvRequest` 作为可选封装。它只证明 URI、字段序列化和 SDK 默认的请求/同步响应处理路径；主体判断、材料条件和渠道准入仍以本页和官方联调为准。每次调用显式传入新的当天唯一 `req_seq_id` / `req_date`，Python 不会自动生成。
+已核验源码基线 Java `3.0.41`、PHP `2.0.31`、Python `2.0.28` 都有 `V2MerchantBasicdataIndvRequest` 作为可选封装。它只证明 URI、字段序列化和 SDK 默认的请求/同步响应处理路径；主体判断、材料条件和渠道准入仍以本页和官方联调为准。每次调用显式传入新的当天唯一 `req_seq_id` / `req_date`，Python 不会自动生成。
 
 ## 回调边界
 
@@ -53,4 +54,4 @@ Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` 都有 `V2MerchantBasicdataIndvRe
 | `data.huifu_id` / `data.apply_no` / `data.token_no` | `String(18) N` / `String(18) N` / `String(20) N` | 条件返回的商户、申请单及取现卡定位字段。 |
 | `data.notify_type` / `data.elec_acct_result` | `String(1) N` / `String(JSON Object) N` | `notify_type=Z` 时为电子账户开通结果。 |
 
-官网未给出可核验的验签原文、成功 ACK、HTTP 超时或重试样本，这些仍为 `[需要官方确认]`。未获得官方样本前，只给出补偿查询路径，不生成回调代码。
+官网未给出可核验的验签原文、成功 ACK、HTTP 超时或重试样本，这些仍为 `[需要官方确认]`。按 `shared-overview.md` 的开发提醒给出本页官方来源和官方/交流群咨询建议；可继续回调框架、补偿查询及已明确字段处理，未知协议留 TODO/配置，不猜测具体 ACK、验签原文或重试策略。

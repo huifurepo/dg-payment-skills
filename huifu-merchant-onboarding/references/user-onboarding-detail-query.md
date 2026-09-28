@@ -7,8 +7,8 @@
 ## 接口与字段面
 
 - Endpoint：`POST https://api.huifu.com/v2/user/basicdata/query`。
-- 快照更新时间：官网 `2026-08-25`，本地冻结 `2026-08-31`；原文 SHA-256：`2d1099e1af4af840d108a9f81d23b01119776ab494f893b45a0873805a072906`。
-- 共144个字段路径：请求7、同步响应137、异步0；4个根表、12个扩展表，最大深度5。
+- 快照更新时间：官网 `2026-09-22`，本地冻结 `2026-09-22`；原文 SHA-256：`3b11a53bb0cb52c086a93346fd6788c015ed0e60a3d8ffbd8e9bfb31c73634b6`。
+- 共165个字段路径：请求7、同步响应158、异步0；4个根表、16个扩展表，最大深度5。
 - 全部请求、响应父子路径、数组层级、类型、长度、Y/N/C 与官方说明读取 `user-onboarding-complete-field-catalog.md`；wire 裁决和官网冲突同时读取 `user-onboarding-field-contracts.md`。
 - 请求 `data.huifu_id` 必须是直属用户 ID，不是商户 ID。
 - 请求 `data.req_seq_id` 必须保持调用方真实值；官网明确要求同一商户号当天唯一，不得自动换流水或把该规则外推到开户、业务入驻接口。
@@ -23,23 +23,27 @@
 - `settle_config_list`
 - `qry_cash_config_list`、`qry_cash_card_info_list`
 
-`elec_acct_config` 按接入方确认解为 String(JSON Object)；`elec_receipt_config` 和 `sign_user_info` 为原生 JSON Object。不得把所有父字段统一成对象或统一成字符串，也不得把同名省市、证件、卡字段跨父路径合并。
+`elec_acct_config`、`elec_receipt_config` 和 `sign_user_info` 当前都按 String(JSON Object) 解码。不得把这些父字段当成原生对象，也不得把同名省市、证件、卡字段跨父路径合并。
 
-`response.data.ent_base_info.file_list[]` 与 `response.data.indv_base_info.file_list[]` 按说明和接入方确认，是解码各自父 String(JSON Object) 后的原生 JSON Array。完整目录分别保留两组 `file_list[]` 及子路径，不得合并附件或删除数组层级。
+`response.data.ent_base_info.file_list[]` 与 `response.data.indv_base_info.file_list[]` 当前是解码各自父 String(JSON Object) 后仍需再解一层的 String(JSON Array)。完整目录分别保留两组 `file_list[]` 及子路径，不得合并附件或删除数组层级。
 
 `elec_acct_config.elec_card_list` 按说明和接入方确认，是解码 `elec_acct_config` 后仍需再解一层的 String(JSON Array)。完整目录保留 `elec_card_list[]` 及其14个子路径，不得按普通数组直接解析。
 
 官网把 `elec_card_list[].mp:String(11)` 标为 `C`，现已补充 11 位数字说明；接入方确认 `card_type=1` 对私法人卡要求存在有效手机号，`card_type=0` 对公卡不要求。历史查询响应仍按存在性容错。`sign_user_info` 的必填列现已为 `C`，按开通电子回单条件解析。
 
-当前详情页已补齐原有空说明与标量长度；结构父节点的空长度仍以 `—` 原样保留，不能从同名请求字段补写。
+本轮新增account_info及充值账户字段仍有空说明，当前详情页已补齐原有标量长度；结构父节点的空长度仍以 `—` 原样保留，不能从同名请求字段补写。
 
 不同响应组均为可选。缺少 `ent_base_info` 或 `indv_base_info` 不能单独推断用户类型、失败或未开户；先检查 `resp_code`，再按存在性解析。
+
+## 新账户等级与配置
+
+response.data.account_info、balance_pay_config、account_recharge_config、delay_pay_config均为原生Object N，共新增21条路径；不要套用请求String(JSON)编码。account_info含account_level/face_url/trans_status/verify_ord_id；活体链接按敏感不透明值处理，验证状态与审核/支付状态隔离。充值响应独有switch_state/transfer_flag_name/transfer_flag_no，不得复制为入驻请求。材料与费用语义见 `user-onboarding-field-contracts.md` 的“用户等级与新资金配置”。
 
 ## 官方冲突与安全边界
 
 - 正式表已将 `resp_code` 修正为 `String(8) Y`，与成功示例 `"00000000"` 一致。
-- 企业与个人基础信息下两条 `file_list` 的 Object/jsonArray来源冲突继续登记，wire 已按说明裁决为父字符串解码后的原生数组。
-- `elec_card_list` 的 Object/jsonArray字符串来源冲突继续登记，wire 已按说明裁决为父对象内的 String(JSON Array)。
+- 企业与个人基础信息下两条 `file_list` 当前正式类型均为 String/jsonArray格式；在各自父字符串解码后再解码一层数组字符串。
+- `elec_card_list` 当前正式类型为 String/jsonArray字符串；在 `elec_acct_config` 父字符串解码后再解一层。
 - `response.data.settle_config_list[].out_settle_acct_type` 正式枚举为 `01/02/05`，当前示例已修正为 `01`。
 - `response.data.qry_cash_config_list[].weekday_fix_amt` 与 `weekday_fee_rate` 的说明现已统一为 `cash_type=D1` 时生效，并用于 D1 工作日结算；旧冲突已关闭。
 - `indv_base_info.prov_id/district_id` 的示例为 `310101/310000`，`qry_cash_card_info_list[].area_id/prov_id` 的示例为 `310000/310100`，与同页其他省市区示例顺序相反；必须查外部地区编码，不能照抄样例。`qry_cash_card_info_list[].branch_code` 原行缺链接，现使用接入方提供的官方基础参数汇总中的银行支行编码下载入口。

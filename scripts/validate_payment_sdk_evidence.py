@@ -8,6 +8,7 @@ import re
 from pathlib import Path
 
 from validation_runtime import require_assertions_enabled
+from validate_merchant_onboarding_sdk_evidence import resolve_sdk_layout
 
 
 require_assertions_enabled()
@@ -23,8 +24,9 @@ def main() -> int:
     parser.add_argument("--sdk-root", type=Path, required=True)
     args = parser.parse_args()
     root = args.sdk_root.resolve()
+    java, php, python = resolve_sdk_layout(root)
 
-    java_root = root / "bspay-java-sdk-parent-generator-sdk/opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps"
+    java_root = java / "opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps"
     java_request = read(java_root / "core/request/V2TradeTransSplitQueryRequest.java")
     java_enum = read(java_root / "core/enums/FunctionCodeEnum.java")
     java_client = read(java_root / "client/BasePayClient.java")
@@ -34,7 +36,7 @@ def main() -> int:
     assert 'V2_TRADE_TRANS_SPLIT_QUERY("v2.trade.trans.split.query"' in java_enum
     assert "params.putAll(request.getExtendInfos())" in java_client
 
-    php_root = root / "bspay-php-sdk-feature_generator_sdk/BsPaySdk"
+    php_root = php
     php_request = read(php_root / "request/V2TradeTransSplitQueryRequest.php")
     php_enum = read(php_root / "enums/FunctionCodeEnum.php")
     php_client = read(php_root / "core/BsPayClient.php")
@@ -44,7 +46,7 @@ def main() -> int:
     assert "V2_TRADE_TRANS_SPLIT_QUERY = 'v2/trade/trans/split/query'" in php_enum
     assert "array_merge($arrayData, $extendInfos)" in php_client
 
-    python_root = root / "bspay-python-sdk-feature_generator_sdk/dg_sdk/request"
+    python_root = python / "request"
     python_request = read(python_root / "v2_trade_trans_split_query_request.py")
     python_urls = read(python_root / "request_api_urls.py")
     declared = set(re.findall(r"^    (hf_seq_id|huifu_id|ord_type) = \"\"$", python_request, re.M))

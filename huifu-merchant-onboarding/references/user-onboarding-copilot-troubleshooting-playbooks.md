@@ -20,7 +20,7 @@
 1. 先保存脱敏后的父字段类型与长度，不记录敏感正文。
 2. 只对合同标明 String(JSON) 的父字段解/编码一层。
 3. 对 `file_list`、`elec_card_list`、审核 `resp_business` 和公共返回 `data` 按 `user-onboarding-platform-contracts.md` 的 wire 矩阵逐层编码/解码；详情 `resp_code` 当前正式长度已统一为8位。
-4. 未命中已登记冲突时停止猜测，保留原始脱敏形态并请求官方确认。
+4. 未命中已登记冲突时保留脱敏类型证据，按 `shared-overview.md` 给出对应官方文档及咨询建议；用 TODO/配置隔离有疑义的转换，继续已明确部分，不猜测也不等待答复才开始整体开发。
 
 ## 审核或配置状态不一致
 
@@ -32,4 +32,4 @@
 
 ## SDK 调用路径异常
 
-如果产物没有使用对应语言的官方 Request/Client，立即停止并替换为官方 SDK 调用；不得生成 `HttpClient`、OkHttp、Guzzle、curl 或自实现 HTTP+签名客户端。接入方已确认官方 Java/PHP SDK 不存在本 Skill 曾推断的 TLS 问题。PHP 还必须单独通过 DEBUG 启动检查：在加载任何 SDK 文件前固定 `DEBUG=false`，否则阻断联调/生产调用。
+如果产物没有使用对应语言的官方 Request/Client，立即停止并替换为官方 SDK 调用；不得生成 `HttpClient`、OkHttp、Guzzle、curl 或自实现 HTTP+签名客户端。通用 Java 3.0.41 使用默认 TLS 工厂；PHP 2.0.31 本地源码仍关闭证书校验，此处仅作非阻断提醒，不要求先取得修复证明或官方答复；继续官方 SDK，可建议开发者查文档或咨询汇付官方、汇付开发者交流沟通群。PHP 仍需独立 DEBUG 启动检查，在加载 SDK 前固定 `DEBUG=false`；不把继续开发说成 TLS 风险已修复。

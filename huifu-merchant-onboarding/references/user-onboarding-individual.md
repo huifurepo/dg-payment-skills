@@ -7,7 +7,7 @@
 ## 接口与字段面
 
 - Endpoint：`POST https://api.huifu.com/v2/user/basicdata/indv`。
-- 快照更新时间：官网 `2026-08-25`，本地冻结 `2026-08-31`；原文 SHA-256：`0bcf5b8e085d7c6e760f7452d2fe7d3bb7879812de6a7953d41a4b44c53cee8c`。
+- 快照更新时间：官网 `2026-09-04`，本地冻结 `2026-09-22`；原文 SHA-256：`e12fd6d81d185b6f9467ed837cc69f64485461fb12dbc943db487fbc9a751759`。
 - 共34个字段路径：请求27、同步响应7、异步0。完整字段读取 `user-onboarding-complete-field-catalog.md`。
 - 请求业务 `data` 没有 `huifu_id`、`upper_huifu_id` 或异步地址。
 
@@ -18,7 +18,7 @@
 - 外国人居留证触发 `cert_nationality`；不得把示例国籍当默认值。
 - `sms_send_flag` 只使用 `Y/N`，默认不发送；当前官网请求示例已使用 `"Y"`。
 - `address` 在开通中信E管家或电子回单时必填。`mcc/prov_id/area_id/district_id` 的必填列为 `N`，但当用户业务入驻修改且电子回单配置开通时说明要求填写；省市区需要级联修改。
-- `file_list:Object N` 的说明为 jsonArray，当前请求示例也使用原生数组；wire 发送原生 JSON Array，不得先序列化成字符串。官网另在表外注明：证件类型为身份证时，会对姓名和身份证号做实名认证。
+- `file_list:String N` 的说明为 jsonArray；wire 发送一层 String(JSON Array)，不得因请求示例使用原生数组而覆盖正式类型。官网另在表外注明：证件类型为身份证时，会对姓名和身份证号做实名认证。
 - 当前示例已删除旧版参数表外 `operator_id`；正式 DTO 仍只允许参数表字段。
 
 ## 同步响应

@@ -7,7 +7,8 @@
 ## 已确认的请求合同
 
 - Endpoint：`POST https://api.huifu.com/v2/merchant/basicdata/query`；顶层使用 `sys_id`、`product_id`、`sign`、`data`。
-- 请求与响应 567 个具名路径（含父容器）的类型、长度、Y/N/C 和官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户详细信息查询”；本页的字段白名单策略不能替代完整目录。
+- 官网更新时间 `2026-09-20`；本地活动快照 `2026-09-22`；原文 SHA-256：`df6014a1fc008bd81dff8de5708432010c60b002d34d0d9602a67145d1ae8806`。
+- 请求与响应 578 个具名路径（含父容器；请求7、响应571）的类型、长度、Y/N/C 和官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户详细信息查询”；本页的字段白名单策略不能替代完整目录。
 - `data` 必填新的 `req_seq_id:String(32)`（当天同商户唯一）、`req_date:String(8)`（`yyyyMMdd`、北京时间）、目标 `huifu_id:String(18)`；高风险约束见 `merchant-onboarding-field-contracts.md`。
 - 响应可能覆盖主体、证照、图片、结算卡、结算/取现、协议、渠道配置和账户资料；按查询目的字段白名单读取，禁止沉淀完整响应表或完整原文。
 - 若白名单字段说明带 MCC/地区/证件/银行编码表、图片上传文档、签约规则或线上材料 XLSX，必须同时读取 `merchant-onboarding-external-resources.md`，并按响应完整路径单列 `外部资料提示`、给出未经改写的原始地址；不得把响应中的示例/运行时 URL 当资料或请求默认值。
@@ -21,14 +22,14 @@
 - 响应 `data.sms_send_flag=Y/N` 表示注册短信是否发送；企业/个人进件请求的同名字段使用 `M/E/A/空`。禁止跨方向复用。
 - 响应 `data.cust_type=1/2` 表示企业/个人；`data.ent_type=1/2/3/4/5/6/7/9` 表示企业种类；它们不是可由调用方猜填的请求参数。
 - 请求与响应 DTO 分开建模。企业请求 `reg_name:String(64)`、个人请求 `reg_name:String(32)`，本接口响应 `reg_name:String(128)`，不得共享同一长度校验。
-- `response.data.material_card_info:String(JSON Object) N` 是独立的对公卡信息；官网类型列原文为 `Object`，本项目以说明列“jsonObject字符串”为 wire 依据。先严格反序列化，再读取 `card_type/card_name/card_no/prov_id/area_id/branch_code` 六个子字段；其中省市不得与响应顶层或其他卡对象的同名字段合并。
-- 官网 `2026-07-28` 锁定页面将 `service_phone` 标为 `String(11)`，但固话示例长度超过 11；严格校验该字段前标记 `[需要官方确认]`，不要截断或擅自放宽。
-- 捷行付响应新增 `response.data.jxf_conf_info.bank_name:String(8) N`；线上费率新增 `response.data.online_fee_conf_list[].fee_formula_type:String N`。支付宝、微信配置各新增 `out_fee_flag:String(1) N`、`out_fee_huifu_id:String(18) N`、`out_fee_acct_type:String(2) N`，三项都必须按各自父数组隔离，不能与顶层公共外扣字段合并；渠道内字段优先级高于同名公共参数。
+- `response.data.material_card_info:String(JSON Object) N` 是独立的对公卡信息；先严格反序列化，再读取 `card_type/card_name/card_no/prov_id/area_id/branch_code` 六个子字段，其中省市不得与响应顶层或其他卡对象的同名字段合并。
+- 当前 `response.data.service_phone:String(32)` 已修正旧11位冲突。正式表已删除 `response.data.share_holder_info_list[].cert_no`，不得从请求股东DTO补回。material_card_info.branch_code响应长度12，不得套用企业请求的8位。
+- 捷行付响应保留 `response.data.jxf_conf_info.bank_name:String(8) N`；线上费率保留 `response.data.online_fee_conf_list[].fee_formula_type:String N`。支付宝、微信配置各自的外扣字段必须按父数组隔离，不能与顶层公共外扣字段合并；抖音 `response.data.qry_dy_conf_list[]` 当前为原生Array，其dy_mer_infos为String(JSON)；`split_bill_result[].acct_split_bunch_list[]` 当前为String(JSON Array)。`merge_pay_config_info.merge_pay_config`正式Object与字符串说明冲突须确认。
 - `response.data.qry_cash_config_list[].weekday_fix_amt` 与 `weekday_fee_rate` 的官网说明已统一为 `cash_type=D1` 时生效，并用于 D1 工作日结算；旧版“不生效/生效”冲突已关闭，不再触发硬停。
 
 ## 公共请求头
 
-- Java 与 PHP 使用 Skill 调用时都要求 `jpt-x-skill-source: <skill_source>`；当前 Java `3.0.40` 与 PHP `2.0.30` 的官方 SDK 主链路会在配置来源值后自动补该头。Python `2.0.24` 同样从 `MerConfig.jpt_x_skill_source` 自动补头。
+- 在已核验源码基线中，Java 与 PHP 使用 Skill 调用时都要求 `jpt-x-skill-source: <skill_source>`；Java `3.0.41` 与 PHP `2.0.31` 的官方 SDK 主链路会在配置来源值后自动补该头。Python `2.0.28` 同样从 `MerConfig.jpt_x_skill_source` 自动补头。
 
 ## 数据边界
 
@@ -38,4 +39,4 @@
 
 ## SDK 证据边界
 
-Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` 都有 `V2MerchantBasicdataQueryRequest` 作为可选封装，字段仅定位到 `req_seq_id`、`req_date`、`huifu_id`。调用方必须为本次查询生成新的当天唯一流水；SDK 默认响应验签路径不等于允许保存完整响应。
+已核验源码基线 Java `3.0.41`、PHP `2.0.31`、Python `2.0.28` 都有 `V2MerchantBasicdataQueryRequest` 作为可选封装，字段仅定位到 `req_seq_id`、`req_date`、`huifu_id`。调用方必须为本次查询生成新的当天唯一流水；SDK 默认响应验签路径不等于允许保存完整响应。

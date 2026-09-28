@@ -27,7 +27,7 @@ require_assertions_enabled()
 
 
 ROOT = Path(__file__).resolve().parent.parent
-LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-08-31.json"
+LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-09-22.json"
 DEFAULT_OUTPUT = (
     ROOT
     / "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md"
@@ -177,9 +177,11 @@ SENSITIVE_EXAMPLE_FIELDS = frozenset(
         "card_name",
         "card_no",
         "cert_no",
+        "cert_number",
         "contact_email",
         "contact_mobile",
         "contact_name",
+        "download_url",
         "elec_acct_sign_seq_id",
         "email",
         "file_id",
@@ -193,10 +195,16 @@ SENSITIVE_EXAMPLE_FIELDS = frozenset(
         "mobile_no",
         "name",
         "operator_id",
+        "qrcode",
+        "qrcode_data",
         "reg_detail",
         "reg_name",
         "short_name",
+        "sign_url",
+        "smid",
         "token_no",
+        "wx_applet_secret",
+        "wx_woa_secret",
     }
 )
 
@@ -382,23 +390,62 @@ def logical_row(lines: list[str], index: int) -> tuple[str, int]:
     return row, index
 
 
-def parse_field(row: str, source_url: str) -> Field | None:
+def table_columns(row: str) -> dict[str, int] | None:
+    """Return semantic column indexes for an official contract table.
+
+    The newer onboarding pages are not consistent about Markdown emphasis or
+    the order of the ``长度`` and ``必填`` columns.  Resolve columns from the
+    header instead of silently interpreting the page's visual order as the
+    older fixed schema.  Three-column enum/reference tables are deliberately
+    excluded from the wire-field catalog.
+    """
+
     cells = split_row(row)
-    if len(cells) < 6:
+    headings = [clean(cell).strip("* ") for cell in cells]
+    if len(headings) < 6 or headings[0] not in {"参数", "出参名"}:
         return None
-    child_match = re.search(r'class="[^"]*\bextend\s+([\w-]+)[^"]*"', cells[0])
-    name = clean(cells[0])
-    if not name or name == "参数":
+
+    def find(*names: str) -> int:
+        for index, heading in enumerate(headings):
+            if heading in names:
+                return index
+        raise ValueError(f"missing contract-table column {names}: {headings}")
+
+    return {
+        "name": 0,
+        "label": 1,
+        "kind": find("定义", "类型"),
+        "length": find("长度"),
+        "required": find("必填", "非空"),
+        "description": find("说明"),
+    }
+
+
+def parse_field(
+    row: str,
+    source_url: str,
+    columns: dict[str, int],
+) -> Field | None:
+    cells = split_row(row)
+    if len(cells) <= max(columns.values()):
         return None
-    description = normalize_links(clean(" | ".join(cells[5:])), source_url) or "—"
+    raw_name = cells[columns["name"]]
+    child_match = re.search(r'class="[^"]*\bextend\s+([\w-]+)[^"]*"', raw_name)
+    name = clean(raw_name).strip("* ")
+    if not name or name in {"参数", "出参名"}:
+        return None
+    description = normalize_links(
+        clean(" | ".join(cells[columns["description"] :])),
+        source_url,
+    ) or "—"
     description = redact_field_examples(name, description)
-    kind = clean(cells[2]) or "—"
+    kind = clean(cells[columns["kind"]]) or "—"
     return Field(
         name=name,
-        label=clean(cells[1]) or "—",
+        label=clean(cells[columns["label"]]) or "—",
         kind=kind,
-        length=clean(cells[3]) or "—",
-        required=clean(cells[4]) or "—",
+        length=clean(cells[columns["length"]]) or "—",
+        required=clean(cells[columns["required"]]) or "—",
         description=description,
         child=child_match.group(1) if child_match else None,
         array=kind.lower() == "array" or "jsonarray" in description.lower(),
@@ -414,7 +461,8 @@ def parse_tables(text: str, source_url: str) -> tuple[list[list[Field]], dict[st
         marker = re.search(r"div:extend-table\s+([\w-]+)-table", lines[index])
         if marker:
             pending = marker.group(1)
-        if not re.match(r"^\|\s*参数", lines[index]):
+        columns = table_columns(lines[index])
+        if columns is None:
             index += 1
             continue
         table_id, pending = pending, None
@@ -423,14 +471,14 @@ def parse_tables(text: str, source_url: str) -> tuple[list[list[Field]], dict[st
         if table_id is None:
             while index < len(lines) and lines[index].lstrip().startswith("|"):
                 row, index = logical_row(lines, index)
-                field = parse_field(row, source_url)
+                field = parse_field(row, source_url, columns)
                 if field:
                     rows.append(field)
         else:
             while index < len(lines) and "<!-- extend:end -->" not in lines[index]:
                 if lines[index].lstrip().startswith("|"):
                     row, index = logical_row(lines, index)
-                    field = parse_field(row, source_url)
+                    field = parse_field(row, source_url, columns)
                     if field:
                         rows.append(field)
                 else:

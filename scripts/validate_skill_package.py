@@ -216,20 +216,60 @@ def validate_refresh_source_bindings(
         refresh_contract_path.read_bytes()
     ):
         raise ValueError("provenance refresh contract SHA differs from current contract")
+    if "sdk_source_lock" not in spec:
+        expected_source_locks = {
+            source_lock_name: sha256(source_lock_path.read_bytes()),
+        }
+        if provenance["source_locks"] != expected_source_locks:
+            raise ValueError("provenance source-lock map differs from Skill manifest")
+        matching_source_locks = [
+            item
+            for item in refresh_contract["source_locks"].values()
+            if item["path"] == source_lock_name
+        ]
+        if len(matching_source_locks) != 1:
+            raise ValueError("refresh contract does not bind the Skill source lock exactly once")
+        if matching_source_locks[0]["sha256"] != expected_source_locks[source_lock_name]:
+            raise ValueError("refresh contract source-lock digest differs from current source lock")
+        return
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    sdk_lock_name = spec["sdk_source_lock"]
+    sdk_lock_path = REPO_ROOT / sdk_lock_name
+    if not sdk_lock_path.is_file():
+        raise ValueError("selected SDK source lock is missing")
     expected_source_locks = {
         source_lock_name: sha256(source_lock_path.read_bytes()),
+        sdk_lock_name: sha256(sdk_lock_path.read_bytes()),
     }
     if provenance["source_locks"] != expected_source_locks:
         raise ValueError("provenance source-lock map differs from Skill manifest")
-    matching_source_locks = [
-        item
-        for item in refresh_contract["source_locks"].values()
-        if item["path"] == source_lock_name
-    ]
-    if len(matching_source_locks) != 1:
-        raise ValueError("refresh contract does not bind the Skill source lock exactly once")
-    if matching_source_locks[0]["sha256"] != expected_source_locks[source_lock_name]:
-        raise ValueError("refresh contract source-lock digest differs from current source lock")
+    for name, digest in expected_source_locks.items():
+        matching = [item for item in refresh_contract["source_locks"].values() if item["path"] == name]
+        if len(matching) != 1:
+            raise ValueError(f"refresh contract does not bind the source lock exactly once: {name}")
+        if matching[0]["sha256"] != digest:
+            raise ValueError(f"refresh contract source-lock digest differs from current source lock: {name}")
+    sdk = json.loads(sdk_lock_path.read_text(encoding="utf-8"))
+    sdk_versions = {name: item["version"] for name, item in sdk["components"].items()}
+    if refresh_contract.get("sdk_versions") != sdk_versions or refresh_contract.get("sdk_reviewed_at") != sdk["verified_at"]:
+        raise ValueError("refresh contract SDK versions/date differ from selected source evidence")
+    if refresh_contract.get("python_sdk") != {"target_version": sdk_versions["python"], "verified_source_version": sdk_versions["python"], "target_source_verified": True}:
+        raise ValueError("refresh contract Python SDK facts differ from selected source evidence")
+    for skill, entry in manifest["skills"].items():
+        # Companion versions are historical metadata, independently versioned.
+        if entry["root"] == spec["root"] and refresh_contract["version_state"].get(skill) != entry["version"]:
+            raise ValueError(f"refresh contract current Skill version differs: {skill}")
+    for relationship in ("previous_refresh", "source_review"):
+        item = refresh_contract.get(relationship)
+        if not isinstance(item, dict):
+            raise ValueError(f"refresh contract lacks {relationship} binding")
+        path = REPO_ROOT / item["path"]
+        if not path.is_file() or sha256(path.read_bytes()) != item["sha256"]:
+            raise ValueError(f"refresh contract {relationship} SHA differs")
+        if json.loads(path.read_text(encoding="utf-8"))["refresh_id"] != item["refresh_id"]:
+            raise ValueError(f"refresh contract {relationship} identity differs")
+    if refresh_contract["source_review"]["refresh_id"] != refresh_contract["source_review_id"]:
+        raise ValueError("refresh contract API source review identity differs")
 
 
 def validate_reproducible_build_metadata(

@@ -2,12 +2,12 @@
 
 ## 适用范围
 
-修改已经存在的企业用户基础资料。官方来源：[企业用户基本信息修改](https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_qyyhjbxxxg.md)。本接口不是 `/v2/merchant/basicdata/modify` 商户基本信息修改，但请求定位号的官方角色存在冲突，生产调用前必须确认。
+修改已经存在的企业用户基础资料。官方来源：[企业用户基本信息修改](https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_qyyhjbxxxg.md)。本接口不是 `/v2/merchant/basicdata/modify` 商户基本信息修改；请求 `huifu_id` 当前已明确为直属汇付企业用户 ID。
 
 ## 接口与字段面
 
 - Endpoint：`POST https://api.huifu.com/v2/user/basicdata/ent/modify`。
-- 官网更新时间：`2026-08-25`；本地冻结：`2026-08-31`；原文 SHA-256：`55f762001ed26859412b98248b71dc8aaecc3e508ec6669bc6e0bec92c6eb90d`。
+- 官网更新时间：`2026-09-04`；本地冻结：`2026-09-22`；原文 SHA-256：`bb0b2a7339463d9731243e7d91ec9bfd729180d844646bb119b68655a11a5df8`。
 - 共37个字段路径：请求32、同步响应5、异步0；4个根表、1个扩展表、3个父节点、34个叶节点。完整类型、长度、Y/N/C 与说明读取 `user-onboarding-complete-field-catalog.md`。
 - 请求定位字段为 `req_date:String(8) Y`、`req_seq_id:String(32) Y`、`huifu_id:String(18) Y`；响应业务字段为 `resp_code:String(8) Y`、`resp_desc:String(512) Y`、`huifu_id:String(18) N`。
 
@@ -25,7 +25,7 @@
 
 ## SDK 边界
 
-Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` 均使用 `V2UserBasicdataEntModifyRequest`，精确路由为 `/v2/user/basicdata/ent/modify`。三语言生成类只显式声明 `req_date`、`req_seq_id`、`huifu_id`、`legal_cert_nationality`；其余官方可选字段通过 exact-key 扩展映射传入。
+已核验源码基线 Java `3.0.41`、PHP `2.0.31`、Python `2.0.28` 均使用 `V2UserBasicdataEntModifyRequest`，精确路由为 `/v2/user/basicdata/ent/modify`。三语言生成类只显式声明 `req_date`、`req_seq_id`、`huifu_id`、`legal_cert_nationality`；其余官方可选字段通过 exact-key 扩展映射传入。
 
 扩展映射在 Java `putAll`、PHP `array_merge`、Python `dict.update` 中后合并，会覆盖同名显式字段。因此接入层必须先拒绝扩展中的 `req_date`、`req_seq_id`、`huifu_id`、`legal_cert_nationality`，再只允许本页正式请求 `data` 中的其他键；未知键、响应键和包络键全部拒绝。`file_list` 在扩展中仍传已经序列化的一层 JSON Array 字符串。
 

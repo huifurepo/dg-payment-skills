@@ -100,29 +100,29 @@ REQUIRED = {
         "详情响应 `sms_send_flag=Y/N`",
     ),
     "status": ("申请单状态查询", "apply_no String(18) Y", "data.apply_status", "data.reg_status", "bank_card_conf_status", "bind_card_status", "cash_status", "settle_status", "union_conf_status", "out_order_funds_status", "均为 `String(1)`：`P/S/F`", "`P=处理中`、`S=成功`、`F=失败`", "data.wx_zl_config.apply_state", "`String(32)`：`S/P/N/F/C`", "data.ali_zl_config[].apply_status"),
-    "business-modify": ("商户业务开通修改", "req_seq_id String(32) Y", "huifu_id String(18) Y", "51 组嵌套配置", "async.business.ord_id", "async.business.reg_result_list[]", "`josnArray`", "禁止采用该示例"),
+    "business-modify": ("商户业务开通修改", "req_seq_id String(32) Y", "huifu_id String(18) Y", "53 组嵌套配置", "async.business.ord_id", "async.business.reg_result_list[]", "`josnArray`", "禁止采用该示例"),
     "basic-modify": ("商户基本信息修改", "upper_huifu_id String(18) C", "资料对象和条件", "审核异步", "基本信息修改 `data.card_info.area_id`", "`String(8) Y`"),
-    "rate-query": ("商户费率信息查询", "fee_rate_type String N", "响应 `huifu_id:String(18) Y`", "[官方文档口径冲突]", "没有专属 Request 类"),
+    "rate-query": ("商户费率信息查询", "fee_rate_type Array<string>(117) N", "`huifu_id String(18) Y`", "原生", "没有专属 Request 类"),
     "status-change": ("商户状态变更", "upd_status_reason String(512) Y", "官方多行注释中的 `file_list` 已废弃", "仅字符串 `1/0`"),
-    "sms-send": ("商户短信发送", "verify_type String Y", "phone/operation_type/verify_code/elec_acct_sign_seq_id", "C 条件"),
+    "sms-send": ("商户短信发送", "verify_type String(32) Y", "phone/operation_type/verify_code/elec_acct_sign_seq_id", "C 条件"),
     "multifee-config": (
         "商户多费率配置",
         "req_seq_id/req_date/huifu_id",
         "wx_conf_list/ali_conf_list",
         "String(JSON Array)",
-        "响应 `conf_list:String N`",
-        "内部对象/数组编码未说明",
-        "旧 `T=微信` 冲突已关闭",
+        "响应 `conf_list:String/jsonArray格式`",
+        "按 String(JSON Array) 解码",
+        "`pay_way=A/W`",
     ),
     "multifee-query": (
         "商户多费率配置查询",
         "fee_sign:String(32) N",
-        "响应 `conf_list:String N`",
+        "响应 `conf_list:String/jsonArray格式`",
         "官网没有说明省略后的精确返回范围",
-        "不能沿用旧版单 Object 假设",
+        "按 String(JSON Array) 解码",
     ),
     "callbacks": ("reg_result_list[].business_stat", "zl_async_info.apply_state", "async.agreement.agreement_info_list.con_stat", "没有 `Array/jsonArray`", "ord_id:String(44)", "RECV_ORD_ID_", "[需要官方确认]", "逐业务通知外层包装待官方样本确认"),
-    "headers": ("jpt-x-skill-source: <skill_source>", "Java、PHP、Python SDK 主链路", "hfms/1.0.2", "hfps/1.3.5;hfms/1.0.2", "其他 SDK 内部请求头由 SDK 自行处理"),
+    "headers": ("jpt-x-skill-source: <skill_source>", "Java、PHP、Python SDK 主链路", "hfms/1.0.4", "hfps/1.3.5;hfms/1.0.4", "其他 SDK 内部请求头由 SDK 自行处理"),
     "same-leaf-paths": (
         "不得按叶字段名去重",
         "request.data.prov_id",
@@ -143,8 +143,8 @@ REQUIRED = {
         "material_card_info",
         "activated_products",
         "01=一体化收款产品",
-        "37个目录节点的说明单元为空",
-        "当前十三页共有58个叶字段的长度单元为空",
+        "10个目录节点的说明单元为空",
+        "4个 String 标量叶字段的长度单元为空",
         "sys_id",
         "渠道商",
         "总部商户",
@@ -168,7 +168,7 @@ ATOMIC_HEADER_TERMS = (
     "外部资料提示",
 )
 ATOMIC_CONTRACT_TERMS = {
-    "merchant-onboarding-enterprise.md": ("sign:String(2048) Y", "data.audit_status", "`Y/N/F`", "企业基础进件请求没有 `data.huifu_id`", "按官网字段合同生成", "成功 ACK", "`data.async_return_url:String(120) N`", "禁止使用 `notify_url`", "`data.prov_id/area_id`", "`data.card_info.prov_id/area_id`", "`data.material_card_info.prov_id/area_id`", "`data.material_card_info:String(JSON Object) N`", "以说明列“jsonObject字符串”为 wire 依据", "不得发送普通嵌套 Object", "不能按叶字段名合并", "`String(64) C`", "`scene_type` 含线下场景时必填"),
+    "merchant-onboarding-enterprise.md": ("sign:String(2048) Y", "data.audit_status", "`Y/N/F`", "企业基础进件请求没有 `data.huifu_id`", "按官网字段合同生成", "成功 ACK", "`data.async_return_url:String(120) N`", "禁止使用 `notify_url`", "`data.prov_id/area_id`", "`data.card_info.prov_id/area_id`", "`data.material_card_info.prov_id/area_id`", "`data.material_card_info:String(JSON Object) Y`", "当前官网类型列已由旧版 `Object` 修正为 `String`", "说明列仍为“jsonObject字符串”", "`material_card_info.card_type`", "不得继续生成该键", "不得发送普通嵌套 Object", "不能按叶字段名合并", "`String(64) C`", "`scene_type` 含线下场景时必填", "[官方文档口径冲突]"),
     "merchant-onboarding-individual.md": ("sign:String(512) N", "data.audit_status", "`Y/N/F`", "个人基础进件请求没有 `data.huifu_id`", "按官网字段合同生成", "成功 ACK", "`data.async_return_url:String(120) N`", "禁止使用 `notify_url`", "`data.prov_id/area_id`", "`data.card_info.prov_id/area_id`", "不得按 `prov_id/area_id` 叶字段名去重", "`String(64) C`", "`scene_type` 含线下场景时必填"),
     "merchant-onboarding-business-open.md": (
         "async.business.reg_result_list[].business_stat",
@@ -195,13 +195,13 @@ ATOMIC_CONTRACT_TERMS = {
         "顶层 `file`",
         "不支持填写企业/个人用户开户返回的用户号",
     ),
-    "merchant-onboarding-detail-query.md": ("567 个具名路径", "req_seq_id:String(32)", "req_date:String(8)", "huifu_id:String(18)", "`1=开通`、`0=未开通`、空=未配置", "禁止把查询响应直接复制为开通请求", "`service_phone` 标为 `String(11)`", "`response.data.material_card_info:String(JSON Object) N`", "以说明列“jsonObject字符串”为 wire 依据", "`card_type/card_name/card_no/prov_id/area_id/branch_code`"),
-    "merchant-onboarding-application-status-query.md": ("data.bank_card_conf_status:String(1)", "data.bind_card_status:String(1)", "data.cash_status:String(1)", "data.settle_status:String(1)", "data.union_conf_status:String(1)", "data.out_order_funds_status:String(1)", "`P=处理中`、`S=成功`、`F=失败`", "data.wx_zl_config.apply_state:String(32)", "data.ali_zl_config[].apply_status:String(1)", "data.agreement_info_list[].con_stat:String(2)", "`wx_config_list[].config_type`", "页面内部不一致"),
+    "merchant-onboarding-detail-query.md": ("578 个具名路径", "req_seq_id:String(32)", "req_date:String(8)", "huifu_id:String(18)", "`1=开通`、`0=未开通`、空=未配置", "禁止把查询响应直接复制为开通请求", "`response.data.service_phone:String(32)`", "`response.data.material_card_info:String(JSON Object) N`", "先严格反序列化", "`card_type/card_name/card_no/prov_id/area_id/branch_code`"),
+    "merchant-onboarding-application-status-query.md": ("data.bank_card_conf_status:String(1)", "data.bind_card_status:String(1)", "data.cash_status:String(1)", "data.settle_status:String(1)", "data.union_conf_status:String(1)", "data.out_order_funds_status:String(1)", "`P=处理中`、`S=成功`、`F=失败`", "data.wx_zl_config.apply_state:String(32)", "data.ali_zl_config[].apply_status:String(1)", "data.agreement_info_list[].con_stat:String(2)", "`wx_config_list[].config_type`", "String(2)"),
 }
 NEW_ATOMIC_CONTRACT_TERMS = {
     "merchant-onboarding-business-open-modify.md": (
-        "444 个节点",
-        "请求 382、同步响应 6、异步通知 56",
+        "452 个节点",
+        "请求 390、同步响应 6、异步通知 56",
         "V2MerchantBusiModifyRequest",
         "async.business.ord_id:String(44)",
         "async.business.reg_result_list[]",
@@ -252,8 +252,9 @@ NEW_ATOMIC_CONTRACT_TERMS = {
         "wx_conf_list:String N",
         "ali_conf_list:String N",
         "data.conf_list:String N",
-        "官网未说明该 String 子表是 JSON Object 还是 JSON Array",
-        "旧 T/W 冲突已关闭",
+        "jsonArray格式",
+        "String(JSON Array)",
+        "只接受 `A/W`",
         "扩展映射必须拒绝 `req_seq_id`、`req_date`、`huifu_id`",
     ),
     "merchant-onboarding-multifee-query.md": (
@@ -266,7 +267,8 @@ NEW_ATOMIC_CONTRACT_TERMS = {
         "/v2/merchant/busi/multiFee/query",
         "data.fee_sign:String(32) N",
         "data.conf_list:String N",
-        "未说明 String 子表是对象还是数组",
+        "jsonArray格式",
+        "String(JSON Array)",
         "不得自行承诺“返回全部配置”",
         "扩展映射必须拒绝 `req_seq_id`、`req_date`、`huifu_id`",
     ),
@@ -292,7 +294,7 @@ TOP_LEVEL_FIELDS = {
     "business": (
         "### 业务开通 `data`",
         "### 必填 `card_info`",
-        "req_seq_id req_date huifu_id upper_huifu_id short_name sign_user_info online_flag quick_flag withhold_flag mer_bus_type out_fee_flag out_fee_huifuid out_fee_acct_type ali_conf_list ali_zl_conf alipay_pre_auth_flag wx_conf_list wx_zl_conf wechatpay_pre_auth_flag union_conf_list bank_card_conf online_fee_conf_list online_pay_fee_conf_list online_busi_type online_media_info_list balance_pay_config out_order_funds_config combine_pay_config hb_fq_fee_config split_conf_info delay_flag forced_delay_flag use_chains_flag extended_material_list agreement_info enter_fee enter_fee_flag online_refund platform_refund support_revoke async_return_url busi_async_return_url recon_resp_addr uni_app_payment_config fund_collection_flag surrogate_config_list large_amt_pay_config half_pay_host_flag agent_recheck_config online_recharge_flag refund_mend_open_flag jxf_conf_info merge_pay_config_info bill_payment_flag withhold_pay_scene recon_resp_sys_id",
+        "req_seq_id req_date huifu_id upper_huifu_id short_name sign_user_info online_flag quick_flag withhold_flag mer_bus_type out_fee_flag out_fee_huifuid out_fee_acct_type ali_conf_list ali_zl_conf alipay_pre_auth_flag wx_conf_list wx_zl_conf wechatpay_pre_auth_flag union_conf_list bank_card_conf online_fee_conf_list online_pay_fee_conf_list online_busi_type online_media_info_list balance_pay_config out_order_funds_config combine_pay_config hb_fq_fee_config split_conf_info delay_flag forced_delay_flag use_chains_flag extended_material_list agreement_info enter_fee enter_fee_flag online_refund platform_refund support_revoke async_return_url busi_async_return_url recon_resp_addr uni_app_payment_config fund_collection_flag surrogate_config_list large_amt_pay_config half_pay_host_flag agent_recheck_config online_recharge_flag refund_mend_open_flag jxf_conf_info merge_pay_config_info bill_payment_flag withhold_pay_scene recon_resp_sys_id dy_conf_list",
     ),
 }
 
@@ -369,17 +371,22 @@ def locked_source_update_dates() -> dict[str, str]:
     return dates
 
 
+def contains_contract(text: str, term: str) -> bool:
+    """Compare contract wording independently of optional Markdown spacing."""
+    return re.sub(r"\s+", "", term) in re.sub(r"\s+", "", text)
+
+
 def main() -> int:
     text = CONTRACT.read_text(encoding="utf-8") if CONTRACT.is_file() else ""
     external_text = EXTERNAL_RESOURCES.read_text(encoding="utf-8") if EXTERNAL_RESOURCES.is_file() else ""
     catalog_text = CATALOG.read_text(encoding="utf-8") if CATALOG.is_file() else ""
     header_text = HEADER_POLICY.read_text(encoding="utf-8") if HEADER_POLICY.is_file() else ""
     skill_text = ONBOARDING_SKILL.read_text(encoding="utf-8") if ONBOARDING_SKILL.is_file() else ""
-    missing = [f"{section}: {term}" for section, terms in REQUIRED.items() for term in terms if term not in text]
+    missing = [f"{section}: {term}" for section, terms in REQUIRED.items() for term in terms if not contains_contract(text, term)]
     for term in (
-        "仅 `huifu-merchant-onboarding 1.0.2`",
-        "`hfms/1.0.2`",
-        "`hfps/1.3.5;hfms/1.0.2`",
+        "仅 `huifu-merchant-onboarding 1.0.4`",
+        "`hfms/1.0.4`",
+        "`hfps/1.3.5;hfms/1.0.4`",
         "顺序固定为支付、进件",
         "英文分号且不加空格",
         "显式提供经确认的合同值时原样透传",
@@ -390,12 +397,11 @@ def main() -> int:
         "`request.data.prov_id/area_id`",
         "`request.data.card_info.prov_id/area_id`",
         "`request.data.material_card_info.prov_id/area_id`",
-        "request/response wire 均按 String(JSON Object)",
-        "1,261 个请求、742 个同步响应和 180 个通知节点",
-        "37个字段说明为空",
-        "58个 String 标量叶字段长度为空",
-        "`hfms/1.0.2`",
-        "`hfps/1.3.5;hfms/1.0.2`",
+        "`card_info` 与 `material_card_info` 都按 String(JSON Object)",
+        "1,277 个请求、753 个同步响应和 180 个通知节点",
+        "当前十三页官网仍有未填写说明或标量长度的字段",
+        "`hfms/1.0.4`",
+        "`hfps/1.3.5;hfms/1.0.4`",
     ):
         if term not in skill_text:
             missing.append(f"SKILL.md: {term}")
@@ -438,7 +444,9 @@ def main() -> int:
         "01：一体化收款产品，02：账户与资金产品，03：业财数通产品；"
         "不传为空 示例值：01,02,03 |"
     )
-    if catalog_text.count(activated_products_row) != 3:
+    if catalog_text.count(activated_products_row) != 1 or catalog_text.count(
+        activated_products_row.replace("`String` | `—`", "`String` | `32`")
+    ) != 2:
         missing.append(
             "complete catalog: three request.data.activated_products descriptions "
             "must preserve the 01/02/03 live-source wording"
@@ -477,15 +485,15 @@ def main() -> int:
             for child in catalog_rows
         )
     ]
-    if len(blank_descriptions) != 37:
+    if len(blank_descriptions) != 10:
         missing.append(
             "complete catalog official blank descriptions: "
-            f"expected=37, actual={len(blank_descriptions)}"
+            f"expected=10, actual={len(blank_descriptions)}"
         )
-    if len(string_leaf_blank_lengths) != 58:
+    if len(string_leaf_blank_lengths) != 4:
         missing.append(
             "complete catalog official blank String leaf lengths: "
-            f"expected=58, actual={len(string_leaf_blank_lengths)}"
+            f"expected=4, actual={len(string_leaf_blank_lengths)}"
         )
     try:
         source_dates = locked_source_update_dates()
@@ -495,25 +503,25 @@ def main() -> int:
         expected_date_clauses = (
             (
                 "refreshed source dates",
-                "来源快照核验日期：`2026-08-31`",
-                source_dates["enterprise"] == "2026-08-26"
-                and source_dates["individual"] == "2026-08-18"
-                and source_dates["basic_info_modify"] == "2026-08-07",
+                "来源快照核验日期：`2026-09-22`",
+                source_dates["enterprise"] == "2026-09-18"
+                and source_dates["individual"] == "2026-09-04"
+                and source_dates["basic_info_modify"] == "2026-09-20",
             ),
             (
-                "description-only refresh",
-                "相对上一快照新增29、删除1、修改45",
+                "current field refresh",
+                "相对上一快照新增82、删除79、修改194",
                 True,
             ),
             (
                 "multifee source date",
                 "`wx_conf_list/ali_conf_list:String N` 均按 String(JSON Array) 发送",
-                source_dates["multifee_config"] == "2026-08-28",
+                source_dates["multifee_config"] == "2026-09-20",
             ),
             (
                 "multifee query source date",
                 "可选 `fee_sign:String(32) N` 只传真实标识",
-                source_dates["multifee_query"] == "2026-08-28",
+                source_dates["multifee_query"] == "2026-09-20",
             ),
         )
         missing.extend(
@@ -545,7 +553,7 @@ def main() -> int:
         page = references / name
         page_text = page.read_text(encoding="utf-8") if page.is_file() else ""
         missing.extend(f"{name}: {term}" for term in ATOMIC_HEADER_TERMS if term not in page_text)
-        missing.extend(f"{name}: {term}" for term in ATOMIC_CONTRACT_TERMS[name] if term not in page_text)
+        missing.extend(f"{name}: {term}" for term in ATOMIC_CONTRACT_TERMS[name] if not contains_contract(page_text, term))
     for name, terms in NEW_ATOMIC_CONTRACT_TERMS.items():
         page = references / name
         page_text = page.read_text(encoding="utf-8") if page.is_file() else ""
@@ -554,14 +562,14 @@ def main() -> int:
             for _ in (0,)
             if "merchant-onboarding-complete-field-catalog.md" not in page_text
         )
-        missing.extend(f"{name}: {term}" for term in terms if term not in page_text)
+        missing.extend(f"{name}: {term}" for term in terms if not contains_contract(page_text, term))
         missing.extend(
             f"{name}: {term}"
             for term in (
                 "## 公共请求头",
                 "`jpt-x-skill-source: <skill_source>`",
-                "`hfms/1.0.2`",
-                "`hfps/1.3.5;hfms/1.0.2`",
+                "`hfms/1.0.4`",
+                "`hfps/1.3.5;hfms/1.0.4`",
             )
             if term not in page_text
         )

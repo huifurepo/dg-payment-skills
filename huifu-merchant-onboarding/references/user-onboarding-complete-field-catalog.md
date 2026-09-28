@@ -32,18 +32,18 @@
 | --- | ---: | ---: | ---: |
 | 企业用户开户 | 43 | 1 | 4 |
 | 个人用户开户 | 34 | 1 | 4 |
-| 用户业务入驻 | 118 | 12 | 5 |
+| 用户业务入驻 | 136 | 16 | 5 |
 | 用户申请单状态查询 | 15 | 0 | 3 |
-| 用户信息查询 | 144 | 12 | 5 |
+| 用户信息查询 | 165 | 16 | 5 |
 | 企业用户基本信息修改 | 37 | 1 | 4 |
 | 个人用户基本信息修改 | 26 | 1 | 4 |
-| 用户业务入驻修改 | 120 | 12 | 5 |
+| 用户业务入驻修改 | 138 | 16 | 5 |
 | 用户列表查询 | 17 | 1 | 4 |
 
 ## 企业用户开户
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_qyyhjbxxzc.md>
-- SHA-256：`4d0d3921368a9f536007a17a6efe8ed1d9c7d9eea40d9a3a4fd5dc8eef07baaf`
+- SHA-256：`b95f8659579a89b4cda719d63922cd99458cc58351c7505b6e3c2b0c8b0fa674`
 - 说明：完整保留官方类型、长度、必填标记和说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -88,15 +88,15 @@
 | `request.data.contact_name` | 管理员姓名 | `String` | `32` | `Y` | 32位英文字符或16个汉字；示例值：[官网敏感示例已脱敏] |
 | `request.data.contact_mobile` | 管理员手机号 | `String` | `11` | `Y` | 示例值：[官网敏感示例已脱敏] |
 | `request.data.contact_email` | 管理员电子邮箱 | `String` | `64` | `N` | 示例值：[官网敏感示例已脱敏] |
-| `request.data.login_name` | 管理员账号 | `String` | `32` | `C` | 如需短信通知则必填；示例值：[官网敏感示例已脱敏] |
+| `request.data.login_name` | 管理员账号 | `String` | `32` | `C` | 如需短信通知则必填；升级LV3必填示例值：[官网敏感示例已脱敏] |
 | `request.data.operator_id` | 操作员 | `String` | `32` | `N` | 示例值：[官网敏感示例已脱敏] |
 | `request.data.sms_send_flag` | 是否发送短信标识 | `String` | `1` | `N` | 入驻成功后短信通知商户联系人，； Y：发送短信通知（联系人手机号）；如需短信通知则login_name必填；N：不发送短信通知；默认；示例值：Y |
 | `request.data.expand_id` | 扩展方字段 | `String` | `18` | `N` | 如果该商户是第三方展业的可以填写拓展方的huifu_id；示例值：[官网示例已脱敏] |
-| `request.data.file_list[]` | 文件列表 | `Object` | `—` | `N` | jsonArray格式 |
+| `request.data.file_list[]` | 文件列表 | `String` | `—` | `N` | jsonArray格式 |
 | `request.data.file_list[].file_type` | 文件类型 | `String` | `8` | `Y` | 请参考：[文件类型枚举](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_wjlx)；示例值：F01 |
 | `request.data.file_list[].file_id` | 文件jfileID | `String` | `128` | `Y` | 示例值：[官网敏感示例已脱敏]；[图片上传接口](https://paas.huifu.com/open/doc/api/#/shgl/shjj/api_shjj_shtpsc)返回的file_id字段 |
 | `request.data.file_list[].file_name` | 文件名称 | `String` | `128` | `N` | 128位英文字符或64个汉字；示例值：[官网敏感示例已脱敏] |
-| `request.data.ent_type` | 公司类型 | `String` | `1` | `N` | 1:政府机构 2:国营企业 3:私营企业 4:外资企业 5:个体工商户 6:其它组织 7:事业单位 8:集体经济；示例值：2 |
+| `request.data.ent_type` | 公司类型 | `String` | `1` | `Y` | 1:政府机构 2:国营企业 3:私营企业 4:外资企业 5:个体工商户 6:其它组织 7:事业单位 8:集体经济；示例值：2 |
 | `request.data.mcc` | 所属行业 | `String` | `7` | `N` | 参考[汇付MCC编码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_hfmccbm) ；示例值：5311；当用户业务入驻修改，电子回单配置开关为开通时，需填写 |
 
 ### 同步响应 data
@@ -112,7 +112,7 @@
 ## 个人用户开户
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_gryhjbxxzc.md>
-- SHA-256：`0bcf5b8e085d7c6e760f7452d2fe7d3bb7879812de6a7953d41a4b44c53cee8c`
+- SHA-256：`e12fd6d81d185b6f9467ed837cc69f64485461fb12dbc943db487fbc9a751759`
 - 说明：完整保留官方类型、长度、必填标记和说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -149,7 +149,7 @@
 | `request.data.login_name` | 管理员账号 | `String` | `32` | `N` | 示例值：[官网敏感示例已脱敏] |
 | `request.data.sms_send_flag` | 是否发送短信标识 | `String` | `1` | `N` | Y:发送短信通知，N：不发送短信通知。默认不发送短信通知。示例值：Y |
 | `request.data.expand_id` | 拓展方字段 | `String` | `18` | `N` | 如果该商户是第三方展业的可以填写拓展方的huifu_id;示例值：[官网示例已脱敏] |
-| `request.data.file_list[]` | 文件列表 | `Object` | `—` | `N` | jsonArray格式；官网页内注意：证件类型是身份证的，会做姓名与身份证号的实名认证 |
+| `request.data.file_list[]` | 文件列表 | `String` | `—` | `N` | jsonArray格式；官网页内注意：证件类型是身份证的，会做姓名与身份证号的实名认证 |
 | `request.data.file_list[].file_type` | 文件类型 | `String` | `8` | `Y` | 参见[文件类型](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_wjlx)；示例值：F85 |
 | `request.data.file_list[].file_id` | 文件jfileID | `String` | `128` | `Y` | [图片上传接口](https://paas.huifu.com/open/doc/api/#/shgl/shjj/api_shjj_shtpsc)生成的fileId；示例值：[官网敏感示例已脱敏] |
 | `request.data.file_list[].file_name` | 文件名称 | `String` | `128` | `N` | 示例值：[官网敏感示例已脱敏] |
@@ -172,7 +172,7 @@
 ## 用户业务入驻
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_ywrz.md>
-- SHA-256：`71fbf48ce46923034ac973488d1c73f1d376735028e13144839cb0031ff64249`
+- SHA-256：`a0f6f864f7b50312b8bf6757ffa35ca9617a70e53c4e549837d11db3ef7cefda`
 - 说明：完整保留官方类型、长度、必填标记和说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -240,7 +240,7 @@
 | `request.data.cash_config[].out_fee_acct_type` | 交易手续费外扣的账户类型 | `String` | `2` | `N` | 01-基本户，02-现金户，05-充值户；不填默认01； 示例值：01 |
 | `request.data.cash_config[].is_priority_receipt` | 是否优先到账 | `String` | `1` | `N` | Y：是 ，N：否。不填，默认值为否。仅在取现类型配置为D1 和 T1 时生效。示例值：Y |
 | `request.data.file_list[]` | 文件列表 | `String` | `—` | `N` | jsonArray格式 |
-| `request.data.file_list[].file_type` | 文件类型 | `String` | `8` | `Y` | card_type为4时，需上传以下文件：营业执照(文件类型：F07)、开户许可证(文件类型：F08)、非同名结算证明材料(文件枚举：F516)；法人证件不同类型上传不同文件，00身份证：F02【法人】身份证人像面、F03【法人】身份证国徽面；04回乡证(港澳居民来往内地通行证)：F31【法人】港澳台居民来往内地通行证；13外国人居留证：F511【法人】外国人居留证；14台胞证(台湾居民来往大陆通行证)：F31【法人】港澳台居民来往内地通行证；15港澳台居民居住证：F512【法人】港澳台居住；请参考：[文件类型枚举](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_wjlx) ；示例值：F01 |
+| `request.data.file_list[].file_type` | 文件类型 | `String` | `8` | `Y` | card_type为4时，需上传以下文件：营业执照(文件类型：F07)、开户许可证(文件类型：F08)、非同名结算证明材料(文件枚举：F516)；法人证件不同类型上传不同文件，00身份证：F02【法人】身份证人像面、F03【法人】身份证国徽面；04回乡证(港澳居民来往内地通行证)：F31【法人】港澳台居民来往内地通行证；13外国人居留证：F511【法人】外国人居留证；14台胞证(台湾居民来往大陆通行证)：F31【法人】港澳台居民来往内地通行证；15港澳台居民居住证：F512【法人】港澳台居住；请参考：[文件类型枚举](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_wjlx) ；示例值：F01；用户账户等级为LV2时，需上传以下文件并进入审核；企业用户：营业执照(文件类型：F07)、；对公结算：开户许可证(文件类型：F08)、；法人证件不同类型上传不同文件，；00身份证：F02【法人】身份证人像面、F03【法人】身份证国徽面；04回乡证(港澳居民来往内地通行证)：F31【法人】港澳台居民来往内地通行证；13外国人居留证：F511【法人】外国人居留证；14台胞证(台湾居民来往大陆通行证)：F31【法人】港澳台居民来往内地通行证 ；15港澳台居民居住证：F512【法人】港澳台居住；个人用户：法人证件不同类型上传不同文件，；00身份证：F02【法人】身份证人像面、F03【法人】身份证国徽面；04回乡证(港澳居民来往内地通行证)：F31【法人】港澳台居民来往内地通行证；13外国人居留证：F511【法人】外国人居留证；14台胞证(台湾居民来往大陆通行证)：F31【法人】港澳台居民来往内地通行证；15港澳台居民居住证：F512【法人】港澳台居住；用户账户等级为LV3时，；需上传以下文件并进入审核；企业用户：营业执照(文件类型：F07)、；对公结算：开户许可证(文件类型：F08)、；对私法人结算：银行卡卡号面(文件类型：F13)；法人证件不同类型上传不同文件，；00身份证：F02【法人】身份证人像面、F03【法人】身份证国徽面；04回乡证(港澳居民来往内地通行证)：F31【法人】港澳台居民来往内地通行证；13外国人居留证：F511【法人】外国人居留证；14台胞证(台湾居民来往大陆通行证)：F31【法人】港澳台居民来往内地通行证；15港澳台居民居住证：F512【法人】港澳台居住；门头照 F22（店铺门头照图片）、收银台/前台照 F105（店铺收银台）、办公场地照 F371（办公环境照）；个人用户：不支持 |
 | `request.data.file_list[].file_id` | 文件jfileID | `String` | `128` | `Y` | [图片上传接口](https://paas.huifu.com/open/doc/api/#/shgl/shjj/api_shjj_shtpsc)生成的fileId；示例值：[官网敏感示例已脱敏] |
 | `request.data.file_list[].file_name` | 文件名称 | `String` | `128` | `N` | 示例值：[官网敏感示例已脱敏] |
 | `request.data.delay_flag` | 延迟入账开关 | `String` | `1` | `N` | N：否 Y：是；示例值：Y |
@@ -250,7 +250,7 @@
 | `request.data.elec_acct_config.cash_fee_party` | 电子账户提现手续费承担方 | `String` | `1` | `Y` | 1:总部 2:其他 |
 | `request.data.elec_acct_config.scene` | 场景 | `String` | `3` | `Y` | 与角色类型关联，[中信定义的资金类型](https://paas.huifu.com/open/doc/api/#/yuer/api_zxegjzllx)；示例值：001 |
 | `request.data.elec_acct_config.role_type` | 角色类型(角色编号) | `String` | `6` | `Y` | 必填；与场景关联，[中信定义的角色类型](https://paas.huifu.com/open/doc/api/#/yuer/api_zxegjzllx);示例值：001001 |
-| `request.data.elec_acct_config.elec_card_list[]` | 银行卡信息 | `Object` | `—` | `N` | jsonArray字符串，如果开通斗拱E账户但不提供绑卡信息将无法取现，后续绑卡请调用[电子账户绑卡接口](https://paas.huifu.com/open/doc/api/#/yuer/api_acct_dzzhbk) |
+| `request.data.elec_acct_config.elec_card_list[]` | 银行卡信息 | `String` | `—` | `N` | jsonArray字符串，如果开通斗拱E账户但不提供绑卡信息将无法取现，后续绑卡请调用[电子账户绑卡接口](https://paas.huifu.com/open/doc/api/#/yuer/api_acct_dzzhbk) |
 | `request.data.elec_acct_config.elec_card_list[].prov_id` | 银行所在省 | `String` | `6` | `Y` | [参考省市区编码表；](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm)；示例值：310000 |
 | `request.data.elec_acct_config.elec_card_list[].area_id` | 银行所在市 | `String` | `6` | `Y` | [参考省市区编码表；](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm)；示例值：310100 |
 | `request.data.elec_acct_config.elec_card_list[].bank_code` | 银行编码 | `String` | `8` | `Y` | [参考银行编码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_yhbm)；示例值：01020000 |
@@ -267,13 +267,26 @@
 | `request.data.elec_acct_config.elec_acct_sign_seq_id` | 中信签约短信流水号 | `String` | `64` | `N` | 示例值：[官网敏感示例已脱敏] |
 | `request.data.elec_acct_config.sign_success_flag` | 签约成功标志 | `String` | `1` | `Y` | Y：成功 |
 | `request.data.async_return_url` | 异步请求地址 | `String` | `128` | `N` | 为空时不推送异步消息 格式：http://消息接收地址，示例值：http://service.example.com/to/path |
-| `request.data.elec_receipt_config` | 电子回单配置 | `Object` | `—` | `N` | jsonObject字符串；银行电子回单配置功能 |
+| `request.data.elec_receipt_config` | 电子回单配置 | `String` | `—` | `N` | jsonObject字符串；银行电子回单配置功能 |
 | `request.data.elec_receipt_config.switch_state` | 电子回单开关 | `String` | `1` | `Y` | 0:关闭 1:开通 |
-| `request.data.sign_user_info` | 签约人信息 | `Object` | `—` | `C` | 当电子回单配置开关为开通时必填 |
+| `request.data.sign_user_info` | 签约人信息 | `String` | `—` | `C` | 当电子回单配置开关为开通时必填;；当用户升级LV3，并且开通 取现、余额支付、账户充值或者延迟支付任一功能时必填 |
 | `request.data.sign_user_info.type` | 签约人类型 | `String` | `6` | `Y` | LEGAL-法人 |
 | `request.data.sign_user_info.mobile_no` | 签约人手机号 | `String` | `11` | `Y` | 需为11位数字 ；示例值：[官网敏感示例已脱敏] |
 | `request.data.sign_user_info.cert_no` | 签约人身份证 | `String` | `18` | `N` | 企业用户不填默认为法人证件号，个人用户不填默认为个人证件号；当前仅支持法人 |
 | `request.data.sign_user_info.name` | 签约人姓名 | `String` | `32` | `N` | 企业用户不填默认为法人姓名，个人用户不填默认为个人姓名 |
+| `request.data.account_level` | 用户等级 | `String` | `6` | `N` | LV1/LV2/LV3，不填默认LV1 |
+| `request.data.balance_pay_config` | 余额支付配置 | `String` | `—` | `N` | jsonObject格式 账户升级LV3 才能开通 |
+| `request.data.balance_pay_config.fee_rate` | 手续费(%) | `String` | `9` | `Y` | 支持两位小数 fee_rate与fee_fix_amt不能同时为空；示例值：0.50代表费率为0.5% |
+| `request.data.balance_pay_config.fee_fix_amt` | 手续费（固定/元） | `String` | `9` | `Y` | 支持两位小数 fee_rate与fee_fix_amt不能同时为空；示例值：1.50 ； 注：如果fee_fix_amt与fee_rate都填写了则手续费=fee_fix_amt+支付金额*fee_rate |
+| `request.data.balance_pay_config.out_fee_acct_type` | 手续费外扣时的账户类型 | `String` | `2` | `N` | 01-基本户（不填默认01），02-现金户，05-充值户，09-营销户，示例值：01 |
+| `request.data.balance_pay_config.out_fee_huifuid` | 手续费外扣汇付ID | `String` | `18` | `N` | 开通余额支付手续费外扣业务时必填，示例值：[官网示例已脱敏] |
+| `request.data.balance_pay_config.out_fee_flag` | 是否交易手续费外扣 | `String` | `1` | `N` | 是否交易手续费外扣 |
+| `request.data.balance_pay_config.charge_mode` | 扣费模式 | `String` | `2` | `N` | 内扣时枚举值: 01: 默认规则, 02: 收款方分摊, 03: 交易时指定承担方 ；外扣时枚举值: 10: 指定承担方, 11: 出款方承担, 12: 交易时指定承担方 示例值：11；内扣时默认为01，外扣时默认为10 |
+| `request.data.account_recharge_config` | 账户充值配置 | `String` | `—` | `N` | jsonObject格式 账户升级LV3 才能开通 |
+| `request.data.account_recharge_config.fee_rate` | 手续费(%) | `String` | `9` | `Y` | 支持两位小数 fee_rate与fee_fix_amt不能同时为空；示例值：0.50代表费率为0.5% |
+| `request.data.account_recharge_config.fee_fix_amt` | 手续费（固定/元） | `String` | `9` | `Y` | 支持两位小数 fee_rate与fee_fix_amt不能同时为空；示例值：1.50 ； 注：如果fee_fix_amt与fee_rate都填写了则手续费=fee_fix_amt+支付金额*fee_rate |
+| `request.data.delay_pay_config` | 延迟交易配置 | `String` | `—` | `N` | jsonObject格式 账户升级LV3 才能开通 |
+| `request.data.delay_pay_config.switch_state` | 开通状态 | `String` | `1` | `Y` | 1 开通 0关闭 |
 
 ### 同步响应 data
 
@@ -313,7 +326,7 @@
 | `async.data.audit_info.audit_desc` | 审核意见 | `String` | `512` | `N` | 审核意见 |
 | `async.data.audit_info.apply_no` | 申请单号 | `String` | `18` | `Y` | 示例值：[官网示例已脱敏] |
 | `async.data.audit_info.token_no` | 取现卡序列号 | `String` | `20` | `N` | 取现卡序列号，交易时使用 |
-| `async.data.audit_info.resp_business[]` | 业务配置结果状态列表 | `Object` | `—` | `N` | jsonArray格式 |
+| `async.data.audit_info.resp_business[]` | 业务配置结果状态列表 | `String` | `—` | `N` | jsonArray格式 |
 | `async.data.audit_info.resp_business[].type` | 配置类型 | `String` | `1` | `Y` | 1、绑卡信息；2、取现配置；3、结算信息配置；5、灵工业务配置；示例值：1 |
 | `async.data.audit_info.resp_business[].code` | 配置状态 | `String` | `1` | `Y` | S:成功，F:失败；示例值：S |
 | `async.data.audit_info.resp_business[].msg` | 配置返回信息 | `String` | `512` | `N` | 业务响应信息；示例值： |
@@ -322,6 +335,11 @@
 | `async.data.elec_acct_result.bank_status` | 电子账户开通状态 | `String` | `1` | `Y` | S：成功 F：失败；示例值：S |
 | `async.data.elec_acct_result.bank_message` | 银行信息 | `String` | `512` | `N` | 银行信息 |
 | `async.data.elec_acct_result.sign_agreement_id` | 签约协议号 | `String` | `32` | `N` | 商户签约中信E管家协议编号； 签约成功才返回示例值：[官网示例已脱敏] |
+| `async.data.account_info` | 升级信息 | `Object` | `—` | `N` | — |
+| `async.data.account_info.account_level` | 用户等级 | `String` | `6` | `N` | 打款验证成功或活体验证成功后返回用户等级LV2/LV3 |
+| `async.data.account_info.trans_status` | 验证状态 | `String` | `1` | `N` | 对公打款验证：1-打款中，2-打款成功验证中，3-打款失败，4-验证通过，5-验证失败；法人活体验证： 1 验证中 4 验证通过 5 验证失败 |
+| `async.data.account_info.verify_ord_id` | 打款验证流水号 | `String` | `32` | `N` | 对公卡时返回打款流水号，LV2、LV3用户升级绑定对公账户时返回，汇付在用户入驻时向用户对公账户打款，用户需通过打款验证接口上送打款流水号与打款金额完成验证 |
+| `async.data.account_info.face_url` | 人脸活体验证 | `String` | `512` | `N` | 升级LV3，对私验证没有终态时返回 |
 
 ## 用户申请单状态查询
 
@@ -367,7 +385,7 @@
 ## 用户信息查询
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhywcx.md>
-- SHA-256：`2d1099e1af4af840d108a9f81d23b01119776ab494f893b45a0873805a072906`
+- SHA-256：`3b11a53bb0cb52c086a93346fd6788c015ed0e60a3d8ffbd8e9bfb31c73634b6`
 - 说明：完整保留官方类型、长度、必填标记和说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -420,7 +438,7 @@
 | `response.data.ent_base_info.contact_mobile_no` | 管理员手机号 | `String` | `11` | `Y` | 11位数字；示例值：[官网示例已脱敏] |
 | `response.data.ent_base_info.contact_email` | 管理员电子邮箱 | `String` | `64` | `N` | 示例值：[官网敏感示例已脱敏] |
 | `response.data.ent_base_info.login_name` | 管理员账号 | `String` | `32` | `N` | 示例值：[官网敏感示例已脱敏] |
-| `response.data.ent_base_info.file_list[]` | 附件资料列表 | `Object` | `—` | `N` | 格式jsonArray |
+| `response.data.ent_base_info.file_list[]` | 附件资料列表 | `String` | `—` | `N` | 格式jsonArray |
 | `response.data.ent_base_info.file_list[].file_type` | 文件类型 | `String` | `8` | `Y` | 请参考：[文件类型枚举](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_wjlx)；示例值：F85 |
 | `response.data.ent_base_info.file_list[].file_id` | 文件jfileID | `String` | `128` | `Y` | [图片上传接口](https://paas.huifu.com/open/doc/api/#/shgl/shjj/api_shjj_shtpsc)生成的fileId；示例值：[官网敏感示例已脱敏] |
 | `response.data.ent_base_info.file_list[].file_name` | 文件名称 | `String` | `128` | `N` | 示例值：[官网敏感示例已脱敏] |
@@ -435,7 +453,7 @@
 | `response.data.indv_base_info.mobile_no` | 手机号 | `String` | `11` | `Y` | 11位数字，示例值：[官网敏感示例已脱敏] |
 | `response.data.indv_base_info.email` | 电子邮箱 | `String` | `64` | `N` | 示例值：[官网敏感示例已脱敏] |
 | `response.data.indv_base_info.login_name` | 管理员账号 | `String` | `32` | `N` | 示例值：[官网敏感示例已脱敏] |
-| `response.data.indv_base_info.file_list[]` | 附件资料列表 | `Object` | `—` | `N` | 格式jsonArray |
+| `response.data.indv_base_info.file_list[]` | 附件资料列表 | `String` | `—` | `N` | 格式jsonArray |
 | `response.data.indv_base_info.file_list[].file_type` | 文件类型 | `String` | `8` | `Y` | 请参考：[文件类型枚举](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_wjlx)；示例值：F85 |
 | `response.data.indv_base_info.file_list[].file_id` | 文件jfileID | `String` | `128` | `Y` | [图片上传接口](https://paas.huifu.com/open/doc/api/#/shgl/shjj/api_shjj_shtpsc)生成的fileId；示例值：[官网敏感示例已脱敏] |
 | `response.data.indv_base_info.file_list[].file_name` | 文件名称 | `String` | `128` | `N` | 示例值：[官网敏感示例已脱敏] |
@@ -508,7 +526,7 @@
 | `response.data.elec_acct_config.cash_fee_party` | 电子账户提现手续费承担方 | `String` | `1` | `Y` | 1:总部 2:其他 |
 | `response.data.elec_acct_config.scene` | 场景 | `String` | `3` | `Y` | 与角色类型关联，[中信定义的资金类型](https://paas.huifu.com/open/doc/api/#/yuer/api_zxegjzllx)；示例值：001 |
 | `response.data.elec_acct_config.role_type` | 角色类型(角色编号) | `String` | `6` | `Y` | 与场景关联，[中信定义的角色类型](https://paas.huifu.com/open/doc/api/#/yuer/api_zxegjzllx);示例值：001001 |
-| `response.data.elec_acct_config.elec_card_list[]` | 银行卡信息 | `Object` | `—` | `N` | jsonArray字符串 |
+| `response.data.elec_acct_config.elec_card_list[]` | 银行卡信息 | `String` | `—` | `N` | jsonArray字符串 |
 | `response.data.elec_acct_config.elec_card_list[].prov_id` | 银行所在省 | `String` | `6` | `N` | [参考省市区编码表；示例值：310000](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) |
 | `response.data.elec_acct_config.elec_card_list[].area_id` | 银行所在市 | `String` | `6` | `N` | [参考省市区编码表；示例值：310100](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) |
 | `response.data.elec_acct_config.elec_card_list[].bank_code` | 银行编码 | `String` | `8` | `Y` | [参考银行编码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_yhbm)；示例值：01020000 |
@@ -526,18 +544,39 @@
 | `response.data.elec_acct_config.bank_status` | 电子账户开通状态 | `String` | `1` | `Y` | S：成功 F：失败；示例值：S |
 | `response.data.elec_acct_config.bank_message` | 银行信息 | `String` | `512` | `N` | 银行返回开户结果 |
 | `response.data.elec_acct_config.merchant_id` | 银行会员编号 | `String` | `15` | `N` | 示例值：[官网敏感示例已脱敏] |
-| `response.data.elec_receipt_config` | 电子回单配置 | `Object` | `—` | `N` | jsonObject格式；银行电子回单配置功能 |
+| `response.data.elec_receipt_config` | 电子回单配置 | `String` | `—` | `N` | jsonObject格式；银行电子回单配置功能 |
 | `response.data.elec_receipt_config.switch_state` | 电子回单开关 | `String` | `1` | `N` | 0:关闭 1:开通 |
-| `response.data.sign_user_info` | 签约人信息 | `Object` | `—` | `C` | 开通电子回单必填 |
+| `response.data.sign_user_info` | 签约人信息 | `String` | `—` | `C` | 开通电子回单必填 |
 | `response.data.sign_user_info.type` | 签约人类型 | `String` | `6` | `Y` | LEGAL-法人 |
 | `response.data.sign_user_info.name` | 签约人姓名 | `String` | `32` | `N` | 企业用户不填默认为法人姓名，个人用户不填默认为个人姓名；示例值：[官网敏感示例已脱敏] |
 | `response.data.sign_user_info.mobile_no` | 签约人手机号 | `String` | `11` | `Y` | 需为11位数字 ；示例值：[官网敏感示例已脱敏] |
 | `response.data.sign_user_info.cert_no` | 签约人证件号 | `String` | `18` | `N` | 企业用户不填默认为法人证件号，个人用户不填默认为个人证件号；当前仅支持法人;示例值：[官网敏感示例已脱敏] |
+| `response.data.account_info` | 升级信息 | `Object` | `—` | `N` | — |
+| `response.data.account_info.account_level` | 用户等级 | `String` | `6` | `N` | LV1/LV2/LV3，不填默认LV1 |
+| `response.data.account_info.trans_status` | 验证状态 | `String` | `1` | `N` | 对公打款验证：1-打款中，2-打款成功验证中，3-打款失败，4-验证通过，5-验证失败；法人活体验证： 1 验证中 4 验证通过 5 验证失败 |
+| `response.data.account_info.face_url` | 活体验证URL | `String` | `512` | `N` | 升级LV3，没有对公卡时走活体验证。 |
+| `response.data.account_info.verify_ord_id` | 打款验证流水号 | `String` | `32` | `N` | 对公卡时返回打款流水号，LV2、LV3用户升级绑定对公账户时返回，汇付在用户入驻时向用户对公账户打款，用户需通过打款验证接口上送打款流水号与打款金额完成验证 |
+| `response.data.balance_pay_config` | 余额支付配置 | `Object` | `—` | `N` | jsonObject格式 |
+| `response.data.balance_pay_config.switch_state` | 开通状态 | `String` | `1` | `N` | 1 开通 0关闭 |
+| `response.data.balance_pay_config.fee_rate` | 手续费(%) | `String` | `9` | `N` | 支持两位小数 fee_rate与fee_fix_amt不能同时为空；示例值：0.50代表费率为0.5% |
+| `response.data.balance_pay_config.fee_fix_amt` | 手续费（固定/元） | `String` | `9` | `N` | 支持两位小数 fee_rate与fee_fix_amt不能同时为空；示例值：1.50 ； 注：如果fee_fix_amt与fee_rate都填写了则手续费=fee_fix_amt+支付金额*fee_rate |
+| `response.data.balance_pay_config.out_fee_acct_type` | 手续费外扣时的账户类型 | `String` | `2` | `N` | 01-基本户（不填默认01），02-现金户，05-充值户，09-营销户，示例值：01 |
+| `response.data.balance_pay_config.out_fee_huifuid` | 手续费外扣汇付ID | `String` | `18` | `N` | 开通余额支付手续费外扣业务时必填，示例值：[官网示例已脱敏] |
+| `response.data.balance_pay_config.out_fee_flag` | 是否交易手续费外扣 | `String` | `1` | `N` | 1:外扣 2:内扣（默认2内扣）， 示例值：1 |
+| `response.data.balance_pay_config.charge_mode` | 扣费模式 | `String` | `2` | `N` | 内扣时枚举值: 01: 默认规则, 02: 收款方分摊, 03: 交易时指定承担方 ；外扣时枚举值: 10: 指定承担方, 11: 出款方承担, 12: 交易时指定承担方 示例值：11；内扣时默认为01，外扣时默认为10 |
+| `response.data.account_recharge_config` | 账户充值配置 | `Object` | `—` | `N` | jsonObject格式 |
+| `response.data.account_recharge_config.switch_state` | 开通状态 | `String` | `1` | `N` | 1 开通 0关闭 |
+| `response.data.account_recharge_config.fee_rate` | 手续费(%) | `String` | `9` | `N` | 支持两位小数 fee_rate与fee_fix_amt不能同时为空；示例值：0.50代表费率为0.5% |
+| `response.data.account_recharge_config.fee_fix_amt` | 手续费（固定/元） | `String` | `9` | `N` | 支持两位小数 fee_rate与fee_fix_amt不能同时为空；示例值：1.50 ； 注：如果fee_fix_amt与fee_rate都填写了则手续费=fee_fix_amt+支付金额*fee_rate |
+| `response.data.account_recharge_config.transfer_flag_no` | 充值收款账号 | `String` | `32` | `N` | — |
+| `response.data.account_recharge_config.transfer_flag_name` | 充值收款账户名称 | `String` | `128` | `N` | — |
+| `response.data.delay_pay_config` | 延迟交易配置 | `Object` | `—` | `N` | jsonObject格式 |
+| `response.data.delay_pay_config.switch_state` | 开通状态 | `String` | `1` | `N` | 1 开通 0关闭 |
 
 ## 企业用户基本信息修改
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_qyyhjbxxxg.md>
-- SHA-256：`55f762001ed26859412b98248b71dc8aaecc3e508ec6669bc6e0bec92c6eb90d`
+- SHA-256：`bb0b2a7339463d9731243e7d91ec9bfd729180d844646bb119b68655a11a5df8`
 - 说明：完整保留官方类型、长度、必填标记和说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -562,7 +601,7 @@
 | --- | --- | --- | ---: | :---: | --- |
 | `request.data.req_date` | 请求日期 | `String` | `8` | `Y` | 格式yyyyMMdd；示例值：20220905 |
 | `request.data.req_seq_id` | 请求流水号 | `String` | `32` | `Y` | 示例值：rQ[官网示例已脱敏] |
-| `request.data.huifu_id` | 汇付客户Id | `String` | `18` | `Y` | 渠道与一级代理商的直属汇付客户Id；示例值：[官网示例已脱敏] |
+| `request.data.huifu_id` | 汇付客户Id | `String` | `18` | `Y` | 当前用户的huifu_id；示例值：[官网示例已脱敏] |
 | `request.data.reg_name` | 企业用户名称 | `String` | `128` | `N` | 示例值：[官网敏感示例已脱敏]；注：修改名称前请联系汇付运营做白名单处理，否则会校验失败 |
 | `request.data.short_name` | 经营简称 | `String` | `20` | `N` | 示例值：[官网敏感示例已脱敏] |
 | `request.data.ent_type` | 公司类型 | `String` | `1` | `N` | 1:政府机构 2:国营企业 3:私营企业 4:外资企业 5:个体工商户 6:其它组织 7:事业单位 8:集体经济；示例值：2 |
@@ -600,7 +639,7 @@
 ## 个人用户基本信息修改
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_gryhjbxxxg.md>
-- SHA-256：`f78db9dc5401496265b7836eb1dc3cdf6cce47263a0de366f29c0008c33ce23c`
+- SHA-256：`b1495f896cfc12f8e8324c8aa1f97655c0c87d41c626ea636eda54b7b3aa741c`
 - 说明：完整保留官方类型、长度、必填标记和说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -625,7 +664,7 @@
 | --- | --- | --- | ---: | :---: | --- |
 | `request.data.req_seq_id` | 请求流水号 | `String` | `32` | `Y` | 请求流水号，同一商户号当天唯一；示例值：[官网示例已脱敏] |
 | `request.data.req_date` | 请求日期 | `String` | `8` | `Y` | 日期格式：yyyyMMdd，以北京时间为准；示例值：20220125 |
-| `request.data.huifu_id` | 汇付客户Id | `String` | `18` | `Y` | 渠道与一级代理商的直属汇付客户Id；示例值：[官网示例已脱敏] |
+| `request.data.huifu_id` | 汇付客户Id | `String` | `18` | `Y` | 当前用户的huifu_id；示例值：[官网示例已脱敏] |
 | `request.data.cert_validity_type` | 个人证件有效期类型 | `String` | `1` | `N` | 1:长期有效；0:非长期有效；示例值：0 |
 | `request.data.cert_begin_date` | 个人证件有效期开始日期 | `String` | `8` | `N` | 日期格式：yyyyMMdd 示例值：20220125 |
 | `request.data.cert_end_date` | 个人证件有效期截止日期 | `String` | `8` | `N` | 日期格式：yyyyMMdd; 长期有效时可不填；示例值：20220125 |
@@ -652,7 +691,7 @@
 ## 用户业务入驻修改
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_ywrzxg.md>
-- SHA-256：`e8abc91b15587be26552d8989c408769246e4686fcdde02b74efec581344faf9`
+- SHA-256：`ca3c5d4430cba1827c806c87d7dee3417b3f78bd4883ce1e88ea90149e5d9c78`
 - 说明：完整保留官方类型、长度、必填标记和说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -689,7 +728,7 @@
 | `request.data.settle_config_list[].settle_abstract` | 结算摘要 | `String` | `128` | `N` | 默认为空，如果需要自定义结算打款备注，请使用此字段传入；支持配置格式化摘要内容，参见[结算配置示例说明](https://paas.huifu.com/open/doc/api/#/jyjs/api_jyjs_pzslsm)；示例值：业务收款 |
 | `request.data.settle_config_list[].settle_batch_no` | 结算批次号 | `String` | `32` | `C` | settle_pattern为P0时必填；[参见结算批次说明](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_jspc) |
 | `request.data.settle_config_list[].settle_pattern` | 结算方式 | `String` | `2` | `N` | P0：批次结算（为空时默认值），~~P1：定时结算~~(建议选P0和P2)，P2:批次定时结算；示例值：P0 |
-| `request.data.settle_config_list[].is_priority_receipt` | 是否优先到账 | `String` | `1` | `C` | settle_pattern为P0时选填， Y：是 N：否（为空默认取值）；示例值：Y |
+| `request.data.settle_config_list[].is_priority_receipt` | 是否优先到账 | `String` | `1` | `C` | settle_pattern为P0时必填， Y：是 N：否（为空默认取值）；示例值：Y |
 | `request.data.settle_config_list[].settle_time` | 自定义结算处理时间 | `String` | `6` | `C` | settle_pattern为P1/P2时必填，注意：00:00到00:30不能指定；格式：HHmmss；示例值：103000 |
 | `request.data.settle_config_list[].fixed_ratio` | 节假日结算手续费率 | `String` | `6` | `C` | settle_cycle为D1时必填。单位%，需保留小数点后两位。取值范围[0.00，100.00]，不收费请填写0.00；settle_cycle=T1时，不生效 ；settle_cycle为D1时，遇节假日按此费率结算 ；示例值：0.05 |
 | `request.data.settle_config_list[].workday_fixed_ratio` | 工作日结算手续费率 | `String` | `6` | `N` | 单位%，需保留小数点后两位。取值范围[0.00，100.00]，不填默认为0.00；示例值：0.05 |
@@ -714,14 +753,14 @@
 | `request.data.cash_config[].cash_type` | 业务类型 | `String` | `2` | `N` | T1/D1/D0/DM；默认D0；示例值：T1 |
 | `request.data.cash_config[].fix_amt` | 提现手续费（固定/元） | `String` | `6` | `C` | fix_amt与fee_rate至少填写一项， 需保留小数点后两位，不收费请填写0.00；示例值：1.00；注：当cash_type=D1时为节假日取现手续费 |
 | `request.data.cash_config[].fee_rate` | 提现手续费率（%） | `String` | `6` | `C` | fix_amt与fee_rate至少填写一项，需保留小数点后两位，取值范围[0.00,100.00]，不收费请填写0.00；示例值：0.05；注：1、如果fix_amt与fee_rate都填写了则手续费=fix_amt+支付金额\*fee_rate；2、当cash_type=D1时为节假日取现手续费 |
-| `request.data.cash_config[].weekday_fix_amt` | D1工作日取现手续费固定金额 | `String` | `6` | `C` | 单位元，需保留小数点后两位。不收费请填写0.00；示例值：1.00；cash_type=D1时，不生效 ；cash_type取现类型为D1时，遇工作日按此费率结算，若未配置则默认按照节假日手续费计算 |
-| `request.data.cash_config[].weekday_fee_rate` | D1工作日取现手续费率 | `String` | `6` | `C` | 单位%，需保留小数点后两位。取值范围[0.00，100.00]，不收费请填写0.00；示例值：0.05；cash_type=D1时，不生效 ；cash_type取现类型为D1时，遇工作日按此费率结算 ，若未配置则默认按照节假日手续费计算 |
+| `request.data.cash_config[].weekday_fix_amt` | D1工作日取现手续费固定金额 | `String` | `6` | `C` | 单位元，需保留小数点后两位。不收费请填写0.00；示例值：1.00；cash_type取现类型为D1时，遇工作日按此费率结算，若未配置则默认按照节假日手续费计算 |
+| `request.data.cash_config[].weekday_fee_rate` | D1工作日取现手续费率 | `String` | `6` | `C` | 单位%，需保留小数点后两位。取值范围[0.00，100.00]，不收费请填写0.00；示例值：0.05；cash_type取现类型为D1时，遇工作日按此费率结算 ，若未配置则默认按照节假日手续费计算 |
 | `request.data.cash_config[].out_fee_flag` | 是否交易手续费外扣 | `String` | `1` | `N` | 1:外扣 2:内扣（默认2内扣）；示例值：1 |
 | `request.data.cash_config[].out_fee_huifu_id` | 手续费承担方 | `String` | `18` | `N` | 手续费外扣时必需指定手续费承担方ID ；示例值：[官网示例已脱敏] |
 | `request.data.cash_config[].out_fee_acct_type` | 交易手续费外扣的账户类型 | `String` | `2` | `N` | 01-基本户，02-现金户，05-充值户；不填默认01 ；示例值：01 |
 | `request.data.cash_config[].is_priority_receipt` | 是否优先到账 | `String` | `1` | `N` | Y：是 ，N：否。不填，默认值为否。仅在取现类型配置为D1 和 T1 时生效。示例值：Y |
 | `request.data.file_list[]` | 文件列表 | `String` | `—` | `N` | jsonArray格式 |
-| `request.data.file_list[].file_type` | 文件类型 | `String` | `8` | `Y` | card_type为4时，需上传以下文件：营业执照(文件类型：F07)、开户许可证(文件类型：F08)、非同名结算证明材料(文件枚举：F516)；法人证件不同类型上传不同文件，00身份证：F02【法人】身份证人像面、F03【法人】身份证国徽面；04回乡证(港澳居民来往内地通行证)：F31【法人】港澳台居民来往内地通行证；13外国人居留证：F511【法人】外国人居留证；14台胞证(台湾居民来往大陆通行证)：F31【法人】港澳台居民来往内地通行证；15港澳台居民居住证：F512【法人】港澳台居住；请参考：[文件类型枚举](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_wjlx) ；示例值：F01 |
+| `request.data.file_list[].file_type` | 文件类型 | `String` | `8` | `Y` | card_type为4时，需上传以下文件：营业执照(文件类型：F07)、开户许可证(文件类型：F08)、非同名结算证明材料(文件枚举：F516)；法人证件不同类型上传不同文件，00身份证：F02【法人】身份证人像面、F03【法人】身份证国徽面；04回乡证(港澳居民来往内地通行证)：F31【法人】港澳台居民来往内地通行证；13外国人居留证：F511【法人】外国人居留证；14台胞证(台湾居民来往大陆通行证)：F31【法人】港澳台居民来往内地通行证；15港澳台居民居住证：F512【法人】港澳台居住；请参考：[文件类型枚举](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_wjlx) ；示例值：F01；用户账户等级为LV2时，需上传以下文件并进入审核；企业用户：营业执照(文件类型：F07)、；对公结算：开户许可证(文件类型：F08)、；法人证件不同类型上传不同文件，；00身份证：F02【法人】身份证人像面、F03【法人】身份证国徽面；04回乡证(港澳居民来往内地通行证)：F31【法人】港澳台居民来往内地通行证；13外国人居留证：F511【法人】外国人居留证；14台胞证(台湾居民来往大陆通行证)：F31【法人】港澳台居民来往内地通行证 ；15港澳台居民居住证：F512【法人】港澳台居住；个人用户：法人证件不同类型上传不同文件，；00身份证：F02【法人】身份证人像面、F03【法人】身份证国徽面；04回乡证(港澳居民来往内地通行证)：F31【法人】港澳台居民来往内地通行证；13外国人居留证：F511【法人】外国人居留证；14台胞证(台湾居民来往大陆通行证)：F31【法人】港澳台居民来往内地通行证；15港澳台居民居住证：F512【法人】港澳台居住；用户账户等级为LV3时，；需上传以下文件并进入审核；企业用户：营业执照(文件类型：F07)、；对公结算：开户许可证(文件类型：F08)、；对私法人结算：银行卡卡号面(文件类型：F13)；法人证件不同类型上传不同文件，；00身份证：F02【法人】身份证人像面、F03【法人】身份证国徽面；04回乡证(港澳居民来往内地通行证)：F31【法人】港澳台居民来往内地通行证；13外国人居留证：F511【法人】外国人居留证；14台胞证(台湾居民来往大陆通行证)：F31【法人】港澳台居民来往内地通行证；15港澳台居民居住证：F512【法人】港澳台居住；门头照 F22（店铺门头照图片）、收银台/前台照 F105（店铺收银台）、办公场地照 F371（办公环境照）；个人用户：不支持 |
 | `request.data.file_list[].file_id` | 文件jfileID | `String` | `128` | `Y` | [图片上传接口](https://paas.huifu.com/open/doc/api/#/shgl/shjj/api_shjj_shtpsc)生成的fileId；示例值：[官网敏感示例已脱敏] |
 | `request.data.file_list[].file_name` | 文件名称 | `String` | `128` | `N` | 示例值：[官网敏感示例已脱敏] |
 | `request.data.delay_flag` | 延迟入账开关 | `String` | `1` | `N` | 选项：N：否 Y：是；示例值：N |
@@ -732,7 +771,7 @@
 | `request.data.elec_acct_config.cash_fee_party` | 电子账户提现手续费承担方 | `String` | `1` | `Y` | 1:总部 2:其他 |
 | `request.data.elec_acct_config.scene` | 场景 | `String` | `3` | `Y` | 与角色类型关联，[中信定义的资金类型](https://paas.huifu.com/open/doc/api/#/yuer/api_zxegjzllx)；示例值：001 |
 | `request.data.elec_acct_config.role_type` | 角色类型(角色编号) | `String` | `6` | `Y` | 必填；与场景关联，[中信定义的角色类型](https://paas.huifu.com/open/doc/api/#/yuer/api_zxegjzllx);示例值：001001 |
-| `request.data.elec_acct_config.elec_card_list[]` | 银行卡信息 | `Object` | `—` | `N` | jsonArray字符串，如果开通斗拱E账户但不提供绑卡信息将无法取现，后续绑卡请调用电子账户绑卡接口 |
+| `request.data.elec_acct_config.elec_card_list[]` | 银行卡信息 | `String` | `—` | `N` | jsonArray字符串，如果开通斗拱E账户但不提供绑卡信息将无法取现，后续绑卡请调用电子账户绑卡接口 |
 | `request.data.elec_acct_config.elec_card_list[].prov_id` | 银行所在省 | `String` | `6` | `Y` | [参考省市区编码表](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) ；示例值：310000 |
 | `request.data.elec_acct_config.elec_card_list[].area_id` | 银行所在市 | `String` | `6` | `Y` | [参考省市区编码表](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) ；示例值：310100 |
 | `request.data.elec_acct_config.elec_card_list[].bank_code` | 银行编码 | `String` | `8` | `Y` | [参考银行编码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_yhbm)；示例值：01020000 |
@@ -749,13 +788,26 @@
 | `request.data.elec_acct_config.bank_message` | 银行信息 | `String` | `512` | `N` | 银行信息 |
 | `request.data.elec_acct_config.elec_acct_sign_seq_id` | 中信签约短信流水号 | `String` | `64` | `N` | 示例值：[官网敏感示例已脱敏] |
 | `request.data.elec_acct_config.sign_success_flag` | 签约成功标志 | `String` | `1` | `N` | Y：成功 |
-| `request.data.elec_receipt_config` | 电子回单配置 | `Object` | `—` | `N` | jsonObject字符串；银行电子回单配置功能 |
+| `request.data.elec_receipt_config` | 电子回单配置 | `String` | `—` | `N` | jsonObject字符串；银行电子回单配置功能 |
 | `request.data.elec_receipt_config.switch_state` | 电子回单开关 | `String` | `1` | `Y` | 0:关闭 1:开通 |
-| `request.data.sign_user_info` | 签约人信息 | `Object` | `—` | `C` | 当电子回单配置开关为开通时必填 |
+| `request.data.sign_user_info` | 签约人信息 | `String` | `—` | `C` | 当电子回单配置开关为开通时必填;；当用户升级LV3，并且开通 取现、余额支付、账户充值或者延迟支付任一功能时必填 |
 | `request.data.sign_user_info.type` | 签约人类型 | `String` | `6` | `Y` | LEGAL-法人 |
 | `request.data.sign_user_info.mobile_no` | 签约人手机号 | `String` | `11` | `Y` | 签约人手机号 |
 | `request.data.sign_user_info.cert_no` | 签约人身份证 | `String` | `18` | `N` | 企业用户不填默认为法人证件号，个人用户不填默认为个人证件号；当前仅支持法人 |
 | `request.data.sign_user_info.name` | 签约人姓名 | `String` | `32` | `N` | 企业用户不填默认为法人姓名，个人用户不填默认为个人姓名 |
+| `request.data.account_level` | 用户等级 | `String` | `6` | `N` | LV1/LV2/LV3，不填默认LV1 |
+| `request.data.balance_pay_config` | 余额支付配置 | `String` | `—` | `N` | jsonObject格式 账户升级LV3 才能开通 |
+| `request.data.balance_pay_config.fee_rate` | 手续费(%) | `String` | `9` | `Y` | 支持两位小数 fee_rate与fee_fix_amt不能同时为空；示例值：0.50代表费率为0.5% |
+| `request.data.balance_pay_config.fee_fix_amt` | 手续费（固定/元） | `String` | `9` | `Y` | 支持两位小数 fee_rate与fee_fix_amt不能同时为空；示例值：1.50 ； 注：如果fee_fix_amt与fee_rate都填写了则手续费=fee_fix_amt+支付金额*fee_rate |
+| `request.data.balance_pay_config.out_fee_acct_type` | 手续费外扣时的账户类型 | `String` | `2` | `N` | 01-基本户（不填默认01），02-现金户，05-充值户，09-营销户，示例值：01 |
+| `request.data.balance_pay_config.out_fee_huifuid` | 手续费外扣汇付ID | `String` | `18` | `N` | 开通余额支付手续费外扣业务时必填，示例值：[官网示例已脱敏] |
+| `request.data.balance_pay_config.out_fee_flag` | 是否交易手续费外扣 | `String` | `1` | `N` | 是否交易手续费外扣 |
+| `request.data.balance_pay_config.charge_mode` | 扣费模式 | `String` | `2` | `N` | 内扣时枚举值: 01: 默认规则, 02: 收款方分摊, 03: 交易时指定承担方 ；外扣时枚举值: 10: 指定承担方, 11: 出款方承担, 12: 交易时指定承担方 示例值：11；内扣时默认为01，外扣时默认为10 |
+| `request.data.account_recharge_config` | 账户充值配置 | `String` | `—` | `N` | jsonObject格式 账户升级LV3 才能开通 |
+| `request.data.account_recharge_config.fee_rate` | 手续费(%) | `String` | `9` | `Y` | 支持两位小数 fee_rate与fee_fix_amt不能同时为空；示例值：0.50代表费率为0.5% |
+| `request.data.account_recharge_config.fee_fix_amt` | 手续费（固定/元） | `String` | `9` | `Y` | 支持两位小数 fee_rate与fee_fix_amt不能同时为空；示例值：1.50 ； 注：如果fee_fix_amt与fee_rate都填写了则手续费=fee_fix_amt+支付金额*fee_rate |
+| `request.data.delay_pay_config` | 延迟交易配置 | `String` | `—` | `N` | jsonObject格式 账户升级LV3 才能开通 |
+| `request.data.delay_pay_config.switch_state` | 开通状态 | `String` | `1` | `Y` | 1 开通 0关闭 |
 
 ### 同步响应 data
 
@@ -795,7 +847,7 @@
 | `async.data.audit_info.audit_desc` | 审核意见 | `String` | `512` | `N` | 审核意见 |
 | `async.data.audit_info.apply_no` | 申请单号 | `String` | `18` | `Y` | 示例值：[官网示例已脱敏] |
 | `async.data.audit_info.token_no` | 取现卡序列号 | `String` | `20` | `N` | 取现卡序列号，交易时使用 |
-| `async.data.audit_info.resp_business[]` | 业务配置结果状态列表 | `Object` | `—` | `N` | jsonArray格式 |
+| `async.data.audit_info.resp_business[]` | 业务配置结果状态列表 | `String` | `—` | `N` | jsonArray格式 |
 | `async.data.audit_info.resp_business[].type` | 配置类型 | `String` | `1` | `Y` | 1、绑卡信息；2、取现配置；3、结算信息配置；5、灵工业务配置；示例值：1 |
 | `async.data.audit_info.resp_business[].code` | 配置状态 | `String` | `1` | `Y` | S:成功，F:失败；示例值：S |
 | `async.data.audit_info.resp_business[].msg` | 配置返回信息 | `String` | `512` | `N` | 业务响应信息；示例值： |
@@ -804,11 +856,16 @@
 | `async.data.elec_acct_result.bank_status` | 电子账户开通状态 | `String` | `1` | `Y` | S：成功 F：失败；示例值：S |
 | `async.data.elec_acct_result.bank_message` | 银行信息 | `String` | `512` | `N` | 银行信息 |
 | `async.data.elec_acct_result.sign_agreement_id` | 签约协议号 | `String` | `32` | `N` | 商户签约中信E管家协议编号； 签约成功才返回示例值：[官网示例已脱敏] |
+| `async.data.account_info` | 升级信息 | `Object` | `—` | `N` | 用户升级信息 |
+| `async.data.account_info.account_level` | 用户等级 | `String` | `6` | `N` | LV1/LV2/LV3，不填默认LV1 |
+| `async.data.account_info.trans_status` | 验证状态 | `String` | `1` | `N` | 验证状态：打款打款验证：1-打款中，2-打款成功验证中，3-打款失败，4-验证通过，5-验证失败；人脸验证： 1 验证中 4 验证通过 5 验证失败 |
+| `async.data.account_info.verify_ord_id` | 打款验证流水号 | `String` | `32` | `N` | 对公卡时返回打款流水号，LV2、LV3用户升级绑定对公账户时返回，汇付在用户入驻时向用户对公账户打款，用户需通过打款验证接口上送打款流水号与打款金额完成验证 |
+| `async.data.account_info.face_url` | 人脸活体验证 | `String` | `512` | `N` | 升级LV3，对私验证没有终态时返回 |
 
 ## 用户列表查询
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhlbcx.md>
-- SHA-256：`606b95a1188cb64ed34daad76ebdb678225d3589fbbf7bea9e02f83698bf7f5f`
+- SHA-256：`b10ab1529c58d5739cae0f38b5f385a105e3f2d6b3348400f6882328b7421d9d`
 - 说明：完整保留官方类型、长度、必填标记和说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -842,7 +899,7 @@
 | --- | --- | --- | ---: | :---: | --- |
 | `response.data.resp_code` | 业务响应码 | `String` | `8` | `Y` | [业务返回码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_ywm) |
 | `response.data.resp_desc` | 业务响应信息 | `String` | `512` | `Y` | [业务返回描述](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_ywm) |
-| `response.data.user_list_info_list[]` | 用户详情列表 | `Object` | `—` | `N` | jsonArray格式 |
+| `response.data.user_list_info_list[]` | 用户详情列表 | `String` | `—` | `N` | jsonArray格式 |
 | `response.data.user_list_info_list[].huifu_id` | 汇付ID | `String` | `18` | `N` | 示例值：[官网示例已脱敏] |
 | `response.data.user_list_info_list[].name` | 用户名称 | `String` | `128` | `N` | 示例值：[官网敏感示例已脱敏] |
 | `response.data.user_list_info_list[].cust_type` | 用户类型 | `String` | `2` | `N` | 1：企业用户，2：个人用户；示例值：1 |

@@ -2,7 +2,7 @@
 
 ## 适用范围
 
-用于结算卡变更或中信 E 管家签约等场景发送、核验短信验证码。官方来源：[商户短信发送](https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shdxfs.md)，锁定来源 SHA-256 为 `562e269268e10248931e0c9ed556a99e88966ddd953b67333f9a106df5934bc3`。
+用于结算卡变更或中信 E 管家签约等场景发送、核验短信验证码。官方来源：[商户短信发送](https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shdxfs.md)，锁定来源 SHA-256 为 `6982fe07d276cbb0739c9c205afbc5b238dd6d72422154efd6248932aa459b54`。
 
 验证码、手机号和签约流水均为敏感数据；不得记录到日志、仓库、示例或前端持久化。
 
@@ -10,7 +10,7 @@
 
 - Endpoint：`POST https://api.huifu.com/v2/merchant/basicdata/sms/send`。
 - 请求顶层为 `sys_id:String(32) Y`、`product_id:String(32) Y`、`sign:String(512) Y`、`data:Json Y`；响应顶层为 `sign:String(512) Y`、`data:Json N`。
-- 完整目录共 20 个节点：请求 12、同步响应 8、无异步通知。完整路径、类型、长度、Y/N/C 和官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户短信发送”。
+- 完整目录共20个节点：请求12、同步响应8、无异步通知。完整路径、类型、长度、Y/N/C 和官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户短信发送”。
 - 请求必填 `data.req_seq_id:String(32) Y`、`data.req_date:String(8) Y`、`data.huifu_id:String(18) Y`、`data.verify_type:String Y`。
 
 ## 条件字段
@@ -26,11 +26,11 @@
 
 ## 公共请求头
 
-- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.2`，双 Skill 默认 `hfps/1.3.5;hfms/1.0.2`。
+- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.4`，双 Skill 默认 `hfps/1.3.5;hfms/1.0.4`。
 
 ## SDK 证据
 
-用户提供且已锁定源码树摘要的 Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` 均存在对应封装：
+用户提供且已锁定源码树摘要的 Java `3.0.41`、PHP `2.0.31`、Python `2.0.28` 均存在对应封装：
 
 - Java / PHP：`V2MerchantBasicdataSmsSendRequest`
 - Python：`V2MerchantBasicdataSmsSendRequest`，模块 `v2_merchant_basicdata_sms_send_request.py`

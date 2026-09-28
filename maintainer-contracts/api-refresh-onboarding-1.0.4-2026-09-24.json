@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "refresh_id": "api-refresh-onboarding-1.0.4-2026-09-24",
+  "source_review_id": "api-refresh-onboarding-online-review-2026-09-22",
+  "requested_at": "2026-09-24",
+  "retrieved_at": "2026-09-22T14:49:12+08:00",
+  "version_state": {
+    "reason": "User-requested onboarding version bump after the completed API/local-SDK review and Python target-version documentation update. Candidate only, not published.",
+    "huifu-merchant-onboarding": "1.0.4",
+    "huifu-pay-integration": "1.3.6"
+  },
+  "previous_refresh": {
+    "path": "maintainer-contracts/api-refresh-onboarding-online-review-2026-09-22.json",
+    "sha256": "c09a12f3a2edf4a346d5c204f25bf9e4cc1c9c3b81ddacc17e1530c94214798a",
+    "refresh_id": "api-refresh-onboarding-online-review-2026-09-22"
+  },
+  "source_locks": {
+    "merchant_onboarding_current": {
+      "path": "maintainer-contracts/merchant-onboarding-source-lock-2026-09-22.json",
+      "sha256": "5b17f7fe29c669151a5167f7579ca35d132133860ce543e7c95b405678bea90c"
+    },
+    "user_onboarding_current": {
+      "path": "maintainer-contracts/user-onboarding-source-lock-2026-09-22.json",
+      "sha256": "f48fe3118c555a0390033168ad7515f605bd5d3766f3991a1d0a4769f01ba677"
+    },
+    "onboarding_extension_current": {
+      "path": "maintainer-contracts/onboarding-extension-source-lock-2026-09-22.json",
+      "sha256": "67be09f33a8a9dee6b6bf11550783eb00baacfe0805b3c01fd59835c130c59ba"
+    },
+    "onboarding_1_0_3": {
+      "path": "maintainer-contracts/merchant-onboarding-1.0.3-source-lock-2026-09-22.json",
+      "sha256": "1faa14779d2577f635c2328050b7cc23eb7976e3b04ca416245763b63badc6be"
+    }
+  },
+  "catalogs": {
+    "merchant": {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
+      "sha256": "c5ae11bb2062480b0d1fd079991257f286bed597b69933c3451c34997e2cf680",
+      "field_paths": 2210
+    },
+    "user": {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md",
+      "sha256": "599e13fc46a249b8a3589038789ac0be441543754e4a54d18cc13cddf744b7c0",
+      "field_paths": 611
+    },
+    "extension": {
+      "path": "huifu-merchant-onboarding/references/onboarding-extension-complete-field-catalog.md",
+      "sha256": "d2674e11ce0ef9a93b9ec669ff16bec4fca698d78a060ab8e176e6255cccf449",
+      "field_paths": 546
+    }
+  },
+  "scope": [
+    "Onboarding candidate version 1.0.4 and default skill_source hfms/1.0.4",
+    "Dual-Skill source hfps/1.3.6;hfms/1.0.4; explicit caller source values remain unchanged",
+    "Reuse the completed 34-interface source review and 3,367 field paths without new source retrieval or business-field changes"
+  ],
+  "field_delta": {
+    "merchant_paths_added": 82,
+    "merchant_paths_removed": 79,
+    "merchant_paths_changed": 194,
+    "merchant_catalog_total": 2210,
+    "user_paths_added": 57,
+    "user_paths_removed": 0,
+    "user_paths_changed": 6,
+    "user_catalog_total": 611,
+    "extension_paths_added": 26,
+    "extension_paths_removed": 28,
+    "extension_paths_changed": 66,
+    "extension_catalog_total": 546,
+    "combined_total": 3367
+  },
+  "version_bump_field_delta": {
+    "field_paths_added": 0,
+    "field_paths_removed": 0,
+    "field_paths_changed": 0
+  },
+  "python_sdk": {
+    "target_version": "2.0.26",
+    "verified_source_version": "2.0.25",
+    "target_source_verified": false
+  },
+  "preserved_boundaries": [
+    "Source-lock current_extension IDs and aggregate version 1.0.3 retain their original reviewed identity",
+    "All historical refresh records, source locks, raw documents and frozen sandbox assets are unchanged",
+    "Payment remains 1.3.6; prior refresh records retain their historical companion-version snapshots",
+    "Python 2.0.26 is the onboarding target only; available source/runtime evidence remains 2.0.25, with non-blocking developer advisories",
+    "No SDK mutation, live gateway calls, real-model run, commit or publication is implied"
+  ],
+  "release_rule": "Version synchronization does not publish artifacts. Source, field, SDK evidence, regression and package checks must pass; formal publication still requires the clean-commit release workflow."
+}

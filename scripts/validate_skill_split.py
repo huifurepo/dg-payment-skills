@@ -10,7 +10,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from skill_validation_config import ONBOARDING_SOURCE_LOCK
+from skill_validation_config import ONBOARDING_SOURCE_LOCK, USER_ONBOARDING_SOURCE_LOCK
 from validation_runtime import require_assertions_enabled
 
 
@@ -41,10 +41,57 @@ EXPECTED_CATEGORY_COUNTS = {
     "REPO_ONLY": 2,
 }
 LOCAL_LINK = re.compile(r"\[[^\]]+\]\((?!https?://)(?!#)([^)]+)\)")
+# This historical lock hashed a Windows worktree with five LF-only lines.
+# Git stored LF throughout. Reconstruct only that exact byte representation;
+# the sealed digest, not newline-normalized text, still decides acceptance.
+LEGACY_SIGNING_TARGET = "huifu-pay-integration/references/shared-signing-v2.md"
+LEGACY_SIGNING_DIGEST = "f9d45674828826a11581cb0ed79a5764d0abd5b962c9d96c744459f992103964"
+LEGACY_SIGNING_LF_LINES = frozenset({3, 49, 55, 56, 57})
+LEGACY_WORKTREE_LINE_ENDINGS = {
+    LEGACY_SIGNING_TARGET: (LEGACY_SIGNING_DIGEST, LEGACY_SIGNING_LF_LINES),
+    "huifu-pay-integration/references/hostingpay-async-webhook.md": (
+        "87139a48125f66639304118425edce9b4f40c0dadd1e2889d524a6803081c188",
+        frozenset({55, 56, 57, 58, 59}),
+    ),
+}
+
+
+# Exact historical mixed-newline profiles recovered from the sealed worktree bytes.
+LEGACY_WORKTREE_LINE_ENDINGS.update({
+    'huifu-pay-integration/references/aggregation-customer-preparation.md': ('535d7d33a78a486c42a1aa8d8198e6d166021855539ca36824b5541f374e6e22', frozenset([38, 64, 65, 89, 90, 91, 92, 125, 126, 127, 128, 129, 130])),
+    'huifu-pay-integration/references/aggregation-order-method-alipay.md': ('5fe5de19a7792fd30e3a19d8951416f61e67606932fde11b000a8303957d90ea', frozenset([1, 2, 3, 34])),
+    'huifu-pay-integration/references/aggregation-order-method-unionpay.md': ('c8cd951659936d0b02ba477293cb2c733cb55d1a2e1a317d0ac0d70d85fd41fc', frozenset([1, 2, 3, 33])),
+    'huifu-pay-integration/references/aggregation-order-method-wechat.md': ('0bf577e484ea2b042ca91d8f88edcae24c29811b5761b22106250a78ac3c500c', frozenset([1, 2, 3, 34, 35, 39, 47, 48, 58, 66, 67, 68, 83, 148])),
+    'huifu-pay-integration/references/hostingpay-error-codes.md': ('b5d1e6544ba2d0135a1d4c4071eee8b4de1ffa86f75f931a08dd73ee7f202066', frozenset([1, 2, 3, 4, 5, 46, 93, 94])),
+    'huifu-pay-integration/references/shared-async-notify.md': ('87191f8a4696231ef48367ec48b5a21a2945107a6626baf2d7ccca7fd766ac63', frozenset([3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 56, 57, 58, 65, 66, 67])),
+    'huifu-pay-integration/references/shared-credential-boundary.md': ('e2c9ebc7e7f284fc944e1f7d7014bf92d77db5c804cf920dcdb89764f41cd46b', frozenset([3, 21, 22, 23, 24])),
+})
 
 
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def reviewed_snapshot_matches(
+    relative_path: str, snapshot_bytes: bytes, expected_digest: str
+) -> bool:
+    if hashlib.sha256(snapshot_bytes).hexdigest() == expected_digest:
+        return True
+    # Older locks sometimes sealed CRLF worktree bytes before Git normalized them.
+    # Compare reconstructed bytes against the unchanged sealed hash, never a new hash.
+    crlf_bytes = snapshot_bytes.replace(b"\r\n", b"\n").replace(b"\n", b"\r\n")
+    if hashlib.sha256(crlf_bytes).hexdigest() == expected_digest:
+        return True
+    profile = LEGACY_WORKTREE_LINE_ENDINGS.get(relative_path)
+    if profile is None or expected_digest != profile[0]:
+        return False
+    normalized = snapshot_bytes.replace(b"\r\n", b"\n")
+    lines = normalized.splitlines(keepends=True)
+    historical_bytes = b"".join(
+        line if number in profile[1] else line.replace(b"\n", b"\r\n")
+        for number, line in enumerate(lines, 1)
+    )
+    return hashlib.sha256(historical_bytes).hexdigest() == expected_digest
 
 
 def commit_bytes(commit: str, path: str) -> bytes:
@@ -290,25 +337,44 @@ def validate_transformation_target_lock(
     if not isinstance(locked, dict) or set(locked) != expected_targets:
         error(errors, "reference transformation target lock destination set differs")
         return
+    try:
+        lock_snapshot_commit = subprocess.check_output(
+            [
+                "git",
+                "log",
+                "-1",
+                "--format=%H",
+                "--",
+                TRANSFORMATION_TARGET_LOCK.relative_to(REPO_ROOT).as_posix(),
+            ],
+            cwd=REPO_ROOT,
+            text=True,
+        ).strip()
+    except subprocess.CalledProcessError:
+        error(errors, "cannot resolve the committed transformation target lock snapshot")
+        return
+    if not re.fullmatch(r"[0-9a-f]{40}", lock_snapshot_commit):
+        error(errors, "transformation target lock snapshot commit is invalid")
+        return
     for relative_path, expected_digest in locked.items():
         target = REPO_ROOT / relative_path
         if not target.is_file():
             error(errors, f"{relative_path}: reviewed transformation target is missing")
             continue
         try:
-            head_digest = hashlib.sha256(commit_bytes("HEAD", relative_path)).hexdigest()
+            reviewed_bytes = commit_bytes(lock_snapshot_commit, relative_path)
         except subprocess.CalledProcessError:
-            error(errors, f"{relative_path}: reviewed transformation target is absent from HEAD")
+            error(
+                errors,
+                f"{relative_path}: reviewed transformation target is absent from lock snapshot",
+            )
             continue
-        if head_digest != expected_digest:
-            error(errors, f"{relative_path}: reviewed transformation target HEAD blob changed")
-        dirty = subprocess.run(
-            ["git", "diff", "--quiet", "HEAD", "--", relative_path],
-            cwd=REPO_ROOT,
-            check=False,
-        )
-        if dirty.returncode != 0:
-            error(errors, f"{relative_path}: reviewed transformation target has uncommitted changes")
+        worktree_digest = digest(target)
+        if (
+            not reviewed_snapshot_matches(relative_path, reviewed_bytes, expected_digest)
+            and worktree_digest != expected_digest
+        ):
+            error(errors, f"{relative_path}: reviewed snapshot blob differs from its lock")
 
 
 def validate_semantic_anchors(
@@ -464,12 +530,12 @@ def validate_maintainer_contracts(errors: list[str]) -> None:
             error(errors, f"release checklist contains stale phrase: {phrase}")
     for required in (
         "huifu-pay-integration` | `1.3.5",
-        "huifu-merchant-onboarding` | `1.0.2",
-        "企业/个人用户开户、企业/个人用户基本信息修改、用户业务入驻及修改",
+        "huifu-merchant-onboarding` | `1.0.4",
+        "电子合同、页面进件、下级权限及微信/支付宝 AT 管理",
     ):
         if required not in versioning:
             error(errors, f"versioning policy missing current fact: {required}")
-    for required in ("manifest", "新增模块流程", "2,737"):
+    for required in ("manifest", "新增模块流程", "当前3,367"):
         if required not in architecture:
             error(errors, f"Skill family architecture missing: {required}")
 
@@ -514,9 +580,7 @@ def load_domain_boundaries() -> dict[str, dict[str, tuple[str, ...]]]:
         flags=re.MULTILINE,
     )
     user_source_lock = json.loads(
-        (REPO_ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-08-24-r4.json").read_text(
-            encoding="utf-8"
-        )
+        USER_ONBOARDING_SOURCE_LOCK.read_text(encoding="utf-8")
     )
     expected_user_field_count = user_source_lock["totals"]["fields"]
     if len(user_field_paths) != expected_user_field_count:

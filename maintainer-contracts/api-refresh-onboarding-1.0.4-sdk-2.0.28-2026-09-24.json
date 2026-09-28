@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "refresh_id": "api-refresh-onboarding-1.0.4-sdk-2.0.28-2026-09-24",
+  "source_review_id": "api-refresh-onboarding-online-review-2026-09-22",
+  "requested_at": "2026-09-24",
+  "retrieved_at": "2026-09-22T14:49:12+08:00",
+  "version_state": {
+    "reason": "User-approved same-version local candidate refresh to the supplied Python SDK 2.0.28; API source bytes/field contracts unchanged. Not published.",
+    "huifu-pay-integration": "1.3.6",
+    "huifu-merchant-onboarding": "1.0.4"
+  },
+  "previous_refresh": {
+    "path": "maintainer-contracts/api-refresh-onboarding-1.0.4-2026-09-24.json",
+    "sha256": "1adfb151fb0a35c02bd09f8f9985f62d790426752a9d7ce54af2e4326a352426",
+    "refresh_id": "api-refresh-onboarding-1.0.4-2026-09-24"
+  },
+  "source_locks": {
+    "merchant_onboarding_current": {
+      "path": "maintainer-contracts/merchant-onboarding-source-lock-2026-09-22.json",
+      "sha256": "5b17f7fe29c669151a5167f7579ca35d132133860ce543e7c95b405678bea90c"
+    },
+    "user_onboarding_current": {
+      "path": "maintainer-contracts/user-onboarding-source-lock-2026-09-22.json",
+      "sha256": "f48fe3118c555a0390033168ad7515f605bd5d3766f3991a1d0a4769f01ba677"
+    },
+    "onboarding_extension_current": {
+      "path": "maintainer-contracts/onboarding-extension-source-lock-2026-09-22.json",
+      "sha256": "67be09f33a8a9dee6b6bf11550783eb00baacfe0805b3c01fd59835c130c59ba"
+    },
+    "onboarding_1_0_3": {
+      "path": "maintainer-contracts/merchant-onboarding-1.0.3-source-lock-2026-09-22.json",
+      "sha256": "1faa14779d2577f635c2328050b7cc23eb7976e3b04ca416245763b63badc6be"
+    },
+    "local_sdk_current": {
+      "path": "maintainer-contracts/local-sdk-source-lock-2026-09-24.json",
+      "sha256": "94efdf556f8fae199d4f0fb8097660578eaec9fd6e885044b2bb91a1c13e3c96"
+    }
+  },
+  "catalogs": {
+    "merchant": {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
+      "sha256": "c5ae11bb2062480b0d1fd079991257f286bed597b69933c3451c34997e2cf680",
+      "field_paths": 2210
+    },
+    "user": {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md",
+      "sha256": "599e13fc46a249b8a3589038789ac0be441543754e4a54d18cc13cddf744b7c0",
+      "field_paths": 611
+    },
+    "extension": {
+      "path": "huifu-merchant-onboarding/references/onboarding-extension-complete-field-catalog.md",
+      "sha256": "d2674e11ce0ef9a93b9ec669ff16bec4fca698d78a060ab8e176e6255cccf449",
+      "field_paths": 546
+    }
+  },
+  "scope": [
+    "Keep onboarding Skill candidate version 1.0.4; use actual local Python SDK 2.0.28 source evidence",
+    "Current defaults hfps/1.3.6 and hfms/1.0.4; combine only actually participating Skills; explicit caller source values remain unchanged",
+    "Reuse the completed 34-interface / 3,367-field API review without retrieval or business-field changes",
+    "Update current-version guidance, source discovery, offline contracts, generation metadata and package provenance; no new shipping-related API support"
+  ],
+  "field_delta": {
+    "merchant_paths_added": 82,
+    "merchant_paths_removed": 79,
+    "merchant_paths_changed": 194,
+    "merchant_catalog_total": 2210,
+    "user_paths_added": 57,
+    "user_paths_removed": 0,
+    "user_paths_changed": 6,
+    "user_catalog_total": 611,
+    "extension_paths_added": 26,
+    "extension_paths_removed": 28,
+    "extension_paths_changed": 66,
+    "extension_catalog_total": 546,
+    "combined_total": 3367
+  },
+  "version_bump_field_delta": {
+    "field_paths_added": 0,
+    "field_paths_removed": 0,
+    "field_paths_changed": 0
+  },
+  "python_sdk": {
+    "target_version": "2.0.28",
+    "verified_source_version": "2.0.28",
+    "target_source_verified": true
+  },
+  "preserved_boundaries": [
+    "Original API review IDs and source locks retain their historical 2026-09-22 identity",
+    "Previous candidate and original API review are separate SHA-bound records; historical bytes are unchanged",
+    "Java, Lightning Java and PHP source-tree digests are unchanged; Python 2.0.28 supplied source is independently locked",
+    "TLS findings and unclear API fields remain non-blocking developer advisories; existing signing/privacy/live-operation protections remain",
+    "No SDK modification, new API retrieval, live gateway request, real-model run, commit or publication is implied"
+  ],
+  "release_rule": "Version synchronization does not publish artifacts. Source, field, SDK evidence, regression and package checks must pass; formal publication still requires the clean-commit release workflow.",
+  "sdk_reviewed_at": "2026-09-24",
+  "api_source_date": "2026-09-22",
+  "source_review": {
+    "path": "maintainer-contracts/api-refresh-onboarding-online-review-2026-09-22.json",
+    "sha256": "c09a12f3a2edf4a346d5c204f25bf9e4cc1c9c3b81ddacc17e1530c94214798a",
+    "refresh_id": "api-refresh-onboarding-online-review-2026-09-22"
+  },
+  "sdk_versions": {
+    "java": "3.0.41",
+    "lightning": "1.0.6",
+    "php": "2.0.31",
+    "python": "2.0.28"
+  },
+  "sdk_refresh_field_delta": {
+    "field_paths_added": 0,
+    "field_paths_removed": 0,
+    "field_paths_changed": 0
+  }
+}

@@ -27,11 +27,11 @@ SOURCE_DIR = onboarding_source_dir()
 EXPECTED_COUNTS = {
     "企业商户进件": 177,
     "个人商户进件": 129,
-    "商户业务开通": 452,
+    "商户业务开通": 460,
     "图片上传": 9,
-    "商户详细信息查询": 567,
+    "商户详细信息查询": 578,
     "申请单状态查询": 93,
-    "商户业务开通修改": 444,
+    "商户业务开通修改": 452,
     "商户基本信息修改": 199,
     "商户费率信息查询": 35,
     "商户状态变更": 14,
@@ -53,6 +53,15 @@ def section_text(text: str, title: str) -> str:
 
 
 def main() -> int:
+    native_array = parse_field_row(
+        '| fee_rate_type | 费率类型 | Array<string> | 117 | N | 示例值：["T1"] |',
+        "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_merchant_conf_search_cx.md",
+        frozenset(),
+    )
+    assert native_array is not None and native_array.is_array
+    native_paths = flatten_fields([native_array], {}, "request.data", set())
+    assert native_paths[0][0] == "request.data.fee_rate_type[]"
+    assert native_array.field_type == "Array<string>", "HTML cleanup erased array subtype"
     typo_fixture = (
         '| <span class="extend fixture_child">other_list</span> | 其他集合 | '
         "String | | N | josnArray格式；此集合可能有多条数据 |"
@@ -134,7 +143,7 @@ def main() -> int:
             line.startswith("| `") for line in section_text(text, title).splitlines()
         )
         assert actual == expected, f"{title}: expected {expected} paths, found {actual}"
-        assert sum(EXPECTED_COUNTS.values()) == 2183
+        assert sum(EXPECTED_COUNTS.values()) == 2210
 
     target = next(
         line
@@ -158,7 +167,7 @@ def main() -> int:
     )
     print(
         "merchant-onboarding field-catalog generation validated: "
-        "2183 paths, wrapped descriptions and relative links preserved"
+        "2210 paths, native string arrays, wrapped descriptions and relative links preserved"
     )
     return 0
 

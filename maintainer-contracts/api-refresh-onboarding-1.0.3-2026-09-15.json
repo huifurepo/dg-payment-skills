@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "refresh_id": "api-refresh-onboarding-1.0.3-2026-09-15",
+  "requested_at": "2026-09-15",
+  "retrieved_at": "2026-09-15T14:15:58+08:00",
+  "version_state": {
+    "reason": "Add twelve onboarding interfaces and refresh every existing onboarding source for huifu-merchant-onboarding 1.0.3.",
+    "huifu-merchant-onboarding": "1.0.3",
+    "huifu-pay-integration": "1.3.5"
+  },
+  "previous_refresh": {
+    "path": "maintainer-contracts/api-refresh-onboarding-online-review-2026-08-31.json",
+    "sha256": "85d0bab42cbdb43310103cebab829371054f3f8de1a4aa89fab9e495a10b34fe",
+    "refresh_id": "api-refresh-onboarding-online-review-2026-08-31"
+  },
+  "source_locks": {
+    "onboarding_1_0_3": {
+      "path": "maintainer-contracts/merchant-onboarding-1.0.3-source-lock.json",
+      "sha256": "a3d8e9486b017038d3aff37ec82c5199652dc44f02dfc05969f0b67de45cc655"
+    },
+    "merchant_onboarding_current": {
+      "path": "maintainer-contracts/merchant-onboarding-source-lock-2026-09-15.json",
+      "sha256": "1352b7064563a8447ded0ccc369fd570c72883b83628d46d7cc7408720bb196d"
+    },
+    "user_onboarding_current": {
+      "path": "maintainer-contracts/user-onboarding-source-lock-2026-09-15.json",
+      "sha256": "4f714ac30cb518ec471be4a9be07296199512afe337027e4580cbaa2da4b8f7d"
+    },
+    "onboarding_extension_current": {
+      "path": "maintainer-contracts/onboarding-extension-source-lock-2026-09-15.json",
+      "sha256": "d99e2f56ccd92f420c5fc91ca4042ca461f1d1be2fc92a03ad06d6d9a78c54ea"
+    }
+  },
+  "catalogs": {
+    "merchant": {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
+      "sha256": "9cd4cc5e883f0df55d296351072d3349dff8699da65768acbb6ae51943f20fd9",
+      "field_paths": 2207
+    },
+    "user": {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md",
+      "sha256": "c6b142faa67fb44c4ecad9662f29b64571463f83454a4f1e8ca615cc55476cc7",
+      "field_paths": 554
+    },
+    "extension": {
+      "path": "huifu-merchant-onboarding/references/onboarding-extension-complete-field-catalog.md",
+      "sha256": "150d447bce01d1b49a0d89a3f0253c9d1ab02733cfda8e844174633a235f8e5c",
+      "field_paths": 548
+    }
+  },
+  "scope": [
+    "thirteen refreshed merchant onboarding and management interfaces",
+    "nine refreshed user onboarding and management interfaces",
+    "twelve newly supported electronic-contract, page-onboarding and AT-management interfaces",
+    "unchanged payment split-detail query cross-skill dependency",
+    "Java 3.0.40, PHP 2.0.30 and Python 2.0.24 SDK evidence"
+  ],
+  "field_delta": {
+    "merchant_paths_added": 35,
+    "merchant_paths_removed": 11,
+    "merchant_paths_changed": 109,
+    "merchant_catalog_total": 2207,
+    "user_paths_added": 0,
+    "user_paths_removed": 0,
+    "user_paths_changed": 21,
+    "user_catalog_total": 554,
+    "extension_paths_added": 548,
+    "extension_paths_removed": 0,
+    "extension_paths_changed": 0,
+    "extension_catalog_total": 548,
+    "combined_total": 3309
+  },
+  "cross_skill_review": {
+    "skill": "huifu-pay-integration",
+    "source_lock": "maintainer-contracts/payment-source-lock-2026-08-31.json",
+    "source_key": "split_detail_query",
+    "online_sha256": "dcab5eb128a7987742ea339631add74ad771227d3ce557c1154d6d6a27266270",
+    "locked_sha256": "dcab5eb128a7987742ea339631add74ad771227d3ce557c1154d6d6a27266270",
+    "changed": false,
+    "version_action": "keep huifu-pay-integration at 1.3.5"
+  },
+  "preserved_boundaries": [
+    "all historical merchant, user and combined source locks remain byte-identical",
+    "the twelve extensions have an independent source lock and field catalog and are not merged into the /v2/user DTO family",
+    "official field names, types, lengths and Y/N/C markers are preserved even when examples conflict",
+    "unresolved wire, callback and copied-example defects remain explicitly marked as requiring official confirmation",
+    "the unchanged split-detail query remains owned only by huifu-pay-integration"
+  ],
+  "release_rule": "The 2,207-node merchant, 554-node user and 548-node extension catalogs, immutable source locks, source validators, SDK boundaries, Skill validation, regression rules and package validation must pass before publishing huifu-merchant-onboarding 1.0.3."
+}

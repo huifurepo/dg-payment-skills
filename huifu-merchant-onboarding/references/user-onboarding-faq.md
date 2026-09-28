@@ -18,7 +18,7 @@
 
 ## `file_list` 应发送数组还是 JSON 字符串？
 
-当前企业/个人开户的类型列均为 Object，说明为 jsonArray格式，按原生 JSON Array 发送。不得把修改或业务入驻接口中的 String(JSON Array) 口径外推到开户接口。
+当前企业/个人开户的类型列均为 String，说明为 jsonArray格式，按一层 String(JSON Array) 发送。不得因官网示例使用原生数组而改写正式字段合同。
 
 ## 同步成功是否表示业务入驻全部完成？
 
@@ -30,4 +30,4 @@
 
 ## Java/PHP 会因为 TLS 被硬停吗？
 
-不会。接入方已确认当前官方 Java/PHP SDK 不存在本 Skill 曾推断的 TLS 问题，真实请求应继续使用官方 SDK，不得降级成手写 HTTP。PHP Demo/Composer loader 启用 `DEBUG=true` 会记录私钥和完整报文，这是独立硬检查点；在加载 SDK 前固定 `DEBUG=false` 后才可生成联调/生产调用。
+不会仅因本轮指定的既有 TLS 风险停止开发或联调代码生成。通用 Java 3.0.41 使用默认 TLS 工厂；PHP 2.0.31 的 `BsPayRequestV2.php` 仍设置 `CURLOPT_SSL_VERIFYPEER=false`，该事实作为非阻断提醒保留，不声称已修复，也不要求先取得修复证明。继续官方 SDK；疑问可查对应 SDK/官方文档，或咨询汇付官方、汇付开发者交流沟通群。字段疑义按 `shared-overview.md` 处理。PHP Demo/Composer loader 的 `DEBUG=true` 会记录私钥和完整报文，仍须在加载 SDK 前固定 `DEBUG=false`；不能用本轮 TLS 策略放宽日志/签验保护。

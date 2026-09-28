@@ -17,13 +17,16 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from validation_runtime import require_assertions_enabled
+from skill_validation_config import USER_ONBOARDING_SOURCE_LOCK
 
 
 require_assertions_enabled()
 
 
 ROOT = Path(__file__).resolve().parent.parent
-LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-08-31.json"
+LOCK = USER_ONBOARDING_SOURCE_LOCK
+SEPTEMBER_LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-09-15.json"
+PREVIOUS_LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-08-31.json"
 HISTORICAL_LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock.json"
 R1_LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-08-24-r1.json"
 R2_LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-08-24-r2.json"
@@ -38,6 +41,18 @@ PLATFORM_CONTRACT = (
     ROOT
     / "huifu-merchant-onboarding/references/user-onboarding-platform-contracts.md"
 )
+
+EXPECTED_ENDPOINTS = {
+    "user_enterprise": "POST /v2/user/basicdata/ent",
+    "user_individual": "POST /v2/user/basicdata/indv",
+    "user_business_open": "POST /v2/user/busi/open",
+    "user_apply_query": "POST /v2/user/apply/query",
+    "user_detail_query": "POST /v2/user/basicdata/query",
+    "user_enterprise_modify": "POST /v2/user/basicdata/ent/modify",
+    "user_individual_modify": "POST /v2/user/basicdata/indv/modify",
+    "user_business_modify": "POST /v2/user/busi/modify",
+    "user_list_query": "POST /v2/user/list/query",
+}
 
 
 SURFACE_NAMES = {
@@ -68,9 +83,11 @@ SENSITIVE_EXAMPLE_FIELDS = frozenset(
         "card_name",
         "card_no",
         "cert_no",
+        "cert_number",
         "contact_email",
         "contact_mobile",
         "contact_name",
+        "download_url",
         "elec_acct_sign_seq_id",
         "email",
         "file_id",
@@ -84,10 +101,16 @@ SENSITIVE_EXAMPLE_FIELDS = frozenset(
         "mobile_no",
         "name",
         "operator_id",
+        "qrcode",
+        "qrcode_data",
         "reg_detail",
         "reg_name",
         "short_name",
+        "sign_url",
+        "smid",
         "token_no",
+        "wx_applet_secret",
+        "wx_woa_secret",
     }
 )
 
@@ -170,6 +193,7 @@ def source_explicit_page_field_notes(
 
 
 def normalize(value: str) -> str:
+    value = re.sub(r"\b(Array)<(string)>", r"\1&lt;\2&gt;", value, flags=re.I)
     value = re.sub(r"<br\s*/?>", "；", value, flags=re.I)
     value = re.sub(r"</?font[^>]*>", "", value, flags=re.I)
     value = re.sub(r"</?(?:span|div)[^>]*>", "", value, flags=re.I)
@@ -247,23 +271,54 @@ def consume_row(lines: list[str], cursor: int) -> tuple[str, int]:
     return row, cursor
 
 
-def source_field(row: str, url: str) -> RawField | None:
+def source_table_columns(row: str) -> dict[str, int] | None:
+    """Resolve a contract table by its declared headings, independently."""
     cells = split_source_row(row)
-    if len(cells) < 6:
+    headings = [normalize(cell).strip("* ") for cell in cells]
+    if len(headings) < 6 or headings[0] not in {"参数", "出参名"}:
         return None
-    child_match = re.search(r'class="[^"]*\bextend\s+([\w-]+)[^"]*"', cells[0])
-    name = normalize(cells[0])
-    if not name or name == "参数":
+
+    def locate(*names: str) -> int:
+        for index, heading in enumerate(headings):
+            if heading in names:
+                return index
+        raise AssertionError(f"missing contract column {names}: {headings}")
+
+    return {
+        "name": 0,
+        "label": 1,
+        "kind": locate("定义", "类型"),
+        "length": locate("长度"),
+        "required": locate("必填", "非空"),
+        "description": locate("说明"),
+    }
+
+
+def source_field(
+    row: str,
+    url: str,
+    columns: dict[str, int],
+) -> RawField | None:
+    cells = split_source_row(row)
+    if len(cells) <= max(columns.values()):
         return None
-    kind = normalize(cells[2]) or "—"
-    description = resolve_links(normalize(" | ".join(cells[5:])), url) or "—"
+    raw_name = cells[columns["name"]]
+    child_match = re.search(r'class="[^"]*\bextend\s+([\w-]+)[^"]*"', raw_name)
+    name = normalize(raw_name).strip("* ")
+    if not name or name in {"参数", "出参名"}:
+        return None
+    kind = normalize(cells[columns["kind"]]) or "—"
+    description = resolve_links(
+        normalize(" | ".join(cells[columns["description"] :])),
+        url,
+    ) or "—"
     description = redact_sensitive_example(name, description)
     return RawField(
         name=name,
-        label=normalize(cells[1]) or "—",
+        label=normalize(cells[columns["label"]]) or "—",
         kind=kind,
-        length=normalize(cells[3]) or "—",
-        required=normalize(cells[4]) or "—",
+        length=normalize(cells[columns["length"]]) or "—",
+        required=normalize(cells[columns["required"]]) or "—",
         description=description,
         child=child_match.group(1) if child_match else None,
         array=kind.lower() == "array" or "jsonarray" in description.lower(),
@@ -279,7 +334,8 @@ def source_tables(text: str, url: str) -> tuple[list[list[RawField]], dict[str, 
         marker = re.search(r"div:extend-table\s+([\w-]+)-table", lines[cursor])
         if marker:
             pending = marker.group(1)
-        if not re.match(r"^\|\s*参数", lines[cursor]):
+        columns = source_table_columns(lines[cursor])
+        if columns is None:
             cursor += 1
             continue
         table_id, pending = pending, None
@@ -288,14 +344,14 @@ def source_tables(text: str, url: str) -> tuple[list[list[RawField]], dict[str, 
         if table_id is None:
             while cursor < len(lines) and lines[cursor].lstrip().startswith("|"):
                 row, cursor = consume_row(lines, cursor)
-                field = source_field(row, url)
+                field = source_field(row, url, columns)
                 if field:
                     rows.append(field)
         else:
             while cursor < len(lines) and "<!-- extend:end -->" not in lines[cursor]:
                 if lines[cursor].lstrip().startswith("|"):
                     row, cursor = consume_row(lines, cursor)
-                    field = source_field(row, url)
+                    field = source_field(row, url, columns)
                     if field:
                         rows.append(field)
                 else:
@@ -533,7 +589,13 @@ def validate_official_undefined_fields(
         for key, value in records.items()
         if node_structure[key] == "leaf" and value[3] == "—"
     }
-    expected_descriptions = {("用户业务入驻修改", "async.data")}
+    expected_descriptions = {
+        ("用户业务入驻修改", "async.data"),
+        ("用户业务入驻", "async.data.account_info"),
+        ("用户信息查询", "response.data.account_info"),
+        ("用户信息查询", "response.data.account_recharge_config.transfer_flag_name"),
+        ("用户信息查询", "response.data.account_recharge_config.transfer_flag_no"),
+    }
     expected_lengths: set[tuple[str, str]] = set()
     assert blank_descriptions == expected_descriptions, (
         "official blank-description set changed: "
@@ -546,6 +608,31 @@ def validate_official_undefined_fields(
         f"extra={sorted(blank_scalar_lengths - expected_lengths)}"
     )
     return len(blank_descriptions), len(blank_scalar_lengths)
+
+
+def validate_current_account_level_contract(records: dict[RecordKey, RecordValue]) -> None:
+    """Pin direction-specific LV3 wire types and the new requiredness conflict."""
+    fields = {(title, path): value for (title, _surface, path), value in records.items()}
+    for title in ("用户业务入驻", "用户业务入驻修改"):
+        level = fields[title, "request.data.account_level"]
+        assert level[2:5] == ("String", "6", "N")
+        assert "LV1/LV2/LV3" in level[5] and "默认LV1" in level[5]
+        for config in ("balance_pay_config", "account_recharge_config", "delay_pay_config"):
+            request = fields[title, f"request.data.{config}"]
+            response = fields["用户信息查询", f"response.data.{config}"]
+            assert request[2] == "String" and "jsonObject" in request[5] and "LV3" in request[5]
+            assert response[2] == "Object", f"query {config} must not inherit request string encoding"
+        for config in ("balance_pay_config", "account_recharge_config"):
+            for fee in ("fee_rate", "fee_fix_amt"):
+                field = fields[title, f"request.data.{config}.{fee}"]
+                assert field[2:5] == ("String", "9", "Y")
+                assert "不能同时为空" in field[5], "preserve Y-versus-either fee condition conflict"
+        out_fee = fields[title, "request.data.balance_pay_config.out_fee_flag"]
+        assert out_fee[5] == "是否交易手续费外扣", "request enum must not be borrowed from query"
+        assert fields[title, "async.data.account_info"][2] == "Object"
+        assert fields[title, "async.data.account_info.face_url"][2:5] == ("String", "512", "N")
+        assert fields[title, "async.data.account_info.verify_ord_id"][2:5] == ("String", "32", "N")
+    assert fields["企业用户开户", "request.data.ent_type"][4] == "Y"
 
 
 def validate_refresh_semantic_contracts(
@@ -566,6 +653,11 @@ def validate_refresh_semantic_contracts(
     )
     for interface, path in conditional_fields:
         assert find(interface, path)[4] == "C"
+    for name in ("weekday_fix_amt", "weekday_fee_rate"):
+        field = find("用户业务入驻修改", f"request.data.cash_config[].{name}")
+        assert field[4] == "C"
+        assert all(term in field[5] for term in ("D1", "工作日", "未配置", "节假日"))
+        assert "不生效" not in field[5], f"resolved weekday fee conflict reintroduced: {name}"
     detail_mp = find(
         "用户信息查询", "response.data.elec_acct_config.elec_card_list[].mp"
     )
@@ -836,8 +928,8 @@ def validate_official_request_example_anomalies(
         "individual-sms-send-flag-y": individual.get("sms_send_flag") == "Y"
         and "Y" in individual_sms[5]
         and "N" in individual_sms[5],
-        "individual-file-list-native-array": isinstance(individual.get("file_list"), list)
-        and individual_file_list[2] == "Object"
+        "individual-file-list-string-native-array-conflict": isinstance(individual.get("file_list"), list)
+        and individual_file_list[2] == "String"
         and "jsonArray" in individual_file_list[5],
         "individual-operator-id-absent": "operator_id" not in individual
         and ("个人用户开户", "request.data.operator_id") not in formal_paths,
@@ -936,7 +1028,8 @@ def validate_list_query_conflicts(
     request_sign = formal("request.sign")
     sign = formal("response.sign")
     checks = {
-        "list-object-native-array": list_field[2] == "Object"
+        "list-string-native-array-conflict": list_field[2] == "String"
+        and "jsonArray" in list_field[5]
         and isinstance(users, list),
         "list-huifu-id-length-eighteen": huifu_id[3] == "18",
         "list-upper-huifu-id-length-eighteen": upper_huifu_id[3] == "18",
@@ -965,6 +1058,10 @@ def main() -> int:
     r2 = json.loads(R2_LOCK.read_text(encoding="utf-8"))
     r3 = json.loads(R3_LOCK.read_text(encoding="utf-8"))
     r4 = json.loads(R4_LOCK.read_text(encoding="utf-8"))
+    previous = json.loads(PREVIOUS_LOCK.read_text(encoding="utf-8"))
+    september = json.loads(SEPTEMBER_LOCK.read_text(encoding="utf-8"))
+    september_sha = "4f714ac30cb518ec471be4a9be07296199512afe337027e4580cbaa2da4b8f7d"
+    assert hashlib.sha256(SEPTEMBER_LOCK.read_bytes()).hexdigest() == september_sha, "2026-09-15 user lock must remain immutable"
     assert hashlib.sha256(HISTORICAL_LOCK.read_bytes()).hexdigest() == (
         "870c49a6affb8584284398ddc86befe12ab7d40a94ef491322ea1f5a4d296169"
     ), "historical five-interface user lock must remain immutable"
@@ -980,6 +1077,9 @@ def main() -> int:
     assert hashlib.sha256(R4_LOCK.read_bytes()).hexdigest() == (
         "f756ce79673a52b526f242edf2517078ff3025d94fede6c6c9a44406c9fc64dd"
     ), "list-query r4 user lock must remain immutable"
+    assert hashlib.sha256(PREVIOUS_LOCK.read_bytes()).hexdigest() == (
+        "bc8a4c4c0950db0eae4fafdae7db6083b830f6a4e997a133a27974dc0b6d86bb"
+    ), "2026-08-31 user lock must remain immutable"
     assert set(lock) == {
         "schema_version",
         "source_date",
@@ -1000,18 +1100,18 @@ def main() -> int:
         )
     } == {
         "schema_version": 1,
-        "source_date": "2026-08-31",
-        "source_snapshot_id": "2026-08-31",
+        "source_date": "2026-09-22",
+        "source_snapshot_id": "2026-09-22",
         "previous_source_lock": {
-            "path": "maintainer-contracts/user-onboarding-source-lock-2026-08-24-r4.json",
-            "sha256": "f756ce79673a52b526f242edf2517078ff3025d94fede6c6c9a44406c9fc64dd",
+            "path": SEPTEMBER_LOCK.relative_to(ROOT).as_posix(),
+            "sha256": september_sha,
         },
     }
-    assert re.fullmatch(r"2026-08-31T\d{2}:\d{2}:\d{2}\+08:00", lock["verified_at"])
+    assert re.fullmatch(r"2026-09-22T\d{2}:\d{2}:\d{2}\+08:00", lock["verified_at"])
     assert [item["key"] for item in lock["sources"]] == [
-        item["key"] for item in r4["sources"]
+        item["key"] for item in previous["sources"]
     ], "current user source set or order changed"
-    previous_by_key = {item["key"]: item for item in r4["sources"]}
+    previous_by_key = {item["key"]: item for item in september["sources"]}
     current_by_key = {item["key"]: item for item in lock["sources"]}
     changed_keys = {
         key
@@ -1020,13 +1120,9 @@ def main() -> int:
     }
     assert changed_keys == {
         "user_enterprise",
-        "user_individual",
         "user_business_open",
         "user_detail_query",
-        "user_enterprise_modify",
-        "user_individual_modify",
         "user_business_modify",
-        "user_list_query",
     }
     current_dir = source_dir(lock)
     historical_dir = (
@@ -1036,8 +1132,9 @@ def main() -> int:
     r2_dir = ROOT / "maintainer-contracts/official-sources/user-onboarding/2026-08-24-r2"
     r3_dir = ROOT / "maintainer-contracts/official-sources/user-onboarding/2026-08-24-r3"
     r4_dir = ROOT / "maintainer-contracts/official-sources/user-onboarding/2026-08-24-r4"
+    previous_dir = ROOT / "maintainer-contracts/official-sources/user-onboarding/2026-08-31"
     assert (current_dir / "application-status-query.md").read_bytes() == (
-        r4_dir / "application-status-query.md"
+        previous_dir / "application-status-query.md"
     ).read_bytes(), "unchanged user apply-query source drifted in the current snapshot"
     snapshots = (
         ("2026-08-10", historical, historical_dir),
@@ -1045,7 +1142,9 @@ def main() -> int:
         ("2026-08-24-r2", r2, r2_dir),
         ("2026-08-24-r3", r3, r3_dir),
         ("2026-08-24-r4", r4, r4_dir),
-        ("2026-08-31", lock, current_dir),
+        ("2026-08-31", previous, previous_dir),
+        ("2026-09-15", september, source_dir(september)),
+        ("2026-09-22", lock, current_dir),
     )
     for snapshot_name, snapshot_lock, snapshot_dir in snapshots:
         expected_files = {source["filename"] for source in snapshot_lock["sources"]}
@@ -1099,34 +1198,37 @@ def main() -> int:
         "business-modify request example must contain exactly one file_list key"
     )
     assert lock["api_refresh"] == {
-        "refresh_id": "api-refresh-user-online-review-2026-08-31",
+        "refresh_id": "api-refresh-user-online-review-2026-09-22",
         "changed_source_keys": [
             "user_enterprise",
-            "user_individual",
             "user_business_open",
             "user_detail_query",
-            "user_enterprise_modify",
-            "user_individual_modify",
             "user_business_modify",
-            "user_list_query",
         ],
-        "field_paths_added": 5,
-        "field_paths_removed": 5,
-        "field_paths_changed": 43,
+        "field_paths_added": 57,
+        "field_paths_removed": 0,
+        "field_paths_changed": 6,
         "document_conflicts": [
             "user business modify response.data is String while the success example is a JSON object",
-            "user business open elec_receipt_config is Object while its description says jsonObject string",
-            "user business modify elec_receipt_config is Object while its description says jsonObject string",
-            "user business open and modify elec_card_list are Object while their descriptions say jsonArray string",
-            "user business modify is_priority_receipt is C while its P0 description says optional",
-            "user business modify weekday_fix_amt and weekday_fee_rate still contain contradictory D1 behavior",
+            "user business open is_priority_receipt is C while its P0 description says optional and supplies a default",
+            "user business modify is_priority_receipt is C and says P0 required while also describing an empty-value default",
+            "balance_pay_config and account_recharge_config fee_rate/fee_fix_amt are both Y while descriptions require at least one",
+            "user business request balance_pay_config.out_fee_flag does not declare its enum; response enums cannot define request behavior",
+            "user list result is String/jsonArray while its example is a native array",
         ],
     }
     base = source_dir(lock)
+    assert [source["key"] for source in lock["sources"]] == list(EXPECTED_ENDPOINTS)
     for source in lock["sources"]:
         raw = (base / source["filename"]).read_bytes()
         assert hashlib.sha256(raw).hexdigest() == source["sha256"], (
             f"{source['filename']}: locked byte digest mismatch"
+        )
+        endpoint = EXPECTED_ENDPOINTS[source["key"]]
+        assert source["endpoint"] == endpoint
+        source_text = raw.decode("utf-8-sig")
+        assert "https://api.huifu.com" + endpoint.removeprefix("POST ") in source_text, (
+            f"{source['key']}: official source does not contain locked endpoint"
         )
 
     expected, table_counts = expected_records(lock)
@@ -1161,6 +1263,7 @@ def main() -> int:
     blank_descriptions, blank_scalar_lengths = validate_official_undefined_fields(
         actual, node_structure
     )
+    validate_current_account_level_contract(actual)
     undefined_triggers, page_notes, incomplete_links, ambiguous_semantics = (
         validate_refresh_semantic_contracts(actual)
     )
@@ -1182,14 +1285,14 @@ def main() -> int:
         for name in ("parent", "leaf")
     }
     assert lock["totals"] == {
-        "fields": 554,
-        "request": 307,
-        "response": 199,
-        "callback": 48,
-        "parent": 61,
-        "leaf": 493,
+        "fields": 611,
+        "request": 333,
+        "response": 220,
+        "callback": 58,
+        "parent": 73,
+        "leaf": 538,
         "root_tables": 40,
-        "extend_tables": 41,
+        "extend_tables": 53,
     }, "current user source lock totals changed"
     assert len(actual) == lock["totals"]["fields"]
     assert direction_counts == {

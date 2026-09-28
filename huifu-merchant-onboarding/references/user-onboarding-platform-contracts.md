@@ -1,6 +1,16 @@
 # 用户开户公共平台合同
 
-本页补充当前九个接口页共同引用的开发、签名、加密、密钥、异步通知、公共参数和 Webhook 规范。具体业务字段仍以接口页和完整字段目录为准；接入方明确确认的冲突裁决标记为“接入方确认”，不改写官网原始字段目录。用户业务入驻修改的 `elec_receipt_config` wire 仍未裁决；用户列表查询的 `user_list_info_list` 已由官网修正为 Object/jsonArray格式。
+## 目录
+
+- [官方公共来源](#官方公共来源)
+- [API 请求与同步响应](#api-请求与同步响应)
+- [用户业务入驻类接口异步通知](#用户业务入驻类接口异步通知)
+- [控台 Webhook 边界](#控台-webhook-边界)
+- [接入方确认的字段裁决](#接入方确认的字段裁决2026-08-10)
+- [接入方确认的 wire 矩阵](#接入方确认的-wire-矩阵2026-08-10)
+- [本轮新增字段的官方 wire 定义](#2026-09-22-新增字段的官方-wire-定义)
+
+本页补充当前九个接口页共同引用的开发、签名、加密、密钥、异步通知、公共参数和 Webhook 规范。具体业务字段仍以接口页和完整字段目录为准；接入方明确确认的冲突裁决标记为“接入方确认”，不改写官网原始字段目录。`2026-09-15` 快照已将多处 JSON 容器的类型列修正为 String；用户业务入驻修改的同步 `response.data` 与示例仍冲突，用户列表的正式 String(JSON Array) 与原生数组示例也仍冲突。
 
 ## 官方公共来源
 
@@ -65,28 +75,43 @@
 | 完整路径 | wire 形态 |
 | --- | --- |
 | `request.data`、`2026-08-10` 已裁决五接口的成功 `response.data` | 原生 JSON Object |
-| 企业/个人开户 `request.data.file_list` | 原生 JSON Array |
+| 企业/个人开户 `request.data.file_list` | String(JSON Array) |
 | 业务入驻 `request.data.settle_config_list/cash_config/file_list` | String(JSON Array) |
 | 业务入驻 `request.data.card_info/elec_acct_config` | String(JSON Object) |
-| 业务入驻 `request.data.elec_acct_config.elec_card_list` | `[需要官方确认]`：类型列 Object、说明为 jsonArray字符串，示例在已字符串化父对象内使用原生数组 |
-| 业务入驻 `request.data.elec_receipt_config` | `[需要官方确认]`：类型列 Object 与 jsonObject字符串说明冲突 |
-| 业务入驻 `request.data.sign_user_info` | 原生 JSON Object |
+| 业务入驻 `request.data.elec_acct_config.elec_card_list` | 父 String(JSON Object) 内的 String(JSON Array) |
+| 业务入驻 `request.data.elec_receipt_config/sign_user_info` | String(JSON Object) |
 | 业务入驻 `response.data.resp_business` | 外层对象中的 String(JSON Array) |
 | 业务入驻 `async.data` | 原始 String(JSON Object)，先验签再解码 |
 | 业务入驻 `async.data.audit_info/elec_acct_result` | 解码异步 data 后的 String(JSON Object) |
-| 业务入驻 `async.data.audit_info.resp_business` | 解码 audit_info 后的原生 JSON Array |
+| 业务入驻 `async.data.audit_info.resp_business` | 解码 audit_info 后的 String(JSON Array) |
 | 业务入驻修改 `request.data.settle_config_list/cash_config/file_list` | String(JSON Array) |
 | 业务入驻修改 `request.data.card_info/elec_acct_config` | String(JSON Object) |
-| 业务入驻修改 `request.data.sign_user_info` | 原生 JSON Object；Java 用受控 exact-key 修正 String setter，PHP 可直接传数组，Python 可直接赋 dict |
-| 业务入驻修改 `request.data.elec_receipt_config` | `[需要官方确认]`：类型列 Object 与 jsonObject字符串说明冲突 |
-| 业务入驻修改 `request.data.elec_acct_config.elec_card_list` | `[需要官方确认]`：类型列 Object 与 jsonArray说明冲突 |
+| 业务入驻修改 `request.data.sign_user_info/elec_receipt_config` | String(JSON Object) |
+| 业务入驻修改 `request.data.elec_acct_config.elec_card_list` | 父 String(JSON Object) 内的 String(JSON Array) |
 | 业务入驻修改 `response.data` | 正式表 String N，成功示例原生 JSON Object；保留冲突 |
-| 业务入驻修改 `async.data.audit_info.resp_business` | 解码 audit_info 后的原生 JSON Array；正式类型与说明已统一为 Object/jsonArray格式 |
-| 用户列表查询 `response.data.user_list_info_list` | 原生 JSON Array |
+| 业务入驻修改 `async.data.audit_info.resp_business` | 解码 audit_info 后的 String(JSON Array) |
+| 用户列表查询 `response.data.user_list_info_list` | 正式表为 String(JSON Array)，成功示例为原生数组；保留冲突 |
 | 详情 `response.data.ent_base_info/indv_base_info/card_info/elec_acct_config` | String(JSON Object) |
 | 详情 `response.data.settle_config_list/qry_cash_config_list/qry_cash_card_info_list` | String(JSON Array) |
-| 详情 `ent_base_info.file_list/indv_base_info.file_list` | 解码各自父对象后的原生 JSON Array |
+| 详情 `ent_base_info.file_list/indv_base_info.file_list` | 解码各自父对象后的 String(JSON Array) |
 | 详情 `elec_acct_config.elec_card_list` | 解码父对象后的 String(JSON Array) |
-| 详情 `response.data.elec_receipt_config/sign_user_info` | 原生 JSON Object |
+| 详情 `response.data.elec_receipt_config/sign_user_info` | String(JSON Object) |
 
 序列化和解码必须逐层按表执行，不能把所有 `String` 都当普通文本，也不能把所有带子表的字段都改成原生对象。
+
+## 2026-09-22 新增字段的官方 wire 定义
+
+以下是本轮正式字段表新增合同，不追溯冒充 `2026-08-10` 接入方确认。
+
+| 完整路径 | wire 形态 |
+| --- | --- |
+| 业务入驻及修改 `request.data.balance_pay_config` | String(JSON Object) |
+| 业务入驻及修改 `request.data.account_recharge_config` | String(JSON Object) |
+| 业务入驻及修改 `request.data.delay_pay_config` | String(JSON Object) |
+| 业务入驻及修改 `async.data.account_info` | 解码异步 data 后的原生 Object |
+| 详情 `response.data.balance_pay_config` | 原生 Object |
+| 详情 `response.data.account_recharge_config` | 原生 Object |
+| 详情 `response.data.delay_pay_config` | 原生 Object |
+| 详情 `response.data.account_info` | 原生 Object |
+
+四组查询对象不得套用请求 String(JSON) 编码。余额/充值收费两字段 `Y` 与“至少填写一个”的说明仍冲突；按 `shared-overview.md` 的开发提醒列出对应业务入驻/修改官方文档，建议核对或咨询汇付官方、汇付开发者交流沟通群。继续 DTO/SDK 开发，争议必填策略用 TODO/配置隔离，不猜互斥或同时必填，也不把取得答复作为开发前提。请求 `account_recharge_config` 仅有正式声明的两个子字段，不能倒灌查询响应的 `switch_state/transfer_flag_no/transfer_flag_name`。

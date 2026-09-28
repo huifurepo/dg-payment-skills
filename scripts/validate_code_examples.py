@@ -308,6 +308,8 @@ def validate_python_blocks(blocks: list[CodeBlock], state: ValidationState) -> N
         validate_python_syntax(block, state)
         validate_python_forbidden_patterns(block, state)
         validate_python_official_sdk_usage(block, state)
+        for finding in (python_mer_config_errors(block.code) if "huifu-merchant-onboarding" in block.path.parts else []):
+            state.error(f"{finding}: {format_block(block)}")
     state.ok(f"Python examples syntax/policy-checked: {len(selected)}")
 
 
@@ -331,6 +333,33 @@ def validate_python_official_sdk_usage(block: CodeBlock, state: ValidationState)
         return
     if "dg_sdk" not in block.code:
         state.error(f"Python SDK examples must use official dg_sdk: {format_block(block)}")
+
+
+def python_mer_config_errors(code: str) -> list[str]:
+    """Guard the source-backed Python constructor's sign/source boundary."""
+    try:
+        tree = ast.parse(code)
+    except SyntaxError:
+        return []  # The syntax validator reports malformed snippets separately.
+    findings: list[str] = []
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        function = node.func
+        name = function.id if isinstance(function, ast.Name) else (
+            function.attr if isinstance(function, ast.Attribute) else ""
+        )
+        if name != "MerConfig":
+            continue
+        if len(node.args) > 4 or any(isinstance(arg, ast.Starred) for arg in node.args):
+            findings.append("MerConfig sign_type/source must use explicit keywords, not positional arguments")
+        keywords = {keyword.arg: keyword.value for keyword in node.keywords}
+        sign_type = keywords.get("sign_type")
+        if not isinstance(sign_type, ast.Constant) or sign_type.value != "RSA":
+            findings.append('MerConfig must explicitly preserve sign_type="RSA"')
+        if "jpt_x_skill_source" not in keywords or None in keywords:
+            findings.append("MerConfig must explicitly name jpt_x_skill_source without ** expansion")
+    return findings
 
 
 def validate_php_blocks(blocks: list[CodeBlock], state: ValidationState) -> None:
@@ -444,7 +473,7 @@ $huifuSdkRoot = getenv('HUIFU_SDK_ROOT') ?: dirname(__DIR__) . '/vendor/huifurep
 if (!is_file($huifuSdkRoot . '/init.php')) { throw new RuntimeException('未找到 dg-php-sdk'); }
 if (!defined('HUIFU_SDK_ROOT')) { define('HUIFU_SDK_ROOT', rtrim($huifuSdkRoot, '/')); }
 require_once HUIFU_SDK_ROOT . '/init.php';
-\\BsPaySdk\\core\\BsPay::init(['sys_id' => 'sys', 'product_id' => 'prod', 'rsa_merch_private_key' => 'private', 'rsa_huifu_public_key' => 'public', 'skill_source' => 'hfps/1.3.5;hfms/1.0.2'], true);
+\\BsPaySdk\\core\\BsPay::init(['sys_id' => 'sys', 'product_id' => 'prod', 'rsa_merch_private_key' => 'private', 'rsa_huifu_public_key' => 'public', 'skill_source' => 'hfps/1.3.5;hfms/1.0.4'], true);
 """)
 
 
@@ -466,7 +495,7 @@ def php_env(project: PhpProject) -> dict[str, str]:
         "HUIFU_ALIPAY_APP_SCHEMA": "alipays://platformapi/startapp",
         "HUIFU_MINIAPP_SEQ_ID": "miniapp",
         "HUIFU_SPLIT_HUIFU_ID": "split_merchant",
-        "HUIFU_SKILL_SOURCE": "hfps/1.3.5;hfms/1.0.2",
+        "HUIFU_SKILL_SOURCE": "hfps/1.3.5;hfms/1.0.4",
     })
     return env
 

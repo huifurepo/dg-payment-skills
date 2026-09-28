@@ -90,6 +90,46 @@ def package_paths(spec: dict[str, object]) -> set[str]:
     }
 
 
+def source_bindings(manifest: dict, spec: dict, refresh: dict) -> dict[str, str]:
+    """Bind both business API evidence and the selected SDK source evidence."""
+    if "sdk_source_lock" not in spec:
+        name = spec["source_lock"]
+        digest = sha256_file(REPO_ROOT / name)
+        matches = [item for item in refresh["source_locks"].values() if item["path"] == name]
+        if len(matches) != 1 or matches[0]["sha256"] != digest:
+            raise ValueError("refresh contract source-lock digest differs from current source lock")
+        return {name: digest}
+    bindings = {}
+    for name in (spec["source_lock"], spec["sdk_source_lock"]):
+        path = REPO_ROOT / name
+        if not path.is_file():
+            raise ValueError(f"source lock is missing: {name}")
+        matches = [item for item in refresh["source_locks"].values() if item["path"] == name]
+        digest = sha256_file(path)
+        if len(matches) != 1 or matches[0]["sha256"] != digest:
+            raise ValueError(f"refresh contract must bind current source lock exactly once: {name}")
+        bindings[name] = digest
+    sdk = json.loads((REPO_ROOT / spec["sdk_source_lock"]).read_text(encoding="utf-8"))
+    versions = {name: item["version"] for name, item in sdk["components"].items()}
+    if refresh.get("sdk_versions") != versions or refresh.get("sdk_reviewed_at") != sdk["verified_at"]:
+        raise ValueError("refresh contract SDK versions/date differ from selected source evidence")
+    if refresh.get("python_sdk") != {"target_version": versions["python"], "verified_source_version": versions["python"], "target_source_verified": True}:
+        raise ValueError("refresh contract Python SDK facts differ from selected source evidence")
+    for skill, entry in manifest["skills"].items():
+        # A companion version is the refresh's dated snapshot, not this package's
+        # release authority. Independently bumping it must not invalidate this ZIP.
+        if entry["root"] == spec["root"] and refresh["version_state"].get(skill) != entry["version"]:
+            raise ValueError(f"refresh contract current Skill version differs: {skill}")
+    for key in ("previous_refresh", "source_review"):
+        item = refresh[key]
+        path = REPO_ROOT / item["path"]
+        if sha256_file(path) != item["sha256"] or json.loads(path.read_text(encoding="utf-8"))["refresh_id"] != item["refresh_id"]:
+            raise ValueError(f"refresh contract {key} binding differs")
+    if refresh["source_review"]["refresh_id"] != refresh["source_review_id"]:
+        raise ValueError("refresh contract API source review identity differs")
+    return bindings
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--skill", required=True)
@@ -128,16 +168,10 @@ def main() -> int:
     if not refresh_contract_path.is_file() or not source_lock_path.is_file():
         raise SystemExit("refresh contract or source lock is missing")
     refresh_contract = json.loads(refresh_contract_path.read_text(encoding="utf-8"))
-    matching_source_locks = [
-        item
-        for item in refresh_contract["source_locks"].values()
-        if item["path"] == spec["source_lock"]
-    ]
-    if len(matching_source_locks) != 1:
-        raise SystemExit("refresh contract does not bind the Skill source lock exactly once")
-    source_lock_sha256 = sha256_file(source_lock_path)
-    if matching_source_locks[0]["sha256"] != source_lock_sha256:
-        raise SystemExit("refresh contract source-lock digest differs from current source lock")
+    try:
+        current_source_bindings = source_bindings(manifest, spec, refresh_contract)
+    except (KeyError, ValueError) as exc:
+        raise SystemExit(f"invalid refresh/source binding: {exc}") from exc
     actual_files = set(files)
     if actual_files != allowed_files:
         raise SystemExit(
@@ -199,9 +233,7 @@ def main() -> int:
         "refresh_id": refresh_contract["refresh_id"],
         "refresh_contract": str(spec["refresh_contract"]),
         "refresh_contract_sha256": sha256_file(refresh_contract_path),
-        "source_locks": {
-            str(spec["source_lock"]): source_lock_sha256,
-        },
+        "source_locks": current_source_bindings,
         "files": {name: sha256_bytes(data) for name, data in sorted(files.items())},
         "test_evidence": dict(sorted(evidence.items())),
         "archive": archive_path.name,

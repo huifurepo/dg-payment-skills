@@ -2,7 +2,7 @@
 
 ## 适用范围
 
-用于已进件商户修改主体、证照、联系人、结算、协议、受益人、股东或其他基础资料。官方来源：[商户基本信息修改](https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shjbxxxg_kyc.md)，锁定来源 SHA-256 为 `458f021fa0e626133d17a65ce1fee21aa445d45b75493c00740562c3c64259c6`。
+用于已进件商户修改主体、证照、联系人、结算、协议、受益人、股东或其他基础资料。官方来源：[商户基本信息修改](https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shjbxxxg_kyc.md)，官网更新时间 `2026-09-20`，本地活动快照 `2026-09-22`，原文 SHA-256 为 `f2146bc553eb4b1dc8c88d4487eb1b5c721468d6a8eec5be7d0ce9f086db4d6c`。
 
 该接口不是企业/个人首次进件。修改资料可能重新进入审核，不能把同步响应成功解释为资料审核完成或已经具备支付能力。
 
@@ -10,7 +10,7 @@
 
 - Endpoint：`POST https://api.huifu.com/v2/merchant/basicdata/modify`。
 - 请求顶层为 `sys_id:String(32) Y`、`product_id:String(32) Y`、`sign:String(512) Y`、`data:Json Y`；同步响应顶层为 `sign:String(512) Y`、`data:Json N`。
-- 完整目录共 199 个节点：请求 164、同步响应 7、异步通知 28。12 组嵌套表、完整路径、类型、长度、Y/N/C 和官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户基本信息修改”。
+- 完整目录共199个节点：请求 164、同步响应 7、异步通知 28。12 组嵌套表、完整路径、类型、长度、Y/N/C 和官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户基本信息修改”。
 - 请求定位字段包括 `data.req_seq_id:String(32) Y`、`data.req_date:String(8) Y`、`data.upper_huifu_id:String(18) C`、`data.huifu_id:String(18) Y`。`upper_huifu_id` 在 `sys_id` 主体为渠道商时填写，总部商户主体时选填。
 - 官方原文明确存在相互依赖和不可同时修改的资料。生成请求前必须读取完整字段说明，不能只凭字段名或首次进件 DTO 猜测修改规则。
 
@@ -35,11 +35,11 @@
 
 ## 公共请求头
 
-- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.2`，双 Skill 默认 `hfps/1.3.5;hfms/1.0.2`。
+- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.4`，双 Skill 默认 `hfps/1.3.5;hfms/1.0.4`。
 
 ## SDK 证据
 
-用户提供且已锁定源码树摘要的 Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` 均存在对应封装：
+用户提供且已锁定源码树摘要的 Java `3.0.41`、PHP `2.0.31`、Python `2.0.28` 均存在对应封装：
 
 - Java / PHP：`V2MerchantBasicdataModifyRequest`
 - Python：`V2MerchantBasicdataModifyRequest`，模块 `v2_merchant_basicdata_modify_request.py`

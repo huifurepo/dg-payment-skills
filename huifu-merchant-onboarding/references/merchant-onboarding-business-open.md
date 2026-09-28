@@ -7,7 +7,8 @@
 ## 已确认的请求合同
 
 - Endpoint：`POST https://api.huifu.com/v2/merchant/busi/open`；顶层使用 `sys_id`、`product_id`、`sign`、`data`。
-- 完整目录共 452 个节点（请求387、同步响应9、异步56）和 52 组扩展表；全部父子路径、类型、长度、Y/N/C 与官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户业务开通”，本页不能替代完整字段目录。
+- 官网更新时间 `2026-09-20`；本地活动快照 `2026-09-22`；原文 SHA-256：`9c3f2262c295489abc5ce32bf123128cfd7376c4d5e35399c5083e39ff206c5c`。
+- 完整目录共460个节点（请求395、同步响应9、异步56）和 54 组扩展表；全部父子路径、类型、长度、Y/N/C 与官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户业务开通”，本页不能替代完整字段目录。
 - `data` 至少需新的当日唯一 `req_seq_id`、`req_date` 和真实 `huifu_id`。`upper_huifu_id:String(18) C`：`sys_id` 主体为渠道商时填写，总部商户主体时选填。
 - 微信、支付宝、银联、银行卡、线上业务、协议、分账等配置按业务分组条件填写；不能用一个通用模板猜填渠道字段或费率。
 - `async_return_url` 是申请审核结果入口；`busi_async_return_url` 是逐支付业务结果入口；电子协议地址的路径为 `data.agreement_info.agreement_async_return_url`（`agreement_info` 是 String(JSON) 条件对象）。字段合同见 `merchant-onboarding-field-contracts.md`。
@@ -30,11 +31,13 @@
 | `data.withhold_pay_scene` | `withhold_flag=Y` 时必填，仅 `1..6`，具体语义见字段合同。 |
 | `data.online_fee_conf_list[].fee_formula_type` | `String N`；代扣开通时才可传，`01/02/03/04` 分别为百分比无封顶保底、百分比有保底、固定、固定+百分比，空值默认 `04`。 |
 
-捷行付 `data.jxf_conf_info` 新增合同必须整组读取：`bank_name:String(8) Y` 仅 `PINGAN/BOC`；`jxf_bank_info.operator_phone/user_name/sign_start_date/sign_end_date` 已从无条件 `Y` 改为 `C`，银行不是平安时必填。`jxf_fee_info:Object N` 下包含 `open_card_fix_fee:String(11) N`、`quota_issue_fee_rate:String(6) N`、`out_fee_flag:String(1) N`、`out_fee_huifuid:String(18) C`、`out_fee_acct_type:String(2) C`；`pay_confirm_flag:String(1) N` 为 `Y/N`，为 `Y` 时 `pay_confirm_req_url:String(256) C` 必填。官网示例独有 `jxf_fee_info.fee_charge_type`，参数表未声明，禁止加入 DTO；`quota_issue_fee_rate` 说明要求两位小数而示例为四位，按正式说明校验并保留官网示例冲突。
+捷行付 `data.jxf_conf_info` 必须整组读取：`bank_name:String(8) Y` 仅 `PINGAN/BOC`；`jxf_bank_info.operator_phone/user_name/sign_start_date/sign_end_date` 为 `C`，银行不是平安时必填。`jxf_fee_info:Object N`（说明仍为jsonObject字符串，类型与说明冲突） 下包含 `open_card_fix_fee:String(11) N`、`quota_issue_fee_rate:String(6) N`、`out_fee_flag:String(1) N`、`out_fee_huifuid:String(18) C`、`out_fee_acct_type:String(2) C`；`pay_confirm_flag:String(1) N` 为 `Y/N`，为 `Y` 时 `pay_confirm_req_url:String(256) C` 必填。最新示例已删除未声明的 `jxf_fee_info.fee_charge_type` 并修正费率精度；该字段仍不进入DTO。对Object与字符串说明冲突的路径，不自行选择wire。
+
+抖音配置当前为 `data.dy_conf_list:String/jsonArray字符串`，保留 `dy_conf_list[]` 及子路径，发送一层 String(JSON Array)。`ali_conf_list[].al_real_name_info` 为 String C，`wx_conf_list[].wx_real_name_info` 为C。`wx_zl_conf.certificate_info/sales_info` 正式Object但说明为jsonObject字符串，属于待确认的wire冲突；新增 `sales_info.fee_rate_file_list.file_id/file_type` 不能遗漏。
 
 方向隔离是硬规则：商户详情查询响应的 `online_flag/quick_flag/withhold_flag/pre_authorization_flag` 使用 `1/0/空`，只表示查询到的当前配置；不得把这些响应值复制到本接口请求。本接口的预授权请求字段名也是 `alipay_pre_auth_flag` / `wechatpay_pre_auth_flag`，不是响应字段 `pre_authorization_flag`。
 
-线上能力还必须按申请内容检查材料：`scene_type=ONLINE/ALL` 时提供 `online_busi_type` 和运营媒介；快捷、网银、余额支付 Pro、银行大额转账、分账比例大于 30%、代扣按官方“线上业务类型编码及补充材料说明”提供材料；纸质协议、余额支付、分账、代扣分别使用对应材料规则。材料缺失时列为阻断缺口，禁止用通用 `file_id`、示例材料编号或同一图片占位。
+线上能力还必须按申请内容检查材料：`scene_type=ONLINE/ALL` 时提供 `online_busi_type` 和运营媒介；快捷、网银、余额支付 Pro、银行大额转账、分账比例大于 30%、代扣按官方“线上业务类型编码及补充材料说明”提供材料；纸质协议、余额支付、分账、代扣分别使用对应材料规则。材料缺失时列为真实提交的数据缺口，开发阶段可继续已明确框架并用 TODO/配置标明待提供项；禁止用通用 `file_id`、示例材料编号或同一图片占位去发真实请求。
 
 上述业务类型、补充材料、渠道编码、图片上传和协议说明都必须同时读取 `merchant-onboarding-external-resources.md`。只要命中其中一个字段，回答就必须单列 `外部资料提示`，逐条重复完整字段路径、触发条件和未经改写的原始地址，禁止用“同字段/同上”省略路径；未实际读取 XLSX/外站正文时必须要求人工核验。`data.agreement_info.agreement_type=3` 时，完整路径 `data.agreement_info.agreement_url` 必须使用索引中的固定 `PaymentServiceAgreement.htm` 原始地址。回调、二维码、商户网站和 APP 下载等示例或运行时 URL 不是官方资料，也不是默认值。
 
@@ -49,7 +52,7 @@
 
 ## 公共请求头
 
-- Java 与 PHP 使用 Skill 调用时都要求 `jpt-x-skill-source: <skill_source>`；当前 Java `3.0.40` 与 PHP `2.0.30` 的官方 SDK 主链路会在配置来源值后自动补该头。Python `2.0.24` 同样从 `MerConfig.jpt_x_skill_source` 自动补头。
+- 在已核验源码基线中，Java 与 PHP 使用 Skill 调用时都要求 `jpt-x-skill-source: <skill_source>`；Java `3.0.41` 与 PHP `2.0.31` 的官方 SDK 主链路会在配置来源值后自动补该头。Python `2.0.28` 同样从 `MerConfig.jpt_x_skill_source` 自动补头。
 
 ## 分层状态模型
 
@@ -60,9 +63,9 @@
 
 ## SDK 证据边界
 
-Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` 都有 `V2MerchantBusiOpenRequest` 作为可选封装。三个生成类没有 `jxf_conf_info` 或 `online_fee_conf_list` 的专属字段；它们必须通过正式请求字段白名单的 exact-key 扩展传入，嵌套对象按完整目录构造。扩展后合并会覆盖显式字段，因此拒绝覆盖各语言生成类已经声明的定位键。SDK 不替代支付业务、费率、协议、实名和渠道权限的人工确认；每次调用显式传入新的当天唯一 `req_seq_id` / `req_date`。
+已核验源码基线 Java `3.0.41`、PHP `2.0.31`、Python `2.0.28` 都有 `V2MerchantBusiOpenRequest` 作为可选封装。三个生成类没有 `jxf_conf_info` 或 `online_fee_conf_list` 的专属字段；它们必须通过正式请求字段白名单的 exact-key 扩展传入，嵌套对象按完整目录构造。扩展后合并会覆盖显式字段，因此拒绝覆盖各语言生成类已经声明的定位键。SDK 不替代支付业务、费率、协议、实名和渠道权限的人工确认；每次调用显式传入新的当天唯一 `req_seq_id` / `req_date`。
 
 ## 已确认与未确认回调规则
 
 - 仅 `busi_async_return_url` 的逐业务通知在存在 `ord_id`（`String(44)`）时，官网规定回包为 `RECV_ORD_ID_` + 该 `ord_id`；不得改用 `req_seq_id`，也不得外推到审核或电子协议通知。
-- 逐业务通知的外层包装仍待官方样本确认；审核和电子协议通知的 ACK 仍为 `[需要官方确认]`。审核、逐业务与电子协议通知的验签原文、HTTP 语义、编码、超时和重试也均为 `[需要官方确认]`。未获得相应协议与脱敏样本前，不得生成回调实现或套用支付 `notify_url` 规则。
+- 逐业务通知的外层包装仍待官方样本确认；审核和电子协议通知的 ACK 仍为 `[需要官方确认]`。审核、逐业务与电子协议通知的验签原文、HTTP 语义、编码、超时和重试也均为 `[需要官方确认]`。按 `shared-overview.md` 的开发提醒引用本页官方文档，建议开发者核对或咨询汇付官方/交流群；继续回调框架与状态处理，把未知协议留为 TODO/配置，不套用支付 `notify_url` 规则，也不要求先拿到样本才开始开发。

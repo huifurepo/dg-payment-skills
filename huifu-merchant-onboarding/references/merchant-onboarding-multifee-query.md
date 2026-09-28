@@ -2,7 +2,7 @@
 
 ## 适用范围
 
-用于商户成功开通多费率配置后，查询支付功能与场景维度的手续费底价配置。官方来源：[商户多费率配置查询](https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflcx.md)，锁定来源 SHA-256 为 `6a5b970177f67985f1ce20c6b2900580117496f870c97c3391055afaaa66438f`。
+用于商户成功开通多费率配置后，查询支付功能与场景维度的手续费底价配置。官方来源：[商户多费率配置查询](https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflcx.md)，官网更新时间 `2026-09-20`，本地活动快照 `2026-09-22`，原文 SHA-256 为 `e2c0f53e77a1ef00827cc8be28ac688c068e5c8a4dc9f741845b841dcd16881a`。
 
 本接口只读取多费率配置，不创建或修改配置，也不返回支付交易的实际手续费结算结果。调用前必须已有真实 `huifu_id`，且商户已成功开通多费率配置；接口存在不证明调用方拥有查询权限。
 
@@ -17,16 +17,16 @@
 ## 同步响应
 
 - `data.resp_code:String(8) Y`、`data.resp_desc:String(512) Y`。
-- `data.conf_list:String N` 仅在有配置结果时返回，并展开 `pay_scene:String(2) Y`、`fee_rate:String(6) Y`、`fee_sign:String(32) Y`、`pay_way:String(1) Y`。官网未说明 String 子表是对象还是数组，也没有成功示例；生产解析在取得编码证据前硬停，不沿用旧版单 Object 假设。
-- `data.conf_list.pay_way:String(1) Y` 仅 `A=支付宝`、`W=微信`。
+- `data.conf_list:String N` 仅在有配置结果时返回，说明已明确为 jsonArray格式；解一层 String(JSON Array) 后按存在性读取 `pay_scene:String(2) N`、`fee_rate:String(6) N`、`fee_sign:String(32) N`、`pay_way:String(1) N`。不得沿用旧响应必填标记。
+- `data.conf_list[].pay_way:String(1) N` 存在时仅 `A=支付宝`、`W=微信`；缺失时不得猜测渠道。
 - `pay_way=W` 时，`pay_scene` 仅 `1=线下反扫`、`2=线下公众号`、`3=线下小程序`、`4=线上公众号`、`5=线上小程序`、`12=线上反扫`；`pay_way=A` 时仅 `1=线下扫码`、`2=线上扫码`。必须先按 `pay_way` 选择枚举空间，不能复用一个无渠道上下文的数字枚举。
-- `fee_rate:String Y` 表示手续费底价百分比，数值大于等于0并保留2位小数；保持字符串，不自行换算或猜默认费率。`fee_sign:String Y` 是后续交易或配置修改可传入的真实标识。
+- `fee_rate:String(6) N` 存在时表示手续费底价百分比，数值大于等于0并保留2位小数；保持字符串，不自行换算或猜默认费率。`fee_sign:String(32) N` 存在时是后续交易或配置修改可传入的真实标识，不得为缺失值生成占位标识。
 
 查询响应没有 `req_seq_id`、`req_date` 或 `conf_status` 字段。不得从“商户多费率配置”同步响应复制这三个字段；当前配置和查询两页都明确写 `W=微信`，禁止沿用旧版 `T`。
 
 ## 三语言 SDK 边界
 
-用户提供且已锁定源码树摘要的 Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` 均有本接口专属类和精确路由：
+用户提供且已锁定源码树摘要的 Java `3.0.41`、PHP `2.0.31`、Python `2.0.28` 均有本接口专属类和精确路由：
 
 | 语言 | Request / 模块 | 路由证据 | 扩展字段方式 |
 | --- | --- | --- | --- |
@@ -43,8 +43,8 @@ Java 可运行代码仍须在进程初始化、任何 SDK 请求前全局执行�
 1. 确认目标 `huifu_id`、多费率已开通状态和查询权限。
 2. 传 `fee_sign` 时确认它来自真实配置；不传时明确官网未定义精确返回范围和数量，不猜分页或全量语义。
 3. 确认扩展映射没有覆盖 `req_seq_id`、`req_date`、`huifu_id`，也没有 `fee_sign` 之外的合同外键。
-4. 响应先完成 SDK 验签，再判断 `resp_code`；`conf_list` 编码确认后再按 `pay_way=A/W` 选择 `pay_scene` 枚举。
+4. 响应先完成 SDK 验签，再判断 `resp_code`；`conf_list` 按 String(JSON Array) 解码后再按 `pay_way=A/W` 选择 `pay_scene` 枚举。
 
 ## 公共请求头
 
-`jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.2`，同时使用支付与进件 Skill 时默认 `hfps/1.3.5;hfms/1.0.2`。
+`jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.4`，同时使用支付与进件 Skill 时默认 `hfps/1.3.5;hfms/1.0.4`。

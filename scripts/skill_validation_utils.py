@@ -13,6 +13,12 @@ from skill_validation_config import (
 
 
 def should_skip(path: Path) -> bool:
+    # Trellis/Codex instructions are development infrastructure, not upload
+    # package references. Only exempt these directories at the repository root:
+    # a similarly named directory inside a skill must still be checked.
+    relative = path.relative_to(REPO_ROOT) if path.is_absolute() else path
+    if relative.parts and relative.parts[0] in {".agents", ".codex", ".trellis"}:
+        return True
     return any(part in SKIP_PARTS for part in path.parts)
 
 

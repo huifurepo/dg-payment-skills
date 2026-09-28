@@ -11,23 +11,33 @@
 
 ## 使用方式与证据边界
 
-本索引是 `huifu-merchant-onboarding 1.0.2` 对十三个官网页面及“商户业务类型”公共编码页的高风险约束速查，不是完整字段目录。完整字段是否存在、嵌套路径、类型、长度、Y/N/C 与官方说明必须读取 `merchant-onboarding-complete-field-catalog.md`；本页负责枚举、默认值、跨方向隔离、官网冲突和安全边界。业务开通或修改仍必须先选定具体能力，不存在跨渠道通用的完整请求模板。来源快照核验日期：`2026-08-31`，共 2,183 个字段节点；相对上一快照新增29、删除1、修改45。独立 Skill 包内可从完整字段目录和 `official-service-source-index.md` 核对十三个来源 URL 与 SHA。允许增量的机器门禁保存在维护仓库，不是安装包运行依赖。
+本索引是 `huifu-merchant-onboarding 1.0.4` 对十三个官网页面及“商户业务类型”公共编码页的高风险约束速查，不是完整字段目录。完整字段是否存在、嵌套路径、类型、长度、Y/N/C 与官方说明必须读取 `merchant-onboarding-complete-field-catalog.md`；本页负责枚举、默认值、跨方向隔离、官网冲突和安全边界。业务开通或修改仍必须先选定具体能力，不存在跨渠道通用的完整请求模板。来源快照核验日期：`2026-09-22`，共 2,210 个字段节点；相对上一快照新增82、删除79、修改194。独立 Skill 包内可从完整字段目录和 `official-service-source-index.md` 核对十三个来源 URL 与 SHA。允许增量的机器门禁保存在维护仓库，不是安装包运行依赖。
 
 - **官网 API 合同**：本页的端点、顶层信封、`data` 第一层字段、类型、最大长度与 Y/N/C 均以所列官网页面为准。
 - **SDK 源码事实**：只读取 `shared-server-sdk-matrix.md`；不能推断材料条件、回调验签、响应枚举或审核结果。
 - **本 Skill 策略**：安全、脱敏、补偿查询等标为本 Skill 策略，不是官网字段。
 - **完整字段目录**：`merchant-onboarding-complete-field-catalog.md` 已机械展开官方全部可达嵌套表。生成对象时必须从父路径读到全部相关叶子，再按调用方真实业务选择取子集；禁止仅凭本页速查、字段名或示例补字段。
-- **当前增量**：企业新增 `head_type`，业务开通及修改各新增10个捷行付/线上费率字段，详情新增8个捷行付/渠道外扣字段；企业请求删除旧 `material_card_info.card_type`。四个接口的 `request.data.upper_huifu_id` 继续为 `String(18) C`，企业/个人三项门店图片继续按线下场景条件必填。
+- **当前增量**：费率查询 `fee_rate_type:Array<string>` 改原生数组；企业补充对公卡必填/长度、微信直连子树、抖音与多层JSON容器、详情响应可选性、短信/状态长度均更新。请求1,277、同步响应753、通知180；字段与嵌套以完整目录为准，不能按本摘要猜wire。
+- **官方空单元保真**：当前十三页仍有10个目录节点的说明单元为空、4个 String 标量叶字段的长度单元为空；完整目录保留 `—`，不得按同名字段、示例或 SDK 类型补写。
+
+文档疑义按 `shared-overview.md` 的“文档疑义与开发提醒”处理：列出完整路径与本页/原子页的对应官方文档，建议开发者核对；不清楚时咨询汇付官方或汇付开发者交流沟通群。继续已明确的 SDK、DTO 和业务代码，争议部分用 TODO/待填配置隔离，不将咨询答复作为开始开发的条件。
+
+### 本轮重点冲突
+
+- 企业 `request.data.material_card_info` 正式Y，但说明仅非个体企业对私结算时要求；必须标记 `[官方文档口径冲突]`，不得不加说明地改成N或无条件收集。其branch_code正式长度8与12位示例冲突；响应同路径长度12，不能互抄。head_type现在String(1) C，activated_products企业及基本修改长度32。
+- 开通/修改的 `jxf_fee_info`、开通的 `wx_zl_conf.certificate_info/sales_info`、修改的分账子对象与通知对象存在Object类型与字符串/数组描述差异；逐路径确认，不套用统一序列化。
+- 修改 `request.data.wx_zl_conf.wx_zl_pay_conf_list:String(512) Y` 没有格式说明，目录不保留旧[]；新增 `request.data.wx_zl_conf.wx_zl_pay_conf_list.sales_info.fee_rate_file_list.file_id/file_type` 不能漏。开通接口则是 `request.data.wx_zl_conf.sales_info.fee_rate_file_list.file_id/file_type`，不能合并父层。
+- 多费率响应conf_list子字段当前N；详情股东cert_no正式路径已删除；业务修改多处费率子字段Y→N仍须保留条件说明。
 
 ## 公共信封
 
-十一个 JSON 接口（图片上传之外的接口）的请求顶层均为：`sys_id:String(32), product_id:String(32), sign:String(512), data:Json`，均为 Y。图片上传是特殊合同：接口元数据标记 `sign=true`，但 `requestDemo` 没有顶层 `sign`。Java `3.0.40` 的图片专用 Request、URI 特判与 `BasePayClient.upload(...)` 已确认满足请求加签和两种来源传输要求；PHP/Python 的专用生成实现不可直接使用，但允许按 Java 已核验 wire 生成图片专用通用 POST/自写 HTTPS multipart 降级。顶层 `file` 与 `data.file_url` 不能同时上传；官网未说明二者都空是否合法。
+十二个 JSON 接口（图片上传之外的接口）的请求顶层均为：`sys_id:String(32), product_id:String(32), sign:String(512), data:Json`，均为 Y。图片上传是特殊合同：接口元数据标记 `sign=true`，但 `requestDemo` 没有顶层 `sign`。Java `3.0.41` 的图片专用 Request、URI 特判与 `BasePayClient.upload(...)` 已确认满足请求加签和两种来源传输要求；PHP/Python 的专用生成实现不可直接使用，但允许按 Java 已核验 wire 生成图片专用通用 POST/自写 HTTPS multipart 降级。顶层 `file` 与 `data.file_url` 不能同时上传；官网未说明二者都空是否合法。
 
-十三个接口页均执行同一 Skill 来源合同：使用 Skill 调用时要求 `jpt-x-skill-source: <skill_source>`；未显式配置时，仅进件实际参与当前请求默认 `hfms/1.0.2`，支付与进件都实际参与当前请求默认 `hfps/1.3.5;hfms/1.0.2`，仅安装未参与的不计入。其他 SDK 内部请求头由 SDK 自行处理，不进入 Skill 的字段、语言差异或硬停判断。十一个已有专属 JSON Request 的 Java、PHP、Python SDK 主链路语言差异仍按 SDK 能力矩阵处理。费率查询在锁定 SDK 中没有专属类，不能据此宣称 SDK 会自动补头。
+十三个接口页均执行同一 Skill 来源合同：使用 Skill 调用时要求 `jpt-x-skill-source: <skill_source>`；未显式配置时，仅进件实际参与当前请求默认 `hfms/1.0.4`，支付与进件都实际参与当前请求默认 `hfps/1.3.5;hfms/1.0.4`，仅安装未参与的不计入。其他 SDK 内部请求头由 SDK 自行处理，不进入 Skill 的字段、语言差异或硬停判断。十一个已有专属 JSON Request 的 Java、PHP、Python SDK 主链路语言差异仍按 SDK 能力矩阵处理。费率查询在锁定 SDK 中没有专属类；使用已核验的官方通用入口并传入正确配置，复用该入口的签名、验签与来源头，不得把类缺口误认为手写 HTTP 授权。
 
-十一个已有专属 Request 类的 JSON 接口和 Java 图片调用均进入 `dg-java-sdk 3.0.40` 的公共 `AbstractRequest`。其 `BasePay.debug` 默认为 `true`，会打印私钥、签名和请求数据；任何 Java 可运行代码都必须在进程初始化阶段、任何 SDK 请求之前执行一次 `BasePay.debug = false;`，不得在并发请求中临时切换。该设置只关闭调试输出，不改变签名流程；十一个已有专属类的 JSON 接口保留请求签名和响应验签，图片 `file_url` 走 `BasePayClient.request(request, true)`，本地文件走 `BasePayClient.upload(request, file)`，两者均保留请求签名但跳过响应验签。费率查询没有专属 Request 类，不得用相似类替代。
+十一个已有专属 Request 类的 JSON 接口和 Java 图片调用均进入 `dg-java-sdk 3.0.41` 的公共 `AbstractRequest`。其 `BasePay.debug` 默认为 `true`，会打印私钥、签名和请求数据；任何 Java 可运行代码都必须在进程初始化阶段、任何 SDK 请求之前执行一次 `BasePay.debug = false;`，不得在并发请求中临时切换。该设置只关闭调试输出，不改变签名流程；十一个已有专属类的 JSON 接口保留请求签名和响应验签，图片 `file_url` 走 `BasePayClient.request(request, true)`，本地文件走 `BasePayClient.upload(request, file)`，两者均保留请求签名但跳过响应验签。费率查询没有专属 Request 类，不得用相似类替代。
 
-PHP `2.0.30` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo/loader.php` 与 `Composer/BsPayConfig.php` 会在 SDK 初始化前启用 `DEBUG=true`。此时 `BsPayRequestV2` 会记录含 `rsa_merch_private_key` 的 `MerConfig`、完整请求体和完整响应。联调/生产必须在加载 SDK、Demo/Composer 配置及调用 `BsPay::init` 前固定 `DEBUG=false`，不得使用 Demo loader，也不得允许后续配置改回 `true`；无法证明时硬停。
+PHP `2.0.31` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo/loader.php` 与 `Composer/BsPayConfig.php` 会在 SDK 初始化前启用 `DEBUG=true`。此时 `BsPayRequestV2` 会记录含 `rsa_merch_private_key` 的 `MerConfig`、完整请求体和完整响应。联调/生产必须在加载 SDK、Demo/Composer 配置及调用 `BsPay::init` 前固定 `DEBUG=false`，不得使用 Demo loader，也不得允许后续配置改回 `true`；无法证明时硬停。
 
 | 接口 | 方法 / URI | 官网来源 |
 | --- | --- | --- |
@@ -47,7 +57,7 @@ PHP `2.0.30` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo
 
 ## 字段生成硬约束
 
-生成、评审 DTO 或解释字段时，按以下顺序逐字段核对；任一项没有本地依据时停止为该字段赋值，并标记 `[需要官方确认]`：
+生成、评审 DTO 或解释字段时，按以下顺序逐字段核对；没有本地依据的字段保留 `[需要官方确认]` 与 TODO/待填配置，不猜赋值，同时继续有依据的部分：
 
 1. 先锁定接口与方向：请求、同步响应、审核通知、逐业务通知、电子协议通知或查询响应。
 2. 再锁定完整路径：例如业务开通请求 `data.online_flag` 与详情响应 `data.online_flag` 是两个合同，禁止只按字段名匹配。
@@ -56,23 +66,23 @@ PHP `2.0.30` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo
 5. 示例值只演示格式，**不是默认值，也不是推荐值**。禁止把示例里的 `1`、`Y`、费率、MCC、商户号或材料编号复制到真实请求。
 6. 官网定义为 `String` 的枚举保持字符串；不得把 `Y/N`、`1/2`、`01` 转成 JSON 布尔值或数字。
 7. 可选字段有默认值且调用方确实接受该默认行为时，优先省略字段；只有调用方明确选择并通过约束校验后才显式赋值。
-8. String(JSON Object/Array) 必须先校验叶子字段，再统一序列化；未展开目标子表时只列缺口，不生成对象。
-9. 数组规则只接受 `Array/jsonArray`；唯一已登记例外是业务开通修改通知的 `async.business.reg_result_list[]`，其原文误拼 `josnArray` 且同一行明确“集合可能有多条数据”。该例外不得按 `_list` 名称扩散。
+8. String(JSON Object/Array) 必须先校验叶子字段，再统一序列化；目标子表未展开时先读取完整目录；仍缺依据的子项以 TODO/配置隔离，可继续对象框架和已明确字段。
+9. 数组仅按正式 `Array/Array<string>/jsonArray` 确认，不从 `_list` 猜测。业务修改通知reg_result_list正式Array；但修改请求wx_zl_pay_conf_list现String且无格式说明，不得套用旧数组。
 10. 不得按叶字段名去重。经营地址和结算卡中的省市必须按完整父路径分别建模：
 
 | 完整路径 | 业务含义 | 生成位置 |
 | --- | --- | --- |
 | `request.data.prov_id` / `request.data.area_id` | 商户经营省 / 经营市 | `data` 顶层 |
 | `request.data.card_info.prov_id` / `request.data.card_info.area_id` | 结算银行所在省 / 所在市 | 先写入 `card_info` 对象，再整体序列化为 String(JSON) |
-| `request.data.material_card_info.prov_id` / `request.data.material_card_info.area_id` | 企业对私结算时补充的对公同名账户省 / 市 | 路径树保留官网 `Object` 类型列；wire 以说明为准，先写入对象再整体序列化为 String(JSON) |
+| `request.data.material_card_info.prov_id` / `request.data.material_card_info.area_id` | 企业对私结算时补充的对公同名账户省 / 市 | 当前正式类型为 `String`；先写入对象再整体序列化为 String(JSON) |
 | `request.data.elec_acct_config.elec_card_list[].prov_id` / `request.data.elec_acct_config.elec_card_list[].area_id` | 电子账户银行卡所在省 / 所在市 | 保留 `elec_card_list[]` 数组父路径 |
 
-企业、个人进件和基本信息修改都存在前两组同名叶字段；企业进件当前还有第三组 `material_card_info` 请求路径。适用时必须同时保留，不得因 `data` 顶层已有 `prov_id/area_id` 而省略任一子对象，也不得把银行卡省市提升到 `data` 顶层。基本信息修改的 `request.data.card_info.area_id` 官网长度为 `8`，企业和个人进件对应路径长度为 `6`，而企业 `request.data.material_card_info.area_id` 官网未给长度；不能跨接口复用长度，也不能跨父对象复用长度。
+企业、个人进件和基本信息修改都存在前两组同名叶字段；企业进件当前还有第三组 `material_card_info` 请求路径。适用时必须同时保留，不得因 `data` 顶层已有 `prov_id/area_id` 而省略任一子对象，也不得把银行卡省市提升到 `data` 顶层。基本信息修改的 `request.data.card_info.area_id` 官网长度为 `8`，企业和个人进件对应路径长度为 `6`，而企业 `request.data.material_card_info.area_id` 当前长度为 `6`；不能跨接口复用长度，也不能跨父对象复用长度。
 
 ### 官网空白项
 
-- 既有十一页共有37个目录节点的说明单元为空；新增多费率配置与查询页均没有新增空说明。完整目录统一保留 `—`，不能按中文名或同名字段补写说明。
-- 按“没有子路径的 String 字段”统计，当前十三页共有58个叶字段的长度单元为空；完整目录统一保留 `—`。String(JSON) 父字段不计入该口径，图片上传未定型顶层字段另按图片合同处理。
+- 官网仍有目录节点的说明或标量长度单元为空；完整目录统一保留 `—`，不能按中文名或同名字段补写。
+- String(JSON) 父字段和图片上传未定型顶层字段按各自接口合同处理；空白单元不能从旧快照、示例或同名路径补齐。
 - 空说明和空长度均属于官网未定义，不是 Skill 字段丢失。生成严格 DTO、数据库长度或前端校验前标记 `[需要官方确认]`；不得从 SDK 类型、示例值或其他接口同名路径推断。
 
 同名字段不得跨接口复用值域：
@@ -100,7 +110,7 @@ PHP `2.0.30` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo
 | 主体 | `reg_name String(64) Y`; `short_name String(64) Y`; `receipt_name String(50) Y`; `mer_en_name String(256) N`; `ent_type String(1) Y`; `mcc String(7) C`; `busi_type String(1) C` | 使用上级资料时部分主体字段不填；MCC/经营类型按官网条件。 |
 | 证照与地址 | `scene_type String(8) Y`; `license_pic String(64) Y`; `license_code String(18) Y`; `license_type String(32) N`; `license_validity_type String(1) Y`; `license_begin_date String(8) Y`; `license_end_date String(8) C`; `found_date String(8) Y`; `reg_capital String(16) C`; `business_scope String(1000) N`; `reg_prov_id/reg_area_id/reg_district_id String(6) N/N/Y`; `reg_detail String(255) Y`; `prov_id/area_id String(6) N`; `district_id String(6) Y`; `detail_addr String(256) C` | `scene_type=OFFLINE/ALL` 时 `detail_addr` 必填；非长期证照时结束日期必填。 |
 | 法人与联系人 | `legal_name String(32) Y`; `legal_cert_type String(2) Y`; `legal_cert_no String(32) Y`; `legal_cert_validity_type String(1) Y`; `legal_cert_begin_date String(8) Y`; `legal_cert_end_date String(8) C`; `legal_mobile_no String(11) N`; `legal_addr String(256) Y`; `legal_cert_back_pic/legal_cert_front_pic String(64) Y`; `contact_name String(128) N`; `contact_mobile_no String(11) Y`; `contact_email String(32) Y`; `service_phone String(32) N`; `login_name String(32) Y`; `sms_send_flag String(1) N` | 法人证件非长期时结束日期必填。 |
-| 资金与材料 | `card_info String(JSON Object) Y`; `material_card_info String(JSON Object) N`; `settle_config String(JSON Object) N`; `cash_config String(JSON Array) N`; `reg_acct_pic String(64) C`; `settle_card_front_pic/settle_cert_back_pic/settle_cert_front_pic/auth_entrust_pic String(64) C` | `material_card_info` 整体序列化为 JSON 字符串；非个体企业且 `card_info` 选择对私结算时补对公同名账户并上传 F08。当前官网已删除其旧 `card_type` 子字段，不得生成或套用默认0。 |
+| 资金与材料 | `card_info String(JSON Object) Y`; `material_card_info String(JSON Object) Y`; `settle_config String(JSON Object) N`; `cash_config String(JSON Array) N`; `reg_acct_pic String(64) C`; `settle_card_front_pic/settle_cert_back_pic/settle_cert_front_pic/auth_entrust_pic String(64) C` | `material_card_info` 整体序列化为 JSON 字符串；非个体企业且 `card_info` 选择对私结算时补对公同名账户并上传 F08。当前官网已删除其旧 `card_type` 子字段，不得生成或套用默认0。 |
 | 组织与扩展 | `head_office_flag/use_head_info_flag String(1) N`; `head_huifu_id String(18) C`; `mer_url String(256) N`; `mer_icp String(50) C`; `store_header_pic/store_indoor_pic/store_cashier_desk_pic String(64) C`; `ext_mer_id String(64) N`; `remarks String(300) N`; `async_return_url String(120) N`; `elec_acct_config String(JSON Object) N`; `beneficiary_info/share_holder_info_list/extended_material_list String(JSON Array) N`; `activated_products String N` | 三项门店图片在 `scene_type` 含线下场景时必填；审核异步地址只能使用 `async_return_url`，禁止使用支付字段 `notify_url`。 |
 
 ### 个人进件 `data`
@@ -109,7 +119,7 @@ PHP `2.0.30` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo
 | --- | --- | --- |
 | 定位与经营 | `req_seq_id String(32) Y`; `req_date String(8) Y`; `upper_huifu_id String(18) C`; `reg_name String(32) Y`; `short_name String(32) N`; `mcc String(7) Y`; `scene_type String(8) Y`; `prov_id/area_id String(6) N`; `district_id String(6) Y`; `detail_addr String(256) C` | 同一商户号当天唯一；`upper_huifu_id` 在渠道商主体时填写、总部主体时选填；线下场景时经营详细地址必填。 |
 | 负责人 | `legal_cert_no String(32) Y`; `legal_cert_begin_date String(8) Y`; `legal_cert_validity_type String(1) N`; `legal_cert_end_date String(8) Y`; `legal_addr String(256) Y`; `legal_cert_back_pic/legal_cert_front_pic String(64) Y`; `occupation String(2) N`; `contact_mobile_no String(11) Y`; `contact_email String(32) Y` | 负责人证件仅支持官网允许的类型和日期约束。 |
-| 结算与扩展 | `card_info String(JSON Object) Y`; `settle_card_front_pic String(64) Y`; `settle_config String(JSON Object) N`; `cash_config String(JSON Array) N`; `sms_send_flag String(1) N`; `login_name String(32) N`; `mer_url String(256) N`; `mer_icp String(50) C`; `store_header_pic/store_indoor_pic/store_cashier_desk_pic String(64) C`; `ext_mer_id String(64) N`; `remarks String(300) N`; `async_return_url String(120) N`; `head_office_flag String(1) N`; `head_huifu_id String(18) C`; `elec_acct_config String(JSON Object) N`; `extended_material_list String(JSON Array) N`; `activated_products String N` | 审核异步地址只能使用 `async_return_url`，禁止使用支付字段 `notify_url`；卡信息和条件材料的叶子字段未在本页展开时不得生成。 |
+| 结算与扩展 | `card_info String(JSON Object) Y`; `settle_card_front_pic String(64) Y`; `settle_config String(JSON Object) N`; `cash_config String(JSON Array) N`; `sms_send_flag String(1) N`; `login_name String(32) N`; `mer_url String(256) N`; `mer_icp String(50) C`; `store_header_pic/store_indoor_pic/store_cashier_desk_pic String(64) C`; `ext_mer_id String(64) N`; `remarks String(300) N`; `async_return_url String(120) N`; `head_office_flag String(1) N`; `head_huifu_id String(18) C`; `elec_acct_config String(JSON Object) N`; `extended_material_list String(JSON Array) N`; `activated_products String N` | 审核异步地址只能使用 `async_return_url`，禁止使用支付字段 `notify_url`；卡信息和条件材料叶子字段联读完整目录；仍未明确的子项标 TODO，继续已明确部分。 |
 
 ### 业务开通 `data`
 
@@ -118,7 +128,7 @@ PHP `2.0.30` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo
 | 定位与费用 | `req_seq_id String(32) Y`; `req_date String(8) Y`; `huifu_id String(18) Y`; `upper_huifu_id String(18) C`; `short_name String(64) N`; `out_fee_flag String(1) N`; `out_fee_huifuid String(18) N`; `out_fee_acct_type String(2) N` | 业务申请编号同一商户号当天唯一；`upper_huifu_id` 在渠道商主体时填写、总部主体时选填；费用承担字段按业务条件。 |
 | 支付能力 | `online_flag/quick_flag/withhold_flag/alipay_pre_auth_flag/wechatpay_pre_auth_flag String(1) N`; `mer_bus_type String(2) N`; `ali_conf_list/wx_conf_list/union_conf_list/online_fee_conf_list/online_pay_fee_conf_list String(JSON Array) N`; `ali_zl_conf/wx_zl_conf/bank_card_conf String(JSON Object) N`; `online_busi_type String(8) C`; `online_media_info_list String(JSON Array) N`; `use_chains_flag String(8) N` | 渠道、费率和线上业务字段按申请能力填写，不能使用通用模板猜填。 |
 | 协议与资金 | `sign_user_info String(JSON Object) C`; `agreement_info String(JSON Object) C`; `balance_pay_config/out_order_funds_config/combine_pay_config/hb_fq_fee_config/split_conf_info String(JSON Object) N`; `delay_flag/forced_delay_flag/fund_collection_flag String(1) N`; `extended_material_list String(JSON Array) N` | 电子签约时 `sign_user_info` 必填；`agreement_async_return_url` 路径是 `data.agreement_info.agreement_async_return_url`。 |
-| 其他申请 | `enter_fee String(14) N`; `enter_fee_flag/online_refund/platform_refund/support_revoke/half_pay_host_flag/online_recharge_flag/refund_mend_open_flag/bill_payment_flag String(1) N`; `async_return_url/busi_async_return_url String(128) N`; `recon_resp_addr String(256) N`; `uni_app_payment_config String(JSON Object) N`; `surrogate_config_list String(JSON Array) N`; `large_amt_pay_config String(JSON Object) N`; `agent_recheck_config/jxf_conf_info/merge_pay_config_info Object N`; `withhold_pay_scene String C`; `recon_resp_sys_id String(32) N` | 对象叶子字段以官网路径和条件为准，未展开时不得生成。 |
+| 其他申请 | `enter_fee String(14) N`; `enter_fee_flag/online_refund/platform_refund/support_revoke/half_pay_host_flag/online_recharge_flag/refund_mend_open_flag/bill_payment_flag String(1) N`; `async_return_url/busi_async_return_url String(128) N`; `recon_resp_addr String(256) N`; `uni_app_payment_config/large_amt_pay_config/agent_recheck_config/jxf_conf_info/merge_pay_config_info String(JSON Object) N`; `surrogate_config_list String(JSON Array) N`; `dy_conf_list String(JSON Array) N`; `withhold_pay_scene String(1) C`; `recon_resp_sys_id String(32) N` | 对象叶子字段联读完整目录，未明确项用 TODO/配置隔离，不猜字段。 |
 
 ## 值域、默认值与条件速查
 
@@ -140,7 +150,7 @@ PHP `2.0.30` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo
 | `data.head_office_flag` | `1=总部商户`、`0=下级商户`、不传=普通商户；不是 `Y/N`。 |
 | `data.use_head_info_flag` / `head_huifu_id` | `use_head_info_flag` 仅 `Y/N`；`head_office_flag=0` 时 `head_huifu_id` 必填，`head_office_flag=1` 时禁止传。 |
 | `data.reg_acct_pic` / 结算材料 | 企业对公结算时 `reg_acct_pic` 必填；对私时银行卡面、持卡人证件正反面必填；对私非法人或对公非同名时授权委托书必填。 |
-| `data.material_card_info` | `String(JSON Object) N`。非个体工商户的企业商户在 `card_info` 选择对私结算（法人或非法人）时补充对公同名账户并上传 F08；当前正式子表不再包含 `card_type`，禁止生成旧默认值。官网类型列 `Object` 与说明列不同，本项目以“jsonObject字符串”说明为 wire 依据；叶字段长度仍为空时不得猜长度。 |
+| `data.material_card_info` | `String(JSON Object) Y`，但正文仍说非个体工商户企业对私结算时补充，必填冲突待确认。上传F08；正式子表不含 `card_type`，禁止生成旧默认值。card_no/prov_id/area_id/branch_code 长度分别32/6/6/8，支行请求长度8与同请求12位示例冲突，不能截断；详情响应12是独立方向定义，不能与请求共用校验。 |
 | `data.activated_products` | 只从 `01=一体化收款产品`、`02=账户与资金产品`、`03=业财数通产品` 选择；多值按官网格式组合，不传为空。商户基本信息修改的同名路径使用相同枚举。 |
 
 ### 个人进件约束
@@ -236,7 +246,7 @@ PHP `2.0.30` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo
 | `data.delay_flag/forced_delay_flag` | `Y/N`；`delay_flag` 空按否解析。 |
 | `data.out_fee_flag` / `out_fee_acct_type` | `1/2`（默认 `2`）与 `01/02/05/09`（默认 `01`）。 |
 
-官网详情页存在需保留原样的合同差异：企业进件请求 `reg_name` 为 `String(64)`、个人为 `String(32)`，详情响应为 `String(128)`；请求和响应 DTO 不得复用同一长度注解。详情页还把 `service_phone` 标为 `String(11)`，但示例固话超过 11 个字符；依赖该字段做严格 DTO 校验前标记 `[需要官方确认]`，不得擅自放宽或截断。
+官网详情页存在需保留原样的合同差异：企业进件请求 `reg_name` 为 `String(64)`、个人为 `String(32)`，详情响应为 `String(128)`；请求和响应 DTO 不得复用同一长度注解。详情页现已将 `service_phone` 修正为 `String(32)`，旧11位冲突已关闭。
 
 ### 必填 `card_info` 叶子合同
 
@@ -260,7 +270,7 @@ PHP `2.0.30` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo
 | `cert_validity_type`、`cert_begin_date`、`cert_end_date` | `String(1) Y`、`String(8) Y`、`String(8) C` | `cert_validity_type=0` 时结束日期必填，`=1` 时结束日期为空。 |
 | `mp`、`is_settle_default` | `String(11) N`、`String(1) N` | 手机号及默认卡标识 `Y/N`。 |
 
-业务开通没有跨能力的统一嵌套对象：微信、支付宝、银联、银行卡、直连、协议、分账或资金能力必须先由用户明确目标，再从官网相应的 `ali_conf_list`、`wx_conf_list`、`union_conf_list`、`bank_card_conf`、`ali_zl_conf`、`wx_zl_conf`、`sign_user_info`、`agreement_info`、`split_conf_info` 等子表加载完整叶子合同。未明确能力、费率、渠道权限和材料时，只能解释字段或输出缺口清单，不得生成“全能力通用请求”。
+业务开通没有跨能力的统一嵌套对象：微信、支付宝、银联、银行卡、直连、协议、分账或资金能力必须先由用户明确目标，再从官网相应的 `ali_conf_list`、`wx_conf_list`、`union_conf_list`、`bank_card_conf`、`ali_zl_conf`、`wx_zl_conf`、`sign_user_info`、`agreement_info`、`split_conf_info` 等子表加载完整叶子合同。未明确能力、费率、渠道权限和材料时，列出缺口并继续可独立确定的 SDK/业务框架，未知配置用 TODO 隔离；不得把猜测的“全能力通用请求”作为真实请求，实际调用仍需真实参数与权限。
 
 ### 图片与查询请求
 
@@ -274,13 +284,13 @@ PHP `2.0.30` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo
 
 | 接口 | 已确认的请求边界 |
 | --- | --- |
-| 业务开通修改 | `req_seq_id String(32) Y`; `req_date String(8) Y`; `huifu_id String(18) Y`；其余 51 组嵌套配置按本次真实修改目标从完整目录读取。 |
+| 业务开通修改 | `req_seq_id String(32) Y`; `req_date String(8) Y`; `huifu_id String(18) Y`；其余 53 组嵌套配置按本次真实修改目标从完整目录读取。 |
 | 基本信息修改 | `req_seq_id String(32) Y`; `req_date String(8) Y`; `upper_huifu_id String(18) C`; `huifu_id String(18) Y`；`upper_huifu_id` 在渠道商主体时填写、总部主体时选填；资料对象和条件必须从完整目录逐叶校验。 |
-| 费率信息查询 | `req_seq_id String(32) Y`; `req_date String(8) Y`; `huifu_id String(32) Y`; `fee_rate_type String N`。`fee_rate_type` 同时出现 String、多选和数组样式示例，标记 `[官方文档口径冲突]`。响应 `huifu_id:String(18) Y` 又说明“同入参”，与请求长度 32 冲突；请求、响应 DTO 必须分开，并标记 `[官方文档口径冲突]`。 |
+| 费率信息查询 | `req_seq_id String(32) Y`; `req_date String(8) Y`; `huifu_id String(32) Y`; `fee_rate_type Array<string>(117) N`。发送原生JSON数组，不做字符串化；正式表与示例已一致。响应huifu_id为18，保留方向差异。 |
 | 商户状态变更 | `req_date string(8) Y`; `req_seq_id string(32) Y`; `huifu_id String(18) Y`; `status String(1) Y`; `upd_status_reason String(512) Y`。`status` 仅字符串 `1/0`。官方多行注释中的 `file_list` 已废弃，不属于合同。 |
-| 商户短信发送 | `req_seq_id String(32) Y`; `req_date String(8) Y`; `huifu_id String(18) Y`; `verify_type String Y`；`phone/operation_type/verify_code/elec_acct_sign_seq_id` 按完整目录中的 C 条件填写。 |
-| 商户多费率配置 | `req_seq_id/req_date/huifu_id` 为 `String(32/8/18) Y`；`wx_conf_list/ali_conf_list:String N` 均按 String(JSON Array) 发送且不得同时为空。子项 `pay_scene/fee_rate/fee_sign` 长度为 `2/6/32`。响应 `conf_list:String N` 的内部对象/数组编码未说明，生产解析硬停确认；`pay_way=A/W`，旧 `T=微信` 冲突已关闭。 |
-| 商户多费率配置查询 | `req_seq_id/req_date/huifu_id` 为 `String(32/8/18) Y`；可选 `fee_sign:String(32) N` 只传真实标识。官网没有说明省略后的精确返回范围、数量或分页语义。响应 `conf_list:String N` 的内部编码未说明，不能沿用旧版单 Object 假设；查询响应仍不补配置接口才有的 `req_seq_id/req_date/conf_status`。 |
+| 商户短信发送 | `req_seq_id String(32) Y`; `req_date String(8) Y`; `huifu_id String(18) Y`; `verify_type String(32) Y`；`phone/operation_type/verify_code/elec_acct_sign_seq_id` 按完整目录中的 C 条件填写。 |
+| 商户多费率配置 | `req_seq_id/req_date/huifu_id` 为 `String(32/8/18) Y`；`wx_conf_list/ali_conf_list:String N` 均按 String(JSON Array) 发送且不得同时为空。子项 `pay_scene/fee_rate/fee_sign` 长度为 `2/6/32`。响应 `conf_list:String/jsonArray格式` 按 String(JSON Array) 解码；`pay_way=A/W`。 |
+| 商户多费率配置查询 | `req_seq_id/req_date/huifu_id` 为 `String(32/8/18) Y`；可选 `fee_sign:String(32) N` 只传真实标识。官网没有说明省略后的精确返回范围、数量或分页语义。响应 `conf_list:String/jsonArray格式` 按 String(JSON Array) 解码；查询响应仍不补配置接口才有的 `req_seq_id/req_date/conf_status`。 |
 
 ## 状态与回调字段归属
 
@@ -290,7 +300,7 @@ PHP `2.0.30` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo
 | 逐业务通知 `reg_result_list[].business_stat` | `String(1)`：`S/F` | 仅官网规定的 `notify_type=W/A/E` 返回；逐业务通知外层包装待官方样本确认。 |
 | 业务开通修改逐业务通知 `async.business.ord_id` | `String(44) N` | 存在时按该接口官网说明应答 `RECV_ORD_ID_` + `ord_id`；不外推到其他通知。 |
 | 逐业务直连结果 `zl_async_info.apply_state` | `String(1)`：`S/P/N/F/C` | 业务开通逐业务通知中的直连申请状态；逐业务通知外层包装待官方样本确认。 |
-| 业务开通/修改/基础资料修改电子协议通知 `async.agreement.agreement_info_list.con_stat` | `String(2)`：`2..8` | 三个通知页面的父字段只定义为 `String`，没有 `Array/jsonArray`；不得因 `_list` 名称或状态查询同名字段而添加 `[]`。`5` 表示签约完成；通知外层协议仍需官方确认。 |
+| 业务开通/修改/基础资料修改电子协议通知 `async.agreement.agreement_info_list.con_stat` | `String(2)`：`2..8` | 业务开通与基础修改父字段为 `String`，业务开通修改为 `Object`，没有 `Array/jsonArray`；不得因 `_list` 名称或状态查询同名字段而添加 `[]`。`5` 表示签约完成；通知外层协议仍需官方确认。 |
 | 申请状态查询 `data.apply_status` | `String(1)`：`Y/P/N/F` | 顶层申请审核状态。 |
 | 申请状态查询 `data.reg_status` | `String(1)`：`P/S/F` | 商户入驻汇付状态。 |
 | 申请状态查询 `data.bank_card_conf_status`、`bind_card_status`、`cash_status`、`settle_status`、`union_conf_status`、`out_order_funds_status` | 均为 `String(1)`：`P/S/F` | 银行卡、绑卡、取现、结算、银联二维码及资金入账的独立状态；`P=处理中`、`S=成功`、`F=失败`，不得与申请审核或协议状态合并。 |
@@ -299,8 +309,8 @@ PHP `2.0.30` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo
 | 申请状态查询 `data.agreement_info_list[].con_stat` | `String(2)`：`2..8` | 状态查询中的电子协议状态，`5` 为签约完成。 |
 | 申请状态查询 `data.ali_conf_result_list[]`、`wx_conf_result_list[]`、`zft_apply_result_list[]`、`wx_config_list[]` | `String(JSON Array)` | 渠道信息集合；读取叶子状态前按官网对应对象路径核验。 |
 
-仅 `busi_async_return_url` 的逐业务通知在**存在** `ord_id:String(44)` 时，官网明确应答 `RECV_ORD_ID_` + 该 `ord_id`。审核通知与电子协议通知的 ACK、验签原文、HTTP 语义、超时和重试均为 `[需要官方确认]`；不得用 `req_seq_id` 代替 `ord_id`，也不得生成回调实现。
+仅 `busi_async_return_url` 的逐业务通知在**存在** `ord_id:String(44)` 时，官网明确应答 `RECV_ORD_ID_` + 该 `ord_id`。审核通知与电子协议通知的 ACK、验签原文、HTTP 语义、超时和重试均为 `[需要官方确认]`；不得用 `req_seq_id` 代替 `ord_id`。可继续回调 Controller、处理器接口和状态测试，把未知协议隔离为 TODO/待填策略，按共享开发提醒给出对应官方文档与咨询渠道，不自行补造协议。
 
 业务开通修改逐业务通知的 `async.business.huifu_id` 字段名、中文名和类型均指向商户号 `String(18)`，但官网说明和示例误写成产品号及 `YYZY`。这是 `[官方文档口径冲突]`：只按真实商户号解析，禁止采用该示例，禁止使用该示例生成值。
 
-同一通知中的 `async.business.reg_result_list[]` 是数组。官网把数组标记误拼为 `josnArray`，但同一行明确说明“集合可能有多条数据”；完整目录据此保留 `[]`。不得扁平化其子字段，也不得因为原始拼写错误而删除数组层级。
+同一通知中的 `async.business.reg_result_list[]` 现已正式声明为Array，虽说明仍误拼 `josnArray`，数组身份不再依赖拼写例外。不得扁平化子字段。

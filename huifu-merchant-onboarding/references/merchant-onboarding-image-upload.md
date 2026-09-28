@@ -12,7 +12,9 @@
 
 ## 适用范围
 
-本文件处理商户进件材料的文件标识获取。官方来源：[图片上传](https://paas.huifu.com/navigator/ossApi/api_shjj_shtpsc.json)。当前锁定 SDK 中，只有 Java `dg-java-sdk 3.0.40` 具有与该接口匹配的完整专用实现；PHP `2.0.30` 与 Python `2.0.24` 的专用生成实现不可直接使用，但本接口允许按已核验 Java wire 生成受控通用 POST 或自写 HTTPS multipart 适配器。
+本文件处理商户进件材料的文件标识获取。官方来源：[图片上传](https://paas.huifu.com/navigator/ossApi/api_shjj_shtpsc.json)；本地活动快照 `2026-09-22`，原文 SHA-256 为 `bf2c22fc745b343e44c557daeda5c6013e7863302a5b910f0ceabc23d895c1f4`。当前锁定 SDK 中，只有 Java `dg-java-sdk 3.0.41` 具有与该接口匹配的完整专用实现；PHP `2.0.31` 与 Python `2.0.28` 的专用生成实现不可直接使用，但本接口允许按已核验 Java wire 生成受控通用 POST 或自写 HTTPS multipart 适配器。
+
+Python 当前 SDK 为 `2.0.28`，本页缺陷已按该版实际 Request 和底层调用入口重新复核，不是由旧版外推。其他安装版本差异按 `shared-server-sdk-matrix.md` 核对；可继续已明确的 multipart 合同、适配接口和测试，未明确部分留 TODO，不阻断整体开发。
 
 ## 已确认的请求合同
 
@@ -27,13 +29,13 @@
 
 ## SDK 源码核验结论
 
-核验目录：`/mnt/d/work/project/1.3.0/sdk`。
+核验目录：`../sdk/`；Python 源码为 `../sdk/dg_sdk-2.0.28/dg_sdk/`。`2026-09-24` 复核下表及后续 Python 源码结论；该分发目录不含 Demo，不以旧 Demo 缺陷作为本版证据。
 
 | 语言 / 版本 | 源码事实 | Skill 结论 |
 | --- | --- | --- |
-| Java `dg-java-sdk 3.0.40` | 有 `V2SupplementaryPictureRequest`、`V2_SUPPLEMENTARY_PICTURE`、`BasePayClient.upload(...)`；无文件时对该 URI 特判为 multipart 文本字段，有文件时以 `file` 为 multipart 文件字段；两条路径都先对 `data` 加签 | 支持。`file_url` 走 `BasePayClient.request(request, true)`；本地文件走 `BasePayClient.upload(request, file)`；二者不得同时使用 |
-| PHP `php_v2.0.30` | 有 Request 类和路由常量；`BsPayClient` 的 `CURLFile` 包装分支把 `needSign`、`needVerfySign` 都设为 `false`；官方 Demo 又同时设置 `file_url` 和 `CURLFile`；无文件分支只是通用 JSON POST | 不直接使用该专用包装；允许保持请求加签的通用 POST 或自写 HTTPS multipart 适配器 |
-| Python `dg_sdk 2.0.24` | 有 Request 类和路由常量，但专用 `post(extend_infos)` 忽略参数、读取未定义的 `self.picture`、遗漏 `req_seq_id/req_date`、使用 `picture` 而非官网 `file`，并关闭签名和验签；Demo 调用参数与方法签名也不一致 | 不直接使用专用类；允许显式开启加签的底层通用 POST 或自写 HTTPS multipart 适配器 |
+| Java `dg-java-sdk 3.0.41` | 有 `V2SupplementaryPictureRequest`、`V2_SUPPLEMENTARY_PICTURE`、`BasePayClient.upload(...)`；无文件时对该 URI 特判为 multipart 文本字段，有文件时以 `file` 为 multipart 文件字段；两条路径都先对 `data` 加签 | 支持。`file_url` 走 `BasePayClient.request(request, true)`；本地文件走 `BasePayClient.upload(request, file)`；二者不得同时使用 |
+| PHP `php_v2.0.31` | 有 Request 类和路由常量；`BsPayClient` 的 `CURLFile` 包装分支把 `needSign`、`needVerfySign` 都设为 `false`；官方 Demo 又同时设置 `file_url` 和 `CURLFile`；无文件分支只是通用 JSON POST | 不直接使用该专用包装；允许保持请求加签的通用 POST 或自写 HTTPS multipart 适配器 |
+| Python `dg_sdk 2.0.28` | 有 Request 类和路由常量，但专用 `post(extend_infos)` 忽略参数、读取未定义的 `self.picture`、遗漏 `req_seq_id/req_date`、使用 `picture` 而非官网 `file`，并关闭签名和验签 | 不直接使用专用类；允许显式开启加签的底层通用 POST 或自写 HTTPS multipart 适配器 |
 
 “官方 SDK 专用实现可用”与“可通过受控降级接入”必须分开表达。不得把 PHP/Python 生成类或 Demo 宣称为已修复；但可为本接口生成 Guzzle、`curl_*`、requests/httpx 或等价通用 POST，实现下述专用 wire 与签名合同。本例外不得用于其他进件接口或商户费率查询。
 
@@ -95,7 +97,7 @@ if (!extendInfo.isEmpty()) {
 Map<String, Object> rawResult = BasePayClient.upload(request, new File(input.localPath()));
 ```
 
-Java 两条图片路径都在 SDK 内完成请求 `data` 加签。SDK 对图片调用使用 `isPage=true`：在响应验签前把原始响应包装进返回 Map 的 `data`，因此这里的 `rawResult` 不是已验签的业务 DTO。不得直接假定 `rawResult.data.file_id` 或任何其他文件标识字段；在获得官方响应合同或脱敏联调样本前，只能保留原始响应边界并停止自动续提进件。
+Java 两条图片路径都在 SDK 内完成请求 `data` 加签。SDK 对图片调用使用 `isPage=true`：在响应验签前把原始响应包装进返回 Map 的 `data`，因此这里的 `rawResult` 不是已验签的业务 DTO。不得直接假定 `rawResult.data.file_id` 或任何其他文件标识字段；保留原始响应边界，自动续提不得使用未经验证或猜测的标识。可继续上传适配器、响应映射接口和后续业务骨架，把未明确的映射留 TODO/配置；不将取得官方样本作为整体开发的前提。
 
 官方 Java Demo 同时设置 `file_url` 并传入本地 `File`，与官网互斥合同冲突，属于不可复制的反例。实际代码必须只选上面一种模式。
 
@@ -113,22 +115,22 @@ Java 两条图片路径都在 SDK 内完成请求 `data` 加签。SDK 对图片�
 语言边界：
 
 - PHP：不得使用会把 `needSign/needVerfySign` 改为 `false` 的 `BsPayClient::postRequest($request, new CURLFile(...))`。可以使用保留加签的通用调用层或 Guzzle/cURL multipart 适配器；若自写 cURL，必须启用 peer 与 hostname 校验。
-- Python：不得直接调用当前 `V2SupplementaryPictureRequest.post(...)`。本地文件可使用底层 `DGTools.request_post`，但必须补齐全部字段、文件键固定为 `file`，并显式 `need_sign=True`；也可使用 requests/httpx multipart 适配器。`file_url` 不得走通用 JSON body，必须按上述 multipart 文本字段发送。
-- 生成代码时明确标注“官方 SDK 专用实现不可用，当前采用图片接口受控降级”，避免把降级实现误称为官方 SDK 支持。
+- Python（已核验源码基线 `2.0.28`）：不得直接调用该基线的 `V2SupplementaryPictureRequest.post(...)`。本地文件可使用底层 `dg_sdk.core.request_tools.request_post`，但必须补齐全部字段、文件键固定为 `file`，并显式 `need_sign=True`；`DGTools.request_post` 不暴露 `need_sign/need_verfy_sign` 开关，不得向其传这些关键字。也可使用仅限图片接口的 requests/httpx multipart 适配器。`file_url` 不得走通用 JSON body，必须按上述 multipart 文本字段发送。
+- 依据已核验源码选择降级时，明确标注“已核验 PHP 2.0.31 / Python 2.0.28 的官方 SDK 专用实现不可用，当前采用图片接口受控降级”（按实际语言保留对应版本），避免把降级实现误称为官方 SDK 支持；其他版本按其实际源码判断，不自动套用本版缺陷或修复结论。
 
 ## 公共请求头与安全边界
 
-- Java 使用 Skill 调用时要求 `jpt-x-skill-source: <skill_source>`；未显式配置时，仅进件实际参与当前请求使用 `hfms/1.0.2`，支付与进件都实际参与时使用 `hfps/1.3.5;hfms/1.0.2`，仅安装未参与的不计入。
+- Java 使用 Skill 调用时要求 `jpt-x-skill-source: <skill_source>`；未显式配置时，仅进件实际参与当前请求使用 `hfms/1.0.4`，支付与进件都实际参与时使用 `hfps/1.3.5;hfms/1.0.4`，仅安装未参与的不计入。
 - 其他 SDK 内部请求头由 SDK 自行获取和发送，Skill 不配置、不校验，也不以其生成方式决定图片能力。
 - `file_url` 必须来自受控 HTTPS 对象存储并使用短时授权；业务层校验 scheme、允许 host、有效期和可访问性。URL、材料内容、请求流水、商户号和密钥不得写入代码、日志或测试样例。
 - Python SDK 的连接重试和任一 SDK 的网络行为都不等于图片接口已确认的业务重试语义；调用方不得自行重放上传。
 
 ## 仍需要官方确认
 
-以下内容标记 `[需要官方确认]`：
+以下内容标记 `[需要官方确认]`，按 `shared-overview.md` 的开发提醒给出本页官方来源；建议开发者核对，不清楚时咨询汇付官方或汇付开发者交流沟通群。继续已核验传输、请求签名和业务框架，未知映射/策略留 TODO，不等待回复才开发：
 
 - PHP/Python 何时提供满足字段、传输、签名和响应处理合同的正式专用 SDK 实现；在此之前使用上述受控降级。
 - 图片上传成功响应的完整 envelope、文件标识字段名、响应验签方式、失败码、幂等和业务重试语义。
 - Java 图片 SDK 为何固定跳过响应验签，以及官方推荐的响应可信性校验方式。
 
-在响应合同确认前，图片类进件字段只填写调用方已通过受信流程取得并核验的文件标识；不得从字段名猜测、从未验签原始响应自动提取或在上传失败后继续提交进件。
+真实提交时，图片类进件字段只填写调用方已通过受信流程取得并核验的文件标识；不得从字段名猜测、从未验签原始响应自动提取或在上传失败后继续提交进件。

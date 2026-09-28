@@ -10,12 +10,16 @@ import sys
 import tempfile
 from pathlib import Path
 
+from skill_validation_config import sdk_version
 from validate_merchant_onboarding_sdk_evidence import (
+    SDK_LOCK,
+    copy_java_sources,
     require_ordered_text,
     require_text,
     resolve_sdk_layout,
     run_checked,
     source_tree_digest,
+    sdk_history_errors,
 )
 from validation_runtime import require_assertions_enabled
 
@@ -23,7 +27,6 @@ from validation_runtime import require_assertions_enabled
 require_assertions_enabled()
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-SDK_LOCK = REPO_ROOT / "maintainer-contracts/merchant-onboarding-sdk-source-lock.json"
 
 ROUTES = {
     "V2_USER_BASICDATA_ENT": "v2/user/basicdata/ent",
@@ -63,6 +66,7 @@ PYTHON_FILES = (
 def validate_source_lock(java: Path, php: Path, python: Path) -> list[str]:
     problems: list[str] = []
     lock = json.loads(SDK_LOCK.read_text(encoding="utf-8"))
+    problems += sdk_history_errors(lock)
     for language, component in (("java", java), ("php", php), ("python", python)):
         count, digest = source_tree_digest(component, language)
         expected = lock["components"][language]
@@ -309,13 +313,19 @@ def validate_static_routes(java: Path, php: Path, python: Path) -> list[str]:
 
 
 def validate_runtime_probes(java: Path, php: Path, python: Path) -> list[str]:
+    with tempfile.TemporaryDirectory(prefix="huifu-user-sdk-copy-") as directory:
+        isolated = copy_java_sources(java, Path(directory) / "sdk")
+        return _validate_runtime_probes(isolated, php, python)
+
+
+def _validate_runtime_probes(java: Path, php: Path, python: Path) -> list[str]:
     problems: list[str] = []
     problems += run_checked(
         ["mvn", "-q", "-pl", "opps-bspay-java-sdk", "-am", "-DskipTests", "compile"],
         java,
     )
     java_classes = java / "opps-bspay-java-sdk/target/classes"
-    java_probe = """
+    java_probe = r"""
 import java.util.Map;
 import com.huifu.bspay.sdk.opps.core.request.*;
 import com.huifu.bspay.sdk.opps.core.utils.ObjectUtils;
@@ -334,11 +344,10 @@ public class UserOnboardingSdkProbe {
     route(new V2UserBusiModifyRequest(), "v2.user.busi.modify");
     route(new V2UserListQueryRequest(), "v2.user.list.query");
     V2UserBusiOpenRequest request = new V2UserBusiOpenRequest();
-    request.setSignUserInfo("stale-string");
-    request.addExtendInfo("sign_user_info", Map.of("type", "LEGAL"));
+    request.setSignUserInfo("{\"type\":\"LEGAL\"}");
     Map<String,Object> params = ObjectUtils.objectToMap(request);
     params.putAll(request.getExtendInfos());
-    if (!(params.get("sign_user_info") instanceof Map)) throw new RuntimeException("object override failed");
+    if (!"{\"type\":\"LEGAL\"}".equals(params.get("sign_user_info"))) throw new RuntimeException("String(JSON) serialization changed");
     V2UserBasicdataEntModifyRequest modify = new V2UserBasicdataEntModifyRequest();
     modify.setReqSeqId("original");
     modify.addExtendInfo("req_seq_id", "overridden");
@@ -356,11 +365,10 @@ public class UserOnboardingSdkProbe {
     if (!"overridden".equals(indvParams.get("req_seq_id"))) throw new RuntimeException("individual locator override behavior changed");
     if (!"masked-probe".equals(indvParams.get("mobile_no"))) throw new RuntimeException("individual optional extension missing");
     V2UserBusiModifyRequest busiModify = new V2UserBusiModifyRequest();
-    busiModify.setSignUserInfo("stale-string");
-    busiModify.addExtendInfo("sign_user_info", Map.of("type", "LEGAL"));
+    busiModify.setSignUserInfo("{\"type\":\"LEGAL\"}");
     Map<String,Object> busiModifyParams = ObjectUtils.objectToMap(busiModify);
     busiModifyParams.putAll(busiModify.getExtendInfos());
-    if (!(busiModifyParams.get("sign_user_info") instanceof Map)) throw new RuntimeException("business modify object override failed");
+    if (!"{\"type\":\"LEGAL\"}".equals(busiModifyParams.get("sign_user_info"))) throw new RuntimeException("business modify String(JSON) serialization changed");
     V2UserListQueryRequest listQuery = new V2UserListQueryRequest();
     listQuery.setReqSeqId("original");
     listQuery.addExtendInfo("req_seq_id", "overridden");
@@ -424,11 +432,10 @@ public class UserOnboardingSdkProbe {
     php_script.extend(
         (
             rf'$r = new \BsPaySdk\request\V2UserBusiOpenRequest();',
-            '$r->setSignUserInfo("stale-string");',
-            '$r->setExtendInfo(array("sign_user_info" => array("type" => "LEGAL")));',
+            '$r->setSignUserInfo(\'{"type":"LEGAL"}\');',
             rf'$c = new \BsPaySdk\core\BsPayClient();',
             '$wire = $c->objectToArray($r)["params"];',
-            'if (!is_array($wire["sign_user_info"]) || $wire["sign_user_info"]["type"] !== "LEGAL") exit(4);',
+            'if ($wire["sign_user_info"] !== \'{"type":"LEGAL"}\') exit(4);',
             rf'$r = new \BsPaySdk\request\V2UserBasicdataEntModifyRequest();',
             '$r->setReqSeqId("original");',
             '$r->setExtendInfo(array("req_seq_id" => "overridden", "reg_name" => "updated-name"));',
@@ -440,9 +447,9 @@ public class UserOnboardingSdkProbe {
             '$wire = $c->objectToArray($r)["params"];',
             'if ($wire["req_seq_id"] !== "overridden" || $wire["mobile_no"] !== "masked-probe") exit(6);',
             rf'$r = new \BsPaySdk\request\V2UserBusiModifyRequest();',
-            '$r->setSignUserInfo(array("type" => "LEGAL"));',
+            '$r->setSignUserInfo(\'{"type":"LEGAL"}\');',
             '$wire = $c->objectToArray($r)["params"];',
-            'if (!is_array($wire["sign_user_info"]) || $wire["sign_user_info"]["type"] !== "LEGAL") exit(7);',
+            'if ($wire["sign_user_info"] !== \'{"type":"LEGAL"}\') exit(7);',
             rf'$r = new \BsPaySdk\request\V2UserListQueryRequest();',
             '$r->setReqSeqId("original");',
             '$r->setExtendInfo(array("req_seq_id" => "overridden", "upper_huifu_id" => "6666000123120000"));',
@@ -477,9 +484,10 @@ for case in cases:
     spec.loader.exec_module(module)
     request = getattr(module, case["class"])()
     if case["class"] == "V2UserBusiOpenRequest":
-        extend = {"sign_user_info": {"type": "LEGAL"}}
+        request.sign_user_info = '{"type":"LEGAL"}'
+        extend = {}
     elif case["class"] == "V2UserBusiModifyRequest":
-        request.sign_user_info = {"type": "LEGAL"}
+        request.sign_user_info = '{"type":"LEGAL"}'
         extend = {}
     elif case["class"] == "V2UserBasicdataEntModifyRequest":
         request.req_seq_id = "original"
@@ -495,18 +503,15 @@ for case in cases:
     route, params = request.post(extend)
     assert route == "/" + case["route"]
     if case["class"] == "V2UserBusiModifyRequest":
-        assert isinstance(params["sign_user_info"], dict)
+        assert params["sign_user_info"] == '{"type":"LEGAL"}'
     if extend:
-        if case["class"] == "V2UserBusiOpenRequest":
-            assert isinstance(params["sign_user_info"], dict)
+        assert params["req_seq_id"] == "overridden"
+        if case["class"] == "V2UserBasicdataEntModifyRequest":
+            assert params["reg_name"] == "updated-name"
+        elif case["class"] == "V2UserListQueryRequest":
+            assert params["upper_huifu_id"] == "6666000123120000"
         else:
-            assert params["req_seq_id"] == "overridden"
-            if case["class"] == "V2UserBasicdataEntModifyRequest":
-                assert params["reg_name"] == "updated-name"
-            elif case["class"] == "V2UserListQueryRequest":
-                assert params["upper_huifu_id"] == "6666000123120000"
-            else:
-                assert params["mobile_no"] == "masked-probe"
+            assert params["mobile_no"] == "masked-probe"
 '''
     cases = [
         {"file": filename, "class": request_class, "enum": enum_name, "route": route}
@@ -525,19 +530,19 @@ def validate_published_contracts() -> list[str]:
     root = REPO_ROOT / "huifu-merchant-onboarding"
     problems += require_text(
         root / "references/user-onboarding-shared-server-sdk-matrix.md",
-        "3.0.40",
-        "2.0.30",
-        "2.0.24",
+        "3.0.41",
+        "2.0.31",
+        sdk_version("python"),
         *REQUEST_CLASSES,
         "sign_user_info",
         "exact-key",
-        "Java setter 静态接收 String",
-        "PHP setter 无类型约束",
-        "Python 动态属性可直接赋 dict",
+        "当前官网类型为 String",
+        "传一层合法 JSON Object 字符串",
+        "三语言均以运行探针锁定只序列化一次",
         "TLS",
         "DEBUG",
         "官方 SDK-only 传输规则",
-        "不存在此前 Skill 推断的 TLS 问题",
+        "CURLOPT_SSL_VERIFYPEER=false",
         "九接口均使用各自官方 Request/Client",
         "HttpClient",
         "OkHttp",
@@ -550,9 +555,9 @@ def validate_published_contracts() -> list[str]:
         "用户九个专属",
         "用户号",
         "商户号",
-        "hfms/1.0.2",
+        "hfms/1.0.4",
         "官方 SDK-only 传输规则",
-        "不存在本 Skill 曾推断的 TLS 硬停问题",
+        "TLS",
         "真实请求都使用官方 Request/Client",
     )
     return problems
