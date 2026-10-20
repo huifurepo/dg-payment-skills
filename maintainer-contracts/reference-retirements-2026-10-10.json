@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "review_plan": "maintainer-contracts/skill-review-2026-10-10-plan.md",
+  "entries": [
+    {
+      "source": "huifu-pay-integration/references/canonical-regression-prompts.md",
+      "archive": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-pay-integration/references/canonical-regression-prompts.md",
+      "sha256": "534c211309e7f78f34ed93f52f58a9381e4b486a86234ef07c2658c091d59f35",
+      "replacement": null,
+      "reason": "维护者评测资料不参与接入运行"
+    },
+    {
+      "source": "huifu-merchant-onboarding/references/canonical-regression-prompts.md",
+      "archive": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-merchant-onboarding/references/canonical-regression-prompts.md",
+      "sha256": "74bd9fcbd2ae03a325d979a5bd2b5b1fc3e78395eb562c4fc655d297202d9c45",
+      "replacement": null,
+      "reason": "维护者评测资料不参与接入运行"
+    },
+    {
+      "source": "huifu-merchant-onboarding/references/user-onboarding-canonical-regression-prompts.md",
+      "archive": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-merchant-onboarding/references/user-onboarding-canonical-regression-prompts.md",
+      "sha256": "f0a9145149edb4445d9be3e3db9ebdf427a2297374299586f598d19bda3a7d83",
+      "replacement": null,
+      "reason": "维护者评测资料不参与接入运行"
+    },
+    {
+      "source": "huifu-merchant-onboarding/references/onboarding-extension-canonical-regression-prompts.md",
+      "archive": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-merchant-onboarding/references/onboarding-extension-canonical-regression-prompts.md",
+      "sha256": "9173bc607c07f6dd84041f4e6c0ab3ff256475bffd34f0ade03b2e6be1a13b3c",
+      "replacement": null,
+      "reason": "维护者评测资料不参与接入运行"
+    },
+    {
+      "source": "huifu-pay-integration/references/aggregation-order-quickstart.md",
+      "archive": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-pay-integration/references/aggregation-order-quickstart.md",
+      "sha256": "c2225b397c604040e83678ca4a52c076f92cf98529623a98171667bacbe72d9b",
+      "replacement": "huifu-pay-integration/references/aggregation-order.md",
+      "reason": "重复导览合并到已有业务入口"
+    },
+    {
+      "source": "huifu-pay-integration/references/aggregation-query-quickstart.md",
+      "archive": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-pay-integration/references/aggregation-query-quickstart.md",
+      "sha256": "f0ffd77807aa81fdb9452ad1c6cd4bcf657dedacef737a40f6e756bd6aa91dbb",
+      "replacement": "huifu-pay-integration/references/aggregation-query.md",
+      "reason": "重复导览合并到已有业务入口"
+    },
+    {
+      "source": "huifu-pay-integration/references/aggregation-refund-quickstart.md",
+      "archive": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-pay-integration/references/aggregation-refund-quickstart.md",
+      "sha256": "5f2e6e79549254743eaf651ffced335464cb52bb24b721e9925a5ab312e71cf1",
+      "replacement": "huifu-pay-integration/references/aggregation-refund.md",
+      "reason": "重复导览合并到已有业务入口"
+    },
+    {
+      "source": "huifu-pay-integration/references/checkout-js-readme.md",
+      "archive": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-pay-integration/references/checkout-js-readme.md",
+      "sha256": "ea5213954c0791ff806d9965f5ab89e5ebcf88b9b1dcd38ef16b78f67d05e516",
+      "replacement": "huifu-pay-integration/references/checkout-js.md",
+      "reason": "重复导览合并到已有业务入口"
+    }
+  ]
+}

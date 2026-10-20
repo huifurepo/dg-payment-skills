@@ -23,7 +23,7 @@ class IndependentReleaseTests(unittest.TestCase):
                 refresh = json.loads(path.read_text(encoding="utf-8"))
                 bindings = package_skill.source_bindings(manifest, spec, refresh)
                 expected = {spec["source_lock"]}
-                if spec["domain"] == "onboarding":
+                if "sdk_source_lock" in spec:
                     expected.add(spec["sdk_source_lock"])
                 self.assertEqual(set(bindings), expected)
                 provenance = {
@@ -37,7 +37,7 @@ class IndependentReleaseTests(unittest.TestCase):
                 bad["source_locks"][spec["source_lock"]] = "0" * 64
                 with self.assertRaises(ValueError):
                     validate_skill_package.validate_refresh_source_bindings(bad, spec)
-                if spec["domain"] == "onboarding":
+                if "sdk_source_lock" in spec:
                     for mutation in ("missing", "wrong"):
                         bad = copy.deepcopy(provenance)
                         if mutation == "missing":

@@ -552,11 +552,12 @@ def validate_published_contracts() -> list[str]:
     )
     problems += require_text(
         root / "SKILL.md",
-        "用户九个专属",
+        "九个用户接口 SDK",
         "用户号",
         "商户号",
-        "hfms/1.0.4",
-        "官方 SDK-only 传输规则",
+        "hfms/1.0.5",
+        "references/user-onboarding-shared-server-sdk-matrix.md",
+        "references/user-onboarding-platform-contracts.md",
         "TLS",
         "真实请求都使用官方 Request/Client",
     )

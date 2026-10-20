@@ -21,7 +21,7 @@ require_assertions_enabled()
 ROOT = Path(__file__).resolve().parent.parent
 LOCK = PAYMENT_SOURCE_LOCK
 CATALOG = ROOT / "huifu-pay-integration/references/payment-complete-field-catalog.md"
-EXPECTED_TOTAL = 2656
+EXPECTED_TOTAL = 2930
 COMMON_RETURN_CODES_URL = (
     "https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md"
 )
@@ -47,6 +47,8 @@ VALIDATION_SURFACES: dict[str, tuple[tuple[str, str], ...]] = {
         ("反扫异步 resp_data", "async.reverse.resp_data"),
     ),
     "aggregation-query": (
+        ("请求信封", "request"),
+        ("同步响应信封", "response"),
         ("请求 data", "request.data"),
         ("同步响应 data", "response.data"),
     ),
@@ -108,7 +110,7 @@ VALIDATION_SURFACES: dict[str, tuple[tuple[str, str], ...]] = {
         ("请求 data", "request.data"),
         ("同步响应信封", "response"),
         ("同步响应 data", "response.data"),
-        ("支付异步载荷（官网未标外层字段名）", "async.unconfirmed_payload"),
+        ("支付异步 resp_data", "async.resp_data"),
     ),
     "hosting-query": (
         ("请求信封", "request"),
@@ -150,6 +152,16 @@ VALIDATION_SURFACES: dict[str, tuple[tuple[str, str], ...]] = {
     ),
 }
 
+VALIDATION_SURFACES.update({
+    "balance-pay": (("请求信封", "request"), ("同步响应信封", "response"), ("请求 data", "request.data"), ("同步响应 data", "response.data"), ("支付异步信封", "async"), ("支付异步 resp_data", "async.resp_data")),
+    "balance-pay-query": (("请求信封", "request"), ("同步响应信封", "response"), ("请求 data", "request.data"), ("同步响应 data", "response.data")),
+    "balance-refund": (("请求信封", "request"), ("同步响应信封", "response"), ("请求 data", "request.data"), ("同步响应 data", "response.data")),
+    "balance-refund-query": (("请求信封", "request"), ("同步响应信封", "response"), ("请求 data", "request.data"), ("同步响应 data", "response.data")),
+    "fee-calc": (("请求信封", "request"), ("同步响应信封", "response"), ("请求 data", "request.data"), ("同步响应 data", "response.data")),
+    "pay-relation": (("请求信封", "request"), ("同步响应信封", "response"), ("请求 data", "request.data"), ("同步响应 data", "response.data")),
+    "balance-sms": (("请求信封", "request"), ("同步响应信封", "response"), ("请求 data", "request.data"), ("同步响应 data", "response.data")),
+})
+
 
 DISPLAY_NOTE = "方便文档展示"
 AGGREGATION_QUERY_METHOD_GROUP = "response.data.method_expand"
@@ -162,10 +174,9 @@ STRING_ENCODED_SURFACES = {
     ("hosting-wechat-mini", "async.split.resp_data"),
     ("hosting-close", "async.resp_data"),
 }
-NAMED_BUT_ENCODING_UNKNOWN_SURFACES = {("hosting-refund", "async.data")}
+NAMED_BUT_ENCODING_UNKNOWN_SURFACES = {("hosting-refund", "async.data"), ("balance-pay", "async.resp_data"), ("hosting-douyin", "async.resp_data")}
 OUTER_NAME_UNKNOWN_SURFACES = {
     ("aggregation-refund", "async.unconfirmed_payload"),
-    ("hosting-douyin", "async.unconfirmed_payload"),
 }
 SOURCE_CONFIRMED_STRING_PATHS = {
     ("aggregation-create", "request.data.terminal_device_data"),
@@ -250,8 +261,10 @@ def expected_transport(
     if surface_key in NAMED_BUT_ENCODING_UNKNOWN_SURFACES:
         return (
             surface_prefix,
-            "—（[需要官方确认]：外层 data 的 JSON/String(JSON) 编码）",
+            f"—（[需要官方确认]：外层 {surface_prefix.rsplit('.', 1)[-1]} 的 JSON/String(JSON) 编码）",
         )
+    if source_key == "pay-relation" and (actual == "response.data.pay_relations" or actual.startswith("response.data.pay_relations.")):
+        return ("response.data.pay_relations", "—（[需要官方确认]：正式说明 jsonArry 的数组编码）")
     if source_key == "split-detail-query" and (
         actual == "response.data.split_trans_responses[]"
         or actual.startswith("response.data.split_trans_responses[].")
@@ -301,7 +314,8 @@ def expected_transport(
     if not inner:
         return wire, decoded(container, actual)
     nested = inner[-1]
-    nested_path = decoded(container, nested)
+    nested_key = nested.removesuffix("[]")
+    nested_path = decoded(container, nested_key)
     if not containers[nested]:
         return wire, nested_path + " => [需要官方确认]：String 子表编码"
     if actual == nested:
@@ -430,6 +444,75 @@ def actual_records() -> dict[
     return records
 
 
+def validate_decoding_fixtures(actual: dict) -> None:
+    """Execute catalog decode paths against encoded and native array payloads.
+
+    These fixtures independently catch [] applied to an undecoded string,
+    extra decoding of native objects, and mixing contracts across interfaces.
+    """
+    def walk(value: object, expression: str) -> list:
+        assert expression.startswith("$")
+        if expression.startswith("$[]"):
+            assert isinstance(value, list), "array traversal before JSON decoding"
+            values = value
+            suffix = expression[3:]
+        else:
+            values = [value]
+            suffix = expression[1:]
+        for token in suffix.lstrip(".").split(".") if suffix else ():
+            selected = []
+            for node in values:
+                assert isinstance(node, dict)
+                child = node[token.removesuffix("[]")]
+                if token.endswith("[]"):
+                    assert isinstance(child, list), "array traversal before JSON decoding"
+                    selected.extend(child)
+                else:
+                    selected.append(child)
+            values = selected
+        return values
+
+    def decode(raw: str, expression: str) -> list:
+        values = [json.loads(raw)]
+        for index, stage in enumerate(expression.split(" => JSON decode => ")):
+            if index:
+                assert all(isinstance(value, str) for value in values), "decoding a native object"
+                values = [json.loads(value) for value in values]
+            values = [child for value in values for child in walk(value, stage)]
+        return values
+
+    fixtures = (
+        (("托管交易查询", "同步响应 data", "response.data.unionpay_response.coupon_info[].spnsr_id"),
+         {"coupon_info": json.dumps([{"spnsr_id": "00010000"}])}, ["00010000"]),
+        (("托管交易退款查询", "同步响应 data", "response.data.unionpay_response.coupon_info[].offstAmt"),
+         {"coupon_info": json.dumps([{"offstAmt": "1.00"}])}, ["1.00"]),
+        (("H5/PC预下单", "支付异步 resp_data", "async.resp_data.fee_formula_infos[].fee_sign"),
+         {"fee_formula_infos": json.dumps([{"fee_sign": "fixture-fee"}])}, ["fixture-fee"]),
+        (("H5/PC预下单", "支付异步 resp_data", "async.resp_data.unionpay_response.coupon_info.spnsr_id"),
+         {"unionpay_response": {"coupon_info": {"spnsr_id": "00010000"}}}, ["00010000"]),
+        (("拆单支付订单查询", "同步响应 data", "response.data.trans_list[].wx_response.cash_fee"),
+         [{"wx_response": json.dumps({"cash_fee": "10.00"})}], ["10.00"]),
+    )
+    for identity, payload, result in fixtures:
+        expression = actual[identity][1]
+        try:
+            assert decode(json.dumps(payload), expression) == result
+        except (AssertionError, TypeError, KeyError) as error:
+            raise AssertionError((identity, expression)) from error
+    for path in ("spnsrId", "type", "offstAmt"):
+        assert actual[("托管交易退款查询", "同步响应 data", "response.data.unionpay_response.coupon_info[]."+path)][4] == "N"
+    try:
+        decode(json.dumps({"coupon_info": json.dumps([{"id": "fixture"}])}), "$.coupon_info[] => JSON decode => $[].id")
+    except AssertionError:
+        pass
+    else:
+        raise AssertionError("fixture accepted array traversal on an undecoded string")
+    douyin = actual[("抖音直连下单", "支付异步 resp_data", "async.resp_data.trans_finish_time")]
+    assert douyin[0] == "async.resp_data" and "需要官方确认" in douyin[1]
+    assert douyin[2:5] == ("String", "13", "N")
+    print("payment decoding fixtures validated: nested strings, native objects/arrays, optional fields and unknown notification encoding")
+
+
 def main() -> int:
     expected = expected_records()
     actual = actual_records()
@@ -444,6 +527,7 @@ def main() -> int:
         if expected[identity] != actual[identity]
     ]
     assert not mismatches, f"field property mismatches: {mismatches[:10]}"
+    validate_decoding_fixtures(actual)
     catalog_text = CATALOG.read_text(encoding="utf-8")
     field_link_targets = [
         target
@@ -455,7 +539,7 @@ def main() -> int:
         target.startswith(("http://", "https://"))
         for target in field_link_targets
     ), "generated payment field descriptions contain relative or fragment-only links"
-    assert catalog_text.count("官网相对地址原文：`#") == 29
+    assert catalog_text.count("官网相对地址原文：`#") == sum(value[-1].count("官网相对地址原文：`#") for value in expected.values())
     assert catalog_text.count("官网原始锚点在当前快照无同名标题") == 0
     assert catalog_text.count("公共返回码全集：[返回码]") >= 8
     assert catalog_text.count("已确认同时指向[聚合正扫异步返回参数]") == 1

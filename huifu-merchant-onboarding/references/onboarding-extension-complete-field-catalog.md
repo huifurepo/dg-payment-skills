@@ -449,7 +449,7 @@
 ## 统一进件页面版查询
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shtyjjwebcx.md>
-- SHA-256：`ca9ebd7e3b8919afe748af2d97b41a5ff12085508bd220398386b005e451f865`
+- SHA-256：`252db113d3eab2a6de3b1fb27291bc7346f9c2c3a53bcc54657c44cc875357c8`
 - 说明：完整保留官方类型、长度、必填标记和说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -502,7 +502,7 @@
 | `response.data.wx_pay_config_info[].wx_small_program_up` | 微信小程序线上 | `String` | `1` | `Y` | Y：已开通，N:未开通；示例值：Y |
 | `response.data.wx_pay_config_info[].wx_small_program_up_rate` | 微信小程序线上费率(%) | `String` | `8` | `N` | 示例值：0.6 |
 | `response.data.wx_real_name_list[]` | 微信实名实体 | `String` | `—` | `N` | jsonArray格式字符串 |
-| `response.data.wx_real_name_list[].pay_scene` | 场景 | `String` | `1` | `Y` | 参见《[微信业务开通类型](https://paas.huifu.com/open/doc/api/#/api_ggcsbm?id=%e5%be%ae%e4%bf%a1%e6%94%af%e4%bb%98%e5%9c%ba%e6%99%af)》 |
+| `response.data.wx_real_name_list[].pay_scene` | 场景 | `String` | `2` | `Y` | 参见《[微信业务开通类型](https://paas.huifu.com/open/doc/api/#/api_ggcsbm?id=%e5%be%ae%e4%bf%a1%e6%94%af%e4%bb%98%e5%9c%ba%e6%99%af)》 |
 | `response.data.wx_real_name_list[].authorize_stat` | 授权状态 | `String` | `8` | `Y` | 1：授权成功；0：授权失败；示例值：1 |
 | `response.data.ali_pay_config_info[]` | 支付宝支付实体 | `String` | `—` | `N` | jsonArray格式字符串 |
 | `response.data.ali_pay_config_info[].ali_pay_be_swept_down` | 支付宝被扫支付线下 | `String` | `1` | `Y` | Y：已开通，N:未开通；示例值：Y |
@@ -766,7 +766,7 @@
 ## 支付宝实名申请提交
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_zfbsmrz.md>
-- SHA-256：`943e970bfe2b468cee53872cd34a740456a2ebd3df5949e516d4256209747f15`
+- SHA-256：`37418d1dc993c3cbac002e0b4be2607ae929f85b7609f48141a52ac10cc37c5e`
 - 说明：完整保留官方类型、长度、必填标记和说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -810,18 +810,18 @@
 | `request.data.auth_identity_info.certificate_info.effect_time` | 证照生效时间 | `String` | `32` | `N` | 示例值：19990101 |
 | `request.data.auth_identity_info.certificate_info.expire_time` | 证照过期时间 | `String` | `32` | `N` | 示例值：20201101，若证件有效期为长期，请填写：长期 |
 | `request.data.auth_identity_info.company_prove_copy` | 单位证明函照片 | `String` | `128` | `N` | 上送图片上传返回的jfileId，文件类型F46。主体类型为政府机关/事业单位时必填；示例值：57cc7f00-600a-33ab-b614-6221bbf2e529 |
-| `request.data.auth_identity_info.support_credentials[]` | 辅助证明材料信息 | `String` | `—` | `N` | jsonArray字符串 1、填写特殊行业的经营许可证信息 2、最多填写支持5个行业 |
-| `request.data.auth_identity_info.support_credentials[].micro_biz_type` | 小微经营类型 | `String` | `32` | `Y` | 门店场所：MICRO_TYPE_STORE；流动经营/便民服务：MICRO_TYPE_MOBILE；示例值：MICRO_TYPE_STORE |
-| `request.data.auth_identity_info.support_credentials[].store_name` | 门店名称 | `String` | `64` | `Y` | 示例值：肯德基共富新村店 |
-| `request.data.auth_identity_info.support_credentials[].province_code` | 门店省市编码 | `String` | `32` | `Y` | [参考地区码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) ；示例值：310000 |
-| `request.data.auth_identity_info.support_credentials[].province` | 门店省份 | `String` | `32` | `Y` | 示例值：浙江省 |
-| `request.data.auth_identity_info.support_credentials[].city_code` | 门店市行政区号 | `String` | `32` | `Y` | [参考地区码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) ；示例值：310100 |
-| `request.data.auth_identity_info.support_credentials[].city` | 门店城市 | `String` | `32` | `Y` | 示例值：杭州市 |
-| `request.data.auth_identity_info.support_credentials[].district_code` | 门店街道区号 | `String` | `32` | `Y` | [参考地区码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) ；示例值：310101 |
-| `request.data.auth_identity_info.support_credentials[].district` | 门店街道 | `String` | `32` | `Y` | 最长16个汉字；示例值：西湖区留下街道 |
-| `request.data.auth_identity_info.support_credentials[].store_address` | 门店场所填写门店详细地址 | `String` | `128` | `Y` | 门店场所填写门店详细地址，流动经营类型填“无”；示例值：上海宝山区共富路512号 |
-| `request.data.auth_identity_info.support_credentials[].store_door_img` | 门店门头照信息或摊位照 | `String` | `128` | `N` | 为空时取开户或开业务时上送的门头照片，文件类型F22；示例值：57cc7f00-600a-33ab-b614-6221bbf2e529 |
-| `request.data.auth_identity_info.support_credentials[].store_inner_img` | 门店店内照片或者摊位照侧面 | `String` | `128` | `N` | 为空时取开户或开业务时上送的店铺内景图片，文件类型F24；示例值：57cc7f00-600a-33ab-b614-6221bbf2e529 |
+| `request.data.auth_identity_info.support_credentials` | 辅助证明材料信息 | `String` | `—` | `N` | jsonObject字符串 ； 主体类型为小微商户时，辅助证明材料信息必填 |
+| `request.data.auth_identity_info.support_credentials.micro_biz_type` | 小微经营类型 | `String` | `32` | `Y` | 门店场所：MICRO_TYPE_STORE；流动经营/便民服务：MICRO_TYPE_MOBILE；示例值：MICRO_TYPE_STORE |
+| `request.data.auth_identity_info.support_credentials.store_name` | 门店名称 | `String` | `64` | `Y` | 示例值：肯德基共富新村店 |
+| `request.data.auth_identity_info.support_credentials.province_code` | 门店省市编码 | `String` | `32` | `Y` | [参考地区码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) ；示例值：310000 |
+| `request.data.auth_identity_info.support_credentials.province` | 门店省份 | `String` | `32` | `Y` | 示例值：浙江省 |
+| `request.data.auth_identity_info.support_credentials.city_code` | 门店市行政区号 | `String` | `32` | `Y` | [参考地区码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) ；示例值：310100 |
+| `request.data.auth_identity_info.support_credentials.city` | 门店城市 | `String` | `32` | `Y` | 示例值：杭州市 |
+| `request.data.auth_identity_info.support_credentials.district_code` | 门店街道区号 | `String` | `32` | `Y` | [参考地区码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) ；示例值：310101 |
+| `request.data.auth_identity_info.support_credentials.district` | 门店街道 | `String` | `32` | `Y` | 最长16个汉字；示例值：西湖区留下街道 |
+| `request.data.auth_identity_info.support_credentials.store_address` | 门店场所填写门店详细地址 | `String` | `128` | `Y` | 门店场所填写门店详细地址，流动经营类型填“无”；示例值：上海宝山区共富路512号 |
+| `request.data.auth_identity_info.support_credentials.store_door_img` | 门店门头照信息或摊位照 | `String` | `128` | `N` | 为空时取开户或开业务时上送的门头照片，文件类型F22；示例值：57cc7f00-600a-33ab-b614-6221bbf2e529 |
+| `request.data.auth_identity_info.support_credentials.store_inner_img` | 门店店内照片或者摊位照侧面 | `String` | `128` | `N` | 为空时取开户或开业务时上送的店铺内景图片，文件类型F24；示例值：57cc7f00-600a-33ab-b614-6221bbf2e529 |
 | `request.data.auth_identity_info.qualification_info_list[]` | 经营许可证 | `String` | `—` | `N` | jsonArray字符串 1、填写特殊行业的经营许可证信息 2、最多填写支持5个行业 |
 | `request.data.auth_identity_info.qualification_info_list[].mcc_code` | 行业类目id | `String` | `20` | `Y` | 参见[支付宝商家行业二级类目code](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_zfbmcc)；示例值：5411 |
 | `request.data.auth_identity_info.qualification_info_list[].image_list` | 行业经营许可证资质照片 | `String` | `400` | `Y` | 上送图片上传返回的jfileId，一个行业类目下最多上传6张资质照片，文件类型F150~F155。使用“,”分隔；示例值：57cc7f00-600a-33ab-b614-6221bbf2e529,57cc7f00-600a-33ab-b614-6221bbf2e534 |

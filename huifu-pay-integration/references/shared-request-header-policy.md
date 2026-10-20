@@ -1,6 +1,6 @@
 # 请求头策略
 
-本文件定义支付 Skill `1.3.5` 已覆盖支付接口的统一请求头约束。`hfps/1.3.5` 是支付来源合同值；商户进件 Skill 的默认来源值为 `hfms/1.0.2`。
+本文件定义支付 Skill `1.4.0` 已覆盖支付接口的统一请求头约束。`hfps/1.4.0` 是支付来源合同值；商户进件 Skill 的默认来源值为 `hfms/1.0.5`。
 
 ## 目录
 
@@ -19,13 +19,13 @@
 `HUIFU_SKILL_SOURCE` 的最终上送值优先使用业务显式配置的 `<skill_source>`，不再自动拼接 `sys_id`。未显式配置时按当前请求实际加载并参与生成的 Skill 集合确定默认值；仅安装在仓库但未参与当前请求不计入：
 
 ```text
-仅支付：hfps/1.3.5
-支付 + 进件：hfps/1.3.5;hfms/1.0.2
+仅支付：hfps/1.4.0
+支付 + 进件：hfps/1.4.0;hfms/1.0.5
 ```
 
 双 Skill 顺序固定为支付、进件，中间只使用一个英文分号且不加空格；不得漏掉任一来源或重复追加。业务方显式配置 `HUIFU_SKILL_SOURCE`、`skill_source` 或 `jpt_x_skill_source` 时，HTTP 层原样透传该值，不再追加默认值。聚合支付里的 `sys_id` 由各官方 SDK 按自己的实现上送：Java Lightning SDK 会放到独立请求头 `sys_id` / `jpt-sys_id`，PHP 官方 SDK 则仍放在签名前请求体顶层字段，Python 官方 SDK 由 `MerConfig` 管理。
 
-local-sandbox `1.0.1` 的冻结 r4 快照使用 `hfps/1.3.1;sandbox/1.0.1`。官方联调或生产环境使用 `hfps/1.3.5`，不要携带 `;sandbox/...` 后缀。
+local-sandbox `1.0.1` 的冻结 r4 快照使用 `hfps/1.3.1;sandbox/1.0.1`。官方联调或生产环境使用 `hfps/1.4.0`，不要携带 `;sandbox/...` 后缀。
 
 `jpt-x-skill-source` 属于 HTTP 请求头，不属于业务报文字段本身，不要把它写进 `data`。
 
@@ -36,11 +36,11 @@ local-sandbox `1.0.1` 的冻结 r4 快照使用 `hfps/1.3.1;sandbox/1.0.1`。官
 - 当前 Skill 包对齐的官方 PHP SDK 只在 `BsPay::post()` 无文件 JSON 分支中，于 `MerConfig.skill_source` 非空时自动补 `jpt-x-skill-source`
 - 如果当前 PHP 请求参数里的 `huifu_id` 存在且非空，且 `MerConfig.skill_source` 已配置，SDK 还会自动补 `jpt-x-skill-huifu_id: <data.huifu_id>`
 - `BsPaySdk\core\Payment` 和 `BsPayClient::postRequest()` 的无文件请求走这条 JSON 主链路；请求含真实 `huifu_id` 时不需要再为来源头打补丁
-- PHP `2.0.30` 传入 `CURLFile` 后进入独立 multipart 分支；该分支已携带 `jpt-x-skill-source`、`jpt-x-skill-huifu_id` 和 `jpt-sdk_version`，但关闭请求签名和响应验签。当前仍必须阻断，不能因请求头齐全而声称安全，也不能用手动补头、手动签名或手写 HTTP 绕过
+- PHP `2.0.31` 传入 `CURLFile` 后进入独立 multipart 分支；该分支已携带 `jpt-x-skill-source`、`jpt-x-skill-huifu_id` 和 `jpt-sdk_version`，但关闭请求签名和响应验签。当前仍必须阻断，不能因请求头齐全而声称安全，也不能用手动补头、手动签名或手写 HTTP 绕过
 - 当前 Python SDK 基线会把 `MerConfig.jpt_x_skill_source` 的值透传到 `jpt-x-skill-source`
 - 当前 Python SDK 基线会从最终请求参数 `data.huifu_id` 推导 `jpt-x-skill-huifu_id`；但在字段缺失时仍发送值为空字符串的该头，不能描述为“条件省略”
 - 当前 Python SDK 的 `MerConfig` 不接收 `jpt_x_skill_huifu_id`；业务侧必须保证每次 request 对象中的 `huifu_id` 是本次真实商户号
-- Python SDK 的 `jpt-sdk_version` 请求头为 `python_2.0.24`
+- Python SDK 的 `jpt-sdk_version` 请求头为 `python_2.0.28`
 
 ## 托管支付请求头
 
@@ -58,7 +58,7 @@ Java 官方 SDK 请求头：
 
 | Header | 值 |
 | --- | --- |
-| `sdk_version` | `javaSDK_3.0.40` |
+| `sdk_version` | `javaSDK_3.0.41` |
 | `jpt-x-skill-source` | `<skill_source>` |
 
 条件性 `huifu_id` 约束：
@@ -69,7 +69,7 @@ PHP 官方 SDK 请求头：
 
 | Header | 值 |
 | --- | --- |
-| `sdk_version` | `php_v2.0.30` |
+| `sdk_version` | `php_v2.0.31` |
 | `charset` | `UTF-8` |
 | `jpt-x-skill-source` | `MerConfig.skill_source` 非空时自动带 `<skill_source>` |
 | `jpt-x-skill-huifu_id` | `MerConfig.skill_source` 已配置且 `params.huifu_id` 存在且非空时自动带 `<data.huifu_id>` |
@@ -78,7 +78,7 @@ Python 官方 SDK 请求头：
 
 | Header | 值 |
 | --- | --- |
-| `jpt-sdk_version` | `python_2.0.24` |
+| `jpt-sdk_version` | `python_2.0.28` |
 | `jpt-x-skill-source` | `MerConfig.jpt_x_skill_source` |
 | `jpt-x-skill-huifu_id` | SDK 从最终请求参数 `data.huifu_id` 自动取值；没有 `huifu_id` 时仍发送空值头，属于 SDK 兼容性告警，不是业务硬停止 |
 | `Content-Type` | 非文件请求为 `application/json;charset=utf-8` |
@@ -101,8 +101,8 @@ Java Lightning SDK 请求头：
 
 | Header | 值 |
 | --- | --- |
-| `sdk_version` | `javaSDK_lightning_1.0.5` |
-| `jpt-sdk_version` | `javaSDK_lightning_1.0.5` |
+| `sdk_version` | `javaSDK_lightning_1.0.6` |
+| `jpt-sdk_version` | `javaSDK_lightning_1.0.6` |
 | `sys_id` | 当前调用方 `sys_id` |
 | `jpt-sys_id` | 当前调用方 `sys_id` |
 | `jpt-x-skill-source` | `<skill_source>` |
@@ -115,7 +115,7 @@ PHP 官方 SDK 请求头：
 
 | Header | 值 |
 | --- | --- |
-| `sdk_version` | `php_v2.0.30` |
+| `sdk_version` | `php_v2.0.31` |
 | `charset` | `UTF-8` |
 | `jpt-x-skill-source` | `MerConfig.skill_source` 非空时自动带 `<skill_source>` |
 | `jpt-x-skill-huifu_id` | `MerConfig.skill_source` 已配置且 `params.huifu_id` 存在且非空时自动带 `<data.huifu_id>` |
@@ -124,7 +124,7 @@ Python 官方 SDK 请求头：
 
 | Header | 值 |
 | --- | --- |
-| `jpt-sdk_version` | `python_2.0.24` |
+| `jpt-sdk_version` | `python_2.0.28` |
 | `jpt-x-skill-source` | `MerConfig.jpt_x_skill_source` |
 | `jpt-x-skill-huifu_id` | SDK 从最终请求参数 `data.huifu_id` 自动取值；没有 `huifu_id` 时仍发送空值头，属于 SDK 兼容性告警，不是业务硬停止 |
 | `Content-Type` | 非文件请求为 `application/json;charset=utf-8` |

@@ -64,6 +64,7 @@ def validate_python_prod_contract(state: ValidationState) -> None:
     validate_python_env_docs(state)
     validate_hosting_python_refund_locator(state)
     validate_onboarding_python_versions(state)
+    validate_python_initialization(state)
 
 
 def onboarding_python_version_errors(text: str) -> list[str]:
@@ -193,8 +194,8 @@ def validate_python_initialization(state: ValidationState) -> None:
             for node in ast.walk(tree):
                 if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == "MerConfig":
                     keywords = {item.arg for item in node.keywords}
-                    if len(node.args) > 4 or not {"sign_type", "jpt_x_skill_source"} <= keywords:
-                        state.error(f"{path.name}: MerConfig must use algorithm/source keywords, never a fifth positional source")
+                    if node.args or not {"private_key", "public_key", "sys_id", "product_id", "sign_type", "jpt_x_skill_source"} <= keywords:
+                        state.error(f"{path.name}: MerConfig must use all six named arguments to prevent credential slot swaps")
             functions.extend((path, node) for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == "init_huifu_sdk")
     if len(functions) != len(PYTHON_ENV_DOC_FILES):
         state.error("Both Python adapters must contain an executable initialization example")
@@ -228,12 +229,16 @@ def validate_python_initialization(state: ValidationState) -> None:
         for path, function in functions:
             sdk = SimpleNamespace(DGClient=SimpleNamespace(), MerConfig=config_class)
             source = f"hfps/{PAYMENT_SPEC.version}"
-            environment = {"dg_sdk": sdk, "require_env": lambda key: source if key == "HUIFU_SKILL_SOURCE" else "offline-placeholder"}
+            sentinels = {"HUIFU_RSA_PRIVATE_KEY": "offline-private-key", "HUIFU_RSA_PUBLIC_KEY": "offline-public-key",
+                         "HUIFU_SYS_ID": "offline-system-id", "HUIFU_PRODUCT_ID": "offline-product-id", "HUIFU_SKILL_SOURCE": source}
+            environment = {"dg_sdk": sdk, "require_env": sentinels.__getitem__}
             exec(compile(ast.Module(body=[function], type_ignores=[]), path.name, "exec"), environment)
             environment["init_huifu_sdk"]()
             config = sdk.DGClient.mer_config
             if config.sign_type != "RSA" or config.jpt_x_skill_source != source:
                 raise AssertionError(f"{path.name}: initialization loses algorithm or source")
+            if (config.private_key, config.public_key, config.sys_id, config.product_id) != tuple(sentinels[key] for key in ("HUIFU_RSA_PRIVATE_KEY", "HUIFU_RSA_PUBLIC_KEY", "HUIFU_SYS_ID", "HUIFU_PRODUCT_ID")):
+                raise AssertionError(f"{path.name}: credential configuration slots are swapped")
             for merchant in ("offline-merchant-a", "offline-merchant-b", ""):
                 data = {"huifu_id": merchant, "req_seq_id": "offline-probe"}
                 request.build(config.product_id, config.sys_id, config.private_key, config.public_key,
@@ -246,6 +251,8 @@ def validate_python_initialization(state: ValidationState) -> None:
                     raise AssertionError("request merchant or version header mismatch")
                 if body.get("sign") != "offline-signature-stub" or "jpt-x-skill-source" in body["data"]:
                     raise AssertionError("request signing/source placement mismatch")
+                if body.get("sys_id") != sentinels["HUIFU_SYS_ID"] or body.get("product_id") != sentinels["HUIFU_PRODUCT_ID"]:
+                    raise AssertionError("credential material entered the system/product envelope slots")
         # The SDK accepts a fifth positional source as sign_type; our examples
         # must reject that misuse, not claim the SDK rejects it itself.
         wrong = config_class("unused", "unused", "unused", "unused", source)
@@ -430,12 +437,12 @@ def validate_python_contract_texts(state: ValidationState) -> None:
 def validate_python_contract_version(state: ValidationState) -> None:
     for path in (EXPECTED_SKILL_FILE, *PYTHON_ENV_DOC_FILES):
         text = path.read_text(encoding="utf-8")
-        if "2.0.24" not in text:
-            state.error(f"{path.name}: retained payment SDK baseline 2.0.24 is missing")
+        if PYTHON_SDK_VERSION not in text:
+            state.error(f"{path.name}: active payment SDK baseline {PYTHON_SDK_VERSION} is missing")
     for path in (REPO_ROOT / "huifu-merchant-onboarding").rglob("*.md"):
         for problem in current_python_claim_errors(path.read_text(encoding="utf-8")):
             state.error(f"{path.relative_to(REPO_ROOT)}: {problem}")
-    state.ok(f"Independent Python SDK baselines checked: payment 2.0.24, onboarding {PYTHON_SDK_VERSION}")
+    state.ok(f"Independent Python SDK baselines checked: payment {PYTHON_SDK_VERSION}, onboarding {PYTHON_SDK_VERSION}")
 
 
 def validate_python_env_docs(state: ValidationState) -> None:

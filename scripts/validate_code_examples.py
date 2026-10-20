@@ -308,7 +308,7 @@ def validate_python_blocks(blocks: list[CodeBlock], state: ValidationState) -> N
         validate_python_syntax(block, state)
         validate_python_forbidden_patterns(block, state)
         validate_python_official_sdk_usage(block, state)
-        for finding in (python_mer_config_errors(block.code) if "huifu-merchant-onboarding" in block.path.parts else []):
+        for finding in python_mer_config_errors(block.code):
             state.error(f"{finding}: {format_block(block)}")
     state.ok(f"Python examples syntax/policy-checked: {len(selected)}")
 
@@ -335,8 +335,8 @@ def validate_python_official_sdk_usage(block: CodeBlock, state: ValidationState)
         state.error(f"Python SDK examples must use official dg_sdk: {format_block(block)}")
 
 
-def python_mer_config_errors(code: str) -> list[str]:
-    """Guard the source-backed Python constructor's sign/source boundary."""
+def python_mer_config_errors(code: str, *, allow_placeholders: bool = False) -> list[str]:
+    """Keep credentials in their source-backed slots using named arguments."""
     try:
         tree = ast.parse(code)
     except SyntaxError:
@@ -351,9 +351,13 @@ def python_mer_config_errors(code: str) -> list[str]:
         )
         if name != "MerConfig":
             continue
-        if len(node.args) > 4 or any(isinstance(arg, ast.Starred) for arg in node.args):
-            findings.append("MerConfig sign_type/source must use explicit keywords, not positional arguments")
+        if allow_placeholders and any(isinstance(arg, ast.Constant) and arg.value is Ellipsis for arg in node.args):
+            continue
+        if node.args:
+            findings.append("MerConfig credentials/algorithm/source must use explicit keywords, not positional arguments")
         keywords = {keyword.arg: keyword.value for keyword in node.keywords}
+        if not {"private_key", "public_key", "sys_id", "product_id"} <= keywords.keys():
+            findings.append("MerConfig must explicitly name private_key/public_key/sys_id/product_id")
         sign_type = keywords.get("sign_type")
         if not isinstance(sign_type, ast.Constant) or sign_type.value != "RSA":
             findings.append('MerConfig must explicitly preserve sign_type="RSA"')
@@ -368,6 +372,8 @@ def validate_php_blocks(blocks: list[CodeBlock], state: ValidationState) -> None
         project = create_php_project(Path(temp_dir))
         for block in selected:
             validate_server_sdk_only_network_policy(block, state)
+            if re.search(r"getRspDatas\(\)\s*\[", block.code):
+                state.error(f"{block.path}:{block.index}: PHP response must check SDK error and envelope before reading data")
             validate_single_php_block(block, project, state)
     state.ok(f"PHP examples executable with SDK stub: {len(selected)}")
 
@@ -435,7 +441,7 @@ def php_core_stub() -> str:
     return """<?php
 namespace BsPaySdk\\core;
 class BsPay { public static array $config = []; public static function init(array $config, bool $prod = true): void { self::$config = $config; } }
-class StubResult { public function getRspDatas(): array { return ['data' => ['trans_stat' => 'S', 'file_details' => [['download_url' => 'https://example.test/bill.csv']], 'download_url' => 'https://example.test/bill.csv', 'jump_url' => 'https://example.test/pay']]; } }
+class StubResult { public function isError(): bool { return false; } public function getRspDatas(): array { return ['data' => ['trans_stat' => 'S', 'file_details' => [['download_url' => 'https://example.test/bill.csv']], 'download_url' => 'https://example.test/bill.csv', 'jump_url' => 'https://example.test/pay']]; } }
 class Payment { public function create($request) { return new StubResult(); } public function query($request) { return new StubResult(); } public function close($request) { return new StubResult(); } public function closeQuery($request) { return new StubResult(); } public function refund($request) { return new StubResult(); } public function refundQuery($request) { return new StubResult(); } }
 class BsPayClient { public function postRequest($request) { return new StubResult(); } }
 class GenericRequest { private array $fields = []; public function __call(string $name, array $args) { if (str_starts_with($name, 'set')) { $this->fields[$name] = $args[0] ?? null; return $this; } throw new \\BadMethodCallException($name); } public function getFunctionCode(): string { return static::class; } public function getFields(): array { return $this->fields; } }
@@ -444,6 +450,7 @@ class GenericRequest { private array $fields = []; public function __call(string
 
 def php_request_stubs() -> list[PhpStubClass]:
     return [
+        PhpStubClass("request/V2TradeAcctpaymentPayQueryRequest.php", "BsPaySdk\\request", "V2TradeAcctpaymentPayQueryRequest"),
         PhpStubClass("request/v4/payment/TradePaymentCreateRequest.php", "BsPaySdk\\request\\v4\\payment", "TradePaymentCreateRequest"),
         PhpStubClass("request/v4/payment/TradePaymentScanpayQueryRequest.php", "BsPaySdk\\request\\v4\\payment", "TradePaymentScanpayQueryRequest"),
         PhpStubClass("request/v4/payment/TradePaymentScanpayCloseRequest.php", "BsPaySdk\\request\\v4\\payment", "TradePaymentScanpayCloseRequest"),

@@ -1,6 +1,6 @@
 # 拆单支付订单查询
 
-> 官方接口更新时间：`2025.12.30`。来源页：`https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingcdzf.md`。
+> 官方接口更新时间：`2026.10.10`。来源页：`https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingcdzf.md`。
 > 本接口只用于拆单支付订单查询，不等同于普通托管交易查询 `v2/trade/hosting/payment/queryorderinfo`。
 
 ## 目录
@@ -104,8 +104,8 @@
 | `openid` | 用户标识 | String | Y | 用户在商户 appid 下的唯一标识 |
 | `sub_openid` | 子商户用户标识 | String | N | 用户在子商户 appid 下的唯一标识 |
 | `bank_type` | 付款银行 | String | Y | 银行类型标识 |
-| `cash_fee` | 现金支付金额 | Int | N | 订单现金支付金额 |
-| `coupon_fee` | 代金券金额 | Int | N | 代金券或立减优惠金额 |
+| `cash_fee` | 现金支付金额 | String(12) | N | 订单现金支付金额 |
+| `coupon_fee` | 代金券金额 | String(12) | N | 代金券或立减优惠金额 |
 | `attach` | 商家数据包 | String | N | 原样返回 |
 | `promotion_detail` | 营销详情列表 | Array | N | 微信营销详情 |
 

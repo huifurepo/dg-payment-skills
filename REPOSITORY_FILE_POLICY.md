@@ -10,6 +10,7 @@
   - `maintainer-contracts/*.json`
   - `maintainer-contracts/*.md`
   - `maintainer-contracts/official-sources/**`
+  - `maintainer-contracts/review-baselines/**`，不可变字段目录审计基线
 - 回归和校验：
   - `tests/regression/*.json`
   - `scripts/*.py`

@@ -13,8 +13,8 @@
 
 | 当前请求实际参与的 Skill | 默认值 |
 | --- | --- |
-| 仅 `huifu-merchant-onboarding 1.0.4`，无论使用商户、用户还是扩展接口 | `hfms/1.0.4` |
-| `huifu-pay-integration` 与 `huifu-merchant-onboarding` 都参与当前请求 | `hfps/1.3.5;hfms/1.0.4` |
+| 仅 `huifu-merchant-onboarding 1.0.5`，无论使用商户、用户还是扩展接口 | `hfms/1.0.5` |
+| `huifu-pay-integration` 与 `huifu-merchant-onboarding` 都参与当前请求 | `hfps/1.4.0;hfms/1.0.5` |
 
 组合顺序固定为支付、进件，中间只使用一个英文分号且不加空格。不得因为两个来源都通过同一个 SDK 配置项传入而丢掉其中一个。调用方显式提供经确认的合同值时原样透传，不再追加默认值或 `sys_id`。
 
@@ -22,6 +22,8 @@
 
 - 商户十一个与用户九个已有专属 Request 类的 JSON 接口使用公共请求链路，并按 `/v2/merchant/*`、`/v2/user/*` 精确隔离。
 - 在任何请求前全局设置 `BasePay.debug = false`。
+- Java3.0.41准确包名为`com.huifu.bspay.sdk.opps.core.BasePay`、`com.huifu.bspay.sdk.opps.core.config.MerConfig`和`com.huifu.bspay.sdk.opps.client.BasePayClient`；Request位于`com.huifu.bspay.sdk.opps.core.request`，不得猜用`com.huifu.bspay.sdk.BasePay`。
+- 初始化先关闭调试，再构造MerConfig并调用`setSysId(sysId)`、`setProductId(productId)`、`setRsaPrivateKey(privateKey)`、`setRsaPublicKey(publicKey)`、`setSkillSource(skillSource)`，最后`BasePay.initWithMerConfig(config)`（声明throws Exception）。上述方法均已由锁定源码确认，不留不存在的setter疑问或手写HTTP头TODO。配置值取服务端安全配置；skillSource按上表取值。
 - 图片 `file_url` 使用 `BasePayClient.request(request, true)` 和 URI 特判的 multipart 文本字段；本地文件使用 `BasePayClient.upload(request, file)`。两种来源互斥，均保留请求签名、跳过响应验签。
 
 ## PHP
@@ -33,7 +35,7 @@
 ## Python
 
 - 当前 SDK 为 `2.0.28`，以下构造器和图片结论已按本地源码复核。`jpt-sdk_version: python_2.0.28` 由实际 SDK 生成，不为了匹配文档版本手写或覆盖它；其他版本差异按 `shared-server-sdk-matrix.md` 提醒核对，不阻断明确部分。
-- 已核验 Python 2.0.28 的 `MerConfig` 第五参数是 `sign_type`，第六参数才是来源。使用 `MerConfig(..., sign_type="RSA", jpt_x_skill_source=skill_source)`，不再传第五个位置参数作为来源。
+- 已核验 Python 2.0.28 的 `MerConfig` 第五参数是 `sign_type`，第六参数才是来源。使用 `MerConfig(private_key=private_key, public_key=public_key, sys_id=sys_id, product_id=product_id, sign_type="RSA", jpt_x_skill_source=skill_source)`，生成代码六参全部使用关键字；前四参源码顺序为private_key/public_key/sys_id/product_id，不得猜成sys_id/product_id/private_key/public_key，避免密钥进入外层系统号字段。
 - 图片专用 Request 仍存在字段、扩展参数、文件键和签验缺陷，不能直接调用。底层 `dg_sdk.core.request_tools.request_post` 可显式设置 `need_sign=True`；`DGTools.request_post` 没有此关键字形参。补齐官网字段并使用顶层 `file` multipart 键后才可用于本地文件模式；`file_url` 模式使用符合相同 multipart 合同的通用 POST/自写 HTTPS 适配器。
 
 ## 明确禁止

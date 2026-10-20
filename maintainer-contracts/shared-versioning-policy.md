@@ -6,15 +6,15 @@
 
 | Skill | 当前版本 | 边界 |
 | --- | --- | --- |
-| `huifu-pay-integration` | `1.3.5` | 支付交易、checkout-js、通知、对账、SDK 与支付沙箱 |
-| `huifu-merchant-onboarding` | `1.0.4` | 商户与用户进件、电子合同、页面进件、下级权限及微信/支付宝 AT 管理 |
+| `huifu-pay-integration` | `1.4.0` | 余额支付、支付交易、checkout-js、通知、对账、SDK 与支付沙箱 |
+| `huifu-merchant-onboarding` | `1.0.5` | 商户与用户进件、电子合同、页面进件、下级权限及微信/支付宝 AT 管理 |
 
-- `2026-09-22` 活动快照包含十三个商户接口2,210条、九个用户接口611条、十二个扩展接口546条，合计34接口3,367个字段路径。历史来源锁全部保持不可变。
-- 当前进件本地 SDK 证据 为 Lightning Java `1.0.6`、通用 Java `3.0.41`、PHP `2.0.31`、Python `2.0.28`；活动证据为 `local-sdk-source-lock-2026-09-24.json`，Python 声明来自 `../sdk/dg_sdk-2.0.28/dg_sdk/dg_client.py`。这不回写历史版本事实，也不证明远端包可下载或真实网关联调成功。 支付包保持原有 SDK 基线。
+- `2026-10-08` 活动快照包含十三个商户接口2,209条、九个用户接口611条、十二个扩展接口546条，合计34接口3,366个字段路径。历史来源锁全部保持不可变。
+- 两个skill均核验官方 Lightning Java `1.0.6`、通用 Java `3.0.41`、PHP `2.0.31`、Python `2.0.28`；活动证据为 `local-sdk-source-lock-2026-10-08.json`，记录官方固定提交、归档和源码树SHA。Python2.0.28制品来自PyPI。SDK证据不代表真实网关联调成功，不回写历史版本事实。
 - 两个 Skill 可单独升级和回滚；商户进件与用户开户能力随同一个进件包发布。
 - 后续新增模块先按产品发布边界判断；属于进件管理的能力继续归入 `huifu-merchant-onboarding`。
-- `skill_source` 优先使用外部显式合同值；缺失时支付使用 `hfps/1.3.5`，商户、用户或扩展接口都使用 `hfms/1.0.4`，两个 Skill 同时参与时使用 `hfps/1.3.5;hfms/1.0.4`。
-- 本次仅升级进件；当前进件记录为 `api-refresh-onboarding-1.0.4-sdk-2.0.28-2026-09-24.json`。支付活动记录保持原值。
+- `skill_source` 优先使用外部显式合同值；缺失时支付使用 `hfps/1.4.0`，商户、用户或扩展接口都使用 `hfms/1.0.5`，两个 Skill 同时参与时使用 `hfps/1.4.0;hfms/1.0.5`。
+- 当前支付1.4.0的活动来源及刷新记录为2026-10-10；进件1.0.5及共同SDK证据仍使用2026-10-08锁。第二轮保持候选版本，分别绑定各自API和SDK证据。
 
 ## 历史候选阶段
 
@@ -50,9 +50,9 @@
 - 六个商户进件接口的 1393 条完整字段路径、官网来源 SHA-256 和字段级外部资料索引
 - Java 图片 `file_url` / 本地文件的 `BasePayClient.request/upload` 与 `isPage=true` 边界、PHP/Python 图片专用实现缺陷及受控降级合同，以及非图片接口的 Python 兼容性提示
 - 用户侧版本与升级提示策略
-- `HUIFU_SKILL_SOURCE` 显式配置时保持 `<skill_source>` 原样透传；未配置时官方联调和生产按当前请求实际参与生成的 Skill 组合使用 `hfps/1.3.5`、`hfms/1.0.4` 或 `hfps/1.3.5;hfms/1.0.4`，仅安装未参与的不计入。这是当前默认来源规则，不回写历史1.3.2制品；local-sandbox `1.0.1` 的冻结 r4 快照继续使用 `hfps/1.3.1;sandbox/1.0.1`
+- `HUIFU_SKILL_SOURCE` 显式配置时保持 `<skill_source>` 原样透传；未配置时官方联调和生产按当前请求实际参与生成的 Skill 组合使用 `hfps/1.4.0`、`hfms/1.0.5` 或 `hfps/1.4.0;hfms/1.0.5`，仅安装未参与的不计入。这是当前默认来源规则，不回写历史1.3.2制品；local-sandbox `1.0.1` 的冻结 r4 快照继续使用 `hfps/1.3.1;sandbox/1.0.1`
 - `2026-06-10` API refresh：版本号仍保持 `1.3.0`，补充抖音直连下单、拆单支付订单查询和聚合字段差异
-- `hf-payment-local-sandbox 1.0.1` 协议快照仍为 `huifu-pay-integration-1.3.0-r4`，report schema 为 `1.8`；当前支付 Skill `1.3.5` 也不修改该冻结契约或增加进件模拟端点
+- `hf-payment-local-sandbox 1.0.1` 协议快照仍为 `huifu-pay-integration-1.3.0-r4`，report schema 为 `1.8`；当前支付 Skill `1.4.0` 也不修改该冻结契约或增加进件模拟端点
 
 ## 何时需要升级版本
 

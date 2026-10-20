@@ -21,7 +21,6 @@
         "fee_amt",
         "fee_sign",
         "fee_type",
-        "file",
         "file_id",
         "file_name",
         "file_type",
@@ -45,7 +44,11 @@
         "sys_id",
         "type",
         "update_time",
-        "upper_huifu_id"
+        "upper_huifu_id",
+        "apply_type",
+        "confirm_url",
+        "mobile_no",
+        "verify_type"
       ],
       "forbidden_implementation_literals": [
         "/v2/merchant/basicdata/ent",

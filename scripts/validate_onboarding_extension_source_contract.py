@@ -303,7 +303,6 @@ def validate_non_contract_tables(lock: dict[str, object], source_dir: Path) -> i
     required_texts = (
         REFERENCES / "merchant-onboarding-wechat-realname-query.md",
         REFERENCES / "onboarding-extension-field-contracts.md",
-        REFERENCES / "onboarding-extension-canonical-regression-prompts.md",
     )
     combined_text = "\n".join(path.read_text(encoding="utf-8") for path in required_texts)
     master = (ROOT / "scripts/huifu-payment-test-prompts.json").read_text(encoding="utf-8")
@@ -348,37 +347,9 @@ def validate_external_resources(lock: dict[str, object], source_dir: Path) -> in
 
 def main() -> int:
     lock = json.loads(LOCK.read_text(encoding="utf-8"))
-    assert set(lock) == {
-        "schema_version",
-        "source_date",
-        "source_snapshot_id",
-        "introduced_in_skill_version",
-        "previous_source_lock",
-        "verified_at",
-        "sources",
-        "totals",
-        "api_refresh",
-    }
-    assert lock["schema_version"] == 1
-    assert lock["source_date"] == lock["source_snapshot_id"] == "2026-09-22"
-    assert lock["introduced_in_skill_version"] == "1.0.3"
-    previous_path = ROOT / "maintainer-contracts/onboarding-extension-source-lock-2026-09-15.json"
-    previous_sha = "d99e2f56ccd92f420c5fc91ca4042ca461f1d1be2fc92a03ad06d6d9a78c54ea"
-    assert sha256(previous_path) == previous_sha, "historical extension source lock changed"
-    assert lock["previous_source_lock"] == {"path": previous_path.relative_to(ROOT).as_posix(), "sha256": previous_sha}
-    previous = json.loads(previous_path.read_text(encoding="utf-8"))
-    previous_dir = ROOT / "maintainer-contracts/official-sources/onboarding-extension/2026-09-15"
-    assert {path.name for path in previous_dir.iterdir() if path.is_file()} == {source["filename"] for source in previous["sources"]}
-    for source in previous["sources"]:
-        assert sha256(previous_dir / source["filename"]) == source["sha256"]
+    from source_review_validation import validate_source, validate_onboarding_combined
+    source_dir = validate_source(lock, "onboarding-extension", list(EXPECTED))
     assert len(lock["sources"]) == len(EXPECTED) == len(SURFACES) == 12
-    assert [item["key"] for item in lock["sources"]] == list(EXPECTED)
-
-    source_dir = onboarding_extension_source_dir()
-    assert source_dir == ROOT / "maintainer-contracts/official-sources/onboarding-extension/2026-09-22"
-    assert {path.name for path in source_dir.iterdir() if path.is_file()} == {
-        item["filename"] for item in lock["sources"]
-    }
     for item in lock["sources"]:
         endpoint, fields, request, response, callback = EXPECTED[item["key"]]
         assert item["endpoint"] == endpoint
@@ -408,15 +379,6 @@ def main() -> int:
         "root_tables": 51,
         "extend_tables": 43,
     }
-    refresh_meta = lock["api_refresh"]
-    assert refresh_meta["refresh_id"] == "api-refresh-extension-online-review-2026-09-22"
-    assert refresh_meta["changed_source_keys"] == [
-        "contract_resend", "contract_list_query", "contract_reject", "lower_merchant_permission",
-        "unified_web_onboarding", "unified_web_query", "wechat_config", "alipay_realname",
-    ]
-    assert (refresh_meta["field_paths_added"], refresh_meta["field_paths_removed"], refresh_meta["field_paths_changed"]) == (26, 28, 66)
-    assert len(refresh_meta["document_conflicts"]) == 11
-
     expected, table_counts = expected_records(lock, source_dir)
     actual = actual_records(lock)
     assert set(expected) == set(actual), (
@@ -508,37 +470,7 @@ def main() -> int:
     non_contract_tables = validate_non_contract_tables(lock, source_dir)
     active_external_urls = validate_external_resources(lock, source_dir)
 
-    combined = json.loads(COMBINED.read_text(encoding="utf-8"))
-    assert combined["version"] == "1.0.3"
-    assert combined["totals"] == {"interfaces": 34, "field_paths": 3367}
-    assert combined["source_locks"]["onboarding_extension"]["sha256"] == sha256(LOCK)
-    assert combined["catalogs"]["extension"]["sha256"] == sha256(CATALOG)
-
-    refresh = json.loads(REFRESH.read_text(encoding="utf-8"))
-    assert refresh["source_locks"]["onboarding_1_0_3"]["sha256"] == sha256(COMBINED)
-    assert refresh["source_locks"]["onboarding_extension_current"]["sha256"] == sha256(LOCK)
-    assert refresh["field_delta"]["combined_total"] == 3367
-    assert refresh["cross_skill_review"]["changed"] is False
-    assert refresh["cross_skill_review"]["online_sha256"] == refresh["cross_skill_review"]["locked_sha256"]
-
-    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))["skills"]["huifu-merchant-onboarding"]
-    assert manifest["version"] == "1.0.4"
-    assert manifest["source_lock"] == COMBINED.relative_to(ROOT).as_posix()
-    assert manifest["refresh_contract"] == "maintainer-contracts/api-refresh-onboarding-1.0.4-sdk-2.0.28-2026-09-24.json"
-    release = json.loads((ROOT / manifest["refresh_contract"]).read_text(encoding="utf-8"))
-    assert release["source_review_id"] == refresh["refresh_id"]
-    assert release["source_review"] == {"path": REFRESH.relative_to(ROOT).as_posix(), "sha256": sha256(REFRESH), "refresh_id": refresh["refresh_id"]}
-    previous_path = ROOT / "maintainer-contracts/api-refresh-onboarding-1.0.4-2026-09-24.json"
-    assert sha256(previous_path) == "1adfb151fb0a35c02bd09f8f9985f62d790426752a9d7ce54af2e4326a352426"
-    previous = json.loads(previous_path.read_text(encoding="utf-8"))
-    assert release["previous_refresh"] == {"path": previous_path.relative_to(ROOT).as_posix(), "sha256": sha256(previous_path), "refresh_id": previous["refresh_id"]}
-    assert previous["previous_refresh"] == release["source_review"]
-    assert previous["source_locks"] == refresh["source_locks"]
-    sdk_path = ROOT / json.loads(MANIFEST.read_text(encoding="utf-8"))["sdk_source_lock"]
-    sdk = json.loads(sdk_path.read_text(encoding="utf-8"))
-    assert release["source_locks"] == {**refresh["source_locks"], "local_sdk_current": {"path": sdk_path.relative_to(ROOT).as_posix(), "sha256": sha256(sdk_path)}}
-    assert release["sdk_versions"] == {name: item["version"] for name, item in sdk["components"].items()}
-    assert release["catalogs"] == refresh["catalogs"]
+    validate_onboarding_combined()
     print(
         "Independent onboarding-extension contract validated: "
         f"{len(actual)} fields; directions={direction_counts}; "

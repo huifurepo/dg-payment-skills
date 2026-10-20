@@ -198,7 +198,7 @@
 ## 文档勘误与实现备注
 
 - 官方请求示例中带有 `checkout_id`，但参数表没有定义该字段；当前 skill 不将其视为正式接入参数。
-- `trans_finish_time` 在异步返回表中的长度列为 `6`，但格式写成 `yyyyMMddHHmmss`；实现时应按完整时间戳处理。
-- `wx_response.cash_fee` 与 `wx_response.coupon_fee` 的类型列写成 `Int`，但示例是带小数点金额字符串；标记 `[官方文档口径冲突]`，在真实样本或官方确认前不得擅自改成 String，也不得只按整数解析。
-- `unionpay_data.pid_info` 在官方表里写成 `String`，同时又展开了对象字段；这里按“JSON 字符串承载对象”处理。
+- 2026-10-10官网已明确通知 `trans_finish_time:String(13)` 为毫秒时间戳；`end_time:String(14)` 仍为 `yyyyMMddHHmmss`，分别解析。
+- 2026-10-10官网 `wx_response.cash_fee/coupon_fee` 明确为 String(12)，保留金额字符串并按十进制处理；旧Int/示例冲突已关闭。
+- `unionpay_data.pid_info` 正式为 String，说明仅“服务商信息”，没有声明JSON编码；其子表只作合同定位路径，编码留 `[需要官方确认]`。
 - `callback_url` 只能控制支付后的页面跳转，不能作为支付成功判定依据；最终结果仍以异步通知或主动查询为准。

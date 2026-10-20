@@ -7,7 +7,7 @@
 ## 接口与字段面
 
 - Endpoint：`POST https://api.huifu.com/v2/user/list/query`。
-- 官网更新时间：`2026-09-04`；本地活动快照：`2026-09-22`；原文 SHA-256：`b10ab1529c58d5739cae0f38b5f385a105e3f2d6b3348400f6882328b7421d9d`。
+- 官网更新时间：`2026-09-04`；本地活动快照：`2026-10-08`；原文 SHA-256：`b10ab1529c58d5739cae0f38b5f385a105e3f2d6b3348400f6882328b7421d9d`。
 - 共17个完整字段路径：请求8、同步响应9、无异步通知；4个根表、1个扩展表、3个父节点、14个叶节点。完整字段读取 `user-onboarding-complete-field-catalog.md`。
 - 请求必填 `legal_cert_no:String(32)`、`req_date:String(8)` 和 `req_seq_id:String(32)`；`upper_huifu_id:String(18) N` 不传时不得自行填充当前用户号或商户号。
 

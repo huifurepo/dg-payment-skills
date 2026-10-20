@@ -58,7 +58,14 @@ $requestShape = (static function (array $request): array { return $request; })([
 ]);
 
 $result = $client->postRequest($requestShape);
-$response = $result->getRspDatas()['data'] ?? [];
+if ($result === null || $result->isError()) {
+    throw new RuntimeException('SDK请求或响应验签失败，拒绝处理业务结果');
+}
+$envelope = $result->getRspDatas();
+if (!is_array($envelope) || !isset($envelope['data']) || !is_array($envelope['data'])) {
+    throw new RuntimeException('SDK响应结构异常，拒绝处理业务结果');
+}
+$response = $envelope['data'];
 $jumpUrl = $response['jump_url'] ?? '';
 ```
 
@@ -75,7 +82,7 @@ $jumpUrl = $response['jump_url'] ?? '';
 
 ## 抖音直连下单
 
-PHP SDK `2.0.30` 使用专属 `V2TradeHostingPaymentPreorderDyRequest`，固定 `pre_order_type=4` 并传入 `dy_data`；其功能码仍映射共用托管预下单 Endpoint。
+PHP SDK `2.0.31` 使用专属 `V2TradeHostingPaymentPreorderDyRequest`，固定 `pre_order_type=4` 并传入 `dy_data`；其功能码仍映射共用托管预下单 Endpoint。
 
 ```php
 require_once HUIFU_SDK_ROOT . '/request/V2TradeHostingPaymentPreorderDyRequest.php';
@@ -108,7 +115,14 @@ $requestShape = (static function (array $request): array { return $request; })([
     ],
 ]);
 $result = $client->postRequest($requestShape);
-$response = $result->getRspDatas()['data'] ?? [];
+if ($result === null || $result->isError()) {
+    throw new RuntimeException('SDK请求或响应验签失败，拒绝处理业务结果');
+}
+$envelope = $result->getRspDatas();
+if (!is_array($envelope) || !isset($envelope['data']) || !is_array($envelope['data'])) {
+    throw new RuntimeException('SDK响应结构异常，拒绝处理业务结果');
+}
+$response = $envelope['data'];
 ```
 
 字段拆分：
@@ -149,7 +163,14 @@ $requestShape = (static function (array $request): array { return $request; })([
     ],
 ]);
 $result = $client->postRequest($requestShape);
-$response = $result->getRspDatas()['data'] ?? [];
+if ($result === null || $result->isError()) {
+    throw new RuntimeException('SDK请求或响应验签失败，拒绝处理业务结果');
+}
+$envelope = $result->getRspDatas();
+if (!is_array($envelope) || !isset($envelope['data']) || !is_array($envelope['data'])) {
+    throw new RuntimeException('SDK响应结构异常，拒绝处理业务结果');
+}
+$response = $envelope['data'];
 ```
 
 可选增强字段：
@@ -215,7 +236,14 @@ $requestShape = (static function (array $request): array { return $request; })([
     ],
 ]);
 $result = $client->postRequest($requestShape);
-$response = $result->getRspDatas()['data'] ?? [];
+if ($result === null || $result->isError()) {
+    throw new RuntimeException('SDK请求或响应验签失败，拒绝处理业务结果');
+}
+$envelope = $result->getRspDatas();
+if (!is_array($envelope) || !isset($envelope['data']) || !is_array($envelope['data'])) {
+    throw new RuntimeException('SDK响应结构异常，拒绝处理业务结果');
+}
+$response = $envelope['data'];
 ```
 
 可选增强字段：

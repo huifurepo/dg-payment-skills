@@ -2,7 +2,7 @@
 
 ## 适用范围
 
-用于企业或小微商户进行微信/支付宝/抖音补开、部分线上业务开通，或修改已开通支付能力的参数和费率。官方来源：[商户业务开通修改](https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywktxg_kyc.md)，官网更新时间 `2026-09-20`，本地活动快照 `2026-09-22`，原文 SHA-256 为 `9dea690376cdf85cf6007e302900111a16f00bd92ab2a8335ca56eaaee9d491d`。银联、银行卡业务开通仍使用 `merchant-onboarding-business-open.md`；不能把所有“已开通后的补开”统一路由到本接口。
+用于企业或小微商户进行微信/支付宝/抖音补开、部分线上业务开通，或修改已开通支付能力的参数和费率。官方来源：[商户业务开通修改](https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywktxg_kyc.md)，官网更新时间 `2026-09-24`，本地活动快照 `2026-10-08`，原文 SHA-256 为 `9e70c875accaecb0d25114f38ab80ee6cbfcc6c0a207c0e0176614ff0d7925bb`。银联、银行卡业务开通仍使用 `merchant-onboarding-business-open.md`；不能把所有“已开通后的补开”统一路由到本接口。
 
 本接口不是首次基础进件，也不是支付下单接口。首次业务开通以及银联、银行卡业务开通使用 `merchant-onboarding-business-open.md`；支付交易交给 `$huifu-pay-integration`。
 
@@ -38,7 +38,7 @@
 
 ## 公共请求头
 
-- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.4`，双 Skill 默认 `hfps/1.3.5;hfms/1.0.4`。
+- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.5`，双 Skill 默认 `hfps/1.4.0;hfms/1.0.5`。
 
 ## SDK 证据
 
@@ -54,3 +54,7 @@ SDK 类存在只证明路由和请求封装可用，不证明商户权限、费�
 ## 通知边界
 
 除上述 `ord_id` 应答规则外，通知验签原文、HTTP 编码、超时、重试及审核/电子协议 ACK 均为 `[需要官方确认]`。按 `shared-overview.md` 的开发提醒引用本页官方来源，建议核对或咨询汇付官方/交流群；继续 Controller 与业务处理框架，未知协议用 TODO/配置隔离，不编造或等待答复才继续整体开发。
+
+## 2026-10-08 字段复核
+
+`request.data.ali_conf_list[].switch_state` 与 `request.data.wx_conf_list[].switch_state` 均由 N 修为 Y；传入对应配置项时必须提供。支付宝项的“默认1”说明已移除，不能再省略后假定开通。该变更只适用于本接口的这两个完整路径，其他配置组以各自正式表为准。

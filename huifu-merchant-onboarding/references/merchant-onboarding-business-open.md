@@ -7,7 +7,7 @@
 ## 已确认的请求合同
 
 - Endpoint：`POST https://api.huifu.com/v2/merchant/busi/open`；顶层使用 `sys_id`、`product_id`、`sign`、`data`。
-- 官网更新时间 `2026-09-20`；本地活动快照 `2026-09-22`；原文 SHA-256：`9c3f2262c295489abc5ce32bf123128cfd7376c4d5e35399c5083e39ff206c5c`。
+- 官网更新时间 `2026-09-20`；本地活动快照 `2026-10-08`；原文 SHA-256：`9c3f2262c295489abc5ce32bf123128cfd7376c4d5e35399c5083e39ff206c5c`。
 - 完整目录共460个节点（请求395、同步响应9、异步56）和 54 组扩展表；全部父子路径、类型、长度、Y/N/C 与官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户业务开通”，本页不能替代完整字段目录。
 - `data` 至少需新的当日唯一 `req_seq_id`、`req_date` 和真实 `huifu_id`。`upper_huifu_id:String(18) C`：`sys_id` 主体为渠道商时填写，总部商户主体时选填。
 - 微信、支付宝、银联、银行卡、线上业务、协议、分账等配置按业务分组条件填写；不能用一个通用模板猜填渠道字段或费率。

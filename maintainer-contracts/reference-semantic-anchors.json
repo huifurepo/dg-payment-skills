@@ -30,7 +30,7 @@
       "source_path": "huifu-pay-integration/references/shared-request-header-policy.md",
       "source_clause": "- PHP 传入 `CURLFile` 后进入独立 multipart 分支，该分支缺少 `jpt-x-skill-source`、`jpt-x-skill-huifu_id` 和 `jpt-sdk_version`，且关闭请求签名和响应验签；当前必须阻断，不能用手动补头或手写 HTTP 绕过",
       "target_path": "huifu-pay-integration/references/shared-request-header-policy.md",
-      "target_clause": "- PHP `2.0.30` 传入 `CURLFile` 后进入独立 multipart 分支；该分支已携带 `jpt-x-skill-source`、`jpt-x-skill-huifu_id` 和 `jpt-sdk_version`，但关闭请求签名和响应验签。当前仍必须阻断，不能因请求头齐全而声称安全，也不能用手动补头、手动签名或手写 HTTP 绕过"
+      "target_clause": "- PHP `2.0.31` 传入 `CURLFile` 后进入独立 multipart 分支；该分支已携带 `jpt-x-skill-source`、`jpt-x-skill-huifu_id` 和 `jpt-sdk_version`，但关闭请求签名和响应验签。当前仍必须阻断，不能因请求头齐全而声称安全，也不能用手动补头、手动签名或手写 HTTP 绕过"
     },
     {
       "id": "onboarding-flag-direction",

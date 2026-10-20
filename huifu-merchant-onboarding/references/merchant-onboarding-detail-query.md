@@ -7,7 +7,7 @@
 ## 已确认的请求合同
 
 - Endpoint：`POST https://api.huifu.com/v2/merchant/basicdata/query`；顶层使用 `sys_id`、`product_id`、`sign`、`data`。
-- 官网更新时间 `2026-09-20`；本地活动快照 `2026-09-22`；原文 SHA-256：`df6014a1fc008bd81dff8de5708432010c60b002d34d0d9602a67145d1ae8806`。
+- 官网更新时间 `2026-09-20`；本地活动快照 `2026-10-08`；原文 SHA-256：`df6014a1fc008bd81dff8de5708432010c60b002d34d0d9602a67145d1ae8806`。
 - 请求与响应 578 个具名路径（含父容器；请求7、响应571）的类型、长度、Y/N/C 和官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户详细信息查询”；本页的字段白名单策略不能替代完整目录。
 - `data` 必填新的 `req_seq_id:String(32)`（当天同商户唯一）、`req_date:String(8)`（`yyyyMMdd`、北京时间）、目标 `huifu_id:String(18)`；高风险约束见 `merchant-onboarding-field-contracts.md`。
 - 响应可能覆盖主体、证照、图片、结算卡、结算/取现、协议、渠道配置和账户资料；按查询目的字段白名单读取，禁止沉淀完整响应表或完整原文。

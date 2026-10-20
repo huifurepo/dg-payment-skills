@@ -39,12 +39,12 @@ CONFLICTS = {
         "contract list result_list is String/jsonArray while its success example is a native array",
         "lower-merchant permission retains a merchant-detail response example and omits required request data.product_id from its example",
         "unified web onboarding retains business success-code, URL-length and async audit req_date-length inconsistencies",
-        "unified web query pay_scene link label disagrees with its target and its length 1 disagrees with example 01",
+        "unified web query pay_scene link label disagrees with its target; length 2 now agrees with example 01",
         "WeChat configuration no longer defines formal synchronous/async envelopes; synchronous scalar lengths are absent",
         "WeChat configuration query contains swapped required/length columns, APPID length inconsistencies and an inner-only success example",
         "WeChat real-name fields marked N contain conditional-required descriptions",
         "WeChat real-name query qrcode_data ambiguously describes base64, image content and HTML",
-        "Alipay support_credentials is a JSON-array string in the table but an object string in the example, with industry prose inconsistent with its store-proof children",
+        "Alipay support_credentials is now explicitly a JSON-object string and conditionally required for micro merchants; old array conflict closed",
         "Alipay real-name financial and region examples remain inconsistent with their conditions",
         "Alipay real-name query success example omits response.sign",
     ],
@@ -252,7 +252,7 @@ def main() -> int:
         entry["sha256"] = digest(ROOT / entry["path"])
     combined_total = sum(item["field_paths"] for item in catalogs.values())
     write_json(combined_path, {"schema_version": 1, "skill": "huifu-merchant-onboarding", "version": ONBOARDING_SPEC.version,
-                "refresh_revision": args.source_date, "scope": "Same-version review of all 34 official onboarding sources and local SDK baseline.",
+                "refresh_revision": args.source_date, "scope": "Review of all 34 official onboarding sources for onboarding 1.0.5.",
                 "previous_combined_lock": {"path": str(previous_combined.relative_to(ROOT)), "sha256": digest(previous_combined)},
                 "source_locks": source_links, "catalogs": catalogs, "totals": {"interfaces": 34, "field_paths": combined_total}})
     # Keep the split-query ownership review tied to the active payment snapshot.
@@ -265,7 +265,7 @@ def main() -> int:
     write_json(refresh_path, {"schema_version": 1, "refresh_id": f"api-refresh-onboarding-online-review-{args.source_date}",
                "requested_at": args.source_date, "retrieved_at": verified, "api_source_date": args.source_date,
                **sdk_metadata,
-               "version_state": {"reason": "User-requested same-version documentation and local SDK refresh.",
+               "version_state": {"reason": "User-confirmed payment 1.4.0 and onboarding 1.0.5 documentation refresh.",
                                  "huifu-merchant-onboarding": ONBOARDING_SPEC.version, "huifu-pay-integration": PAYMENT_SPEC.version},
                "previous_refresh": {"path": str(previous_refresh.relative_to(ROOT)), "sha256": digest(previous_refresh), "refresh_id": old_refresh["refresh_id"]},
                "source_locks": refresh_sources, "catalogs": catalogs,

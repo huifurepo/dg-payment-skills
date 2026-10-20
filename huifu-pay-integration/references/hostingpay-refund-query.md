@@ -13,7 +13,7 @@
 
 # 托管交易退款查询
 
-> 本文依据 2026-05-22 官方文档整理，适用于 `v2/trade/hosting/payment/queryRefundInfo`。
+> 本文依据 2026-10-10 官方文档整理，适用于 `v2/trade/hosting/payment/queryRefundInfo`。
 
 ## 接口概述
 
@@ -120,16 +120,16 @@
 
 | 参数 | 中文名 | 类型 | 长度 | 必填 | 说明 |
 |------|--------|------|------|------|------|
-| coupon_info | 银联优惠信息 | Object | - | N | 银联使用优惠活动时出现；官方说明同时写为 `jsonArray` 格式 |
+| coupon_info | 银联优惠信息 | String(JSON Array) | - | N | 银联使用优惠活动时出现；长度未声明 |
 
 #### `response.data.unionpay_response.coupon_info[]`
 
 | 参数 | 中文名 | 类型 | 长度 | 必填 | 说明 |
 |------|--------|------|------|------|------|
 | addnInfo | 附加信息 | String | 100 | N | 内容自定义 |
-| spnsrId | 出资方 | String | 20 | Y | `00010000`=银联出资，也可能为付款方机构代码或商户代码 |
-| type | 项目类型 | String | 4 | Y | `DD01`=随机立减，`CP01`=抵金券 |
-| offstAmt | 抵消交易金额 | String | 14 | Y | 不能为全 `0`，单位元 |
+| spnsrId | 出资方 | String | 20 | N | `00010000`=银联出资，也可能为付款方机构代码或商户代码 |
+| type | 项目类型 | String | 4 | N | `DD01`=随机立减，`CP01`=抵金券 |
+| offstAmt | 抵消交易金额 | String | 14 | N | 不能为全 `0`，单位元 |
 | id | 项目编号 | String | 40 | N | 用于票券编号等 |
 | desc | 项目简称 | String | 40 | N | 优惠活动简称 |
 
@@ -195,10 +195,10 @@
 | loan_acct_type | 垫资账户类型 | String | 2 | N | `01`=基本户，`05`=充值户，默认充值户 |
 | org_out_order_id | 原外部订单号 | String | 128 | N | 扫码退款返回 |
 | unionpay_response | 银联返回的响应报文 | String(JSON Object) | 6000 | N | 扫码退款返回 |
-| dy_response | 抖音返回的响应报文 | String（子表编码待确认） | 6000 | N | 官网未声明 JSON；子字段只作合同展示路径 |
+| dy_response | 抖音返回的响应报文 | String(JSON Object) | 6000 | N | 先解码JSON对象字符串，再读取子字段 |
 | trans_finish_time | 退款完成时间 | String | 14 | N | `yyyyMMddHHmmss` |
 
-`dy_response` 的父字段只有 `String(6000)` 证据，官网没有说明 JSON 编码；其展开子字段保留为合同定位路径，但真实样本或官方确认前不得生成固定 JSON decode 路径。
+`dy_response:String(JSON Object)(6000)` 的编码已由正式说明明确，先解码字符串再读取退款子字段，旧编码疑义已关闭。
 
 ### 同步成功示例
 
@@ -237,8 +237,8 @@
 ## 文档勘误与实现备注
 
 - 公共返回参数表声明顶层 `sign` 必返，但官方成功示例只展示了 `data`，没有展示 `sign`。
-- `trans_stat` 的说明列给出了 `P/S/F/I` 四种状态，但同一行示例值写成 `TRANS_REFUND`；当前保留该官方冲突记录，字段取值仍只按 `P/S/F/I` 输出和解析，不要生成 `TRANS_REFUND` 作为 `trans_stat` 示例。
-- `unionpay_response.coupon_info` 的类型列写为 `Object`，说明又写成 `jsonArray` 格式；完整目录为遍历子项保留 `coupon_info[]` 路径，但传输容器类型仍标记 `[官方文档口径冲突]`。没有真实样本或官方确认前，不得把 Object 或 Array 任一方写成不可变 DTO 结论。
+- 2026-10-10官网已将 `trans_stat` 示例修正为 S；枚举仍为P/S/F/I。I需联系汇付技术，不能改作退款成功。
+- `unionpay_response` 是JSON对象字符串，解码后其 `coupon_info` 仍是JSON数组字符串；先读取coupon_info，再二次解码为数组后遍历。Object/Array旧冲突已关闭，容器长度仍未声明。
 - `actual_ref_amt` 在官方成功示例里给的是空字符串，但字段表定义为金额字段；消费方不要只按数值型做强解析。
-- `split_fee_acct_id` 在本页长度写为 `16`，而退款申请异步文档中的同名字段长度写为 `9`；当前按本页官方表保留，并显式记录跨页不一致。
+- 本页与退款申请异步的 `split_fee_acct_id` 长度均为16，旧跨页长度冲突已关闭；本页Y、退款异步N各自保留。
 - 本页 `org_req_date`、`org_req_seq_id` 指向退款请求本身，不是原支付交易；这是退款查询最容易用错的地方。

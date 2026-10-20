@@ -30,16 +30,42 @@ def forbid(text: str, *needles: str) -> None:
         assert needle not in text, f"stale/forbidden reviewed contract: {needle}"
 
 
+def validate_current_atomic_fields() -> None:
+    """Pin the revised field semantics in the human-facing atomic tables."""
+    contracts = {
+        "hostingpay-preorder-h5-pc-response.md": {"trans_finish_time": ("String", "13", "N")},
+        "hostingpay-preorder-alipay-mini.md": {"trans_finish_time": ("String", "13", "N")},
+        "hostingpay-preorder-wechat-mini.md": {"trans_finish_time": ("String", "13", "N"), "req_seq_id": ("String", "64", "Y")},
+        "hostingpay-preorder-h5-pc-response-channel.md": {"cash_fee": ("String", "12", "N"), "coupon_fee": ("String", "12", "N"), "coupon_info": ("Object", "-", "N")},
+        "hostingpay-query-payment-status-query.md": {"cash_fee": ("String", "12", "N"), "coupon_fee": ("String", "12", "N"), "coupon_info": ("String(JSON Array)", "-", "N")},
+        "hostingpay-refund-query.md": {"coupon_info": ("String(JSON Array)", "-", "N"), "spnsrId": ("String", "20", "N"), "type": ("String", "4", "N"), "offstAmt": ("String", "14", "N"), "dy_response": ("String(JSON Object)", "6000", "N"), "trans_finish_time": ("String", "14", "N")},
+    }
+    for filename, fields in contracts.items():
+        seen = set()
+        for line in read(filename).splitlines():
+            if not line.startswith("|"):
+                continue
+            cells = [cell.strip().strip('`') for cell in re.split(r'(?<!\\)\|', line.strip('|'))]
+            if len(cells) != 6 or cells[0] not in fields:
+                continue
+            name = cells[0]
+            assert tuple(cells[2:5]) == fields[name], (filename, name, cells[2:5])
+            seen.add(name)
+        assert seen == fields.keys(), (filename, fields.keys()-seen)
+    print("current atomic payment tables validated: timestamp, decimal strings, array encoding and optionality")
+
+
 def main() -> int:
+    validate_current_atomic_fields()
     matrix = read("shared-server-sdk-matrix.md")
     require(
         matrix,
         "dg-java-sdk",
-        "3.0.40",
-        "2.0.30",
-        "2.0.24",
+        "3.0.41",
+        "2.0.31",
+        "2.0.28",
         "官方 SDK-only 传输规则",
-        "不存在本 Skill 曾从历史源码快照推断的 TLS 问题",
+        "非阻断开发提醒",
         "三种语言的真实请求都使用官方 Request/facade/client",
         "不得手写 HTTP 补位",
         "V2TradeHostingPaymentPreorderDyRequest",
@@ -144,7 +170,7 @@ def main() -> int:
         "#### `response.data.split_fee_info.split_fee_details[]`",
         "### `response.data.unionpay_response`",
         "#### `response.data.unionpay_response.coupon_info[]`",
-        "[官方文档口径冲突]",
+        "旧冲突已关闭",
     )
 
     hosting_refund = read("hostingpay-refund.md")
@@ -159,12 +185,10 @@ def main() -> int:
         "`split_fee_info.split_fee_details[]`",
         "| `org_hf_seq_id` | String | 128 | C | 与 `org_req_seq_id` 二选一，不能都为空 |",
         "| `org_req_seq_id` | String | 128 | C | 与 `org_hf_seq_id` 二选一，不能都为空 |",
-        "[官方文档口径冲突]",
         "risk_check_data.ip_addr",
-        "risk_check_data.ip_address",
-        "risk_check_data.risk_mng_info.sub_trade_type",
-        "String（子表编码待确认）",
-        "wire 子表编码和 JSON decode 路径均为 `[需要官方确认]`",
+        "旧风控示例冲突已关闭",
+        "String(JSON Object)",
+        "退款异步外层仍标为 `data`",
     )
     for snippet in (
         "| `org_ord_amt` | String | 14 | Y |",
@@ -181,11 +205,11 @@ def main() -> int:
     skill = (ROOT / "huifu-pay-integration/SKILL.md").read_text(encoding="utf-8")
     require(
         skill,
-        "Lightning Java `1.0.5`",
-        "通用 Java `3.0.40`",
-        "PHP `2.0.30`",
+        "Lightning Java `1.0.6`",
+        "通用 Java `3.0.41`",
+        "PHP `2.0.31`",
         "## 官方 SDK-only 传输规则",
-        "不存在本 Skill 曾从历史源码快照推断的 TLS 问题",
+        "非阻断开发提醒",
         "真实请求都必须使用对应官方 SDK",
         "不得为了“规避 TLS”",
         "完整 DTO、完整响应、嵌套字段或同名字段核对",
@@ -194,8 +218,8 @@ def main() -> int:
         "实际 JSON/解码路径",
         "不把官网展示分组当成 wire key",
         "按当前请求实际加载并参与生成的 Skill 集合取值",
-        "仅本 Skill 使用 `hfps/1.3.5`",
-        "两个 Skill 都参与当前请求时使用 `hfps/1.3.5;hfms/1.0.2`",
+        "仅本 Skill 使用 `hfps/1.4.0`",
+        "两个 Skill 都参与当前请求时使用 `hfps/1.4.0;hfms/1.0.5`",
         "顺序固定为支付、进件",
         "官方 `BsPayDemo/loader.php` 与 `Composer/BsPayConfig.php`",
         "加载任何 SDK 文件前固定 `DEBUG=false`",
@@ -204,8 +228,8 @@ def main() -> int:
     header_policy = read("shared-request-header-policy.md")
     require(
         header_policy,
-        "仅支付：hfps/1.3.5",
-        "支付 + 进件：hfps/1.3.5;hfms/1.0.2",
+        "仅支付：hfps/1.4.0",
+        "支付 + 进件：hfps/1.4.0;hfms/1.0.5",
         "双 Skill 顺序固定为支付、进件",
         "英文分号且不加空格",
         "原样透传该值，不再追加默认值",
@@ -289,7 +313,10 @@ def main() -> int:
         async_notify,
         "https://paas.huifu.com/partners/start/ybxx/jiekouguifan_ybxx.md",
         "同时指向同一接口页的“聚合正扫异步返回参数”和“聚合反扫异步返回参数”两套通知参数",
-        "按实际 `trade_type` 选择对应数据面",
+        "验签后按通知 `resp_data.trans_type` 与已匹配原订单的 `trade_type` 核对",
+        "请求/同步的 `trade_type` 不能作为通知中已声明字段读取",
+        "缺失时可依据已匹配的落库原交易核对",
+        "无法匹配或类型冲突时先查单核对",
         "HTTP `500-599` 默认重试 `3` 次",
         "不能把所有错误统一写成“最多 3 次”",
         "不得据此让商户接收端、SDK 或主动请求客户端关闭 TLS",
@@ -361,7 +388,7 @@ def main() -> int:
             f"{filename}: missing official PHP SDK network call"
         )
 
-    print("payment first-review contract validated: security, routing and high-risk fields")
+    print("payment review contract validated: security, routing and high-risk fields")
     return 0
 
 

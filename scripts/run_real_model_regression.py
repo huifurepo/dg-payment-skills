@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
 import json
 import os
@@ -64,6 +65,7 @@ REGRESSION_WORKSPACE_ENTRIES = REGRESSION_WORKSPACE_BASE_ENTRIES + (
 REGRESSION_SOURCE_ENTRIES = REGRESSION_WORKSPACE_ENTRIES + (
     SDK_SOURCE_LOCK_RELATIVE,
     "scripts/run_real_model_regression.py",
+    "scripts/validate_code_examples.py",
     "scripts/huifu-payment-test-prompts.json",
     "tests/regression/user-onboarding.json",
     "tests/regression/cross-route.json",
@@ -145,7 +147,6 @@ REFERENCE_MENTION_PATTERN = re.compile(
     rf"(?:({'|'.join(map(re.escape, SKILL_IDS))})/)?"
     r"(?:references/)?([A-Za-z0-9_.-]+\.md)"
 )
-MAX_LISTED_REFERENCES = 5
 PHP_TEMPLATE_FORBIDDEN = (
     r"\bnew\s+\\?hostingclient\b",
     r"\bclass\s+\\?hostingclient\b",
@@ -153,12 +154,6 @@ PHP_TEMPLATE_FORBIDDEN = (
     r"\bclass\s+\\?aggregationclient\b",
     r"\bcurl\s*_\s*init\s*\(",
     r"\bcurl\s*_\s*setopt\s*\(",
-)
-CHECKOUT_INSTALL_FORBIDDEN = (
-    r"\bnpm\s+install\b",
-    r"\bpnpm\s+add\b",
-    r"\byarn\s+add\b",
-    r"<\s*script\b[^>]*\bsrc\s*=",
 )
 CHECKOUT_CALLBACK_FORBIDDEN = (
     r"callback\s*成功\s*(就是|即|等于)\s*最终成功",
@@ -222,20 +217,20 @@ IMAGE_FALLBACK_UNSAFE_ATTACKS = (
 
 RULES: dict[int, CaseRule] = {
     1: CaseRule((("shared-overview",), ("copilot-onboarding",), ("copilot-solution-selection",), ("Java",), ("聚合支付", "托管支付", "H5"))),
-    2: CaseRule((("aggregation-refund",), ("aggregation-php-adapter",), ("aggregation-query-php-scenarios",), ("Payment::refund", "refundQuery"), ("skill_source", "MerConfig.skill_source"), ("PHP", "2.0.30"), ("官方 SDK",), ("不存在", "不再"), ("TLS",), ("Guzzle", "curl", "手写 HTTP")), PHP_TEMPLATE_FORBIDDEN),
+    2: CaseRule((("aggregation-refund",), ("aggregation-php-adapter",), ("aggregation-query-php-scenarios",), ("Payment::refund", "refundQuery"), ("skill_source", "MerConfig.skill_source"), ("PHP", "2.0.31"), ("官方 SDK",), ("不存在", "不再"), ("TLS",), ("Guzzle", "curl", "手写 HTTP")), PHP_TEMPLATE_FORBIDDEN),
     3: CaseRule((("checkout-js",), ("checkout-js-callback-and-confirmation",), ("hostingpay-query",), ("hostingpay-async-webhook",), ("前端回调不等于", "前端回调不能", "前端 callback 不等于", "前端 `callback` 不等于", "callback 不等于", "不是最终成功", "非支付终态", "均非支付终态", "均不等于最终支付成功", "均不等于最终成功", "callback 只传", "不改终态", "不能直接改已支付", "不要直接改订单为已支付", "不要信前端 callback"))),
     4: CaseRule((("checkout-js",), ("checkout-js-callback-and-confirmation",), ("hostingpay-async-webhook",), ("跳过", "不再读", "暂时不要读", "已完成阶段")), CHECKOUT_CALLBACK_FORBIDDEN),
-    5: CaseRule((REFERENCE_EVIDENCE_TERMS, ("shared-server-sdk-matrix",), ("hostingpay-php-adapter",), ("jpt-x-skill-source",), ("jpt-x-skill-huifu_id",), ("HTTP 请求头", "HTTP 头", "请求头"), ("MerConfig.skill_source", "MerConfig` 配置", "MerConfig 配置", "'skill_source'", '"skill_source"'), ("hfps/1.3.5",), ("仅支付", "只实际加载", "本次仅", "未参与"), ("自动",), ("DEBUG",), ("false",), ("BsPayDemo/loader.php",), ("Composer/BsPayConfig.php",), ("加载任何 SDK", "加载 SDK 前", "SDK 文件前"), ("BsPay::init",), ("私钥",), ("不得复用", "不能复用", "禁止使用", "不得使用"))),
+    5: CaseRule((REFERENCE_EVIDENCE_TERMS, ("shared-server-sdk-matrix",), ("hostingpay-php-adapter",), ("jpt-x-skill-source",), ("jpt-x-skill-huifu_id",), ("HTTP 请求头", "HTTP 头", "请求头"), ("MerConfig.skill_source", "MerConfig` 配置", "MerConfig 配置", "'skill_source'", '"skill_source"'), ("hfps/1.4.0",), ("仅支付", "只实际加载", "本次仅", "未参与"), ("自动",), ("DEBUG",), ("false",), ("BsPayDemo/loader.php",), ("Composer/BsPayConfig.php",), ("加载任何 SDK", "加载 SDK 前", "SDK 文件前"), ("BsPay::init",), ("私钥",), ("不得复用", "不能复用", "禁止使用", "不得使用"))),
     6: CaseRule((("Java",), ("MerConfig.setSkillSource",), ("jpt-x-skill-source",), ("jpt-x-skill-huifu_id",), ("huifu_id",))),
     7: CaseRule((("huifurepo/dg-php-sdk", "dg-php-sdk"), ("BsPayClient::postRequest",), ("request 类", "request类", "V2TradeHostingPaymentPreorderH5Request"), ("skill_source",)), PHP_TEMPLATE_FORBIDDEN),
-    8: CaseRule((("硬检查点",), ("checkout-js",), ("不能单独", "不能直接", "不能只靠前端"), ("托管预下单",), ("查单", "异步通知")), CHECKOUT_INSTALL_FORBIDDEN),
+    8: CaseRule((("checkout-js",), ("不能单独", "不能直接", "不能只靠前端"), ("托管预下单",), ("异步通知",), ("查单",), ("待确认", "未确认", "待接入"), ("TODO", "待填配置", "待配置"), ("callback", "前端回调")), CHECKOUT_CALLBACK_FORBIDDEN + (r"(?<!不)(?<!未)(?<!不能)(?<!尚未)(?:已经|已)完成(?:服务端|支付)?闭环[，,；;：:]?可(?:直接)?上线",)),
     9: CaseRule((("aggregation-order",), ("aggregation-php-adapter",), ("aggregation-query-php-scenarios",), ("Payment::create", "$payment->create", "->create("), ("TradePaymentCreateRequest",)), PHP_TEMPLATE_FORBIDDEN),
     10: CaseRule((("aggregation-query",), ("aggregation-php-adapter",), ("aggregation-query-php-scenarios",), ("Payment::query", "$payment->query", "->query("), ("close()", "closeQuery", "$payment->close", "->close("), ("落库", "持久化")), PHP_TEMPLATE_FORBIDDEN),
     11: CaseRule((("BsPayClient::postRequest", "$client->postRequest"), ("V2TradeCheckFilequeryRequest",), ("aggregation-query",), ("aggregation-php-adapter",), ("aggregation-query-php-scenarios",)), PHP_TEMPLATE_FORBIDDEN),
-    12: CaseRule((("dg-java-sdk",), ("3.0.40",), ("V2TradeCheckFilequeryRequest",), ("BasePayClient.request",), ("aggregation-query",), ("aggregation-query-reconciliation",), ("手写 HTTP", "不要给"), ("不存在", "不再"), ("TLS",)), (r"(?:return\s+|=\s*)HttpClientUtils\.sendPost\(", r"HttpClientUtils\.sendPost\([^)]*\)\s*;")),
+    12: CaseRule((("dg-java-sdk",), ("3.0.41",), ("V2TradeCheckFilequeryRequest",), ("BasePayClient.request",), ("aggregation-query",), ("aggregation-query-reconciliation",), ("手写 HTTP", "不要给"), ("不存在", "不再"), ("TLS",)), (r"(?:return\s+|=\s*)HttpClientUtils\.sendPost\(", r"HttpClientUtils\.sendPost\([^)]*\)\s*;")),
     13: CaseRule((("hostingpay-refund",), ("hostingpay-refund-query",), ("req_date",), ("req_seq_id",), ("huifu_id",), ("ord_amt",), ("org_req_date",), ("loan_flag", "垫资"), ("risk_check_data",), ("bank_info_data", "银行大额"))),
     14: CaseRule((("aggregation-refund",), ("aggregation-refund-query",), ("不传 `tx_metadata`", "不传 tx_metadata", "不要传 `tx_metadata`", "不要包 `tx_metadata`", "不要包 tx_metadata", "不要套 `tx_metadata`", "不要套 tx_metadata", "禁止包在请求 `tx_metadata`", "禁止包在 tx_metadata"), ("acct_split_bunch",), ("combinedpay_data",), ("device_type=4", "device_type`=4", "device_type` 为 `4", 'device_type="4"', "device_type='4'"), ("org_hf_seq_id",), ("org_req_seq_id",), ("mer_ord_id",))),
-    15: CaseRule((("huifurepo/dg-php-sdk",), ("2.0.30",), ("composer require",), ("composer update", "--with-all-dependencies"), ("api.github.com/repos/huifurepo/bspay-php-sdk/zipball", "备用下载", "GitHub"), ("BsPaySdk/init.php", "init.php"), ("BsPay::init",), ("skill_source",), ("HUIFU_SDK_ROOT",), ("HUIFU_SYS_ID",), ("HUIFU_RSA_PRIVATE_KEY",), ("require_once",), ("request 类", "request类", "Request 类", "Request类", "TradePaymentCreateRequest"), ("官方 SDK",), ("不存在", "不再"), ("TLS",), ("DEBUG",)), PHP_TEMPLATE_FORBIDDEN),
+    15: CaseRule((("huifurepo/dg-php-sdk",), ("2.0.31",), ("composer require",), ("composer update", "--with-all-dependencies"), ("api.github.com/repos/huifurepo/bspay-php-sdk/zipball", "备用下载", "GitHub"), ("BsPaySdk/init.php", "init.php"), ("BsPay::init",), ("skill_source",), ("HUIFU_SDK_ROOT",), ("HUIFU_SYS_ID",), ("HUIFU_RSA_PRIVATE_KEY",), ("require_once",), ("request 类", "request类", "Request 类", "Request类", "TradePaymentCreateRequest"), ("官方 SDK",), ("不存在", "不再"), ("TLS",), ("DEBUG",)), PHP_TEMPLATE_FORBIDDEN),
     16: CaseRule((REFERENCE_EVIDENCE_TERMS, ("接入判断卡",), ("首次接入",), ("聚合支付",), ("Java",), ("用户类型",), ("产品线",), ("阶段",), ("技术栈",), ("端形态",), ("当前目标", "目标：", "目标:"), ("还缺", "缺少", "待补", "补齐"))),
     17: CaseRule((REFERENCE_EVIDENCE_TERMS, ("copilot-existing-system",), ("存量系统", "增量接入"), ("建议新增",), ("建议保留",), ("人工确认",), ("落库字段", "落库"), ("风险点", "风险"), ("回归检查", "回归"), ("不重写", "不直接替换"), ("callback", "前端回调", "同步受理"))),
     18: CaseRule((REFERENCE_EVIDENCE_TERMS, ("托管支付",), ("H5/PC", "H5 / PC"), ("project_id",), ("托管项目状态", "项目状态", "托管项目须已开通", "状态可交易", "托管项目、支付方式配置须处于可用状态"), ("notify_url",), ("callback_url",), ("前端回跳", "前端回调", "页面回跳不代表支付成功", "浏览器跳回", "浏览器支付后回跳", "`callback_url` 只负责", "`callback_url`仅负责"), ("查单", "异步通知"), ("方案卡", "推荐方案", "建议新增"), ("存量系统", "存量"))),
@@ -273,12 +268,12 @@ RULES: dict[int, CaseRule] = {
     50: CaseRule((REFERENCE_EVIDENCE_TERMS, ("payment-operations-faq",), ("copilot-troubleshooting-playbooks",), ("退款一直处理中", "处理中"), ("退款查询", "轮询"), ("不换流水", "不要换流水", "不能换流水"), ("请求频率过高", "频率", "降频", "并发重试"), ("降频", "等待终态", "停止并发", "至少等待"), ("延时分账", "确认退款", "已确认部分", "未确认部分"), ("未确认部分可按交易退款", "未确认部分可以按交易退款")), (r"未确认(?:部分|分账|资金).{0,20}(?:先|先行)确认.{0,12}(?:再|然后)退款",)),
     51: CaseRule((REFERENCE_EVIDENCE_TERMS, ("payment-operations-faq",), ("official-service-source-index",), ("对账文件", "对账"), ("配置", "开通"), ("跑批", "任务状态", "task_stat"), ("DM", "取现"), ("发票",), ("转人工", "运营", "税务"), ("不写支付代码", "不是代码", "不由代码", "不能写代码解决", "不能写支付代码解决", "不是支付接口字段")), OFFICIAL_REMOTE_URL_FORBIDDEN),
     52: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-faq",), ("copilot-troubleshooting-playbooks",), ("huifu_id",), ("本次响应返回了商户号", "响应返回了商户号", "只表示本次响应返回了商户号", "只证明已返回商户号", "仅表示已返回商户号"), ("业务开通",), ("token_no",), ("银行卡",), ("结算",), ("取现",), ("实名",), ("补齐资料", "补资料"), ("不等于", "不能等同", "不代表", "不能当成"), ("交易可用", "可交易")), (r"(?:缺少|没有|无)\s*token_no.{0,24}不影响.{0,16}(?:银行卡|绑卡|支付)",)),
-    53: CaseRule((REFERENCE_EVIDENCE_TERMS, ("hostingpay-faq",), ("hostingpay-refund",), ("setProductId",), ("3.0.40", "最新"), ("setProcutId",), ("不要再生成", "不要再用", "旧文档", "旧"), ("extendInfoMap", "Map<String, Object> ext", "ext.put"), ("org_req_seq_id",), ("setExtendInfo",), ("不是 SDK bug", "不应说这是 SDK bug", "不是 bug", "不按 SDK bug", "不直接按 SDK bug")), (r"(?:没有|无)\s*setter.{0,24}(?:判定为|就是|属于).{0,12}(?:sdk\s*)?bug.{0,24}(?:反射|私有setter|私有方法)",)),
+    53: CaseRule((REFERENCE_EVIDENCE_TERMS, ("hostingpay-faq",), ("hostingpay-refund",), ("setProductId",), ("3.0.41", "最新"), ("setProcutId",), ("不要再生成", "不要再用", "旧文档", "旧"), ("extendInfoMap", "Map<String, Object> ext", "ext.put"), ("org_req_seq_id",), ("setExtendInfo",), ("不是 SDK bug", "不应说这是 SDK bug", "不是 bug", "不按 SDK bug", "不直接按 SDK bug")), (r"(?:没有|无)\s*setter.{0,24}(?:判定为|就是|属于).{0,12}(?:sdk\s*)?bug.{0,24}(?:反射|私有setter|私有方法)",)),
     54: CaseRule((REFERENCE_EVIDENCE_TERMS, ("copilot-existing-system",), ("存量业务系统首次接汇付", "存量系统增量接入", "存量系统"), ("第一次接汇付", "首次接入汇付"), ("不能因为", "仅代表新增渠道", "只是新增渠道", "不改变存量属性", "仍是存量", "存量业务系统首次接入汇付"), ("建议新增",), ("建议保留",), ("人工确认",), ("落库字段", "落库"), ("风险点", "风险"), ("回归检查", "回归"), ("不重写", "不直接替换"))),
     55: CaseRule((REFERENCE_EVIDENCE_TERMS, ("copilot-troubleshooting-playbooks",), ("official-service-source-index",), ("AI 技能包技术支持", "技术支持"), ("https://paas.huifu.com/docs/devtools/#/skillsv1_0?id=support",), ("脱敏",), ("问题描述",), ("环境",), ("接口路径",), ("SDK 版本", "SDK版本", "SDK 名称及版本"), ("请求",), ("响应",), ("流水",), ("时间",), ("日志",), ("影响范围",), ("已执行动作", "已做动作", "已执行的排查", "排查项"), ("真实密钥", "敏感数据", "生产敏感"))),
     56: CaseRule((REFERENCE_EVIDENCE_TERMS, ("shared-local-sandbox",), ("local-sandbox", "本地沙箱"), ("本地联调通过", "本地通过", "沙箱通过", "local-sandbox 通过"), ("不代表官方联调通过", "不等于官方联调通过", "不等于官方联调", "不能代表官方联调", "只有官方联调结论"), ("不代表具备生产上线条件", "不等于生产上线", "不等于官方联调、生产准入", "不代表真实权限、通道、风控、资金结果或生产准入已验证", "不能直接上线", "不能直接生产上线", "不适用：直接切生产"), ("真实商户权限", "真实权限"), ("通道",), ("费率",), ("风控",), ("资金结果",), ("copilot-go-live-checklist", "上线检查")), (r"(?:因此|所以|这就|即|结论.{0,4})可以直接上线", r"已经具备生产上线", r"(?:说明|意味着|等于|可视为)官方联调通过")),
     57: CaseRule(
-        (REFERENCE_EVIDENCE_TERMS, ("硬检查点",), ("主体类型", "企业/个体", "无执照个人"), ("确认", "请确认"), ("不能", "不应", "不要"), ("生成", "请求")),
+        (REFERENCE_EVIDENCE_TERMS, ("暂停", "不能生成可提交请求", "不能直接生成", "不能生成", "不应生成", "硬检查点"), ("主体类型", "企业/个体", "无执照个人"), ("确认", "请确认"), ("不能", "不应", "不要"), ("生成", "请求")),
         (
             r"\bnew\s+v2merchantbasicdata(?:ent|indv)request\b",
             r"\{(?=[^。]{0,900}req_seq_id)(?=[^。]{0,900}req_date)(?=[^。]{0,900}(?:reg_name|license_code|legal_cert_no))[^。]{0,900}\}",
@@ -288,8 +283,8 @@ RULES: dict[int, CaseRule] = {
     58: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-image-upload",), ("file_url",), ("file", "文件流"), ("互斥", "不能同时", "二选一"), ("JPG", "BMP", "PNG"), ("2MB", "2M"), ("Java",), ("BasePayClient.upload",), ("PHP",), ("Python",), ("专用",), ("不可直接", "不能直接", "不得直接"), ("通用 POST", "自写 HTTPS", "受控降级"), ("multipart",), ("data",), ("加签", "签名"), ("TLS",), ("需要官方确认", "[需要官方确认]", "未确认边界", "尚无可核验")), IMAGE_FALLBACK_UNSAFE_FORBIDDEN),
     59: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-enterprise",), ("merchant-onboarding-business-open",), ("merchant-onboarding-application-status-query",), ("huifu_id",), ("不等于", "不能", "不代表"), ("可交易",), ("实名", "渠道"), ("电子协议", "con_stat"), ("申请状态", "补偿查询"))),
     60: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-business-open", "merchant-onboarding-field-contracts"), ("ord_id",), ("RECV_ORD_ID_",), ("req_seq_id",), ("审核",), ("电子协议",), ("需要官方确认", "[需要官方确认]"), ("不能", "不得", "不套用"))),
-    61: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-image-upload",), ("shared-request-header-policy",), ("shared-server-sdk-matrix",), ("file_url",), ("file", "本地文件"), ("互斥", "不能同时", "二选一"), ("Java",), ("BasePayClient.request",), ("multipart", "文本字段"), ("BasePay.debug",), ("false",), ("PHP",), ("Python",), ("专用",), ("不可直接", "不能直接", "不得直接"), ("通用 POST", "自写 HTTPS", "受控降级"), ("data",), ("加签", "签名"), ("TLS",), ("JSON body", "JSON 请求体", "JSON body"), ("hfms/1.0.4",), ("hfps/1.3.5;hfms/1.0.4",), ("仅进件",), ("支付", "两个 Skill", "双 Skill"), ("不猜测", "不得猜测", "不能推断", "不推断", "不得臆测", "臆测", "实际返回标识", "不得猜字段", "不能猜字段", "不猜字段")), IMAGE_FALLBACK_UNSAFE_FORBIDDEN),
-    62: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-image-upload", "shared-request-header-policy", "shared-server-sdk-matrix"), ("Python",), (PYTHON_SDK_VERSION,), ("专用",), ("不可直接", "不能直接", "不得直接"), ("DGTools.request_post",), ("request_tools.request_post",), ("need_sign=True", "need_sign = True"), ("file",), ("file_url",), ("multipart",), ("JSON body", "JSON 请求体"), ("jpt_x_skill_source",), ("huifu_id",), ("sign_type",), ("RSA",), ("关键字",), ("hfms/1.0.4",), ("仅进件", "只实际使用", "未参与"), ("不能", "不可以", "不得")), IMAGE_FALLBACK_UNSAFE_FORBIDDEN + SENSITIVE_MATERIAL_FORBIDDEN),
+    61: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-image-upload",), ("shared-request-header-policy",), ("shared-server-sdk-matrix",), ("file_url",), ("file", "本地文件"), ("互斥", "不能同时", "二选一"), ("Java",), ("BasePayClient.request",), ("multipart", "文本字段"), ("BasePay.debug",), ("false",), ("PHP",), ("Python",), ("专用",), ("不可直接", "不能直接", "不得直接"), ("通用 POST", "自写 HTTPS", "受控降级"), ("data",), ("加签", "签名"), ("TLS",), ("JSON body", "JSON 请求体", "JSON body"), ("hfms/1.0.5",), ("hfps/1.4.0;hfms/1.0.5",), ("仅进件",), ("支付", "两个 Skill", "双 Skill"), ("不猜测", "不得猜测", "不能推断", "不推断", "不得臆测", "臆测", "实际返回标识", "不得猜字段", "不能猜字段", "不猜字段")), IMAGE_FALLBACK_UNSAFE_FORBIDDEN),
+    62: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-image-upload", "shared-request-header-policy", "shared-server-sdk-matrix"), ("Python",), (PYTHON_SDK_VERSION,), ("专用",), ("不可直接", "不能直接", "不得直接"), ("DGTools.request_post",), ("request_tools.request_post",), ("need_sign=True", "need_sign = True"), ("file",), ("file_url",), ("multipart",), ("JSON body", "JSON 请求体"), ("jpt_x_skill_source",), ("huifu_id",), ("sign_type",), ("RSA",), ("关键字",), ("hfms/1.0.5",), ("仅进件", "只实际使用", "未参与"), ("不能", "不可以", "不得")), IMAGE_FALLBACK_UNSAFE_FORBIDDEN + SENSITIVE_MATERIAL_FORBIDDEN),
     63: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-image-upload",), ("file_url",), ("file", "本地文件"), ("互斥", "不能同时", "二选一"), ("Java",), ("BasePayClient",), ("PHP",), ("Python",), ("通用 POST", "自写 HTTPS", "受控降级"), ("multipart",), ("data",), ("加签", "签名"), ("TLS",), ("需要官方确认", "[需要官方确认]"), ("响应", "file_id", "文件标识"), ("重试",), ("不得", "不能", "拒绝")), IMAGE_FALLBACK_UNSAFE_FORBIDDEN),
     64: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-detail-query", "merchant-onboarding-field-contracts"), ("req_seq_id", "String(32)"), ("req_date", "String(8)", "北京时间"), ("huifu_id", "String(18)"), ("必填",), ("data",), ("白名单", "最小化")), SENSITIVE_MATERIAL_FORBIDDEN),
     65: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-application-status-query", "merchant-onboarding-field-contracts"), ("req_seq_id", "String(32)"), ("req_date", "String(8)"), ("apply_no", "String(18)"), ("huifu_id", "String(18)"), ("data.apply_status",), ("data.reg_status",), ("reg_result_list[].business_stat",), ("data.bank_card_conf_status", "bank_card_conf_status"), ("bind_card_status",), ("cash_status",), ("settle_status",), ("union_conf_status",), ("out_order_funds_status",), ("P/S/F",), ("处理中",), ("成功",), ("失败",), ("data.wx_zl_config.apply_state",), ("String(32)",), ("data.ali_zl_config[].apply_status",), ("data.agreement_info_list[].con_stat",), ("String(2)",), ("不能", "不要", "不应"), ("合并", "混用", "混为"))),
@@ -462,7 +457,7 @@ RULES: dict[int, CaseRule] = {
             ("35",),
             ("8",),
             ("27",),
-            ("无异步", "无通知", "没有异步"),
+            ("无异步", "无通知", "没有异步", "异步通知：无"),
             ("fee_rate_type",),
             ("Array<string>",),
             ("多选",),
@@ -471,6 +466,10 @@ RULES: dict[int, CaseRule] = {
             ("没有专属", "无专属", "未找到"),
             ("通用调用入口", "通用入口"),
             ("BasePayClient.request", "funcCode"),
+            ("String(18)",),
+            ("2.0.28",),
+            ("验签失败", "兼容缺口"),
+            ("Java", "3.0.41"),
         ),
     ),
     79: CaseRule(
@@ -671,11 +670,10 @@ RULES: dict[int, CaseRule] = {
             ("扩展映射", "extend"),
             ("必须为空", "拒绝覆盖", "禁止覆盖"),
             ("split_trans_responses",),
-            ("Array",),
             ("String(JSON Array)", "JSON Array 字符串"),
-            ("冲突",),
-            ("硬停", "停止", "不得生成", "不能生成"),
-            ("参数表未声明", "示例独有", "不进入字段目录", "不进入 DTO"),
+            ("只解码一次", "解码一层", "一次解码", "JSON 解码一次"),
+            ("16", "十六"),
+            ("参数表没有声明", "参数表未声明", "示例独有", "不进入字段目录", "不进入 DTO", "不加入强类型正式响应 DTO"),
         ),
     ),
     85: CaseRule(
@@ -686,15 +684,14 @@ RULES: dict[int, CaseRule] = {
             ("response.data.method_expand",),
             ("String(JSON Object)", "JSON Object 字符串"),
             ("只解码一次", "一次解码"),
-            ("根层", "单层平铺", "根级"),
+            ("根层", "单层平铺", "根级", "根字段"),
             ("A_JSAPI",),
             ("A_NATIVE",),
             ("A_MICROPAY",),
-            ("文档场景分组", "文档分组", "展示分组"),
-            ("不是 wire key", "不是线上 key", "不是真实 key"),
+            ("文档场景分组", "文档分组", "展示分组", "参数表的场景分组"),
+            ("不是 wire key", "不是线上 key", "不是真实 key", "不是线上 wire key"),
             ("$.buyer_logon_id",),
-            ("A_IMICROPAY",),
-            ("文档错误", "官网成功示例错误", "官网示例笔误"),
+            ("勘误", "重复笔误", "说明笔误", "文档错误"),
             ("合同漂移",),
         ),
     ),
@@ -731,7 +728,7 @@ RULES: dict[int, CaseRule] = {
     207: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-image-upload",), ("user-onboarding-external-resources",), ("/v2/supplementary/picture",), ("data.huifu_id",), ("直属商户",), ("不支持",), ("userHuifuId",), ("Java",), ("PHP",), ("Python",), ("专用",), ("不可直接", "不能直接"), ("通用 POST", "自写 HTTPS", "受控"), ("multipart",))),
     208: CaseRule((REFERENCE_EVIDENCE_TERMS, ("shared-server-sdk-matrix",), ("user-onboarding-platform-contracts",), ("V2UserBasicdataEntRequest",), ("V2UserBasicdataIndvRequest",), ("V2UserBusiOpenRequest",), ("V2UserApplyQueryRequest",), ("V2UserBasicdataQueryRequest",), ("V2UserBasicdataEntModifyRequest",), ("V2UserBasicdataIndvModifyRequest",), ("V2UserBusiModifyRequest",), ("V2UserListQueryRequest",), ("四个", "四字段"), ("三个", "三字段"), ("upper_huifu_id",), ("sign_user_info",), ("String(JSON Object)",), ("一次", "序列化"), ("exact-key",), ("覆盖",), ("Y/N/C",), ("条件必填",), ("字段说明", "卡类型矩阵"), ("wire",), ("extendInfos", "extend_infos", "扩展字段"), ("Java",), ("官方 SDK",), ("CURLOPT_SSL_VERIFYPEER",), ("TLS",), ("非阻断", "不阻断", "仅提醒", "不硬停"), ("DEBUG",), ("手写 HTTP", "Guzzle", "HttpClient"))),
     209: CaseRule((REFERENCE_EVIDENCE_TERMS, ("user-onboarding-complete-field-catalog",), ("user-onboarding-field-contracts",), ("user-onboarding-platform-contracts",), ("43",), ("34",), ("136",), ("15",), ("165",), ("37",), ("26",), ("138",), ("17",), ("611",), ("333",), ("220",), ("58",), ("40",), ("53",), ("73",), ("538",), ("父节点", "父对象"), ("叶节点", "叶字段"), ("12",), ("19",), ("说明",), ("长度",), ("必填列",), ("file_list",), ("九个", "9个", "9 个"), ("注记",))),
-    210: CaseRule((REFERENCE_EVIDENCE_TERMS, ("shared-request-header-policy",), ("shared-credential-boundary",), ("hfms/1.0.4",), ("login_password",), ("证件号",), ("银行卡号",), ("手机号",), ("token_no",), ("脱敏",))),
+    210: CaseRule((REFERENCE_EVIDENCE_TERMS, ("shared-request-header-policy",), ("shared-credential-boundary",), ("hfms/1.0.5",), ("login_password",), ("证件号",), ("银行卡号",), ("手机号",), ("token_no",), ("脱敏",))),
     211: CaseRule((REFERENCE_EVIDENCE_TERMS, ("user-onboarding-platform-contracts",), ("shared-signing-v2",), ("user-onboarding-business-open",), ("async_return_url",), ("Webhook",), ("POST",), ("UTF-8",), ("data",), ("不排序", "免排序"), ("RSA",), ("HTTP 200",), ("RECV_ORD_ID_",), ("req_seq_id",), ("5秒", "5 秒"), ("500-599",), ("3次", "3 次"), ("幂等",))),
     212: CaseRule((REFERENCE_EVIDENCE_TERMS, ("user-onboarding-enterprise-modify",), ("user-onboarding-complete-field-catalog",), ("user-onboarding-field-contracts",), ("shared-server-sdk-matrix",), ("/v2/user/basicdata/ent/modify",), ("V2UserBasicdataEntModifyRequest",), ("37",), ("32",), ("5",), ("企业用户号",), ("legal_cert_type",), ("legal_cert_validity_type",), ("legal_cert_begin_date",), ("legal_cert_end_date",), ("legal_cert_nationality",), ("String(JSON Array)",), ("req_date",), ("req_seq_id",), ("huifu_id",), ("exact-key",), ("覆盖",), ("拒绝", "禁止", "不能", "硬停"))),
     213: CaseRule((REFERENCE_EVIDENCE_TERMS, ("user-onboarding-individual-modify",), ("user-onboarding-complete-field-catalog",), ("user-onboarding-field-contracts",), ("shared-server-sdk-matrix",), ("/v2/user/basicdata/indv/modify",), ("V2UserBasicdataIndvModifyRequest",), ("26",), ("21",), ("5",), ("个人用户号",), ("cert_validity_type",), ("0/1",), ("当前示例",), ("1",), ("String(JSON Array)",), ("file_id",), ("file_name",), ("64",), ("response.sign",), ("验签",), ("req_date",), ("req_seq_id",), ("huifu_id",), ("exact-key",), ("覆盖",), ("拒绝", "禁止", "不能", "硬停"))),
@@ -747,7 +744,7 @@ RULES: dict[int, CaseRule] = {
     308: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-wechat-config-query",), ("onboarding-extension-complete-field-catalog",), ("onboarding-extension-field-contracts",), ("onboarding-extension-shared-server-sdk-matrix",), ("/v2/merchant/busi/config/query",), ("V2MerchantBusiConfigQueryRequest",), ("32",), ("8",), ("24",), ("micro_sub_appid",), ("必填",), ("长度",), ("20",), ("512",), ("信封",), ("冲突",))),
     309: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-wechat-realname",), ("onboarding-extension-complete-field-catalog",), ("onboarding-extension-field-contracts",), ("onboarding-extension-external-resources",), ("onboarding-extension-shared-server-sdk-matrix",), ("/v2/merchant/busi/realname",), ("V2MerchantBusiRealnameRequest",), ("51",), ("45",), ("6",), ("条件必填",), ("联系人",), ("受益人",), ("金融机构",), ("特殊主体",), ("材料",), ("exact-key",), ("覆盖",))),
     310: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-wechat-realname-query",), ("onboarding-extension-complete-field-catalog",), ("onboarding-extension-field-contracts",), ("onboarding-extension-shared-server-sdk-matrix",), ("/v2/merchant/busi/realname/query",), ("V2MerchantBusiRealnameQueryRequest",), ("22",), ("9",), ("13",), ("APPLYMENT_STATE_EDITTING",), ("APPLYMENT_STATE_WAITTING_FOR_AUDIT",), ("APPLYMENT_STATE_WAITTING_FOR_CONFIRM_CONTACT",), ("APPLYMENT_STATE_WAITTING_FOR_CONFIRM_LEGALPERSON",), ("APPLYMENT_STATE_PASSED",), ("APPLYMENT_STATE_REJECTED",), ("APPLYMENT_STATE_FREEZED",), ("APPLYMENT_STATE_CANCELED",), ("APPLYMENT_STATE_NOAPPLY",), ("authorize_stat",), ("qrcode_data",), ("base64",), ("HTML",), ("DOM",), ("敏感",), ("冲突",))),
-    311: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-alipay-realname",), ("onboarding-extension-complete-field-catalog",), ("onboarding-extension-field-contracts",), ("onboarding-extension-external-resources",), ("onboarding-extension-shared-server-sdk-matrix",), ("/v2/merchant/busi/ali/realname/apply",), ("V2MerchantBusiAliRealnameApplyRequest",), ("69",), ("63",), ("6",), ("社会组织",), ("support_credentials",), ("String(JSON Array)",), ("冲突",), ("金融机构",), ("地区",), ("示例",), ("不得", "不能"), ("日志",))),
+    311: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-alipay-realname",), ("onboarding-extension-complete-field-catalog",), ("onboarding-extension-field-contracts",), ("onboarding-extension-external-resources",), ("onboarding-extension-shared-server-sdk-matrix",), ("/v2/merchant/busi/ali/realname/apply",), ("V2MerchantBusiAliRealnameApplyRequest",), ("69",), ("63",), ("6",), ("社会组织",), ("support_credentials",), ("String(JSON Object)",), ("小微",), ("必填",), ("冲突",), ("金融机构",), ("地区",), ("示例",), ("不得", "不能"), ("日志",))),
     312: CaseRule((REFERENCE_EVIDENCE_TERMS, ("merchant-onboarding-alipay-realname-query",), ("onboarding-extension-complete-field-catalog",), ("onboarding-extension-field-contracts",), ("onboarding-extension-shared-server-sdk-matrix",), ("/v2/merchant/busi/ali/realname/query",), ("V2MerchantBusiAliRealnameQueryRequest",), ("25",), ("9",), ("16",), ("response.sign",), ("验签",), ("申请",), ("授权",), ("子商户",), ("不等于", "不代表"))),
 }
 
@@ -931,7 +928,7 @@ SEMANTIC_FORBIDDEN_PATTERNS: dict[int, tuple[str, ...]] = {
         r"dgtools\s*\.\s*request_post\s*\([^)]{0,500}\bneed_sign\s*=",
         r"merconfig\s*\((?:[^,()]+,\s*){4}(?:jpt_x_skill_source|skill_source|source|['\"]hfms/)[^,)]*\)",
         r"(?:第五|第\s*5)个?(?:参数|位置|实参).{0,20}(?:填|传|使用|写).{0,12}(?:来源|skill_source|jpt_x_skill_source)",
-        r"(?:第五|第\s*5|5th|末尾|最后).{0,16}(?:参数|位置|实参|末参).{0,20}(?:huifu_id|merchant_id|商户号)|(?:huifu_id|merchant_id|商户号).{0,20}(?:第五|第\s*5|末参|merconfig)",
+        r"(?:第五|第\s*5|5th|末尾|最后).{0,16}(?:参数|位置|实参|末参).{0,20}(?:huifu_id|merchant_id|商户号)|(?:huifu_id|merchant_id|商户号).{0,20}(?:第五|第\s*5|末参|(?:作为|填入|传入|写入|放入|传给).{0,8}merconfig)",
         r"(?:省略|删除|不传|移除).{0,16}(?:data\s*\.\s*)?huifu_id.{0,24}(?:放|写|传|填).{0,12}(?:末参|merconfig|第五参数)",
         r"jpt_x_skill_source.{0,20}(?:填|写|设为|使用|传).{0,12}(?:huifu_id|merchant_id|商户号)|(?:huifu_id|merchant_id|商户号).{0,20}(?:写入|放入|填到|传到).{0,16}(?:来源头|jpt_x_skill_source)",
     ),
@@ -1207,8 +1204,8 @@ ATOMIC_FORBIDDEN_PATTERNS: dict[int, tuple[str, ...]] = {
 REQUIRED_ASSERTION_GROUPS: dict[int, tuple[tuple[str, ...], ...]] = {
     5: (
         (
-            r"(?:仅支付|只(?:实际)?(?:加载|使用)|本次仅).{0,80}hfps/1\.3\.5",
-            r"hfps/1\.3\.5.{0,80}(?:仅支付|只(?:实际)?(?:加载|使用)|本次仅|进件.{0,20}未参与)",
+            r"(?:仅支付|只(?:实际)?(?:加载|使用)|本次仅).{0,80}hfps/1\.4\.0",
+            r"hfps/1\.4\.0.{0,80}(?:仅支付|只(?:实际)?(?:加载|使用)|本次仅|进件.{0,20}未参与)",
         ),
     ),
     47: (
@@ -1599,13 +1596,13 @@ FORBIDDEN_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
         accepted=(
             "不能继续使用 setProcutId，退款申请也不得调用 setOrgReqSeqId。",
             "不能把编译失败判为 SDK bug 后反射私有 setter。",
-            "不得改用未核验 3.0.40；org_req_seq_id 不能放顶层绕过 setExtendInfo。",
+            "不得改用未核验 3.0.41；org_req_seq_id 不能放顶层绕过 setExtendInfo。",
         ),
         rejected=(
             "继续调用 setProcutId。",
             "退款申请调用 setOrgReqSeqId。",
             "没有 setter 就判定为 SDK bug 并反射私有 setter。",
-            "升级 dg-java-sdk 3.0.40。",
+            "升级 dg-java-sdk 3.0.41。",
             "org_req_seq_id 放请求顶层，不用 setExtendInfo。",
         ),
     ),
@@ -1671,6 +1668,12 @@ FORBIDDEN_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
             "Java SDK 对 data 加签，不得把本地文件字节自行拼进签名原文。",
             "Java 本地文件使用官方 BasePayClient.upload，不自行组装 multipart。",
             "调用方不得自动业务重试。",
+            "故网络失败按结果未知处理，不自动重放。",
+            "单次上传，不执行自动业务重试。",
+            "file 与 file_url 两者都为空是否合法未确认；实际请求必须二选一。",
+            "file 与 file_url 官网没有说明两者都为空是否合法；实际请求必须明确提供一种。",
+            "SDK连接重试不等于图片接口的业务重试合同。",
+            "每次最多发起一次远程调用，不在此方法中自动重试。",
             "PHP 可用 Guzzle multipart 降级，但必须对 data 加签并保持 TLS 校验。",
             "Python 可用 requests files 的顶层 file part，并显式保持请求签名。",
         ),
@@ -1678,6 +1681,8 @@ FORBIDDEN_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
             "成功响应的 data.pictureKey 就是文件标识，读取后继续进件。",
             "HTTP 200 就代表上传成功。",
             "失败后 for 循环重放上传三次。",
+            "网络失败按结果未知处理，但应自动重放上传三次。",
+            "SDK连接重试不等于业务重试，但失败后应自动重放上传三次。",
             "待签名串直接拼接 imageBytes 即可。",
             "接口支持 GIF，图片上限 10MB。",
             "file_url 和 file 两者可以都不传。",
@@ -1753,6 +1758,7 @@ FORBIDDEN_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
             "第五个参数不能传来源，必须显式使用关键字 sign_type 和 jpt_x_skill_source。",
             "MerConfig 第五参数不能传 huifu_id，jpt_x_skill_source 也不得填写商户号。",
             "data.huifu_id 必须保留；不得把 huifu_id 放到 MerConfig 末参。",
+            'huifu_id 应放在签名后的 data 中，且仅可填已确认的直属商户号：\nMerConfig(..., sign_type="RSA", jpt_x_skill_source="hfms/1.0.5")。',
         ),
         rejected=(
             "DGTools.request_post(uri, data, need_sign=True)。",
@@ -1761,6 +1767,7 @@ FORBIDDEN_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
             "-----BEGIN " + "PRIVATE KEY-----",
             "MIIEvg" + "A" * 80,
             "MerConfig(sys_id, product_id, rsa, pub, huifu_id)。",
+            'huifu_id 应放在 data 中；实际 MerConfig(private, public, sys_id, product_id, huifu_id)。',
             "第五个参数位置传 merchant_id。",
             "省略 data.huifu_id，把它放到 MerConfig 末参。",
             "jpt_x_skill_source 填 huifu_id。",
@@ -2068,18 +2075,22 @@ FORBIDDEN_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
     82: ForbiddenBoundaryFixture(
         accepted=(
             "银联补开不能走 /v2/merchant/busi/modify，应使用 /v2/merchant/busi/open。",
+            "银联补开走 /v2/merchant/busi/open。微信、支付宝、抖音补开走 /v2/merchant/busi/modify。",
         ),
         rejected=(
             "银联补开选择 /v2/merchant/busi/modify。",
+            "微信、支付宝、抖音和银联补开都走 /v2/merchant/busi/modify。",
             "银联不能走 /v2/merchant/busi/modify，应走 /v2/merchant/busi/open。实施结论：POST /v2/merchant/busi/modify。",
         ),
     ),
     83: ForbiddenBoundaryFixture(
         accepted=(
             "微信补开不得调用 /v2/merchant/busi/open，应使用 /v2/merchant/busi/modify。",
+            "微信补开走 /v2/merchant/busi/modify。银行卡、银联补开走 /v2/merchant/busi/open。",
         ),
         rejected=(
             "微信补开应调用 /v2/merchant/busi/open。",
+            "银行卡、银联和微信补开都走 /v2/merchant/busi/open。",
             "微信不得走 /v2/merchant/busi/open，应走 /v2/merchant/busi/modify。实施结论：POST /v2/merchant/busi/open。",
         ),
     ),
@@ -2107,7 +2118,7 @@ FORBIDDEN_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
         ),
         rejected=(
             "AbstractRequest 不会打印私钥。",
-            "线上应升级 dg-java-sdk 3.0.40。",
+            "线上应升级 dg-java-sdk 3.0.42。",
             "企业共用 V2MerchantBasicdataRequest。",
             "业务类使用 V2MerchantBusiopenRequest。",
             "关闭 debug 只影响响应验签，不影响请求签名。",
@@ -2212,7 +2223,7 @@ huifu_id 或业务已提交不等于可交易。实名、渠道、电子协议 c
 
 CASE_61_SAFE_RESPONSE = """本轮实际使用 references：merchant-onboarding-image-upload.md、shared-request-header-policy.md、shared-server-sdk-matrix.md。
 file_url 与本地 file 互斥、二选一。当前只有 Java 3.0.41 支持：BasePayClient.request(request, true) 对图片 URI 使用 multipart 文本字段，并须在任何 SDK 请求前以 BasePay.debug=false 防止输出私钥和请求数据。
-PHP/Python 专用生成实现不可直接调用，但可仅为图片接口使用受控通用 POST 或自写 HTTPS 降级：file_url 仍发 multipart 文本字段，对 data 加签并启用 TLS 校验，不能走通用 JSON body。未显式配置 skill_source 时，仅进件实际参与默认 hfms/1.0.4；双 Skill 默认 hfps/1.3.5;hfms/1.0.4。URL 使用受控 HTTPS且禁止记录；响应标识和业务重试 [需要官方确认]，不得猜测响应标识或自动重试。"""
+PHP/Python 专用生成实现不可直接调用，但可仅为图片接口使用受控通用 POST 或自写 HTTPS 降级：file_url 仍发 multipart 文本字段，对 data 加签并启用 TLS 校验，不能走通用 JSON body。未显式配置 skill_source 时，仅进件实际参与默认 hfms/1.0.5；双 Skill 默认 hfps/1.4.0;hfms/1.0.5。URL 使用受控 HTTPS且禁止记录；响应标识和业务重试 [需要官方确认]，不得猜测响应标识或自动重试。"""
 
 CASE_63_SAFE_RESPONSE = """本轮实际使用 references：merchant-onboarding-image-upload.md。
 file_url 与本地 file 互斥、必须二选一。Java 使用官方 BasePayClient；PHP/Python 可仅为 /v2/supplementary/picture 生成受控通用 POST 或自写 HTTPS multipart 降级，并保持 data 加签与 TLS 校验。不得自动重试或猜测响应 file_id；文件标识及业务重试均 [需要官方确认]。"""
@@ -2247,7 +2258,19 @@ CASE_68_REQUEST_THREAD_SAFE_RESPONSE = """本轮实际使用 references：mercha
 dg-java-sdk 3.0.41；公共 AbstractRequest 可能打印私钥、签名和请求数据。BasePay.debug 默认 true，在进程启动初始化阶段、任何 SDK 请求之前仅设置一次 BasePay.debug=false；禁止在请求或线程间动态开关。关闭仅停止调试输出，不影响请求签名和响应验签。
 V2MerchantBasicdataEntRequest、V2MerchantBasicdataIndvRequest、V2MerchantBusiOpenRequest、V2MerchantBasicdataQueryRequest、V2MerchantBasicdataStatusQueryRequest、V2MerchantBusiModifyRequest、V2MerchantBasicdataModifyRequest、V2MerchantBusiModifyBusistatusRequest、V2MerchantBasicdataSmsSendRequest。"""
 
+CASE_8_SKELETON_SAFE_RESPONSE = """本轮实际使用 references：checkout-js.md、checkout-js-create-preorder-contract.md、checkout-js-callback-and-confirmation.md、checkout-js-component-modes.md、checkout-js-framework-integration-notes.md、hostingpay-async-webhook.md、hostingpay-query.md。
+checkout-js不能单独形成支付闭环，服务端托管预下单、异步通知验签/幂等和查单补偿尚未确认。
+可先执行 npm install @dg-elements/js-sdk 并生成组件骨架；预下单配置、通知处理与最终确认接口留TODO，待接入后再联调。
+前端callback不代表最终支付成功，不能以这个骨架宣称已经可上线。"""
+
 FULL_RESPONSE_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
+    8: ForbiddenBoundaryFixture(
+        accepted=(CASE_8_SKELETON_SAFE_RESPONSE,),
+        rejected=(
+            CASE_8_SKELETON_SAFE_RESPONSE + "\n前端回调成功就是最终成功。",
+            CASE_8_SKELETON_SAFE_RESPONSE + "\n已经完成支付闭环，可直接上线。",
+        ),
+    ),
     3: ForbiddenBoundaryFixture(
         accepted=(
             CASE_3_SAFE_RESPONSE,
@@ -2339,17 +2362,17 @@ FULL_RESPONSE_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
             CASE_32_SAFE_RESPONSE + "\n原 1.3.2 已被当前版本替代。",
             CASE_32_SAFE_RESPONSE + "\n旧文档曾写“当前版本是 1.3.2”，该说法已过期。",
             CASE_32_SAFE_RESPONSE + "\n历史文档中“当前本地 Skill 版本是 1.3.2”已经过期，不应再采用。",
-            CASE_32_SAFE_RESPONSE + "\n历史上的当前本地 Skill 版本是 1.3.2，如今已被 1.3.5 替代。",
-            CASE_32_SAFE_RESPONSE + "\n历史版本曾为 1.3.2，但当前版本仍是 1.3.5。",
+            CASE_32_SAFE_RESPONSE + "\n历史上的当前本地 Skill 版本是 1.3.2，如今已被 1.4.0 替代。",
+            CASE_32_SAFE_RESPONSE + "\n历史版本曾为 1.3.2，但当前版本仍是 1.4.0。",
             CASE_32_SAFE_RESPONSE + "\n1.3.2 不再是当前版本。",
             CASE_32_SAFE_RESPONSE + "\n1.3.2 曾是当前版本，但已被替代。",
-            CASE_32_SAFE_RESPONSE + "\n旧版 1.3.2 现已切换到 1.3.5。",
+            CASE_32_SAFE_RESPONSE + "\n旧版 1.3.2 现已切换到 1.4.0。",
             CASE_32_SAFE_RESPONSE + "\n旧版 1.3.2 现已废弃。",
             CASE_32_SAFE_RESPONSE + "\n文档曾称当前版本为 1.3.2，该表述现已废弃。",
             CASE_32_SAFE_RESPONSE + "\n“最新版本是 1.3.2”属于无效旧说法。",
-            CASE_32_SAFE_RESPONSE + "\n不应使用 1.3.2，应使用 1.3.5。",
-            CASE_32_SAFE_RESPONSE + "\n部署清单不得锁定 1.3.2，应锁定 1.3.5。",
-            CASE_32_SAFE_RESPONSE + "\n版本选择器不应返回 1.3.2，应返回 1.3.5。",
+            CASE_32_SAFE_RESPONSE + "\n不应使用 1.3.2，应使用 1.4.0。",
+            CASE_32_SAFE_RESPONSE + "\n部署清单不得锁定 1.3.2，应锁定 1.4.0。",
+            CASE_32_SAFE_RESPONSE + "\n版本选择器不应返回 1.3.2，应返回 1.4.0。",
         ),
         rejected=(
             CASE_32_SAFE_RESPONSE + "\n不过实际当前版本是 1.3.2，应以这个为准。",
@@ -2369,9 +2392,9 @@ FULL_RESPONSE_BOUNDARY_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
             CASE_32_SAFE_RESPONSE + "\n真正有效的是 1.3.2。",
             CASE_32_SAFE_RESPONSE + "\n1.3.2 才是正式版本。",
             CASE_32_SAFE_RESPONSE + "\n正确版本应为 1.3.2。",
-            CASE_32_SAFE_RESPONSE + "\n应使用 1.3.2，不要使用 1.3.5。",
-            CASE_32_SAFE_RESPONSE + "\n版本选择器应返回 1.3.2，1.3.5 不要使用。",
-            CASE_32_SAFE_RESPONSE + "\n部署清单必须锁定 1.3.2，不能装载 1.3.5。",
+            CASE_32_SAFE_RESPONSE + "\n应使用 1.3.2，不要使用 1.4.0。",
+            CASE_32_SAFE_RESPONSE + "\n版本选择器应返回 1.3.2，1.4.0 不要使用。",
+            CASE_32_SAFE_RESPONSE + "\n部署清单必须锁定 1.3.2，不能装载 1.4.0。",
             CASE_32_SAFE_RESPONSE + "\n版本口径以旧版 1.3.2 为权威。",
             CASE_32_SAFE_RESPONSE + "\n安装时请选择 1.3.2。",
         ),
@@ -2764,7 +2787,7 @@ sub_mch_id、sub_appid 必须和商户绑定，sub_openid 必须来自同一个 
     52: """本轮实际使用 references：merchant-onboarding-faq.md、copilot-troubleshooting-playbooks.md。
 huifu_id 只表示本次响应返回了商户号，不等于交易可用。继续核对业务开通、token_no、银行卡、结算、取现、实名和补齐资料；未返回标识时保留响应并查询，不盲目换流水重提。""",
     53: """本轮实际使用 references：hostingpay-faq.md、hostingpay-refund.md。
-dg-java-sdk 3.0.40 使用 setProductId，不要再用旧的 setProcutId。退款 org_req_seq_id 没有独立 setter，应放入 Map<String, Object> extendInfoMap，再调用 setExtendInfo；这不是 SDK bug。""",
+dg-java-sdk 3.0.41 使用 setProductId，不要再用旧的 setProcutId。退款 org_req_seq_id 没有独立 setter，应放入 Map<String, Object> extendInfoMap，再调用 setExtendInfo；这不是 SDK bug。""",
     55: """本轮实际使用 references：copilot-troubleshooting-playbooks.md、official-service-source-index.md。
 AI 技能包技术支持：https://paas.huifu.com/docs/devtools/#/skillsv1_0?id=support 。提交脱敏的问题描述、环境、接口路径、SDK 名称及版本、请求/响应、流水、时间、日志、影响范围和已执行动作；不得提交真实密钥或生产敏感数据。""",
     56: """本轮实际使用 references：shared-local-sandbox.md、copilot-go-live-checklist.md。
@@ -2776,7 +2799,7 @@ local-sandbox 本地联调通过不代表官方联调通过，也不代表具备
     60: CASE_60_SAFE_RESPONSE,
     61: CASE_61_SAFE_RESPONSE,
     62: """本轮实际使用 references：merchant-onboarding-image-upload.md、shared-request-header-policy.md、shared-server-sdk-matrix.md。
-Python 2.0.28 的图片专用 Request 不可直接使用。DGTools.request_post 不暴露签验开关，本地文件可用 core.request_tools.request_post，但必须显式 need_sign=True、补齐官网字段且文件键为 file；file_url 必须改用 multipart 文本字段的通用 POST/自写 HTTPS 降级，不能走通用 JSON body。MerConfig 第五参数是 sign_type，第六参数才是 jpt_x_skill_source，使用关键字 sign_type="RSA", jpt_x_skill_source=skill_source，不能传 huifu_id；huifu_id 只放业务 data。未显式配置且本次仅进件实际参与时必须传 hfms/1.0.4；仅安装但未参与的支付 Skill 不计入。代码仅使用占位符，不输出真实值。""",
+Python 2.0.28 的图片专用 Request 不可直接使用。DGTools.request_post 不暴露签验开关，本地文件可用 core.request_tools.request_post，但必须显式 need_sign=True、补齐官网字段且文件键为 file；file_url 必须改用 multipart 文本字段的通用 POST/自写 HTTPS 降级，不能走通用 JSON body。MerConfig 第五参数是 sign_type，第六参数才是 jpt_x_skill_source，使用关键字 sign_type="RSA", jpt_x_skill_source=skill_source，不能传 huifu_id；huifu_id 只放业务 data。未显式配置且本次仅进件实际参与时必须传 hfms/1.0.5；仅安装但未参与的支付 Skill 不计入。代码仅使用占位符，不输出真实值。""",
     63: CASE_63_SAFE_RESPONSE,
     64: """本轮实际使用 references：merchant-onboarding-detail-query.md、merchant-onboarding-field-contracts.md。
 req_seq_id 为 String(32) 必填，req_date 为北京时间 String(8) 必填，huifu_id 为 String(18) 必填；请求置于 data。响应从 data 白名单最小化读取，禁止记录高敏原文。""",
@@ -2815,6 +2838,16 @@ INDEPENDENT_REVIEW_FULL_FIXTURES: dict[int, ForbiddenBoundaryFixture] = {
 }
 
 
+RULES.update({
+    4001: CaseRule((("balancepay-pay",), ("out_huifu_id",), ("acct_split_bunch",), ("risk_check_data",), ("String(JSON", "JSON字符串", "JSON 字符串"), ("verify_value",), ("C",), ("5分钟", "5 分钟"))),
+    4002: CaseRule((("balancepay-query",), ("V2TradeAcctpaymentPayQueryRequest",), ("org_req_date",), ("org_req_seq_id",), ("org_hf_seq_id",), ("扩展",), ("不生成", "不需要", "没有新的", "无须", "无需"))),
+    4003: CaseRule((("balancepay-refund",), ("23000004",), ("org_req_seq_id",), ("org_hf_seq_id",), ("原",), ("分账",), ("ord_amt",), ("冲突", "疑义"))),
+    4004: CaseRule((("balancepay-refund-query",), ("org_req_seq_id",), ("org_req_date",), ("huifu_id",), ("退款",), ("P",), ("S",), ("F",), ("不", "无"))),
+    4005: CaseRule((("balancepay-fee-calc",), ("ACCT_PAYMENT",), ("trans_amt",), ("试算",), ("最终",), ("冲突", "疑义"))),
+    4006: CaseRule((("balancepay-pay-relation",), ("pay_relations",), ("ADD",), ("DEL",), ("confirm_url",), ("确认",), ("String(JSON Array)", "JSON数组字符串", "JSON 数组字符串"))),
+    4007: CaseRule((("balancepay-sms",), ("DGTools.request_post",), ("/v2/trade/sms/verifycode/send",), ("out_huifu_id",), ("ACCT_PAYMENT",), ("5分钟", "5 分钟"), ("通用",), ("无专属", "没有专属", "无匹配专属", "无匹配的专属"))),
+})
+
 def main() -> int:
     global REGRESSION_WORKSPACE_ENTRIES, REGRESSION_SOURCE_ENTRIES
     args = parse_args()
@@ -2822,6 +2855,7 @@ def main() -> int:
     REGRESSION_SOURCE_ENTRIES = REGRESSION_WORKSPACE_ENTRIES + (
         SDK_SOURCE_LOCK_RELATIVE,
         "scripts/run_real_model_regression.py",
+        "scripts/validate_code_examples.py",
         "scripts/huifu-payment-test-prompts.json",
         "tests/regression/user-onboarding.json",
         "tests/regression/cross-route.json",
@@ -3145,11 +3179,41 @@ def validate_rule_definitions(cases: list[PromptCase]) -> list[str]:
         (
             1019,
             "路由结论：both\n先由进件 Skill 开户，再交接支付 Skill 收款。"
-            "\n默认 jpt-x-skill-source：hfps/1.3.5;hfms/1.0.4。"
+            "\n默认 jpt-x-skill-source：hfps/1.4.0;hfms/1.0.5。"
             "\n本轮实际使用 references："
             "huifu-merchant-onboarding/references/shared-overview.md、"
             "huifu-pay-integration/references/shared-overview.md",
             True,
+        ),
+        (
+            1019,
+            "路由结论：both\n进件模块负责开户；支付模块负责收款。"
+            "\n默认 jpt-x-skill-source：hfps/1.4.0;hfms/1.0.5。"
+            "\n本轮实际使用 references："
+            "huifu-merchant-onboarding/references/shared-overview.md、"
+            "huifu-pay-integration/references/shared-overview.md",
+            True,
+        ),
+        (
+            1019,
+            "路由结论：both\n两个Skill为huifu-merchant-onboarding、huifu-pay-integration。"
+            "\n默认 jpt-x-skill-source：hfps/1.4.0;hfms/1.0.5。"
+            "\n本轮实际使用 references："
+            "huifu-merchant-onboarding/references/shared-overview.md、"
+            "huifu-pay-integration/references/shared-overview.md",
+            False,
+        ),
+        (
+            1032,
+            "路由结论：onboarding\n本轮使用进件 Skill。\n本轮实际使用 references："
+            "huifu-merchant-onboarding/references/user-onboarding-enterprise.md",
+            True,
+        ),
+        (
+            1032,
+            "路由结论：payment\n本轮使用进件 Skill。\n本轮实际使用 references："
+            "huifu-merchant-onboarding/references/user-onboarding-enterprise.md",
+            False,
         ),
         (
             1019,
@@ -3169,7 +3233,7 @@ def validate_rule_definitions(cases: list[PromptCase]) -> list[str]:
         (
             1019,
             "路由结论：both\n先由进件 Skill 开户，再交接支付 Skill。"
-            "\n正确组合不是 hfps/1.3.5;hfms/1.0.4，而是 hfms/1.0.4;hfps/1.3.5。"
+            "\n正确组合不是 hfps/1.4.0;hfms/1.0.5，而是 hfms/1.0.5;hfps/1.4.0。"
             "\n本轮实际使用 references："
             "huifu-merchant-onboarding/references/shared-overview.md、"
             "huifu-pay-integration/references/shared-overview.md",
@@ -3187,74 +3251,85 @@ def validate_rule_definitions(cases: list[PromptCase]) -> list[str]:
                 f"case {case_id}: cross-route fixture expected "
                 f"{'pass' if should_pass else 'reject'}: {text!r}"
             )
+    python_sdk_fixtures = (
+        ('dg_sdk.MerConfig(private_key=private_key, public_key=public_key, sys_id=sys_id, product_id=product_id, sign_type="RSA", jpt_x_skill_source=source)', True),
+        ('dg_sdk.MerConfig(sys_id, product_id, private_key, public_key, sign_type="RSA", jpt_x_skill_source=source)', False),
+        ('dg_sdk.MerConfig(private_key, public_key, sys_id, product_id, sign_type="RSA", jpt_x_skill_source=source)', False),
+        ('from dg_sdk.utils import DGTools', False),
+        ('"fee_rate_type": ["WX_FEE_RATE", "ALI_FEE_RATE"]', True),
+        ('marker = ...\ndg_sdk.MerConfig(sys_id, product_id, private_key, public_key, sign_type="RSA", jpt_x_skill_source=source)', False),
+    )
+    for code, should_pass in python_sdk_fixtures:
+        if (not generated_python_sdk_errors("```python\n" + code + "\n```")) != should_pass:
+            errors.append(f"Python SDK constructor/import fixture failed: {code!r}")
     source_policy_fixtures = (
-        (5, "本次仅支付，默认值为 hfps/1.3.5。", True),
+        (5, "本次仅支付，默认值为 hfps/1.4.0。", True),
         (5, "本次仅支付，默认值为 hfps/1.3.4。", False),
-        (5, "本次仅支付，默认值为 hfps/1.3.5。最终默认使用 hfps/1.3.4。", False),
-        (5, "本次仅支付，默认值为 hfps/1.3.5。历史默认值为 hfps/1.3.4。", True),
-        (5, "当前默认值为 hfps/1.3.5，历史默认值为 hfps/1.3.4。", True),
-        (5, "本次仅支付，默认值为 hfps/1.3.5。外部合同显式配置 hfps/1.3.4 时原样透传，不改为默认值。", True),
-        (5, "本次仅支付，默认值为 hfps/1.3.5。外部合同显式指定默认值为 hfps/1.3.4，需要原样透传。", True),
-        (5, "本次仅支付，默认值为 hfps/1.3.5。外部合同显式配置已记录，但当前默认值为 hfps/1.3.4。", False),
-        (5, "本次仅支付，默认值为 hfps/1.3.5。不得默认使用 hfps/1.3.4。", True),
-        (5, "本次仅支付，默认值为 hfps/1.3.5。历史默认值为 hfps/1.3.4，但最终默认使用 hfps/1.3.4。", False),
-        (5, "本次仅支付，默认值为 `hfps/1.3.5`。", True),
-        (5, '本次仅支付，默认值为 "hfps/1.3.5",', True),
-        (5, "本次仅支付，默认值为 hfps/1.3.5evil。", False),
-        (5, "本次仅支付，默认值为 hfps/1.3.50。", False),
-        (5, "先提 hfps/1.3.5，最终使用 hfps/1.3.5; hfms/1.0.4。", False),
+        (5, "本次仅支付，默认值为 hfps/1.4.0。最终默认使用 hfps/1.3.4。", False),
+        (5, "本次仅支付，默认值为 hfps/1.4.0。历史默认值为 hfps/1.3.4。", True),
+        (5, "当前默认值为 hfps/1.4.0，历史默认值为 hfps/1.3.4。", True),
+        (5, "本次仅支付，默认值为 hfps/1.4.0。外部合同显式配置 hfps/1.3.4 时原样透传，不改为默认值。", True),
+        (5, "本次仅支付，默认值为 hfps/1.4.0。外部合同显式指定默认值为 hfps/1.3.4，需要原样透传。", True),
+        (5, "本次仅支付，默认值为 hfps/1.4.0。外部合同显式配置已记录，但当前默认值为 hfps/1.3.4。", False),
+        (5, "本次仅支付，默认值为 hfps/1.4.0。不得默认使用 hfps/1.3.4。", True),
+        (5, "本次仅支付，默认值为 hfps/1.4.0。历史默认值为 hfps/1.3.4，但最终默认使用 hfps/1.3.4。", False),
+        (5, "本次仅支付，默认值为 `hfps/1.4.0`。", True),
+        (5, '本次仅支付，默认值为 "hfps/1.4.0",', True),
+        (5, "本次仅支付，默认值为 hfps/1.4.0evil。", False),
+        (5, "本次仅支付，默认值为 hfps/1.4.00。", False),
+        (5, "先提 hfps/1.4.0，最终使用 hfps/1.4.0; hfms/1.0.5。", False),
         (
             5,
-            "本次仅支付，先写 hfps/1.3.5，最终使用 hfps/1.3.5;hfms/1.0.4，不能再省略。",
+            "本次仅支付，先写 hfps/1.4.0，最终使用 hfps/1.4.0;hfms/1.0.5，不能再省略。",
             False,
         ),
-        (62, "本次仅进件，默认值为 hfms/1.0.4。", True),
+        (62, "本次仅进件，默认值为 hfms/1.0.5。", True),
         (62, "本次仅进件，默认值为 hfms/1.0.3。", False),
-        (62, "本次仅进件，默认值为 hfms/1.0.4。最终默认使用 hfms/1.0.3。", False),
-        (62, "当前默认值为 hfms/1.0.4，历史默认值为 hfms/1.0.3。", True),
-        (62, "默认值为 hfms/1.0.4。外部合同显式配置 hfms/1.0.3 时原样透传。", True),
-        (62, "默认值为 hfms/1.0.4。外部合同显式指定默认值为 hfms/1.0.3，需要原样透传。", True),
-        (62, "默认值为 hfms/1.0.4。不应默认使用 hfms/1.0.3。", True),
-        (62, "默认值为 hfms/1.0.4。历史默认值为 hfms/1.0.3，但最终默认使用 hfms/1.0.3。", False),
-        (62, "本次仅进件，默认值为 `hfms/1.0.4`。", True),
-        (62, '本次仅进件，默认值为 "hfms/1.0.4",', True),
-        (62, "本次仅进件，默认值为 hfms/1.0.4evil。", False),
-        (62, "本次仅进件，默认值为 hfms/1.0.40。", False),
-        (62, "默认使用 hfps/1.3.5;hfms/1.0.4。", False),
+        (62, "本次仅进件，默认值为 hfms/1.0.5。最终默认使用 hfms/1.0.3。", False),
+        (62, "当前默认值为 hfms/1.0.5，历史默认值为 hfms/1.0.3。", True),
+        (62, "默认值为 hfms/1.0.5。外部合同显式配置 hfms/1.0.3 时原样透传。", True),
+        (62, "默认值为 hfms/1.0.5。外部合同显式指定默认值为 hfms/1.0.3，需要原样透传。", True),
+        (62, "默认值为 hfms/1.0.5。不应默认使用 hfms/1.0.3。", True),
+        (62, "默认值为 hfms/1.0.5。历史默认值为 hfms/1.0.3，但最终默认使用 hfms/1.0.3。", False),
+        (62, "本次仅进件，默认值为 `hfms/1.0.5`。", True),
+        (62, '本次仅进件，默认值为 "hfms/1.0.5",', True),
+        (62, "本次仅进件，默认值为 hfms/1.0.5evil。", False),
+        (62, "本次仅进件，默认值为 hfms/1.0.50。", False),
+        (62, "默认使用 hfps/1.4.0;hfms/1.0.5。", False),
         (
             62,
-            "本次仅进件，先写 hfms/1.0.4，最终使用 hfps/1.3.5;hfms/1.0.4，不能再省略。",
+            "本次仅进件，先写 hfms/1.0.5，最终使用 hfps/1.4.0;hfms/1.0.5，不能再省略。",
             False,
         ),
-        (1019, "双 Skill 默认值为 hfps/1.3.5;hfms/1.0.4。", True),
-        (1019, "双 Skill 默认值为 hfps/1.3.5;hfms/1.0.3。", False),
-        (1019, "双 Skill 默认值为 hfps/1.3.5;hfms/1.0.4。最终默认使用 hfps/1.3.5;hfms/1.0.3。", False),
-        (1019, "双 Skill 默认值为 hfps/1.3.5;hfms/1.0.4。历史默认值为 hfps/1.3.5;hfms/1.0.3。", True),
-        (1019, "双 Skill 默认值为 hfps/1.3.5;hfms/1.0.4。外部合同显式指定默认值为 hfps/1.3.5;hfms/1.0.3，需要原样透传。", True),
-        (1019, "双 Skill 默认值为 hfps/1.3.5;hfms/1.0.4。不应默认使用 hfps/1.3.5;hfms/1.0.3。", True),
-        (1019, "双 Skill 默认值为 hfps/1.3.5;hfms/1.0.3。", False),
-        (1019, "双 Skill 默认值为 hfps/1.3.5;hfms/1.0.4。最终默认使用 hfps/1.3.5;hfms/1.0.3。", False),
-        (1019, "双 Skill 默认值为 hfps/1.3.5;hfms/1.0.4。历史默认值为 hfps/1.3.5;hfms/1.0.3。", True),
-        (1019, "双 Skill 默认值为 hfps/1.3.5;hfms/1.0.4。外部合同显式配置 hfps/1.3.5;hfms/1.0.3 时原样透传，不改为默认值。", True),
-        (1019, "双 Skill 默认值为 hfps/1.3.5;hfms/1.0.4。外部合同显式指定默认值为 hfps/1.3.5;hfms/1.0.3，需要原样透传。", True),
-        (1019, "双 Skill 默认值为 hfps/1.3.5;hfms/1.0.4。不应默认使用 hfps/1.3.5;hfms/1.0.3。", True),
-        (1019, "双 Skill 默认值为 `hfps/1.3.5;hfms/1.0.4`。", True),
-        (1019, '双 Skill 默认值为 "hfps/1.3.5;hfms/1.0.4",', True),
-        (1019, "双 Skill 默认值为 hfps/1.3.5;hfms/1.0.4evil。", False),
-        (1019, "双 Skill 默认值为 hfps/1.3.5;hfms/1.0.40。", False),
+        (1019, "双 Skill 默认值为 hfps/1.4.0;hfms/1.0.5。", True),
+        (1019, "双 Skill 默认值为 hfps/1.4.0;hfms/1.0.3。", False),
+        (1019, "双 Skill 默认值为 hfps/1.4.0;hfms/1.0.5。最终默认使用 hfps/1.4.0;hfms/1.0.3。", False),
+        (1019, "双 Skill 默认值为 hfps/1.4.0;hfms/1.0.5。历史默认值为 hfps/1.4.0;hfms/1.0.3。", True),
+        (1019, "双 Skill 默认值为 hfps/1.4.0;hfms/1.0.5。外部合同显式指定默认值为 hfps/1.4.0;hfms/1.0.3，需要原样透传。", True),
+        (1019, "双 Skill 默认值为 hfps/1.4.0;hfms/1.0.5。不应默认使用 hfps/1.4.0;hfms/1.0.3。", True),
+        (1019, "双 Skill 默认值为 hfps/1.4.0;hfms/1.0.3。", False),
+        (1019, "双 Skill 默认值为 hfps/1.4.0;hfms/1.0.5。最终默认使用 hfps/1.4.0;hfms/1.0.3。", False),
+        (1019, "双 Skill 默认值为 hfps/1.4.0;hfms/1.0.5。历史默认值为 hfps/1.4.0;hfms/1.0.3。", True),
+        (1019, "双 Skill 默认值为 hfps/1.4.0;hfms/1.0.5。外部合同显式配置 hfps/1.4.0;hfms/1.0.3 时原样透传，不改为默认值。", True),
+        (1019, "双 Skill 默认值为 hfps/1.4.0;hfms/1.0.5。外部合同显式指定默认值为 hfps/1.4.0;hfms/1.0.3，需要原样透传。", True),
+        (1019, "双 Skill 默认值为 hfps/1.4.0;hfms/1.0.5。不应默认使用 hfps/1.4.0;hfms/1.0.3。", True),
+        (1019, "双 Skill 默认值为 `hfps/1.4.0;hfms/1.0.5`。", True),
+        (1019, '双 Skill 默认值为 "hfps/1.4.0;hfms/1.0.5",', True),
+        (1019, "双 Skill 默认值为 hfps/1.4.0;hfms/1.0.5evil。", False),
+        (1019, "双 Skill 默认值为 hfps/1.4.0;hfms/1.0.50。", False),
         (
             1019,
-            "正确组合不是 hfps/1.3.5;hfms/1.0.4，而是 hfms/1.0.4;hfps/1.3.5。",
-            False,
-        ),
-        (
-            1019,
-            "先写 hfps/1.3.5;hfms/1.0.4，最终改为 hfms/1.0.4;hfps/1.3.5，不能再省略。",
+            "正确组合不是 hfps/1.4.0;hfms/1.0.5，而是 hfms/1.0.5;hfps/1.4.0。",
             False,
         ),
         (
             1019,
-            "先写 hfps/1.3.5;hfms/1.0.4，最终改为 hfps/1.3.5; hfms/1.0.4，不能再省略。",
+            "先写 hfps/1.4.0;hfms/1.0.5，最终改为 hfms/1.0.5;hfps/1.4.0，不能再省略。",
+            False,
+        ),
+        (
+            1019,
+            "先写 hfps/1.4.0;hfms/1.0.5，最终改为 hfps/1.4.0; hfms/1.0.5，不能再省略。",
             False,
         ),
     )
@@ -3728,10 +3803,11 @@ def build_prompt(case: PromptCase, load_mode: str) -> str:
     return (
         "你是回归受测模型。" + entry
         + f"当前隔离加载模式为 `{load_mode}`。"
-        "禁止凭通用支付经验回答；最终回答必须用“本轮实际使用 references：”列出不超过 5 份实际读取的 reference 文件名、关键 SDK 类或方法。"
+        "禁止凭通用支付经验回答；最终回答必须用“本轮实际使用 references：”列出实际读取的 reference 文件名、关键 SDK 类或方法，资料数量按当前任务需要。"
         "暂不读、暂不推荐、禁止动作里不要列具体 .md 文件名。"
         "可以读取本地文件；禁止修改文件、联网或执行真实支付请求。"
-        "回答控制在 500 字以内，只输出最终回答正文。\n\n"
+        "本套件同时审查当前目标接口的完整合同与SDK边界：按需核对方向/节点数量、字段英文名与类型/长度/条件、wire编码、状态与通知、官方SDK调用和安全初始化、来源头及已知差异；不把未确认部分写成既定协议。"
+        "先回答用户重点，再给直接相关的合同与实现依据；完整字段清单及代码不得因固定字数省略，简单问题保持简洁。只输出最终回答正文。\n\n"
         f"用户问题：{case.prompt}"
     )
 
@@ -3775,8 +3851,6 @@ def evaluate_case(
     missing.extend(required_assertion_missing(case.case_id, text))
     reference_paths = extract_reference_mentions(text)
     policy_errors = []
-    if len(reference_paths) > MAX_LISTED_REFERENCES:
-        policy_errors.append(f"too many references listed: {len(reference_paths)} > {MAX_LISTED_REFERENCES}")
     if case.suite == "cross-route":
         policy_errors.extend(
             cross_route_policy_errors(case, text, reference_paths, load_mode)
@@ -3784,6 +3858,7 @@ def evaluate_case(
     policy_errors.extend(skill_source_policy_errors(case.case_id, text))
     policy_errors.extend(development_advisory_errors(case.case_id, text))
     forbidden_hits = case_forbidden_matches(case.case_id, text, rule.forbidden + SENSITIVE_MATERIAL_FORBIDDEN)
+    forbidden_hits.extend(generated_python_sdk_errors(text))
     passed = returncode == 0 and not missing and not forbidden_hits and not policy_errors
     return CaseResult(case.case_id, passed, missing, forbidden_hits, policy_errors, output_path, returncode)
 
@@ -3791,6 +3866,10 @@ def evaluate_case(
 def detect_infrastructure_failure(text: str, returncode: int) -> str | None:
     if returncode == 127:
         return "executable-not-found"
+    # A successful answer may discuss gateway UNAUTHORIZED or rate limits.
+    # Those business facts are not failures of the model CLI itself.
+    if returncode == 0:
+        return None
     for pattern, label in INFRASTRUCTURE_FAILURE_PATTERNS:
         if pattern.search(text):
             return label
@@ -3802,7 +3881,32 @@ def is_infrastructure_blocked(result: CaseResult) -> bool:
 
 
 def contains_any(text: str, terms: tuple[str, ...]) -> bool:
-    return any(term in text for term in terms)
+    normalized = text.replace("\\<", "<").replace("\\>", ">").replace("–", "-").replace("—", "-")
+    # Type/length columns and inline String(18) describe the same metadata.
+    normalized = re.sub(r"\b(String|Integer)\s*\|\s*(\d+)\s*\|", r"\1(\2)|", normalized)
+    return any(term in normalized for term in terms)
+
+
+def generated_python_sdk_errors(text: str) -> list[str]:
+    """Inspect code without executing it or making any request."""
+    from validate_code_examples import python_mer_config_errors
+    findings: list[str] = []
+    for code in re.findall(r"```(?:python|py)\s*\n(.*?)```", text, flags=re.I | re.S):
+        try:
+            tree = ast.parse(code)
+        except SyntaxError:
+            try:
+                tree = ast.parse("{" + code + "}")
+            except SyntaxError:
+                findings.append("python-sdk:syntax-error")
+                continue
+        # Only an explicitly abbreviated constructor is a placeholder. An
+        # unrelated TODO/ellipsis cannot hide a runnable credential slot swap.
+        findings.extend("python-sdk:" + error for error in python_mer_config_errors(code, allow_placeholders=True))
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ImportFrom) and node.module == "dg_sdk.utils":
+                findings.append("python-sdk:nonexistent-dg_sdk.utils")
+    return list(dict.fromkeys(findings))
 
 
 def extract_reference_mentions(text: str) -> list[str]:
@@ -3830,9 +3934,10 @@ def cross_route_policy_errors(
         flags=re.I,
     )
     normalized_routes = [value.lower() for value in route_values]
-    if normalized_routes != [case.expected_skill]:
+    expected_route = "onboarding" if case.expected_skill == "user-onboarding" else case.expected_skill
+    if normalized_routes != [expected_route]:
         errors.append(
-            f"route conclusion must be exactly {case.expected_skill}, found {normalized_routes}"
+            f"route conclusion must be exactly {expected_route}, found {normalized_routes}"
         )
     single_skill_terms = {
         "payment": ("huifu-pay-integration", "支付 Skill", "支付 skill"),
@@ -3862,7 +3967,11 @@ def cross_route_policy_errors(
         if any(re.search(pattern, text, flags=re.I) for pattern in contradiction_patterns):
             errors.append("response body contradicts the declared single-Skill route")
     else:
-        if not re.search(r"先.+(?:再|然后|之后)|分别|交接|阶段|顺序", text, flags=re.S):
+        divided_roles = all(re.search(pattern, text, flags=re.I) for pattern in (
+            r"(?:进件(?:\s*Skill|模块)|huifu-merchant-onboarding)[^\n。]{0,200}(?:负责|开户|开通|配置|入驻)",
+            r"(?:支付(?:\s*Skill|模块)|huifu-pay-integration)[^\n。]{0,200}(?:负责|支付|收款|下单|查单)",
+        ))
+        if not divided_roles and not re.search(r"先.+(?:再|然后|之后)|分别|交接|阶段|顺序", text, flags=re.S):
             errors.append("both route must divide or sequence the two domain responsibilities")
         if re.search(
             r"(?:支付 Skill|进件 Skill).{0,10}(?:只是|仅作|仅为)备用",
@@ -4912,6 +5021,8 @@ def case_forbidden_matches(case_id: int, text: str, patterns: tuple[str, ...]) -
     def semantic_match_has_confirmed_exception(clause: str, match: re.Match[str]) -> bool:
         """Keep documented positive paths while rejecting the unsafe shortcut."""
         assertion = match.group(0)
+        if case_id in (58, 61, 63) and re.match(r"是否合法.{0,8}(?:未确认|尚未确认)", clause[match.end():]):
+            return True
         if case_id == 50:
             stopped_parallel = re.search(
                 r"(?:停止|禁止|不得|不要|不能|不再)\s*并发",
@@ -5016,9 +5127,11 @@ def case_forbidden_matches(case_id: int, text: str, patterns: tuple[str, ...]) -
         ):
             return True
         local_prefix = prefix[-20:]
+        if re.search(r"sdk.{0,6}连接$", local_prefix, re.I) and re.match(r"不等于.{0,16}(?:业务|图片).{0,8}重试", suffix, re.I):
+            return True
         if re.search(
             r"(?:不得|不能|不可|不可以|不应|不要|禁止|严禁|切勿|停止|不再|拒绝|"
-            r"并非|不是|不等于|不代表|不表示|不允许|不赞成|不提倡|不建议|不)"
+            r"并非|不是|不等于|不代表|不表示|不允许|不赞成|不提倡|不建议|不执行|不)"
             r"[^，,。；;]{0,12}$",
             local_prefix,
             flags=re.I,
@@ -5080,7 +5193,7 @@ def case_forbidden_matches(case_id: int, text: str, patterns: tuple[str, ...]) -
             repeated_action = re.compile(
                 r"(?:重试|重发|重放|重投|重新(?:发送|提交|调用|投递|请求|执行)|"
                 r"再次(?:发送|提交|调用|请求|投递|执行)|再发|再请求|补发|补偿发送|"
-                r"递归(?:执行|调用)|重新投递)(?!语义|规则|边界|机制)",
+                r"递归(?:执行|调用)|重新投递)(?!语义|规则|边界|机制|合同|次数|策略)",
                 flags=re.I,
             ).search(context, failure.end() if failure else 0)
             if (
@@ -5226,7 +5339,16 @@ def case_forbidden_matches(case_id: int, text: str, patterns: tuple[str, ...]) -
     if wrong_endpoint is not None:
         for clause in re.split(r"[。！？!?；;\n\r]+", normalize_semantic_text(text)):
             for match in re.finditer(re.escape(wrong_endpoint), clause, flags=re.I):
-                if not route_endpoint_is_negated(clause, match):
+                other_channel_comparison = (
+                    case_id == 82
+                    and re.search(r"微信|支付宝|抖音", clause[:match.start()])
+                    and not re.search(r"银联|银行卡", clause[:match.start()])
+                ) or (
+                    case_id in (83, 84)
+                    and re.search(r"银行卡|银联", clause[:match.start()])
+                    and not re.search(r"微信|支付宝|抖音", clause[:match.start()])
+                )
+                if not other_channel_comparison and not route_endpoint_is_negated(clause, match):
                     hits.append(
                         f"semantic:affirmative-wrong-route:{wrong_endpoint}"
                     )
@@ -5276,7 +5398,7 @@ def required_assertion_missing(case_id: int, text: str) -> list[str]:
             ("enterprise:177", r"(?:企业(?:商户)?进件).{0,32}(?<!\d)177(?!\d)|(?<!\d)177(?!\d).{0,32}(?:企业(?:商户)?进件)"),
             ("individual:129", r"(?:个人(?:商户)?进件).{0,32}(?<!\d)129(?!\d)|(?<!\d)129(?!\d).{0,32}(?:个人(?:商户)?进件)"),
             ("business-open:460", r"(?:商户)?业务开通.{0,32}(?<!\d)460(?!\d)|(?<!\d)460(?!\d).{0,32}(?:商户)?业务开通"),
-            ("image-upload:9", r"图片上传.{0,32}(?<!\d)9(?!\d)|(?<!\d)9(?!\d).{0,32}图片上传"),
+            ("image-upload:8", r"图片上传.{0,32}(?<!\d)8(?!\d)|(?<!\d)8(?!\d).{0,32}图片上传"),
             ("detail-query:578", r"(?:(?:商户)?详细信息查询|详情查询).{0,32}(?<!\d)578(?!\d)|(?<!\d)578(?!\d).{0,32}(?:(?:商户)?详细信息查询|详情查询)"),
             ("status-query:93", r"申请(?:单)?状态查询.{0,32}(?<!\d)93(?!\d)|(?<!\d)93(?!\d).{0,32}申请(?:单)?状态查询"),
         )
@@ -5403,7 +5525,7 @@ def assertion_is_negated(
     if double_negative:
         return False
     pre_or_inline_negative = re.search(
-        r"(?:不能|不得|不应|不要|不可|不可以|不关闭|不影响|不会|不等于|并不等于|不代表|不包含|未包含|没有包含|不同时|不一起|不重发|不重放|不重试|不再次调用|不重新调用|不能视为|请勿|严禁|禁止|拒绝|并非|不是|不建议|不允许|不赞成|不提倡|切勿|别|莫|勿|未确认|未确定|尚未确认|尚未确定|避免|反例(?:是|为)?|错误(?:地)?(?:说|称|认为))",
+        r"(?:不能|不得|不应|不要|不可|不可以|不关闭|不影响|不会|不执行|不在.{0,12}(?:自动|重试)|没有说明|不等于|并不等于|不代表|不包含|未包含|没有包含|不同时|不一起|不(?:自动|直接|擅自)?(?:重发|重放|重试|再次调用|重新调用)|不能视为|请勿|严禁|禁止|拒绝|并非|不是|不建议|不允许|不赞成|不提倡|切勿|别|莫|勿|未确认|未确定|尚未确认|尚未确定|避免|反例(?:是|为)?|错误(?:地)?(?:说|称|认为))",
         polarity_prefix,
         flags=re.I,
     )

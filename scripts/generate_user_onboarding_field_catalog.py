@@ -27,7 +27,8 @@ require_assertions_enabled()
 
 
 ROOT = Path(__file__).resolve().parent.parent
-LOCK = ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-09-22.json"
+from skill_validation_config import USER_ONBOARDING_SOURCE_LOCK
+LOCK = USER_ONBOARDING_SOURCE_LOCK
 DEFAULT_OUTPUT = (
     ROOT
     / "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md"

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Download and lock the 37 official payment documents used by the payment Skill."""
+"""Download and lock official payment documents without overwriting snapshots."""
 
 from __future__ import annotations
 
@@ -70,6 +70,13 @@ SOURCES = (
     source("hosting-close", "托管交易关单", "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostinggd.md", "hostingpay-query-trade-close.md"),
     source("hosting-splitpay-query", "拆单支付订单查询", "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingcdzf.md", "hostingpay-query-splitpay.md"),
     source("split-detail-query", "交易分账明细查询", "https://paas.huifu.com/partners/api/doc/smzf/api_fzmxcx.md", "trade-split-detail-query.md"),
+    source("balance-pay", "余额支付", "https://paas.huifu.com/partners/api/doc/yuer/api_acctpayzf.md", "balancepay-pay.md"),
+    source("balance-pay-query", "余额支付查询", "https://paas.huifu.com/partners/api/doc/yuer/api_acctpaycx.md", "balancepay-query.md"),
+    source("balance-refund", "余额支付退款", "https://paas.huifu.com/partners/api/doc/yuer/api_acctpaytk.md", "balancepay-refund.md"),
+    source("balance-refund-query", "余额支付退款查询", "https://paas.huifu.com/partners/api/doc/yuer/api_acctpaytkcx.md", "balancepay-refund-query.md"),
+    source("fee-calc", "手续费试算", "https://paas.huifu.com/partners/api/doc/sxf/api_sxf_sxfss.md", "balancepay-fee-calc.md"),
+    source("pay-relation", "付款关系提交", "https://paas.huifu.com/partners/api/doc/yuer/api_acct_fkgxtj.md", "balancepay-pay-relation.md"),
+    source("balance-sms", "余额支付发送短信验证码", "https://paas.huifu.com/partners/api/doc/yuer/api_smscode.md", "balancepay-sms.md"),
 )
 
 
@@ -103,8 +110,8 @@ def default_lock_path(source_date: str) -> Path:
 
 def ensure_mutable_lock(path: Path) -> None:
     historical_lock = ROOT / "maintainer-contracts/payment-source-lock.json"
-    if path.resolve() == historical_lock.resolve():
-        raise ValueError("the unversioned 2026-07-28 payment source lock is immutable")
+    if path.resolve() == historical_lock.resolve() or path.exists():
+        raise ValueError("existing payment source locks are immutable; choose a new snapshot date")
 
 
 def main() -> int:
@@ -116,6 +123,7 @@ def main() -> int:
         type=Path,
         help="Versioned lock output; defaults to payment-source-lock-<source-date>.json.",
     )
+    parser.add_argument("--previous-lock", type=Path, help="Predecessor lock; defaults to the active manifest lock.")
     args = parser.parse_args()
     lock_path = args.lock or default_lock_path(args.source_date)
     try:
@@ -126,6 +134,8 @@ def main() -> int:
     output_dir = args.output_dir or (
         ROOT / "maintainer-contracts/official-sources/payment" / args.source_date
     )
+    if output_dir.exists() and any(output_dir.iterdir()):
+        parser.error("existing payment source snapshot is immutable")
     output_dir.mkdir(parents=True, exist_ok=True)
 
     locked: list[dict[str, object]] = []
@@ -145,7 +155,9 @@ def main() -> int:
             }
         )
 
-    previous_lock = ROOT / "maintainer-contracts/payment-source-lock-2026-08-24.json"
+    manifest = json.loads((ROOT / "skills-manifest.json").read_text())
+    previous_lock = args.previous_lock or ROOT / manifest["skills"]["huifu-pay-integration"]["source_lock"]
+    previous = {item["key"]: item for item in json.loads(previous_lock.read_text())["sources"]}
     payload = {
         "schema_version": 1,
         "source_date": args.source_date,
@@ -159,18 +171,10 @@ def main() -> int:
         "sources": locked,
         "current_extension": {
             "refresh_id": f"api-refresh-payment-online-review-{args.source_date}",
-            "changed_source_keys": ["aggregation-query", "split-detail-query"],
-            "field_paths_added": 0,
-            "field_paths_removed": 0,
-            "field_paths_changed": 18,
-            "document_conflicts": [
-                "aggregation-query still duplicates A_NATIVE for Alipay micropay even though the success example now uses A_MICROPAY",
-                "split-detail-query example-only response.data.huifu_id is excluded from the formal catalog",
-            ],
-            "preserved_boundaries": [
-                "split_trans_responses is String(JSON Array) and all sixteen decoded child paths retain []",
-                "the twenty lightning guide pages and fifteen other formal API pages are byte-identical to the previous snapshot",
-            ],
+            "changed_source_keys": [item["key"] for item in locked if item["key"] in previous and item["sha256"] != previous[item["key"]]["sha256"]],
+            "added_source_keys": [item["key"] for item in locked if item["key"] not in previous],
+            "review_status": "pending-independent-field-and-semantic-review",
+            "document_conflicts": [],
         },
     }
     lock_path.write_text(

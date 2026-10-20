@@ -32,7 +32,7 @@
 
 ## 公共请求头
 
-- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.4`，双 Skill 默认 `hfps/1.3.5;hfms/1.0.4`。
+- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.5`，双 Skill 默认 `hfps/1.4.0;hfms/1.0.5`。
 
 ## SDK 证据
 

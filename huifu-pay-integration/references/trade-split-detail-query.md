@@ -24,7 +24,7 @@
 
 ## 三语言 SDK 边界
 
-用户提供且已核对的 Java `3.0.40`、PHP `2.0.30`、Python `2.0.24` 源码均有本接口专属类和精确路由：
+用户提供且已核对的 Java `3.0.41`、PHP `2.0.31`、Python `2.0.28` 源码均有本接口专属类和精确路由：
 
 | 语言 | Request / 模块 | 路由证据 | 请求字段边界 |
 | --- | --- | --- | --- |
@@ -45,4 +45,4 @@ Java 可运行代码仍须在进程初始化、任何 SDK 请求前全局执行�
 
 ## 公共请求头
 
-`jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅支付默认 `hfps/1.3.5`，同时使用支付与进件 Skill 时默认 `hfps/1.3.5;hfms/1.0.2`。
+`jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅支付默认 `hfps/1.4.0`，同时使用支付与进件 Skill 时默认 `hfps/1.4.0;hfms/1.0.5`。

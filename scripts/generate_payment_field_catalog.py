@@ -54,6 +54,8 @@ SURFACES: dict[str, tuple[tuple[str, str], ...]] = {
         ("反扫异步 resp_data", "async.reverse.resp_data"),
     ),
     "aggregation-query": (
+        ("请求信封", "request"),
+        ("同步响应信封", "response"),
         ("请求 data", "request.data"),
         ("同步响应 data", "response.data"),
     ),
@@ -115,7 +117,7 @@ SURFACES: dict[str, tuple[tuple[str, str], ...]] = {
         ("请求 data", "request.data"),
         ("同步响应信封", "response"),
         ("同步响应 data", "response.data"),
-        ("支付异步载荷（官网未标外层字段名）", "async.unconfirmed_payload"),
+        ("支付异步 resp_data", "async.resp_data"),
     ),
     "hosting-query": (
         ("请求信封", "request"),
@@ -157,6 +159,13 @@ SURFACES: dict[str, tuple[tuple[str, str], ...]] = {
     ),
 }
 
+for _key in ("balance-pay-query", "balance-refund", "balance-refund-query", "fee-calc", "pay-relation", "balance-sms"):
+    SURFACES[_key] = (("请求信封", "request"), ("同步响应信封", "response"),
+                      ("请求 data", "request.data"), ("同步响应 data", "response.data"))
+SURFACES["balance-pay"] = (("请求信封", "request"), ("同步响应信封", "response"),
+                           ("请求 data", "request.data"), ("同步响应 data", "response.data"),
+                           ("支付异步信封", "async"), ("支付异步 resp_data", "async.resp_data"))
+
 
 DISPLAY_NOTE = "方便文档展示"
 AGGREGATION_QUERY_METHOD_GROUP = "response.data.method_expand"
@@ -171,10 +180,11 @@ KNOWN_STRING_JSON_SURFACES = {
 }
 UNKNOWN_NAMED_SURFACES = {
     ("hosting-refund", "async.data"),
+    ("balance-pay", "async.resp_data"),
+    ("hosting-douyin", "async.resp_data"),
 }
 UNKNOWN_OUTER_SURFACES = {
     ("aggregation-refund", "async.unconfirmed_payload"),
-    ("hosting-douyin", "async.unconfirmed_payload"),
 }
 KNOWN_STRING_JSON_PATHS = {
     ("aggregation-create", "request.data.terminal_device_data"),
@@ -234,8 +244,10 @@ def transport_paths(
     if surface in UNKNOWN_NAMED_SURFACES:
         return (
             surface_prefix,
-            "—（[需要官方确认]：外层 data 的 JSON/String(JSON) 编码）",
+            f"—（[需要官方确认]：外层 {surface_prefix.rsplit('.', 1)[-1]} 的 JSON/String(JSON) 编码）",
         )
+    if source_key == "pay-relation" and (actual == "response.data.pay_relations" or actual.startswith("response.data.pay_relations.")):
+        return "response.data.pay_relations", "—（[需要官方确认]：正式说明 jsonArry 的数组编码）"
     if source_key == "split-detail-query" and (
         actual == "response.data.split_trans_responses[]"
         or actual.startswith("response.data.split_trans_responses[].")
@@ -281,7 +293,9 @@ def transport_paths(
     if not inner:
         return wire, decoded_from(container, actual)
     nested = inner[-1]
-    nested_path = decoded_from(container, nested)
+    # A nested JSON array is still a string until its own decode step. Read
+    # the container key first; [] belongs only to that decode's result.
+    nested_path = decoded_from(container, strip_string_array_marker(nested))
     if not containers[nested]:
         return wire, nested_path + " => [需要官方确认]：String 子表编码"
     if actual == nested:

@@ -130,7 +130,7 @@
     "suite": "cross-route",
     "expected_skill": "both",
     "prompt": "新商户还没开户，但本周要完成微信 JSAPI 收款，请给完整交接顺序；两个 Skill 都存在且没有显式配置 skill_source，请同时给出来源头默认值。",
-    "expected": "先用进件 Skill 完成账户和微信业务准备，再用支付 Skill 完成 JSAPI 下单与终态；jpt-x-skill-source 使用 hfps/1.3.5;hfms/1.0.4。"
+    "expected": "先用进件 Skill 完成账户和微信业务准备，再用支付 Skill 完成 JSAPI 下单与终态；jpt-x-skill-source 使用 hfps/1.4.0;hfms/1.0.5。"
   },
   {
     "id": 1020,

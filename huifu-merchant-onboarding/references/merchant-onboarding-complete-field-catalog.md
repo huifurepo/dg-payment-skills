@@ -36,7 +36,7 @@
 | 企业商户进件 | 177 | 10 | 5 |
 | 个人商户进件 | 129 | 7 | 5 |
 | 商户业务开通 | 460 | 54 | 7 |
-| 图片上传 | 9 | 0 | 3 |
+| 图片上传 | 8 | 0 | 3 |
 | 商户详细信息查询 | 578 | 65 | 5 |
 | 申请单状态查询 | 93 | 8 | 4 |
 | 商户业务开通修改 | 452 | 53 | 8 |
@@ -934,7 +934,7 @@
 ## 图片上传
 
 - 原始地址：<https://paas.huifu.com/navigator/ossApi/api_shjj_shtpsc.json>
-- SHA-256：`bf2c22fc745b343e44c557daeda5c6013e7863302a5b910f0ceabc23d895c1f4`
+- SHA-256：`2fcb84dd1cfe0260cfa3d49b79174d2e7b8a287cdf860faa62011bfc1e8472dd`
 - URI：`v2/supplementary/picture`；接口元数据 `sign=true`。官方 JSON 未给 HTTP method、host 或 Content-Type。
 - 官方 JSON 未定义响应字段；不得猜测 `file_id`、其他响应路径或重试语义。
 
@@ -945,12 +945,11 @@
 | `request.sys_id` | — | `—` | `—` | `—` | 仅见于 `requestDemo`；官方 JSON 未给正式顶层 schema。 |
 | `request.product_id` | — | `—` | `—` | `—` | 仅见于 `requestDemo`；官方 JSON 未给正式顶层 schema。 |
 | `request.data` | — | `—` | `—` | `—` | 仅见于 `requestDemo`；`requestBody.params` 定义下列五个 data 字段。 |
-| `request.file` | 图片文件流 | `—` | `—` | `—` | 仅见于 `requestDemo`，且字段说明只确认它与 `request.data.file_url` 不能同时上传；不得猜测类型或必填性。 |
 | `request.data.req_seq_id` | 业务请求流水号 | `String` | `32` | `Y` | 业务请求流水号；示例值：[官网示例已脱敏] |
 | `request.data.req_date` | 业务请求日期 | `String` | `8` | `Y` | 日期格式:yyyyMMdd;示例值：20220915 |
 | `request.data.file_type` | 图片类型 | `String` | `32` | `Y` | 具体取值请参考各接口文档中的字段说明。；[枚举取值表](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_wjlx)；示例值：F01 |
 | `request.data.huifu_id` | 商户号 | `String` | `18` | `N` | 渠道与一级代理商的直属商户ID；示例值：[官网示例已脱敏] ；如果商户未开户没有商户号，可以为空。；不支持"企业用户基本信息开户"和"个人用户基本信息开户"接口所返回的用户号 |
-| `request.data.file_url` | 文件url链接 | `String` | `512` | `N` | 文件url链接与file文件流不能同时上传；文件支持类型：JPG,BMP,PNG；单个图片最大支持2M；除去图片外其他类型文件支持10M；示例值：[官网示例图片已省略] |
+| `request.data.file_url` | 文件url链接文件url链接与file文件流不能同时上传；文件支持类型：JPG,BMP,PNG；单个图片最大支持2M；除去图片外其他类型文件支持10M；示例值：[官网示例图片已省略] | `String` | `512` | `C` | 文件url链接与file文件流不能同时上传；文件支持类型：JPG,BMP,PNG；单个图片最大支持2M；除去图片外其他类型文件支持10M；示例值：[官网示例图片已省略] |
 
 ## 商户详细信息查询
 
@@ -1678,7 +1677,7 @@
 ## 商户业务开通修改
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywktxg_kyc.md>
-- SHA-256：`9dea690376cdf85cf6007e302900111a16f00bd92ab2a8335ca56eaaee9d491d`
+- SHA-256：`9e70c875accaecb0d25114f38ab80ee6cbfcc6c0a207c0e0176614ff0d7925bb`
 - 说明：下表保留官方字段类型、长度、必填标记和字段说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -1739,7 +1738,7 @@
 | `request.data.ali_conf_list[].mcc` | 商户经营类目 | `String` | `32` | `N` | 支付宝商户经营类目，[支付宝MCC](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_zfbmcc) ；示例值：5411 |
 | `request.data.ali_conf_list[].pay_scene` | 支付场景 | `String` | `2` | `N` | 1、线下扫码，2.线上扫码，3.非盈利费率；示例值：1 |
 | `request.data.ali_conf_list[].pay_channel_id` | 子渠道号 | `String` | `50` | `N` | 不填入驻到渠道默认配置的支付宝渠道号下；示例值：JP00001 |
-| `request.data.ali_conf_list[].switch_state` | *功能开关* | `String` | `2` | `N` | 1:开通 0:关闭 默认：1；示例值：1 |
+| `request.data.ali_conf_list[].switch_state` | *功能开关* | `String` | `2` | `Y` | 1:开通 0:关闭 示例值：1 |
 | `request.data.ali_conf_list[].is_check_real_name` | 是否需要实名认证 | `String` | `1` | `N` | Y-是，业务功能开通成功后使用法人信息发起实名认证申请；N-否；默认为N；示例值：Y |
 | `request.data.ali_conf_list[].al_real_name_info` | 实名认证信息 | `String` | `—` | `N` | 实名时需要填写；jsonObject字符串 ；若请求支付宝入驻成功，但实名申请失败需要调用单独的实名接口重新发起实名。 |
 | `request.data.ali_conf_list[].al_real_name_info.finance_institution_flag` | 是否金融机构 | `String` | `5` | `N` | 选填，请根据申请主体的实际情况填写；1、若商户主体是金融机构，则填写：true。；2、若商户主体不是金融机构，则填写：false。；若未传入将默认填写：false；3，支付宝实名金融机构需要提供 F236：金融机构许可证图片一 ；F237：金融机构许可证图片二；F238：金融机构许可证图片三；F239：金融机构许可证图片四；F240：金融机构许可证图片五；补充资料填写在extended_material_list对象中；示例值：true |
@@ -1763,7 +1762,7 @@
 | `request.data.ali_conf_list[].al_real_name_info.legal_person_info.auth_letter_img` | 授权函照片 | `String` | `128` | `N` | 上送图片上传返回的jfileId；文件类型F224业务办理授权函；当证件持有人类型为经办人时必须上传。其他情况，无需上传。示例值：57cc7f00-600a-33ab-b614-6221bbf2e530 |
 | `request.data.ali_conf_list[].al_real_name_info.legal_person_info.is_benefit_person` | 是否为受益人 | `String` | `1` | `N` | Y-受益人;N-非受益人 默认值：Y；示例值：Y |
 | `request.data.wx_conf_list[]` | 微信配置对象 | `String` | `—` | `N` | jsonArray格式字符串 |
-| `request.data.wx_conf_list[].switch_state` | 开关状态 | `String` | `1` | `N` | 1:开通，0关闭；示例值：1 |
+| `request.data.wx_conf_list[].switch_state` | 开关状态 | `String` | `1` | `Y` | 1:开通，0关闭；示例值：1 |
 | `request.data.wx_conf_list[].fee_rate` | 手续费（%） | `String` | `9` | `N` | 数字类型，大于0,保留2位小数；示例值：0.38 |
 | `request.data.wx_conf_list[].fee_min_amt` | 最低收取手续费（元） | `String` | `6` | `N` | 固定金额保留2位小数；大于0。需要渠道商开通此功能。示例值：0.38 |
 | `request.data.wx_conf_list[].pay_scene` | 支付场景 | `String` | `2` | `N` | 参见《[微信支付场景](https://paas.huifu.com/open/doc/api/#/api_ggcsbm?id=%e5%be%ae%e4%bf%a1%e6%94%af%e4%bb%98%e5%9c%ba%e6%99%af)》说明；示例值：1 |

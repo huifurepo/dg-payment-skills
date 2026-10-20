@@ -7,7 +7,7 @@
 ## 接口与字段面
 
 - Endpoint：`POST https://api.huifu.com/v2/user/apply/query`。
-- 快照更新时间：官网 `2025.04.24`，本地冻结 `2026-08-10`。
+- 快照更新时间：官网 `2025.04.24`，本地冻结 `2026-10-08`。
 - 共15个字段路径：请求8、同步响应7、异步0。
 - 全部请求和同步响应的完整路径、类型、长度、Y/N/C 与官方说明读取 `user-onboarding-complete-field-catalog.md`；状态返回裁决及官网冲突同时读取 `user-onboarding-field-contracts.md`。
 - `data` 必须包含 `huifu_id:String(18)` 用户号、`req_seq_id:String(32)`、`req_date:String(8)`、`apply_no:String(18)`。

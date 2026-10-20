@@ -3,7 +3,7 @@
 ## 接口合同
 
 - Endpoint：`POST https://api.huifu.com/v2/agreement/elect/signurl/resend`。
-- 官方来源：[电子合同重发](https://paas.huifu.com/partners/api/doc/shgl/fp/api_fp_dzhtcf.md)；快照 `2026-09-22`；SHA-256 `169b62c666fbe0345ab4f5b10f7f39116d5fd774f6a04ec6abdb77c3923a156e`。
+- 官方来源：[电子合同重发](https://paas.huifu.com/partners/api/doc/shgl/fp/api_fp_dzhtcf.md)；快照 `2026-10-08`；SHA-256 `169b62c666fbe0345ab4f5b10f7f39116d5fd774f6a04ec6abdb77c3923a156e`。
 - 共13个路径：请求9、同步响应4、无异步。完整字段见 `onboarding-extension-complete-field-catalog.md`。
 - 请求 data 必须包含 `req_seq_id/req_date/huifu_id/agreement_id/sign_user_email`；长度分别为 `32/8/32/32/64`，均为 String Y。
 

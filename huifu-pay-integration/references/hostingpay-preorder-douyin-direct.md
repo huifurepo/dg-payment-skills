@@ -1,6 +1,6 @@
 # 抖音直连下单
 
-> 官方接口更新时间：`2026.04.17`。来源页：`https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_dypreorder.md`。
+> 官方接口更新时间：`2026.10.10`。来源页：`https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_dypreorder.md`。
 > 本接口属于托管支付预下单，和 H5/PC、支付宝小程序、微信小程序预下单共用 `v2/trade/hosting/payment/preorder`，通过 `pre_order_type=4` 区分抖音直连场景。
 
 ## 目录
@@ -73,7 +73,7 @@
 | --- | --- | --- | --- | --- |
 | `sub_appid` | 子商户应用 ID | String | Y | 子商户或二级商户在抖音开放平台申请的应用 ID，需确保已与 `sub_mchid` 绑定 |
 | `busi_scene` | 业务场景 | String | Y | `APP` 或 `H5` |
-| `coupon_info` | 优惠标记 | String(JSON Object) | N | 与抖音支付协商后使用，可含业务场景、个性化策略或指定优惠信息 |
+| `coupon_info` | 优惠标记 | String(JSON Object)(1024) | N | 与抖音支付协商后使用，可含业务场景、个性化策略或指定优惠信息 |
 | `h5_info` | H5 场景信息 | Object | C | `busi_scene=H5` 时必填 |
 | `scene_info` | 场景信息 | Object | Y | 支付场景描述 |
 
@@ -107,6 +107,8 @@
 
 ## 异步返回参数
 
+2026-10-10官网新增外层 `resp_data` 标题，目录使用 `async.resp_data`。此标题未声明外层JSON/String(JSON)编码、签名位置或ACK；通知接入保留独立适配点并提示核对官方规范，不能直接套用通用托管Controller。
+
 | 参数 | 中文名 | 类型 | 必填 | 说明 |
 | --- | --- | --- | --- | --- |
 | `resp_code` | 业务返回码 | String | Y | 业务返回码 |
@@ -121,7 +123,7 @@
 | `trans_amt` | 交易金额 | String | N | 单位元 |
 | `settlement_amt` | 结算金额 | String | N | 单位元 |
 | `trans_stat` | 交易状态 | String | N | `S` 成功，`F` 失败 |
-| `trans_finish_time` | 汇付侧完成时间 | String | N | `yyyyMMddHHmmss` |
+| `trans_finish_time` | 汇付侧完成时间 | String | N | 13位毫秒时间戳（String(13)） |
 | `end_time` | 支付完成时间 | String | N | `yyyyMMddHHmmss` |
 | `acct_date` | 入账时间 | String | N | `yyyyMMdd` |
 | `dy_response` | 抖音响应报文 | String(JSON Object) | N | 见下方字段 |

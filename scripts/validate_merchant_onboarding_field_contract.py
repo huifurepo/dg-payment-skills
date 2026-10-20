@@ -87,7 +87,7 @@ REQUIRED = {
         "`withhold_flag=Y` 时必填",
         "示例值只演示格式",
     ),
-    "image": ("图片上传", "官网仅给 URI `/v2/supplementary/picture`，未给 method", "当前 SDK 适配证据使用 `POST`", "file_type String(32) Y", "file_url String(512) N", "huifu_id String(18) N", "顶层 `file` 互斥"),
+    "image": ("图片上传", "官网仅给 URI `/v2/supplementary/picture`，未给 method", "当前 SDK 适配证据使用 `POST`", "file_type String(32) Y", "file_url String(512) C", "huifu_id String(18) N", "顶层 `file` 互斥"),
     "detail": (
         "商户详细信息查询",
         "req_seq_id String(32) Y",
@@ -122,7 +122,7 @@ REQUIRED = {
         "按 String(JSON Array) 解码",
     ),
     "callbacks": ("reg_result_list[].business_stat", "zl_async_info.apply_state", "async.agreement.agreement_info_list.con_stat", "没有 `Array/jsonArray`", "ord_id:String(44)", "RECV_ORD_ID_", "[需要官方确认]", "逐业务通知外层包装待官方样本确认"),
-    "headers": ("jpt-x-skill-source: <skill_source>", "Java、PHP、Python SDK 主链路", "hfms/1.0.4", "hfps/1.3.5;hfms/1.0.4", "其他 SDK 内部请求头由 SDK 自行处理"),
+    "headers": ("jpt-x-skill-source: <skill_source>", "Java、PHP、Python SDK 主链路", "hfms/1.0.5", "hfps/1.4.0;hfms/1.0.5", "其他 SDK 内部请求头由 SDK 自行处理"),
     "same-leaf-paths": (
         "不得按叶字段名去重",
         "request.data.prov_id",
@@ -168,8 +168,8 @@ ATOMIC_HEADER_TERMS = (
     "外部资料提示",
 )
 ATOMIC_CONTRACT_TERMS = {
-    "merchant-onboarding-enterprise.md": ("sign:String(2048) Y", "data.audit_status", "`Y/N/F`", "企业基础进件请求没有 `data.huifu_id`", "按官网字段合同生成", "成功 ACK", "`data.async_return_url:String(120) N`", "禁止使用 `notify_url`", "`data.prov_id/area_id`", "`data.card_info.prov_id/area_id`", "`data.material_card_info.prov_id/area_id`", "`data.material_card_info:String(JSON Object) Y`", "当前官网类型列已由旧版 `Object` 修正为 `String`", "说明列仍为“jsonObject字符串”", "`material_card_info.card_type`", "不得继续生成该键", "不得发送普通嵌套 Object", "不能按叶字段名合并", "`String(64) C`", "`scene_type` 含线下场景时必填", "[官方文档口径冲突]"),
-    "merchant-onboarding-individual.md": ("sign:String(512) N", "data.audit_status", "`Y/N/F`", "个人基础进件请求没有 `data.huifu_id`", "按官网字段合同生成", "成功 ACK", "`data.async_return_url:String(120) N`", "禁止使用 `notify_url`", "`data.prov_id/area_id`", "`data.card_info.prov_id/area_id`", "不得按 `prov_id/area_id` 叶字段名去重", "`String(64) C`", "`scene_type` 含线下场景时必填"),
+    "merchant-onboarding-enterprise.md": ("data.audit_status", "`Y/N/F`", "企业基础进件请求没有 `data.huifu_id`", "按官网字段合同生成", "成功 ACK", "`data.async_return_url:String(120) N`", "禁止使用 `notify_url`", "`data.prov_id/area_id`", "`data.card_info.prov_id/area_id`", "`data.material_card_info.prov_id/area_id`", "`data.material_card_info:String(JSON Object) Y`", "当前官网类型列已由旧版 `Object` 修正为 `String`", "说明列仍为“jsonObject字符串”", "`material_card_info.card_type`", "不得继续生成该键", "不得发送普通嵌套 Object", "不能按叶字段名合并", "`String(64) C`", "`scene_type` 含线下场景时必填", "[官方文档口径冲突]"),
+    "merchant-onboarding-individual.md": ("data.audit_status", "`Y/N/F`", "个人基础进件请求没有 `data.huifu_id`", "按官网字段合同生成", "成功 ACK", "`data.async_return_url:String(120) N`", "禁止使用 `notify_url`", "`data.prov_id/area_id`", "`data.card_info.prov_id/area_id`", "不得按 `prov_id/area_id` 叶字段名去重", "`String(64) C`", "`scene_type` 含线下场景时必填"),
     "merchant-onboarding-business-open.md": (
         "async.business.reg_result_list[].business_stat",
         "async.business.zl_async_info.apply_state",
@@ -223,10 +223,8 @@ NEW_ATOMIC_CONTRACT_TERMS = {
     "merchant-onboarding-rate-query.md": (
         "35 个节点",
         "请求 8、同步响应 27、无异步通知",
-        "[官方文档口径冲突]",
         "request.data.huifu_id",
         "response.data.huifu_id",
-        "32/18",
         "未找到 `/v2/merchant/fee-rate/query` 的专属 Request 类",
     ),
     "merchant-onboarding-status-change.md": (
@@ -384,9 +382,9 @@ def main() -> int:
     skill_text = ONBOARDING_SKILL.read_text(encoding="utf-8") if ONBOARDING_SKILL.is_file() else ""
     missing = [f"{section}: {term}" for section, terms in REQUIRED.items() for term in terms if not contains_contract(text, term)]
     for term in (
-        "仅 `huifu-merchant-onboarding 1.0.4`",
-        "`hfms/1.0.4`",
-        "`hfps/1.3.5;hfms/1.0.4`",
+        "仅 `huifu-merchant-onboarding 1.0.5`",
+        "`hfms/1.0.5`",
+        "`hfps/1.4.0;hfms/1.0.5`",
         "顺序固定为支付、进件",
         "英文分号且不加空格",
         "显式提供经确认的合同值时原样透传",
@@ -398,10 +396,16 @@ def main() -> int:
         "`request.data.card_info.prov_id/area_id`",
         "`request.data.material_card_info.prov_id/area_id`",
         "`card_info` 与 `material_card_info` 都按 String(JSON Object)",
-        "1,277 个请求、753 个同步响应和 180 个通知节点",
-        "当前十三页官网仍有未填写说明或标量长度的字段",
-        "`hfms/1.0.4`",
-        "`hfps/1.3.5;hfms/1.0.4`",
+        "请求1,276、同步响应753、通知180",
+        "当前十三页仍有10个目录节点的说明单元为空、4个 String 标量叶字段的长度单元为空",
+    ):
+        if term not in text:
+            missing.append(f"merchant-onboarding-field-contracts.md: {term}")
+    for term in (
+        "references/merchant-onboarding-complete-field-catalog.md",
+        "references/merchant-onboarding-field-contracts.md",
+        "`hfms/1.0.5`",
+        "`hfps/1.4.0;hfms/1.0.5`",
     ):
         if term not in skill_text:
             missing.append(f"SKILL.md: {term}")
@@ -503,14 +507,14 @@ def main() -> int:
         expected_date_clauses = (
             (
                 "refreshed source dates",
-                "来源快照核验日期：`2026-09-22`",
+                "来源快照核验日期：`2026-10-08`",
                 source_dates["enterprise"] == "2026-09-18"
                 and source_dates["individual"] == "2026-09-04"
                 and source_dates["basic_info_modify"] == "2026-09-20",
             ),
             (
                 "current field refresh",
-                "相对上一快照新增82、删除79、修改194",
+                "相对上一快照新增0、删除1、修改3",
                 True,
             ),
             (
@@ -549,6 +553,35 @@ def main() -> int:
         if actual != CARD_INFO_FIELDS[section]:
             missing.append(f"{section} card_info: expected={CARD_INFO_FIELDS[section]}, actual={actual}")
     references = CONTRACT.parent
+    for title, filename in (
+        ("企业商户进件", "merchant-onboarding-enterprise.md"),
+        ("个人商户进件", "merchant-onboarding-individual.md"),
+    ):
+        section = catalog_text.split(f"## {title}\n", 1)[-1].split("\n## ", 1)[0]
+        row = re.search(r"^\| `async\.audit\.sign` \|[^\n]+$", section, re.M)
+        cells = [cell.strip().strip("`") for cell in row.group().split("|")[1:-1]] if row else []
+        if len(cells) < 5:
+            missing.append(f"{title} catalog: missing async.audit.sign")
+            continue
+        contract = f"sign:{cells[2]}({cells[3]}) {cells[4]}"
+        page = (references / filename).read_text(encoding="utf-8")
+        if contract not in page:
+            missing.append(f"{filename}: async sign differs from catalog: {contract}")
+    rate_catalog = catalog_text.split("## 商户费率信息查询\n", 1)[-1].split("\n## ", 1)[0]
+    rate_page = (references / "merchant-onboarding-rate-query.md").read_text(encoding="utf-8")
+    rate_summary = next((line for line in text.splitlines() if line.startswith("| 费率信息查询 |") and "req_seq_id" in line), "")
+    for direction in ("request", "response"):
+        path = f"{direction}.data.huifu_id"
+        row = re.search(r"^\| `" + re.escape(path) + r"` \|[^\n]+$", rate_catalog, re.M)
+        cells = [cell.strip().strip("`") for cell in row.group().split("|")[1:-1]] if row else []
+        if len(cells) < 5:
+            missing.append(f"rate-query catalog: missing {path}")
+            continue
+        contract = f"{cells[2]}({cells[3]}) {cells[4]}"
+        if f"{path}:{contract}" not in rate_page:
+            missing.append(f"rate-query page differs from catalog: {path}:{contract}")
+        if direction == "request" and f"huifu_id {contract}" not in rate_summary:
+            missing.append(f"rate-query summary differs from catalog: huifu_id {contract}")
     for name in ATOMIC_PAGES:
         page = references / name
         page_text = page.read_text(encoding="utf-8") if page.is_file() else ""
@@ -568,8 +601,8 @@ def main() -> int:
             for term in (
                 "## 公共请求头",
                 "`jpt-x-skill-source: <skill_source>`",
-                "`hfms/1.0.4`",
-                "`hfps/1.3.5;hfms/1.0.4`",
+                "`hfms/1.0.5`",
+                "`hfps/1.4.0;hfms/1.0.5`",
             )
             if term not in page_text
         )

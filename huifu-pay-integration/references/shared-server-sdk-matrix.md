@@ -8,6 +8,7 @@
 - 当前 Skill 包的真实覆盖范围
 - 新增接口 SDK 兼容性
 - 当前版本口径
+- SDK 同步返回形状
 - PHP 默认落地方式
 - Python 默认落地方式
 - 读法建议
@@ -19,15 +20,15 @@
 
 先区分制品身份：
 
-- Lightning 极速版专用 SDK：当前明确发布证据只有 Java `dg-lightning-sdk 1.0.5`。
+- Lightning 极速版专用 SDK：当前明确发布证据只有 Java `dg-lightning-sdk 1.0.6`。
 - 通用斗拱 SDK：Java/PHP/Python 可以包含 V4 Endpoint 的 Request/facade，但不能因此称为“Lightning 专用 SDK”。
 - 本 Skill 的 Java、PHP、Python 真实请求统一使用对应官方 SDK；没有专用 SDK 能力证据时报告缺口，不改写原始 HTTP 客户端。
 
 | 语言 | 官方安装方式 | 最低运行时 | 当前说明 |
 | --- | --- | --- | --- |
-| Java | Maven | JDK 8+ | Lightning `1.0.5` 与通用 `3.0.40` 均按官方 SDK 主链路生成真实调用 |
+| Java | Maven | JDK 8+ | Lightning `1.0.6` 与通用 `3.0.41` 均按官方 SDK 主链路生成真实调用 |
 | PHP | Composer `huifurepo/dg-php-sdk` | PHP 7.4+ | API/Request 能力可核对，按官方 Request/facade/client 生成真实调用 |
-| Python | pip `dg-sdk` | Python 3.x；本地 SDK classifier 只列到 3.7，实际项目需安装验证 | 聚合支付和托管支付核心场景已覆盖，当前 Skill 基线为 `dg-sdk 2.0.24` |
+| Python | pip `dg-sdk` | Python 3.x；本地 SDK classifier 只列到 3.7，实际项目需安装验证 | 聚合支付和托管支付核心场景已覆盖，当前 Skill 基线为 `dg-sdk 2.0.28` |
 | C# | NuGet | .NET 4.8+ | 当前只保留入口说明 |
 | Go | go mod | Go 1.16+ | 当前只保留入口说明 |
 
@@ -56,11 +57,19 @@
 
 | 项目 | 版本 |
 | --- | --- |
-| 托管支付 Java SDK | `dg-java-sdk 3.0.40` |
-| 聚合支付 Java SDK | `dg-lightning-sdk 1.0.5` |
-| PHP SDK 包 | `huifurepo/dg-php-sdk 2.0.30` |
-| Python SDK 包 | `dg-sdk 2.0.24` |
+| 托管支付 Java SDK | `dg-java-sdk 3.0.41` |
+| 聚合支付 Java SDK | `dg-lightning-sdk 1.0.6` |
+| PHP SDK 包 | `huifurepo/dg-php-sdk 2.0.31` |
+| Python SDK 包 | `dg-sdk 2.0.28` |
 | 前端 JS SDK | `@dg-elements/js-sdk`，项目锁定版本 |
+
+## SDK 同步返回形状
+
+网关响应的 `sign + data` 信封与SDK返回值不能混用。通用Java3.0.41 `BasePayClient.request(request, false)` 已返回验签后的业务Map，直接读取resp_code及业务字段，不再get("data")；验签失败抛异常。此说明不外推Lightning或图片/page模式，后者保留自己的返回合同。
+
+PHP2.0.31 `Payment` / `BsPayClient::postRequest` 返回SDK响应对象或null，不是array。必须先检查非null且 `!result->isError()`，再检查 `getRspDatas()` 是信封array、其中data是array后读取业务字段；验签失败的对象仍可持有原响应，不能跳过isError检查，也不能以空数组补齐缺失data。
+
+Python2.0.28正常签名JSON响应返回业务data，直接读取resp_code，不再取data；验签失败抛异常。非200、非JSON或无sign分支可返回原始对象/文本/信封，不能将“SDK返回了结果”作为验签成功证明或直接更新业务状态。
 
 ## PHP 默认落地方式
 
@@ -71,10 +80,10 @@ PHP 场景默认使用官方 Composer 包 `huifurepo/dg-php-sdk`，业务入口�
 - request 类提供 `funcCode`
 - `params` 数组承载实际业务字段（适用于 `postRequest()` 路径）
 
-当前 Skill 包的 PHP SDK 包基线是 `2.0.30`，优先通过 Composer 安装或升级：
+当前 Skill 包的 PHP SDK 包基线是 `2.0.31`，优先通过 Composer 安装或升级：
 
 ```bash
-composer require "huifurepo/dg-php-sdk:^2.0.30"
+composer require "huifurepo/dg-php-sdk:^2.0.31"
 composer update huifurepo/dg-php-sdk --with-all-dependencies
 composer show huifurepo/dg-php-sdk
 test -f vendor/huifurepo/dg-php-sdk/BsPaySdk/init.php
@@ -82,11 +91,11 @@ test -f vendor/huifurepo/dg-php-sdk/BsPaySdk/init.php
 
 Composer 不可用时，可以使用 Packagist 元数据指向的 GitHub 分发包手动下载当前基线：
 
-- `https://api.github.com/repos/huifurepo/bspay-php-sdk/zipball/refs/tags/2.0.30`
+- `https://api.github.com/repos/huifurepo/bspay-php-sdk/zipball/refs/tags/2.0.31`
 - 解压后设置 `HUIFU_SDK_ROOT=/absolute/path/to/BsPaySdk`
 - 必须执行 `test -f "$HUIFU_SDK_ROOT/init.php"` 确认实际 SDK 路径
 
-官方 PHP SDK 文档在 2026-04-24 直接校验时仍只列到 `v2.0.25`，且 `php-sdk_v2.0.25.7z` OSS 地址返回 404；不能用旧版本可访问链接静默替代当前 `2.0.30` 基线。
+官方 PHP SDK 文档在 2026-04-24 直接校验时仍只列到 `v2.0.25`，且 `php-sdk_v2.0.25.7z` OSS 地址返回 404；不能用旧版本可访问链接静默替代当前 `2.0.31` 基线。
 
 当前 Skill 包不再内置 PHP 模板资产或非官方自维护 client。
 
@@ -94,11 +103,11 @@ Composer 不可用时，可以使用 Packagist 元数据指向的 GitHub 分发�
 
 - PHP SDK 自带 `init.php` 默认 `DEBUG=false`，但官方 `BsPayDemo/loader.php` 和 `Composer/BsPayConfig.php` 会在 SDK 初始化前定义 `DEBUG=true`。
 - 调试开启后，`BsPayRequestV2` 会记录包含 `rsa_merch_private_key` 的 `MerConfig`、完整请求体和完整响应。
-- PHP 联调/生产必须在加载任何 SDK、Demo/Composer 配置以及调用 `BsPay::init` 之前固定 `DEBUG=false`；不得使用 Demo/Composer loader，启动检查必须拒绝已定义为 `true` 的进程。不能证明时停止生成可运行实现。
+- PHP 联调/生产必须在加载任何 SDK、Demo/Composer 配置以及调用 `BsPay::init` 之前固定 `DEBUG=false`；不得使用 Demo/Composer loader，启动检查必须拒绝已定义为 `true` 的进程。可先生成包含启动拒绝检查的安全初始化骨架，无需用户先提供既有配置证明；未通过检查的进程不得执行真实请求。
 
 ## 官方 SDK-only 传输规则
 
-- 接入方确认官方 Lightning Java `1.0.5`、通用 Java `3.0.40`、PHP `2.0.30` 和 Python `2.0.24` SDK 不存在本 Skill 曾从历史源码快照推断的 TLS 问题；Java/PHP 不再触发 TLS 硬停。
+- 2026-10-08 核验官方 Lightning Java `1.0.6`、通用 Java `3.0.41`、PHP `2.0.31` 和 Python `2.0.28`。通用Java/Python 默认校验 TLS；Lightning1.0.6仍有空证书检查/无条件主机名通过；PHP 2.0.31 仍关闭 `CURLOPT_SSL_VERIFYPEER`，仅作非阻断开发提醒，不声称已修复。
 - 三种语言的真实请求都使用官方 Request/facade/client。禁止以规避 TLS、补齐示例或验证技术链路为由，生成 `HttpClient`、OkHttp、Guzzle、curl 或自实现 HTTP+签名/验签客户端。
 - 没有专属 Request 时先核对官方通用调用入口；仍无官方能力证据则报告缺口并等待确认，不得手写 HTTP 补位。
 - 上线仍应按常规检查证书链和主机名校验，且不得主动关闭校验或信任所有证书；这不是当前官方 Java/PHP SDK 的预设阻断条件。
@@ -126,10 +135,10 @@ Composer 不可用时，可以使用 Packagist 元数据指向的 GitHub 分发�
 
 Python 场景默认使用官方 pip 包 `dg-sdk`，代码中 import `dg_sdk`。
 
-当前 Skill 包的 Python SDK 包基线是 `2.0.24`。输出可运行代码前必须验证：
+当前 Skill 包的 Python SDK 包基线是 `2.0.28`。输出可运行代码前必须验证：
 
 ```bash
-python3 -m pip install "dg-sdk==2.0.24"
+python3 -m pip install "dg-sdk==2.0.28"
 python3 -c "import dg_sdk; print(dg_sdk.DGClient.__version__)"
 ```
 
@@ -175,3 +184,15 @@ Python SDK 的来源头来自 `MerConfig` 和最终请求参数：
 - 托管支付 Python 抖音直连使用 `V2TradeHostingPaymentPreorderDyRequest`
 - Python 受支持场景如果需要输出代码，必须体现官方 `dg-sdk` / `dg_sdk`
 - Java 仍是聚合支付和托管支付的完整基线实现
+
+## 当前官方源码证据
+
+2026-10-08核验 Java3.0.41、Lightning1.0.6、PHP2.0.31、Python2.0.28 的官方固定提交/制品。余额七接口入口见 `balancepay-sdk-matrix.md`，短信无专属类时用官方通用入口。Python MerConfig 第五参数 sign_type、第六 jpt_x_skill_source，初始化用关键字。
+
+官方Java固定提交：https://github.com/huifurepo/bspay-java-sdk-parent/tree/3dd088b159ad94ebc5246114c07c97070e0581b2
+
+官方PHP固定提交：https://github.com/huifurepo/bspay-php-sdk/tree/d93cae52dea2033c4a737dc0d6877a2f65a34418
+
+Python制品：https://pypi.org/project/dg-sdk/2.0.28/
+
+当前API来源复核日期为2026-10-10；SDK继续使用2026-10-08官方固定提交/制品核验记录，版本未调整。

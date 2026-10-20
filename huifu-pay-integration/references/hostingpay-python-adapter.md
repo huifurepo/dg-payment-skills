@@ -32,7 +32,7 @@
 
 - 包名：`dg-sdk`
 - import 名：`dg_sdk`
-- 当前 Skill 包基线：`2.0.24`
+- 当前 Skill 包基线：`2.0.28`
 - 源码级差异以项目实际安装包复核为准
 
 业务入口优先使用官方 request 类：
@@ -40,6 +40,7 @@
 - `V2TradeHostingPaymentPreorderH5Request`
 - `V2TradeHostingPaymentPreorderWxRequest`
 - `V2TradeHostingPaymentPreorderAliRequest`
+- `V2TradeHostingPaymentPreorderDyRequest`
 - `V2TradeHostingPaymentQueryorderinfoRequest`
 - `V2TradeHostingPaymentCloseRequest`
 - `V2TradeHostingPaymentHtrefundRequest`
@@ -49,16 +50,12 @@
 
 这些 request 类通过 `.post({})` 发起调用。
 
-当前官方 Python SDK 源码未发现以下独立 request 类：
-
-- 抖音直连下单使用 `V2TradeHostingPaymentPreorderDyRequest`
-
 ## 安装与环境变量前置检查
 
 输出 Python 可运行代码时，必须先给出 SDK 安装和环境变量准备。
 
 ```bash
-python3 -m pip install "dg-sdk==2.0.24"
+python3 -m pip install "dg-sdk==2.0.28"
 python3 -c "import dg_sdk; print(dg_sdk.DGClient.__version__)"
 ```
 
@@ -69,7 +66,7 @@ export HUIFU_SYS_ID="渠道商或商户系统号"
 export HUIFU_PRODUCT_ID="汇付产品号"
 export HUIFU_RSA_PRIVATE_KEY="商户 RSA 私钥"
 export HUIFU_RSA_PUBLIC_KEY="汇付 RSA 公钥"
-export HUIFU_SKILL_SOURCE="hfps/1.3.5"
+export HUIFU_SKILL_SOURCE="hfps/1.4.0"
 export HUIFU_MERCHANT_ID="本次请求的 huifu_id"
 export HUIFU_NOTIFY_URL="https://your-domain.example/huifu/notify"
 export HUIFU_PROJECT_ID="统一收银台托管项目号"
@@ -102,15 +99,16 @@ def require_env(name: str) -> str:
 def init_huifu_sdk() -> None:
     dg_sdk.DGClient.env = "prod"
     dg_sdk.DGClient.mer_config = dg_sdk.MerConfig(
-        require_env("HUIFU_RSA_PRIVATE_KEY"),
-        require_env("HUIFU_RSA_PUBLIC_KEY"),
-        require_env("HUIFU_SYS_ID"),
-        require_env("HUIFU_PRODUCT_ID"),
-        require_env("HUIFU_SKILL_SOURCE"),
+        private_key=require_env("HUIFU_RSA_PRIVATE_KEY"),
+        public_key=require_env("HUIFU_RSA_PUBLIC_KEY"),
+        sys_id=require_env("HUIFU_SYS_ID"),
+        product_id=require_env("HUIFU_PRODUCT_ID"),
+        sign_type="RSA",
+        jpt_x_skill_source=require_env("HUIFU_SKILL_SOURCE"),
     )
 ```
 
-`MerConfig` 的第五个参数是 `jpt_x_skill_source`。`dg-sdk 2.0.24` 会从最终请求参数 `data.huifu_id` 自动推导 `jpt-x-skill-huifu_id` 请求头；同一进程请求多个商户号时，不需要为 huifu 头重置 `DGClient.mer_config`，但每个 request 对象必须写入本次真实 `huifu_id`。
+`MerConfig` 的第五个参数是 `sign_type`，第六个参数是 `jpt_x_skill_source`。`dg-sdk 2.0.28` 会从最终请求参数 `data.huifu_id` 自动推导 `jpt-x-skill-huifu_id` 请求头；同一进程请求多个商户号时，不需要为 huifu 头重置 `DGClient.mer_config`，但每个 request 对象必须写入本次真实 `huifu_id`。
 
 ## 推荐调用方式
 
@@ -125,7 +123,7 @@ Python 官方 SDK 会生成以下请求头：
 
 | Header | 值 |
 | --- | --- |
-| `jpt-sdk_version` | `python_2.0.24` |
+| `jpt-sdk_version` | `python_2.0.28` |
 | `jpt-x-skill-source` | `MerConfig.jpt_x_skill_source` |
 | `jpt-x-skill-huifu_id` | SDK 从最终请求参数 `data.huifu_id` 自动取值；没有 `huifu_id` 时为空 |
 | `Content-Type` | 非文件请求为 `application/json;charset=utf-8` |
@@ -154,7 +152,7 @@ json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
 
 ## 新增接口兼容性
 
-| 接口 | Python `dg-sdk 2.0.24` / 官方源码核对 | 输出规则 |
+| 接口 | Python `dg-sdk 2.0.28` / 官方源码核对 | 输出规则 |
 | --- | --- | --- |
 | 抖音直连下单 | 使用 `V2TradeHostingPaymentPreorderDyRequest`，功能码映射共用 `preorder` 端点 | 设置 `request.pre_order_type = "4"` 和序列化后的 `request.dy_data`；其他扩展字段通过 `.post(extend_infos)` 传入 |
 | 拆单支付订单查询 | 存在 `V2TradeHostingPaymentSplitpayQueryRequest` 和 `V2_TRADE_HOSTING_PAYMENT_SPLITPAY_QUERY` 常量 | 可生成官方 request 类代码；字段为 `req_date`、`req_seq_id`、`huifu_id`、`org_req_date`、`org_req_seq_id` |

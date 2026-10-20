@@ -11,18 +11,20 @@
 
 ## 使用方式与证据边界
 
-本索引是 `huifu-merchant-onboarding 1.0.4` 对十三个官网页面及“商户业务类型”公共编码页的高风险约束速查，不是完整字段目录。完整字段是否存在、嵌套路径、类型、长度、Y/N/C 与官方说明必须读取 `merchant-onboarding-complete-field-catalog.md`；本页负责枚举、默认值、跨方向隔离、官网冲突和安全边界。业务开通或修改仍必须先选定具体能力，不存在跨渠道通用的完整请求模板。来源快照核验日期：`2026-09-22`，共 2,210 个字段节点；相对上一快照新增82、删除79、修改194。独立 Skill 包内可从完整字段目录和 `official-service-source-index.md` 核对十三个来源 URL 与 SHA。允许增量的机器门禁保存在维护仓库，不是安装包运行依赖。
+本索引是 `huifu-merchant-onboarding 1.0.5` 对十三个官网页面及“商户业务类型”公共编码页的高风险约束速查，不是完整字段目录。完整字段是否存在、嵌套路径、类型、长度、Y/N/C 与官方说明必须读取 `merchant-onboarding-complete-field-catalog.md`；本页负责枚举、默认值、跨方向隔离、官网冲突和安全边界。业务开通或修改仍必须先选定具体能力，不存在跨渠道通用的完整请求模板。来源快照核验日期：`2026-10-08`，共 2,209 个字段节点；相对上一快照新增0、删除1、修改3。独立 Skill 包内可从完整字段目录和 `official-service-source-index.md` 核对十三个来源 URL 与 SHA。允许增量的机器门禁保存在维护仓库，不是安装包运行依赖。
 
 - **官网 API 合同**：本页的端点、顶层信封、`data` 第一层字段、类型、最大长度与 Y/N/C 均以所列官网页面为准。
 - **SDK 源码事实**：只读取 `shared-server-sdk-matrix.md`；不能推断材料条件、回调验签、响应枚举或审核结果。
 - **本 Skill 策略**：安全、脱敏、补偿查询等标为本 Skill 策略，不是官网字段。
 - **完整字段目录**：`merchant-onboarding-complete-field-catalog.md` 已机械展开官方全部可达嵌套表。生成对象时必须从父路径读到全部相关叶子，再按调用方真实业务选择取子集；禁止仅凭本页速查、字段名或示例补字段。
-- **当前增量**：费率查询 `fee_rate_type:Array<string>` 改原生数组；企业补充对公卡必填/长度、微信直连子树、抖音与多层JSON容器、详情响应可选性、短信/状态长度均更新。请求1,277、同步响应753、通知180；字段与嵌套以完整目录为准，不能按本摘要猜wire。
+- **当前增量**：费率查询 `fee_rate_type:Array<string>` 改原生数组；企业补充对公卡必填/长度、微信直连子树、抖音与多层JSON容器、详情响应可选性、短信/状态长度均更新。请求1,276、同步响应753、通知180；字段与嵌套以完整目录为准，不能按本摘要猜wire。
 - **官方空单元保真**：当前十三页仍有10个目录节点的说明单元为空、4个 String 标量叶字段的长度单元为空；完整目录保留 `—`，不得按同名字段、示例或 SDK 类型补写。
 
 文档疑义按 `shared-overview.md` 的“文档疑义与开发提醒”处理：列出完整路径与本页/原子页的对应官方文档，建议开发者核对；不清楚时咨询汇付官方或汇付开发者交流沟通群。继续已明确的 SDK、DTO 和业务代码，争议部分用 TODO/待填配置隔离，不将咨询答复作为开始开发的条件。
 
-### 本轮重点冲突
+同名地区字段按完整父路径分别建模：`request.data.prov_id/area_id` 是经营省市，`request.data.card_info.prov_id/area_id` 是结算卡省市，企业进件的 `request.data.material_card_info.prov_id/area_id` 是补充对公同名账户省市。详情响应另有 `response.data.material_card_info.prov_id/area_id`，不得与请求共用长度或合并到顶层。`card_info` 与 `material_card_info` 都按 String(JSON Object) 整体编码/解码。
+
+### 当前重点冲突
 
 - 企业 `request.data.material_card_info` 正式Y，但说明仅非个体企业对私结算时要求；必须标记 `[官方文档口径冲突]`，不得不加说明地改成N或无条件收集。其branch_code正式长度8与12位示例冲突；响应同路径长度12，不能互抄。head_type现在String(1) C，activated_products企业及基本修改长度32。
 - 开通/修改的 `jxf_fee_info`、开通的 `wx_zl_conf.certificate_info/sales_info`、修改的分账子对象与通知对象存在Object类型与字符串/数组描述差异；逐路径确认，不套用统一序列化。
@@ -33,7 +35,7 @@
 
 十二个 JSON 接口（图片上传之外的接口）的请求顶层均为：`sys_id:String(32), product_id:String(32), sign:String(512), data:Json`，均为 Y。图片上传是特殊合同：接口元数据标记 `sign=true`，但 `requestDemo` 没有顶层 `sign`。Java `3.0.41` 的图片专用 Request、URI 特判与 `BasePayClient.upload(...)` 已确认满足请求加签和两种来源传输要求；PHP/Python 的专用生成实现不可直接使用，但允许按 Java 已核验 wire 生成图片专用通用 POST/自写 HTTPS multipart 降级。顶层 `file` 与 `data.file_url` 不能同时上传；官网未说明二者都空是否合法。
 
-十三个接口页均执行同一 Skill 来源合同：使用 Skill 调用时要求 `jpt-x-skill-source: <skill_source>`；未显式配置时，仅进件实际参与当前请求默认 `hfms/1.0.4`，支付与进件都实际参与当前请求默认 `hfps/1.3.5;hfms/1.0.4`，仅安装未参与的不计入。其他 SDK 内部请求头由 SDK 自行处理，不进入 Skill 的字段、语言差异或硬停判断。十一个已有专属 JSON Request 的 Java、PHP、Python SDK 主链路语言差异仍按 SDK 能力矩阵处理。费率查询在锁定 SDK 中没有专属类；使用已核验的官方通用入口并传入正确配置，复用该入口的签名、验签与来源头，不得把类缺口误认为手写 HTTP 授权。
+十三个接口页均执行同一 Skill 来源合同：使用 Skill 调用时要求 `jpt-x-skill-source: <skill_source>`；未显式配置时，仅进件实际参与当前请求默认 `hfms/1.0.5`，支付与进件都实际参与当前请求默认 `hfps/1.4.0;hfms/1.0.5`，仅安装未参与的不计入。其他 SDK 内部请求头由 SDK 自行处理，不进入 Skill 的字段、语言差异或硬停判断。十一个已有专属 JSON Request 的 Java、PHP、Python SDK 主链路语言差异仍按 SDK 能力矩阵处理。费率查询在锁定 SDK 中没有专属类；使用已核验的官方通用入口并传入正确配置，复用该入口的签名、验签与来源头，不得把类缺口误认为手写 HTTP 授权。
 
 十一个已有专属 Request 类的 JSON 接口和 Java 图片调用均进入 `dg-java-sdk 3.0.41` 的公共 `AbstractRequest`。其 `BasePay.debug` 默认为 `true`，会打印私钥、签名和请求数据；任何 Java 可运行代码都必须在进程初始化阶段、任何 SDK 请求之前执行一次 `BasePay.debug = false;`，不得在并发请求中临时切换。该设置只关闭调试输出，不改变签名流程；十一个已有专属类的 JSON 接口保留请求签名和响应验签，图片 `file_url` 走 `BasePayClient.request(request, true)`，本地文件走 `BasePayClient.upload(request, file)`，两者均保留请求签名但跳过响应验签。费率查询没有专属 Request 类，不得用相似类替代。
 
@@ -276,7 +278,7 @@ PHP `2.0.31` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo
 
 | 接口 | `data` 字段 |
 | --- | --- |
-| 图片上传 | `req_seq_id String(32) Y`; `req_date String(8) Y`; `file_type String(32) Y`; `huifu_id String(18) N`; `file_url String(512) N`。`data.file_url` 与顶层 `file` 互斥；图片为 JPG/BMP/PNG，最大 2MB。官网未定义响应 schema。 |
+| 图片上传 | `req_seq_id String(32) Y`; `req_date String(8) Y`; `file_type String(32) Y`; `huifu_id String(18) N`; `file_url String(512) C`。`data.file_url` 与顶层 `file` 互斥；图片为 JPG/BMP/PNG，最大 2MB；其他文件最大 10MB。官网未定义响应 schema。 |
 | 详情查询 | `req_seq_id String(32) Y`; `req_date String(8) Y`; `huifu_id String(18) Y`。响应公共字段为 `data.resp_code String(8) Y`、`data.resp_desc String(512) Y`；详情中的高敏字段按白名单读取。 |
 | 申请状态查询 | `req_seq_id String(32) Y`; `req_date String(8) Y`; `apply_no String(18) Y`; `huifu_id String(18) Y`。响应公共字段为 `data.resp_code String(8) Y`、`data.resp_desc String(512) Y`。 |
 
@@ -286,7 +288,7 @@ PHP `2.0.31` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo
 | --- | --- |
 | 业务开通修改 | `req_seq_id String(32) Y`; `req_date String(8) Y`; `huifu_id String(18) Y`；其余 53 组嵌套配置按本次真实修改目标从完整目录读取。 |
 | 基本信息修改 | `req_seq_id String(32) Y`; `req_date String(8) Y`; `upper_huifu_id String(18) C`; `huifu_id String(18) Y`；`upper_huifu_id` 在渠道商主体时填写、总部主体时选填；资料对象和条件必须从完整目录逐叶校验。 |
-| 费率信息查询 | `req_seq_id String(32) Y`; `req_date String(8) Y`; `huifu_id String(32) Y`; `fee_rate_type Array<string>(117) N`。发送原生JSON数组，不做字符串化；正式表与示例已一致。响应huifu_id为18，保留方向差异。 |
+| 费率信息查询 | `req_seq_id String(32) Y`; `req_date String(8) Y`; `huifu_id String(18) Y`; `fee_rate_type Array<string>(117) N`。发送原生JSON数组，不做字符串化；正式表与示例已一致。请求和响应huifu_id长度均为18，按各自方向建模。 |
 | 商户状态变更 | `req_date string(8) Y`; `req_seq_id string(32) Y`; `huifu_id String(18) Y`; `status String(1) Y`; `upd_status_reason String(512) Y`。`status` 仅字符串 `1/0`。官方多行注释中的 `file_list` 已废弃，不属于合同。 |
 | 商户短信发送 | `req_seq_id String(32) Y`; `req_date String(8) Y`; `huifu_id String(18) Y`; `verify_type String(32) Y`；`phone/operation_type/verify_code/elec_acct_sign_seq_id` 按完整目录中的 C 条件填写。 |
 | 商户多费率配置 | `req_seq_id/req_date/huifu_id` 为 `String(32/8/18) Y`；`wx_conf_list/ali_conf_list:String N` 均按 String(JSON Array) 发送且不得同时为空。子项 `pay_scene/fee_rate/fee_sign` 长度为 `2/6/32`。响应 `conf_list:String/jsonArray格式` 按 String(JSON Array) 解码；`pay_way=A/W`。 |
@@ -314,3 +316,7 @@ PHP `2.0.31` 自带 `init.php` 默认定义 `DEBUG=false`，但官方 `BsPayDemo
 业务开通修改逐业务通知的 `async.business.huifu_id` 字段名、中文名和类型均指向商户号 `String(18)`，但官网说明和示例误写成产品号及 `YYZY`。这是 `[官方文档口径冲突]`：只按真实商户号解析，禁止采用该示例，禁止使用该示例生成值。
 
 同一通知中的 `async.business.reg_result_list[]` 现已正式声明为Array，虽说明仍误拼 `josnArray`，数组身份不再依赖拼写例外。不得扁平化子字段。
+
+## 当前字段口径
+
+图片上传 file_url 为 C，示例移除顶层 file；文件流证据仍独立保留。业务开通修改 request.data.ali_conf_list[].switch_state 与 request.data.wx_conf_list[].switch_state 均为 Y，支付宝项不得沿用旧默认1。条件以完整父路径核对，不外推其他接口或配置组。

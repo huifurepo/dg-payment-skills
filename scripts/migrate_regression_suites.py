@@ -36,7 +36,7 @@ def main() -> int:
             onboarding.append(item)
         else:
             payment.append(item)
-    assert len(payment) == 58
+    assert len(payment) == 65
     assert len(onboarding) == 44
     LEGACY.write_text(
         json.dumps(cases, ensure_ascii=False, indent=2) + "\n",
@@ -48,7 +48,7 @@ def main() -> int:
             json.dumps(selected, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",
         )
-    print("regression suites generated: payment=58, onboarding=44, primary ownership=102")
+    print(f"regression suites generated: payment={len(payment)}, onboarding={len(onboarding)}, primary ownership={len(cases)}")
     return 0
 
 

@@ -56,7 +56,7 @@
   {
     "id": 210,
     "prompt": "本次只使用商户进件 Skill 的用户开户能力，skill_source 默认值是什么？哪些响应字段不能出现在日志和前端？",
-    "expected": "必须读取 `shared-request-header-policy.md` 和 `user-onboarding-shared-credential-boundary.md`；仅本 Skill 参与时默认 skill_source 为 hfms/1.0.4，显式合同值原样透传；login_password、证件号、银行卡号、手机号、地址、邮箱、token_no 和文件 ID 均须白名单提取与脱敏，不得写日志、前端或回答示例。",
+    "expected": "必须读取 `shared-request-header-policy.md` 和 `user-onboarding-shared-credential-boundary.md`；仅本 Skill 参与时默认 skill_source 为 hfms/1.0.5，显式合同值原样透传；login_password、证件号、银行卡号、手机号、地址、邮箱、token_no 和文件 ID 均须白名单提取与脱敏，不得写日志、前端或回答示例。",
     "suite": "user-onboarding"
   },
   {

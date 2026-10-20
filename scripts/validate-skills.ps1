@@ -40,8 +40,11 @@ Invoke-Validation @("scripts\test_independent_onboarding_release.py")
 Invoke-Validation @("scripts\generate_payment_source_index.py", "--check")
 Invoke-Validation @("scripts\validate_payment_source_contract.py")
 Invoke-Validation @("scripts\validate_payment_review_contract.py")
+Invoke-Validation @("scripts\validate_reference_source_metadata.py")
 Invoke-Validation @("scripts\generate_payment_field_catalog.py", "--check")
 Invoke-Validation @("scripts\validate_payment_field_catalog.py")
+Invoke-Validation @("scripts\validate_balance_payment_contract.py")
+Invoke-Validation @("scripts\validate_api_review.py")
 Invoke-Validation @("scripts\validate_onboarding_source_refresh.py")
 Invoke-Validation @(
     "scripts\generate_merchant_onboarding_field_catalog.py",
@@ -80,6 +83,7 @@ try {
 }
 
 if ($env:HUIFU_SDK_ROOT) {
+    Invoke-Validation @("scripts\validate_balance_payment_contract.py", "--sdk-root", $env:HUIFU_SDK_ROOT)
     Invoke-Validation @("scripts\validate_payment_sdk_evidence.py", "--sdk-root", $env:HUIFU_SDK_ROOT)
     Invoke-Validation @("scripts\validate_merchant_onboarding_sdk_evidence.py", "--sdk-root", $env:HUIFU_SDK_ROOT)
     Invoke-Validation @("scripts\validate_user_onboarding_sdk_evidence.py", "--sdk-root", $env:HUIFU_SDK_ROOT)

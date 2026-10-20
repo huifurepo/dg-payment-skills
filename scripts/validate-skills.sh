@@ -11,6 +11,7 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$REPO_ROOT"
 
 python3 -B scripts/validate_skill_split.py
+python3 -B scripts/validate_reference_retirements.py
 python3 -B scripts/validate_skills.py
 python3 -B scripts/validate_regression_reference_ownership.py
 python3 -B scripts/validate_aggregation_payload_contract.py
@@ -22,8 +23,11 @@ python3 -B scripts/test_independent_onboarding_release.py
 python3 -B scripts/generate_payment_source_index.py --check
 python3 -B scripts/validate_payment_source_contract.py
 python3 -B scripts/validate_payment_review_contract.py
+python3 -B scripts/validate_reference_source_metadata.py
 python3 -B scripts/generate_payment_field_catalog.py --check
 python3 -B scripts/validate_payment_field_catalog.py
+python3 -B scripts/validate_balance_payment_contract.py
+python3 -B scripts/validate_api_review.py
 python3 -B scripts/validate_onboarding_source_refresh.py
 python3 -B scripts/generate_merchant_onboarding_field_catalog.py \
   --locked-source-dir \
@@ -48,6 +52,7 @@ python3 -B scripts/validate_skill_packages.py --allow-dirty
 (cd local-sandbox && go test ./... -count=1)
 
 if [[ -n "${HUIFU_SDK_ROOT:-}" ]]; then
+  python3 -B scripts/validate_balance_payment_contract.py --sdk-root "$HUIFU_SDK_ROOT"
   python3 -B scripts/validate_payment_sdk_evidence.py --sdk-root "$HUIFU_SDK_ROOT"
   python3 -B scripts/validate_merchant_onboarding_sdk_evidence.py --sdk-root "$HUIFU_SDK_ROOT"
   python3 -B scripts/validate_user_onboarding_sdk_evidence.py --sdk-root "$HUIFU_SDK_ROOT"

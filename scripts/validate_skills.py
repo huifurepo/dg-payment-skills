@@ -25,6 +25,7 @@ from skill_validation_config import (
     ValidationState,
 )
 from validate_python_contract import validate_python_prod_contract
+from reference_retirements import canonical_regression_files
 from skill_validation_utils import (
     looks_like_local_path,
     should_skip,
@@ -37,10 +38,11 @@ DESCRIPTION_REQUIRED_TERMS = {
     "huifu-pay-integration": (
         "聚合支付",
         "托管支付",
+        "余额支付",
         "checkout-js",
         "签名",
         "幂等",
-        "商户进件",
+        "进件",
         "业务开通",
         "huifu-merchant-onboarding",
     ),
@@ -50,19 +52,17 @@ DESCRIPTION_REQUIRED_TERMS = {
         "开户",
         "图片",
         "业务开通",
-        "业务开通修改",
-        "基本信息修改",
-        "费率查询",
-        "状态变更",
+        "基本信息",
+        "费率",
         "短信",
-        "商户详情",
+        "商户状态",
+        "详情",
         "申请状态",
-        "企业用户",
-        "个人用户",
-        "用户业务入驻",
-        "用户申请单",
-        "用户信息查询",
-        "支付下单",
+        "用户",
+        "业务入驻",
+        "电子合同",
+        "统一页面进件",
+        "支付交易",
         "支付终态",
         "huifu-pay-integration",
     ),
@@ -279,8 +279,8 @@ def validate_description(description: object, skill_file: Path, state: Validatio
     if not isinstance(description, str) or not description.strip():
         state.error(f"{skill_file} missing required description")
         return
-    if len(description) > 1024:
-        state.error(f"{skill_file} description exceeds 1024 chars")
+    if len(description) > 300:
+        state.error(f"{skill_file} description exceeds 300 chars")
         return
     missing_terms = [
         term
@@ -531,10 +531,10 @@ def validate_regression_metadata(state: ValidationState) -> None:
         suite: sum(1 for item in prompts if item.get("suite") == suite)
         for suite in ("payment", "onboarding")
     }
-    if suite_counts != {"payment": 58, "onboarding": 44}:
+    if suite_counts != {"payment": 65, "onboarding": 44}:
         state.error(f"regression ownership/count changed unexpectedly: {suite_counts}")
     else:
-        state.ok("102 cases have unique payment=58/onboarding=44 ownership")
+        state.ok("109 cases have unique payment=65/onboarding=44 ownership")
     expected_suite_files = {
         "payment": [item for item in prompts if item.get("suite") == "payment"],
         "onboarding": [item for item in prompts if item.get("suite") == "onboarding"],
@@ -581,13 +581,7 @@ def validate_regression_metadata(state: ValidationState) -> None:
         state.ok("smoke regression covers 1.3.0 field/API refresh cases")
 
     for spec in SKILL_SPECS:
-        canonical_files = [spec.references_dir / "canonical-regression-prompts.md"]
-        user_canonical = spec.references_dir / "user-onboarding-canonical-regression-prompts.md"
-        if user_canonical.is_file():
-            canonical_files.append(user_canonical)
-        extension_canonical = spec.references_dir / "onboarding-extension-canonical-regression-prompts.md"
-        if extension_canonical.is_file():
-            canonical_files.append(extension_canonical)
+        canonical_files = canonical_regression_files(spec.root)
         canonical_count = sum(
             len(re.findall(r"^### [CEOU]\d+", path.read_text(encoding="utf-8"), flags=re.M))
             for path in canonical_files
@@ -649,23 +643,20 @@ def validate_user_onboarding_reference_contract(state: ValidationState) -> None:
     root = REPO_ROOT / "huifu-merchant-onboarding"
     required_terms = {
         root / "SKILL.md": (
-            "条件必填",
-            "account_info",
-            "account_recharge_config",
-            "account_level",
-            "LV3",
-            "九页官网都把外层 `response.data`",
-            "父节点整体缺失",
-            "个人用户只允许 `card_type=1`",
+            "C按条件必填",
+            "merchantHuifuId",
+            "userHuifuId",
+            "逐层编码/解码",
+            "references/user-onboarding-field-contracts.md",
+            "references/user-onboarding-complete-field-catalog.md",
+            "references/onboarding-extension-complete-field-catalog.md",
             "RECV_ORD_ID_` + `req_seq_id",
             "user-onboarding-platform-contracts.md",
-            "官方 SDK-first 与图片例外",
-            "CURLOPT_SSL_VERIFYPEER=false",
             "常规接口真实请求都使用官方 Request/Client 入口",
-            "SDK 没有专属 Request/路由时",
+            "SDK没有专属Request/路由时",
             "唯一例外是 `/v2/supplementary/picture`",
-            "PHP/Python 图片上传按上述唯一例外允许受控降级",
-            "商户费率查询仍禁止手写 HTTP",
+            "PHP/Python受控multipart适配",
+            "不手写HTTP补位",
         ),
         root / "references/shared-server-sdk-matrix.md": (
             "只使用官方 Request/SDK 主链路",

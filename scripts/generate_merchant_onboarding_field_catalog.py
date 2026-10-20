@@ -491,7 +491,7 @@ def parse_markdown_tables(
         id_match = re.search(r"div:extend-table\s+([\w-]+)-table", lines[index])
         if id_match:
             pending_id = id_match.group(1)
-        if not re.match(r"^\|\s*参数", lines[index]):
+        if not re.match(r"^\|\s*(?:\*\*)?参数(?:\*\*)?\s*\|", lines[index]):
             index += 1
             continue
 
@@ -686,14 +686,17 @@ def render_image_source(content: bytes) -> tuple[str, dict[str, object]]:
         "| `request.sys_id` | — | `—` | `—` | `—` | 仅见于 `requestDemo`；官方 JSON 未给正式顶层 schema。 |",
         "| `request.product_id` | — | `—` | `—` | `—` | 仅见于 `requestDemo`；官方 JSON 未给正式顶层 schema。 |",
         "| `request.data` | — | `—` | `—` | `—` | 仅见于 `requestDemo`；`requestBody.params` 定义下列五个 data 字段。 |",
-        "| `request.file` | 图片文件流 | `—` | `—` | `—` | 仅见于 `requestDemo`，且字段说明只确认它与 `request.data.file_url` 不能同时上传；不得猜测类型或必填性。 |",
     ]
+    # A demo-only field must disappear when the official demo removes it.
+    demo = json.loads(document["requestDemo"])
+    if "file" in demo:
+        lines.append("| `request.file` | 图片文件流 | `—` | `—` | `—` | 仅见于 `requestDemo`，且字段说明只确认它与 `request.data.file_url` 不能同时上传；不得猜测类型或必填性。 |")
     for item in params:
         description = clean_cell(item.get("remark", ""))
         lines.append(
             "| `request.data.{}` | {} | `{}` | `{}` | `{}` | {} |".format(
                 escape_table(item["name"]),
-                escape_table(item.get("desc", "")),
+                escape_table(clean_cell(item.get("desc", ""))),
                 escape_table(item.get("fieldType", "—")),
                 escape_table(item.get("maxLength", "—") or "—"),
                 escape_table(item.get("isRequired", "—")),
@@ -706,8 +709,8 @@ def render_image_source(content: bytes) -> tuple[str, dict[str, object]]:
         "sha256": hashlib.sha256(content).hexdigest(),
         "root_tables": 1,
         "extend_tables": 0,
-        "surface_counts": {"请求信封与 data": 4 + len(params)},
-        "total_fields": 4 + len(params),
+        "surface_counts": {"请求信封与 data": len(demo) + len(params)},
+        "total_fields": len(demo) + len(params),
         "max_depth": 3,
     }
     return "\n".join(lines), summary

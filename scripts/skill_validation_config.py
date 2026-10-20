@@ -120,18 +120,12 @@ SKILL_SPECS = load_skill_specs()
 SKILL_FILES = sorted(spec.skill_file for spec in SKILL_SPECS)
 PAYMENT_SPEC = next(spec for spec in SKILL_SPECS if spec.domain == "payment")
 ONBOARDING_SPEC = next(spec for spec in SKILL_SPECS if spec.domain == "onboarding")
-PAYMENT_SOURCE_LOCK = (
-    REPO_ROOT / "maintainer-contracts/payment-source-lock-2026-08-31.json"
-)
-ONBOARDING_SOURCE_LOCK = (
-    REPO_ROOT / "maintainer-contracts/merchant-onboarding-source-lock-2026-09-22.json"
-)
-USER_ONBOARDING_SOURCE_LOCK = (
-    REPO_ROOT / "maintainer-contracts/user-onboarding-source-lock-2026-09-22.json"
-)
-ONBOARDING_EXTENSION_SOURCE_LOCK = (
-    REPO_ROOT / "maintainer-contracts/onboarding-extension-source-lock-2026-09-22.json"
-)
+_manifest = json.loads(MANIFEST_FILE.read_text(encoding="utf-8"))
+PAYMENT_SOURCE_LOCK = REPO_ROOT / _manifest["skills"]["huifu-pay-integration"]["source_lock"]
+_onboarding_combined = json.loads((REPO_ROOT / _manifest["skills"]["huifu-merchant-onboarding"]["source_lock"]).read_text(encoding="utf-8"))
+ONBOARDING_SOURCE_LOCK = REPO_ROOT / _onboarding_combined["source_locks"]["merchant_onboarding"]["path"]
+USER_ONBOARDING_SOURCE_LOCK = REPO_ROOT / _onboarding_combined["source_locks"]["user_onboarding"]["path"]
+ONBOARDING_EXTENSION_SOURCE_LOCK = REPO_ROOT / _onboarding_combined["source_locks"]["onboarding_extension"]["path"]
 
 
 def load_payment_source_lock() -> dict[str, object]:

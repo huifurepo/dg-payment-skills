@@ -93,7 +93,7 @@
 | `latitude` | String | 20 | N | 与 IP、基站地址至少三选一送一项 |
 | `longitude` | String | 20 | N | 与 IP、基站地址至少三选一送一项 |
 
-> **[官方文档口径冲突]** 请求参数表定义 `risk_check_data.ip_addr/base_station/latitude/longitude`，但同页成功请求样例使用 `risk_check_data.ip_address`，并额外出现表中未定义的 `risk_check_data.risk_mng_info.sub_trade_type`。两套路径只能作为互不等价的候选口径保留；取得真实联调样本或官方确认前，不得静默把 `ip_addr` 重命名为 `ip_address`、补入 `risk_mng_info`，也不得生成生产 DTO 或固定校验器。
+> 2026-10-10官网请求示例已改为 `risk_check_data.ip_addr`，删除示例专有字段。按正式 `ip_addr/base_station/latitude/longitude` 构造，旧风控示例冲突已关闭。
 
 ### `terminal_device_data`
 
@@ -146,7 +146,7 @@
 | `actual_ref_amt` | String | 14 | N | 实际退款金额 |
 | `acct_split_bunch` | String(JSON Object) | 2048 | N | 分账信息 |
 | `unionpay_response` | String(JSON Object) | 6000 | N | 银联返回报文 |
-| `dy_response` | String（子表编码待确认） | 6000 | N | 官网未声明 JSON；子字段只作合同展示路径 |
+| `dy_response` | String(JSON Object) | 6000 | N | 先解码JSON对象字符串，再读取子字段 |
 | `remark` | String | 84 | N | 备注，原样返回 |
 | `bank_code` | String | 64 | N | 通道返回码 |
 | `bank_message` | String | 256 | N | 通道返回描述 |
@@ -188,14 +188,14 @@
 | `acct_split_bunch` | String(JSON Object) | 4000 | Y | 分账退款信息 |
 | `split_fee_info` | String(JSON Object) | 2048 | N | 分账手续费信息，线上交易返回 |
 | `unionpay_response` | String(JSON Object) | 6000 | N | 银联返回报文，可能含 `coupon_info` 优惠信息 |
-| `dy_response` | String（子表编码待确认） | 6000 | N | 官网未声明 JSON；子字段只作合同展示路径 |
+| `dy_response` | String(JSON Object) | 6000 | N | 先解码JSON对象字符串，再读取子字段 |
 | `remark` | String | 84 | N | 备注，原样返回 |
 
 ### 同步/异步扩展对象
 
 `acct_split_bunch` 的对象长度以所在主表为准：同步 2048、异步 4000。
 
-`dy_response` 的父字段仅由官网定义为 `String(6000)`，未说明 JSON 编码。以下 `org_out_trans_id/out_trans_id/payer_refund` 是官网展开的合同定位路径；在真实样本或官方确认前，wire 子表编码和 JSON decode 路径均为 `[需要官方确认]`。
+`dy_response` 在同步及异步业务表均已明确为 String(JSON Object)(6000)。同步侧可按目录解码；退款异步外层仍标为 `data`，外层编码/签验协议未明确，不能据子字段编码推定整份通知协议。
 
 | 字段路径 | 类型 | 长度 | 必填 | 说明 |
 | --- | --- | --- | --- | --- |
@@ -223,7 +223,7 @@
 | --- | --- | --- | --- | --- |
 | `split_fee_amt` | String | 14 | Y | 分账手续费金额 |
 | `split_fee_huifu_id` | String | 32 | Y | 分账手续费承担方商户号 |
-| `split_fee_acct_id` | String | 9 | N | 分账手续费承担方账号 |
+| `split_fee_acct_id` | String | 16 | N | 分账手续费承担方账号 |
 
 `unionpay_response.coupon_info[]`：
 

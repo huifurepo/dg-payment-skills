@@ -2,7 +2,7 @@
 
 ## 适用范围
 
-用于商户成功开通微信、支付宝支付功能后，按支付功能与场景配置或修改手续费底价。官方来源：[商户多费率配置](https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflpz.md)，官网更新时间 `2026-09-20`，本地活动快照 `2026-09-22`，原文 SHA-256 为 `e4b23cb9bfaf59e9a88448a890f539d7ee9cbf7002d763a7d078294053aa7473`。
+用于商户成功开通微信、支付宝支付功能后，按支付功能与场景配置或修改手续费底价。官方来源：[商户多费率配置](https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflpz.md)，官网更新时间 `2026-09-20`，本地活动快照 `2026-10-08`，原文 SHA-256 为 `e4b23cb9bfaf59e9a88448a890f539d7ee9cbf7002d763a7d078294053aa7473`。
 
 本接口是商户业务配置接口，不是商户费率信息查询、支付下单费率覆盖或实际手续费结算结果。调用前必须已有真实 `huifu_id`，且目标微信或支付宝能力已经开通成功；接口存在不证明调用方拥有配置权限。
 
@@ -57,4 +57,6 @@ Java 可运行代码仍须在进程初始化、任何 SDK 请求前全局执行�
 
 ## 公共请求头
 
-`jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.4`，同时使用支付与进件 Skill 时默认 `hfps/1.3.5;hfms/1.0.4`。
+Python2.0.28使用`import dg_sdk`和`dg_sdk.V2MerchantBusiMultifeeConfigRequest()`；精确子模块为`dg_sdk.request.v2_merchant_busi_multifee_config_request`（request为单数）。初始化按共享请求头页把全关键字构造的MerConfig绑定`dg_sdk.DGClient.mer_config`，设置实例的`req_seq_id/req_date/huifu_id`后再`post(extend_infos)`；三个属性不能只写注释占位。
+
+`jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.5`，同时使用支付与进件 Skill 时默认 `hfps/1.4.0;hfms/1.0.5`。

@@ -378,7 +378,7 @@ def source_tables(
         marker = re.search(r"div:extend-table\s+([\w-]+)-table", lines[cursor])
         if marker:
             pending = marker.group(1)
-        if not re.match(r"^\|\s*参数", lines[cursor]):
+        if not re.match(r"^\|\s*(?:\*\*)?参数(?:\*\*)?\s*\|", lines[cursor]):
             cursor += 1
             continue
         table_id, pending = pending, None
@@ -493,6 +493,7 @@ def expected_records(lock: dict[str, object]) -> dict[tuple[str, str, str], tupl
                 RawField("data", "—", "—", "—", "—", "仅见于 `requestDemo`；`requestBody.params` 定义下列五个 data 字段。", None, False),
                 RawField("file", "图片文件流", "—", "—", "—", "仅见于 `requestDemo`，且字段说明只确认它与 `request.data.file_url` 不能同时上传；不得猜测类型或必填性。", None, False),
             )
+            synthetic = tuple(field for field in synthetic if field.name in json.loads(document["requestDemo"]))
             for field in synthetic:
                 item = record(
                     source["title"],
@@ -507,7 +508,7 @@ def expected_records(lock: dict[str, object]) -> dict[tuple[str, str, str], tupl
             for param in document["requestBody"]["params"]:
                 field = RawField(
                     param["name"],
-                    param.get("desc", ""),
+                    normalize(param.get("desc", "")),
                     param.get("fieldType", "—"),
                     param.get("maxLength", "—") or "—",
                     param.get("isRequired", "—"),
@@ -779,179 +780,11 @@ def main() -> int:
         json.loads((ROOT / "tests/regression/onboarding.json").read_text(encoding="utf-8")),
     )
     assert not route_errors, "onboarding route contract mismatch: " + "; ".join(route_errors)
+    from source_review_validation import validate_source
     lock = json.loads(LOCK.read_text(encoding="utf-8"))
-    assert set(lock) == {
-        "schema_version",
-        "source_date",
-        "source_snapshot_id",
-        "previous_source_lock",
-        "verified_at",
-        "sources",
-        "totals",
-        "api_refresh",
-    }, "current merchant source lock schema changed"
-    assert {
-        key: lock[key]
-        for key in ("schema_version", "source_date", "source_snapshot_id")
-    } == {
-        "schema_version": 1,
-        "source_date": "2026-09-22",
-        "source_snapshot_id": "2026-09-22",
-    }, "current merchant source metadata changed"
-    assert re.fullmatch(r"2026-09-22T\d{2}:\d{2}:\d{2}\+08:00", lock["verified_at"])
-    september_lock = ROOT / "maintainer-contracts/merchant-onboarding-source-lock-2026-09-15.json"
-    september_sha = "1352b7064563a8447ded0ccc369fd570c72883b83628d46d7cc7408720bb196d"
-    assert hashlib.sha256(september_lock.read_bytes()).hexdigest() == september_sha, "2026-09-15 merchant lock must remain immutable"
-    assert lock["previous_source_lock"] == {
-        "path": september_lock.relative_to(ROOT).as_posix(),
-        "sha256": september_sha,
-    }
-    assert lock["totals"] == {
-        "fields": 2210,
-        "request": 1277,
-        "response": 753,
-        "callback": 180,
-        "parent": 246,
-        "leaf": 1964,
-        "root_tables": 63,
-        "extend_tables": 217,
-    }
-    assert lock["api_refresh"] == {
-        "refresh_id": "api-refresh-merchant-online-review-2026-09-22",
-        "changed_source_keys": [
-            "enterprise",
-            "business_open",
-            "detail_query",
-            "status_query",
-            "business_open_modify",
-            "basic_info_modify",
-            "rate_query",
-            "sms_send",
-            "multifee_config",
-            "multifee_query",
-        ],
-        "field_paths_added": 82,
-        "field_paths_removed": 79,
-        "field_paths_changed": 194,
-        "document_conflicts": [
-            "enterprise request.data.material_card_info is Y while its description limits requiredness to enterprise private settlement",
-            "enterprise request.data.material_card_info.branch_code length is 8 while its example has 12 characters",
-            "several Object types (including jxf_fee_info and business-open wx_zl_conf certificate_info/sales_info) still describe jsonObject strings",
-            "business-modify wx_zl_pay_conf_list is String with no declared JSON shape although it has nested fields",
-            "business-modify async.business.huifu_id still describes and exemplifies a product ID",
-        ],
-    }, "current merchant refresh delta changed"
-
-    current_source_schema = {
-        "key",
-        "title",
-        "filename",
-        "url",
-        "endpoint",
-        "official_page_update",
-        "sha256",
-        "field_count",
-        "request_fields",
-        "response_fields",
-        "callback_fields",
-        "root_tables",
-        "extend_tables",
-    }
-    assert all(set(source) == current_source_schema for source in lock["sources"]), (
-        "current merchant source entry schema changed"
-    )
-    expected_current_files = {source["filename"] for source in lock["sources"]}
-    actual_current_files = {path.name for path in SOURCE_DIR.iterdir() if path.is_file()}
-    assert actual_current_files == expected_current_files, (
-        "current merchant source snapshot file set changed"
-    )
-    assert [source["key"] for source in lock["sources"]] == list(EXPECTED_ENDPOINTS), (
-        "current merchant source order or endpoint coverage changed"
-    )
+    validate_source(lock, "merchant-onboarding", list(EXPECTED_ENDPOINTS))
     for source in lock["sources"]:
-        expected_endpoint = EXPECTED_ENDPOINTS[source["key"]]
-        assert source["endpoint"] == expected_endpoint, (
-            f"{source['key']}: source-lock endpoint differs from official page: "
-            f"{source['endpoint']} != {expected_endpoint}"
-        )
-        source_path = SOURCE_DIR / source["filename"]
-        endpoint_path = expected_endpoint.removeprefix("POST ")
-        if source["key"] == "image_upload":
-            payload = json.loads(source_path.read_text(encoding="utf-8"))
-            assert "/" + payload["uri"].lstrip("/") == endpoint_path, (
-                "image-upload source URI differs from source lock"
-            )
-        else:
-            official_text = source_path.read_text(encoding="utf-8-sig")
-            assert f"api.huifu.com{endpoint_path}" in official_text, (
-                f"{source['key']}: official source does not contain {endpoint_path}"
-            )
-
-    previous_raw = PREVIOUS_LOCK.read_bytes()
-    assert hashlib.sha256(previous_raw).hexdigest() == PREVIOUS_LOCK_SHA256, (
-        "previous merchant source lock changed"
-    )
-    previous = json.loads(previous_raw)
-    previous_by_key = {source["key"]: source for source in previous["sources"]}
-    current_by_key = {source["key"]: source for source in lock["sources"]}
-    assert set(current_by_key) == set(previous_by_key), "merchant source keys changed"
-    assert {
-        key: previous_by_key[key]["endpoint"]
-        for key in PREVIOUS_ENDPOINT_METADATA_ERRORS
-    } == PREVIOUS_ENDPOINT_METADATA_ERRORS, (
-        "historical endpoint-metadata error set changed"
-    )
-    expected_previous_files = {
-        source["filename"] for source in previous["sources"]
-    }
-    actual_previous_files = {
-        path.name for path in PREVIOUS_SOURCE_DIR.iterdir() if path.is_file()
-    }
-    assert actual_previous_files == expected_previous_files, (
-        "previous merchant source snapshot file set changed"
-    )
-    for source in previous["sources"]:
-        raw = (PREVIOUS_SOURCE_DIR / source["filename"]).read_bytes()
-        assert hashlib.sha256(raw).hexdigest() == source["sha256"], (
-            f"previous merchant source SHA changed: {source['filename']}"
-        )
-
-    september = json.loads(september_lock.read_text(encoding="utf-8"))
-    previous_by_key = {source["key"]: source for source in september["sources"]}
-    september_dir = ROOT / "maintainer-contracts/official-sources/merchant-onboarding/2026-09-15"
-    assert {path.name for path in september_dir.iterdir() if path.is_file()} == {
-        source["filename"] for source in september["sources"]
-    }
-    for source in september["sources"]:
-        assert hashlib.sha256((september_dir / source["filename"]).read_bytes()).hexdigest() == source["sha256"]
-    actual_changed = {
-        key
-        for key in current_by_key
-        if current_by_key[key]["sha256"] != previous_by_key[key]["sha256"]
-    }
-    assert actual_changed == CHANGED_SOURCE_KEYS, (
-        f"merchant changed-source set differs: {sorted(actual_changed)}"
-    )
-    inherited_keys = set(current_by_key) - CHANGED_SOURCE_KEYS
-    for key in inherited_keys:
-        current_metadata = dict(current_by_key[key])
-        previous_metadata = dict(previous_by_key[key])
-        if key in PREVIOUS_ENDPOINT_METADATA_ERRORS:
-            current_metadata.pop("endpoint")
-            previous_metadata.pop("endpoint")
-        assert current_metadata == previous_metadata, (
-            f"inherited merchant source metadata changed: {key}"
-        )
-        filename = current_by_key[key]["filename"]
-        assert (SOURCE_DIR / filename).read_bytes() == (
-            september_dir / filename
-        ).read_bytes(), f"inherited merchant source bytes changed: {key}"
-
-    for source in lock["sources"]:
-        raw = (SOURCE_DIR / source["filename"]).read_bytes()
-        assert hashlib.sha256(raw).hexdigest() == source["sha256"], (
-            f"{source['filename']}: locked byte digest mismatch"
-        )
+        assert source["endpoint"] == EXPECTED_ENDPOINTS[source["key"]]
 
     expected = expected_records(lock)
     actual = actual_records(lock)

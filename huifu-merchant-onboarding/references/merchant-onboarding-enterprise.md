@@ -7,7 +7,7 @@
 ## 已确认的请求合同
 
 - Endpoint：`POST https://api.huifu.com/v2/merchant/basicdata/ent`；顶层包含 `sys_id`、`product_id`、`sign`、`data`。
-- 官网更新时间 `2026-09-18`；本地活动快照 `2026-09-22`；原文 SHA-256：`6606629100f94813a7a4238c8f1ffc970ec3b905d1af9487bb92baee6138822e`。
+- 官网更新时间 `2026-09-18`；本地活动快照 `2026-10-08`；原文 SHA-256：`6606629100f94813a7a4238c8f1ffc970ec3b905d1af9487bb92baee6138822e`。
 - 请求、同步响应和审核异步的完整父子路径、类型、长度、Y/N/C 与官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“企业商户进件”；本页只保留生成策略和高风险约束，不能替代完整字段目录。
 - `data` 的请求定位键为 `req_seq_id`（当日唯一）和 `req_date`（`yyyyMMdd`）。`upper_huifu_id:String(18) C`：`sys_id` 主体为渠道商时填写真实渠道商号，总部商户主体时选填；不得为满足字段而虚构。
 - 最小资料按主体、营业执照、注册地址/经营地址、法人、联系人、结算卡和门店资料分组校验。图片字段只接收图片上传接口返回的标识。
@@ -52,7 +52,7 @@ sdkRequest.setExtendInfo(extendInfoMap);
 
 ## 回调边界
 
-官网已确认异步包络为 `resp_code:String(5) Y`、`resp_desc:String(512) Y`、`sign:String(2048) Y`、`data:String(JSON Object) N`。`data` 中已知字段为：
+官网已确认异步包络为 `resp_code:String(5) Y`、`resp_desc:String(512) Y`、`sign:String(512) Y`、`data:String(JSON Object) N`。`data` 中已知字段为：
 
 | 路径 | 类型 / 必填 | 说明 |
 | --- | --- | --- |

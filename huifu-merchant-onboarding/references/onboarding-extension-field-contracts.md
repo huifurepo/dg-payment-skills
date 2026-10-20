@@ -22,10 +22,10 @@
 1. 三个电子合同接口的 `resp_code` 已统一为8位；列表现在使用 `page_size/create_time`，响应分页字段也已正式声明，旧拼写与长度冲突关闭。但 `result_list:String/jsonArray` 与原生数组示例仍冲突；无协议时不返回该字段，不能伪造空值。三接口路由已迁移到 `/v2/agreement/elect/signurl/resend`、`/v2/agreement/apply/list`、`/v2/agreement/elect/rejectsign`。本地新增 `V2Invoice*` 专属类仍是旧 invoice 路由，不可用于最新接口；使用已核验的官方 SDK 通用入口。
 2. 下级商户权限配置的请求示例漏掉正式必填的 `data.product_id`，响应示例仍复制商户详情。只使用正式表；真实响应联调前保持宽容读取并记录未知键。
 3. 统一页面进件 `use_chains_flag` 已明确四值，`head_huifu_id` 为 C，旧冲突关闭；业务 `resp_code`、URL 长度、审核通知日期长度冲突仍保留。页面 URL 按不透明敏感值处理，不截断。
-4. 统一页面查询正式拼写已修为 `wx_real_name_list`；五组列表都正式定义为 String(JSON Array)，旧拼写与容器冲突关闭。但该字段 `pay_scene` 长度1与枚举01冲突，链接文字写“微信业务开通类型”、目标锚点却是“微信支付场景”，不得静默选择外部枚举。
+4. 统一页面查询正式拼写已修为 `wx_real_name_list`；五组列表都正式定义为 String(JSON Array)，旧拼写与容器冲突关闭。本轮 `pay_scene` 长度已修为2，旧长度冲突关闭；链接文字写“微信业务开通类型”、目标锚点却是“微信支付场景”，不得静默选择外部枚举。
 5. 微信配置异步 `config_type` 已修为 String(2)，同步四字段均 N 且未声明长度；旧长度冲突关闭。微信配置查询的一行仍把必填和长度写成 `32/N`，且新增/查询页对公众号 APPID 长度给出20/512；外层签名/信封、HTTP 状态与重试仍未知。
 6. 微信实名状态的 `qrcode_data` 同时被描述为 base64、可直接加载图片和完整 HTML。不得直接插入 DOM，也不得在确认 wire 前做二次解码。
-7. 支付宝实名申请已给社会组织主体编码6及对应证件条件，`auth_identity_info` 改为 N；旧主体编码缺口关闭。`support_credentials` 正式 String(JSON Array) 却给对象示例，`industry_qualification_info` 正文仍与社会组织枚举不一致；金融机构与地区示例冲突仍保留。
+7. 支付宝实名申请已给社会组织主体编码6及对应证件条件，`auth_identity_info` 改为 N；旧主体编码缺口关闭。`support_credentials` 已改 String(JSON Object)，小微商户条件必填，旧数组/对象冲突关闭；`industry_qualification_info` 正文仍与社会组织枚举不一致；金融机构与地区示例冲突仍保留。
 
 ## 异步与状态
 

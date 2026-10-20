@@ -2,9 +2,9 @@
 
 ## 当前 SDK 版本与源码边界
 
-Python 当前 SDK 为 `2.0.28`，来自 `../sdk/dg_sdk-2.0.28/dg_sdk/`；本页专属类、新旧路由、字段与通用入口已按实际源码复核，不代表网关权限或业务结果已验证。其他版本差异按 `shared-server-sdk-matrix.md` 留 TODO 并继续明确的官方 SDK 接入，不设整体开发前置核验要求。
+Python 当前 SDK 为 `2.0.28`，来自官方PyPI 2.0.28制品；本页专属类、新旧路由、字段与通用入口已按实际源码复核，不代表网关权限或业务结果已验证。其他版本差异按 `shared-server-sdk-matrix.md` 留 TODO 并继续明确的官方 SDK 接入，不设整体开发前置核验要求。
 
-本轮复核用户本地 Java `3.0.41`、PHP `2.0.31`、Python `2.0.28` 源码及 2026-09-22 官方文档。九个商户/AT 接口有精确专属 Request；三个电子合同正式 Endpoint 已迁移到 `/v2/agreement/...`，未找到对应专属类，须使用官方 SDK 通用入口。SDK 中的 `V2Invoice*` 类仍指向旧 invoice 路由，不能用于新文档接口。进件 skill 版本仍为 1.0.4。
+本轮依据2026-10-08已核验的官方固定Git提交/PyPI制品：Java `3.0.41`、PHP `2.0.31`、Python `2.0.28`，API来源为2026-10-08。九个商户/AT 接口有精确专属 Request；三个电子合同正式 Endpoint 已迁移到 `/v2/agreement/...`，未找到对应专属类，须使用官方 SDK 通用入口。SDK 中的 `V2Invoice*` 类仍指向旧 invoice 路由，不能用于新文档接口。进件 skill 版本仍为 1.0.5。
 
 | 接口 | 三语言 Request 类 | 生成类直接字段 |
 | --- | --- | --- |
@@ -20,6 +20,7 @@ Python 当前 SDK 为 `2.0.28`，来自 `../sdk/dg_sdk-2.0.28/dg_sdk/`；本页�
 
 ## 使用规则
 
+- 代码生成必须读取 `shared-server-sdk-matrix.md` 的“同步返回形状”：Java常规调用已经返回业务data，不能再get("data")；PHP先检查SDK响应对象isError再取信封data；Python正常签名响应返回业务data。
 - 九个商户/AT 接口必须使用对应官方 Request/Client 主链路；其余正式请求字段通过接口级 exact-key 白名单扩展。三种 SDK 的扩展合并都可能覆盖直接字段，扩展层必须拒绝覆盖生成类字段。
 - Java 在任何请求前固定 `BasePay.debug=false`；PHP 在加载 SDK/Demo 与 `BsPay::init` 前固定 `DEBUG=false`；新代码不主动关闭 TLS 校验，本地 PHP 既有风险按下方提醒处理。
 - 新版电子合同只用 `/v2/agreement/elect/signurl/resend`、`/v2/agreement/apply/list`、`/v2/agreement/elect/rejectsign`。Java 使用 `BasePayClient.request(params, "v2.agreement.elect.signurl.resend", false)`（其余功能码按精确路径转换）；PHP 使用 `postRequest(['funcCode' => 'v2/agreement/elect/signurl/resend', 'params' => $params])`；Python 使用 `DGTools.request_post('/v2/agreement/elect/signurl/resend', params)`。列表和拒签分别使用自己的精确路由，不复用重发。

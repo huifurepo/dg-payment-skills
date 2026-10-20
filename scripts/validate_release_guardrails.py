@@ -504,7 +504,7 @@ def validate_reproducible_provenance() -> None:
                     stdout=subprocess.DEVNULL,
                 )
                 outputs.append(
-                    output / "huifu-pay-integration-1.3.5.provenance.json"
+                    output / f"huifu-pay-integration-{run_real_model_regression.PAYMENT_SKILL_VERSION}.provenance.json"
                 )
             if before == source_snapshot():
                 break
@@ -523,17 +523,17 @@ def validate_reproducible_provenance() -> None:
         validate_skill_package.validate_refresh_source_bindings(payload, payment_spec)
         require(payload["schema_version"] == 3, "provenance schema 3 missing")
         require(
-            payload["refresh_id"] == "api-refresh-payment-online-review-2026-08-31",
+            payload["refresh_id"] == json.loads((REPO_ROOT / payment_spec["refresh_contract"]).read_text())["refresh_id"],
             "refresh ID was not bound to provenance",
         )
         require(
             payload["refresh_contract"]
-            == "maintainer-contracts/api-refresh-payment-online-review-2026-08-31.json",
+            == payment_spec["refresh_contract"],
             "refresh contract path was not bound to provenance",
         )
         require(
             set(payload["source_locks"])
-            == {"maintainer-contracts/payment-source-lock-2026-08-31.json"},
+            == {payment_spec["source_lock"], payment_spec["sdk_source_lock"]},
             "payment source lock was not bound to provenance",
         )
         tampered_refresh = json.loads(json.dumps(payload))
@@ -561,7 +561,7 @@ def validate_reproducible_provenance() -> None:
             == {"real-model/all/summary.json": hashlib.sha256(evidence_path.read_bytes()).hexdigest()},
             "labeled external evidence was not bound to provenance",
         )
-        archive = outputs[0].parent / "huifu-pay-integration-1.3.5.zip"
+        archive = outputs[0].parent / f"huifu-pay-integration-{run_real_model_regression.PAYMENT_SKILL_VERSION}.zip"
         validate_command = [
             sys.executable,
             str(REPO_ROOT / "scripts/validate_skill_package.py"),
@@ -632,6 +632,23 @@ def validate_external_model_evidence_path() -> None:
         not blocked.missing and not blocked.forbidden_hits,
         "infrastructure failure generated content-evaluation noise",
     )
+    for message in (
+        "authorize_stat 支持 AUTHORIZED、UNAUTHORIZED。",
+        "接口返回 authentication failed；请核对网关凭据。",
+        "遇到 rate limit 时按接口规则处理。",
+    ):
+        require(
+            run_real_model_regression.detect_infrastructure_failure(message, 0) is None,
+            "successful business answer was misclassified as model infrastructure failure",
+        )
+    for message, label in (
+        ("ERROR: authentication failed", "authentication"),
+        ("ERROR: rate limit exceeded", "rate-limit"),
+    ):
+        require(
+            run_real_model_regression.detect_infrastructure_failure(message, 1) == label,
+            "real model CLI failure was not detected",
+        )
 
 
 def main() -> int:

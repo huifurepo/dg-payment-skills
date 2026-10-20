@@ -3,7 +3,7 @@
 ## 接口合同
 
 - Endpoint：`POST https://api.huifu.com/v2/merchant/url/forward`。
-- 官方来源：[商户统一进件（页面版）](https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shtyjjweb.md)；快照 `2026-09-22`；SHA-256 `d3ce5d64bf4c9783b40e0700a93476016b469478ba9b3d2c9adf82f55d1e5888`。
+- 官方来源：[商户统一进件（页面版）](https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shtyjjweb.md)；快照 `2026-10-08`；SHA-256 `d3ce5d64bf4c9783b40e0700a93476016b469478ba9b3d2c9adf82f55d1e5888`。
 - 共59个路径：请求17、同步响应8、异步34；审核通知和逐业务通知必须分开建模。
 - `store_id:String(64) Y` 是本地关联键；`upper_huifu_id:C` 按调用主体填写。`head_office_flag=0` 时文案要求 `head_huifu_id` 必填，`head_office_flag=1` 时禁止传。
 

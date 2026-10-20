@@ -12,6 +12,7 @@ from pathlib import Path
 
 from skill_validation_config import ONBOARDING_SOURCE_LOCK, USER_ONBOARDING_SOURCE_LOCK
 from validation_runtime import require_assertions_enabled
+from reference_retirements import historical_reference
 
 
 require_assertions_enabled()
@@ -166,7 +167,7 @@ def validate_ledger(errors: list[str]) -> None:
             error(errors, f"{entry['source_path']}: no destination")
             continue
         for destination in destinations:
-            target = REPO_ROOT / destination["path"]
+            target = historical_reference(REPO_ROOT / destination["path"])
             if not target.is_file():
                 error(errors, f"{entry['source_path']}: missing destination {destination['path']}")
                 continue
@@ -357,7 +358,7 @@ def validate_transformation_target_lock(
         error(errors, "transformation target lock snapshot commit is invalid")
         return
     for relative_path, expected_digest in locked.items():
-        target = REPO_ROOT / relative_path
+        target = historical_reference(REPO_ROOT / relative_path)
         if not target.is_file():
             error(errors, f"{relative_path}: reviewed transformation target is missing")
             continue
@@ -529,13 +530,13 @@ def validate_maintainer_contracts(errors: list[str]) -> None:
         if phrase in release:
             error(errors, f"release checklist contains stale phrase: {phrase}")
     for required in (
-        "huifu-pay-integration` | `1.3.5",
-        "huifu-merchant-onboarding` | `1.0.4",
+        "huifu-pay-integration` | `1.4.0",
+        "huifu-merchant-onboarding` | `1.0.5",
         "电子合同、页面进件、下级权限及微信/支付宝 AT 管理",
     ):
         if required not in versioning:
             error(errors, f"versioning policy missing current fact: {required}")
-    for required in ("manifest", "新增模块流程", "当前3,367"):
+    for required in ("manifest", "新增模块流程", "当前3,366"):
         if required not in architecture:
             error(errors, f"Skill family architecture missing: {required}")
 

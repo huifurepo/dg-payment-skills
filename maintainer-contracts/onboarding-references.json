@@ -1,9 +1,8 @@
 {
   "schema_version": 1,
   "skill": "huifu-merchant-onboarding",
-  "reference_count": 71,
+  "reference_count": 68,
   "references": [
-    "canonical-regression-prompts.md",
     "copilot-troubleshooting-playbooks.md",
     "merchant-onboarding-alipay-realname-query.md",
     "merchant-onboarding-alipay-realname.md",
@@ -36,7 +35,6 @@
     "onboarding-electronic-contract-list-query.md",
     "onboarding-electronic-contract-reject.md",
     "onboarding-electronic-contract-resend.md",
-    "onboarding-extension-canonical-regression-prompts.md",
     "onboarding-extension-complete-field-catalog.md",
     "onboarding-extension-external-resources.md",
     "onboarding-extension-field-contracts.md",
@@ -54,7 +52,6 @@
     "user-onboarding-application-status-query.md",
     "user-onboarding-business-modify.md",
     "user-onboarding-business-open.md",
-    "user-onboarding-canonical-regression-prompts.md",
     "user-onboarding-complete-field-catalog.md",
     "user-onboarding-copilot-troubleshooting-playbooks.md",
     "user-onboarding-detail-query.md",

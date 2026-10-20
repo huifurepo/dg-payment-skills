@@ -1,6 +1,6 @@
 # 发布检查清单
 
-发版前逐项检查 manifest 中登记的每个 Skill。支付与商户进件必须能够独立构建、独立验证、独立升级和独立回滚；用户开户与十二个扩展接口作为进件 `1.0.4` 的子域随同一包发布。
+发版前逐项检查 manifest 中登记的每个 Skill。支付与商户进件必须能够独立构建、独立验证、独立升级和独立回滚；用户开户与十二个扩展接口作为进件 `1.0.5` 的子域随同一包发布。
 
 ## 结构检查
 
@@ -18,20 +18,21 @@
 - `SKILL.md` frontmatter 是否只使用 Agent Skills 规范允许字段
 - `name` 是否与目录名一致
 - `description` 是否说明“做什么”和“什么时候用”
+- 两个 `description` 是否均不超过300字符（含英文和标点），并保留所属领域及跨 Skill 路由
 - `agents/openai.yaml` 是否已生成且与主 Skill 当前口径一致
 - 主 `SKILL.md` 是否控制在 `500` 行以内
 
 ## 内容检查
 
 - 通用 Java SDK 版本是否与活动 SDK 锁一致：`3.0.41`
-- 聚合支付 Java SDK 版本是否仍为 `1.0.5`
+- 聚合支付 Java SDK 版本是否与活动 SDK 锁一致：Lightning `1.0.6`
 - PHP SDK 版本是否与活动 SDK 锁一致：`huifurepo/dg-php-sdk 2.0.31`
-- 进件 Python SDK 当前证据为 `dg-sdk 2.0.28`；支付保持其原有 `2.0.24` 文档基线，独立升级。
+- 支付与进件 Python SDK 是否均与活动 SDK 锁一致：`dg-sdk 2.0.28`
 - 前端 JS SDK 是否避免描述为“最新版”，并写清以项目锁定版本接入、升级前查询 npm registry
-- `HUIFU_SKILL_SOURCE` 显式值是否原样透传；缺失时是否按当前请求实际参与生成的 Skill 集合分别得到仅支付 `hfps/1.3.5`、仅进件 `hfms/1.0.4`、双 Skill `hfps/1.3.5;hfms/1.0.4`，且仅安装未参与的不计入、组合顺序固定、分号两侧无空格
+- `HUIFU_SKILL_SOURCE` 显式值是否原样透传；缺失时是否按当前请求实际参与生成的 Skill 集合分别得到仅支付 `hfps/1.4.0`、仅进件 `hfms/1.0.5`、双 Skill `hfps/1.4.0;hfms/1.0.5`，且仅安装未参与的不计入、组合顺序固定、分号两侧无空格
 - 图片是否只把 Java `3.0.41` 判为官方专用实现可用：`file_url` 走 `BasePayClient.request(request, true)`，本地文件走 `BasePayClient.upload(request, file)`，两者互斥且明确请求签名保留、响应验签跳过；PHP/Python 是否依据当前源码保留已知专用实现缺陷，同时仅为 `/v2/supplementary/picture` 放开保持 multipart、`data` 加签、TLS 和日志边界的通用 POST/自写 HTTPS 降级；Python 本次分发缺少 Demo 不视为核心能力缺失，不冒充已检查旧 Demo；图片标识/重试、审核/电子协议回调未确认项是否标 `[需要官方确认]` 并允许继续明确部分
 - `merchant-onboarding-field-contracts.md` 是否保留十三接口官网 URL、核验日期、公共信封、第一层请求字段、企业/个人必填 `card_info` 叶子合同与精确状态路径；其他未展开嵌套对象是否明确不得生成完整请求
-- `merchant-onboarding-complete-field-catalog.md` 是否与活动十三接口来源锁逐项一致，保留具名路径、父对象、官网来源 URL 与 SHA-256，合计 2,210；各接口数量以机械目录摘要和独立验证器为准
+- `merchant-onboarding-complete-field-catalog.md` 是否与活动十三接口来源锁逐项一致，保留具名路径、父对象、官网来源 URL 与 SHA-256，合计 2,209；各接口数量以机械目录摘要和独立验证器为准
 - `onboarding-extension-complete-field-catalog.md` 是否与活动十二接口来源锁逐项一致，合计546，并逐项登记官方冲突；各接口数量以机械目录摘要为准
 - `merchant-onboarding-external-resources.md` 是否按字段路径保留外部资料的原始地址，未把回调、APP 下载、二维码、图片等示例/运行时 URL 当作官方资料或默认值
 - `user-onboarding-complete-field-catalog.md` 是否与活动九接口来源锁逐项一致，合计611=333请求+220同步响应+58通知；根表、扩展表、父节点和叶节点数量由当前机械目录及独立验证器核对，不沿用旧快照计数
@@ -61,7 +62,7 @@
 - 官方业务指引、联调攻略、FAQ 是否只作为资料源索引与脱敏摘要，没有复制大图、真实商户数据或完整 FAQ 库
 - `official-service-source-index.md` 是否已检查采集日期、覆盖状态、不覆盖/转人工菜单和 AI 技能包技术支持入口，并明确官网 URL 只用于来源追溯和人工刷新
 - `skill-version-policy.md` 是否已检查当前版本、升级触发条件、用户更新方式，并明确 Skill 不主动联网检查或推送升级
-- 支付、商户进件和用户子域的 canonical regression prompts 是否保留 manifest 登记数量的安装后快速复测 Prompt
+- 支付、商户进件和用户子域的 canonical regression prompts 是否在维护者归档中保留 manifest 登记数量，且不进入安装包
 
 ## 上传检查
 
@@ -75,25 +76,25 @@
 - 已执行 `python3 scripts/validate_skill_split.py`
 - 已执行 `python3 scripts/validate_aggregation_payload_contract.py`
 - 已执行 `python3 scripts/validate_request_field_preservation.py`
-- 已从活跃37页支付来源锁生成并独立复核17个 API 的2,656个完整节点；历史来源锁及其原始字节保持不变
+- 已从活跃44页支付来源锁生成并独立复核24个 API 的2,930个完整节点；历史来源锁及其原始字节保持不变
 - 已执行 `python3 scripts/validate_payment_sdk_evidence.py --sdk-root <sdk-root>`，锁定交易分账明细查询的三语言专属 Request、精确路由和扩展覆盖边界
 - 已执行 `python3 scripts/validate_merchant_onboarding_complete_catalog.py`
 - 已从锁定十三份官方原文执行字段目录生成器 `--check`
-- 已执行 `python3 scripts/validate_merchant_onboarding_source_contract.py`，逐项比较全部 2,210 个节点的完整属性
+- 已执行 `python3 scripts/validate_merchant_onboarding_source_contract.py`，逐项比较全部 2,209 个节点的完整属性
 - 已执行 `python3 scripts/validate_onboarding_extension_source_contract.py`，核对十二份来源、546个节点、原子页、SDK 边界和组合锁
 - 已从锁定九份用户原文执行 `python3 scripts/generate_user_onboarding_field_catalog.py --locked-source-dir --check`
 - 已执行 `python3 scripts/validate_user_onboarding_source_contract.py`，逐项比较全部611个节点的完整属性
 - 已执行 `python3 scripts/validate_code_examples.py`
 - 已执行 `python3 scripts/scan_sensitive_examples.py`
 - 已执行 `python3 scripts/validate_skill_packages.py`，并确认 provenance 与 SHA sidecar 必须存在
-- 两个 provenance 均使用 schema `3`；进件 `1.0.4` 额外绑定 API 锁与其 manifest 指定的 SDK 锁，支付维持原有来源绑定合同。进件 API 锁复用历史1.0.3命名的34接口组合来源锁，历史文件不改写。
+- 两个 provenance 均使用 schema `3`；支付1.4.0绑定10-10API锁及刷新记录，进件1.0.5绑定10-08组合锁及刷新记录，两者SDK均绑定已核验10-08锁；历史文件不改写。
 - 在提供 SDK 根目录的环境执行 `python3 scripts/validate_merchant_onboarding_sdk_evidence.py --sdk-root <sdk-root>`
 - 在提供 SDK 根目录的环境执行 `python3 scripts/validate_user_onboarding_sdk_evidence.py --sdk-root <sdk-root>`，验证九个精确路由、三个修改接口和列表查询的声明字段精确集合及三语言 Object/extend 覆盖运行探针
 - 已执行 `git diff --exit-code -- local-sandbox/contracts/`，并通过 r4 契约资产 SHA-256 冻结测试
 - Windows 本地已执行 `powershell -ExecutionPolicy Bypass -File scripts\validate-skills.ps1`
 - 已校验仓库级回归 Prompt JSON 是合法 JSON
 - 已执行 `python3 scripts/run_real_model_regression.py --validate-rules-only`，确认 forbidden 正则与分句极性匹配器有效，边界 fixtures 的安全措辞通过、危险肯定措辞被拒，且不会误伤对应 expected
-- 发布门禁设置全新的 `REAL_MODEL_EVIDENCE_ROOT`，并实际运行 `scripts/validate-release.sh`；该命令必须分别以 `payment/payment-only`、`onboarding/onboarding-only`、`user-onboarding/user-onboarding-only`、`cross-route/all-skills` 执行全部152个真实模型案例，其中两个 onboarding suite 都加载同一个进件 Skill，并用 `--skip-run` 重放校验证据语义
+- 发布门禁设置全新的 `REAL_MODEL_EVIDENCE_ROOT`，并实际运行 `scripts/validate-release.sh`；该命令必须分别以 `payment/payment-only`、`onboarding/onboarding-only`、`user-onboarding/user-onboarding-only`、`cross-route/all-skills` 执行全部159个真实模型案例，其中两个 onboarding suite 都加载同一个进件 Skill，并用 `--skip-run` 重放校验证据语义
 - `REAL_MODEL_EVIDENCE_ROOT` 在命令启动前必须不存在；脚本负责创建根目录并拒绝复用任何既有根目录
 - `RELEASE_OUTPUT_DIR` 在命令启动前必须不存在；最终上传的 ZIP、SHA 和 provenance 必须直接取自该持久目录，不能另跑无 evidence 的手工打包命令
 - 执行真实回归前确认 `.tmp/`、`__pycache__/`、`*.pyc` 不会进入发布包，并先提交相关源文件；正式证据运行必须是干净提交

@@ -52,7 +52,7 @@
 | --- | --- | --- |
 | 支付宝实名查询的接口前置说明 | 支付宝实名认证申请接口 | `https://paas.huifu.com/open/doc/api/#/shgl/shjj/api_shjj_zfbsmrz` |
 | `request.data.pay_channel_id`（申请和查询） | 支付渠道号说明 | `https://paas.huifu.com/open/doc/api/#/czsm/api_czsm_bankChannelNo` |
-| `request.data.auth_identity_info.support_credentials[].province_code/city_code/district_code` | 地区码 | `https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm` |
+| `request.data.auth_identity_info.support_credentials.province_code/city_code/district_code` | 地区码 | `https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm` |
 | `request.data.auth_identity_info.qualification_info_list[].mcc_code` | 支付宝商家行业二级类目编码 | `https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_zfbmcc` |
 | `request.data.legal_person_info.card_front_img/card_back_img` | 商户图片上传；页面开头另有 HTTP 版本链接，字段行使用 HTTPS | `http://paas.huifu.com/open/doc/api/#/shgl/shjj/api_shjj_shtpsc`、`https://paas.huifu.com/open/doc/api/#/shgl/shjj/api_shjj_shtpsc` |
 

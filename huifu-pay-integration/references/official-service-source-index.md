@@ -4,7 +4,7 @@
 
 只沉淀脱敏摘要、判断规则、路由和必要摘录；不复制官网大图、完整 FAQ 库、真实商户信息、订单号、用户标识或密钥。
 
-本轮 37 个指定接口页的逐页 URL、原子 reference 与 SHA-256 锁定关系见 `references/official-payment-page-lock.md`；活跃快照日期为 `2026-08-31`，其中聚合交易查询和交易分账明细查询发生修订，其余35页与上一快照逐字节一致。
+当前44份指定文档的逐页URL、原子reference与SHA-256关系见 `references/official-payment-page-lock.md`；活跃快照为 `2026-10-10`。相对10-08，8份托管支付页变化，其余36份支付文档字节不变；24个API共2,930条完整字段路径。
 
 ## 目录
 
@@ -24,8 +24,8 @@
 | 业务指引 | https://paas.huifu.com/open/service/guide/#/ | 2026-05-15 | 产品功能、商户材料、控台配置、业务开通、权限边界 | 李稼祥 | 配置清单、开通前置、人工升级材料 |
 | 联调攻略 | https://paas.huifu.com/open/service/develop/#/ | 2026-05-15 | 支付产品联调步骤、托管支付、分账、异步回调、常见接入顺序 | 李稼祥 | 方案卡、联调步骤、必测项、常见卡点 |
 | FAQ | https://paas.huifu.com/open/service/faq/#/ | 2026-05-15 | 高频错误、权限/配置/状态/流水/回调/签名问题 | 李稼祥 | 问题分类、排查顺序、修复建议、升级人工条件 |
-| API 文档 | https://paas.huifu.com/partners/lightning/、https://paas.huifu.com/partners/api/doc/ | 2026-08-31 | 用户指定的极速版介绍/开发指引、聚合支付 API、对账 API、托管支付 API 与交易分账明细查询，共 37 页 | 李稼祥 | 字段差异刷新、接口新增/修改确认；逐页摘要见 `official-payment-page-lock.md` |
-| API 公共资料 | https://paas.huifu.com/partners/api/doc/csfl/api_csfl.md、https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md、https://paas.huifu.com/partners/api/doc/csfl/api_csfl_mcjs.md | 2026-07-29 | 基础参数入口、网关/业务返回码全集、名词解释 | 李稼祥 | 公共编码路由、返回码合并排查、术语释义；不计入 37 个接口字段快照 |
+| API 文档 | https://paas.huifu.com/partners/lightning/、https://paas.huifu.com/partners/api/doc/ | 2026-10-10 | 用户指定的极速版介绍/开发指引、聚合支付、对账、托管支付、交易分账明细和余额七接口，共44份文档 | 李稼祥 | 字段差异刷新、接口新增/修改确认；逐页摘要见 `official-payment-page-lock.md` |
+| API 公共资料 | https://paas.huifu.com/partners/api/doc/csfl/api_csfl.md、https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md、https://paas.huifu.com/partners/api/doc/csfl/api_csfl_mcjs.md | 2026-07-29 | 基础参数入口、网关/业务返回码全集、名词解释 | 李稼祥 | 公共编码路由、返回码合并排查、术语释义；不计入44份文档快照 |
 | 异步消息规范 | https://paas.huifu.com/partners/start/ybxx/jiekouguifan_ybxx.md | 2026-07-29 | 通知传输、验签、ACK、重试与幂等规则 | 李稼祥 | `notify_url` 通用处理；具体字段仍取接口页，聚合下单同时覆盖正扫和反扫通知 |
 | AI 技能包技术支持 | https://paas.huifu.com/docs/devtools/#/skillsv1_0?id=support | 2026-06-12 | 官方 AI 技能包技术支持联系方式 | 李稼祥 | 用户明确要求技术支持或本地排查仍解决不了时给出联系方式 |
 
@@ -34,7 +34,7 @@
 1. 普通回答不得要求访问官网，也不要把官网 URL 列入“本轮实际使用的 references”。
 2. 用户问 FAQ、官网能力、不覆盖能力或人工升级材料时，先读本文件，再读对应本地 playbook 或产品线 reference。
 3. 用户明确要求“核对官网最新口径”“看官网现在怎么写”时，说明本地 Skill 不内置实时官网抓取；如当前环境允许联网或人工核验，再以官网为核验来源。
-4. 回答依据仍控制为 3-5 份本地 `references/*.md`；官网 URL 只作为来源追溯和刷新依据，不参与普通回答路径。
+4. 回答依据为当前问题实际需要的本地 `references/*.md`；官网 URL 只作为来源追溯和刷新依据，不参与普通回答路径。
 5. 如果本地覆盖状态为“部分覆盖”“不覆盖”或“转人工”，不得为了填满方案卡而生成完整模板或生产判断结论。
 6. AI 技能包技术支持链接只在用户明确要求联系支持、问题超出本地覆盖或排查后仍解决不了时给出；它是联系方式，不列入“本轮实际使用的 references”。
 

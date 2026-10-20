@@ -334,6 +334,16 @@
 
 ## 当前语言边界
 
+| 方面 | 聚合支付退款当前文档链路 | 托管支付退款 |
+|------|---------------------|-----------|
+| SDK | dg-lightning-sdk | dg-java-sdk |
+| org_req_seq_id | 有独立 setter，直接调用 | **无 setter**，必须 extendInfoMap |
+| remark/notify_url | **无 setter**，通过 `client.optional()` | 通过 extendInfoMap |
+| 交易能力扩展字段 | 请求侧不传 `tx_metadata` 包装层；不要传 `tx_metadata`；按能力名直接传 `acct_split_bunch` / `combinedpay_data` / `terminal_device_data` | 通过 extendInfoMap / setter |
+| 调用方式 | `client.refund(req)` | `BasePayClient.request(req, false)` |
+
+
+
 - Java 提供完整路径
 - 聚合支付 PHP 已支持 `Payment::refund()` 与 `Payment::refundQuery()`；示例入口见 `references/aggregation-query-php-scenarios.md`
 

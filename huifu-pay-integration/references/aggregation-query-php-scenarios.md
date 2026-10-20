@@ -50,7 +50,14 @@ $request->setMethodExpand(json_encode([
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 
 $result = $payment->create($request);
-$response = $result->getRspDatas()['data'] ?? [];
+if ($result === null || $result->isError()) {
+    throw new RuntimeException('SDK请求或响应验签失败，拒绝处理业务结果');
+}
+$envelope = $result->getRspDatas();
+if (!is_array($envelope) || !isset($envelope['data']) || !is_array($envelope['data'])) {
+    throw new RuntimeException('SDK响应结构异常，拒绝处理业务结果');
+}
+$response = $envelope['data'];
 ```
 
 适合场景：
@@ -78,7 +85,14 @@ $request->setHuifuId(getenv('HUIFU_MERCHANT_ID'));
 $request->setHfSeqId($order->getHfSeqId());
 
 $result = $payment->query($request);
-$response = $result->getRspDatas()['data'] ?? [];
+if ($result === null || $result->isError()) {
+    throw new RuntimeException('SDK请求或响应验签失败，拒绝处理业务结果');
+}
+$envelope = $result->getRspDatas();
+if (!is_array($envelope) || !isset($envelope['data']) || !is_array($envelope['data'])) {
+    throw new RuntimeException('SDK响应结构异常，拒绝处理业务结果');
+}
+$response = $envelope['data'];
 ```
 
 适合场景：
@@ -106,7 +120,14 @@ $request->setOrgReqDate($order->getReqDate());
 $request->setOrgReqSeqId($order->getReqSeqId());
 
 $result = $payment->close($request);
-$response = $result->getRspDatas()['data'] ?? [];
+if ($result === null || $result->isError()) {
+    throw new RuntimeException('SDK请求或响应验签失败，拒绝处理业务结果');
+}
+$envelope = $result->getRspDatas();
+if (!is_array($envelope) || !isset($envelope['data']) || !is_array($envelope['data'])) {
+    throw new RuntimeException('SDK响应结构异常，拒绝处理业务结果');
+}
+$response = $envelope['data'];
 ```
 
 适合场景：
@@ -129,7 +150,14 @@ $request->setOrgReqDate($order->getReqDate());
 $request->setOrgReqSeqId($order->getReqSeqId());
 
 $result = $payment->closeQuery($request);
-$response = $result->getRspDatas()['data'] ?? [];
+if ($result === null || $result->isError()) {
+    throw new RuntimeException('SDK请求或响应验签失败，拒绝处理业务结果');
+}
+$envelope = $result->getRspDatas();
+if (!is_array($envelope) || !isset($envelope['data']) || !is_array($envelope['data'])) {
+    throw new RuntimeException('SDK响应结构异常，拒绝处理业务结果');
+}
+$response = $envelope['data'];
 $transStat = $response['trans_stat'] ?? 'P';
 ```
 
@@ -155,7 +183,14 @@ $request->setOrdAmt('0.10');
 $request->setNotifyUrl(getenv('HUIFU_NOTIFY_URL'));
 
 $result = $payment->refund($request);
-$response = $result->getRspDatas()['data'] ?? [];
+if ($result === null || $result->isError()) {
+    throw new RuntimeException('SDK请求或响应验签失败，拒绝处理业务结果');
+}
+$envelope = $result->getRspDatas();
+if (!is_array($envelope) || !isset($envelope['data']) || !is_array($envelope['data'])) {
+    throw new RuntimeException('SDK响应结构异常，拒绝处理业务结果');
+}
+$response = $envelope['data'];
 ```
 
 适合场景：
@@ -176,7 +211,14 @@ $request->setOrgReqDate($refundOrder->getReqDate());
 $request->setOrgReqSeqId($refundOrder->getReqSeqId());
 
 $result = $payment->refundQuery($request);
-$response = $result->getRspDatas()['data'] ?? [];
+if ($result === null || $result->isError()) {
+    throw new RuntimeException('SDK请求或响应验签失败，拒绝处理业务结果');
+}
+$envelope = $result->getRspDatas();
+if (!is_array($envelope) || !isset($envelope['data']) || !is_array($envelope['data'])) {
+    throw new RuntimeException('SDK响应结构异常，拒绝处理业务结果');
+}
+$response = $envelope['data'];
 ```
 
 适合场景：
@@ -203,7 +245,14 @@ $request->setExtendInfo([
 ]);
 
 $result = $client->postRequest($request);
-$response = $result->getRspDatas()['data'] ?? [];
+if ($result === null || $result->isError()) {
+    throw new RuntimeException('SDK请求或响应验签失败，拒绝处理业务结果');
+}
+$envelope = $result->getRspDatas();
+if (!is_array($envelope) || !isset($envelope['data']) || !is_array($envelope['data'])) {
+    throw new RuntimeException('SDK响应结构异常，拒绝处理业务结果');
+}
+$response = $envelope['data'];
 ```
 
 适合场景：

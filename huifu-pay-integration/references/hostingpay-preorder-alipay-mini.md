@@ -14,7 +14,7 @@
 
 # 支付宝小程序预下单
 
-> 本文依据 2026-05-26 官方文档整理，适用于 `v2/trade/hosting/payment/preorder` 的支付宝小程序场景。
+> 本文依据 2026-10-10 官方文档整理，适用于 `v2/trade/hosting/payment/preorder` 的支付宝小程序场景。
 
 ## 接口概述
 
@@ -287,7 +287,7 @@
 | settlement_amt | 结算金额 | String | 16 | N | 单位元，保留两位小数 |
 | fee_amount | 手续费金额 | String | 16 | N | 单位元，保留两位小数 |
 | trans_stat | 交易状态 | String | 1 | N | `S`=成功，`F`=失败 |
-| trans_finish_time | 汇付侧交易完成时间 | String | 6 | N | 文档原表长度列为 `6`，格式说明为 `yyyyMMddHHmmss` |
+| trans_finish_time | 汇付侧交易完成时间 | String | 13 | N | 毫秒时间戳；String(13)，示例1791598928000 |
 | end_time | 支付完成时间 | String | 14 | N | `yyyyMMddHHmmss` |
 | acct_date | 入账时间 | String | 8 | N | `yyyyMMdd` |
 | debit_flag | 借贷记标识 | String | 1 | N | `D`=借记卡，`C`=信用卡，`Z`=借贷合一卡 |
@@ -402,6 +402,10 @@
 ## 文档勘误与实现备注
 
 - 请求示例里出现了 `checkout_id`，但参数表没有定义该字段；当前 skill 不将其视为正式接入参数。
-- 异步字段 `trans_finish_time` 的长度列写为 `6`，但格式说明为 `yyyyMMddHHmmss`；实现时按 14 位时间串处理更合理。
+- 2026-10-10官网已明确通知 `trans_finish_time:String(13)` 为毫秒时间戳；`end_time:String(14)` 仍为 `yyyyMMddHHmmss`，分别解析。
 - `alipay_response`、`trans_fee_allowance_info` 在父表中写成 `String` 且说明为 Json 格式，同时又展开了子字段；当前文档按“JSON 字符串承载对象”的方式描述。
 - `app_schema` 限长 100 字符，且含 `+/?%#&=` 时必须编码，否则容易导致无法唤起收银台。
+
+## 2026-10-08 字段复核
+
+官方新增 `request.data.alipay_data.fq_mer_discount_flag`：String(1)，N，商户贴息标记，Y 为商家全部贴息，P 为商家部分贴息；选 P 时必须在 `ali_business_params` 传入支付宝约定的活动参数。编码位置和完整说明见 `payment-complete-field-catalog.md`，位于一层 String(JSON Object) 的 `alipay_data` 内；不传为非商户贴息（默认），不能放进 `hosting_data`。

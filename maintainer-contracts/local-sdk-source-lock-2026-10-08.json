@@ -1,0 +1,307 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-10-08",
+  "provenance": {
+    "status": "official-source-retrieval",
+    "sdk_root_hint": "/home/xiang/workspace/hf-payment-skills/.tmp/sdk-evidence/onboarding",
+    "official_tag_or_commit": "per-component archive records",
+    "note": "Pinned official GitHub commits/tags and PyPI sdists independently retrieved; Java and Python trees match prior local evidence; PHP and Lightning differences recorded, not silently treated as identical."
+  },
+  "tree_digest_algorithm": "sha256 over sorted records: uint32be(path_utf8_length) + path_utf8 + uint64be(file_length) + file_bytes; java pom.xml/**/*.java, php **/*.php, python **/*.py; exclude target,__pycache__,.git",
+  "components": {
+    "java": {
+      "version": "3.0.41",
+      "relative_root": "bspay-java-sdk",
+      "version_file": "opps-bspay-java-sdk/pom.xml",
+      "file_count": 675,
+      "tree_sha256": "6fba7762256b8b336178526859d0b6d73628834b27aa3d5fba75ad39c1b9c281",
+      "selected_sources": [
+        {
+          "path": "opps-bspay-java-sdk/pom.xml",
+          "sha256": "7b666a0e378e18af36c6b80d48b21405ada00dbbb20a2b3640adfac840a18e83"
+        },
+        {
+          "path": "opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/net/AbstractRequest.java",
+          "sha256": "766b66d85519e4472ec5bab588794cecf83ff74226f34f7cb994f2b8b5c3d4db"
+        },
+        {
+          "path": "opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/utils/HttpClientUtils.java",
+          "sha256": "13bf5f8a17e9fd7f8a58612a242640e1e6a84a0382dfa7b1283fc08324a81382"
+        },
+        {
+          "path": "opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/enums/FunctionCodeEnum.java",
+          "sha256": "6ec9ea53eb2acb6a8b09ec6b6582ab18335f7f9ffd62167518a2a0170a14db28"
+        },
+        {
+          "path": "opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V2TradeAcctpaymentPayRequest.java",
+          "sha256": "f3ba72f5d20bc2f93de536b023975e06ecf87dcbea58417e17d71065a57fa183"
+        },
+        {
+          "path": "opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V2TradeAcctpaymentPayQueryRequest.java",
+          "sha256": "db819671e805bfd400b4177df5213137a9c4f2d48a95e832e60ee34fb5c22e29"
+        },
+        {
+          "path": "opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V2TradeAcctpaymentRefundRequest.java",
+          "sha256": "5d4313aa999c681279c8701844301c49fd6716979b690183f94d0f6e412737e2"
+        },
+        {
+          "path": "opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V2TradeAcctpaymentRefundQueryRequest.java",
+          "sha256": "0782f5eae6c5dcca0de676a082256e45025ee60d0df74e1f590d8da7de12fde3"
+        },
+        {
+          "path": "opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V2TradeFeecalcRequest.java",
+          "sha256": "666c19b93be886c2605329eaccc2673f351a3edd376212f8350bd5896a28e4e0"
+        },
+        {
+          "path": "opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V2TradePayrelationApplyRequest.java",
+          "sha256": "830670a502b83abe6559bab26d4f52389ab8b10cd77587eee7d67159cff457b3"
+        },
+        {
+          "path": "opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/client/BasePayClient.java",
+          "sha256": "d4e85248a5fa2e48b184fe11ba2204071e189c3a65e63e3dbd349ffc990eb525"
+        }
+      ],
+      "retrieval": {
+        "scope": "payment-and-onboarding",
+        "repository": "https://github.com/huifurepo/bspay-java-sdk-parent",
+        "commit": "3dd088b159ad94ebc5246114c07c97070e0581b2",
+        "archive_url": "https://codeload.github.com/huifurepo/bspay-java-sdk-parent/tar.gz/3dd088b159ad94ebc5246114c07c97070e0581b2",
+        "archive_sha256": "b66aa9098de06d483c89930a064cb16b7678f607318fe31cd60e4e1ff0940d53",
+        "root": ".tmp/sdk-evidence/onboarding/bspay-java-sdk"
+      }
+    },
+    "lightning": {
+      "version": "1.0.6",
+      "relative_root": "dg-lightning-sdk-java",
+      "version_file": "dg-lightning-sdk/pom.xml",
+      "file_count": 110,
+      "tree_sha256": "1210248a90c30571dad7a3a083c7195a6875315e73836cb153818b4fdd050ebc",
+      "selected_sources": [
+        {
+          "path": "dg-lightning-sdk/pom.xml",
+          "sha256": "a092da981ea503e01422203d95178613471a45573164ed6582f4aa668f352b2b"
+        },
+        {
+          "path": "dg-lightning-sdk/src/main/java/com/huifu/dg/lightning/biz/net/AbstractRequest.java",
+          "sha256": "4e3187a4d2c15f7bb71913fde98049be94a3f3201b432382fc6138f3b54926d9"
+        },
+        {
+          "path": "dg-lightning-sdk/src/main/java/com/huifu/dg/lightning/utils/HttpClientUtils.java",
+          "sha256": "b67100d489a0433f59f958182ba797e630f6d6576bff82652a7f2d3fe3d79d2a"
+        }
+      ],
+      "retrieval": {
+        "scope": "payment-and-onboarding",
+        "repository": "https://github.com/huifurepo/dg-lightning-sdk-java",
+        "commit": "6b35008c8e8816c8286a2dedfd9d79f665622e32",
+        "archive_url": "https://codeload.github.com/huifurepo/dg-lightning-sdk-java/tar.gz/6b35008c8e8816c8286a2dedfd9d79f665622e32",
+        "archive_sha256": "37cbabd0013c6a0d996130176ec32a5c4b843640f859f8ab1ac9b10652d7a17e",
+        "root": ".tmp/sdk-evidence/onboarding/dg-lightning-sdk-java"
+      }
+    },
+    "php": {
+      "version": "2.0.31",
+      "relative_root": "bspay-php-sdk/BsPaySdk",
+      "version_file": "init.php",
+      "file_count": 361,
+      "tree_sha256": "4cdad29b7d7cabfc633812537a4857425a517480ffc5ed1d01114c9bb752b1b6",
+      "selected_sources": [
+        {
+          "path": "init.php",
+          "sha256": "b72ae0e1279ab055c4a0ed1796fa894cafc41770c4b6e179c2c4837cee1013ff"
+        },
+        {
+          "path": "core/BsPay.php",
+          "sha256": "01cb09dee851bae8a64b42af67a2721b17a47cb4a26076105dc41063451e11b4"
+        },
+        {
+          "path": "core/BsPayClient.php",
+          "sha256": "a1ee810de349a0118decaf48fb798bd29aededf15726b2b7e077dd2e972154c9"
+        },
+        {
+          "path": "core/BsPayRequestV2.php",
+          "sha256": "b63bb6ae473ba4a3e365a05bdff8c8c8e73a4fd83ba4d7cd8898ef361064d559"
+        },
+        {
+          "path": "enums/FunctionCodeEnum.php",
+          "sha256": "82287b14ccb8751b27b527e7edb9496cc6ab6192663e0ff33d02ac86341e2703"
+        },
+        {
+          "path": "request/V2TradeAcctpaymentPayRequest.php",
+          "sha256": "fc91a2612e31b6a5e1a2b6c64efd3df94d8741df46da29d5de76eab3f9d9949c"
+        },
+        {
+          "path": "request/V2TradeAcctpaymentPayQueryRequest.php",
+          "sha256": "251ad1838d3f0e04311fc73925bcdce9264b30fee974290395eff73baa674098"
+        },
+        {
+          "path": "request/V2TradeAcctpaymentRefundRequest.php",
+          "sha256": "2b3de0b9a743f8ebdd61a23bcc32ddc2f4ff83bbfdb355c9aed829855f564423"
+        },
+        {
+          "path": "request/V2TradeAcctpaymentRefundQueryRequest.php",
+          "sha256": "dea2e6f1f2b5975e469b04a9e174b4106590b9818e96430ef59248fbeec26bd2"
+        },
+        {
+          "path": "request/V2TradeFeecalcRequest.php",
+          "sha256": "8aee700d36a2dcb3bf1b09d729014d2d396125bb5a063dc5e132be3ecef54538"
+        },
+        {
+          "path": "request/V2TradePayrelationApplyRequest.php",
+          "sha256": "f2d1408d3acb6f35a4a41f307f5756fc31cb34bab733db452f449e2debe7d855"
+        }
+      ],
+      "retrieval": {
+        "scope": "payment-and-onboarding",
+        "repository": "https://github.com/huifurepo/bspay-php-sdk",
+        "commit": "d93cae52dea2033c4a737dc0d6877a2f65a34418",
+        "archive_url": "https://codeload.github.com/huifurepo/bspay-php-sdk/tar.gz/d93cae52dea2033c4a737dc0d6877a2f65a34418",
+        "archive_sha256": "facd03c1a0326e2e6fad061a18dcc907dceac140d78dc51130d9f223d39f1336",
+        "root": ".tmp/sdk-evidence/onboarding/bspay-php-sdk"
+      }
+    },
+    "python": {
+      "version": "2.0.28",
+      "relative_root": "dg_sdk-2.0.28/dg_sdk",
+      "version_file": "dg_client.py",
+      "file_count": 351,
+      "tree_sha256": "b8e5b30df1a5be170484dc18fb14fc7118423d5e8a24ae064e9a0d2fbc6083d5",
+      "selected_sources": [
+        {
+          "path": "dg_client.py",
+          "sha256": "29766b388326edf332009406566af2e273efe7fdebd79e6a37dbfc13befa8ded"
+        },
+        {
+          "path": "core/mer_config.py",
+          "sha256": "4a6b0ac13f840d2d3e68fc103e386288ca8f90ea8b27cc300c6fcc75899a84f7"
+        },
+        {
+          "path": "core/api_request.py",
+          "sha256": "1ca28fb8faa12f765dc30722cc49d891d4187a385c87c103cc84b162c30b4525"
+        },
+        {
+          "path": "core/request_tools.py",
+          "sha256": "b711e2eb86c7027937201d46d5524b695adbe3eb45717bdec09df8c95ec23e2e"
+        },
+        {
+          "path": "request/request_api_urls.py",
+          "sha256": "3d3ed84485a6670b0f27aafeb927436bae09805b343eed11aa23e70ad2ca98f7"
+        },
+        {
+          "path": "request/v2_supplementary_picture_request.py",
+          "sha256": "491aca308037fdd6cf5a2fa1655b9299fc6a1c2b0f594f666c6328a7ae3babf6"
+        },
+        {
+          "path": "dg_tools.py",
+          "sha256": "153b75abf441b2859b89bb571918a0eefa46a4644250d20d3123ae3963b2432c"
+        },
+        {
+          "path": "request/v2_trade_acctpayment_pay_request.py",
+          "sha256": "419727dd0671b7443be336205aef36e3ae8c61ccdf81a704f6fc7d9a6f56f3eb"
+        },
+        {
+          "path": "request/v2_trade_acctpayment_pay_query_request.py",
+          "sha256": "812db25637231618bec2ebfd2d9b9e9b4f62fc78a2e8c4957e275f57795fcea1"
+        },
+        {
+          "path": "request/v2_trade_acctpayment_refund_request.py",
+          "sha256": "87e105586262765267ac358508777be56d68f7e4b669653d39765b7ac1f6413c"
+        },
+        {
+          "path": "request/v2_trade_acctpayment_refund_query_request.py",
+          "sha256": "2a42ad031cb24d4fb04dfd83274d2a570f89a81536e08df8b5c64d6346598a5c"
+        },
+        {
+          "path": "request/v2_trade_feecalc_request.py",
+          "sha256": "2bf146950d9e6eb914866d6f227c7ffda077707bc471dabfd80ef83547f819b0"
+        },
+        {
+          "path": "request/v2_trade_payrelation_apply_request.py",
+          "sha256": "c5adcbd8ca5cac95cb08a71dbc0b79e86971ef0efa56f95f12e0591a70ad99c2"
+        }
+      ],
+      "distribution_sources": [
+        {
+          "path": "dg_sdk-2.0.28/setup.py",
+          "sha256": "b647f1c7fa8d92316bc48fe1fea3e043d102b053c83a41f78a76f6d90dfa2746"
+        },
+        {
+          "path": "dg_sdk-2.0.28/PKG-INFO",
+          "sha256": "a20dd41024cd36116cfc215eb6c3aa6bb5631cbc1a3c2c707a334dac70c3e78a"
+        },
+        {
+          "path": "dg_sdk-2.0.28/dg_sdk.egg-info/PKG-INFO",
+          "sha256": "137b69a41ae71e8db5387eef082cc0b14db63e8871bb76d11d08d9ea729b76b2"
+        }
+      ],
+      "demo_available": false,
+      "retrieval": {
+        "scope": "payment-and-onboarding",
+        "repository": "https://pypi.org/project/dg-sdk/2.0.28/",
+        "version": "2.0.28",
+        "archive_url": "https://files.pythonhosted.org/packages/61/cd/1e9c9377a8ec1764be94644681fc57174b2ca26be9e62a5b091af25f1b58/dg_sdk-2.0.28.tar.gz",
+        "archive_sha256": "09dc4f3c53c19af097073b0aa35c9a608fddd62bc8bfe30c90aab52a38942c64",
+        "root": ".tmp/sdk-evidence/onboarding/dg_sdk-2.0.28"
+      }
+    }
+  },
+  "transport_findings": {
+    "java": "Default SSLConnectionSocketFactory.getSocketFactory() in inspected main path",
+    "lightning": "Empty X509TrustManager checks and unconditional HostnameVerifier in inspected source; non-blocking developer advisory per user decision. No SDK remediation is claimed.",
+    "php": "CURLOPT_SSL_VERIFYPEER=false in BsPayRequestV2; non-blocking developer advisory per user decision. No SDK remediation is claimed.",
+    "python": "requests session retains default TLS verification"
+  },
+  "python_constructor": "MerConfig(private_key, public_key, sys_id, product_id, sign_type=\"RSA\", jpt_x_skill_source=\"\")",
+  "observed_legacy_invoice_requests": [
+    "V2InvoiceContractrepeatRequest",
+    "V2InvoiceQueryecmsapplylistRequest",
+    "V2InvoiceRejectsignRequest"
+  ],
+  "current_contract_routes": {
+    "resend": "/v2/agreement/elect/signurl/resend",
+    "list": "/v2/agreement/apply/list",
+    "reject": "/v2/agreement/elect/rejectsign"
+  },
+  "current_contract_support": "No dedicated request for current agreement routes; use verified official SDK generic entry and current API fields. Legacy invoice classes are not substitutes.",
+  "previous_source_lock": {
+    "path": "maintainer-contracts/local-sdk-source-lock-2026-09-24.json",
+    "sha256": "94efdf556f8fae199d4f0fb8097660578eaec9fd6e885044b2bb91a1c13e3c96"
+  },
+  "verification_scope": {
+    "source_tree": "All four pinned official trees retrieved and hashed; Java/Python match previous evidence. Lightning/PHP differ in bytes or file set; current tree hashes and archives explicitly recorded.",
+    "python_source": "Runtime declaration, setup extraction, constructor, headers, exact supported routes, generic dispatcher and image Request inspected.",
+    "offline_audit": "Offline source checks and actual Python generated Request payload/collision probes for six balance routes; generic SMS entry and transport inspected. No live gateway.",
+    "historical_comparison": "Previous SDK lock kept immutable; no claim that all newly retrieved trees are identical or that only selected files changed.",
+    "remote_registry_verified": "Pinned Python sdists verified against PyPI SHA-256; official GitHub archives recorded, not Maven/Composer installation.",
+    "live_gateway_verified": false,
+    "real_model_run": false
+  },
+  "python_image_findings": [
+    "Dedicated picture Request still reads undefined self.picture, ignores extend_infos and declared date/sequence, uses picture instead of file, and disables signing/verification.",
+    "DGTools has no need_sign switch; lower official request_tools does. file_url without files uses JSON, not multipart; retain image-only controlled adaptation.",
+    "No demo directory is included in this distribution; old Demo observations are historical only."
+  ],
+  "out_of_scope_new_routes": [
+    "/v3/trade/hosting/payment/receipt/confirm",
+    "/v3/trade/hosting/payment/shippinginfo/upload",
+    "/v3/trade/hosting/payment/combinedshippinginfo/upload"
+  ],
+  "balance_payment_support": {
+    "specialized_requests": [
+      "V2TradeAcctpaymentPayRequest",
+      "V2TradeAcctpaymentPayQueryRequest",
+      "V2TradeAcctpaymentRefundRequest",
+      "V2TradeAcctpaymentRefundQueryRequest",
+      "V2TradeFeecalcRequest",
+      "V2TradePayrelationApplyRequest"
+    ],
+    "sms_route": "/v2/trade/sms/verifycode/send",
+    "sms_specialized_request_found": {
+      "java": false,
+      "php": false,
+      "python": false
+    },
+    "sms_adapter": "official generic entry; normal signing and response verification",
+    "conditional_fields": "SDK declared fields do not redefine API Y/N/C; Python payment sends empty strings for unset declared fields."
+  }
+}

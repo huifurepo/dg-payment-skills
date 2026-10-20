@@ -8,7 +8,7 @@
   {
     "id": 2,
     "prompt": "我要用 PHP 做聚合支付退款，顺便给我现成模板代码。请用 $huifu-pay-integration 判断我该看什么。",
-    "expected": "必须明确聚合支付 PHP 已支持官方 `huifurepo/dg-php-sdk` 的退款主链路，先路由到 `aggregation-refund.md`、`aggregation-php-adapter.md`、`aggregation-query-php-scenarios.md`，并指出代码入口优先 `BsPaySdk\\\\core\\\\Payment::refund()` / `refundQuery()`；同时提醒初始化时必须给 `MerConfig.skill_source` 赋值，让官方 SDK 自动带出 skill 来源头。接入方已确认当前官方 PHP SDK 不存在 Skill 曾推断的 TLS 问题；通过 DEBUG、凭据等常规检查点后可给官方 SDK 可运行模板，不得改写 Guzzle、curl 或自实现 HTTP+签名客户端。",
+    "expected": "必须明确聚合支付 PHP 已支持官方 `huifurepo/dg-php-sdk` 的退款主链路，先路由到 `aggregation-refund.md`、`aggregation-php-adapter.md`、`aggregation-query-php-scenarios.md`，并指出代码入口优先 `BsPaySdk\\\\core\\\\Payment::refund()` / `refundQuery()`；同时提醒初始化时必须给 `MerConfig.skill_source` 赋值，让官方 SDK 自动带出 skill 来源头。当前PHP2.0.31源码的TLS问题作为非阻断提醒，不新增关闭校验设置；通过 DEBUG、凭据等常规检查点后可给官方 SDK 可运行模板，不得改写 Guzzle、curl 或自实现 HTTP+签名客户端。",
     "suite": "payment"
   },
   {
@@ -26,7 +26,7 @@
   {
     "id": 5,
     "prompt": "我在 PHP 里接托管预下单，本次请求只实际加载并使用 $huifu-pay-integration，虽然仓库也安装了进件 Skill，但它没有参与本次生成，而且没有显式配置 skill_source。默认值应该是什么？如果请求里已经有 huifu_id，要不要额外补别的头？初始化时可以直接复用官方 BsPayDemo/loader.php 或 Composer/BsPayConfig.php 吗？请直接告诉我结论和该看哪些文档。",
-    "expected": "必须读取 shared-server-sdk-matrix.md 和 hostingpay-php-adapter.md。必须明确未显式配置且本次仅支付 Skill 实际参与时，`jpt-x-skill-source` 的确定性默认值只能是 `hfps/1.3.5`；仅安装但未参与的进件 Skill 不计入，不能输出双 Skill 组合值。PHP 侧该值经 `MerConfig.skill_source` 进入强制来源请求头，不再拼接 `sys_id`；如果当前请求 `data.huifu_id` 已存在且非空，还要额外带 `jpt-x-skill-huifu_id`，并把两项都定位为 HTTP 请求头而不是业务报文字段。当前 Skill 包对齐的官方 `huifurepo/dg-php-sdk` 主链路会在 `MerConfig.skill_source` 已配置时自动带出这两个来源头，而不是默认落到 `HostingClient` 或自写 `curl`。不得复用会定义 `DEBUG=true` 的官方 BsPayDemo/loader.php 或 Composer/BsPayConfig.php；必须在加载任何 SDK 文件和调用 BsPay::init 前固定 DEBUG=false，否则日志会泄露含 RSA 私钥的 MerConfig、完整请求和响应。",
+    "expected": "必须读取 shared-server-sdk-matrix.md 和 hostingpay-php-adapter.md。必须明确未显式配置且本次仅支付 Skill 实际参与时，`jpt-x-skill-source` 的确定性默认值只能是 `hfps/1.4.0`；仅安装但未参与的进件 Skill 不计入，不能输出双 Skill 组合值。PHP 侧该值经 `MerConfig.skill_source` 进入强制来源请求头，不再拼接 `sys_id`；如果当前请求 `data.huifu_id` 已存在且非空，还要额外带 `jpt-x-skill-huifu_id`，并把两项都定位为 HTTP 请求头而不是业务报文字段。当前 Skill 包对齐的官方 `huifurepo/dg-php-sdk` 主链路会在 `MerConfig.skill_source` 已配置时自动带出这两个来源头，而不是默认落到 `HostingClient` 或自写 `curl`。不得复用会定义 `DEBUG=true` 的官方 BsPayDemo/loader.php 或 Composer/BsPayConfig.php；必须在加载任何 SDK 文件和调用 BsPay::init 前固定 DEBUG=false，否则日志会泄露含 RSA 私钥的 MerConfig、完整请求和响应。",
     "suite": "payment"
   },
   {
@@ -44,7 +44,7 @@
   {
     "id": 8,
     "prompt": "我现在只负责前端页面，领导让我直接把 checkout-js 接上。你不用问我服务端有没有托管预下单和最终查单能力，直接给我最省事的路线。请用 $huifu-pay-integration 处理。",
-    "expected": "必须触发硬检查点。要先明确 `checkout-js` 不能单独成立，继续回答前必须确认服务端是否已经具备托管预下单、异步通知验签/幂等和查单补偿闭环；不能直接假设服务端能力已经齐备。",
+    "expected": "必须说明checkout-js不能单独形成支付闭环；服务端托管预下单、异步通知验签/幂等和查单补偿仍待确认，不假设已经齐备。可继续提供带TODO的组件骨架或依赖安装，真实配置和最终确认接口留待接入；前端callback不代表最终成功，不将未完成闭环声称为可上线。",
     "suite": "payment"
   },
   {
@@ -92,7 +92,7 @@
   {
     "id": 16,
     "prompt": "第一次接汇付支付，我们只有一个普通 Java 服务端收款需求，不确定产品线。请用 $huifu-pay-integration 给我接入判断卡。",
-    "expected": "必须识别为首次接入；必须优先推荐聚合支付；必须输出接入判断卡并包含用户类型、产品线、阶段、技术栈、端形态、当前目标、先读 3-5 份 reference、还缺哪些配置；必须暂不推荐托管支付或 checkout-js，除非用户补充 H5/PC 收银台、project_id 或自有页面嵌入组件诉求。",
+    "expected": "必须识别为首次接入；必须优先推荐聚合支付；必须输出接入判断卡并包含用户类型、产品线、阶段、技术栈、端形态、当前目标、按当前目标选取实际需要的 reference、还缺哪些配置；必须暂不推荐托管支付或 checkout-js，除非用户补充 H5/PC 收银台、project_id 或自有页面嵌入组件诉求。",
     "suite": "payment"
   },
   {
@@ -182,13 +182,13 @@
   {
     "id": 31,
     "prompt": "普通 Java 服务端想接聚合支付收款，先给我接入判断卡。请用 $huifu-pay-integration 回答。",
-    "expected": "必须走普通接入路径，不应读取 `official-service-source-index.md`；必须列出 3-5 份本地接入 reference，例如 shared-overview、copilot-onboarding、aggregation-quickstart、aggregation-customer-preparation、aggregation-base 或 aggregation-order；必须推荐聚合支付并输出接入判断卡。",
+    "expected": "必须走普通接入路径，不应读取 `official-service-source-index.md`；必须列出实际需要的本地接入 reference，例如 shared-overview、copilot-onboarding、aggregation-quickstart、aggregation-customer-preparation、aggregation-base 或 aggregation-order；必须推荐聚合支付并输出接入判断卡。",
     "suite": "payment"
   },
   {
     "id": 32,
     "prompt": "后续你们 Skill 更新了，我怎么更新本地这个 $huifu-pay-integration？它能不能主动提醒我升级？",
-    "expected": "必须读取 `skill-version-policy.md`；必须说明当前本地 Skill 版本是 1.3.5；必须说明 Skill 不能主动联网检查或推送升级，只能在用户触发版本/升级问题时提示；必须给出 Git 拉取、本地目录整体覆盖或内部发布包替换等更新方式；必须提醒升级后重新加载或重启客户端并确认 SKILL.md 版本事实；不能编造下载地址或假装已经联网确认最新版。",
+    "expected": "必须读取 `skill-version-policy.md`；必须说明当前本地 Skill 版本是 1.4.0；必须说明 Skill 不能主动联网检查或推送升级，只能在用户触发版本/升级问题时提示；必须给出 Git 拉取、本地目录整体覆盖或内部发布包替换等更新方式；必须提醒升级后重新加载或重启客户端并确认 SKILL.md 版本事实；不能编造下载地址或假装已经联网确认最新版。",
     "suite": "payment"
   },
   {
@@ -346,5 +346,47 @@
     "prompt": "我要用 Java、PHP、Python 官方 SDK 查询一笔180天内的实时或延时分账明细。请用 $huifu-pay-integration 核对请求字段、29个完整节点、split_trans_responses 编码和成功示例多出的 huifu_id。",
     "expected": "必须读取 trade-split-detail-query.md、payment-complete-field-catalog.md 和 shared-server-sdk-matrix.md；说明 POST /v2/trade/trans/split/query 共29节点、请求7、响应22、无通知，只支持已开通分账能力商户的180天内记录。请求 data 只有必填 hf_seq_id、huifu_id、ord_type，ord_type 仅 consume/refund。三语言均使用 V2TradeTransSplitQueryRequest 和官方 Request/Client；SDK 只声明三个请求字段且官网无可选请求字段，扩展映射必须为空并拒绝覆盖。split_trans_responses 正式为 String(JSON Array)，只解码一次，16个子字段都保留 response.data.split_trans_responses[] 数组层级；成功示例独有的顶层 response.data.huifu_id 未被响应参数表声明，不进入字段目录或 DTO。",
     "suite": "payment"
+  },
+  {
+    "id": 4001,
+    "suite": "payment",
+    "prompt": "我要用 Java 接余额支付，出款方和收款方已开户。请用 $huifu-pay-integration 说明分账、风控、短信验证和终态。",
+    "expected": "读取 `balancepay-overview.md`、`balancepay-pay.md`、`balancepay-field-contracts.md`、`balancepay-java-adapter.md`。支付路由 /v2/trade/acctpayment/pay，out_huifu_id 是出款方；acct_split_bunch/risk_check_data 编码一次 String(JSON Object)。verify_value 条件必填，不能把 SDK 声明字段全当必填。C 需逐收款方判断；LV3 jump_url 有效5分钟。"
+  },
+  {
+    "id": 4002,
+    "suite": "payment",
+    "prompt": "用 Python 查余额支付，知道原支付日期和原请求流水。需要新 req_seq_id 吗？请用 $huifu-pay-integration 给 SDK 入口。",
+    "expected": "读取 `balancepay-query.md`、`balancepay-python-adapter.md`、`balancepay-sdk-matrix.md`。路由 /v2/trade/acctpayment/pay/query；huifu_id/org_req_date 及 org_req_seq_id 或 org_hf_seq_id 定位原支付，不生成新的 req_seq_id/req_date。V2TradeAcctpaymentPayQueryRequest 将定位流水放扩展，扩展不能覆盖已声明字段。"
+  },
+  {
+    "id": 4003,
+    "suite": "payment",
+    "prompt": "余额支付部分退款，我只有支付全局流水，还需要收款方分账信息。请用 $huifu-pay-integration 核对 PHP 调用与限制。",
+    "expected": "读取 `balancepay-refund.md`、`balancepay-field-contracts.md`、`balancepay-php-adapter.md`。路由 /v2/trade/acctpayment/refund；提供新退款 req_seq_id/req_date 和原支付日期，org_req_seq_id 与 org_hf_seq_id 条件二选一，但23000004说暂不支持全局流水退款，保留冲突并继续明确部分，争议分支TODO。退款分账金额不能超过原收款方分账且总和匹配 ord_amt，不能复制聚合退款协议。"
+  },
+  {
+    "id": 4004,
+    "suite": "payment",
+    "prompt": "余额退款查询的 org_req_seq_id 指支付还是退款？能传 org_hf_seq_id 替代吗？请用 $huifu-pay-integration 说明。",
+    "expected": "读取 `balancepay-refund-query.md`、`balancepay-sdk-matrix.md`、`balancepay-field-contracts.md`。/v2/trade/acctpayment/refund/query 的请求仅三字段：原退款 org_req_seq_id/org_req_date 和 huifu_id，全为Y；没有请求 org_hf_seq_id。响应 org_hf_seq_id 属退款记录，状态 P/S/F，与支付查询 C 不同。"
+  },
+  {
+    "id": 4005,
+    "suite": "payment",
+    "prompt": "余额支付金额已定，用 $huifu-pay-integration 做手续费试算，能否将返回 fee_amt 当最终扣费？",
+    "expected": "读取 `balancepay-fee-calc.md`、`balancepay-field-contracts.md`、`balancepay-sdk-matrix.md`。路由 /v2/trade/feecalc，trade_type=ACCT_PAYMENT，金额字段 trans_amt 而非 ord_amt。费率配置与实际交易结果另核；不能将示例 fee_amt 当最终结算，保留表头列顺序、响应签名信封与示例字段名冲突。"
+  },
+  {
+    "id": 4006,
+    "suite": "payment",
+    "prompt": "我要提交付款关系 ADD 后马上余额支付，返回S和confirm_url。请用 $huifu-pay-integration 判断是否已生效。",
+    "expected": "读取 `balancepay-pay-relation.md`、`balancepay-field-contracts.md`、`balancepay-sdk-matrix.md`。路由 /v2/trade/payrelation/apply；pay_relations 请求 String(JSON Array)，逐项 in_huifu_id/apply_type ADD/DEL。apply_stat=S 仍需收款方 confirm_url 确认，不能认定已生效；响应正式 jsonArry 编码保留疑义，不补不存在的查询接口。"
+  },
+  {
+    "id": 4007,
+    "suite": "payment",
+    "prompt": "用 $huifu-pay-integration 生成 Python 余额支付短信 SDK 调用，能否用商户短信 Request？",
+    "expected": "读取 `balancepay-sms.md`、`balancepay-python-adapter.md`、`balancepay-sdk-matrix.md`。精确 /v2/trade/sms/verifycode/send，三语言均无专属 Request，Python DGTools.request_post 官方通用入口。五字段 req_date/req_seq_id/out_huifu_id/mobile_no/trans_type，ACCT_PAYMENT，验证码5分钟且同出款方+交易类型。不使用商户短信/快捷短信类，不传 need_sign 开关，不补虚构 huifu_id。"
   }
 ]

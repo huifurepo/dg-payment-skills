@@ -43,7 +43,14 @@ $requestShape = (static function (array $request): array { return $request; })([
 ]);
 
 $result = $client->postRequest($requestShape);
-$response = $result->getRspDatas()['data'] ?? [];
+if ($result === null || $result->isError()) {
+    throw new RuntimeException('SDK请求或响应验签失败，拒绝处理业务结果');
+}
+$envelope = $result->getRspDatas();
+if (!is_array($envelope) || !isset($envelope['data']) || !is_array($envelope['data'])) {
+    throw new RuntimeException('SDK响应结构异常，拒绝处理业务结果');
+}
+$response = $envelope['data'];
 $transStat = $response['trans_stat'] ?? 'P';
 ```
 
@@ -79,7 +86,14 @@ $requestShape = (static function (array $request): array { return $request; })([
 ]);
 
 $result = $client->postRequest($requestShape);
-$response = $result->getRspDatas()['data'] ?? [];
+if ($result === null || $result->isError()) {
+    throw new RuntimeException('SDK请求或响应验签失败，拒绝处理业务结果');
+}
+$envelope = $result->getRspDatas();
+if (!is_array($envelope) || !isset($envelope['data']) || !is_array($envelope['data'])) {
+    throw new RuntimeException('SDK响应结构异常，拒绝处理业务结果');
+}
+$response = $envelope['data'];
 $transListRaw = $response['trans_list'] ?? null;
 if ($transListRaw === null || $transListRaw === '') {
     $transList = [];
@@ -124,7 +138,14 @@ $requestShape = (static function (array $request): array { return $request; })([
     ],
 ]);
 $result = $client->postRequest($requestShape);
-$response = $result->getRspDatas()['data'] ?? [];
+if ($result === null || $result->isError()) {
+    throw new RuntimeException('SDK请求或响应验签失败，拒绝处理业务结果');
+}
+$envelope = $result->getRspDatas();
+if (!is_array($envelope) || !isset($envelope['data']) || !is_array($envelope['data'])) {
+    throw new RuntimeException('SDK响应结构异常，拒绝处理业务结果');
+}
+$response = $envelope['data'];
 ```
 
 用途：
@@ -154,7 +175,14 @@ $requestShape = (static function (array $request): array { return $request; })([
 ]);
 
 $result = $client->postRequest($requestShape);
-$response = $result->getRspDatas()['data'] ?? [];
+if ($result === null || $result->isError()) {
+    throw new RuntimeException('SDK请求或响应验签失败，拒绝处理业务结果');
+}
+$envelope = $result->getRspDatas();
+if (!is_array($envelope) || !isset($envelope['data']) || !is_array($envelope['data'])) {
+    throw new RuntimeException('SDK响应结构异常，拒绝处理业务结果');
+}
+$response = $envelope['data'];
 $fileDetails = $response['file_details'] ?? [];
 $downloadUrl = $fileDetails[0]['download_url'] ?? '';
 ```

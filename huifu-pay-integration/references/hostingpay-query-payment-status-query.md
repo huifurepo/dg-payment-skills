@@ -13,7 +13,7 @@
 
 # 托管交易查询
 
-> 本文依据 2026-05-27 官方文档整理，适用于 `v2/trade/hosting/payment/queryorderinfo`。
+> 本文依据 2026-10-10 官方文档整理，适用于 `v2/trade/hosting/payment/queryorderinfo`。
 
 ## 接口概述
 
@@ -91,8 +91,8 @@
 | openid | 用户标识 | String | 128 | Y | 用户在商户 `appid` 下的唯一标识 |
 | sub_openid | 子商户用户标识 | String | 128 | N | 用户在子商户 `appid` 下的唯一标识 |
 | bank_type | 付款银行 | String | 16 | Y | 银行类型标识 |
-| cash_fee | 现金支付金额 | Int | 100 | N | 订单现金支付金额 |
-| coupon_fee | 代金券金额 | Int | 100 | N | 代金券或立减优惠金额 |
+| cash_fee | 现金支付金额 | String | 12 | N | 订单现金支付金额 |
+| coupon_fee | 代金券金额 | String | 12 | N | 代金券或立减优惠金额 |
 | attach | 商家数据包 | String | 128 | N | 原样返回 |
 | promotion_detail | 营销详情列表 | Array | 6000 | N | 返回值为 JSON 数组 |
 
@@ -152,9 +152,11 @@
 
 | 参数 | 中文名 | 类型 | 长度 | 必填 | 说明 |
 |------|--------|------|------|------|------|
-| coupon_info | 银联优惠信息 | Object | - | N | 银联使用优惠活动时出现，JSON 格式 |
+| coupon_info | 银联优惠信息 | String(JSON Array) | - | N | 银联使用优惠活动时出现；长度未声明 |
 
-#### unionpay_response.coupon_info
+#### unionpay_response.coupon_info[]
+
+`unionpay_response` 先解码为对象，其中 `coupon_info` 再由JSON数组字符串解码为数组。不能直接遍历字符串；完整目录区分容器读取路径与解码后 `$[]` 路径。
 
 | 参数 | 中文名 | 类型 | 长度 | 必填 | 说明 |
 |------|--------|------|------|------|------|
@@ -404,7 +406,7 @@
 - 官方历史资料中的“业务返回码”说明曾指向旧测试域名；该链接已废弃，当前实现应以正式文档站点为准。
 - 公共返回参数表声明顶层 `sign` 为必返字段，但官方成功示例只展示了 `data`，没有给出 `sign`；接入时仍应按“有签名响应”处理。
 - 官方成功示例里出现了 `product_id`，但同步返回参数表没有定义该字段；当前不将其视为稳定返回字段。
-- `wx_response.cash_fee` 与 `wx_response.coupon_fee` 的类型列写为 `Int`、长度列写为 `100`，但示例值却是金额格式字符串（如 `10.00`、`1.00`）；当前按官方原表保留并标记 `[官方文档口径冲突]`，在真实样本或官方确认前不得固化为整数或字符串 DTO。
+- 2026-10-10官网 `wx_response.cash_fee/coupon_fee` 明确为 String(12)，保留金额字符串并按十进制处理；旧Int/示例冲突已关闭。
 - 查询条件在原文中分散写在各字段说明里，容易误读成 `huifu_id` 单字段可选；实际应按 `(party_order_id) OR (huifu_id + org_req_date + org_req_seq_id)` 理解。
 - `trans_fee_allowance_info.cur_allowance_config_infos` 在本页定义为 `Object`，而前面几个托管支付异步文档中同名字段常见定义为 `Array`；当前以本页官方定义为准，不做静默改写。
 - `request_ip` 长度写为 `15`，明显仅覆盖 IPv4 形式；如果上游后续支持 IPv6，应以真实返回为准而不是在调用方写死长度校验。

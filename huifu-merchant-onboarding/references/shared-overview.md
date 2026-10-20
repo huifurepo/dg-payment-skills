@@ -34,7 +34,6 @@
 | 主题 | reference |
 | --- | --- |
 | 调用方请求字段保留 | `shared-request-field-preservation.md` |
-| 维护者回归提示 | `canonical-regression-prompts.md` |
 
 ## 固定边界
 
@@ -55,4 +54,4 @@
 
 ## 当前来源
 
-当前商户字段快照为 `2026-09-22`，十三接口共2,210个字段路径。相对上一快照完整路径新增82、删除79、同路径属性变化194项：费率查询明确原生 `Array<string>`，材料账户补齐长度与必填标记，微信费率材料新增完整嵌套路径，JSON 容器路径变化不能误读为全部新增业务。`upper_huifu_id:String(18) C`、门店图片条件和 `material_card_info` 独立父路径继续保留。官网 URL 只用于来源追溯和维护刷新，不计入普通回答的本轮 references。
+当前商户字段快照为 `2026-10-08`，十三接口共2,209个字段路径。34份进件文档在10-10复核中原始字节均不变。`upper_huifu_id:String(18) C`、门店图片条件和 `material_card_info` 独立父路径继续保留。官网URL用于来源追溯和维护刷新，不计入普通回答的本轮references。

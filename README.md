@@ -4,8 +4,8 @@
 
 | Skill | 版本 | 使用场景 |
 | --- | --- | --- |
-| `huifu-pay-integration` | `1.3.5` | 聚合支付、托管支付、checkout-js、下单、查单、关单、退款、对账、支付通知、本地沙箱和支付上线 |
-| `huifu-merchant-onboarding` | `1.0.4` | 企业/个人商户进件、用户开户、电子合同、统一页面进件、下级权限及微信/支付宝 AT 管理 |
+| `huifu-pay-integration` | `1.4.0` | 余额支付七接口、聚合支付、托管支付、checkout-js、下单、查单、关单、退款、对账、支付通知、本地沙箱和支付上线 |
+| `huifu-merchant-onboarding` | `1.0.5` | 企业/个人商户进件、用户开户、电子合同、统一页面进件、下级权限及微信/支付宝 AT 管理 |
 
 用户只需加载当前任务相关的 Skill。商户进件与分账/结算用户开户都由同一个进件 Skill 路由；只有跨到支付交易领域时才组合加载支付 Skill。
 
@@ -21,11 +21,24 @@
 
 两个 Skill 之间没有运行时文件依赖，也不会通过相对路径读取对方的 references。
 
-## 商户进件 1.0.4 更新（2026-09-28）
 
-商户进件采用 2026-09-22 的 34 接口、3,367 条字段路径（商户 2,210、用户 611、扩展 546），本地 SDK 证据为 Java 3.0.41、PHP 2.0.31、Python 2.0.28。三个电子合同使用 `/v2/agreement/*` 精确路由和官方 SDK 通用入口。当前进件 API/SDK 来源及刷新记录由 `skills-manifest.json` 选择。
+## 当前版本更新（2026-10-10）
 
-本次仅合入商户进件；支付维持 1.3.5 及原有来源、SDK 文档和包内容。历史进件复审记录中伴随支付版本只表示当时的工作区快照，不改变支付当前发布状态。
+支付 skill 1.4.0 新增余额支付、支付查询、退款、退款查询、手续费试算、付款关系提交和发送短信验证码七接口，并提供 Java/PHP/Python 官方 SDK 调用参考。支付目录覆盖24个API、2,930条完整字段路径。短信没有专属 Request，使用精确路由的官方通用入口。
+
+重新下载并比较用户提供的78份官方文档：支付44份、进件34份，发现6份已有文档变更。进件 skill 同步为1.0.5，目录共3,366条路径；修正图片上传、业务开通修改、统一页面查询和支付宝实名结构。旧来源锁及沙箱 r1-r4 保留。Java3.0.41、Lightning1.0.6、PHP2.0.31、Python2.0.28从官方固定提交/制品重新核验；PHP现有TLS事实只作非阻断提示。
+
+第二轮复核78份文档，8份托管支付页变化、70份不变；支付路径总数仍2,930。改动清单、开发及复审见 [第二轮方案](maintainer-contracts/api-review-2026-10-10-plan.md) 和 [复核结果](maintainer-contracts/api-review-2026-10-10.md)。第一轮记录见 [10-08报告](maintainer-contracts/api-review-2026-10-08.md)。活动来源、SDK与版本由 `skills-manifest.json` 选择。本次开发不表示发布或真实资金联调。
+
+第三轮整理两个Skill入口，合并四份重复导览、移出四份维护者回归提示，历史版本页原字节归档；原始来源与完整字段目录保持不变。方案见 [第三轮整理方案](maintainer-contracts/skill-review-2026-10-10-plan.md)。旧发布指南已标明历史适用版本，候选整理结果不代表已发布。
+
+提测前已进行真实模型评测和子代理官方网关联调，修复SDK初始化、响应验签消费边界、过期摘要及通知字段方向。现有资料支持6个接口、9次真实查询/试算请求；Python2.0.28商户费率查询验签兼容问题仍有局部能力缺口，Java3.0.41官方入口已验证成功。严格模型回归仍未全通过，支付/退款资金、短信及真实回调未覆盖。问题、修复与逐轮证据见 [提测前评测报告](maintainer-contracts/pre-submission-live-evaluation-2026-10-10.md) 和 [修复方案](maintainer-contracts/pre-submission-live-evaluation-2026-10-10-plan.md)。
+
+## 上一版商户进件 1.0.4 更新（2026-09-28，历史记录）
+
+上一版商户进件采用 2026-09-22 的 34 接口、3,367 条字段路径（商户 2,210、用户 611、扩展 546），本地 SDK 证据为 Java 3.0.41、PHP 2.0.31、Python 2.0.28。三个电子合同使用 `/v2/agreement/*` 精确路由和官方 SDK 通用入口。当前进件 API/SDK 来源及刷新记录由 `skills-manifest.json` 选择。
+
+该次仅合入商户进件；当时支付维持 1.3.5 及原有来源、SDK 文档和包内容。历史进件复审记录中伴随支付版本只表示当时的工作区快照，不改变支付当前发布状态。
 
 ## 目录
 
@@ -33,12 +46,12 @@
 huifu-pay-integration/
 ├── SKILL.md
 ├── agents/openai.yaml
-└── references/                  # 支付专属，102 份
+└── references/                  # 支付专属，110 份
 
 huifu-merchant-onboarding/
 ├── SKILL.md
 ├── agents/openai.yaml
-└── references/                  # 商户、用户与扩展进件合同，71 份
+└── references/                  # 商户、用户与扩展进件合同，68 份
 
 maintainer-contracts/            # 仓库维护证据，不进入任何 Skill ZIP
 ├── payment-references.json
@@ -50,7 +63,7 @@ maintainer-contracts/            # 仓库维护证据，不进入任何 Skill ZI
 ├── merchant-onboarding-source-lock-2026-08-24.json  # 十二接口历史锁（r1）
 ├── merchant-onboarding-source-lock-2026-08-24-r2.json # 历史十三接口锁
 ├── merchant-onboarding-source-lock-2026-08-31.json # 历史十三接口锁
-├── merchant-onboarding-source-lock-2026-09-22.json # 当前十三接口锁
+├── merchant-onboarding-source-lock-2026-09-22.json # 历史十三接口锁
 ├── merchant-onboarding-1.0.2-source-lock.json       # 1.0.2 r1 历史组合锁
 ├── merchant-onboarding-1.0.2-r2-source-lock.json    # 历史组合发布锁
 ├── user-onboarding-source-lock.json                 # 历史五接口锁
@@ -59,19 +72,19 @@ maintainer-contracts/            # 仓库维护证据，不进入任何 Skill ZI
 ├── user-onboarding-source-lock-2026-08-24-r3.json  # 八接口历史锁
 ├── user-onboarding-source-lock-2026-08-24-r4.json  # 历史九接口锁
 ├── user-onboarding-source-lock-2026-08-31.json     # 历史九接口锁
-├── user-onboarding-source-lock-2026-09-22.json     # 当前九接口锁
-├── onboarding-extension-source-lock-2026-09-22.json # 当前十二扩展接口锁
+├── user-onboarding-source-lock-2026-09-22.json     # 历史九接口锁
+├── onboarding-extension-source-lock-2026-09-22.json # 历史十二扩展接口锁
 ├── merchant-onboarding-1.0.2-r3-source-lock.json    # 六用户接口历史组合锁
 ├── merchant-onboarding-1.0.2-r4-source-lock.json    # 七用户接口历史组合锁
 ├── merchant-onboarding-1.0.2-r5-source-lock.json    # 八用户接口历史组合锁
 ├── merchant-onboarding-1.0.2-r6-source-lock.json    # 历史组合发布锁
 ├── merchant-onboarding-1.0.2-r7-source-lock.json    # 1.0.2 历史组合发布锁
-├── merchant-onboarding-1.0.3-source-lock-2026-09-22.json       # 当前34接口组合发布锁
+├── merchant-onboarding-1.0.3-source-lock-2026-09-22.json       # 历史34接口组合发布锁
 └── official-sources/
 
 tests/regression/
-├── payment.json                 # 58 个支付主用例
-├── onboarding.json              # 32 个商户进件主用例
+├── payment.json                 # 65 个支付主用例
+├── onboarding.json              # 44 个商户进件主用例
 ├── user-onboarding.json         # 15 个用户开户、入驻、查询与维护用例
 └── cross-route.json             # 支付、商户进件与用户开户跨域路由用例
 ```
@@ -86,7 +99,8 @@ tests/regression/
 
 主要能力：
 
-- 聚合支付和托管支付的 Java、PHP、Python 接入。
+- 聚合支付、托管支付和余额支付的 Java、PHP、Python 接入。
+- 余额手续费试算、付款关系和短信验证。
 - checkout-js 前端组件及服务端终态闭环。
 - 下单、查单、关单、退款、对账和支付通知。
 - 请求头、签名、验签、幂等和请求字段保留。
@@ -105,7 +119,7 @@ tests/regression/
 | 企业商户进件 | `merchant-onboarding-enterprise.md` | 177 |
 | 个人商户进件 | `merchant-onboarding-individual.md` | 129 |
 | 商户业务开通 | `merchant-onboarding-business-open.md` | 460 |
-| 图片上传 | `merchant-onboarding-image-upload.md` | 9 |
+| 图片上传 | `merchant-onboarding-image-upload.md` | 8 |
 | 商户详细信息查询 | `merchant-onboarding-detail-query.md` | 578 |
 | 申请单状态查询 | `merchant-onboarding-application-status-query.md` | 93 |
 | 商户业务开通修改 | `merchant-onboarding-business-open-modify.md` | 452 |
@@ -116,13 +130,13 @@ tests/regression/
 | 商户多费率配置 | `merchant-onboarding-multifee-config.md` | 27 |
 | 商户多费率配置查询 | `merchant-onboarding-multifee-query.md` | 17 |
 
-完整目录共 2,210 个节点，包括 1,277 个请求、753 个同步响应和 180 个通知节点。父对象、数组、类型、长度、Y/N/C、说明和来源 SHA 见：
+完整目录共 2,209 个节点，包括 1,276 个请求、753 个同步响应和 180 个通知节点。父对象、数组、类型、长度、Y/N/C、说明和来源 SHA 见：
 
 - `huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md`
 - `huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md`
 - `huifu-merchant-onboarding/references/merchant-onboarding-external-resources.md`
 
-当前商户来源快照复审于 `2026-09-22`。十三接口合计2,210个节点；相对上一快照完整路径新增82、删除79、修改194项合同（含容器数组标记迁移，不代表82项新能力）。费率查询改原生Array<string>；企业补充结算卡Y与条件描述、支行号长度8与示例12仍有冲突。`upper_huifu_id`角色、门店照片和独立卡父路径不变；股东手机号继续保留，但详情不再声明股东cert_no：
+当前商户来源快照复审于 `2026-10-08`。十三接口合计2,209个节点；相对 2026-09-22 删除图片示例顶层 file 路径，修改 file_url 条件标记及两项 switch_state 必填标记。费率查询改原生Array<string>；企业补充结算卡Y与条件描述、支行号长度8与示例12仍有冲突。`upper_huifu_id`角色、门店照片和独立卡父路径不变；股东手机号继续保留，但详情不再声明股东cert_no：
 
 - `request.data.share_holder_info_list[].mobile_no`
 - `response.data.share_holder_info_list[].mobile_no`
@@ -150,7 +164,7 @@ tests/regression/
 
 用户子域完整目录共611个节点，包括333个请求、220个同步响应和58个通知节点。进件 Skill 在内部强制区分 `userHuifuId` 与 `merchantHuifuId`，不得因 wire 键同为 `huifu_id` 而复用 DTO。图片上传的 `data.huifu_id` 只支持直属商户号，不支持用户开户返回的用户号。
 
-当前九接口活动快照为 `2026-09-22`；四页变化，新增57条路径，修改6项合同；补齐LV1/LV2/LV3、余额/充值/延迟支付配置与验证状态。请求String(JSON)、查询及异步Object必须分方向处理；双Y手续费与“至少一个”描述冲突仍保留。用户业务入驻及其修改是两个声明异步通知的接口。
+当前九接口活动快照为 `2026-10-08`；本轮九页原文字节及611条字段均无变化；此前补齐LV1/LV2/LV3、余额/充值/延迟支付配置与验证状态。请求String(JSON)、查询及异步Object必须分方向处理；双Y手续费与“至少一个”描述冲突仍保留。用户业务入驻及其修改是两个声明异步通知的接口。
 
 ## 进件扩展能力（同属商户进件 Skill）
 
@@ -201,7 +215,7 @@ tests/regression/
 - 用户业务入驻修改：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_ywrzxg.md>
 - 用户列表查询：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhlbcx.md>
 
-新增十二接口的官方地址及 SHA 见 `onboarding-extension-official-service-source-index.md`。原始字节和 SHA 锁保存在 `maintainer-contracts/official-sources/`、三个子域来源锁及 `merchant-onboarding-1.0.3-source-lock-2026-09-22.json`，不会进入 Skill ZIP。用户列出的交易分账明细查询仍归支付 Skill；本轮在线 SHA 与支付 `2026-08-31` 锁完全一致，因此支付保持 `1.3.5` 且未改写其来源快照。
+新增十二接口的官方地址及 SHA 见 `onboarding-extension-official-service-source-index.md`。原始字节和 SHA 锁保存在 `maintainer-contracts/official-sources/`、三个子域来源锁及当前 `merchant-onboarding-1.0.5-source-lock-2026-10-08.json`，不会进入 Skill ZIP。用户列出的交易分账明细查询仍归支付 Skill；本轮在线SHA保持一致，仍只由支付skill负责；支付本轮升级1.4.0并新增余额七接口。
 
 ## 安装与更新
 
@@ -228,11 +242,11 @@ Codex 会从仓库级 `.agents/skills/` 和用户级 `~/.agents/skills/` 发现 
 
 升级和回滚按 Skill 独立进行：
 
-- 支付 `1.3.5` 可以单独回滚到旧支付包。
-- 进件 `1.0.4` 可以整体回滚到 `1.0.3` 或更早包。
+- 支付 `1.4.0` 可以单独回滚到旧支付包。
+- 进件 `1.0.5` 可以整体回滚到 `1.0.4`、`1.0.3` 或更早包。
 - 旧 `1.3.2` 作为归档回退，不继续作为长期路由 Skill。
 
-`skill_source` 优先使用显式合同值。未配置时，支付使用 `hfps/1.3.5`；商户、用户和扩展接口均使用 `hfms/1.0.4`；两 Skill 同时参与时使用 `hfps/1.3.5;hfms/1.0.4`。
+`skill_source` 优先使用显式合同值。未配置时，支付使用 `hfps/1.4.0`；商户、用户和扩展接口均使用 `hfms/1.0.5`；两 Skill 同时参与时使用 `hfps/1.4.0;hfms/1.0.5`。
 
 ## 本地沙箱
 
@@ -259,10 +273,10 @@ powershell -ExecutionPolicy Bypass -File scripts\validate-skills.ps1
 - 两个 Skill 的结构、frontmatter、agents 元数据和 reference manifest。
 - 110 份旧 reference 的迁移守恒及原样移动 SHA。
 - 无跨 Skill 相对路径、无孤儿 reference。
-- 2,210 字段商户目录、十三份官方来源 SHA、历史刷新守恒和独立全属性比较。
+- 2,209 字段商户目录、十三份官方来源 SHA、历史刷新守恒和独立全属性比较。
 - 611 字段用户目录、九份官方来源 SHA 和独立双解析器全属性比较。
 - 546 字段扩展目录、十二份官方来源 SHA、当前官方冲突、SDK 边界及组合发布锁校验。
-- 支付 37 页官方来源锁、17 个 API 的 2,656 条完整字段路径及独立全属性比较；交易分账明细查询按 String(JSON Array) 解码并锁定全部数组子路径。
+- 支付 44 页官方来源锁、24 个 API 的 2,930 条完整字段路径及独立全属性比较；交易分账明细查询按 String(JSON Array) 解码并锁定全部数组子路径。
 - 支付示例代码、字段保留、敏感信息扫描和三语言官方 SDK-first 门禁；仅图片 `/v2/supplementary/picture` 对 PHP/Python 开放受控通用 POST/自写 HTTPS 降级。
 - 两个独立 ZIP 的构建、文件白名单和内容 SHA。
 
@@ -281,7 +295,7 @@ RELEASE_OUTPUT_DIR=/path/to/new/release-directory \
 scripts/validate-release.sh
 ```
 
-发布门禁会分别以 `payment-only`、`onboarding-only`、`user-onboarding-only` 和 `all-skills` 加载模式执行58、44、15、35个真实模型案例；证据根目录必须在命令启动前不存在，脚本会原子创建它并拒绝复用旧输出。`RELEASE_OUTPUT_DIR` 也必须在命令启动前不存在，脚本最终在该目录保留并校验两个正式 ZIP、SHA 和 provenance。四个 suite 的 `run-manifest.json` 与 `summary.json` 会先被独立重放校验，再把摘要写入正式发布包的 provenance。
+发布门禁会分别以 `payment-only`、`onboarding-only`、`user-onboarding-only` 和 `all-skills` 加载模式执行65、44、15、35个真实模型案例；证据根目录必须在命令启动前不存在，脚本会原子创建它并拒绝复用旧输出。`RELEASE_OUTPUT_DIR` 也必须在命令启动前不存在，脚本最终在该目录保留并校验两个正式 ZIP、SHA 和 provenance。四个 suite 的 `run-manifest.json` 与 `summary.json` 会先被独立重放校验，再把摘要写入正式发布包的 provenance。
 
 ## 回归测试
 
@@ -307,7 +321,7 @@ python3 scripts/run_real_model_regression.py \
   --suite cross-route --load-mode all-skills --timeout 300
 ```
 
-当前共152个真实模型案例：支付58、商户进件44、用户开户15、跨域路由35。用户开户套件仍单独运行，但加载的是同一个 `huifu-merchant-onboarding` Skill；商户进件套件已纳入新增十二接口的逐接口场景。
+当前共159个真实模型案例：支付65、商户进件44、用户开户15、跨域路由35。用户开户套件仍单独运行，但加载的是同一个 `huifu-merchant-onboarding` Skill；商户进件套件已纳入新增十二接口的逐接口场景。
 
 ## 打包
 
@@ -322,12 +336,12 @@ python3 scripts/package_skill.py \
 
 ```
 
-每次构建输出 ZIP、SHA-256 和 provenance sidecar。ZIP 文件集合严格等于对应 Skill 的 `SKILL.md`、`agents/openai.yaml` 和 reference manifest 登记的直属 Markdown；维护合同、其他 Skill、沙箱、嵌套目录和测试脚本均不会进入。以上单独的 `package_skill.py` 命令只适合开发构建；正式上传物必须来自 `validate-release.sh` 的 `RELEASE_OUTPUT_DIR`，其 provenance 会把152-case四个 suite 的运行清单和汇总文件摘要绑定到 `test_evidence`。
+每次构建输出 ZIP、SHA-256 和 provenance sidecar。ZIP 文件集合严格等于对应 Skill 的 `SKILL.md`、`agents/openai.yaml` 和 reference manifest 登记的直属 Markdown；维护合同、其他 Skill、沙箱、嵌套目录和测试脚本均不会进入。以上单独的 `package_skill.py` 命令只适合开发构建；正式上传物必须来自 `validate-release.sh` 的 `RELEASE_OUTPUT_DIR`，其 provenance 会把159-case四个 suite 的运行清单和汇总文件摘要绑定到 `test_evidence`。
 
 ## 安全边界
 
 - 不将私钥、身份证、银行卡、手机号、图片资料或生产流水写入仓库、日志和回答示例。
-- Java、PHP、Python 的常规真实请求均使用对应官方 SDK；进件对本次本地 SDK 的 TLS 风险保留事实和非阻断咨询提示；支付维持其独立文档基线。Java `BasePay.debug=false` 与 PHP `DEBUG=false` 仍是独立敏感日志要求。
+- Java、PHP、Python 的常规真实请求均使用对应官方 SDK；进件对本次本地 SDK 的 TLS 风险保留事实和非阻断咨询提示；支付已同步核验相同 SDK 基线。Java `BasePay.debug=false` 与 PHP `DEBUG=false` 仍是独立敏感日志要求。
 - 进件图片接口当前只有 Java `3.0.41` 可用官方 `BasePayClient.request/upload` 专用实现；PHP `2.0.31` 的 `CURLFile` 包装路径关闭签验，Python `2.0.28` 的专用 Request 存在字段、文件键和方法签名缺陷，不能直接调用。两种语言可仅对该图片接口使用保持 multipart、`data` 加签、TLS 和日志边界的通用 POST/自写 HTTPS 降级。
 - 未确认的进件通知 ACK、验签原文、HTTP、超时和重试只输出确认清单。
 - 同步支付响应、页面回跳和前端 callback 都不是支付终态。

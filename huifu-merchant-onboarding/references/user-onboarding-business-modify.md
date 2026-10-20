@@ -7,7 +7,7 @@
 ## 接口与字段面
 
 - Endpoint：`POST https://api.huifu.com/v2/user/busi/modify`。
-- 官网更新时间：`2026-09-22`；本地活动快照：`2026-09-22`；原文 SHA-256：`ca3c5d4430cba1827c806c87d7dee3417b3f78bd4883ce1e88ea90149e5d9c78`。
+- 官网更新时间：`2026-09-22`；本地活动快照：`2026-10-08`；原文 SHA-256：`ca3c5d4430cba1827c806c87d7dee3417b3f78bd4883ce1e88ea90149e5d9c78`。
 - 共138个字段路径：请求98、同步响应11、异步29；6个根表、16个扩展表、19个父节点、119个叶节点。完整字段读取 `user-onboarding-complete-field-catalog.md`。
 - `request.data.huifu_id:String(18) Y` 明确使用开户返回的用户号；不得填上级商户号。流水在同一商户号当天唯一，日期为 `yyyyMMdd`。
 

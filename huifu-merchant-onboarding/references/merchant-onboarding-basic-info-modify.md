@@ -2,7 +2,7 @@
 
 ## 适用范围
 
-用于已进件商户修改主体、证照、联系人、结算、协议、受益人、股东或其他基础资料。官方来源：[商户基本信息修改](https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shjbxxxg_kyc.md)，官网更新时间 `2026-09-20`，本地活动快照 `2026-09-22`，原文 SHA-256 为 `f2146bc553eb4b1dc8c88d4487eb1b5c721468d6a8eec5be7d0ce9f086db4d6c`。
+用于已进件商户修改主体、证照、联系人、结算、协议、受益人、股东或其他基础资料。官方来源：[商户基本信息修改](https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shjbxxxg_kyc.md)，官网更新时间 `2026-09-20`，本地活动快照 `2026-10-08`，原文 SHA-256 为 `f2146bc553eb4b1dc8c88d4487eb1b5c721468d6a8eec5be7d0ce9f086db4d6c`。
 
 该接口不是企业/个人首次进件。修改资料可能重新进入审核，不能把同步响应成功解释为资料审核完成或已经具备支付能力。
 
@@ -35,7 +35,7 @@
 
 ## 公共请求头
 
-- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.4`，双 Skill 默认 `hfps/1.3.5;hfms/1.0.4`。
+- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.5`，双 Skill 默认 `hfps/1.4.0;hfms/1.0.5`。
 
 ## SDK 证据
 

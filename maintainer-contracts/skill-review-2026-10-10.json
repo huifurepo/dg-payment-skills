@@ -1,0 +1,1578 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-10-10",
+  "branch": "feature_skills-12",
+  "review_kind": "skill-content-cleanup",
+  "plan": {
+    "path": "maintainer-contracts/skill-review-2026-10-10-plan.md",
+    "sha256": "11724bd504d124ab8e64a707af04de50c5de20a0c818398118e3c553d8c23b60",
+    "result": "approved-before-development-with-reviewed-caller-supplement"
+  },
+  "scope": {
+    "official_documents_reused": 78,
+    "formal_apis": 58,
+    "field_paths": 6296,
+    "markdown_documents_inventoried": 188,
+    "reference_files_before": 186,
+    "reference_files_after": 178
+  },
+  "metrics": {
+    "huifu-pay-integration": {
+      "version": "1.4.0",
+      "entry_bytes_before": 15082,
+      "entry_bytes_after": 10766,
+      "entry_lines_before": 141,
+      "entry_lines_after": 103,
+      "entry_byte_reduction_percent": 28.6,
+      "references_before": 115,
+      "references_after": 110,
+      "description_characters_before": 175,
+      "description_characters_after": 134
+    },
+    "huifu-merchant-onboarding": {
+      "version": "1.0.5",
+      "entry_bytes_before": 30343,
+      "entry_bytes_after": 12775,
+      "entry_lines_before": 196,
+      "entry_lines_after": 128,
+      "entry_byte_reduction_percent": 57.9,
+      "references_before": 71,
+      "references_after": 68,
+      "description_characters_before": 574,
+      "description_characters_after": 196
+    }
+  },
+  "preservation": {
+    "protected_baseline_files": 874,
+    "protected_baseline_binding_set_sha256": "76ddc087108ef8c1d502cbc0ff404259ca29c1a27267add686364391275c7a6c",
+    "protected_changes": [],
+    "api_review": {
+      "path": "maintainer-contracts/api-review-2026-10-10.json",
+      "sha256": "6eb21f4d8d6c23b3e27cd643687fbae30c4feaf31c07c357c24c19fe38ee1d48"
+    },
+    "catalogs": {
+      "payment": {
+        "path": "huifu-pay-integration/references/payment-complete-field-catalog.md",
+        "sha256": "5e1a605c3fa7010b07ffa7bed24eec11e2e1c34e731e911460b70fe6c065b701"
+      },
+      "merchant": {
+        "path": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
+        "sha256": "0edfff8bdca244b0ce79c47a0c4b3c28257af695a041af2c4b67e0d7d056c6ab"
+      },
+      "user": {
+        "path": "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md",
+        "sha256": "599e13fc46a249b8a3589038789ac0be441543754e4a54d18cc13cddf744b7c0"
+      },
+      "extension": {
+        "path": "huifu-merchant-onboarding/references/onboarding-extension-complete-field-catalog.md",
+        "sha256": "d8260de740d3330487adace1f24a7614c4bb435c7fe8907a1949caf59059bba5"
+      }
+    },
+    "archives": [
+      {
+        "path": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-merchant-onboarding/references/canonical-regression-prompts.md",
+        "sha256": "74bd9fcbd2ae03a325d979a5bd2b5b1fc3e78395eb562c4fc655d297202d9c45"
+      },
+      {
+        "path": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-merchant-onboarding/references/onboarding-extension-canonical-regression-prompts.md",
+        "sha256": "9173bc607c07f6dd84041f4e6c0ab3ff256475bffd34f0ade03b2e6be1a13b3c"
+      },
+      {
+        "path": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-merchant-onboarding/references/skill-version-policy.md",
+        "sha256": "7aa90412e2a1e46bbfc831218959a49a5cae846f11f9866a4cd4f8bd914e44ad"
+      },
+      {
+        "path": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-merchant-onboarding/references/user-onboarding-canonical-regression-prompts.md",
+        "sha256": "f0a9145149edb4445d9be3e3db9ebdf427a2297374299586f598d19bda3a7d83"
+      },
+      {
+        "path": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-pay-integration/references/aggregation-order-quickstart.md",
+        "sha256": "c2225b397c604040e83678ca4a52c076f92cf98529623a98171667bacbe72d9b"
+      },
+      {
+        "path": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-pay-integration/references/aggregation-query-quickstart.md",
+        "sha256": "f0ffd77807aa81fdb9452ad1c6cd4bcf657dedacef737a40f6e756bd6aa91dbb"
+      },
+      {
+        "path": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-pay-integration/references/aggregation-refund-quickstart.md",
+        "sha256": "5f2e6e79549254743eaf651ffced335464cb52bb24b721e9925a5ab312e71cf1"
+      },
+      {
+        "path": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-pay-integration/references/canonical-regression-prompts.md",
+        "sha256": "534c211309e7f78f34ed93f52f58a9381e4b486a86234ef07c2658c091d59f35"
+      },
+      {
+        "path": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-pay-integration/references/checkout-js-readme.md",
+        "sha256": "ea5213954c0791ff806d9965f5ab89e5ebcf88b9b1dcd38ef16b78f67d05e516"
+      },
+      {
+        "path": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-pay-integration/references/skill-version-policy.md",
+        "sha256": "d923bc3f07439ecaca26012f6d161390cc575a2bbe151a11555331c9a476af7c"
+      }
+    ],
+    "user_preflight_audit_unchanged": true
+  },
+  "retirement_contract": {
+    "path": "maintainer-contracts/reference-retirements-2026-10-10.json",
+    "sha256": "f9b499b26bee1515ff00e2e7c839f8dc66ab246434de4a1f470cf660c5509e4a"
+  },
+  "document_decisions": [
+    {
+      "path": "huifu-merchant-onboarding/SKILL.md",
+      "before_sha256": "36f6ad648d6d1dc23c6cf656fc7008edb789c720307644d9f5da798e4a950b04",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "1849e0417f89f11c5016063302e7149aedccd02b6534baaa40d64667e83b5d95"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/canonical-regression-prompts.md",
+      "before_sha256": "74bd9fcbd2ae03a325d979a5bd2b5b1fc3e78395eb562c4fc655d297202d9c45",
+      "decision": "archive-maintainer-only",
+      "archive": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-merchant-onboarding/references/canonical-regression-prompts.md",
+      "replacement": null
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/copilot-troubleshooting-playbooks.md",
+      "before_sha256": "4de3ce5243aaac3e3106e59536f412446b9a4ade2f9e25de943bbcf9e1004832",
+      "decision": "retain-unchanged",
+      "after_sha256": "4de3ce5243aaac3e3106e59536f412446b9a4ade2f9e25de943bbcf9e1004832"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-alipay-realname-query.md",
+      "before_sha256": "362331f105dbf525d61fff35c582bdb14c7832d279b63dbfc884b48bbe6f64a7",
+      "decision": "retain-unchanged",
+      "after_sha256": "362331f105dbf525d61fff35c582bdb14c7832d279b63dbfc884b48bbe6f64a7"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-alipay-realname.md",
+      "before_sha256": "c82728f8ce6f30a07e1a718cc30d48a7adacc475b66397fe5dc8c08b1a2aa820",
+      "decision": "retain-unchanged",
+      "after_sha256": "c82728f8ce6f30a07e1a718cc30d48a7adacc475b66397fe5dc8c08b1a2aa820"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-application-status-query.md",
+      "before_sha256": "777f65bbcf9000e69b857468fadf479a799c718eefa13a8e2abe95c06e5143dc",
+      "decision": "retain-unchanged",
+      "after_sha256": "777f65bbcf9000e69b857468fadf479a799c718eefa13a8e2abe95c06e5143dc"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-basic-info-modify.md",
+      "before_sha256": "bb21ffdb5455e6c7f13ff87ad0bcac657490e21600fad156d0c24624713b5043",
+      "decision": "retain-unchanged",
+      "after_sha256": "bb21ffdb5455e6c7f13ff87ad0bcac657490e21600fad156d0c24624713b5043"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-business-open-modify.md",
+      "before_sha256": "6124c6260c7d666156bcd957abcfa13742a185906a9602c12d464ce2f93a99bb",
+      "decision": "retain-unchanged",
+      "after_sha256": "6124c6260c7d666156bcd957abcfa13742a185906a9602c12d464ce2f93a99bb"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-business-open.md",
+      "before_sha256": "145521bf439741f438771419e8057a2ec6268f87daa99ef382cc7742cc64b396",
+      "decision": "retain-unchanged",
+      "after_sha256": "145521bf439741f438771419e8057a2ec6268f87daa99ef382cc7742cc64b396"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
+      "before_sha256": "0edfff8bdca244b0ce79c47a0c4b3c28257af695a041af2c4b67e0d7d056c6ab",
+      "decision": "retain-unchanged",
+      "after_sha256": "0edfff8bdca244b0ce79c47a0c4b3c28257af695a041af2c4b67e0d7d056c6ab"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-detail-query.md",
+      "before_sha256": "c51499f9e47bb608e2579e64bbb0c9c35eb679e6893208b723e287f3ee02b6af",
+      "decision": "retain-unchanged",
+      "after_sha256": "c51499f9e47bb608e2579e64bbb0c9c35eb679e6893208b723e287f3ee02b6af"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-enterprise.md",
+      "before_sha256": "0f8dc64bc7576e9c56dcd85ecde7500d12044640d071f2182d148d6cb9e39406",
+      "decision": "retain-unchanged",
+      "after_sha256": "0f8dc64bc7576e9c56dcd85ecde7500d12044640d071f2182d148d6cb9e39406"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-error-codes.md",
+      "before_sha256": "37e59eecdeec7175047a82804e17d4ccb49ba8e257ab8e246f175b9ab1cbf73d",
+      "decision": "retain-unchanged",
+      "after_sha256": "37e59eecdeec7175047a82804e17d4ccb49ba8e257ab8e246f175b9ab1cbf73d"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-external-resources.md",
+      "before_sha256": "826b9ae1e71841abdbcdb080e4af9d1c43247b858185faaad852573b70368d94",
+      "decision": "retain-unchanged",
+      "after_sha256": "826b9ae1e71841abdbcdb080e4af9d1c43247b858185faaad852573b70368d94"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-faq.md",
+      "before_sha256": "34da0d3060c57b5871443e0ae87f4cc31acde794fcb049fbe951f9ea4ad5afab",
+      "decision": "retain-unchanged",
+      "after_sha256": "34da0d3060c57b5871443e0ae87f4cc31acde794fcb049fbe951f9ea4ad5afab"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md",
+      "before_sha256": "7ad129927ab57cd51959834e1531246322993228a42cd25f0fcbe25e0b2813e3",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "1dea8fafaf4a36eee97bcecc4115aeef11b01a89356c18cbc0cd5bb159b32f21"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-image-upload.md",
+      "before_sha256": "a283f10d56cb1509fd3d7eb9e29ece873135c9a76c79f2a25bd4a3961f466406",
+      "decision": "retain-unchanged",
+      "after_sha256": "a283f10d56cb1509fd3d7eb9e29ece873135c9a76c79f2a25bd4a3961f466406"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-individual.md",
+      "before_sha256": "43fc1ad3a713bb3d206614318978fadb00ac569cc0b97d2c4a99011435efebc8",
+      "decision": "retain-unchanged",
+      "after_sha256": "43fc1ad3a713bb3d206614318978fadb00ac569cc0b97d2c4a99011435efebc8"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-lower-merchant-permission.md",
+      "before_sha256": "f0e3176d9ab6afb9793d7ec0b50944303e2cc30e3b680336e52ff63ab5fabcad",
+      "decision": "retain-unchanged",
+      "after_sha256": "f0e3176d9ab6afb9793d7ec0b50944303e2cc30e3b680336e52ff63ab5fabcad"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-multifee-config.md",
+      "before_sha256": "c20ef802129662611193de89d7d8f04088a148402f0f39612599084365915657",
+      "decision": "retain-unchanged",
+      "after_sha256": "c20ef802129662611193de89d7d8f04088a148402f0f39612599084365915657"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-multifee-query.md",
+      "before_sha256": "8729886038b85f661a89ba930617eb4df290f35c8a76db3ba3deae6fbc906879",
+      "decision": "retain-unchanged",
+      "after_sha256": "8729886038b85f661a89ba930617eb4df290f35c8a76db3ba3deae6fbc906879"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-rate-query.md",
+      "before_sha256": "a32c27df8ac2d31c5a18d62fc79d1b00e0a5187c81fb52bd0385c11532eaf106",
+      "decision": "retain-unchanged",
+      "after_sha256": "a32c27df8ac2d31c5a18d62fc79d1b00e0a5187c81fb52bd0385c11532eaf106"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-sms-send.md",
+      "before_sha256": "015d85bfe00ba2a1e5e7323a5fa2d942d0194f4bfc6b2a9825fa0ad10f5c475c",
+      "decision": "retain-unchanged",
+      "after_sha256": "015d85bfe00ba2a1e5e7323a5fa2d942d0194f4bfc6b2a9825fa0ad10f5c475c"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-status-change.md",
+      "before_sha256": "a7e806f2bdb3404b1fca9a5aa5e2b844771a3380a0228963b3863c35240f2c24",
+      "decision": "retain-unchanged",
+      "after_sha256": "a7e806f2bdb3404b1fca9a5aa5e2b844771a3380a0228963b3863c35240f2c24"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-unified-web-query.md",
+      "before_sha256": "4a256970593751be4f00fccf753c856cda1da50a7eb5acd738b7b8bee6f530c7",
+      "decision": "retain-unchanged",
+      "after_sha256": "4a256970593751be4f00fccf753c856cda1da50a7eb5acd738b7b8bee6f530c7"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-unified-web.md",
+      "before_sha256": "d03fe9cac7f7808c2947b1008cbaea6cee95db407eba69aafebcd8355a98b37f",
+      "decision": "retain-unchanged",
+      "after_sha256": "d03fe9cac7f7808c2947b1008cbaea6cee95db407eba69aafebcd8355a98b37f"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-wechat-config-query.md",
+      "before_sha256": "b16a827c8e814f7409f54b689f7a186f0ef6b163445197d7692fb473c6863e99",
+      "decision": "retain-unchanged",
+      "after_sha256": "b16a827c8e814f7409f54b689f7a186f0ef6b163445197d7692fb473c6863e99"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-wechat-config.md",
+      "before_sha256": "2d35f202361ea3598564468d38a119a75202638e914492def1b5087a269099cc",
+      "decision": "retain-unchanged",
+      "after_sha256": "2d35f202361ea3598564468d38a119a75202638e914492def1b5087a269099cc"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-wechat-realname-query.md",
+      "before_sha256": "86420b568438469ce7641c47981cb884790709984af1e4c9911cb05a0ff47b3d",
+      "decision": "retain-unchanged",
+      "after_sha256": "86420b568438469ce7641c47981cb884790709984af1e4c9911cb05a0ff47b3d"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-wechat-realname.md",
+      "before_sha256": "a6d839def349a5ac9ec86afca8b5dc891ba6806f0029c6ff987b7ee12624983c",
+      "decision": "retain-unchanged",
+      "after_sha256": "a6d839def349a5ac9ec86afca8b5dc891ba6806f0029c6ff987b7ee12624983c"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/official-service-source-index.md",
+      "before_sha256": "e396039dda1ee79b3e827e966b44658e1db177d402cbf73dd3d7e5ce0a266135",
+      "decision": "retain-unchanged",
+      "after_sha256": "e396039dda1ee79b3e827e966b44658e1db177d402cbf73dd3d7e5ce0a266135"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/onboarding-electronic-contract-list-query.md",
+      "before_sha256": "fa46050bba75561e2b698338dc97f4d46a2662f4b9975e6375e8b7b427a6dd9e",
+      "decision": "retain-unchanged",
+      "after_sha256": "fa46050bba75561e2b698338dc97f4d46a2662f4b9975e6375e8b7b427a6dd9e"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/onboarding-electronic-contract-reject.md",
+      "before_sha256": "5d67edaac88d8e18a10a0569eea636c844de22479949ce454228558ce14ecfb5",
+      "decision": "retain-unchanged",
+      "after_sha256": "5d67edaac88d8e18a10a0569eea636c844de22479949ce454228558ce14ecfb5"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/onboarding-electronic-contract-resend.md",
+      "before_sha256": "c9f27bfea1d97ef6e8420cd957ca201711dfc9596c8c12d985a197fed6814d8e",
+      "decision": "retain-unchanged",
+      "after_sha256": "c9f27bfea1d97ef6e8420cd957ca201711dfc9596c8c12d985a197fed6814d8e"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/onboarding-extension-canonical-regression-prompts.md",
+      "before_sha256": "9173bc607c07f6dd84041f4e6c0ab3ff256475bffd34f0ade03b2e6be1a13b3c",
+      "decision": "archive-maintainer-only",
+      "archive": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-merchant-onboarding/references/onboarding-extension-canonical-regression-prompts.md",
+      "replacement": null
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/onboarding-extension-complete-field-catalog.md",
+      "before_sha256": "d8260de740d3330487adace1f24a7614c4bb435c7fe8907a1949caf59059bba5",
+      "decision": "retain-unchanged",
+      "after_sha256": "d8260de740d3330487adace1f24a7614c4bb435c7fe8907a1949caf59059bba5"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/onboarding-extension-external-resources.md",
+      "before_sha256": "36e9f42c3b6325d7ae8c88a8600b9b78af08cbdbdbe1463c7f89c8878246445e",
+      "decision": "retain-unchanged",
+      "after_sha256": "36e9f42c3b6325d7ae8c88a8600b9b78af08cbdbdbe1463c7f89c8878246445e"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/onboarding-extension-field-contracts.md",
+      "before_sha256": "11ece328be26d4d96136c08057029e58acfaae2832fdf8cf14d311e88f0404a7",
+      "decision": "retain-unchanged",
+      "after_sha256": "11ece328be26d4d96136c08057029e58acfaae2832fdf8cf14d311e88f0404a7"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/onboarding-extension-official-service-source-index.md",
+      "before_sha256": "eb3ce0237c8452821461093c8d80bb20a8a632d01435b47c24869553d93d76d4",
+      "decision": "retain-unchanged",
+      "after_sha256": "eb3ce0237c8452821461093c8d80bb20a8a632d01435b47c24869553d93d76d4"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/onboarding-extension-shared-overview.md",
+      "before_sha256": "e5ef0518b72fdd968573090f37a8bca385341e53c941cd06e78aa20f57005772",
+      "decision": "retain-unchanged",
+      "after_sha256": "e5ef0518b72fdd968573090f37a8bca385341e53c941cd06e78aa20f57005772"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/onboarding-extension-shared-server-sdk-matrix.md",
+      "before_sha256": "8909109b754aeab804993991438ee5e52ab9b4f485a91b98614dd13b515ffd89",
+      "decision": "retain-unchanged",
+      "after_sha256": "8909109b754aeab804993991438ee5e52ab9b4f485a91b98614dd13b515ffd89"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/shared-copyright-notice.md",
+      "before_sha256": "390fde6aa7a4a6bd5c0a302a5acc4df8c53f29d1a8a01191a5d5d26abd33428f",
+      "decision": "retain-unchanged",
+      "after_sha256": "390fde6aa7a4a6bd5c0a302a5acc4df8c53f29d1a8a01191a5d5d26abd33428f"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/shared-credential-boundary.md",
+      "before_sha256": "74db21a0d5cbb95030a038f399ce84b9e0e105b98eed058385feecdc0ae1d84a",
+      "decision": "retain-unchanged",
+      "after_sha256": "74db21a0d5cbb95030a038f399ce84b9e0e105b98eed058385feecdc0ae1d84a"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/shared-overview.md",
+      "before_sha256": "2c905aeaad8bc5ec7133b97dc6d34ce326660e199b43bfe435730ed41e1872d5",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "62a812b6359fb080c4f8e2064a3b7247beaa4564d8b1bda8914672c278143a3e"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/shared-request-field-preservation.md",
+      "before_sha256": "9dbec9f9f71caf2c304be88e7b929a02a65ee79ca7b6feaf429e89e8620206b4",
+      "decision": "retain-unchanged",
+      "after_sha256": "9dbec9f9f71caf2c304be88e7b929a02a65ee79ca7b6feaf429e89e8620206b4"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/shared-request-header-policy.md",
+      "before_sha256": "6c5398c0e55b49c47f9b1dbf4f0f790d824eff50b61ab7e6decf7aa04d07a2d4",
+      "decision": "retain-unchanged",
+      "after_sha256": "6c5398c0e55b49c47f9b1dbf4f0f790d824eff50b61ab7e6decf7aa04d07a2d4"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/shared-server-sdk-matrix.md",
+      "before_sha256": "98e31ad5262508e23da783488ba5641b99c2c015260048dfc14621b5be5c4dbc",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "3628c2b25c936b2b045948be120540b504a5fc4d0e5e374c19483e1132d67a33"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/shared-signing-v2.md",
+      "before_sha256": "4dd86fce5b0c88f7cff2a40b07fb8132d052d09090784d738536d5c89c1fc4bb",
+      "decision": "retain-unchanged",
+      "after_sha256": "4dd86fce5b0c88f7cff2a40b07fb8132d052d09090784d738536d5c89c1fc4bb"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/skill-version-policy.md",
+      "before_sha256": "7aa90412e2a1e46bbfc831218959a49a5cae846f11f9866a4cd4f8bd914e44ad",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "d10447fdc20a7781fbb26cb2e8878f7cb2b94e43a8c82e54f632a81245672cf1"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-application-status-query.md",
+      "before_sha256": "30b951dd786d52c67ad4cacfdb166db74bf67bcb670c5a91f64dfaca56763860",
+      "decision": "retain-unchanged",
+      "after_sha256": "30b951dd786d52c67ad4cacfdb166db74bf67bcb670c5a91f64dfaca56763860"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-business-modify.md",
+      "before_sha256": "7856864859bfb244cd5f63cc6f4c831b29a65151db66d8614067f43809f83ebb",
+      "decision": "retain-unchanged",
+      "after_sha256": "7856864859bfb244cd5f63cc6f4c831b29a65151db66d8614067f43809f83ebb"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-business-open.md",
+      "before_sha256": "180d125fee6c6f9e0dbac85682104d3b8c4632a2ec9d3032377b08d5420898df",
+      "decision": "retain-unchanged",
+      "after_sha256": "180d125fee6c6f9e0dbac85682104d3b8c4632a2ec9d3032377b08d5420898df"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-canonical-regression-prompts.md",
+      "before_sha256": "f0a9145149edb4445d9be3e3db9ebdf427a2297374299586f598d19bda3a7d83",
+      "decision": "archive-maintainer-only",
+      "archive": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-merchant-onboarding/references/user-onboarding-canonical-regression-prompts.md",
+      "replacement": null
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md",
+      "before_sha256": "599e13fc46a249b8a3589038789ac0be441543754e4a54d18cc13cddf744b7c0",
+      "decision": "retain-unchanged",
+      "after_sha256": "599e13fc46a249b8a3589038789ac0be441543754e4a54d18cc13cddf744b7c0"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-copilot-troubleshooting-playbooks.md",
+      "before_sha256": "ddacf8bbe6e0d928ebd4840a6777bab6ea9ac9d80b528774857e0428f951c9f6",
+      "decision": "retain-unchanged",
+      "after_sha256": "ddacf8bbe6e0d928ebd4840a6777bab6ea9ac9d80b528774857e0428f951c9f6"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-detail-query.md",
+      "before_sha256": "1dc30f7edce8c6a254ed12e22f7dc7257d1a5a2e4ba5d764f4620d5f9520f935",
+      "decision": "retain-unchanged",
+      "after_sha256": "1dc30f7edce8c6a254ed12e22f7dc7257d1a5a2e4ba5d764f4620d5f9520f935"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-enterprise-modify.md",
+      "before_sha256": "50d1f24cf7ec259f81abbbaf2b20da86bcf04ff6ed99d837df669491b4989f94",
+      "decision": "retain-unchanged",
+      "after_sha256": "50d1f24cf7ec259f81abbbaf2b20da86bcf04ff6ed99d837df669491b4989f94"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-enterprise.md",
+      "before_sha256": "afb332fc95e83ff1e13791fccd60401868bd5ac61c075a8a6ee48cc96907b359",
+      "decision": "retain-unchanged",
+      "after_sha256": "afb332fc95e83ff1e13791fccd60401868bd5ac61c075a8a6ee48cc96907b359"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-error-codes.md",
+      "before_sha256": "54899e4849584b8637e9075cb27f86fa77eac127f8e2a170c19954494df123b2",
+      "decision": "retain-unchanged",
+      "after_sha256": "54899e4849584b8637e9075cb27f86fa77eac127f8e2a170c19954494df123b2"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-external-resources.md",
+      "before_sha256": "f08b657b9dea2049fb6d32e06196089f6607d5a546ce995f0dc6cf95ac99e7c6",
+      "decision": "retain-unchanged",
+      "after_sha256": "f08b657b9dea2049fb6d32e06196089f6607d5a546ce995f0dc6cf95ac99e7c6"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-faq.md",
+      "before_sha256": "33b0e7bc1a3e93301afdc69f3560ff45c8bbcbc43f991d56038ed8a2ec6d8e30",
+      "decision": "retain-unchanged",
+      "after_sha256": "33b0e7bc1a3e93301afdc69f3560ff45c8bbcbc43f991d56038ed8a2ec6d8e30"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-field-contracts.md",
+      "before_sha256": "fee7f2f32b112de05e7c8495e832148f5d41f8e8928e244dfdfcca95a5bdbc17",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "f989d39839473370ebf6691f855f1820a73a180fcc84e73eccc3eb8a8ae66884"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-individual-modify.md",
+      "before_sha256": "279b73d102b7755d59ff960d0c0963bee9a18d31f43ddd3ef990fff9199fc8a9",
+      "decision": "retain-unchanged",
+      "after_sha256": "279b73d102b7755d59ff960d0c0963bee9a18d31f43ddd3ef990fff9199fc8a9"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-individual.md",
+      "before_sha256": "b3a04a2407d430870e128459c75b90c5b555f046adf66e916e8cc4bb5d832eac",
+      "decision": "retain-unchanged",
+      "after_sha256": "b3a04a2407d430870e128459c75b90c5b555f046adf66e916e8cc4bb5d832eac"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-list-query.md",
+      "before_sha256": "a7014013095ea0c9f992aadfe636d3a1cab1f5affbeb76e193250333d5fe7ecb",
+      "decision": "retain-unchanged",
+      "after_sha256": "a7014013095ea0c9f992aadfe636d3a1cab1f5affbeb76e193250333d5fe7ecb"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-official-service-source-index.md",
+      "before_sha256": "1a1b2e3fd54a00ecef56f848a29257296c6cc5c05b2ac063377f1517a2b69db4",
+      "decision": "retain-unchanged",
+      "after_sha256": "1a1b2e3fd54a00ecef56f848a29257296c6cc5c05b2ac063377f1517a2b69db4"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-platform-contracts.md",
+      "before_sha256": "8372c3694f9feb9f9bbf0c3da41669d7a35b55fb312e646bf6839de10b581766",
+      "decision": "retain-unchanged",
+      "after_sha256": "8372c3694f9feb9f9bbf0c3da41669d7a35b55fb312e646bf6839de10b581766"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-shared-credential-boundary.md",
+      "before_sha256": "410f069673ba26bcc0eb490036e5cf14788116c33f6041430442e7c0ee72b814",
+      "decision": "retain-unchanged",
+      "after_sha256": "410f069673ba26bcc0eb490036e5cf14788116c33f6041430442e7c0ee72b814"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-shared-overview.md",
+      "before_sha256": "6de30ded547571bf35a2eed30444e18d5335fa8f9d529d9b97fbcf4f878e18fa",
+      "decision": "retain-unchanged",
+      "after_sha256": "6de30ded547571bf35a2eed30444e18d5335fa8f9d529d9b97fbcf4f878e18fa"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-shared-request-field-preservation.md",
+      "before_sha256": "a81809ad87b377b17a716e8edd5b53767274f9ab46db8409c59671a9f6451675",
+      "decision": "retain-unchanged",
+      "after_sha256": "a81809ad87b377b17a716e8edd5b53767274f9ab46db8409c59671a9f6451675"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-shared-server-sdk-matrix.md",
+      "before_sha256": "5339af2c3f773643fee91950ac554ddb8d78ab8ed31fd3f86353b823a745bc0f",
+      "decision": "retain-unchanged",
+      "after_sha256": "5339af2c3f773643fee91950ac554ddb8d78ab8ed31fd3f86353b823a745bc0f"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-shared-signing-v2.md",
+      "before_sha256": "7bacc05340e0318205fd7dcfa584a0149641bb3b16570bc5fe1f5a07464efb97",
+      "decision": "retain-unchanged",
+      "after_sha256": "7bacc05340e0318205fd7dcfa584a0149641bb3b16570bc5fe1f5a07464efb97"
+    },
+    {
+      "path": "huifu-pay-integration/SKILL.md",
+      "before_sha256": "b2e9842143050c1f18f0336c151152f477d0bdf14ec8003f847262ed52e21e6d",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "96816e2a70556138312d74a7a8cc7b29e937e4c54c227912b4cb81918060edf9"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-async-webhook.md",
+      "before_sha256": "fa4224a4caa3903d770a11c1bfb0df4c0e37b9b1118c5ea6ddd540a5d2648e8c",
+      "decision": "retain-unchanged",
+      "after_sha256": "fa4224a4caa3903d770a11c1bfb0df4c0e37b9b1118c5ea6ddd540a5d2648e8c"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-base.md",
+      "before_sha256": "b1a6965d0b1e29897ae3b6b6063b8b4518b0cb3cddaced5d4111efb2630b9b0a",
+      "decision": "retain-unchanged",
+      "after_sha256": "b1a6965d0b1e29897ae3b6b6063b8b4518b0cb3cddaced5d4111efb2630b9b0a"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-common-params.md",
+      "before_sha256": "5ab462ec0dd8282415e2b3d3e2de006824ad8dff456fbdd5df2bcb1168978642",
+      "decision": "retain-unchanged",
+      "after_sha256": "5ab462ec0dd8282415e2b3d3e2de006824ad8dff456fbdd5df2bcb1168978642"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-customer-preparation.md",
+      "before_sha256": "d34094d63e5b4ccaa4504ae727ba97683a6fc40dc7c0992d33d35f406477dd9a",
+      "decision": "retain-unchanged",
+      "after_sha256": "d34094d63e5b4ccaa4504ae727ba97683a6fc40dc7c0992d33d35f406477dd9a"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-error-codes.md",
+      "before_sha256": "7648fe9332336845ed55944916c2c56ce5b522e4377d320b44dd2214bd297ca4",
+      "decision": "retain-unchanged",
+      "after_sha256": "7648fe9332336845ed55944916c2c56ce5b522e4377d320b44dd2214bd297ca4"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-faq.md",
+      "before_sha256": "bec7190a8a8dcc6c3582d5ab3d6f0977f2144560ca7b407fbb375351b2549cc4",
+      "decision": "retain-unchanged",
+      "after_sha256": "bec7190a8a8dcc6c3582d5ab3d6f0977f2144560ca7b407fbb375351b2549cc4"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-java-adapter.md",
+      "before_sha256": "9d4880f6117b97a91851618a1fe0c2da63b44a9b9e447748a9f93f5070d96f79",
+      "decision": "retain-unchanged",
+      "after_sha256": "9d4880f6117b97a91851618a1fe0c2da63b44a9b9e447748a9f93f5070d96f79"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-java-sdk-quickstart.md",
+      "before_sha256": "7307719d8e597bb557e0203cfa19b546d347e4fa82f8205f855a50f20cb461d6",
+      "decision": "retain-unchanged",
+      "after_sha256": "7307719d8e597bb557e0203cfa19b546d347e4fa82f8205f855a50f20cb461d6"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-java-tech-spec.md",
+      "before_sha256": "4507cd047c1ec60884dfbdac9ea387e3dfb10e1b2157a548d8fd875c29875632",
+      "decision": "retain-unchanged",
+      "after_sha256": "4507cd047c1ec60884dfbdac9ea387e3dfb10e1b2157a548d8fd875c29875632"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order-errors.md",
+      "before_sha256": "14ea497da00c47537f0437e74a269847f29afb0ae4365cd351e461c62e5202db",
+      "decision": "retain-unchanged",
+      "after_sha256": "14ea497da00c47537f0437e74a269847f29afb0ae4365cd351e461c62e5202db"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order-method-alipay.md",
+      "before_sha256": "5102275bd691a2e454941eb69ea033713ccc33fc26da11f96d0dbf4d40ebc26e",
+      "decision": "retain-unchanged",
+      "after_sha256": "5102275bd691a2e454941eb69ea033713ccc33fc26da11f96d0dbf4d40ebc26e"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order-method-unionpay.md",
+      "before_sha256": "4137ebd56407ba50f6be7338dea6553a5dc4b97bfd371541eb7e4213706dc32d",
+      "decision": "retain-unchanged",
+      "after_sha256": "4137ebd56407ba50f6be7338dea6553a5dc4b97bfd371541eb7e4213706dc32d"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order-method-wechat.md",
+      "before_sha256": "ba96c8efe547342dc972f2ea42ee0c027fd3972214fc970b4f906980cf54e2ab",
+      "decision": "retain-unchanged",
+      "after_sha256": "ba96c8efe547342dc972f2ea42ee0c027fd3972214fc970b4f906980cf54e2ab"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order-quickstart.md",
+      "before_sha256": "c2225b397c604040e83678ca4a52c076f92cf98529623a98171667bacbe72d9b",
+      "decision": "merge-duplicate-navigation",
+      "archive": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-pay-integration/references/aggregation-order-quickstart.md",
+      "replacement": "huifu-pay-integration/references/aggregation-order.md"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order-request.md",
+      "before_sha256": "92982533f198ea035a99ba8ecc534c5947b0d00bb0e37bd985b3597e42471b1b",
+      "decision": "retain-unchanged",
+      "after_sha256": "92982533f198ea035a99ba8ecc534c5947b0d00bb0e37bd985b3597e42471b1b"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order-response.md",
+      "before_sha256": "0015ab85b691650a7d75340293ac3bb4fd46b0a1b496402fc5acaf9bed3534b9",
+      "decision": "retain-unchanged",
+      "after_sha256": "0015ab85b691650a7d75340293ac3bb4fd46b0a1b496402fc5acaf9bed3534b9"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order-tx-metadata.md",
+      "before_sha256": "8a33edcd54c8d6b2461730b8963b1dd7030dd57d71da58d53129ab564a4ff279",
+      "decision": "retain-unchanged",
+      "after_sha256": "8a33edcd54c8d6b2461730b8963b1dd7030dd57d71da58d53129ab564a4ff279"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order.md",
+      "before_sha256": "ddc4f594373f31be0bd207c363898704188b616e100eebd9c009a22189db9525",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "5b51ebd04321ea7089172d102c0291ef2ddc7e28dd784a45af4c466db4e2c167"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-payload-construction.md",
+      "before_sha256": "ee150b8f989b2f303d0c3673ee6fc397fc87a74571f72d7fa0cde994ed8771f0",
+      "decision": "retain-unchanged",
+      "after_sha256": "ee150b8f989b2f303d0c3673ee6fc397fc87a74571f72d7fa0cde994ed8771f0"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-php-adapter.md",
+      "before_sha256": "78a57b508a18e7c8d91a4ae8ffca290011e00c607869ea9bc829113717c7de1b",
+      "decision": "retain-unchanged",
+      "after_sha256": "78a57b508a18e7c8d91a4ae8ffca290011e00c607869ea9bc829113717c7de1b"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-python-adapter.md",
+      "before_sha256": "94f6bda717c527b57017eec71d22ccc967be5fc956548ff5270626f5941ee8d5",
+      "decision": "retain-unchanged",
+      "after_sha256": "94f6bda717c527b57017eec71d22ccc967be5fc956548ff5270626f5941ee8d5"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-python-scenarios.md",
+      "before_sha256": "49863670c5165c2b95f44f5492a30c2342229eb59f79b226e39f829badb80d7b",
+      "decision": "retain-unchanged",
+      "after_sha256": "49863670c5165c2b95f44f5492a30c2342229eb59f79b226e39f829badb80d7b"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-query-close-query.md",
+      "before_sha256": "a67d496c558d6061d17521a6f29509aa8b3c3edb0596b382b87e0a9382ae787d",
+      "decision": "retain-unchanged",
+      "after_sha256": "a67d496c558d6061d17521a6f29509aa8b3c3edb0596b382b87e0a9382ae787d"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-query-payment-query.md",
+      "before_sha256": "80617f12a423f0b871de0b97e3ad128bb14a5f7171db36bcd77fcf046e4d51ed",
+      "decision": "retain-unchanged",
+      "after_sha256": "80617f12a423f0b871de0b97e3ad128bb14a5f7171db36bcd77fcf046e4d51ed"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-query-php-scenarios.md",
+      "before_sha256": "3feaaa922867ca8801c610d7063da107abe2a42f3d1a4574d7084809d186926a",
+      "decision": "retain-unchanged",
+      "after_sha256": "3feaaa922867ca8801c610d7063da107abe2a42f3d1a4574d7084809d186926a"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-query-quickstart.md",
+      "before_sha256": "f0ffd77807aa81fdb9452ad1c6cd4bcf657dedacef737a40f6e756bd6aa91dbb",
+      "decision": "merge-duplicate-navigation",
+      "archive": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-pay-integration/references/aggregation-query-quickstart.md",
+      "replacement": "huifu-pay-integration/references/aggregation-query.md"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-query-reconciliation.md",
+      "before_sha256": "88b7ac092d8249e26e1f34252eb6f2dbc7763a6b8537a71ca988140a39c40b74",
+      "decision": "retain-unchanged",
+      "after_sha256": "88b7ac092d8249e26e1f34252eb6f2dbc7763a6b8537a71ca988140a39c40b74"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-query-trade-close.md",
+      "before_sha256": "d6ba1f303fc4a748753d2a1f7e884c45deda8872b728731d28d13ff185f535ef",
+      "decision": "retain-unchanged",
+      "after_sha256": "d6ba1f303fc4a748753d2a1f7e884c45deda8872b728731d28d13ff185f535ef"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-query.md",
+      "before_sha256": "c0e56a3be4f467a726c23f0da822c3f1a88878aff307ef030146325957cf9981",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "459e6be233a1e3c7196e14183b8452c8bab6ab32764b4ad03c5d9b0c5012c2c2"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-quickstart.md",
+      "before_sha256": "e59556577e83e864e70e9dd4993a07f0c01a7b4cc6a53cb0cb224d35c3026213",
+      "decision": "retain-unchanged",
+      "after_sha256": "e59556577e83e864e70e9dd4993a07f0c01a7b4cc6a53cb0cb224d35c3026213"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-refund-query.md",
+      "before_sha256": "81bd6d1335847a3565032887a83193158090b29b959952ee503b78bd9a319f10",
+      "decision": "retain-unchanged",
+      "after_sha256": "81bd6d1335847a3565032887a83193158090b29b959952ee503b78bd9a319f10"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-refund-quickstart.md",
+      "before_sha256": "5f2e6e79549254743eaf651ffced335464cb52bb24b721e9925a5ab312e71cf1",
+      "decision": "merge-duplicate-navigation",
+      "archive": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-pay-integration/references/aggregation-refund-quickstart.md",
+      "replacement": "huifu-pay-integration/references/aggregation-refund.md"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-refund.md",
+      "before_sha256": "f4ab3edb3942c9dd09b167e684fb6f1ad1955942c5121ba021bfbd6d3a929f51",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "07672ae5b3eb639c61842fb5b691d724abbc92c6c811dd9254cc3246bd37bf06"
+    },
+    {
+      "path": "huifu-pay-integration/references/balancepay-fee-calc.md",
+      "before_sha256": "73789f7c15bdac22c2cd8393c6e4404bdd6ad71b6897e34cd7820f950f169370",
+      "decision": "retain-unchanged",
+      "after_sha256": "73789f7c15bdac22c2cd8393c6e4404bdd6ad71b6897e34cd7820f950f169370"
+    },
+    {
+      "path": "huifu-pay-integration/references/balancepay-field-contracts.md",
+      "before_sha256": "dfc2af3bd2cd0063386e7824a725e5a9b30e58bd4bae23f0404228476e1ccc8b",
+      "decision": "retain-unchanged",
+      "after_sha256": "dfc2af3bd2cd0063386e7824a725e5a9b30e58bd4bae23f0404228476e1ccc8b"
+    },
+    {
+      "path": "huifu-pay-integration/references/balancepay-java-adapter.md",
+      "before_sha256": "aafd57c06a17b639e7bf2a3a18e5c31724ebaa5d778868dbc4c2dc4473c15197",
+      "decision": "retain-unchanged",
+      "after_sha256": "aafd57c06a17b639e7bf2a3a18e5c31724ebaa5d778868dbc4c2dc4473c15197"
+    },
+    {
+      "path": "huifu-pay-integration/references/balancepay-overview.md",
+      "before_sha256": "83b7df281f1eb9881287a7c5c488f7f318fdfad8f76a7b5c714820f4365071d5",
+      "decision": "retain-unchanged",
+      "after_sha256": "83b7df281f1eb9881287a7c5c488f7f318fdfad8f76a7b5c714820f4365071d5"
+    },
+    {
+      "path": "huifu-pay-integration/references/balancepay-pay-relation.md",
+      "before_sha256": "0df09b255b22316564cce2323f9f754343b937862043dadae2395c92083268ce",
+      "decision": "retain-unchanged",
+      "after_sha256": "0df09b255b22316564cce2323f9f754343b937862043dadae2395c92083268ce"
+    },
+    {
+      "path": "huifu-pay-integration/references/balancepay-pay.md",
+      "before_sha256": "6c6c5b16d5fdab8a36bb45b8a9ce48a82dc8f0ba53a0daa18856a2f2a742d25e",
+      "decision": "retain-unchanged",
+      "after_sha256": "6c6c5b16d5fdab8a36bb45b8a9ce48a82dc8f0ba53a0daa18856a2f2a742d25e"
+    },
+    {
+      "path": "huifu-pay-integration/references/balancepay-php-adapter.md",
+      "before_sha256": "ba70163430f5604b2a22e3f246ceff4ea1d682bae8ac766ce6f57830b85b5a99",
+      "decision": "retain-unchanged",
+      "after_sha256": "ba70163430f5604b2a22e3f246ceff4ea1d682bae8ac766ce6f57830b85b5a99"
+    },
+    {
+      "path": "huifu-pay-integration/references/balancepay-python-adapter.md",
+      "before_sha256": "a6fb1074e0292cadc2ad82dc8badbb3b74a417b05714b97db01af0229a6c0842",
+      "decision": "retain-unchanged",
+      "after_sha256": "a6fb1074e0292cadc2ad82dc8badbb3b74a417b05714b97db01af0229a6c0842"
+    },
+    {
+      "path": "huifu-pay-integration/references/balancepay-query.md",
+      "before_sha256": "2f8173b5420431af7a10ffd7db5b7e3cade73457f5acd373e0e7b7bdcdf03efe",
+      "decision": "retain-unchanged",
+      "after_sha256": "2f8173b5420431af7a10ffd7db5b7e3cade73457f5acd373e0e7b7bdcdf03efe"
+    },
+    {
+      "path": "huifu-pay-integration/references/balancepay-refund-query.md",
+      "before_sha256": "dd6a0b6ae9a273de7a284e410f10ce8bb5f2b42dcf22eac046145ffa39c55011",
+      "decision": "retain-unchanged",
+      "after_sha256": "dd6a0b6ae9a273de7a284e410f10ce8bb5f2b42dcf22eac046145ffa39c55011"
+    },
+    {
+      "path": "huifu-pay-integration/references/balancepay-refund.md",
+      "before_sha256": "1c697573123fb1562eed3737b9fafbe16bd58edcf0c5d6c51ce435b127f57181",
+      "decision": "retain-unchanged",
+      "after_sha256": "1c697573123fb1562eed3737b9fafbe16bd58edcf0c5d6c51ce435b127f57181"
+    },
+    {
+      "path": "huifu-pay-integration/references/balancepay-sdk-matrix.md",
+      "before_sha256": "7dd232eaed548f7c80809883fca6eb1851070fff01918c384e558db349294ad3",
+      "decision": "retain-unchanged",
+      "after_sha256": "7dd232eaed548f7c80809883fca6eb1851070fff01918c384e558db349294ad3"
+    },
+    {
+      "path": "huifu-pay-integration/references/balancepay-sms.md",
+      "before_sha256": "b7637905e91e5fc15d16df26c901c4675df096afe3f88395d56b4445063d0dba",
+      "decision": "retain-unchanged",
+      "after_sha256": "b7637905e91e5fc15d16df26c901c4675df096afe3f88395d56b4445063d0dba"
+    },
+    {
+      "path": "huifu-pay-integration/references/canonical-regression-prompts.md",
+      "before_sha256": "534c211309e7f78f34ed93f52f58a9381e4b486a86234ef07c2658c091d59f35",
+      "decision": "archive-maintainer-only",
+      "archive": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-pay-integration/references/canonical-regression-prompts.md",
+      "replacement": null
+    },
+    {
+      "path": "huifu-pay-integration/references/checkout-js-callback-and-confirmation.md",
+      "before_sha256": "996c92df38e855684ad69c544821683fc5f219ccca7899c4d9c125a4eaa639ff",
+      "decision": "retain-unchanged",
+      "after_sha256": "996c92df38e855684ad69c544821683fc5f219ccca7899c4d9c125a4eaa639ff"
+    },
+    {
+      "path": "huifu-pay-integration/references/checkout-js-component-modes.md",
+      "before_sha256": "8ecec8e3c2629acd6c8c88c8951598ddb184996d7a7c90ae525879397722e2ba",
+      "decision": "retain-unchanged",
+      "after_sha256": "8ecec8e3c2629acd6c8c88c8951598ddb184996d7a7c90ae525879397722e2ba"
+    },
+    {
+      "path": "huifu-pay-integration/references/checkout-js-create-preorder-contract.md",
+      "before_sha256": "0bb9d37d6c3ef9994499d0bfde7fa2099f956e7e9112691d35f525728d86d2c3",
+      "decision": "retain-unchanged",
+      "after_sha256": "0bb9d37d6c3ef9994499d0bfde7fa2099f956e7e9112691d35f525728d86d2c3"
+    },
+    {
+      "path": "huifu-pay-integration/references/checkout-js-framework-integration-notes.md",
+      "before_sha256": "17f03ba604c2152fd948e1103bfb51d408ae986471e7db40a32d56d2270b26fc",
+      "decision": "retain-unchanged",
+      "after_sha256": "17f03ba604c2152fd948e1103bfb51d408ae986471e7db40a32d56d2270b26fc"
+    },
+    {
+      "path": "huifu-pay-integration/references/checkout-js-integration-flow.md",
+      "before_sha256": "5178058400a249fbd999bd54e36482393d7667085246613522a25d41d0aa5b11",
+      "decision": "retain-unchanged",
+      "after_sha256": "5178058400a249fbd999bd54e36482393d7667085246613522a25d41d0aa5b11"
+    },
+    {
+      "path": "huifu-pay-integration/references/checkout-js-readme.md",
+      "before_sha256": "ea5213954c0791ff806d9965f5ab89e5ebcf88b9b1dcd38ef16b78f67d05e516",
+      "decision": "merge-duplicate-navigation",
+      "archive": "maintainer-contracts/skill-review-2026-10-10-archive/huifu-pay-integration/references/checkout-js-readme.md",
+      "replacement": "huifu-pay-integration/references/checkout-js.md"
+    },
+    {
+      "path": "huifu-pay-integration/references/checkout-js.md",
+      "before_sha256": "564f97d168240c3a0d9774872f359f97081866b0b1b12f5b3624aa290ba3d639",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "93590c4e5de0accc646cf8fc8ef129ccb06f04c80919fb860c07bea2f552558d"
+    },
+    {
+      "path": "huifu-pay-integration/references/copilot-existing-system.md",
+      "before_sha256": "c7ed29352e1636ab538dbf26f0e0a93480e1ef0762a95ef45d3f4a746188adf6",
+      "decision": "retain-unchanged",
+      "after_sha256": "c7ed29352e1636ab538dbf26f0e0a93480e1ef0762a95ef45d3f4a746188adf6"
+    },
+    {
+      "path": "huifu-pay-integration/references/copilot-go-live-checklist.md",
+      "before_sha256": "e6ce7fed9f76ae147eccb3d1f6d84225022fe7bc6d0357f045479915be597957",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "33b616cba40a149b6815a703e5f913e9546ecb45e6c9b1ec7490c7018d117dfb"
+    },
+    {
+      "path": "huifu-pay-integration/references/copilot-onboarding.md",
+      "before_sha256": "aad83ee4c66dc97aa2d1c17140facf5b6db420d6ac61daf66cd8f3d3291e2ee9",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "b2167298bea7a5c193250fa520222cf215ce9912dbb3b8b6149c07f1f51f36f6"
+    },
+    {
+      "path": "huifu-pay-integration/references/copilot-parameter-review.md",
+      "before_sha256": "ddb20e1c4d351d28007d1cdc2a6ad6360b152405b478510ae40938f01715bd32",
+      "decision": "retain-unchanged",
+      "after_sha256": "ddb20e1c4d351d28007d1cdc2a6ad6360b152405b478510ae40938f01715bd32"
+    },
+    {
+      "path": "huifu-pay-integration/references/copilot-solution-cards.md",
+      "before_sha256": "64434acb7516091c77249471b9e67eb4c8dbcc06469d3d708bd88a6024834ddb",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "0146356d9845d40c016b185db8b222a7c7b82ea7ed1d0d372d31a330c368e300"
+    },
+    {
+      "path": "huifu-pay-integration/references/copilot-solution-selection.md",
+      "before_sha256": "5dfa4831aea1a6f0124155543ab0a4ada606aced21666cf40fd50db2d6edf2b3",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "b54ec3a68e93880fb97ce6fe58b4ca54e18700c2bc7c7872ec2cf940294771f6"
+    },
+    {
+      "path": "huifu-pay-integration/references/copilot-troubleshooting-playbooks.md",
+      "before_sha256": "0ca2abc8c1d0dbbd8ed77b533946ddede58ffc9b2c4ad211ec8a037b8a4de365",
+      "decision": "retain-unchanged",
+      "after_sha256": "0ca2abc8c1d0dbbd8ed77b533946ddede58ffc9b2c4ad211ec8a037b8a4de365"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-async-webhook.md",
+      "before_sha256": "fce4844c7c28899ba1f47f7e6b30ba99034ff31f94ef6641604b4876a3db9f73",
+      "decision": "retain-unchanged",
+      "after_sha256": "fce4844c7c28899ba1f47f7e6b30ba99034ff31f94ef6641604b4876a3db9f73"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-base.md",
+      "before_sha256": "e74cf0c7e06f3de5ad241fc80fef27a3dcc95de3b6eea2858ffb1f3cd44cae22",
+      "decision": "retain-unchanged",
+      "after_sha256": "e74cf0c7e06f3de5ad241fc80fef27a3dcc95de3b6eea2858ffb1f3cd44cae22"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-common-params.md",
+      "before_sha256": "0aabee1521c6f495bbc962dcb9562493ab8e7d2a489b58ac91706a562c81baf4",
+      "decision": "retain-unchanged",
+      "after_sha256": "0aabee1521c6f495bbc962dcb9562493ab8e7d2a489b58ac91706a562c81baf4"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-customer-preparation.md",
+      "before_sha256": "b0cf91f89efa29bd69986a0b5d7c68cd075b6aeb66c7609a728d2fb2be4f4f22",
+      "decision": "retain-unchanged",
+      "after_sha256": "b0cf91f89efa29bd69986a0b5d7c68cd075b6aeb66c7609a728d2fb2be4f4f22"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-error-codes.md",
+      "before_sha256": "918b1be1ff078a42b65a4db5d1ce6bf701360fd635a4a49450e9aaf4b8bee6cc",
+      "decision": "retain-unchanged",
+      "after_sha256": "918b1be1ff078a42b65a4db5d1ce6bf701360fd635a4a49450e9aaf4b8bee6cc"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-faq.md",
+      "before_sha256": "56a5812b6e83d26d3cd4be30376df6db148a56ff3761f80841af6aad50d26ba9",
+      "decision": "retain-unchanged",
+      "after_sha256": "56a5812b6e83d26d3cd4be30376df6db148a56ff3761f80841af6aad50d26ba9"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-java-adapter.md",
+      "before_sha256": "af10726d1085b8f340e93ad39f8d05e03f2b7f8c3616cbbf6ff3ef94105b9d35",
+      "decision": "retain-unchanged",
+      "after_sha256": "af10726d1085b8f340e93ad39f8d05e03f2b7f8c3616cbbf6ff3ef94105b9d35"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-java-sdk-quickstart.md",
+      "before_sha256": "898f2ecb49b44b95fa85b1d7a02c4a91f0ac943d27a93d788afd6266e9d445fa",
+      "decision": "retain-unchanged",
+      "after_sha256": "898f2ecb49b44b95fa85b1d7a02c4a91f0ac943d27a93d788afd6266e9d445fa"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-java-tech-spec.md",
+      "before_sha256": "5e99409c141934fad8d16f24d84c922c3a82d4d4165175028d0ddedbf3c480ca",
+      "decision": "retain-unchanged",
+      "after_sha256": "5e99409c141934fad8d16f24d84c922c3a82d4d4165175028d0ddedbf3c480ca"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-payload-construction.md",
+      "before_sha256": "fc537ea2fc65e90b7a31e8771a894a992a6b19afe39ee286f6e4ce6bfd75ca72",
+      "decision": "retain-unchanged",
+      "after_sha256": "fc537ea2fc65e90b7a31e8771a894a992a6b19afe39ee286f6e4ce6bfd75ca72"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-php-adapter.md",
+      "before_sha256": "2d60fc58bcf4f7218feed2c5ecfe6dd57cf6ba80ee287ccc459aff50c4b1db0e",
+      "decision": "retain-unchanged",
+      "after_sha256": "2d60fc58bcf4f7218feed2c5ecfe6dd57cf6ba80ee287ccc459aff50c4b1db0e"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-alipay-mini.md",
+      "before_sha256": "b31f0f975ee4eab7f09047640074c71dd551e40dfee741970f65215f81dd1b5a",
+      "decision": "retain-unchanged",
+      "after_sha256": "b31f0f975ee4eab7f09047640074c71dd551e40dfee741970f65215f81dd1b5a"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-douyin-direct.md",
+      "before_sha256": "70c0be42a0ac8e8424a24a8bde1e97bd00d2cbc77cf9168b9b4169ce3d7ecde2",
+      "decision": "retain-unchanged",
+      "after_sha256": "70c0be42a0ac8e8424a24a8bde1e97bd00d2cbc77cf9168b9b4169ce3d7ecde2"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-channel.md",
+      "before_sha256": "8b713f4b1ad65742baacfd00ad9d51a57ced8e3756b7c72ebdfb1c449ebe44f7",
+      "decision": "retain-unchanged",
+      "after_sha256": "8b713f4b1ad65742baacfd00ad9d51a57ced8e3756b7c72ebdfb1c449ebe44f7"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-errors.md",
+      "before_sha256": "7ed1eb5f9bd4ceacc526f677d736b0da5c62c14c0d5ed3b04793f39c25ad664a",
+      "decision": "retain-unchanged",
+      "after_sha256": "7ed1eb5f9bd4ceacc526f677d736b0da5c62c14c0d5ed3b04793f39c25ad664a"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-request.md",
+      "before_sha256": "83597d83b997806262c736e8e636bd868b160cedb3a6229e79543cc3be9d22af",
+      "decision": "retain-unchanged",
+      "after_sha256": "83597d83b997806262c736e8e636bd868b160cedb3a6229e79543cc3be9d22af"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-response-channel.md",
+      "before_sha256": "3cc8de07730f2d8489a870f8627fef04fc467c7e4c04167020925cff3bb8ad13",
+      "decision": "retain-unchanged",
+      "after_sha256": "3cc8de07730f2d8489a870f8627fef04fc467c7e4c04167020925cff3bb8ad13"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc-response.md",
+      "before_sha256": "9d59d6245ccb1145950b2cc582881c4a8194c18e9ad94dfc75d84b258777d249",
+      "decision": "retain-unchanged",
+      "after_sha256": "9d59d6245ccb1145950b2cc582881c4a8194c18e9ad94dfc75d84b258777d249"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-h5-pc.md",
+      "before_sha256": "40c0fd9bbb2b8ac525fd83b99c590c6ae17273b9864d2ee2e92f5b0e17cf8c69",
+      "decision": "retain-unchanged",
+      "after_sha256": "40c0fd9bbb2b8ac525fd83b99c590c6ae17273b9864d2ee2e92f5b0e17cf8c69"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-php-scenarios.md",
+      "before_sha256": "9acbb13a9ff0db3d34dc6b9a87c47835974fff661b19b1f4d3d2a0991a3744a2",
+      "decision": "retain-unchanged",
+      "after_sha256": "9acbb13a9ff0db3d34dc6b9a87c47835974fff661b19b1f4d3d2a0991a3744a2"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-quickstart.md",
+      "before_sha256": "00b4226274a60e193bae0c7445a6a4188f7a85ad27eb524d2ab748a4f474bcec",
+      "decision": "retain-unchanged",
+      "after_sha256": "00b4226274a60e193bae0c7445a6a4188f7a85ad27eb524d2ab748a4f474bcec"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder-wechat-mini.md",
+      "before_sha256": "2fa13d0a4bcb19c56c2afc116065ac5364ba92e827cd900bf83b6822af05f5b3",
+      "decision": "retain-unchanged",
+      "after_sha256": "2fa13d0a4bcb19c56c2afc116065ac5364ba92e827cd900bf83b6822af05f5b3"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-preorder.md",
+      "before_sha256": "05adc64104d857d6b4efb77c34f7a3c5579a69b97a0d594010a03d842e2e6da0",
+      "decision": "retain-unchanged",
+      "after_sha256": "05adc64104d857d6b4efb77c34f7a3c5579a69b97a0d594010a03d842e2e6da0"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-python-adapter.md",
+      "before_sha256": "8e607353e9f1a8365c6dc01b71615cccc82494576119a69edd8afef8fabe0688",
+      "decision": "retain-unchanged",
+      "after_sha256": "8e607353e9f1a8365c6dc01b71615cccc82494576119a69edd8afef8fabe0688"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-python-scenarios.md",
+      "before_sha256": "a9ea395f53d3b9d91a9497fed44cfd7b8c31d63cbb1b89bdeec2aecab3df0fcf",
+      "decision": "retain-unchanged",
+      "after_sha256": "a9ea395f53d3b9d91a9497fed44cfd7b8c31d63cbb1b89bdeec2aecab3df0fcf"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-query-payment-status-query.md",
+      "before_sha256": "d4b31de9ca9478678cf19726ca53be88f8428981652fcc011470a583f80b9352",
+      "decision": "retain-unchanged",
+      "after_sha256": "d4b31de9ca9478678cf19726ca53be88f8428981652fcc011470a583f80b9352"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-query-php-scenarios.md",
+      "before_sha256": "a2ff7425b3aca76386564a8e6b30b89d05d5894d817157df57c7783560666e19",
+      "decision": "retain-unchanged",
+      "after_sha256": "a2ff7425b3aca76386564a8e6b30b89d05d5894d817157df57c7783560666e19"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-query-quickstart.md",
+      "before_sha256": "a5996bab62c92dd07995c186e0c6d95d4d0052f96ad85ddf96dba42f2097c539",
+      "decision": "retain-unchanged",
+      "after_sha256": "a5996bab62c92dd07995c186e0c6d95d4d0052f96ad85ddf96dba42f2097c539"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-query-reconciliation.md",
+      "before_sha256": "4b93f7c497faf919995d7063a3071e694c5e463725bf5e53a171477cb256472e",
+      "decision": "retain-unchanged",
+      "after_sha256": "4b93f7c497faf919995d7063a3071e694c5e463725bf5e53a171477cb256472e"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-query-splitpay.md",
+      "before_sha256": "aa4282649e846af4381e8cd30f3835308c64e80714e9f72c622d0865ff87c5d4",
+      "decision": "retain-unchanged",
+      "after_sha256": "aa4282649e846af4381e8cd30f3835308c64e80714e9f72c622d0865ff87c5d4"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-query-trade-close.md",
+      "before_sha256": "8ad32dd9cf8708118e50b8ba215e57b76e5b71c7b12c56c1dbb3d071ce234541",
+      "decision": "retain-unchanged",
+      "after_sha256": "8ad32dd9cf8708118e50b8ba215e57b76e5b71c7b12c56c1dbb3d071ce234541"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-query.md",
+      "before_sha256": "60dab78ec132a8d13d3ea5258234e269e83966e53ff1e8adf9addbaaa001a150",
+      "decision": "retain-unchanged",
+      "after_sha256": "60dab78ec132a8d13d3ea5258234e269e83966e53ff1e8adf9addbaaa001a150"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-quickstart.md",
+      "before_sha256": "81bac8d7dceac65cfef390a1d051510960792035032d044fbc9042303667ef9f",
+      "decision": "retain-unchanged",
+      "after_sha256": "81bac8d7dceac65cfef390a1d051510960792035032d044fbc9042303667ef9f"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-refund-php-scenarios.md",
+      "before_sha256": "d96574eae8ccee7a18a0f4b40e1815948218ea324597762655d54d655d1eb143",
+      "decision": "retain-unchanged",
+      "after_sha256": "d96574eae8ccee7a18a0f4b40e1815948218ea324597762655d54d655d1eb143"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-refund-query.md",
+      "before_sha256": "6339b516026404812b976830e1bff6bf8fecb0db60c6d57b47868322738b9505",
+      "decision": "retain-unchanged",
+      "after_sha256": "6339b516026404812b976830e1bff6bf8fecb0db60c6d57b47868322738b9505"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-refund-quickstart.md",
+      "before_sha256": "533255551b61bfe9d197ef2e6281cf5a11043d9f5d26f30011a217de313c6818",
+      "decision": "retain-unchanged",
+      "after_sha256": "533255551b61bfe9d197ef2e6281cf5a11043d9f5d26f30011a217de313c6818"
+    },
+    {
+      "path": "huifu-pay-integration/references/hostingpay-refund.md",
+      "before_sha256": "6050ce582e7172c3bc1be61f39a0d9a843a0d97b74af8b2665ba612d271e7626",
+      "decision": "retain-unchanged",
+      "after_sha256": "6050ce582e7172c3bc1be61f39a0d9a843a0d97b74af8b2665ba612d271e7626"
+    },
+    {
+      "path": "huifu-pay-integration/references/official-payment-page-lock.md",
+      "before_sha256": "4e42cd2185352c8e348c7bd29a7ec7935a7bf0f9c7ca46dd9aa9bbdca3d7ba77",
+      "decision": "retain-unchanged",
+      "after_sha256": "4e42cd2185352c8e348c7bd29a7ec7935a7bf0f9c7ca46dd9aa9bbdca3d7ba77"
+    },
+    {
+      "path": "huifu-pay-integration/references/official-service-source-index.md",
+      "before_sha256": "eb4b755c6e0df4259e5adf82276e7f48ac23287d4dc71d6f7363241a09ff6967",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "7c971307be4d657a2d959a2caa0732499fcda0be0f6e897a46246d11f203c032"
+    },
+    {
+      "path": "huifu-pay-integration/references/payment-complete-field-catalog.md",
+      "before_sha256": "5e1a605c3fa7010b07ffa7bed24eec11e2e1c34e731e911460b70fe6c065b701",
+      "decision": "retain-unchanged",
+      "after_sha256": "5e1a605c3fa7010b07ffa7bed24eec11e2e1c34e731e911460b70fe6c065b701"
+    },
+    {
+      "path": "huifu-pay-integration/references/payment-operations-faq.md",
+      "before_sha256": "52f0d6b109a6fec8c24d84605751f6619e55a53f703bbee5b6c52963ed4da7b8",
+      "decision": "retain-unchanged",
+      "after_sha256": "52f0d6b109a6fec8c24d84605751f6619e55a53f703bbee5b6c52963ed4da7b8"
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-async-notify.md",
+      "before_sha256": "97a0e5fe89656bac4cb2cf4a022166be39801ea8c0f52275d43bea8736b1a9ce",
+      "decision": "retain-unchanged",
+      "after_sha256": "97a0e5fe89656bac4cb2cf4a022166be39801ea8c0f52275d43bea8736b1a9ce"
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-copyright-notice.md",
+      "before_sha256": "390fde6aa7a4a6bd5c0a302a5acc4df8c53f29d1a8a01191a5d5d26abd33428f",
+      "decision": "retain-unchanged",
+      "after_sha256": "390fde6aa7a4a6bd5c0a302a5acc4df8c53f29d1a8a01191a5d5d26abd33428f"
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-credential-boundary.md",
+      "before_sha256": "ca19b4d994cbc4295b2a6e2dc0190e32d3beacf98eb30a2257b822e217cbc7e1",
+      "decision": "retain-unchanged",
+      "after_sha256": "ca19b4d994cbc4295b2a6e2dc0190e32d3beacf98eb30a2257b822e217cbc7e1"
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-frontend-sdk-matrix.md",
+      "before_sha256": "34c9be9ff7192ea2bd3a5e73377cadf953b00dc6cc9558811c9e0870a8326df1",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "e188885590309c991ffd19ea9003315acec694940a7e54206866bc488d1f1092"
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-local-sandbox.md",
+      "before_sha256": "851ca787fbdbd4118592c9170b75b86ff32daabedc8b4142ef40e8f7424083aa",
+      "decision": "retain-unchanged",
+      "after_sha256": "851ca787fbdbd4118592c9170b75b86ff32daabedc8b4142ef40e8f7424083aa"
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-overview.md",
+      "before_sha256": "de9e09bd0cd2925c864cea9481f910a9455560c508e06a688e5ba76e4cba6cbb",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "e34daee9becee14d686befbd53bff0c892a8fa174b6e3da7c88373cfabccc832"
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-request-field-preservation.md",
+      "before_sha256": "0db1edcfdb157244691d2907ed3f0483a0fb611150f6c7c97e03169f92c6f5ea",
+      "decision": "retain-unchanged",
+      "after_sha256": "0db1edcfdb157244691d2907ed3f0483a0fb611150f6c7c97e03169f92c6f5ea"
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-request-header-policy.md",
+      "before_sha256": "4b40197edc09bc9a8ebb69e3b2205b53c9e6701c06ca03c104e49dde7badd0db",
+      "decision": "retain-unchanged",
+      "after_sha256": "4b40197edc09bc9a8ebb69e3b2205b53c9e6701c06ca03c104e49dde7badd0db"
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-server-sdk-matrix.md",
+      "before_sha256": "d4f243b171699074fc6b6958ff35fe79ea543be733b57a900af52c1b165a706b",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "5a71fec6ef1fc0a51c3bff990c92618b0b1f774fe3662cda882973c78b9069e5"
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-signing-v2.md",
+      "before_sha256": "d9901c96eb6a752a2b519de7bb85f892891fc93e260eb2cc0854b97046261a03",
+      "decision": "retain-unchanged",
+      "after_sha256": "d9901c96eb6a752a2b519de7bb85f892891fc93e260eb2cc0854b97046261a03"
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-webhook-signing.md",
+      "before_sha256": "3f4769c2a7fe430c1247cfc5d1bb81823ebc96eadeb709376be29f93ec33cb79",
+      "decision": "retain-unchanged",
+      "after_sha256": "3f4769c2a7fe430c1247cfc5d1bb81823ebc96eadeb709376be29f93ec33cb79"
+    },
+    {
+      "path": "huifu-pay-integration/references/skill-version-policy.md",
+      "before_sha256": "d923bc3f07439ecaca26012f6d161390cc575a2bbe151a11555331c9a476af7c",
+      "decision": "revise-instructions-or-summary",
+      "after_sha256": "41a3680782e7a703387525da0a88ad31727de8b76707fffda2804062a33ef7f7"
+    },
+    {
+      "path": "huifu-pay-integration/references/trade-split-detail-query.md",
+      "before_sha256": "f60780737aa9b8ab9fb94d3bcc5cc7f32f9f60b92c0dda4489fbce4d0a7506b7",
+      "decision": "retain-unchanged",
+      "after_sha256": "f60780737aa9b8ab9fb94d3bcc5cc7f32f9f60b92c0dda4489fbce4d0a7506b7"
+    }
+  ],
+  "modified_baseline_files": [
+    {
+      "path": "README.md",
+      "action": "modify",
+      "before_sha256": "1a5a20bd2ffd759b4f95003213bcd822a100a0ce5d312bcd188105f3d7d08e6f",
+      "after_sha256": "d5bacf7f82229703544e0dbfefa1108881151326858bdf786e50f21d3b5598d9"
+    },
+    {
+      "path": "docs/official-docs/huifu-merchant-onboarding.md",
+      "action": "modify",
+      "before_sha256": "3d3c2521939037a9bbf1764635589efbcaa00c9da1a13105757a2291b594550b",
+      "after_sha256": "898a89047bad85401dff9e6ba0ec0090ea7be6089d1446ad8363d0c9ce760fa2"
+    },
+    {
+      "path": "docs/official-docs/huifu-payment-integration.md",
+      "action": "modify",
+      "before_sha256": "00f1cc94d65353c93c9c90669079466e147e6fa5c4fc0c22b9bef199316c7783",
+      "after_sha256": "260ad0d95945b8f29d8440f65bdf2663949e4fa33cd81f6e5ee6b92931f3ea66"
+    },
+    {
+      "path": "huifu-merchant-onboarding/SKILL.md",
+      "action": "modify",
+      "before_sha256": "36f6ad648d6d1dc23c6cf656fc7008edb789c720307644d9f5da798e4a950b04",
+      "after_sha256": "1849e0417f89f11c5016063302e7149aedccd02b6534baaa40d64667e83b5d95"
+    },
+    {
+      "path": "huifu-merchant-onboarding/agents/openai.yaml",
+      "action": "modify",
+      "before_sha256": "8386a9855d072a49e8beec045d3e70d9cf841977388423226eec02dab4bc20c9",
+      "after_sha256": "18cb9f5206f9145373d4f4d10b7b1e42680c852f080c1a72da5d0714b6834216"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/canonical-regression-prompts.md",
+      "action": "remove-from-runtime",
+      "before_sha256": "74bd9fcbd2ae03a325d979a5bd2b5b1fc3e78395eb562c4fc655d297202d9c45"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md",
+      "action": "modify",
+      "before_sha256": "7ad129927ab57cd51959834e1531246322993228a42cd25f0fcbe25e0b2813e3",
+      "after_sha256": "1dea8fafaf4a36eee97bcecc4115aeef11b01a89356c18cbc0cd5bb159b32f21"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/onboarding-extension-canonical-regression-prompts.md",
+      "action": "remove-from-runtime",
+      "before_sha256": "9173bc607c07f6dd84041f4e6c0ab3ff256475bffd34f0ade03b2e6be1a13b3c"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/shared-overview.md",
+      "action": "modify",
+      "before_sha256": "2c905aeaad8bc5ec7133b97dc6d34ce326660e199b43bfe435730ed41e1872d5",
+      "after_sha256": "62a812b6359fb080c4f8e2064a3b7247beaa4564d8b1bda8914672c278143a3e"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/shared-server-sdk-matrix.md",
+      "action": "modify",
+      "before_sha256": "98e31ad5262508e23da783488ba5641b99c2c015260048dfc14621b5be5c4dbc",
+      "after_sha256": "3628c2b25c936b2b045948be120540b504a5fc4d0e5e374c19483e1132d67a33"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/skill-version-policy.md",
+      "action": "modify",
+      "before_sha256": "7aa90412e2a1e46bbfc831218959a49a5cae846f11f9866a4cd4f8bd914e44ad",
+      "after_sha256": "d10447fdc20a7781fbb26cb2e8878f7cb2b94e43a8c82e54f632a81245672cf1"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-canonical-regression-prompts.md",
+      "action": "remove-from-runtime",
+      "before_sha256": "f0a9145149edb4445d9be3e3db9ebdf427a2297374299586f598d19bda3a7d83"
+    },
+    {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-field-contracts.md",
+      "action": "modify",
+      "before_sha256": "fee7f2f32b112de05e7c8495e832148f5d41f8e8928e244dfdfcca95a5bdbc17",
+      "after_sha256": "f989d39839473370ebf6691f855f1820a73a180fcc84e73eccc3eb8a8ae66884"
+    },
+    {
+      "path": "huifu-pay-integration/SKILL.md",
+      "action": "modify",
+      "before_sha256": "b2e9842143050c1f18f0336c151152f477d0bdf14ec8003f847262ed52e21e6d",
+      "after_sha256": "96816e2a70556138312d74a7a8cc7b29e937e4c54c227912b4cb81918060edf9"
+    },
+    {
+      "path": "huifu-pay-integration/agents/openai.yaml",
+      "action": "modify",
+      "before_sha256": "55fadc859c297741ee820632ae8a3a2a00f6145007d0050db7a2a160bbbb896f",
+      "after_sha256": "f9cfd694242ae102f4e005313ba097a82ee5b7ca0ed4a0cc4feef819f8d18245"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order-quickstart.md",
+      "action": "remove-from-runtime",
+      "before_sha256": "c2225b397c604040e83678ca4a52c076f92cf98529623a98171667bacbe72d9b"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-order.md",
+      "action": "modify",
+      "before_sha256": "ddc4f594373f31be0bd207c363898704188b616e100eebd9c009a22189db9525",
+      "after_sha256": "5b51ebd04321ea7089172d102c0291ef2ddc7e28dd784a45af4c466db4e2c167"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-query-quickstart.md",
+      "action": "remove-from-runtime",
+      "before_sha256": "f0ffd77807aa81fdb9452ad1c6cd4bcf657dedacef737a40f6e756bd6aa91dbb"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-query.md",
+      "action": "modify",
+      "before_sha256": "c0e56a3be4f467a726c23f0da822c3f1a88878aff307ef030146325957cf9981",
+      "after_sha256": "459e6be233a1e3c7196e14183b8452c8bab6ab32764b4ad03c5d9b0c5012c2c2"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-refund-quickstart.md",
+      "action": "remove-from-runtime",
+      "before_sha256": "5f2e6e79549254743eaf651ffced335464cb52bb24b721e9925a5ab312e71cf1"
+    },
+    {
+      "path": "huifu-pay-integration/references/aggregation-refund.md",
+      "action": "modify",
+      "before_sha256": "f4ab3edb3942c9dd09b167e684fb6f1ad1955942c5121ba021bfbd6d3a929f51",
+      "after_sha256": "07672ae5b3eb639c61842fb5b691d724abbc92c6c811dd9254cc3246bd37bf06"
+    },
+    {
+      "path": "huifu-pay-integration/references/canonical-regression-prompts.md",
+      "action": "remove-from-runtime",
+      "before_sha256": "534c211309e7f78f34ed93f52f58a9381e4b486a86234ef07c2658c091d59f35"
+    },
+    {
+      "path": "huifu-pay-integration/references/checkout-js-readme.md",
+      "action": "remove-from-runtime",
+      "before_sha256": "ea5213954c0791ff806d9965f5ab89e5ebcf88b9b1dcd38ef16b78f67d05e516"
+    },
+    {
+      "path": "huifu-pay-integration/references/checkout-js.md",
+      "action": "modify",
+      "before_sha256": "564f97d168240c3a0d9774872f359f97081866b0b1b12f5b3624aa290ba3d639",
+      "after_sha256": "93590c4e5de0accc646cf8fc8ef129ccb06f04c80919fb860c07bea2f552558d"
+    },
+    {
+      "path": "huifu-pay-integration/references/copilot-go-live-checklist.md",
+      "action": "modify",
+      "before_sha256": "e6ce7fed9f76ae147eccb3d1f6d84225022fe7bc6d0357f045479915be597957",
+      "after_sha256": "33b616cba40a149b6815a703e5f913e9546ecb45e6c9b1ec7490c7018d117dfb"
+    },
+    {
+      "path": "huifu-pay-integration/references/copilot-onboarding.md",
+      "action": "modify",
+      "before_sha256": "aad83ee4c66dc97aa2d1c17140facf5b6db420d6ac61daf66cd8f3d3291e2ee9",
+      "after_sha256": "b2167298bea7a5c193250fa520222cf215ce9912dbb3b8b6149c07f1f51f36f6"
+    },
+    {
+      "path": "huifu-pay-integration/references/copilot-solution-cards.md",
+      "action": "modify",
+      "before_sha256": "64434acb7516091c77249471b9e67eb4c8dbcc06469d3d708bd88a6024834ddb",
+      "after_sha256": "0146356d9845d40c016b185db8b222a7c7b82ea7ed1d0d372d31a330c368e300"
+    },
+    {
+      "path": "huifu-pay-integration/references/copilot-solution-selection.md",
+      "action": "modify",
+      "before_sha256": "5dfa4831aea1a6f0124155543ab0a4ada606aced21666cf40fd50db2d6edf2b3",
+      "after_sha256": "b54ec3a68e93880fb97ce6fe58b4ca54e18700c2bc7c7872ec2cf940294771f6"
+    },
+    {
+      "path": "huifu-pay-integration/references/official-service-source-index.md",
+      "action": "modify",
+      "before_sha256": "eb4b755c6e0df4259e5adf82276e7f48ac23287d4dc71d6f7363241a09ff6967",
+      "after_sha256": "7c971307be4d657a2d959a2caa0732499fcda0be0f6e897a46246d11f203c032"
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-frontend-sdk-matrix.md",
+      "action": "modify",
+      "before_sha256": "34c9be9ff7192ea2bd3a5e73377cadf953b00dc6cc9558811c9e0870a8326df1",
+      "after_sha256": "e188885590309c991ffd19ea9003315acec694940a7e54206866bc488d1f1092"
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-overview.md",
+      "action": "modify",
+      "before_sha256": "de9e09bd0cd2925c864cea9481f910a9455560c508e06a688e5ba76e4cba6cbb",
+      "after_sha256": "e34daee9becee14d686befbd53bff0c892a8fa174b6e3da7c88373cfabccc832"
+    },
+    {
+      "path": "huifu-pay-integration/references/shared-server-sdk-matrix.md",
+      "action": "modify",
+      "before_sha256": "d4f243b171699074fc6b6958ff35fe79ea543be733b57a900af52c1b165a706b",
+      "after_sha256": "5a71fec6ef1fc0a51c3bff990c92618b0b1f774fe3662cda882973c78b9069e5"
+    },
+    {
+      "path": "huifu-pay-integration/references/skill-version-policy.md",
+      "action": "modify",
+      "before_sha256": "d923bc3f07439ecaca26012f6d161390cc575a2bbe151a11555331c9a476af7c",
+      "after_sha256": "41a3680782e7a703387525da0a88ad31727de8b76707fffda2804062a33ef7f7"
+    },
+    {
+      "path": "maintainer-contracts/onboarding-references.json",
+      "action": "modify",
+      "before_sha256": "a674ca523206a833f5e421648356cfca35b0f89e47d99a8c788f6da9dbae1f16",
+      "after_sha256": "0b9bc311d3afb520fee5236a36f781cad3239acbee124d6e2d97a04d96d45362"
+    },
+    {
+      "path": "maintainer-contracts/payment-references.json",
+      "action": "modify",
+      "before_sha256": "0f7a1c20ada2cfb52876434ff8c33992a06f5f0d77779014cb6639d230bd0b1e",
+      "after_sha256": "71912866dcdb31fec529910264e44715bc4be0b0adc50b5a8de3cf064d9a3821"
+    },
+    {
+      "path": "scripts/huifu-payment-test-prompts.json",
+      "action": "modify",
+      "before_sha256": "b202b43cefeb46636785c100cb43f49321e07f57d7a6f5de7b1f59a8795deea0",
+      "after_sha256": "9614dd53c1561e42c5e7a8addcd5c2b110deb9d53346111a44a32e2284ca4d93"
+    },
+    {
+      "path": "scripts/run_real_model_regression.py",
+      "action": "modify",
+      "before_sha256": "4096c148692c8998cefc40c49ab42fb3d4fde9e3628b9e3f37a98027a772131d",
+      "after_sha256": "1072893b238ed911b6ccb1129f41d649753e3c1ba6e39035dbd0b9df04d08ae9"
+    },
+    {
+      "path": "scripts/validate-skills.sh",
+      "action": "modify",
+      "before_sha256": "d254eecacb48b1b3610f80ca8051a9806f1834c5761e83c62aaa9a6578d50854",
+      "after_sha256": "bbf5d79c1ee5d834eccf3109e43e5e444b8852861ac35b6ad285a0af02b50684"
+    },
+    {
+      "path": "scripts/validate_aggregation_payload_contract.py",
+      "action": "modify",
+      "before_sha256": "4cf839658444bd2afdb98f0bd1c382b8197d66ee1277adb3bc5567ae38b26f74",
+      "after_sha256": "72ca82e9aeeb4946b185c35ab891a4621333fefdcd8286766b750da9ac2f7480"
+    },
+    {
+      "path": "scripts/validate_merchant_onboarding_field_contract.py",
+      "action": "modify",
+      "before_sha256": "69479cbbd641e43a4ec019dc5b423e4dc9f9eabac999b1df0100c2effea81336",
+      "after_sha256": "c1ab0e1830816a018ebb423239700116cc97d8f6ba3da239b7162138cbec404d"
+    },
+    {
+      "path": "scripts/validate_merchant_onboarding_sdk_evidence.py",
+      "action": "modify",
+      "before_sha256": "93eeabb226a264ed32d83f50a957c06f46b883aa17dad8f653c9083ab413ae8e",
+      "after_sha256": "d036e69b99aa09a732c42cce19e4afad65a9e9c003a5da31c23ae18e4d26c5f7"
+    },
+    {
+      "path": "scripts/validate_onboarding_extension_source_contract.py",
+      "action": "modify",
+      "before_sha256": "89a66b3412292511d3169eb2f4a286adaacd7d8c1f38ea88c96650bbef24867f",
+      "after_sha256": "3c46b57af0740df40299d18768fd06b53e3dff91a7bf5850009ee74b69b4d2e8"
+    },
+    {
+      "path": "scripts/validate_skill_split.py",
+      "action": "modify",
+      "before_sha256": "6d8373a81d79aa593447150381ea36a252b02aebb2ed07c48db879a17e7e1f32",
+      "after_sha256": "bce5a573fa75502a6db9d31bc9d2a039344e1984673a09c4d9a88617ad2c7964"
+    },
+    {
+      "path": "scripts/validate_skills.py",
+      "action": "modify",
+      "before_sha256": "60398f8cb76f73d862fc77dc5efe0fa04ffc94c9623a6aca67e5845964f72a04",
+      "after_sha256": "5014eeeddd10858d062ae984e355d68b80de567055720770cdcc25f691e068ad"
+    },
+    {
+      "path": "scripts/validate_user_onboarding_sdk_evidence.py",
+      "action": "modify",
+      "before_sha256": "b5d428c28bc05908384a24531ea20ea798dd9dbb95ef4d729bacf29b40b056a1",
+      "after_sha256": "13f4a0e325bf308b356334da47e0050b8f57d286784326c3d4782869df499194"
+    },
+    {
+      "path": "tests/regression/payment.json",
+      "action": "modify",
+      "before_sha256": "f7d6a7ce7db1a4b51cf1c059dc73d2e5f6ca981ba81729834691c90d622d1113",
+      "after_sha256": "0820b8c55432eb78d887a3c83023c1f59350643ce1937992976aa8b32a667314"
+    }
+  ],
+  "regression": {
+    "canonical_prompts_archived": 63,
+    "case_count": 159,
+    "updated_expected_cases": [
+      8,
+      16,
+      31
+    ],
+    "new_cases": 0,
+    "rules_and_behavior_fixtures": "passed",
+    "actual_model_runs": "not-run"
+  },
+  "validation": {
+    "full_gate_exit_code": 0,
+    "full_gate_log": ".tmp/third-review-2026-10-10/final-validation.log",
+    "sdk_offline_probes": "passed",
+    "local_sandbox_go_tests": "passed",
+    "cryptographic_golden_vectors": 7,
+    "release_guardrail_checks": 14,
+    "retirement_negative_fixtures": 7,
+    "checkout_skeleton_fixture": "accepts TODO and SDK install; rejects callback-as-success and false go-live claim",
+    "source_metadata_headers": 44,
+    "quick_validate": "both-passed",
+    "independent_packages": "both-passed",
+    "git_diff_check": "passed"
+  },
+  "packages": [
+    {
+      "skill": "huifu-pay-integration",
+      "version": "1.4.0",
+      "path": "dist/huifu-pay-integration-1.4.0.zip",
+      "sha256": "d96e23c7a25ceae4864036d6564d406a9817982abac6411d4c1c2f31a1d41630",
+      "status": "unpublished-dirty-candidate"
+    },
+    {
+      "skill": "huifu-merchant-onboarding",
+      "version": "1.0.5",
+      "path": "dist/huifu-merchant-onboarding-1.0.5.zip",
+      "sha256": "25082b5c38f0f24610c41770126702eb548b409423e57006aa0f74b9e1e09845",
+      "status": "unpublished-dirty-candidate"
+    }
+  ],
+  "final_review": {
+    "result": "passed-no-blocking-findings",
+    "review_mode": "separate pass by the same executing agent; no independent reviewer or subagent claim",
+    "remaining_limitations": [
+      "实际模型调用与真实汇付网关未执行",
+      "工作区候选尚未提交或发布",
+      "官方已声明的未知字段/协议仍按原合同保留待确认项"
+    ]
+  }
+}

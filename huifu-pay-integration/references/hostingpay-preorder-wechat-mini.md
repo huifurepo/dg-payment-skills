@@ -13,7 +13,7 @@
 - [文档勘误与实现备注](#文档勘误与实现备注)
 
 # 微信小程序预下单
-> 本文依据 2026-05-26 官方文档整理，适用于 `v2/trade/hosting/payment/preorder` 的微信小程序场景。
+> 本文依据 2026-10-10 官方文档整理，适用于 `v2/trade/hosting/payment/preorder` 的微信小程序场景。
 
 ## 接口概述
 | 属性 | 值 |
@@ -278,7 +278,7 @@
 | resp_code | 业务返回码 | String | 8 | Y | 业务返回码 |
 | resp_desc | 业务返回信息 | String | 512 | Y | 业务返回描述 |
 | req_date | 请求时间 | String | 8 | Y | 原样返回，格式 `yyyyMMdd` |
-| req_seq_id | 请求流水号 | String | 32 | Y | 文档此处写为 `32` |
+| req_seq_id | 请求流水号 | String | 64 | Y | 请求流水原样返回，长度64 |
 | hf_seq_id | 全局流水号 | String | 40 | N | 汇付全局流水号 |
 | out_trans_id | 用户账单上的交易订单号 | String | 64 | N | 用户账单交易订单号 |
 | party_order_id | 用户账单上的商户订单号 | String | 64 | N | 用户账单商户订单号 |
@@ -290,7 +290,7 @@
 | acct_date | 入账时间 | String | 8 | N | `yyyyMMdd` |
 | trans_stat | 交易状态 | String | 1 | N | `S`=成功，`F`=失败 |
 | end_time | 支付完成时间 | String | 14 | N | `yyyyMMddHHmmss` |
-| trans_finish_time | 汇付侧交易完成时间 | String | 6 | N | 文档原表长度列为 `6`，格式说明为 `yyyyMMddHHmmss` |
+| trans_finish_time | 汇付侧交易完成时间 | String | 13 | N | 毫秒时间戳；String(13)，示例1791598928000 |
 | debit_flag | 借贷记标识 | String | 1 | N | `D`=借记卡，`C`=信用卡，`Z`=借贷合一卡 |
 | wx_user_id | 微信用户唯一标识码 | String | 128 | N | 微信用户唯一标识码 |
 | wx_response | 微信返回的响应报文 | String(JSON Object) | 6000 | N | JSON Object 格式 |
@@ -405,7 +405,7 @@
 | resp_desc | 业务返回信息 | String | 512 | Y | 业务返回描述 |
 | huifu_id | 商户号 | String | 32 | Y | 商户号 |
 | req_date | 请求时间 | String | 8 | Y | 原样返回，格式 `yyyyMMdd` |
-| req_seq_id | 请求流水号 | String | 32 | Y | 原样返回 |
+| req_seq_id | 请求流水号 | String | 64 | Y | 原样返回 |
 | trans_stat | 交易状态 | String | 1 | Y | `S`=成功，`F`=失败 |
 | sys_id | 系统号 | String | 32 | Y | 渠道商/商户的 `huifu_id` |
 
@@ -417,7 +417,7 @@
 
 ## 文档勘误与实现备注
 - 请求示例里出现了 `checkout_id`，但参数表没有定义该字段；当前 skill 不将其视为正式接入参数。
-- 异步字段 `trans_finish_time` 的长度列写为 `6`，但格式说明为 `yyyyMMddHHmmss`；实现时按 14 位时间串处理更合理。
-- 主异步与拆单异步中的 `req_seq_id` 长度列写为 `32`，但请求参数表与同步返回都写为 `64`；当前按官方原表保留并显式记录该冲突。
+- 2026-10-10官网已明确通知 `trans_finish_time:String(13)` 为毫秒时间戳；`end_time:String(14)` 仍为 `yyyyMMddHHmmss`，分别解析。
+- 2026-10-10官网主异步、拆单异步 `req_seq_id` 均为 String(64)，与请求/同步一致，旧长度冲突已关闭。
 - 同步返回 `miniapp_data` 的官方子表只定义了 `gh_id`、`path`、`scheme_code`；官方成功示例还出现了 `appid`、`need_scheme`、`private_info`、`seq_id`，当前只作为示例可见键记录，不能升级成官方稳定字段。
 - `wx_response`、`trans_fee_allowance_info` 在父表中写成 `String` 且说明为 JsonObject/JsonArray，同时又展开了子字段；当前文档按“JSON 字符串承载对象/数组”的方式描述。

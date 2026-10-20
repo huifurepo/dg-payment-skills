@@ -1,0 +1,4862 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-10-08",
+  "scope": {
+    "official_documents": 78,
+    "existing_documents": 71,
+    "added_documents": 7,
+    "changed_existing_documents": 6,
+    "formal_apis": 58,
+    "field_paths": 6296
+  },
+  "source_comparison": [
+    {
+      "domain": "payment",
+      "key": "lightning-intro",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/jsbjs.md",
+      "before_sha256": "a9d31276659a2396ef70f920dd11dc4ba4fb1e954b6b6bdbb2b9b41c4508f4f9",
+      "after_sha256": "a9d31276659a2396ef70f920dd11dc4ba4fb1e954b6b6bdbb2b9b41c4508f4f9",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "lightning-quickstart",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/ksks.md",
+      "before_sha256": "07686d8481661ecfa318a769c219c223d54ede76077afedae78d38731c84b06b",
+      "after_sha256": "07686d8481661ecfa318a769c219c223d54ede76077afedae78d38731c84b06b",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "wx-jsapi-intro",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/wx_gzh_intro.md",
+      "before_sha256": "c969e19cbef6e0744888c4a8e3a74b9d3aaf06e6196b1be0c8bae259c0db963e",
+      "after_sha256": "c969e19cbef6e0744888c4a8e3a74b9d3aaf06e6196b1be0c8bae259c0db963e",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "wx-jsapi-guide",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/wx_gzh_kfzy.md",
+      "before_sha256": "4dc7474e5f9568e612e088a89100b63631b54a70491fe3d5ed3ab601fad1bb86",
+      "after_sha256": "4dc7474e5f9568e612e088a89100b63631b54a70491fe3d5ed3ab601fad1bb86",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "wx-mini-intro",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/wx_xcx_intro.md",
+      "before_sha256": "e8b62b2cc432f2a525255d9ca6fd7526d88e1d77e03a9cdcd8e059b1f9cafe3b",
+      "after_sha256": "e8b62b2cc432f2a525255d9ca6fd7526d88e1d77e03a9cdcd8e059b1f9cafe3b",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "wx-mini-guide",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/wx_xcx_kfzy.md",
+      "before_sha256": "4fa3b7b19f6e4a8ea09a2629314756e5365a598307bac552ebc8714747a90a97",
+      "after_sha256": "4fa3b7b19f6e4a8ea09a2629314756e5365a598307bac552ebc8714747a90a97",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "wx-micropay-intro",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/wx_fkm_intro.md",
+      "before_sha256": "33d05ad1e374c346cdb1fb623ae347fbf76c9987ac446890ac187337a24f2d4d",
+      "after_sha256": "33d05ad1e374c346cdb1fb623ae347fbf76c9987ac446890ac187337a24f2d4d",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "wx-micropay-guide",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/wx_fkm_kfzy.md",
+      "before_sha256": "6cb6ed61dde8e55234d4ef40a4020944ab4be084b08a31a962cd3efc15343e3d",
+      "after_sha256": "6cb6ed61dde8e55234d4ef40a4020944ab4be084b08a31a962cd3efc15343e3d",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "alipay-js-intro",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/zfb_js_intro.md",
+      "before_sha256": "33ea95ef68e0ff267c3d3713b260c30d77f50ebe518ed2f1f1ba544695844d9f",
+      "after_sha256": "33ea95ef68e0ff267c3d3713b260c30d77f50ebe518ed2f1f1ba544695844d9f",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "alipay-js-guide",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/zfb_js_kfzy.md",
+      "before_sha256": "0bb46e538061309c60ab55656d78f00814daf1f3fb913dde7b77af553af7023d",
+      "after_sha256": "0bb46e538061309c60ab55656d78f00814daf1f3fb913dde7b77af553af7023d",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "alipay-native-intro",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/zfb_zs_intro.md",
+      "before_sha256": "9cf564f226821fae08e8b38452cf23a91aa97d01047060d2bad9dca0393e657f",
+      "after_sha256": "9cf564f226821fae08e8b38452cf23a91aa97d01047060d2bad9dca0393e657f",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "alipay-native-guide",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/zfb_zs_kfzy.md",
+      "before_sha256": "0469ff4dd5f6ba45452abe113b6d220ce430cb9f4395495decae48d9f51108b7",
+      "after_sha256": "0469ff4dd5f6ba45452abe113b6d220ce430cb9f4395495decae48d9f51108b7",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "alipay-micropay-intro",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/zfb_fkm_intro.md",
+      "before_sha256": "e59ebefa25e7154c281405a366bb9aab6ff7ebfdb13dd1c2b3d776c5553dbcbd",
+      "after_sha256": "e59ebefa25e7154c281405a366bb9aab6ff7ebfdb13dd1c2b3d776c5553dbcbd",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "alipay-micropay-guide",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/zfb_fkm_kfzy.md",
+      "before_sha256": "96c83e68b38beb7913b4d503e3e536e00e0952e31221055068b663a3ae8f0011",
+      "after_sha256": "96c83e68b38beb7913b4d503e3e536e00e0952e31221055068b663a3ae8f0011",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "unionpay-js-intro",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/yl_js_intro.md",
+      "before_sha256": "2433c10e107cc337515720c8b21ec23e30794fd23582b7b1c5adf0ccc2b9a968",
+      "after_sha256": "2433c10e107cc337515720c8b21ec23e30794fd23582b7b1c5adf0ccc2b9a968",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "unionpay-js-guide",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/yl_js_kfzy.md",
+      "before_sha256": "5a3d29611f3b341295a9166a83ccedfad92c89e8b0e306d3562a1b733fc8ddd1",
+      "after_sha256": "5a3d29611f3b341295a9166a83ccedfad92c89e8b0e306d3562a1b733fc8ddd1",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "unionpay-native-intro",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/yl_zs_intro.md",
+      "before_sha256": "00758a10b66a00b907c003a61c6dfb0be8b660a91b5478f6e7563f8bec3f022d",
+      "after_sha256": "00758a10b66a00b907c003a61c6dfb0be8b660a91b5478f6e7563f8bec3f022d",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "unionpay-native-guide",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/yl_zs_kfzy.md",
+      "before_sha256": "f81ea381a8b12343a3f83ff784b4153ea93d4d39c202a3b4b9960beb9cbeef06",
+      "after_sha256": "f81ea381a8b12343a3f83ff784b4153ea93d4d39c202a3b4b9960beb9cbeef06",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "unionpay-micropay-intro",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/yl_fkm_intro.md",
+      "before_sha256": "e29f34244e3e862a6f97817eac7826a4eca880563c1dd592ccd3f4dd84f379be",
+      "after_sha256": "e29f34244e3e862a6f97817eac7826a4eca880563c1dd592ccd3f4dd84f379be",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "unionpay-micropay-guide",
+      "url": "https://paas.huifu.com/partners/lightning/jsb/zf/yl_fkm_kfzy.md",
+      "before_sha256": "2f554275f351d3c304c93321411b726f9c44ea3e7d04f12bba0607193e9233fb",
+      "after_sha256": "2f554275f351d3c304c93321411b726f9c44ea3e7d04f12bba0607193e9233fb",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "aggregation-create",
+      "url": "https://paas.huifu.com/partners/lightning/api/jhzfxd.md",
+      "before_sha256": "8412cf1c21eaba1164e281fbf4b881e98c7bd9524a1d5def920ff00d4247d8a5",
+      "after_sha256": "8412cf1c21eaba1164e281fbf4b881e98c7bd9524a1d5def920ff00d4247d8a5",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "aggregation-query",
+      "url": "https://paas.huifu.com/partners/lightning/api/jyddcx.md",
+      "before_sha256": "9e714b3db5c041bbc4732dec8db3b084f0d1f0464b67f759986cf40276747b92",
+      "after_sha256": "9e714b3db5c041bbc4732dec8db3b084f0d1f0464b67f759986cf40276747b92",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "aggregation-close",
+      "url": "https://paas.huifu.com/partners/lightning/api/jygd.md",
+      "before_sha256": "acb6416d691ad8e3692fd823210be97f9c1addd9c9e53a41053ae901188edc7c",
+      "after_sha256": "acb6416d691ad8e3692fd823210be97f9c1addd9c9e53a41053ae901188edc7c",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "aggregation-close-query",
+      "url": "https://paas.huifu.com/partners/lightning/api/jygdcx.md",
+      "before_sha256": "57fa894392eab458c7031020c47232269c08f62aed272ee4834c7629e302184c",
+      "after_sha256": "57fa894392eab458c7031020c47232269c08f62aed272ee4834c7629e302184c",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "aggregation-refund",
+      "url": "https://paas.huifu.com/partners/lightning/api/jytk.md",
+      "before_sha256": "ed632a82bcc7d5c706c51f651fdede9e63ef7e359d2f6e2d1195c1185f55225e",
+      "after_sha256": "ed632a82bcc7d5c706c51f651fdede9e63ef7e359d2f6e2d1195c1185f55225e",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "aggregation-refund-query",
+      "url": "https://paas.huifu.com/partners/lightning/api/jytkcx.md",
+      "before_sha256": "9775730d9b922e856e36dd5dc3cdbc0cb37d3c29fe11049339bb8cfa3bcd7ee1",
+      "after_sha256": "9775730d9b922e856e36dd5dc3cdbc0cb37d3c29fe11049339bb8cfa3bcd7ee1",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "reconciliation-v2",
+      "url": "https://paas.huifu.com/partners/api/doc/jyjs/api_jyjs_wjcx.md",
+      "before_sha256": "4ca6260c74f5f74820b645dd58935c777bea007795599bf41e974195dc2fc55f",
+      "after_sha256": "4ca6260c74f5f74820b645dd58935c777bea007795599bf41e974195dc2fc55f",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "hosting-h5",
+      "url": "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hosting.md",
+      "before_sha256": "8b4cfaac098b1f09d0f9387520b0826a340dfa6364d00beee0aefe343b5bb00b",
+      "after_sha256": "e79333a57abef3723636ed92a373d276aa3550dff00fa6f33d21396e19f1cd86",
+      "result": "changed"
+    },
+    {
+      "domain": "payment",
+      "key": "hosting-alipay-mini",
+      "url": "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_zfbpreorder.md",
+      "before_sha256": "b8e99c46d8926f6a440fdd92807e58dc49005c74fbfc42d64cef3817a95ea0aa",
+      "after_sha256": "7e87b990aaad008b6bda53ef05bc52e86f4324adfa7f59489d4bfb6e4d34425e",
+      "result": "changed"
+    },
+    {
+      "domain": "payment",
+      "key": "hosting-wechat-mini",
+      "url": "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_wxpreorder.md",
+      "before_sha256": "e2f96340d3d6becb3c27217c987c205bbb386887f9990d1e6cf22e575d2ce692",
+      "after_sha256": "e2f96340d3d6becb3c27217c987c205bbb386887f9990d1e6cf22e575d2ce692",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "hosting-douyin",
+      "url": "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_dypreorder.md",
+      "before_sha256": "affd2c8f4031e569f335ab2fb2e6ed045fa60037dbf69c80b49e949df16bfab4",
+      "after_sha256": "affd2c8f4031e569f335ab2fb2e6ed045fa60037dbf69c80b49e949df16bfab4",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "hosting-query",
+      "url": "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingcx.md",
+      "before_sha256": "14dd71066df958ed2ac8a76a01cebadb9b39bdb01961ee16866c0e0a94706869",
+      "after_sha256": "14dd71066df958ed2ac8a76a01cebadb9b39bdb01961ee16866c0e0a94706869",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "hosting-refund",
+      "url": "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingtk.md",
+      "before_sha256": "7bb8a4fa1bf2a7c38b547ebf58d9024f9cfb0525a617372d170e00e59789bb20",
+      "after_sha256": "7bb8a4fa1bf2a7c38b547ebf58d9024f9cfb0525a617372d170e00e59789bb20",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "hosting-refund-query",
+      "url": "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingtkcx.md",
+      "before_sha256": "1f982a42ef9e149ef64db96256fc3b3033c7e0c5551ba0547e27f995eb88d1dd",
+      "after_sha256": "1f982a42ef9e149ef64db96256fc3b3033c7e0c5551ba0547e27f995eb88d1dd",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "hosting-close",
+      "url": "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostinggd.md",
+      "before_sha256": "97b61f7e7725b4cf999a8a05ad3eb332a2183cc56100d558c2499ebe57574f51",
+      "after_sha256": "97b61f7e7725b4cf999a8a05ad3eb332a2183cc56100d558c2499ebe57574f51",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "hosting-splitpay-query",
+      "url": "https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingcdzf.md",
+      "before_sha256": "ed42e854f5a90b5a30c6365e724a0add02546984121a80d08a7bf7261094ff78",
+      "after_sha256": "ed42e854f5a90b5a30c6365e724a0add02546984121a80d08a7bf7261094ff78",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "split-detail-query",
+      "url": "https://paas.huifu.com/partners/api/doc/smzf/api_fzmxcx.md",
+      "before_sha256": "dcab5eb128a7987742ea339631add74ad771227d3ce557c1154d6d6a27266270",
+      "after_sha256": "dcab5eb128a7987742ea339631add74ad771227d3ce557c1154d6d6a27266270",
+      "result": "unchanged"
+    },
+    {
+      "domain": "payment",
+      "key": "balance-pay",
+      "url": "https://paas.huifu.com/partners/api/doc/yuer/api_acctpayzf.md",
+      "before_sha256": null,
+      "after_sha256": "f0d354f91b4b554caa970a9b67f2f94db9cfeedea77531b112f46c23c7deb943",
+      "result": "added"
+    },
+    {
+      "domain": "payment",
+      "key": "balance-pay-query",
+      "url": "https://paas.huifu.com/partners/api/doc/yuer/api_acctpaycx.md",
+      "before_sha256": null,
+      "after_sha256": "79815b5911c183d16107976c94495a26e786157e511040013a4f7f90e45d6da7",
+      "result": "added"
+    },
+    {
+      "domain": "payment",
+      "key": "balance-refund",
+      "url": "https://paas.huifu.com/partners/api/doc/yuer/api_acctpaytk.md",
+      "before_sha256": null,
+      "after_sha256": "b95fbc14df93458a916fb59a5158f563af8f76a9e68bc4dc984ae4ac81168f1f",
+      "result": "added"
+    },
+    {
+      "domain": "payment",
+      "key": "balance-refund-query",
+      "url": "https://paas.huifu.com/partners/api/doc/yuer/api_acctpaytkcx.md",
+      "before_sha256": null,
+      "after_sha256": "e31b15b8f72aa21458b054b33f6ddaa32d1f1a927edb48a56ce93d7c64685ce0",
+      "result": "added"
+    },
+    {
+      "domain": "payment",
+      "key": "fee-calc",
+      "url": "https://paas.huifu.com/partners/api/doc/sxf/api_sxf_sxfss.md",
+      "before_sha256": null,
+      "after_sha256": "e5a3270bbb76fa2a4948b129414568e3b57d41fae1ff080749e1c2b171a9f862",
+      "result": "added"
+    },
+    {
+      "domain": "payment",
+      "key": "pay-relation",
+      "url": "https://paas.huifu.com/partners/api/doc/yuer/api_acct_fkgxtj.md",
+      "before_sha256": null,
+      "after_sha256": "884ca71510e55b1d0bc63fbd01dec4770b667901a324dd743c5af4278a5e7c05",
+      "result": "added"
+    },
+    {
+      "domain": "payment",
+      "key": "balance-sms",
+      "url": "https://paas.huifu.com/partners/api/doc/yuer/api_smscode.md",
+      "before_sha256": null,
+      "after_sha256": "2e13d8bbb9c8c4f0f9cf0054388e8d4ae8e85309ab0710192fae87fd28bcf87e",
+      "result": "added"
+    },
+    {
+      "domain": "merchant",
+      "key": "enterprise",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_qyshjbxxrz_kyc.md",
+      "before_sha256": "6606629100f94813a7a4238c8f1ffc970ec3b905d1af9487bb92baee6138822e",
+      "after_sha256": "6606629100f94813a7a4238c8f1ffc970ec3b905d1af9487bb92baee6138822e",
+      "result": "unchanged"
+    },
+    {
+      "domain": "merchant",
+      "key": "individual",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_grshjbxxrz_kyc.md",
+      "before_sha256": "09862a3923b114abcf7dbc9e7545798481abc37f88b6eb64911ce7d53f9f5437",
+      "after_sha256": "09862a3923b114abcf7dbc9e7545798481abc37f88b6eb64911ce7d53f9f5437",
+      "result": "unchanged"
+    },
+    {
+      "domain": "merchant",
+      "key": "business_open",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_kyc.md",
+      "before_sha256": "9c3f2262c295489abc5ce32bf123128cfd7376c4d5e35399c5083e39ff206c5c",
+      "after_sha256": "9c3f2262c295489abc5ce32bf123128cfd7376c4d5e35399c5083e39ff206c5c",
+      "result": "unchanged"
+    },
+    {
+      "domain": "merchant",
+      "key": "image_upload",
+      "url": "https://paas.huifu.com/navigator/ossApi/api_shjj_shtpsc.json",
+      "before_sha256": "bf2c22fc745b343e44c557daeda5c6013e7863302a5b910f0ceabc23d895c1f4",
+      "after_sha256": "2fcb84dd1cfe0260cfa3d49b79174d2e7b8a287cdf860faa62011bfc1e8472dd",
+      "result": "changed"
+    },
+    {
+      "domain": "merchant",
+      "key": "detail_query",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shxxxxcx_kyc.md",
+      "before_sha256": "df6014a1fc008bd81dff8de5708432010c60b002d34d0d9602a67145d1ae8806",
+      "after_sha256": "df6014a1fc008bd81dff8de5708432010c60b002d34d0d9602a67145d1ae8806",
+      "result": "unchanged"
+    },
+    {
+      "domain": "merchant",
+      "key": "status_query",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_sqdztcx.md",
+      "before_sha256": "8c39b88e199d2c877267994172fa09de5130c47d38eb5f01147d2d1520c2bef4",
+      "after_sha256": "8c39b88e199d2c877267994172fa09de5130c47d38eb5f01147d2d1520c2bef4",
+      "result": "unchanged"
+    },
+    {
+      "domain": "merchant",
+      "key": "business_open_modify",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywktxg_kyc.md",
+      "before_sha256": "9dea690376cdf85cf6007e302900111a16f00bd92ab2a8335ca56eaaee9d491d",
+      "after_sha256": "9e70c875accaecb0d25114f38ab80ee6cbfcc6c0a207c0e0176614ff0d7925bb",
+      "result": "changed"
+    },
+    {
+      "domain": "merchant",
+      "key": "basic_info_modify",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shjbxxxg_kyc.md",
+      "before_sha256": "f2146bc553eb4b1dc8c88d4487eb1b5c721468d6a8eec5be7d0ce9f086db4d6c",
+      "after_sha256": "f2146bc553eb4b1dc8c88d4487eb1b5c721468d6a8eec5be7d0ce9f086db4d6c",
+      "result": "unchanged"
+    },
+    {
+      "domain": "merchant",
+      "key": "rate_query",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_merchant_conf_search_cx.md",
+      "before_sha256": "20a3be9f505c542a716bbdad65da146f9089be05b206850c089c6df4e9ac050e",
+      "after_sha256": "20a3be9f505c542a716bbdad65da146f9089be05b206850c089c6df4e9ac050e",
+      "result": "unchanged"
+    },
+    {
+      "domain": "merchant",
+      "key": "status_change",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/api_shgl_shztbg.md",
+      "before_sha256": "d2fe6ab4404abd79b3ac5f5eecffaaec9d61d245ac1a60ebccddee889535a07f",
+      "after_sha256": "d2fe6ab4404abd79b3ac5f5eecffaaec9d61d245ac1a60ebccddee889535a07f",
+      "result": "unchanged"
+    },
+    {
+      "domain": "merchant",
+      "key": "sms_send",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shdxfs.md",
+      "before_sha256": "6982fe07d276cbb0739c9c205afbc5b238dd6d72422154efd6248932aa459b54",
+      "after_sha256": "6982fe07d276cbb0739c9c205afbc5b238dd6d72422154efd6248932aa459b54",
+      "result": "unchanged"
+    },
+    {
+      "domain": "merchant",
+      "key": "multifee_config",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflpz.md",
+      "before_sha256": "e4b23cb9bfaf59e9a88448a890f539d7ee9cbf7002d763a7d078294053aa7473",
+      "after_sha256": "e4b23cb9bfaf59e9a88448a890f539d7ee9cbf7002d763a7d078294053aa7473",
+      "result": "unchanged"
+    },
+    {
+      "domain": "merchant",
+      "key": "multifee_query",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflcx.md",
+      "before_sha256": "e2c0f53e77a1ef00827cc8be28ac688c068e5c8a4dc9f741845b841dcd16881a",
+      "after_sha256": "e2c0f53e77a1ef00827cc8be28ac688c068e5c8a4dc9f741845b841dcd16881a",
+      "result": "unchanged"
+    },
+    {
+      "domain": "user",
+      "key": "user_enterprise",
+      "url": "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_qyyhjbxxzc.md",
+      "before_sha256": "b95f8659579a89b4cda719d63922cd99458cc58351c7505b6e3c2b0c8b0fa674",
+      "after_sha256": "b95f8659579a89b4cda719d63922cd99458cc58351c7505b6e3c2b0c8b0fa674",
+      "result": "unchanged"
+    },
+    {
+      "domain": "user",
+      "key": "user_individual",
+      "url": "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_gryhjbxxzc.md",
+      "before_sha256": "e12fd6d81d185b6f9467ed837cc69f64485461fb12dbc943db487fbc9a751759",
+      "after_sha256": "e12fd6d81d185b6f9467ed837cc69f64485461fb12dbc943db487fbc9a751759",
+      "result": "unchanged"
+    },
+    {
+      "domain": "user",
+      "key": "user_business_open",
+      "url": "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_ywrz.md",
+      "before_sha256": "a0f6f864f7b50312b8bf6757ffa35ca9617a70e53c4e549837d11db3ef7cefda",
+      "after_sha256": "a0f6f864f7b50312b8bf6757ffa35ca9617a70e53c4e549837d11db3ef7cefda",
+      "result": "unchanged"
+    },
+    {
+      "domain": "user",
+      "key": "user_apply_query",
+      "url": "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhsqdzt.md",
+      "before_sha256": "f7894c5e2bc3544a9501922d4e3d5bb8b1f054704a80c36405a51ef2ad768e56",
+      "after_sha256": "f7894c5e2bc3544a9501922d4e3d5bb8b1f054704a80c36405a51ef2ad768e56",
+      "result": "unchanged"
+    },
+    {
+      "domain": "user",
+      "key": "user_detail_query",
+      "url": "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhywcx.md",
+      "before_sha256": "3b11a53bb0cb52c086a93346fd6788c015ed0e60a3d8ffbd8e9bfb31c73634b6",
+      "after_sha256": "3b11a53bb0cb52c086a93346fd6788c015ed0e60a3d8ffbd8e9bfb31c73634b6",
+      "result": "unchanged"
+    },
+    {
+      "domain": "user",
+      "key": "user_enterprise_modify",
+      "url": "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_qyyhjbxxxg.md",
+      "before_sha256": "bb0b2a7339463d9731243e7d91ec9bfd729180d844646bb119b68655a11a5df8",
+      "after_sha256": "bb0b2a7339463d9731243e7d91ec9bfd729180d844646bb119b68655a11a5df8",
+      "result": "unchanged"
+    },
+    {
+      "domain": "user",
+      "key": "user_individual_modify",
+      "url": "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_gryhjbxxxg.md",
+      "before_sha256": "b1495f896cfc12f8e8324c8aa1f97655c0c87d41c626ea636eda54b7b3aa741c",
+      "after_sha256": "b1495f896cfc12f8e8324c8aa1f97655c0c87d41c626ea636eda54b7b3aa741c",
+      "result": "unchanged"
+    },
+    {
+      "domain": "user",
+      "key": "user_business_modify",
+      "url": "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_ywrzxg.md",
+      "before_sha256": "ca3c5d4430cba1827c806c87d7dee3417b3f78bd4883ce1e88ea90149e5d9c78",
+      "after_sha256": "ca3c5d4430cba1827c806c87d7dee3417b3f78bd4883ce1e88ea90149e5d9c78",
+      "result": "unchanged"
+    },
+    {
+      "domain": "user",
+      "key": "user_list_query",
+      "url": "https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhlbcx.md",
+      "before_sha256": "b10ab1529c58d5739cae0f38b5f385a105e3f2d6b3348400f6882328b7421d9d",
+      "after_sha256": "b10ab1529c58d5739cae0f38b5f385a105e3f2d6b3348400f6882328b7421d9d",
+      "result": "unchanged"
+    },
+    {
+      "domain": "extension",
+      "key": "contract_resend",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/fp/api_fp_dzhtcf.md",
+      "before_sha256": "169b62c666fbe0345ab4f5b10f7f39116d5fd774f6a04ec6abdb77c3923a156e",
+      "after_sha256": "169b62c666fbe0345ab4f5b10f7f39116d5fd774f6a04ec6abdb77c3923a156e",
+      "result": "unchanged"
+    },
+    {
+      "domain": "extension",
+      "key": "contract_list_query",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/fp/api_fp_dzhtsqlbcx.md",
+      "before_sha256": "2a774b8820cdb4e5e4dc1364f1be9bcdcfc273b7b86e064aa3c631c97e8d397b",
+      "after_sha256": "2a774b8820cdb4e5e4dc1364f1be9bcdcfc273b7b86e064aa3c631c97e8d397b",
+      "result": "unchanged"
+    },
+    {
+      "domain": "extension",
+      "key": "contract_reject",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/fp/api_fp_dzhtjq.md",
+      "before_sha256": "ec6aea1f10e1ab3113993d16422214e9a3aaa586e71bcd646841f45ad60c1f9e",
+      "after_sha256": "ec6aea1f10e1ab3113993d16422214e9a3aaa586e71bcd646841f45ad60c1f9e",
+      "result": "unchanged"
+    },
+    {
+      "domain": "extension",
+      "key": "lower_merchant_permission",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_xjshpz.md",
+      "before_sha256": "e213479c4b3bb355dd8bbccefcee1d1980e12f83af2fb14323760c6776d24d8f",
+      "after_sha256": "e213479c4b3bb355dd8bbccefcee1d1980e12f83af2fb14323760c6776d24d8f",
+      "result": "unchanged"
+    },
+    {
+      "domain": "extension",
+      "key": "unified_web_onboarding",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shtyjjweb.md",
+      "before_sha256": "d3ce5d64bf4c9783b40e0700a93476016b469478ba9b3d2c9adf82f55d1e5888",
+      "after_sha256": "d3ce5d64bf4c9783b40e0700a93476016b469478ba9b3d2c9adf82f55d1e5888",
+      "result": "unchanged"
+    },
+    {
+      "domain": "extension",
+      "key": "unified_web_query",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shtyjjwebcx.md",
+      "before_sha256": "ca9ebd7e3b8919afe748af2d97b41a5ff12085508bd220398386b005e451f865",
+      "after_sha256": "252db113d3eab2a6de3b1fb27291bc7346f9c2c3a53bcc54657c44cc875357c8",
+      "result": "changed"
+    },
+    {
+      "domain": "extension",
+      "key": "wechat_config",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_wxshpz.md",
+      "before_sha256": "bc0b92c4e46e7a097248cf3e048fcd9f13159b41ccd26194b2825babc132426a",
+      "after_sha256": "bc0b92c4e46e7a097248cf3e048fcd9f13159b41ccd26194b2825babc132426a",
+      "result": "unchanged"
+    },
+    {
+      "domain": "extension",
+      "key": "wechat_config_query",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_wxshpzcx.md",
+      "before_sha256": "99937c6b7807a691d017830e8553521b1e13691f66a02473dcf6ce3e6bc0924e",
+      "after_sha256": "99937c6b7807a691d017830e8553521b1e13691f66a02473dcf6ce3e6bc0924e",
+      "result": "unchanged"
+    },
+    {
+      "domain": "extension",
+      "key": "wechat_realname",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_wxsmrz.md",
+      "before_sha256": "41d4520a560c4cafb61cf8b87f7d15bf316c949e2b126a131833e343c8fa3197",
+      "after_sha256": "41d4520a560c4cafb61cf8b87f7d15bf316c949e2b126a131833e343c8fa3197",
+      "result": "unchanged"
+    },
+    {
+      "domain": "extension",
+      "key": "wechat_realname_query",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_wxsmrzztcx.md",
+      "before_sha256": "8477b7bada0041c3f7ef6fc33ae2a35d041a3898e6ef2c23f6d1ff2d7be66872",
+      "after_sha256": "8477b7bada0041c3f7ef6fc33ae2a35d041a3898e6ef2c23f6d1ff2d7be66872",
+      "result": "unchanged"
+    },
+    {
+      "domain": "extension",
+      "key": "alipay_realname",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_zfbsmrz.md",
+      "before_sha256": "943e970bfe2b468cee53872cd34a740456a2ebd3df5949e516d4256209747f15",
+      "after_sha256": "37418d1dc993c3cbac002e0b4be2607ae929f85b7609f48141a52ac10cc37c5e",
+      "result": "changed"
+    },
+    {
+      "domain": "extension",
+      "key": "alipay_realname_query",
+      "url": "https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_zfbsmcx.md",
+      "before_sha256": "cf2e66377106963060ac93656e20bfbc13e0dc4f1a1eaba0b935e9e7f2a8bed6",
+      "after_sha256": "cf2e66377106963060ac93656e20bfbc13e0dc4f1a1eaba0b935e9e7f2a8bed6",
+      "result": "unchanged"
+    }
+  ],
+  "field_comparison": {
+    "payment": {
+      "before": 2656,
+      "after": 2930,
+      "added": [
+        {
+          "interface": "H5/PC预下单",
+          "path": "request.data.alipay_data.fq_mer_discount_flag",
+          "after": {
+            "wire": "`request.data.alipay_data`",
+            "decoded": "`$.fq_mer_discount_flag`",
+            "name": "商户贴息标记",
+            "type": "`String`",
+            "length": "`—`",
+            "required": "`N`",
+            "status": "[需要官方确认]：长度",
+            "description": "花呗分期商户补贴活动，Y：商户全额贴息，P：商户部分贴息，不传为非商户贴息（默认）；示例值：P；选择P：商户部分贴息活动，需同时在【ali_business_params：商户业务信息】中传入支付宝约定的活动参数，参数说明详见分期支付指引文档。"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "request.data",
+          "after": {
+            "wire": "`request.data`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求数据",
+            "type": "`JSON`",
+            "length": "`—`",
+            "required": "`Y`",
+            "status": "N/A：结构字段长度",
+            "description": "业务请求参数，具体值参考API文档"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "request.data.out_huifu_id",
+          "after": {
+            "wire": "`request.data.out_huifu_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "出款方商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "request.data.pay_relations[]",
+          "after": {
+            "wire": "`request.data.pay_relations`",
+            "decoded": "`—（String(JSON Array) 容器）`",
+            "name": "付款关系明细",
+            "type": "`String`",
+            "length": "`—`",
+            "required": "`Y`",
+            "status": "[需要官方确认]：长度",
+            "description": "付款关系，jsonArray"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "request.data.pay_relations[].apply_type",
+          "after": {
+            "wire": "`request.data.pay_relations`",
+            "decoded": "`$[].apply_type`",
+            "name": "操作类型",
+            "type": "`String`",
+            "length": "`3`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "ADD:新增；DEL:删除；示例值：ADD"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "request.data.pay_relations[].in_huifu_id",
+          "after": {
+            "wire": "`request.data.pay_relations`",
+            "decoded": "`$[].in_huifu_id`",
+            "name": "入账方商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "request.data.req_date",
+          "after": {
+            "wire": "`request.data.req_date`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求日期",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "格式为YYYYMMDD，示例值：20221023"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "request.data.req_seq_id",
+          "after": {
+            "wire": "`request.data.req_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "request.product_id",
+          "after": {
+            "wire": "`request.product_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "产品号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "汇付分配的产品号，示例值：YYZY"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "request.sign",
+          "after": {
+            "wire": "`request.sign`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "加签结果",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "签名，对报文整体签名；[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq)"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "request.sys_id",
+          "after": {
+            "wire": "`request.sys_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "系统号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "渠道商/商户的huifu_id ；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为直连商户时，此字段填写商户huifu_id；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "response.data",
+          "after": {
+            "wire": "`response.data`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "响应内容体",
+            "type": "`JSON`",
+            "length": "`—`",
+            "required": "`N`",
+            "status": "N/A：结构字段长度",
+            "description": "业务返回参数"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "response.data.confirm_url",
+          "after": {
+            "wire": "`response.data.confirm_url`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "付款关系确认页面URL",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：https://spin-test.cloudpnr.com/balance/?hfSeqId=0035000topB240314153727P590c0a8309800000"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "response.data.out_huifu_id",
+          "after": {
+            "wire": "`response.data.out_huifu_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "出款方商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "response.data.pay_relations",
+          "after": {
+            "wire": "`response.data.pay_relations`",
+            "decoded": "`—（[需要官方确认]：正式说明 jsonArry 的数组编码）`",
+            "name": "付款关系明细",
+            "type": "`String`",
+            "length": "`—`",
+            "required": "`Y`",
+            "status": "[需要官方确认]：长度",
+            "description": "付款关系，jsonArry"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "response.data.pay_relations.apply_desc",
+          "after": {
+            "wire": "`response.data.pay_relations`",
+            "decoded": "`—（[需要官方确认]：正式说明 jsonArry 的数组编码）`",
+            "name": "提交状态描述",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：待删除入账方不在付款关系中"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "response.data.pay_relations.apply_stat",
+          "after": {
+            "wire": "`response.data.pay_relations`",
+            "decoded": "`—（[需要官方确认]：正式说明 jsonArry 的数组编码）`",
+            "name": "提交状态",
+            "type": "`String`",
+            "length": "`1`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "S=成功；F=失败；示例值：S"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "response.data.pay_relations.apply_type",
+          "after": {
+            "wire": "`response.data.pay_relations`",
+            "decoded": "`—（[需要官方确认]：正式说明 jsonArry 的数组编码）`",
+            "name": "操作类型",
+            "type": "`String`",
+            "length": "`3`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "ADD:新增；DEL:删除；示例值：ADD"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "response.data.pay_relations.in_huifu_id",
+          "after": {
+            "wire": "`response.data.pay_relations`",
+            "decoded": "`—（[需要官方确认]：正式说明 jsonArry 的数组编码）`",
+            "name": "入账方商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "response.data.pay_relations.in_mer_name",
+          "after": {
+            "wire": "`response.data.pay_relations`",
+            "decoded": "`—（[需要官方确认]：正式说明 jsonArry 的数组编码）`",
+            "name": "入账方商户名称",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：上海汇付支付服务公司"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "response.data.req_date",
+          "after": {
+            "wire": "`response.data.req_date`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求日期",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "格式为YYYYMMDD，示例值：20221013"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "response.data.req_seq_id",
+          "after": {
+            "wire": "`response.data.req_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "业务请求流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "response.data.resp_code",
+          "after": {
+            "wire": "`response.data.resp_code`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "业务返回码",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "[业务返回码](https://paas.huifu.com/partners/api/doc/yuer/api_acct_fkgxtj.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查） ；示例值：00000000"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "response.data.resp_desc",
+          "after": {
+            "wire": "`response.data.resp_desc`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "业务返回描述",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "[业务返回描述](https://paas.huifu.com/partners/api/doc/yuer/api_acct_fkgxtj.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查）；示例值：交易成功"
+          }
+        },
+        {
+          "interface": "付款关系提交",
+          "path": "response.sign",
+          "after": {
+            "wire": "`response.sign`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "签名",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "签名，对报文整体签名；[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq)"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_code",
+          "after": {
+            "wire": "`async.resp_code`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "业务返回码",
+            "type": "`string`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "[业务返回码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_ywm?id=%e7%ba%bf%e4%b8%8a%e4%ba%a4%e6%98%93%e8%bf%94%e5%9b%9e%e7%a0%81), 示例值：00000000"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_data",
+          "after": {
+            "wire": "`async.resp_data`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "业务数据",
+            "type": "`string`",
+            "length": "`—`",
+            "required": "`Y`",
+            "status": "[需要官方确认]：长度",
+            "description": "业务数据，见resp_data"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_data.acct_split_bunch",
+          "after": {
+            "wire": "`async.resp_data`",
+            "decoded": "`—（[需要官方确认]：外层 resp_data 的 JSON/String(JSON) 编码）`",
+            "name": "分账对象",
+            "type": "`Object`",
+            "length": "`—`",
+            "required": "`Y`",
+            "status": "N/A：结构字段长度",
+            "description": "分账对象，jsonObject字符串"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_data.acct_split_bunch.acct_infos[]",
+          "after": {
+            "wire": "`async.resp_data`",
+            "decoded": "`—（[需要官方确认]：外层 resp_data 的 JSON/String(JSON) 编码）`",
+            "name": "分账明细",
+            "type": "`Array`",
+            "length": "`—`",
+            "required": "`N`",
+            "status": "N/A：结构字段长度",
+            "description": "—"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_data.acct_split_bunch.acct_infos[].acct_id",
+          "after": {
+            "wire": "`async.resp_data`",
+            "decoded": "`—（[需要官方确认]：外层 resp_data 的 JSON/String(JSON) 编码）`",
+            "name": "账户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "可指定账户号，仅支持基本户、现金户，不填默认为基本户，示例值：F00598600"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_data.acct_split_bunch.acct_infos[].div_amt",
+          "after": {
+            "wire": "`async.resp_data`",
+            "decoded": "`—（[需要官方确认]：外层 resp_data 的 JSON/String(JSON) 编码）`",
+            "name": "分账金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "单位元，需保留小数点后两位，示例值：1.00 ,最低传入0.01"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_data.acct_split_bunch.acct_infos[].fee_amt",
+          "after": {
+            "wire": "`async.resp_data`",
+            "decoded": "`—（[需要官方确认]：外层 resp_data 的 JSON/String(JSON) 编码）`",
+            "name": "手续费金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "手续费金额，单位:元。仅在分账接受方承担手续费时返回。 示例值：0.02"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_data.acct_split_bunch.acct_infos[].huifu_id",
+          "after": {
+            "wire": "`async.resp_data`",
+            "decoded": "`—（[需要官方确认]：外层 resp_data 的 JSON/String(JSON) 编码）`",
+            "name": "分账接收方ID",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "开户自动生成编号；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_data.acct_split_bunch.acct_infos[].trans_stat",
+          "after": {
+            "wire": "`async.resp_data`",
+            "decoded": "`—（[需要官方确认]：外层 resp_data 的 JSON/String(JSON) 编码）`",
+            "name": "分账交易状态",
+            "type": "`String`",
+            "length": "`1`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "P：处理中、S：成功、F：失败；灵活用工余额支付交易状态为C时，需查看分账交易状态；示例值：P"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_data.acct_split_bunch.fee_acct_id",
+          "after": {
+            "wire": "`async.resp_data`",
+            "decoded": "`—（[需要官方确认]：外层 resp_data 的 JSON/String(JSON) 编码）`",
+            "name": "手续费承担方账户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：F00598600"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_data.acct_split_bunch.fee_amt",
+          "after": {
+            "wire": "`async.resp_data`",
+            "decoded": "`—（[需要官方确认]：外层 resp_data 的 JSON/String(JSON) 编码）`",
+            "name": "手续费金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "单位:元，保留两位小数。示例值：1.23"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_data.acct_split_bunch.fee_huifu_id",
+          "after": {
+            "wire": "`async.resp_data`",
+            "decoded": "`—（[需要官方确认]：外层 resp_data 的 JSON/String(JSON) 编码）`",
+            "name": "手续费承担方商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_data.hf_seq_id",
+          "after": {
+            "wire": "`async.resp_data`",
+            "decoded": "`—（[需要官方确认]：外层 resp_data 的 JSON/String(JSON) 编码）`",
+            "name": "全局流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "汇付返回流水号"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_data.huifu_id",
+          "after": {
+            "wire": "`async.resp_data`",
+            "decoded": "`—（[需要官方确认]：外层 resp_data 的 JSON/String(JSON) 编码）`",
+            "name": "商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "发起方商户号"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_data.ord_amt",
+          "after": {
+            "wire": "`async.resp_data`",
+            "decoded": "`—（[需要官方确认]：外层 resp_data 的 JSON/String(JSON) 编码）`",
+            "name": "订单金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "订单金额"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_data.product_id",
+          "after": {
+            "wire": "`async.resp_data`",
+            "decoded": "`—（[需要官方确认]：外层 resp_data 的 JSON/String(JSON) 编码）`",
+            "name": "产品号",
+            "type": "`String`",
+            "length": "`64`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "产品号"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_data.req_date",
+          "after": {
+            "wire": "`async.resp_data`",
+            "decoded": "`—（[需要官方确认]：外层 resp_data 的 JSON/String(JSON) 编码）`",
+            "name": "请求日期",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "业务请求时间YYYYMMDD（发起余额支付请求时间）YYYYMMDD"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_data.req_seq_id",
+          "after": {
+            "wire": "`async.resp_data`",
+            "decoded": "`—（[需要官方确认]：外层 resp_data 的 JSON/String(JSON) 编码）`",
+            "name": "交易请求流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "业务请求流水号(发起余额支付请求流水号)"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_data.trans_stat",
+          "after": {
+            "wire": "`async.resp_data`",
+            "decoded": "`—（[需要官方确认]：外层 resp_data 的 JSON/String(JSON) 编码）`",
+            "name": "交易状态",
+            "type": "`String`",
+            "length": "`1`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "PSF P:处理中；S：成功；F：失败；C：完成。 状态为完成时，需查看分账对象中每个分账的具体状态"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_data.trans_type",
+          "after": {
+            "wire": "`async.resp_data`",
+            "decoded": "`—（[需要官方确认]：外层 resp_data 的 JSON/String(JSON) 编码）`",
+            "name": "交易类型",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "余额支付：ACCT_PAYMENT"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "async.resp_desc",
+          "after": {
+            "wire": "`async.resp_desc`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "业务返回描述",
+            "type": "`string`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "[业务返回描述](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_ywm?id=%e7%ba%bf%e4%b8%8a%e4%ba%a4%e6%98%93%e8%bf%94%e5%9b%9e%e7%a0%81)；示例值：交易成功"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data",
+          "after": {
+            "wire": "`request.data`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求数据",
+            "type": "`JSON`",
+            "length": "`—`",
+            "required": "`Y`",
+            "status": "N/A：结构字段长度",
+            "description": "业务请求参数，具体值参考API文档"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.acct_channel",
+          "after": {
+            "wire": "`request.data.acct_channel`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "支付渠道",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "支付渠道。HUIFU=汇付账务(默认)；ZXE=中信E管家"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.acct_split_bunch",
+          "after": {
+            "wire": "`request.data.acct_split_bunch`",
+            "decoded": "`—（String(JSON) 容器）`",
+            "name": "分账对象",
+            "type": "`String`",
+            "length": "`—`",
+            "required": "`Y`",
+            "status": "[需要官方确认]：长度",
+            "description": "json格式；余额支付支持付款给多账户。；如余额支付100元，支付给A账户60元，支付给B账户40元。"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.acct_split_bunch.acct_infos[]",
+          "after": {
+            "wire": "`request.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[]`",
+            "name": "分账明细",
+            "type": "`Array`",
+            "length": "`—`",
+            "required": "`N`",
+            "status": "N/A：结构字段长度",
+            "description": "—"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.acct_split_bunch.acct_infos[].acct_id",
+          "after": {
+            "wire": "`request.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].acct_id`",
+            "name": "账户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "可指定账户号，仅支持基本户、现金户，不填默认为基本户，示例值：F00598600"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.acct_split_bunch.acct_infos[].div_amt",
+          "after": {
+            "wire": "`request.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].div_amt`",
+            "name": "分账金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "单位元，需保留小数点后两位，示例值：1.00 ,最低传入0.01"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.acct_split_bunch.acct_infos[].huifu_id",
+          "after": {
+            "wire": "`request.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].huifu_id`",
+            "name": "分账接收方ID",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "开户自动生成编号；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.acct_split_bunch.acct_infos[].percentage_div",
+          "after": {
+            "wire": "`request.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].percentage_div`",
+            "name": "分账百分比%",
+            "type": "`String`",
+            "length": "`6`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：23.50，表示23.50%。仅在percentage_flag=Y时起作用； acct_infos中全部分账百分比之和必须为100.00%。"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.acct_split_bunch.is_clean_split",
+          "after": {
+            "wire": "`request.data.acct_split_bunch`",
+            "decoded": "`$.is_clean_split`",
+            "name": "是否净值分账",
+            "type": "`String`",
+            "length": "`1`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "Y:使用净值分账，仅在交易手续费由出款方承担且使用百分比分账时起作用；示例值：Y"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.acct_split_bunch.percentage_flag",
+          "after": {
+            "wire": "`request.data.acct_split_bunch`",
+            "decoded": "`$.percentage_flag`",
+            "name": "百分比分账标志",
+            "type": "`String`",
+            "length": "`1`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "Y:使用百分比分账；示例值：Y"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.delay_acct_flag",
+          "after": {
+            "wire": "`request.data.delay_acct_flag`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "是否延迟分账",
+            "type": "`String`",
+            "length": "`1`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "Y 为延迟，N为不延迟，不传默认N；示例值：Y"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.fund_type",
+          "after": {
+            "wire": "`request.data.fund_type`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "资金类型",
+            "type": "`String`",
+            "length": "`16`",
+            "required": "`C`",
+            "status": "已确认",
+            "description": "资金类型。支付渠道为中信E管家时，资金类型必填（[详见说明](https://paas.huifu.com/open/doc/api/#/yuer/api_zxegjzllx)）"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.good_desc",
+          "after": {
+            "wire": "`request.data.good_desc`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "商品描述",
+            "type": "`String`",
+            "length": "`256`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：商品描述"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.huifu_id",
+          "after": {
+            "wire": "`request.data.huifu_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "发起方商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "该字段已废弃，新接入商户不建议使用；历史商户已用此参数，后续余额支付、查询、退款、交易确认接口仍以参数值为准"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.imax_pay_callback_url",
+          "after": {
+            "wire": "`request.data.imax_pay_callback_url`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "验证成功后跳转地址",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "验证成功后跳转地址，无时不显示返回按钮。在交易参与方有用户，且用户是LV3时生效。"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.imaxn_pay",
+          "after": {
+            "wire": "`request.data.imaxn_pay`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "支付类型",
+            "type": "`String`",
+            "length": "`10`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "SURETY_PAY:延迟交易"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.notify_url",
+          "after": {
+            "wire": "`request.data.notify_url`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "异步通知地址",
+            "type": "`String`",
+            "length": "`256`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "异步通知地址，在交易参与方有用户，且用户是LV3时生效。"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.ord_amt",
+          "after": {
+            "wire": "`request.data.ord_amt`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "支付金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "单元：元。保留两位小数。示例值：1.23"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.out_acct_id",
+          "after": {
+            "wire": "`request.data.out_acct_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "出款方账户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "只支持基本户和现金户；示例值：F00598600"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.out_huifu_id",
+          "after": {
+            "wire": "`request.data.out_huifu_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "出款方商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "出款方商户号，示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.remark",
+          "after": {
+            "wire": "`request.data.remark`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "备注",
+            "type": "`String`",
+            "length": "`256`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：备注"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.req_date",
+          "after": {
+            "wire": "`request.data.req_date`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求日期",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "格式yyyyMMdd；示例值：20221023"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.req_seq_id",
+          "after": {
+            "wire": "`request.data.req_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.risk_check_data",
+          "after": {
+            "wire": "`request.data.risk_check_data`",
+            "decoded": "`—（String(JSON) 容器）`",
+            "name": "安全信息",
+            "type": "`String`",
+            "length": "`—`",
+            "required": "`Y`",
+            "status": "[需要官方确认]：长度",
+            "description": "json格式；示例: {\"subProduct\":\"\",\"transferType\":\"\"}"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.risk_check_data.base_station",
+          "after": {
+            "wire": "`request.data.risk_check_data`",
+            "decoded": "`$.base_station`",
+            "name": "基站地址",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "【mcc】+【mnc】+【location_cd】+【lbs_num】；- mcc:移动国家代码，460代表中国；3位长；- mnc：移动网络号码；2位长；- location_cd：位置区域码，16进制，5位长；- lbs_num：基站编号，16进制，5位长；- 注意若位数不足用空格补足；示例值：460001039217563，460（mcc)， 00(mnc)，10392(location_cd)， 17563(lbs_num) ；经纬度、基站地址、IP地址三组信息至少填写一组"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.risk_check_data.ip_addr",
+          "after": {
+            "wire": "`request.data.risk_check_data`",
+            "decoded": "`$.ip_addr`",
+            "name": "IP地址",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：172.28.52.52；经纬度、基站地址、IP地址三组信息至少填写一组"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.risk_check_data.latitude",
+          "after": {
+            "wire": "`request.data.risk_check_data`",
+            "decoded": "`$.latitude`",
+            "name": "纬度",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "格式：+表示北纬，-表示南纬。纬度整数位不超过2位，小数位不超过6位。示例值：+37.12；IP地址、经纬度、基站地址最少要送其中一项"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.risk_check_data.longitude",
+          "after": {
+            "wire": "`request.data.risk_check_data`",
+            "decoded": "`$.longitude`",
+            "name": "经度",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "格式：+表示东经，-表示西经；经度整数位不超过3位，小数位不超过5位；示例值：-121.213；IP地址、经纬度、基站地址最少要送其中一项"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.risk_check_data.sub_product",
+          "after": {
+            "wire": "`request.data.risk_check_data`",
+            "decoded": "`$.sub_product`",
+            "name": "产品子类",
+            "type": "`String`",
+            "length": "`20`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：1"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.risk_check_data.transfer_type",
+          "after": {
+            "wire": "`request.data.risk_check_data`",
+            "decoded": "`$.transfer_type`",
+            "name": "转账原因",
+            "type": "`String`",
+            "length": "`2`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "01：卡券推广类；02：卡券核销类；03：消费；04：工资代发；05：分润；06：灵活用工；示例值：01"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.trans_fee_take_flag",
+          "after": {
+            "wire": "`request.data.trans_fee_take_flag`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "手续费承担方标识",
+            "type": "`String`",
+            "length": "`4`",
+            "required": "`C`",
+            "status": "已确认",
+            "description": "余额支付手续费承担方标识；商户余额支付扣收规则为接口指定承担方时必填！枚举值：；OUT：出款方；IN：分账接受方。；示例值：IN"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.verify_type",
+          "after": {
+            "wire": "`request.data.verify_type`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "余额支付安全核验方式",
+            "type": "`String`",
+            "length": "`16`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "SMS-短信验证"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.data.verify_value",
+          "after": {
+            "wire": "`request.data.verify_value`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "核验值",
+            "type": "`String`",
+            "length": "`64`",
+            "required": "`C`",
+            "status": "已确认",
+            "description": "verify_type不为空时必填。当verify_type=SMS时，填写用户收到的短信验证码"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.product_id",
+          "after": {
+            "wire": "`request.product_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "产品号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "汇付分配的产品号，示例值：YYZY"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.sign",
+          "after": {
+            "wire": "`request.sign`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "加签结果",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "签名，对报文整体签名；[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq)"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "request.sys_id",
+          "after": {
+            "wire": "`request.sys_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "系统号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "渠道商/商户的huifu_id ；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为直连商户时，此字段填写商户huifu_id；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data",
+          "after": {
+            "wire": "`response.data`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "响应内容体",
+            "type": "`JSON`",
+            "length": "`—`",
+            "required": "`N`",
+            "status": "N/A：结构字段长度",
+            "description": "业务返回参数"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.acct_channel",
+          "after": {
+            "wire": "`response.data.acct_channel`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "支付渠道",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "支付渠道。HUIFU=汇付账务(默认)；ZXE=中信E管家"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.acct_split_bunch",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`—（String(JSON) 容器）`",
+            "name": "分账对象",
+            "type": "`String`",
+            "length": "`—`",
+            "required": "`Y`",
+            "status": "[需要官方确认]：长度",
+            "description": "json格式。余额支付支持付款给多账户。；如余额支付100元，支付给A账户60元，支付给B账户40元。"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.acct_split_bunch.acct_infos[]",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[]`",
+            "name": "分账明细",
+            "type": "`Array`",
+            "length": "`—`",
+            "required": "`N`",
+            "status": "N/A：结构字段长度",
+            "description": "—"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.acct_split_bunch.acct_infos[].acct_id",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].acct_id`",
+            "name": "账户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "可指定账户号，仅支持基本户、现金户，不填默认为基本户，示例值：F00598600"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.acct_split_bunch.acct_infos[].div_amt",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].div_amt`",
+            "name": "分账金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "单位元，需保留小数点后两位，灵活用工以异步返回的金额为准示例值：1.00 ,最低传入0.01"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.acct_split_bunch.acct_infos[].fee_amt",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].fee_amt`",
+            "name": "手续费金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "手续费金额，单位:元。仅在分账接受方承担手续费时返回。 示例值：0.02"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.acct_split_bunch.acct_infos[].huifu_id",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].huifu_id`",
+            "name": "分账接收方ID",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "开户自动生成编号；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.acct_split_bunch.acct_infos[].trans_stat",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].trans_stat`",
+            "name": "交易状态",
+            "type": "`String`",
+            "length": "`1`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "P：处理中、S：成功、F：失败；灵工用工场景，以异步返回的交易状态为准示例值：P"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.acct_split_bunch.acct_infos[].unconfirm_amt",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].unconfirm_amt`",
+            "name": "待确认总金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "单位元，需保留小数点后两位，示例值：1.00"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.acct_split_bunch.fee_acct_id",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.fee_acct_id`",
+            "name": "手续费承担方账户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：F00598600"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.acct_split_bunch.fee_amt",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.fee_amt`",
+            "name": "手续费金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "单位:元，保留两位小数。示例值：1.23"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.acct_split_bunch.fee_huifu_id",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.fee_huifu_id`",
+            "name": "手续费承担方商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.acct_split_bunch.is_clean_split",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.is_clean_split`",
+            "name": "是否净值分账",
+            "type": "`String`",
+            "length": "`1`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "Y:使用净值分账，仅在交易手续费由出款方承担且使用百分比分账时起作用；示例值：Y"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.confirmed_amt",
+          "after": {
+            "wire": "`response.data.confirmed_amt`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "已确认总金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "单位元，需保留小数点后两位，示例值：1.00"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.fund_type",
+          "after": {
+            "wire": "`response.data.fund_type`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "资金类型",
+            "type": "`String`",
+            "length": "`16`",
+            "required": "`C`",
+            "status": "已确认",
+            "description": "资金类型。支付渠道为中信E管家时，资金类型必填（[详见说明](https://paas.huifu.com/open/doc/api/#/yuer/api_zxegjzllx)）"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.good_desc",
+          "after": {
+            "wire": "`response.data.good_desc`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "商品描述",
+            "type": "`String`",
+            "length": "`256`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：商品描述"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.hf_seq_id",
+          "after": {
+            "wire": "`response.data.hf_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "全局流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "汇付返回流水号；示例值：00470topo1A211015160805P090ac132fef00000"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.huifu_id",
+          "after": {
+            "wire": "`response.data.huifu_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "发起方商户号；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.jump_url",
+          "after": {
+            "wire": "`response.data.jump_url`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "支付密码验证跳转地址",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "交易参与方有用户，且用户是LV3时返回。商户引导用户跳转该地址完成验证。链接有效期5分钟。"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.ord_amt",
+          "after": {
+            "wire": "`response.data.ord_amt`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "支付金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：200.00"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.out_acct_id",
+          "after": {
+            "wire": "`response.data.out_acct_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "出款方账户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：F00598600"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.out_huifu_id",
+          "after": {
+            "wire": "`response.data.out_huifu_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "出款商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "出款方商户号；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.remark",
+          "after": {
+            "wire": "`response.data.remark`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "备注",
+            "type": "`String`",
+            "length": "`256`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：备注"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.req_date",
+          "after": {
+            "wire": "`response.data.req_date`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求日期",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "请求日期。格式：yyyyMMdd，示例值：20221013"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.req_seq_id",
+          "after": {
+            "wire": "`response.data.req_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "业务请求流水号；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.resp_code",
+          "after": {
+            "wire": "`response.data.resp_code`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "业务返回码",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "[业务返回码](https://paas.huifu.com/partners/api/doc/yuer/api_acctpayzf.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查） ；示例值：00000000"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.resp_desc",
+          "after": {
+            "wire": "`response.data.resp_desc`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "业务返回描述",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "[业务返回描述](https://paas.huifu.com/partners/api/doc/yuer/api_acctpayzf.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查）；示例值：交易成功"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.trans_fee_take_flag",
+          "after": {
+            "wire": "`response.data.trans_fee_take_flag`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "手续费承担方标识",
+            "type": "`String`",
+            "length": "`4`",
+            "required": "`C`",
+            "status": "已确认",
+            "description": "余额支付手续费承担方标识；商户余额支付扣收规则为接口指定承担方时必填！枚举值：；OUT：出款方；IN：分账接受方。；示例值：IN"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.trans_finish_time",
+          "after": {
+            "wire": "`response.data.trans_finish_time`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "交易完成时间",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "余额支付完成时间，格式：yyyyMMddHHmmss；示例值：20211021163242"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.trans_stat",
+          "after": {
+            "wire": "`response.data.trans_stat`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "交易状态",
+            "type": "`String`",
+            "length": "`1`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "P:处理中；S：成功；F：失败；示例值：S"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.data.unconfirm_amt",
+          "after": {
+            "wire": "`response.data.unconfirm_amt`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "待确认总金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "单位元，需保留小数点后两位，示例值：1.00"
+          }
+        },
+        {
+          "interface": "余额支付",
+          "path": "response.sign",
+          "after": {
+            "wire": "`response.sign`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "签名",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "签名，对报文整体签名；[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq)"
+          }
+        },
+        {
+          "interface": "余额支付发送短信验证码",
+          "path": "request.data",
+          "after": {
+            "wire": "`request.data`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求数据",
+            "type": "`JSON`",
+            "length": "`—`",
+            "required": "`Y`",
+            "status": "N/A：结构字段长度",
+            "description": "业务请求参数，具体值参考API文档"
+          }
+        },
+        {
+          "interface": "余额支付发送短信验证码",
+          "path": "request.data.mobile_no",
+          "after": {
+            "wire": "`request.data.mobile_no`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "接收验证码的手机号",
+            "type": "`String`",
+            "length": "`11`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "需为11位数字；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付发送短信验证码",
+          "path": "request.data.out_huifu_id",
+          "after": {
+            "wire": "`request.data.out_huifu_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "出款方商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "出款方商户号，示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付发送短信验证码",
+          "path": "request.data.req_date",
+          "after": {
+            "wire": "`request.data.req_date`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求日期",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "格式yyyyMMdd；示例值：20221023"
+          }
+        },
+        {
+          "interface": "余额支付发送短信验证码",
+          "path": "request.data.req_seq_id",
+          "after": {
+            "wire": "`request.data.req_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付发送短信验证码",
+          "path": "request.data.trans_type",
+          "after": {
+            "wire": "`request.data.trans_type`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "业务类型",
+            "type": "`String`",
+            "length": "`256`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "业务类型，ACCT_PAYMENT-余额支付"
+          }
+        },
+        {
+          "interface": "余额支付发送短信验证码",
+          "path": "request.product_id",
+          "after": {
+            "wire": "`request.product_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "产品号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "汇付分配的产品号，示例值：YYZY"
+          }
+        },
+        {
+          "interface": "余额支付发送短信验证码",
+          "path": "request.sign",
+          "after": {
+            "wire": "`request.sign`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "加签结果",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "签名，对报文整体签名；[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq)"
+          }
+        },
+        {
+          "interface": "余额支付发送短信验证码",
+          "path": "request.sys_id",
+          "after": {
+            "wire": "`request.sys_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "系统号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "渠道商/商户的huifu_id ；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为直连商户时，此字段填写商户huifu_id；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付发送短信验证码",
+          "path": "response.data",
+          "after": {
+            "wire": "`response.data`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "响应内容体",
+            "type": "`JSON`",
+            "length": "`—`",
+            "required": "`N`",
+            "status": "N/A：结构字段长度",
+            "description": "业务返回参数"
+          }
+        },
+        {
+          "interface": "余额支付发送短信验证码",
+          "path": "response.data.req_seq_id",
+          "after": {
+            "wire": "`response.data.req_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "业务请求流水号；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付发送短信验证码",
+          "path": "response.data.resp_code",
+          "after": {
+            "wire": "`response.data.resp_code`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "业务返回码",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "[业务返回码](https://paas.huifu.com/partners/api/doc/yuer/api_smscode.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查） ；示例值：00000000"
+          }
+        },
+        {
+          "interface": "余额支付发送短信验证码",
+          "path": "response.data.resp_desc",
+          "after": {
+            "wire": "`response.data.resp_desc`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "业务返回描述",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "[业务返回描述](https://paas.huifu.com/partners/api/doc/yuer/api_smscode.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查）；示例值：交易成功"
+          }
+        },
+        {
+          "interface": "余额支付发送短信验证码",
+          "path": "response.sign",
+          "after": {
+            "wire": "`response.sign`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "签名",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "签名，对报文整体签名；[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq)"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "request.data",
+          "after": {
+            "wire": "`request.data`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求数据",
+            "type": "`JSON`",
+            "length": "`—`",
+            "required": "`Y`",
+            "status": "N/A：结构字段长度",
+            "description": "业务请求参数，具体值参考API文档"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "request.data.huifu_id",
+          "after": {
+            "wire": "`request.data.huifu_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "发起方商户号；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "request.data.org_hf_seq_id",
+          "after": {
+            "wire": "`request.data.org_hf_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "原交易全局流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "与org_req_seq_id二选一；示例值：003500TOP2B211021163242P447ac132fd200000"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "request.data.org_req_date",
+          "after": {
+            "wire": "`request.data.org_req_date`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "原交易请求日期",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "原交易请求日期，格式：yyyyMMdd；示例值：20221023"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "request.data.org_req_seq_id",
+          "after": {
+            "wire": "`request.data.org_req_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "原交易请求流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "与org_hf_seq_id二选一；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "request.product_id",
+          "after": {
+            "wire": "`request.product_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "产品号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "汇付分配的产品号，示例值：YYZY"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "request.sign",
+          "after": {
+            "wire": "`request.sign`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "加签结果",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "签名，对报文整体签名；[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq)"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "request.sys_id",
+          "after": {
+            "wire": "`request.sys_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "系统号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "渠道商/商户的huifu_id ；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为直连商户时，此字段填写商户huifu_id；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data",
+          "after": {
+            "wire": "`response.data`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "响应内容体",
+            "type": "`JSON`",
+            "length": "`—`",
+            "required": "`N`",
+            "status": "N/A：结构字段长度",
+            "description": "业务返回参数"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.acct_split_bunch",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`—（String(JSON) 容器）`",
+            "name": "分账对象",
+            "type": "`String`",
+            "length": "`—`",
+            "required": "`N`",
+            "status": "[需要官方确认]：长度",
+            "description": "分账信息，jsonObject字符串。余额支付支持付款给多账户。；如余额支付100元，支付给A账户60元，支付给B账户40元。"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.acct_split_bunch.acct_infos[]",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[]`",
+            "name": "分账明细",
+            "type": "`Array`",
+            "length": "`—`",
+            "required": "`N`",
+            "status": "N/A：结构字段长度",
+            "description": "acct_infos"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.acct_split_bunch.acct_infos[].div_amt",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].div_amt`",
+            "name": "分账金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "单位元，需保留小数点后两位，示例值：1.00，最低传入0.01"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.acct_split_bunch.acct_infos[].fee_amt",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].fee_amt`",
+            "name": "手续费金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "手续费金额，单位:元。仅在分账接受方承担手续费时返回。 示例值：0.02"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.acct_split_bunch.acct_infos[].huifu_id",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].huifu_id`",
+            "name": "分账接收方ID",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "斗拱开户自动生成编号；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.acct_split_bunch.acct_infos[].trans_stat",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].trans_stat`",
+            "name": "分账交易状态",
+            "type": "`String`",
+            "length": "`1`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "分账交易状态。灵活用工余额支付交易状态为C时，需查看分账交易状态"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.acct_split_bunch.acct_infos[].unconfirm_amt",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].unconfirm_amt`",
+            "name": "未确认金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "未确认金额:元。 示例值：0.02"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.acct_split_bunch.fee_acct_id",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.fee_acct_id`",
+            "name": "手续费承担方账户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：F00598600"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.acct_split_bunch.fee_amt",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.fee_amt`",
+            "name": "手续费金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "单位:元，保留两位小数。示例值：1.23"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.acct_split_bunch.fee_huifu_id",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.fee_huifu_id`",
+            "name": "手续费承担方商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.confirmed_amt",
+          "after": {
+            "wire": "`response.data.confirmed_amt`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "已确认总金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "单位元，需保留小数点后两位，示例值：1.00"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.delay_acct_flag",
+          "after": {
+            "wire": "`response.data.delay_acct_flag`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "延时标记",
+            "type": "`String`",
+            "length": "`1`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "是否延时交易，Y为延迟，N为不延迟，不传默认N；示例值：N"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.good_desc",
+          "after": {
+            "wire": "`response.data.good_desc`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "商品描述",
+            "type": "`String`",
+            "length": "`256`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：商品描述"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.huifu_id",
+          "after": {
+            "wire": "`response.data.huifu_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "发起方商户号；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.ord_amt",
+          "after": {
+            "wire": "`response.data.ord_amt`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "支付金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：23.00"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.org_hf_seq_id",
+          "after": {
+            "wire": "`response.data.org_hf_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "原交易全局流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "汇付返回的流水号；示例值：00470topo1A211015160805P090ac132fef00000"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.org_req_date",
+          "after": {
+            "wire": "`response.data.org_req_date`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "原交易请求日期",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "原交易请求日期，格式：yyyyMMdd，示例值：20221013"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.org_req_seq_id",
+          "after": {
+            "wire": "`response.data.org_req_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "原交易请求流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "业务请求流水号(发起余额支付请求流水号)；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.out_huifu_id",
+          "after": {
+            "wire": "`response.data.out_huifu_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "出款商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.remark",
+          "after": {
+            "wire": "`response.data.remark`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "备注",
+            "type": "`String`",
+            "length": "`256`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：备注"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.resp_code",
+          "after": {
+            "wire": "`response.data.resp_code`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "业务返回码",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "[业务返回码](https://paas.huifu.com/partners/api/doc/yuer/api_acctpaycx.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查） ；示例值：00000000"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.resp_desc",
+          "after": {
+            "wire": "`response.data.resp_desc`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "业务返回描述",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "[业务返回描述](https://paas.huifu.com/partners/api/doc/yuer/api_acctpaycx.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查）；示例值：交易成功"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.trans_fee_take_flag",
+          "after": {
+            "wire": "`response.data.trans_fee_take_flag`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "手续费承担方标识",
+            "type": "`String`",
+            "length": "`4`",
+            "required": "`C`",
+            "status": "已确认",
+            "description": "余额支付手续费承担方标识；商户余额支付扣收规则为接口指定承担方时必填！枚举值：；OUT：出款方；IN：分账接受方。；示例值：IN"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.trans_finish_time",
+          "after": {
+            "wire": "`response.data.trans_finish_time`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "交易完成时间",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "格式：yyyyMMddHHmmss；示例值：20211021163242"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.trans_stat",
+          "after": {
+            "wire": "`response.data.trans_stat`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "交易状态",
+            "type": "`String`",
+            "length": "`1`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "P:处理中；S：成功；F：失败；C：完成（灵活用工余额支付特有，需查看分账交易状态）；示例值：S"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.data.unconfirm_amt",
+          "after": {
+            "wire": "`response.data.unconfirm_amt`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "待确认总金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "单位元，需保留小数点后两位，示例值：1.00"
+          }
+        },
+        {
+          "interface": "余额支付查询",
+          "path": "response.sign",
+          "after": {
+            "wire": "`response.sign`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "签名",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "签名，对报文整体签名；[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq)"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "request.data",
+          "after": {
+            "wire": "`request.data`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求数据",
+            "type": "`JSON`",
+            "length": "`—`",
+            "required": "`Y`",
+            "status": "N/A：结构字段长度",
+            "description": "业务请求参数，具体值参考API文档"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "request.data.acct_split_bunch",
+          "after": {
+            "wire": "`request.data.acct_split_bunch`",
+            "decoded": "`—（String(JSON) 容器）`",
+            "name": "分账对象",
+            "type": "`String`",
+            "length": "`—`",
+            "required": "`N`",
+            "status": "[需要官方确认]：长度",
+            "description": "分账信息，jsonObject字符串。余额支付分账给一个商户或多个商户，退款时也支持从多个商户分账退款。；每个商户退款金额不能超过原入账金额。"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "request.data.acct_split_bunch.acct_infos[]",
+          "after": {
+            "wire": "`request.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[]`",
+            "name": "退账明细",
+            "type": "`Array`",
+            "length": "`—`",
+            "required": "`Y`",
+            "status": "N/A：结构字段长度",
+            "description": "退款明细"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "request.data.acct_split_bunch.acct_infos[].div_amt",
+          "after": {
+            "wire": "`request.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].div_amt`",
+            "name": "退款金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "单位元，需保留小数点后两位，示例值：1.00 ,最低传入0.01"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "request.data.acct_split_bunch.acct_infos[].huifu_id",
+          "after": {
+            "wire": "`request.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].huifu_id`",
+            "name": "退款方ID",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "开户自动生成编号；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "request.data.huifu_id",
+          "after": {
+            "wire": "`request.data.huifu_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "发起方商户号，示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "request.data.ord_amt",
+          "after": {
+            "wire": "`request.data.ord_amt`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "退款金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：10.00"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "request.data.org_hf_seq_id",
+          "after": {
+            "wire": "`request.data.org_hf_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "原余额支付支付全局流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`C`",
+            "status": "已确认",
+            "description": "org_hf_seq_id和orgReqSeqId二选一；示例值：00470topo1A211015160805P090ac132fef00000"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "request.data.org_req_date",
+          "after": {
+            "wire": "`request.data.org_req_date`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "原余额支付请求日期",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "格式：yyyyMMdd；示例值：20221023"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "request.data.org_req_seq_id",
+          "after": {
+            "wire": "`request.data.org_req_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "原余额支付请求流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`C`",
+            "status": "已确认",
+            "description": "org_hf_seq_id和orgReqSeqId二选一；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "request.data.remark",
+          "after": {
+            "wire": "`request.data.remark`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "备注",
+            "type": "`String`",
+            "length": "`256`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：备注"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "request.data.req_date",
+          "after": {
+            "wire": "`request.data.req_date`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求日期",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "格式yyyyMMdd；示例值：20221023"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "request.data.req_seq_id",
+          "after": {
+            "wire": "`request.data.req_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "request.data.risk_check_data",
+          "after": {
+            "wire": "`request.data.risk_check_data`",
+            "decoded": "`—（String(JSON) 容器）`",
+            "name": "安全信息",
+            "type": "`String`",
+            "length": "`—`",
+            "required": "`N`",
+            "status": "[需要官方确认]：长度",
+            "description": "jsonObject字符串。例如:\"{\"subProduct\":\"\",\"transferType\":\"\"}\""
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "request.data.risk_check_data.sub_product",
+          "after": {
+            "wire": "`request.data.risk_check_data`",
+            "decoded": "`$.sub_product`",
+            "name": "产品子类",
+            "type": "`String`",
+            "length": "`20`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：1"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "request.data.risk_check_data.transfer_type",
+          "after": {
+            "wire": "`request.data.risk_check_data`",
+            "decoded": "`$.transfer_type`",
+            "name": "转账原因",
+            "type": "`String`",
+            "length": "`2`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "01：卡券推广类；02：卡券核销类；03：消费；04：工资代发；05：分润；示例值：01"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "request.product_id",
+          "after": {
+            "wire": "`request.product_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "产品号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "汇付分配的产品号，示例值：YYZY"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "request.sign",
+          "after": {
+            "wire": "`request.sign`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "加签结果",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "签名，对报文整体签名；[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq)"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "request.sys_id",
+          "after": {
+            "wire": "`request.sys_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "系统号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "渠道商/商户的huifu_id ；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为直连商户时，此字段填写商户huifu_id；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data",
+          "after": {
+            "wire": "`response.data`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "响应内容体",
+            "type": "`JSON`",
+            "length": "`—`",
+            "required": "`N`",
+            "status": "N/A：结构字段长度",
+            "description": "业务返回参数"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.acct_split_bunch",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`—（String(JSON) 容器）`",
+            "name": "退款分账串",
+            "type": "`String`",
+            "length": "`—`",
+            "required": "`N`",
+            "status": "[需要官方确认]：长度",
+            "description": "分账信息，jsonObject字符串。；余额支付分账给一个商户或多个商户，退款时也支持从多个商户分账退款。；每个商户退款金额不能超过原入账金额。"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.acct_split_bunch.acct_infos[]",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[]`",
+            "name": "退账明细",
+            "type": "`Array`",
+            "length": "`—`",
+            "required": "`Y`",
+            "status": "N/A：结构字段长度",
+            "description": "退款明细"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.acct_split_bunch.acct_infos[].acct_id",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].acct_id`",
+            "name": "账户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "分账账户号；示例值：F00598600"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.acct_split_bunch.acct_infos[].div_amt",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].div_amt`",
+            "name": "退款金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "单位元，需保留小数点后两位，示例值：1.00 ,最低传入0.01"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.acct_split_bunch.acct_infos[].fee_amt",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].fee_amt`",
+            "name": "手续费金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "单位:元。仅在分账接受方承担手续费时返回。 示例值：0.02"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.acct_split_bunch.acct_infos[].huifu_id",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].huifu_id`",
+            "name": "退款方ID",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "开户自动生成编号；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.acct_split_bunch.fee_acct_id",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.fee_acct_id`",
+            "name": "手续费承担方账户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：A28356961"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.acct_split_bunch.fee_amt",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.fee_amt`",
+            "name": "手续费",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "单位元，需保留小数点后两位，示例值：1.00"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.acct_split_bunch.fee_huifu_id",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.fee_huifu_id`",
+            "name": "手续费承担方商户号",
+            "type": "`String`",
+            "length": "`16`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.hf_seq_id",
+          "after": {
+            "wire": "`response.data.hf_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "全局流水号",
+            "type": "`String`",
+            "length": "`40`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "汇付返回流水号；示例值：00470topo1A211015160805P090ac132fef00000"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.huifu_id",
+          "after": {
+            "wire": "`response.data.huifu_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "发起方商户号；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.ord_amt",
+          "after": {
+            "wire": "`response.data.ord_amt`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "退款金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：20.00"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.org_hf_seq_id",
+          "after": {
+            "wire": "`response.data.org_hf_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "原余额支付支付全局流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：00470topo1A211015160805P090ac132fef00001"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.org_req_date",
+          "after": {
+            "wire": "`response.data.org_req_date`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "原余额支付请求日期",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "格式：yyyyMMdd；示例值：20221103"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.org_req_seq_id",
+          "after": {
+            "wire": "`response.data.org_req_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "原余额支付请求流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.product_id",
+          "after": {
+            "wire": "`response.data.product_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "产品号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "接入时提供；示例值：YYZY"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.remark",
+          "after": {
+            "wire": "`response.data.remark`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "备注",
+            "type": "`String`",
+            "length": "`256`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：备注"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.req_date",
+          "after": {
+            "wire": "`response.data.req_date`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求日期",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "请求日期。格式：yyyyMMdd，示例值：20221013"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.req_seq_id",
+          "after": {
+            "wire": "`response.data.req_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "业务请求流水号；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.resp_code",
+          "after": {
+            "wire": "`response.data.resp_code`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "业务返回码",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "[业务返回码](https://paas.huifu.com/partners/api/doc/yuer/api_acctpaytk.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查） ；示例值：00000000"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.resp_desc",
+          "after": {
+            "wire": "`response.data.resp_desc`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "业务返回描述",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "[业务返回描述](https://paas.huifu.com/partners/api/doc/yuer/api_acctpaytk.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查）；示例值：交易成功"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.trans_finish_time",
+          "after": {
+            "wire": "`response.data.trans_finish_time`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "退款完成时间",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "格式yyyyMMddHHmmss；示例值：20221104132334"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.data.trans_stat",
+          "after": {
+            "wire": "`response.data.trans_stat`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "交易状态",
+            "type": "`String`",
+            "length": "`1`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "P:处理中；S：成功；F：失败；示例值：S"
+          }
+        },
+        {
+          "interface": "余额支付退款",
+          "path": "response.sign",
+          "after": {
+            "wire": "`response.sign`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "签名",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "签名，对报文整体签名；[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq)"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "request.data",
+          "after": {
+            "wire": "`request.data`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求数据",
+            "type": "`JSON`",
+            "length": "`—`",
+            "required": "`Y`",
+            "status": "N/A：结构字段长度",
+            "description": "业务请求参数，具体值参考API文档"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "request.data.huifu_id",
+          "after": {
+            "wire": "`request.data.huifu_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "发起方商户号；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "request.data.org_req_date",
+          "after": {
+            "wire": "`request.data.org_req_date`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "余额支付退款请求日期",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "格式：yyyyMMdd；示例值：20210917"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "request.data.org_req_seq_id",
+          "after": {
+            "wire": "`request.data.org_req_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "退款请求流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "request.product_id",
+          "after": {
+            "wire": "`request.product_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "产品号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "汇付分配的产品号，示例值：YYZY"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "request.sign",
+          "after": {
+            "wire": "`request.sign`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "加签结果",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "签名，对报文整体签名；[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq)"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "request.sys_id",
+          "after": {
+            "wire": "`request.sys_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "系统号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "渠道商/商户的huifu_id ；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为直连商户时，此字段填写商户huifu_id；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data",
+          "after": {
+            "wire": "`response.data`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "响应内容体",
+            "type": "`JSON`",
+            "length": "`—`",
+            "required": "`N`",
+            "status": "N/A：结构字段长度",
+            "description": "业务返回参数"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.acct_split_bunch",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`—（String(JSON) 容器）`",
+            "name": "分账对象",
+            "type": "`String`",
+            "length": "`—`",
+            "required": "`N`",
+            "status": "[需要官方确认]：长度",
+            "description": "分账信息，jsonObject字符串。"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.acct_split_bunch.acct_infos[]",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[]`",
+            "name": "退账明细",
+            "type": "`Array`",
+            "length": "`—`",
+            "required": "`Y`",
+            "status": "N/A：结构字段长度",
+            "description": "退款信息"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.acct_split_bunch.acct_infos[].acct_id",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].acct_id`",
+            "name": "账户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "分账账户号；示例值：F00598600"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.acct_split_bunch.acct_infos[].div_amt",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].div_amt`",
+            "name": "退款金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：9.00"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.acct_split_bunch.acct_infos[].fee_amt",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].fee_amt`",
+            "name": "手续费金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "手续费金额，单位:元。仅在分账接受方承担手续费时返回。 示例值：0.02"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.acct_split_bunch.acct_infos[].huifu_id",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.acct_infos[].huifu_id`",
+            "name": "退账方商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.acct_split_bunch.fee_acct_id",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.fee_acct_id`",
+            "name": "手续费承担方账户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：A28356961"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.acct_split_bunch.fee_amt",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.fee_amt`",
+            "name": "手续费",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "单位元，需保留小数点后两位，示例值：1.00"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.acct_split_bunch.fee_huifu_id",
+          "after": {
+            "wire": "`response.data.acct_split_bunch`",
+            "decoded": "`$.fee_huifu_id`",
+            "name": "手续费承担方商户号",
+            "type": "`String`",
+            "length": "`16`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.confirmed_amt",
+          "after": {
+            "wire": "`response.data.confirmed_amt`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "已确认总金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "单位元，需保留小数点后两位，示例值：1.00"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.huifu_id",
+          "after": {
+            "wire": "`response.data.huifu_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "退款请求发起方商户号；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.ord_amt",
+          "after": {
+            "wire": "`response.data.ord_amt`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "退款金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "需保留小数点后两位，示例值：10.00最低传入0.01"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.org_hf_seq_id",
+          "after": {
+            "wire": "`response.data.org_hf_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "原余额支付退款全局流水号",
+            "type": "`String`",
+            "length": "`40`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "原余额支付退款全局流水号"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.org_req_date",
+          "after": {
+            "wire": "`response.data.org_req_date`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "余额支付退款请求日期",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "格式：yyyyMMdd；示例值：20210917"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.org_req_seq_id",
+          "after": {
+            "wire": "`response.data.org_req_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "退款请求流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.product_id",
+          "after": {
+            "wire": "`response.data.product_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "产品号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "产品号，接入时提供；示例值：YYZY"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.remark",
+          "after": {
+            "wire": "`response.data.remark`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "备注",
+            "type": "`String`",
+            "length": "`45`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：备注"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.resp_code",
+          "after": {
+            "wire": "`response.data.resp_code`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "业务返回码",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "[业务返回码](https://paas.huifu.com/partners/api/doc/yuer/api_acctpaytkcx.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查） ；示例值：00000000"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.resp_desc",
+          "after": {
+            "wire": "`response.data.resp_desc`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "业务返回描述",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "[业务返回描述](https://paas.huifu.com/partners/api/doc/yuer/api_acctpaytkcx.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查）；示例值：交易成功"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.trans_finish_time",
+          "after": {
+            "wire": "`response.data.trans_finish_time`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "退款完成时间",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "格式yyyyMMddHHmmss；示例值：20221023112343"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.trans_stat",
+          "after": {
+            "wire": "`response.data.trans_stat`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "交易状态",
+            "type": "`String`",
+            "length": "`1`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "P:处理中；S：成功；F：失败；示例值：S"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.data.unconfirm_amt",
+          "after": {
+            "wire": "`response.data.unconfirm_amt`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "待确认总金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "单位元，需保留小数点后两位，示例值：1.00"
+          }
+        },
+        {
+          "interface": "余额支付退款查询",
+          "path": "response.sign",
+          "after": {
+            "wire": "`response.sign`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "签名",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "签名，对报文整体签名；[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq)"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "request.data",
+          "after": {
+            "wire": "`request.data`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "数据",
+            "type": "`Json`",
+            "length": "`—`",
+            "required": "`Y`",
+            "status": "N/A：结构字段长度",
+            "description": "业务请求参数，具体值参考API文档"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "request.data.bank_id",
+          "after": {
+            "wire": "`request.data.bank_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "付款方银行编号",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "网银、快捷和wap手机支付类交易需传入；参考： [银行编码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_yhbm)；示例值：01020000"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "request.data.card_type",
+          "after": {
+            "wire": "`request.data.card_type`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "卡类型",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "D：借记卡，C：信用卡，默认：D（借记卡）；示例值：C"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "request.data.channel_no",
+          "after": {
+            "wire": "`request.data.channel_no`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "渠道号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "扫码交易必传；如果交易走自有渠道请联系运维人员获取；示例值:10000001"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "request.data.digital_bank_no",
+          "after": {
+            "wire": "`request.data.digital_bank_no`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "数字货币银行编号",
+            "type": "`String`",
+            "length": "`5`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "01002: 工行，01004: 中行， 01005: 建行，01008：邮储 ；示例值：01002"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "request.data.encash_type",
+          "after": {
+            "wire": "`request.data.encash_type`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "取现到账类型",
+            "type": "`String`",
+            "length": "`3`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "取现交易必传；T0：当日到账，T1：次工作日到账，D1：次自然日到账；示例值:T0"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "request.data.huifu_id",
+          "after": {
+            "wire": "`request.data.huifu_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "request.data.online_trans_type",
+          "after": {
+            "wire": "`request.data.online_trans_type`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "网银交易类型",
+            "type": "`String`",
+            "length": "`3`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "网银交易必传；3000:B2B网银支付，3001:B2C网银支付，3002:B2B网银充值，3003:B2C网银充值；示例值：3001"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "request.data.pay_scene",
+          "after": {
+            "wire": "`request.data.pay_scene`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "场景类型",
+            "type": "`String`",
+            "length": "`2`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "01:标准线上场景； 02:标准线下场景；03:非盈利商户场景；04:缴费行业场景；05:保险行业场景；06:蓝海绿洲活动场景；07:校园餐饮场景；08:k12中小幼行业场景；09:非在线教培行业场景；示例值:01"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "request.data.req_date",
+          "after": {
+            "wire": "`request.data.req_date`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求日期",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "格式为yyyyMMdd，示例值：20091225"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "request.data.req_seq_id",
+          "after": {
+            "wire": "`request.data.req_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "同一huifu_id下当天唯一；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "request.data.trade_type",
+          "after": {
+            "wire": "`request.data.trade_type`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "交易类型",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "T_JSAPI: 微信公众号,； T_MINIAPP: 微信小程序, ；A_JSAPI: 支付宝JS,； A_NATIVE: 支付宝正扫,； U_NATIVE: 银联正扫,； U_JSAPI: 银联JS,； ENCASHMENT：取现，；ACCT_PAYMENT:余额支付，； ONLINE_PAY:网银，；QUICK_PAY:快捷，；WAP_PAY:手机WAP，；UNION_PAY：银联统一支付；示例值：UNION_PAY"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "request.data.trans_amt",
+          "after": {
+            "wire": "`request.data.trans_amt`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "交易金额",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "单位元，需保留小数点后两位，示例值：1.00，最低传入0.01"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "request.product_id",
+          "after": {
+            "wire": "`request.product_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "产品号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "汇付分配的产品号，示例值：MCS"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "request.sign",
+          "after": {
+            "wire": "`request.sign`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "加签结果",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq)"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "request.sys_id",
+          "after": {
+            "wire": "`request.sys_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "系统号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "渠道商/商户的huifu_id ；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为直连商户时，此字段填写商户huifu_id；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "response.data",
+          "after": {
+            "wire": "`response.data`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "响应内容体",
+            "type": "`Json`",
+            "length": "`—`",
+            "required": "`N`",
+            "status": "N/A：结构字段长度",
+            "description": "业务返回参数"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "response.data.credit_fee_amt",
+          "after": {
+            "wire": "`response.data.credit_fee_amt`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "贷记手续费",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "快捷、网银、代扣交易根据实际银行、借贷记取对应借贷记手续费；示例值：1.00"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "response.data.debit_fee_amt",
+          "after": {
+            "wire": "`response.data.debit_fee_amt`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "借记手续费",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "快捷、网银、代扣交易根据实际银行、借贷记取对应借贷记手续费；示例值：1.00"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "response.data.fee_amt",
+          "after": {
+            "wire": "`response.data.fee_amt`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "通用手续费",
+            "type": "`String`",
+            "length": "`14`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "扫码类、刷卡类交易取通用手续费；示例值：1.00"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "response.data.hf_seq_id",
+          "after": {
+            "wire": "`response.data.hf_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "全局流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`N`",
+            "status": "已确认",
+            "description": "示例值：00470topo1A221019132207P068ac1362af00000 |"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "response.data.huifu_id",
+          "after": {
+            "wire": "`response.data.huifu_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "商户号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "response.data.req_date",
+          "after": {
+            "wire": "`response.data.req_date`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求日期",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "原样返回,格式为yyyyMMdd；示例值：20091225"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "response.data.req_seq_id",
+          "after": {
+            "wire": "`response.data.req_seq_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求流水号",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "原样返回；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "response.data.resp_code",
+          "after": {
+            "wire": "`response.data.resp_code`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "业务响应码",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：00000000"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "response.data.resp_desc",
+          "after": {
+            "wire": "`response.data.resp_desc`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "业务响应描述",
+            "type": "`String`",
+            "length": "`256`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "示例值：成功"
+          }
+        },
+        {
+          "interface": "手续费试算",
+          "path": "response.sign",
+          "after": {
+            "wire": "`response.sign`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "签名",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq)"
+          }
+        },
+        {
+          "interface": "支付宝小程序预下单",
+          "path": "request.data.alipay_data.fq_mer_discount_flag",
+          "after": {
+            "wire": "`request.data.alipay_data`",
+            "decoded": "`$.fq_mer_discount_flag`",
+            "name": "商户贴息标记",
+            "type": "`String`",
+            "length": "`—`",
+            "required": "`N`",
+            "status": "[需要官方确认]：长度",
+            "description": "花呗分期商户补贴活动，Y：商户全额贴息，P：商户部分贴息，不传为非商户贴息（默认）；示例值：P；选择P：商户部分贴息活动，需同时在【ali_business_params：商户业务信息】中传入支付宝约定的活动参数，参数说明详见分期支付指引文档。"
+          }
+        },
+        {
+          "interface": "聚合交易查询",
+          "path": "request.data",
+          "after": {
+            "wire": "`request.data`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "请求数据",
+            "type": "`JSON`",
+            "length": "`—`",
+            "required": "`Y`",
+            "status": "N/A：结构字段长度",
+            "description": "业务请求参数，具体值参考API文档"
+          }
+        },
+        {
+          "interface": "聚合交易查询",
+          "path": "request.product_id",
+          "after": {
+            "wire": "`request.product_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "产品号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "汇付分配的产品号，示例值：MCS"
+          }
+        },
+        {
+          "interface": "聚合交易查询",
+          "path": "request.sign",
+          "after": {
+            "wire": "`request.sign`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "加签结果",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq)"
+          }
+        },
+        {
+          "interface": "聚合交易查询",
+          "path": "request.sys_id",
+          "after": {
+            "wire": "`request.sys_id`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "系统号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "渠道商/代理商/商户的huifu_id ；（1）当主体为渠道商/代理商时，此字段填写渠道商/代理商huifu_id；（2）当主体为直连商户时，此字段填写商户huifu_id；示例值：[官网示例已脱敏]"
+          }
+        },
+        {
+          "interface": "聚合交易查询",
+          "path": "response.data",
+          "after": {
+            "wire": "`response.data`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "响应内容体",
+            "type": "`JSON`",
+            "length": "`—`",
+            "required": "`N`",
+            "status": "N/A：结构字段长度",
+            "description": "业务返回参数"
+          }
+        },
+        {
+          "interface": "聚合交易查询",
+          "path": "response.sign",
+          "after": {
+            "wire": "`response.sign`",
+            "decoded": "`—（直接 JSON 路径）`",
+            "name": "签名",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`Y`",
+            "status": "已确认",
+            "description": "[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq)"
+          }
+        }
+      ],
+      "removed": [],
+      "changed": []
+    },
+    "merchant": {
+      "before": 2210,
+      "after": 2209,
+      "added": [],
+      "removed": [
+        {
+          "interface": "图片上传",
+          "path": "request.file",
+          "before": {
+            "name": "图片文件流",
+            "type": "`—`",
+            "length": "`—`",
+            "required": "`—`",
+            "description": "仅见于 `requestDemo`，且字段说明只确认它与 `request.data.file_url` 不能同时上传；不得猜测类型或必填性。"
+          }
+        }
+      ],
+      "changed": [
+        {
+          "interface": "商户业务开通修改",
+          "path": "request.data.ali_conf_list[].switch_state",
+          "before": {
+            "name": "*功能开关*",
+            "type": "`String`",
+            "length": "`2`",
+            "required": "`N`",
+            "description": "1:开通 0:关闭 默认：1；示例值：1"
+          },
+          "after": {
+            "name": "*功能开关*",
+            "type": "`String`",
+            "length": "`2`",
+            "required": "`Y`",
+            "description": "1:开通 0:关闭 示例值：1"
+          }
+        },
+        {
+          "interface": "商户业务开通修改",
+          "path": "request.data.wx_conf_list[].switch_state",
+          "before": {
+            "name": "开关状态",
+            "type": "`String`",
+            "length": "`1`",
+            "required": "`N`",
+            "description": "1:开通，0关闭；示例值：1"
+          },
+          "after": {
+            "name": "开关状态",
+            "type": "`String`",
+            "length": "`1`",
+            "required": "`Y`",
+            "description": "1:开通，0关闭；示例值：1"
+          }
+        },
+        {
+          "interface": "图片上传",
+          "path": "request.data.file_url",
+          "before": {
+            "name": "文件url链接",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`N`",
+            "description": "文件url链接与file文件流不能同时上传；文件支持类型：JPG,BMP,PNG；单个图片最大支持2M；除去图片外其他类型文件支持10M；示例值：[官网示例图片已省略]"
+          },
+          "after": {
+            "name": "文件url链接文件url链接与file文件流不能同时上传；文件支持类型：JPG,BMP,PNG；单个图片最大支持2M；除去图片外其他类型文件支持10M；示例值：[官网示例图片已省略]",
+            "type": "`String`",
+            "length": "`512`",
+            "required": "`C`",
+            "description": "文件url链接与file文件流不能同时上传；文件支持类型：JPG,BMP,PNG；单个图片最大支持2M；除去图片外其他类型文件支持10M；示例值：[官网示例图片已省略]"
+          }
+        }
+      ]
+    },
+    "user": {
+      "before": 611,
+      "after": 611,
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "extension": {
+      "before": 546,
+      "after": 546,
+      "added": [
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials",
+          "after": {
+            "name": "辅助证明材料信息",
+            "type": "`String`",
+            "length": "`—`",
+            "required": "`N`",
+            "description": "jsonObject字符串 ； 主体类型为小微商户时，辅助证明材料信息必填"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials.city",
+          "after": {
+            "name": "门店城市",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "description": "示例值：杭州市"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials.city_code",
+          "after": {
+            "name": "门店市行政区号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "description": "[参考地区码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) ；示例值：310100"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials.district",
+          "after": {
+            "name": "门店街道",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "description": "最长16个汉字；示例值：西湖区留下街道"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials.district_code",
+          "after": {
+            "name": "门店街道区号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "description": "[参考地区码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) ；示例值：310101"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials.micro_biz_type",
+          "after": {
+            "name": "小微经营类型",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "description": "门店场所：MICRO_TYPE_STORE；流动经营/便民服务：MICRO_TYPE_MOBILE；示例值：MICRO_TYPE_STORE"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials.province",
+          "after": {
+            "name": "门店省份",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "description": "示例值：浙江省"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials.province_code",
+          "after": {
+            "name": "门店省市编码",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "description": "[参考地区码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) ；示例值：310000"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials.store_address",
+          "after": {
+            "name": "门店场所填写门店详细地址",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`Y`",
+            "description": "门店场所填写门店详细地址，流动经营类型填“无”；示例值：上海宝山区共富路512号"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials.store_door_img",
+          "after": {
+            "name": "门店门头照信息或摊位照",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`N`",
+            "description": "为空时取开户或开业务时上送的门头照片，文件类型F22；示例值：57cc7f00-600a-33ab-b614-6221bbf2e529"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials.store_inner_img",
+          "after": {
+            "name": "门店店内照片或者摊位照侧面",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`N`",
+            "description": "为空时取开户或开业务时上送的店铺内景图片，文件类型F24；示例值：57cc7f00-600a-33ab-b614-6221bbf2e529"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials.store_name",
+          "after": {
+            "name": "门店名称",
+            "type": "`String`",
+            "length": "`64`",
+            "required": "`Y`",
+            "description": "示例值：肯德基共富新村店"
+          }
+        }
+      ],
+      "removed": [
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials[]",
+          "before": {
+            "name": "辅助证明材料信息",
+            "type": "`String`",
+            "length": "`—`",
+            "required": "`N`",
+            "description": "jsonArray字符串 1、填写特殊行业的经营许可证信息 2、最多填写支持5个行业"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials[].city",
+          "before": {
+            "name": "门店城市",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "description": "示例值：杭州市"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials[].city_code",
+          "before": {
+            "name": "门店市行政区号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "description": "[参考地区码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) ；示例值：310100"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials[].district",
+          "before": {
+            "name": "门店街道",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "description": "最长16个汉字；示例值：西湖区留下街道"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials[].district_code",
+          "before": {
+            "name": "门店街道区号",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "description": "[参考地区码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) ；示例值：310101"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials[].micro_biz_type",
+          "before": {
+            "name": "小微经营类型",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "description": "门店场所：MICRO_TYPE_STORE；流动经营/便民服务：MICRO_TYPE_MOBILE；示例值：MICRO_TYPE_STORE"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials[].province",
+          "before": {
+            "name": "门店省份",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "description": "示例值：浙江省"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials[].province_code",
+          "before": {
+            "name": "门店省市编码",
+            "type": "`String`",
+            "length": "`32`",
+            "required": "`Y`",
+            "description": "[参考地区码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_dqbm) ；示例值：310000"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials[].store_address",
+          "before": {
+            "name": "门店场所填写门店详细地址",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`Y`",
+            "description": "门店场所填写门店详细地址，流动经营类型填“无”；示例值：上海宝山区共富路512号"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials[].store_door_img",
+          "before": {
+            "name": "门店门头照信息或摊位照",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`N`",
+            "description": "为空时取开户或开业务时上送的门头照片，文件类型F22；示例值：57cc7f00-600a-33ab-b614-6221bbf2e529"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials[].store_inner_img",
+          "before": {
+            "name": "门店店内照片或者摊位照侧面",
+            "type": "`String`",
+            "length": "`128`",
+            "required": "`N`",
+            "description": "为空时取开户或开业务时上送的店铺内景图片，文件类型F24；示例值：57cc7f00-600a-33ab-b614-6221bbf2e529"
+          }
+        },
+        {
+          "interface": "支付宝实名申请提交",
+          "path": "request.data.auth_identity_info.support_credentials[].store_name",
+          "before": {
+            "name": "门店名称",
+            "type": "`String`",
+            "length": "`64`",
+            "required": "`Y`",
+            "description": "示例值：肯德基共富新村店"
+          }
+        }
+      ],
+      "changed": [
+        {
+          "interface": "统一进件页面版查询",
+          "path": "response.data.wx_real_name_list[].pay_scene",
+          "before": {
+            "name": "场景",
+            "type": "`String`",
+            "length": "`1`",
+            "required": "`Y`",
+            "description": "参见《[微信业务开通类型](https://paas.huifu.com/open/doc/api/#/api_ggcsbm?id=%e5%be%ae%e4%bf%a1%e6%94%af%e4%bb%98%e5%9c%ba%e6%99%af)》"
+          },
+          "after": {
+            "name": "场景",
+            "type": "`String`",
+            "length": "`2`",
+            "required": "`Y`",
+            "description": "参见《[微信业务开通类型](https://paas.huifu.com/open/doc/api/#/api_ggcsbm?id=%e5%be%ae%e4%bf%a1%e6%94%af%e4%bb%98%e5%9c%ba%e6%99%af)》"
+          }
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "No live gateway or financial transaction was executed.",
+    "Official document conflicts are recorded in balancepay-field-contracts.md; ambiguous wire behavior is not invented."
+  ],
+  "baseline_commit": "3612ef5c1aabfe55941608541d8bbfdc8b40edd3"
+}

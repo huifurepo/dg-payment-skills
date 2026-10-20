@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "requested_at": "2026-10-10",
+  "retrieved_at": "2026-10-10T07:10:58.530288+00:00",
+  "api_source_date": "2026-10-10",
+  "sdk_reviewed_at": "2026-10-08",
+  "sdk_versions": {
+    "java": "3.0.41",
+    "lightning": "1.0.6",
+    "php": "2.0.31",
+    "python": "2.0.28"
+  },
+  "python_sdk": {
+    "target_version": "2.0.28",
+    "verified_source_version": "2.0.28",
+    "target_source_verified": true
+  },
+  "version_state": {
+    "reason": "Second review of 78 official documents; eight hosting pages changed. Candidate versions remain unchanged.",
+    "huifu-pay-integration": "1.4.0",
+    "huifu-merchant-onboarding": "1.0.5"
+  },
+  "scope": [
+    "Second online comparison of 78 documents; 8 hosting pages changed, 70 unchanged",
+    "24 payment APIs with 2930 paths; 100 path migrations, 79 same-path attribute/decode changes"
+  ],
+  "field_delta": {
+    "field_paths_added": 100,
+    "field_paths_removed": 100,
+    "field_paths_changed": 79,
+    "catalog_total": 2930,
+    "new_api_fields": 0,
+    "existing_api_fields_added": 0,
+    "migrated_paths": 100
+  },
+  "source_locks": {
+    "payment_current": {
+      "path": "maintainer-contracts/payment-source-lock-2026-10-10.json",
+      "sha256": "5ad78d04a9b57bb6738caa122acdb774eeeca5d71466a5a2d03268d1c32494dc"
+    },
+    "local_sdk_current": {
+      "path": "maintainer-contracts/local-sdk-source-lock-2026-10-08.json",
+      "sha256": "10e15fe7ec03e58ff2ae18e722204e8356e16b7ffd244e62b2919589f7d1b310"
+    }
+  },
+  "catalogs": {
+    "payment": {
+      "path": "huifu-pay-integration/references/payment-complete-field-catalog.md",
+      "sha256": "5e1a605c3fa7010b07ffa7bed24eec11e2e1c34e731e911460b70fe6c065b701",
+      "field_paths": 2930,
+      "generator": "scripts/generate_payment_field_catalog.py",
+      "independent_validator": "scripts/validate_payment_field_catalog.py"
+    }
+  },
+  "field_review": {
+    "path": "maintainer-contracts/api-review-2026-10-10.json",
+    "sha256": "6eb21f4d8d6c23b3e27cd643687fbae30c4feaf31c07c357c24c19fe38ee1d48"
+  },
+  "preserved_boundaries": [
+    "Historical locks, raw snapshots and frozen sandbox r1-r4 remain immutable",
+    "No live gateway call, commit, push or publication"
+  ],
+  "release_rule": "Independent source, field, SDK, regression and packaging gates must pass before publication.",
+  "previous_refresh": {
+    "path": "maintainer-contracts/api-refresh-payment-online-review-2026-10-08.json",
+    "sha256": "8d7fae5199bcefe43a5b7bd0363921c35bfd9c3507e0a996ea2007eab867afcb",
+    "refresh_id": "api-refresh-payment-online-review-2026-10-08"
+  },
+  "refresh_id": "api-refresh-payment-online-review-2026-10-10"
+}

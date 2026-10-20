@@ -3,7 +3,7 @@
 ## 接口合同
 
 - Endpoint：`POST https://api.huifu.com/v2/agreement/elect/rejectsign`。
-- 官方来源：[电子合同拒签](https://paas.huifu.com/partners/api/doc/shgl/fp/api_fp_dzhtjq.md)；快照 `2026-09-22`；SHA-256 `ec6aea1f10e1ab3113993d16422214e9a3aaa586e71bcd646841f45ad60c1f9e`。
+- 官方来源：[电子合同拒签](https://paas.huifu.com/partners/api/doc/shgl/fp/api_fp_dzhtjq.md)；快照 `2026-10-08`；SHA-256 `ec6aea1f10e1ab3113993d16422214e9a3aaa586e71bcd646841f45ad60c1f9e`。
 - 共12个路径：请求8、同步响应4、无异步。请求 data 为 `req_date:String(8) Y`、`req_seq_id:String(32) Y`、`huifu_id:String(18) Y`、`agreement_id:String(32) Y`。
 
 ## 风险与 SDK

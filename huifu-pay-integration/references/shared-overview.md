@@ -4,7 +4,7 @@
 
 ## 什么时候读取
 
-- 首次接入且不知道选聚合支付、托管支付或 checkout-js。
+- 首次接入且不知道选聚合支付、托管支付、余额支付或 checkout-js。
 - 需要判断服务端、前端和最终状态确认的职责。
 - 存量项目需要确定增量改造入口。
 
@@ -12,6 +12,7 @@
 
 | 需求 | 产品线 | 首选入口 |
 | --- | --- | --- |
+| 使用已开户账户余额转账、手续费试算、付款关系和短信验证 | 余额支付 | `balancepay-overview.md` |
 | 服务端直接下单、扫码、查单、退款 | 聚合支付 | `aggregation-quickstart.md` |
 | H5/PC、小程序、抖音或托管项目 | 托管支付 | `hostingpay-quickstart.md` |
 | 按分账全局流水查询实时或延时分账明细 | 分账服务 | `trade-split-detail-query.md` |
@@ -36,15 +37,14 @@
 
 | 主题 | reference |
 | --- | --- |
-| 聚合下单最小流程、请求和错误 | `aggregation-order-quickstart.md`、`aggregation-order-request.md`、`aggregation-order-errors.md` |
-| 聚合 Java 与退款快速接入 | `aggregation-java-adapter.md`、`aggregation-refund-quickstart.md` |
-| 聚合查单快速接入 | `aggregation-query-quickstart.md` |
+| 聚合下单最小流程、请求和错误 | `aggregation-order.md`、`aggregation-order-request.md`、`aggregation-order-errors.md` |
+| 聚合 Java 与退款快速接入 | `aggregation-java-adapter.md`、`aggregation-refund.md` |
+| 聚合查单快速接入 | `aggregation-query.md` |
 | 托管预下单快速接入与 Java | `hostingpay-preorder-quickstart.md`、`hostingpay-java-adapter.md` |
 | 托管查询、关单和对账 | `hostingpay-query-quickstart.md`、`hostingpay-query-trade-close.md`、`hostingpay-query-reconciliation.md` |
 | 交易分账明细查询 | `trade-split-detail-query.md`、`payment-complete-field-catalog.md` |
-| checkout-js 组件、流程和框架 | `checkout-js-readme.md`、`checkout-js-component-modes.md`、`checkout-js-integration-flow.md`、`checkout-js-framework-integration-notes.md` |
+| checkout-js 组件、流程和框架 | `checkout-js.md`、`checkout-js-component-modes.md`、`checkout-js-integration-flow.md`、`checkout-js-framework-integration-notes.md` |
 | 凭据与前端 SDK 边界 | `shared-credential-boundary.md`、`shared-frontend-sdk-matrix.md` |
-| 维护者回归提示 | `canonical-regression-prompts.md` |
 
 ## 边界
 
@@ -55,4 +55,4 @@
 
 ## 当前版本
 
-支付 Skill 为 `1.3.5`。Java/PHP/Python 基线分别见 `shared-server-sdk-matrix.md`。`skill_source` 默认值与当前包版本同步为 `hfps/1.3.5`，显式合同值仍优先原样透传。
+支付 Skill 为 `1.4.0`。Java/PHP/Python 基线分别见 `shared-server-sdk-matrix.md`。`skill_source` 默认值与当前包版本同步为 `hfps/1.4.0`，显式合同值仍优先原样透传。

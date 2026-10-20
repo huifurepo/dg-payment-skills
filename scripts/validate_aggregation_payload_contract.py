@@ -19,7 +19,7 @@ LANGUAGE_DOCS = (
 REQUEST_BOUNDARY_DOCS = (
     REFERENCE_ROOT / "aggregation-payload-construction.md",
     REFERENCE_ROOT / "aggregation-order-request.md",
-    REFERENCE_ROOT / "aggregation-order-quickstart.md",
+    REFERENCE_ROOT / "aggregation-order.md",
     REFERENCE_ROOT / "aggregation-order-method-wechat.md",
     REFERENCE_ROOT / "aggregation-order-method-alipay.md",
     REFERENCE_ROOT / "aggregation-order-method-unionpay.md",
@@ -27,7 +27,6 @@ REQUEST_BOUNDARY_DOCS = (
     REFERENCE_ROOT / "aggregation-customer-preparation.md",
     REFERENCE_ROOT / "aggregation-order-tx-metadata.md",
     REFERENCE_ROOT / "aggregation-refund.md",
-    REFERENCE_ROOT / "aggregation-refund-quickstart.md",
 )
 TRADE_TYPE_KEYS = (
     "T_JSAPI",
