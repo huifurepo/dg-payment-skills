@@ -89,13 +89,7 @@ def validate_first_review(after_paths: dict[str, Path]) -> int:
     return len(protected)
 
 
-def main() -> int:
-    manifest = json.loads((ROOT / 'skills-manifest.json').read_text())
-    latest_path = ROOT / manifest['skills']['huifu-pay-integration'].get('api_review', str(REPORT.relative_to(ROOT)))
-    if latest_path == REPORT:
-        protected = validate_first_review({key: ROOT / path for key, path in CATALOGS.items()})
-        print(f'API review validated: 78 documents, 6296 paths; {protected} immutable historical files')
-        return 0
+def validate_second_review(latest_path: Path, after_paths: dict | None = None, locks: dict | None = None) -> int:
     report = json.loads(latest_path.read_text())
     assert report['schema_version'] == 2
     assert checked_path(report['previous_api_review']) == REPORT
@@ -110,10 +104,12 @@ def main() -> int:
         assert hashlib.sha256(path.read_bytes()).hexdigest() == prior_catalogs[prior_names[key]]['sha256'], key
     validate_first_review(before_paths)
     for key, relative in CATALOGS.items():
-        assert checked_path(report['current_catalogs'][key]) == ROOT / relative
-        delta = comparison(records(before_paths[key].read_text()), records((ROOT / relative).read_text()))
+        current = after_paths[key] if after_paths is not None else ROOT / relative
+        assert report['current_catalogs'][key]['path'] == relative
+        assert hashlib.sha256(current.read_bytes()).hexdigest() == report['current_catalogs'][key]['sha256']
+        delta = comparison(records(before_paths[key].read_text()), records(current.read_text()))
         assert delta == report['field_comparison'][key], f'incomplete second review: {key}'
-    locks = {
+    locks = locks or {
         'payment': PAYMENT_SOURCE_LOCK,
         'merchant-onboarding': ONBOARDING_SOURCE_LOCK,
         'user-onboarding': USER_ONBOARDING_SOURCE_LOCK,
@@ -161,11 +157,70 @@ def main() -> int:
             migrated.add((old['interface'], old['path']))
     assert len(migrated) == len(added) == len(removed) == 100
     delta = report['field_comparison']['payment']
-    lock = json.loads(PAYMENT_SOURCE_LOCK.read_text())
+    lock = json.loads(locks['payment'].read_text())
     for name in ('added', 'removed', 'changed'):
         assert lock['current_extension'][f'field_paths_{name}'] == len(delta[name])
     print(f'Second API review validated: 78 documents, 8 changed, 6296 paths; 100 migrations, {len(delta["changed"])} same-path changes; {len(report["immutable_evidence"])} immutable files')
     return 0
+
+
+def validate_current_review(path: Path) -> int:
+    report = json.loads(path.read_text())
+    assert report['schema_version'] == 3
+    previous = checked_path(report['previous_api_review'])
+    assert previous == ROOT / 'maintainer-contracts/api-review-2026-10-10.json'
+    baseline = {key: checked_path(item) for key, item in report['baseline_catalogs'].items()}
+    prior_locks = {key: checked_path(item) for key, item in report['baseline_source_locks'].items()}
+    validate_second_review(previous, baseline, prior_locks)
+    for key, name in CATALOGS.items():
+        assert checked_path(report['current_catalogs'][key]) == ROOT / name
+        actual = comparison(records(baseline[key].read_text()), records((ROOT / name).read_text()))
+        assert actual == report['field_comparison'][key], ('incomplete current field audit', key)
+    expected_locks = {'payment': PAYMENT_SOURCE_LOCK, 'merchant-onboarding': ONBOARDING_SOURCE_LOCK,
+                      'user-onboarding': USER_ONBOARDING_SOURCE_LOCK, 'onboarding-extension': ONBOARDING_EXTENSION_SOURCE_LOCK}
+    active = {key: json.loads(checked_path(item).read_text()) for key, item in report['current_source_locks'].items()}
+    for key, item in report['current_source_locks'].items():
+        assert checked_path(item) == expected_locks[key]
+    audit = json.loads(checked_path(report['source_audit']).read_text())
+    assert audit['source_count'] == 78
+    domains = {'payment': 'payment', 'merchant_onboarding': 'merchant-onboarding', 'user_onboarding': 'user-onboarding', 'onboarding_extension': 'onboarding-extension'}
+    seen = set()
+    for row in audit['sources']:
+        domain = domains[row['domain']]
+        identity = domain, row['key']
+        assert identity not in seen; seen.add(identity)
+        old = next(s for s in json.loads(prior_locks[domain].read_text())['sources'] if s['key'] == row['key'])
+        new = next(s for s in active[domain]['sources'] if s['key'] == row['key'])
+        assert row['before_sha256'] == old['sha256'] and row['after_sha256'] == new['sha256']
+        assert row['url'] == old['url'] == new['url']
+        assert row['http_status'] == 200
+        assert hashlib.sha256((ROOT / row['after_file']).read_bytes()).hexdigest() == new['sha256']
+        assert row['byte_changed'] == (old['sha256'] != new['sha256'])
+        assert 'field_review_error' not in row
+    assert len(seen) == 78
+    assert sum(row['byte_changed'] for row in audit['sources']) == 13
+    assert sum(row['result'] == 'unchanged' for row in audit['sources']) == 65
+    assert sum(item['after'] for item in report['field_comparison'].values()) == 6500
+    for name, expected in report['immutable_evidence'].items():
+        assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == expected, name
+    additions = [json.loads((ROOT / name).read_text()) for name in report['new_interface_locks']]
+    assert sum(lock['totals']['interfaces'] for lock in additions) == 9
+    assert sum(lock['totals']['field_paths'] for lock in additions) == 368
+    assert report['scope']['total_apis'] == 67 and report['scope']['total_field_paths'] == 6868
+    print('Current API review validated: 78 existing sources, 13 updates, 6500 base paths + 368 additional paths; all historical audit chains preserved')
+    return 0
+
+
+def main() -> int:
+    manifest = json.loads((ROOT / 'skills-manifest.json').read_text())
+    latest = ROOT / manifest['skills']['huifu-pay-integration'].get('api_review', str(REPORT.relative_to(ROOT)))
+    if latest == REPORT:
+        protected = validate_first_review({key: ROOT / path for key, path in CATALOGS.items()})
+        print(f'API review validated: 78 documents, 6296 paths; {protected} immutable historical files')
+        return 0
+    if json.loads(latest.read_text())['schema_version'] == 3:
+        return validate_current_review(latest)
+    return validate_second_review(latest)
 
 
 if __name__ == '__main__':

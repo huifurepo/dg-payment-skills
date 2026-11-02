@@ -182,6 +182,7 @@ UNKNOWN_NAMED_SURFACES = {
     ("hosting-refund", "async.data"),
     ("balance-pay", "async.resp_data"),
     ("hosting-douyin", "async.resp_data"),
+    ("delay-confirm", "async.resp_data"),
 }
 UNKNOWN_OUTER_SURFACES = {
     ("aggregation-refund", "async.unconfirmed_payload"),

@@ -21,7 +21,7 @@ require_assertions_enabled()
 ROOT = Path(__file__).resolve().parent.parent
 LOCK = PAYMENT_SOURCE_LOCK
 CATALOG = ROOT / "huifu-pay-integration/references/payment-complete-field-catalog.md"
-EXPECTED_TOTAL = 2930
+EXPECTED_TOTAL = 3096
 COMMON_RETURN_CODES_URL = (
     "https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md"
 )
@@ -174,7 +174,7 @@ STRING_ENCODED_SURFACES = {
     ("hosting-wechat-mini", "async.split.resp_data"),
     ("hosting-close", "async.resp_data"),
 }
-NAMED_BUT_ENCODING_UNKNOWN_SURFACES = {("hosting-refund", "async.data"), ("balance-pay", "async.resp_data"), ("hosting-douyin", "async.resp_data")}
+NAMED_BUT_ENCODING_UNKNOWN_SURFACES = {("hosting-refund", "async.data"), ("balance-pay", "async.resp_data"), ("hosting-douyin", "async.resp_data"), ("delay-confirm", "async.resp_data")}
 OUTER_NAME_UNKNOWN_SURFACES = {
     ("aggregation-refund", "async.unconfirmed_payload"),
 }

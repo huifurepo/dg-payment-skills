@@ -7,8 +7,8 @@
 ## 接口与字段面
 
 - Endpoint：`POST https://api.huifu.com/v2/user/busi/open`。
-- 快照更新时间：官网 `2026-09-22`，本地冻结 `2026-10-08`；原文 SHA-256：`a0f6f864f7b50312b8bf6757ffa35ca9617a70e53c4e549837d11db3ef7cefda`。
-- 共136个字段路径：请求96、同步响应11、异步29；与用户业务入驻修改同为当前九接口中声明异步通知的两个接口。
+- 快照更新时间：官网 `2026-10-20`，本地冻结 `2026-10-25`；原文 SHA-256：`bef9e9e82e9e0dfc5f4d0445242abfb711fe32195386dd99618366f3110b1191`。
+- 共149个字段路径：请求102、同步响应11、异步36；与用户业务入驻修改同为当前九接口中声明异步通知的两个接口。
 - 全部请求、同步响应和异步通知的完整父子路径、类型、长度、Y/N/C 与官方说明读取 `user-onboarding-complete-field-catalog.md`；String(JSON)、条件字段和官网冲突同时读取 `user-onboarding-field-contracts.md`。
 - `data.huifu_id:String(18) Y` 是开户返回的用户号；`data.upper_huifu_id:String(18) Y` 是真实渠道商/商户号。两个角色不得交换。
 
@@ -33,11 +33,11 @@
 
 正式表要求 `settle_cycle=D1` 时 `fixed_ratio`、`constant_amt` 必填，且费率和金额保留两位小数；当前官网请求示例已分别使用 `fixed_ratio:"2.00"`、`constant_amt:"1.00"` 和 `cash_config.fee_rate:"2.00"`。示例只用于交叉核验，不提升为默认值。
 
-官网已补充 `elec_acct_config`、`elec_receipt_config` 和 `sign_user_info.mobile_no` 说明，并补齐 `async.sign:String(512)`、`elec_receipt_config.switch_state:String(1)`、`sign_user_info.type/name/mobile_no/cert_no` 长度 `6/32/11/18`。这些请求容器当前正式类型为 String，按上文逐层序列化；新增异步 `account_info:Object` 则按其独立方向读取，不套用请求容器规则。
+官网已补充 `elec_acct_config`、`elec_receipt_config` 和 `sign_user_info.mobile_no` 说明，并补齐 `async.sign:String(512)`、`elec_receipt_config.switch_state:String(1)`、`sign_user_info.type/name/mobile_no/cert_no` 长度 `6/32/11/18`。这些请求容器当前正式类型为 String，按上文逐层序列化；当前异步 `account_info:String(JSON Object)` 则按其独立方向读取，不套用请求容器规则。
 
 ## 用户等级与资金配置
 
-新增account_level默认LV1，可选LV1/LV2/LV3。LV3仅企业；balance_pay_config/account_recharge_config/delay_pay_config各按String(JSON Object)发送，不能复用商户同名DTO。请求out_fee_flag未定义枚举；fee_rate/fee_fix_amt双Y与至少一项说明冲突，严格实现前确认。LV2/LV3材料与sign_user_info新增条件、扣费模式、异步account_info原生Object和打款/活体状态见 `user-onboarding-field-contracts.md` 的“用户等级与新资金配置”，必须联读。
+新增account_level默认LV1，可选LV1/LV2/LV3。LV3仅企业；balance_pay_config/account_recharge_config/delay_pay_config各按String(JSON Object)发送，不能复用商户同名DTO。余额支付配置的请求out_fee_flag未定义枚举；充值配置已明确1外扣/2内扣；fee_rate/fee_fix_amt双Y与至少一项说明冲突，严格实现前确认。LV2/LV3材料与sign_user_info新增条件、扣费模式、异步account_info的String(JSON Object)和打款/活体状态见 `user-onboarding-field-contracts.md` 的“用户等级与新资金配置”，必须联读。
 
 ## 同步响应
 
@@ -51,7 +51,9 @@
 
 内部 `huifu_id:String(18) Y` 的中文名和说明现已统一为“汇付客户号”；按用户号解析，不再保留旧版商户号角色冲突。
 
-- `A`：解析 `audit_info:String(JSON Object)`；审核 `Y/P/N`，配置结果 `S/F`。
+- `E`：审核消息，解析 `audit_info:String(JSON Object)`；审核 `Y/P/N`。
+- `A`：业务消息，可含 `audit_info` 与 `account_info`；配置结果 `S/F`。
+- `U`：用户升级消息，解码 `account_info:String(JSON Object)` 并独立判断升级状态。
 - `Z`：解析 `elec_acct_result:String(JSON Object)`；银行开通 `S/F`。
 
 审核中的 `resp_business` 当前为 String/jsonArray格式；解码 `audit_info` 后再解码一层 String(JSON Array)。审核、配置与银行状态必须独立持久化。
@@ -60,4 +62,28 @@
 
 ## SDK 边界
 
-三语言锁定版本均有 `V2UserBusiOpenRequest`。对 `sign_user_info` 等正式请求字段，按 `user-onboarding-platform-contracts.md` 的 wire 矩阵使用 exact-key 扩展能力，并用运行探针验证 String(JSON) 没有再次序列化。原生 Object 的 `async.data.account_info` 只用于入站通知解析，不得作为 SDK 请求扩展或回填到请求。三语言真实请求均使用对应官方 SDK；PHP 仍遵守 DEBUG 敏感日志保护；既有 TLS 风险仅作非阻断提醒，不要求先提供修复证明，详见 `user-onboarding-shared-server-sdk-matrix.md`。字段有疑义时按共享开发提醒继续明确部分，不能把风险提醒或 TODO 当作已验证结论。
+三语言锁定版本均有 `V2UserBusiOpenRequest`。对 `sign_user_info` 等正式请求字段，按 `user-onboarding-platform-contracts.md` 的 wire 矩阵使用 exact-key 扩展能力，并用运行探针验证 String(JSON) 没有再次序列化。String(JSON Object) 的 `async.data.account_info` 只用于入站通知解析，不得作为 SDK 请求扩展或回填到请求。三语言真实请求均使用对应官方 SDK；PHP 仍遵守 DEBUG 敏感日志保护；既有 TLS 风险仅作非阻断提醒，不要求先提供修复证明，详见 `user-onboarding-shared-server-sdk-matrix.md`。字段有疑义时按共享开发提醒继续明确部分，不能把风险提醒或 TODO 当作已验证结论。
+
+## 2026-10-25 官网更新同步
+
+本地当前来源SHA-256：`bef9e9e82e9e0dfc5f4d0445242abfb711fe32195386dd99618366f3110b1191`。
+
+通知类型当前为E审核、A业务、U用户升级、Z电子账户；audit_info在A/E消息出现。异步account_info改为String(JSON Object)，按父路径解码后再取升级状态/失败原因。新增agreement_info_list为String(JSON Array)，协议链接只按需读取并脱敏。请求新增的协议及外扣配置按当前完整目录逐项核对，不从响应回填请求。
+
+| 新增完整合同路径 | 中文名 | 类型 | 长度 | 必填 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| `async.data.account_info.fail_msg` | 验证失败原因 | `String` | `256` | `N` | 条件与完整原文见对应完整目录 |
+| `async.data.agreement_info_list[]` | 协议信息列表 | `String` | `—` | `N` | 条件与完整原文见对应完整目录 |
+| `async.data.agreement_info_list[].agreement_id` | 协议编号 | `String` | `64` | `N` | 条件与完整原文见对应完整目录 |
+| `async.data.agreement_info_list[].agreement_link` | 协议签署连接 | `String` | `1024` | `N` | 条件与完整原文见对应完整目录 |
+| `async.data.agreement_info_list[].agreement_name` | 协议名称 | `String` | `256` | `N` | 条件与完整原文见对应完整目录 |
+| `async.data.agreement_info_list[].agreement_type` | 协议类型 | `String` | `1` | `N` | 条件与完整原文见对应完整目录 |
+| `async.data.agreement_info_list[].con_stat` | 合同状态 | `String` | `2` | `N` | 条件与完整原文见对应完整目录 |
+| `request.data.account_recharge_config.out_fee_acct_id` | 交易手续费外扣账户号 | `String` | `16` | `C` | 条件与完整原文见对应完整目录 |
+| `request.data.account_recharge_config.out_fee_flag` | 交易手续费外扣标记 | `String` | `1` | `N` | 条件与完整原文见对应完整目录 |
+| `request.data.account_recharge_config.out_fee_huifu_id` | 手续费外扣汇付ID | `String` | `18` | `C` | 条件与完整原文见对应完整目录 |
+| `request.data.agreement_info` | 协议信息实体 | `String` | `—` | `N` | 条件与完整原文见对应完整目录 |
+| `request.data.agreement_info.agreement_type` | 协议类型 | `String` | `1` | `Y` | 条件与完整原文见对应完整目录 |
+| `request.data.agreement_info.message_send_type` | 电子协议签约短信发送标识 | `String` | `1` | `N` | 条件与完整原文见对应完整目录 |
+
+属性修订路径：`async.data.account_info`、`async.data.audit_info`、`async.data.notify_type`。类型/说明均已同步完整目录，原口径见维护者逐项差异。

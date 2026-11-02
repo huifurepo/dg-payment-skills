@@ -36,7 +36,7 @@ Python2.0.28 `MerConfig` 第五参数是 `sign_type`，第六是 `jpt_x_skill_so
 
 Java请求前全局 `BasePay.debug=false`；PHP加载任何SDK文件前固定 `DEBUG=false`，不能使用Demo loader。PHP2.0.31源码仍关闭 peer TLS校验，按已确认维护规则作为非阻断提醒；生成代码不增加关闭校验、不修改SDK。Python/通用Java公共默认TLS路径按实际源码记录。
 
-来源头仅支付为 `hfps/1.4.0`，两套Skill共同参与为 `hfps/1.4.0;hfms/1.0.5`，显式配置原样透传。只有出款方、没有正式 `huifu_id` 的接口不得为商户头添加虚构业务键；SDK内部头生成保持其原生行为。
+来源头仅支付为 `hfps/1.5.0`，两套Skill共同参与为 `hfps/1.5.0;hfms/1.1.0`，显式配置原样透传。只有出款方、没有正式 `huifu_id` 的接口不得为商户头添加虚构业务键；SDK内部头生成保持其原生行为。
 
 ## 官方源码来源
 

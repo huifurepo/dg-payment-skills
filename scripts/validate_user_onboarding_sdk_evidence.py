@@ -555,7 +555,7 @@ def validate_published_contracts() -> list[str]:
         "九个用户接口 SDK",
         "用户号",
         "商户号",
-        "hfms/1.0.5",
+        "hfms/1.1.0",
         "references/user-onboarding-shared-server-sdk-matrix.md",
         "references/user-onboarding-platform-contracts.md",
         "TLS",

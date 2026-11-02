@@ -13,8 +13,8 @@
 
 | 当前请求实际参与的 Skill | 默认值 |
 | --- | --- |
-| 仅 `huifu-merchant-onboarding 1.0.5`，无论使用商户、用户还是扩展接口 | `hfms/1.0.5` |
-| `huifu-pay-integration` 与 `huifu-merchant-onboarding` 都参与当前请求 | `hfps/1.4.0;hfms/1.0.5` |
+| 仅 `huifu-merchant-onboarding 1.1.0`，无论使用商户、用户还是扩展接口 | `hfms/1.1.0` |
+| `huifu-pay-integration` 与 `huifu-merchant-onboarding` 都参与当前请求 | `hfps/1.5.0;hfms/1.1.0` |
 
 组合顺序固定为支付、进件，中间只使用一个英文分号且不加空格。不得因为两个来源都通过同一个 SDK 配置项传入而丢掉其中一个。调用方显式提供经确认的合同值时原样透传，不再追加默认值或 `sys_id`。
 

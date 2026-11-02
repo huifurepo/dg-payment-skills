@@ -11,6 +11,7 @@ import subprocess
 import zipfile
 from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
+from additional_source_bindings import additional_bindings
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -127,6 +128,7 @@ def source_bindings(manifest: dict, spec: dict, refresh: dict) -> dict[str, str]
             raise ValueError(f"refresh contract {key} binding differs")
     if refresh["source_review"]["refresh_id"] != refresh["source_review_id"]:
         raise ValueError("refresh contract API source review identity differs")
+    bindings.update(additional_bindings(REPO_ROOT, spec))
     return bindings
 
 

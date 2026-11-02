@@ -443,7 +443,8 @@ def expected_records(
             for path, field in flatten(fields, nested, prefix, used):
                 description = field.description
                 path_leaf = path.removesuffix("[]").rsplit(".", 1)[-1]
-                if path.startswith("request.data.") and path_leaf in page_notes:
+                note_prefix = "request." if path_leaf in {"sys_id", "product_id", "sign"} else "request.data."
+                if path.startswith(note_prefix) and path_leaf in page_notes:
                     description = (
                         f"{description}；官网页内注意：{page_notes[path_leaf]}"
                         if description != "—"
@@ -591,7 +592,6 @@ def validate_official_undefined_fields(
     }
     expected_descriptions = {
         ("用户业务入驻修改", "async.data"),
-        ("用户业务入驻", "async.data.account_info"),
         ("用户信息查询", "response.data.account_info"),
         ("用户信息查询", "response.data.account_recharge_config.transfer_flag_name"),
         ("用户信息查询", "response.data.account_recharge_config.transfer_flag_no"),
@@ -629,7 +629,12 @@ def validate_current_account_level_contract(records: dict[RecordKey, RecordValue
                 assert "不能同时为空" in field[5], "preserve Y-versus-either fee condition conflict"
         out_fee = fields[title, "request.data.balance_pay_config.out_fee_flag"]
         assert out_fee[5] == "是否交易手续费外扣", "request enum must not be borrowed from query"
-        assert fields[title, "async.data.account_info"][2] == "Object"
+        assert fields[title, "async.data.account_info"][2] == "String"
+        assert "jsonObject" in fields[title, "async.data.account_info"][5]
+        assert fields[title, "async.data.account_info.fail_msg"][2:5] == ("String", "256", "N")
+        assert all(token in fields[title, "async.data.notify_type"][5] for token in ("E:", "A:", "U：", "Z："))
+        assert fields[title, "request.data.account_recharge_config.out_fee_huifu_id"][2:5] == ("String", "18", "C")
+        assert fields[title, "request.data.account_recharge_config.out_fee_acct_id"][2:5] == ("String", "16", "C")
         assert fields[title, "async.data.account_info.face_url"][2:5] == ("String", "512", "N")
         assert fields[title, "async.data.account_info.verify_ord_id"][2:5] == ("String", "32", "N")
     assert fields["企业用户开户", "request.data.ent_type"][4] == "Y"
@@ -680,6 +685,10 @@ def validate_refresh_semantic_contracts(
         value = find(interface, path)
         assert "官网页内注意" in value[5]
         assert ("实名认证" if index < 3 else "同步填写") in value[5]
+    for interface in ("企业用户开户", "个人用户开户"):
+        value = find(interface, "request.sys_id")
+        assert "官网页内注意" in value[5]
+        assert all(term in value[5] for term in ("总部商户", "开户", "upper_huifu_id"))
     incomplete_links: tuple[tuple[str, str], ...] = ()
     ambiguous_semantics = (("用户业务入驻", "request.data.card_info.card_type"),)
     value = find(*ambiguous_semantics[0])
@@ -687,7 +696,7 @@ def validate_refresh_semantic_contracts(
 
     return (
         len(conditional_fields),
-        len(page_notes),
+        len(page_notes) + 2,
         len(incomplete_links),
         len(ambiguous_semantics),
     )
@@ -752,7 +761,7 @@ def validate_official_example_shape_contract(lock: dict[str, object]) -> int:
         "user_enterprise": {"request_paths": 29, "response_paths": 7},
         "user_individual": {"request_paths": 21, "response_paths": 7},
         "user_business_open": {"request_paths": 66, "response_paths": 6},
-        "user_apply_query": {"request_paths": 8, "response_paths": 7},
+        "user_apply_query": {"request_paths": 8, "response_paths": 13},
         "user_detail_query": {"request_paths": 7, "response_paths": 50},
         "user_enterprise_modify": {"request_paths": 28, "response_paths": 5},
         "user_individual_modify": {"request_paths": 12, "response_paths": 5},
@@ -777,8 +786,8 @@ def validate_official_example_shape_contract(lock: dict[str, object]) -> int:
     assert per_interface == expected_counts, (
         f"official example path counts changed: {per_interface}"
     )
-    assert len(fingerprints) == 329
-    assert digest == "9f1bc2b6164256aba3fae4274b267faa7d12e4ea0d3f18db36242d31dd315d31", (
+    assert len(fingerprints) == 335
+    assert digest == "e0e30620184c8b5a8fcc1a14f09ddfb42ad935d7692f81703a746dea7ac8b616", (
         f"official example path fingerprint changed: {digest}"
     )
     return len(fingerprints)
@@ -1091,6 +1100,8 @@ def main() -> int:
         actual, node_structure
     )
     validate_current_account_level_contract(actual)
+    for title in ("用户业务入驻", "用户业务入驻修改"):
+        assert actual[title, "异步通知 data", "async.data.agreement_info_list[]"][2] == "String"
     undefined_triggers, page_notes, incomplete_links, ambiguous_semantics = (
         validate_refresh_semantic_contracts(actual)
     )
@@ -1112,14 +1123,14 @@ def main() -> int:
         for name in ("parent", "leaf")
     }
     assert lock["totals"] == {
-        "fields": 611,
-        "request": 333,
-        "response": 220,
-        "callback": 58,
-        "parent": 73,
-        "leaf": 538,
+        "fields": 644,
+        "request": 345,
+        "response": 227,
+        "callback": 72,
+        "parent": 78,
+        "leaf": 566,
         "root_tables": 40,
-        "extend_tables": 53,
+        "extend_tables": 58,
     }, "current user source lock totals changed"
     assert len(actual) == lock["totals"]["fields"]
     assert direction_counts == {

@@ -14,6 +14,7 @@ python3 -B scripts/validate_skill_split.py
 python3 -B scripts/validate_reference_retirements.py
 python3 -B scripts/validate_skills.py
 python3 -B scripts/validate_regression_reference_ownership.py
+python3 -B scripts/run_real_model_regression.py --validate-rules-only
 python3 -B scripts/validate_aggregation_payload_contract.py
 python3 -B scripts/validate_request_field_preservation.py
 python3 -B scripts/validate_code_examples.py
@@ -24,6 +25,8 @@ python3 -B scripts/generate_payment_source_index.py --check
 python3 -B scripts/validate_payment_source_contract.py
 python3 -B scripts/validate_payment_review_contract.py
 python3 -B scripts/validate_reference_source_metadata.py
+python3 -B scripts/generate_additional_interface_catalog.py --check
+python3 -B scripts/validate_additional_interfaces.py
 python3 -B scripts/generate_payment_field_catalog.py --check
 python3 -B scripts/validate_payment_field_catalog.py
 python3 -B scripts/validate_balance_payment_contract.py
@@ -52,6 +55,7 @@ python3 -B scripts/validate_skill_packages.py --allow-dirty
 (cd local-sandbox && go test ./... -count=1)
 
 if [[ -n "${HUIFU_SDK_ROOT:-}" ]]; then
+  python3 -B scripts/validate_additional_interfaces.py --sdk-root "$HUIFU_SDK_ROOT"
   python3 -B scripts/validate_balance_payment_contract.py --sdk-root "$HUIFU_SDK_ROOT"
   python3 -B scripts/validate_payment_sdk_evidence.py --sdk-root "$HUIFU_SDK_ROOT"
   python3 -B scripts/validate_merchant_onboarding_sdk_evidence.py --sdk-root "$HUIFU_SDK_ROOT"

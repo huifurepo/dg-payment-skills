@@ -1,6 +1,6 @@
 # 付款关系提交
 
-官方来源：<https://paas.huifu.com/partners/api/doc/yuer/api_acct_fkgxtj.md>；快照 `2026-10-10`，官网更新时间 `2025-02-25`。
+官方来源：<https://paas.huifu.com/partners/api/doc/yuer/api_acct_fkgxtj.md>；快照 `2026-10-25`，官网更新时间 `2025-02-25`。
 
 接口：`POST /v2/trade/payrelation/apply`。仅适用于须预先维护付款关系才能正常余额支付的商户；完整24个字段路径见 `payment-complete-field-catalog.md` 的“付款关系提交”。
 

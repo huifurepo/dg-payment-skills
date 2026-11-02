@@ -5,28 +5,29 @@
     "huifu-pay-integration": {
       "root": "huifu-pay-integration",
       "domain": "payment",
-      "version": "1.4.0",
+      "version": "1.5.0",
       "agents_file": "agents/openai.yaml",
       "reference_manifest": "maintainer-contracts/payment-references.json",
-      "max_reference_mentions": 90,
+      "max_reference_mentions": 105,
       "canonical_regression_count": 14,
       "regression_suites": [
         "payment",
         "cross-route"
       ],
       "package_profile": "payment",
-      "source_lock": "maintainer-contracts/payment-source-lock-2026-10-10.json",
-      "refresh_contract": "maintainer-contracts/api-refresh-payment-1.4.0-2026-10-10.json",
+      "source_lock": "maintainer-contracts/payment-source-lock-2026-10-25.json",
+      "refresh_contract": "maintainer-contracts/api-refresh-payment-1.5.0-2026-10-25.json",
       "sdk_source_lock": "maintainer-contracts/local-sdk-source-lock-2026-10-08.json",
-      "api_review": "maintainer-contracts/api-review-2026-10-10.json"
+      "api_review": "maintainer-contracts/api-review-2026-10-25.json",
+      "additional_source_lock": "maintainer-contracts/huifu-pay-integration-additional-source-lock-2026-10-25.json"
     },
     "huifu-merchant-onboarding": {
       "root": "huifu-merchant-onboarding",
       "domain": "onboarding",
-      "version": "1.0.5",
+      "version": "1.1.0",
       "agents_file": "agents/openai.yaml",
       "reference_manifest": "maintainer-contracts/onboarding-references.json",
-      "max_reference_mentions": 120,
+      "max_reference_mentions": 135,
       "canonical_regression_count": 49,
       "regression_suites": [
         "onboarding",
@@ -34,9 +35,10 @@
         "cross-route"
       ],
       "package_profile": "onboarding",
-      "source_lock": "maintainer-contracts/merchant-onboarding-1.0.5-source-lock-2026-10-08.json",
-      "refresh_contract": "maintainer-contracts/api-refresh-onboarding-1.0.5-2026-10-08.json",
-      "sdk_source_lock": "maintainer-contracts/local-sdk-source-lock-2026-10-08.json"
+      "source_lock": "maintainer-contracts/merchant-onboarding-1.1.0-source-lock-2026-10-25.json",
+      "refresh_contract": "maintainer-contracts/api-refresh-onboarding-1.1.0-2026-10-25.json",
+      "sdk_source_lock": "maintainer-contracts/local-sdk-source-lock-2026-10-08.json",
+      "additional_source_lock": "maintainer-contracts/huifu-merchant-onboarding-additional-source-lock-2026-10-25.json"
     }
   },
   "frozen_assets": [

@@ -1,0 +1,56 @@
+[
+  {
+    "id": 4101,
+    "suite": "payment",
+    "prompt": "延时交易确认如何选择原交易定位键、构造百分比分账并处理通知？",
+    "expected": "本轮实际使用 references：`delay-confirm.md`、`payment-extension-complete-field-catalog.md`、`payment-extension-sdk-matrix.md`。使用/v2/trade/payment/delaytrans/confirm。org_hf_seq_id、org_req_date+org_req_seq_id、org_req_date+org_mer_ord_id三选一；余额ACCT_PAYMENT只用日期加原流水。acct_split_bunch为String(JSON Object)，百分比分账总和100.00%。异步resp_data的JSON编码未声明，ACK未知，保留适配点。"
+  },
+  {
+    "id": 4102,
+    "suite": "payment",
+    "prompt": "交易确认查询的SDK用V2还是V3？分账信息是对象还是数组？",
+    "expected": "本轮实际使用 references：`delay-confirm-query.md`、`payment-extension-complete-field-catalog.md`、`payment-extension-sdk-matrix.md`。必须使用V3TradePaymentDelaytransConfirmqueryRequest和/v3/trade/payment/delaytrans/confirmquery。org_req_date与org_req_seq_id定位交易确认记录。响应acct_split_bunch为String(JSON Array)，元素内acct_infos为Array；不能照搬确认接口的对象编码。"
+  },
+  {
+    "id": 4103,
+    "suite": "payment",
+    "prompt": "交易确认退款是不是已经给付款人退款？原日期流水和退款金额怎么填？",
+    "expected": "本轮实际使用 references：`delay-confirm-refund.md`、`payment-extension-complete-field-catalog.md`。使用/v2/trade/payment/delaytrans/confirmrefund，资金退回原商户账户，不能视为付款人已收退款。org_req_date和org_req_seq_id定位原确认，正式Y。请求没有顶层ord_amt；金额由acct_split_bunch.acct_infos的div_amt表示。向付款人退款需另按原支付产品合同处理。"
+  },
+  {
+    "id": 4104,
+    "suite": "payment",
+    "prompt": "按给出的JSON文档实现交易确认退款查询，能否同时给出完整响应DTO？",
+    "expected": "本轮实际使用 references：`delay-confirm-refund-query.md`、`payment-extension-complete-field-catalog.md`、`payment-extension-sdk-matrix.md`。URI为/v2/trade/payment/delaytrans/confirmrefundquery。仅4个正式请求字段：huifu_id与org_req_date为Y；org_req_seq_id与org_hf_seq_id为C，二选一，定位确认退款。官方JSON没有定义响应或HTTP方法；POST来自SDK证据。响应DTO留TODO，不从其他退款接口补字段。"
+  },
+  {
+    "id": 4105,
+    "suite": "onboarding",
+    "prompt": "开通商户子账户时，账户种类、结算和绑卡审核有哪些区别？",
+    "expected": "本轮实际使用 references：`account-subaccount-open.md`、`merchant-account-complete-field-catalog.md`、`merchant-account-sdk-matrix.md`。使用/v2/merchant/settle/config，为商户开通02现金户。huifu_id、upper_huifu_id是商户与上级角色；settle_config为N，card_info为C，均String(JSON Object)。绑卡审核失败不影响子账户使用，但不能提现、结算。通知data为String(JSON Object)，audit_status为Y/N/F；未知ACK留适配点。"
+  },
+  {
+    "id": 4106,
+    "suite": "onboarding",
+    "prompt": "修改子账户配置是否可以复用开通接口DTO？settle_config可以不传吗？",
+    "expected": "本轮实际使用 references：`account-subaccount-modify.md`、`merchant-account-complete-field-catalog.md`、`merchant-account-sdk-matrix.md`。使用/v2/merchant/settle/modify，huifu_id、upper_huifu_id、acct_id均Y。settle_config为Y，card_info为C，采用String(JSON Object)。开通接口settle_config为N，与修改不同；不要增加acct_name/acct_type。审核通知和结算状态分别处理。"
+  },
+  {
+    "id": 4107,
+    "suite": "payment",
+    "prompt": "只查询账户余额时，需要重新进件吗？请求流水和账务日期是否必填？",
+    "expected": "本轮实际使用 references：`account-balance-query.md`、`payment-extension-complete-field-catalog.md`。余额查询归支付Skill的账务能力，账户前提已满足时无需重新进件。使用/v2/trade/acctpayment/balance/query；req_date、huifu_id为Y，req_seq_id为N，acct_date为N且默认当天。余额不是某笔订单的支付终态。"
+  },
+  {
+    "id": 4108,
+    "suite": "payment",
+    "prompt": "账务流水如何翻页？一天两万条能否直接循环拉取？必须传req_date吗？",
+    "expected": "本轮实际使用 references：`account-ledger-query.md`、`payment-extension-complete-field-catalog.md`。使用/v2/trade/acctpayment/acctlog/query，没有req_date，req_seq_id、huifu_id、acct_date正式Y。page_size最大100，默认10；游标last_end_log_id要求acct_id，首次0。hf_seq_id优先规则不改写acct_date的Y。单日上限10000，更多通过账务文件联系技术支持，不声称无限翻页。"
+  },
+  {
+    "id": 4109,
+    "suite": "payment",
+    "prompt": "账务流水汇总结果查询没有专属SDK类，如何接入？同步返回是否代表完成？",
+    "expected": "本轮实际使用 references：`account-ledger-summary-query.md`、`payment-extension-complete-field-catalog.md`、`payment-extension-sdk-matrix.md`。使用/v2/trade/acctpayment/acctlog/summary，当前SDK无专属类，使用官方通用入口。req_date与notify_url正式Y，示例漏日期不能照抄；窗口7天。正文异步与同步参数表冲突，summary_list正式String(JSON Array)而示例原生数组。通知验签原文、ACK及重试未知，留TODO，同步受理不代表汇总完成。"
+  }
+]

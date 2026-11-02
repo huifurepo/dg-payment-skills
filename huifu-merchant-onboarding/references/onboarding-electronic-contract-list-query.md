@@ -3,7 +3,7 @@
 ## 接口合同
 
 - Endpoint：`POST https://api.huifu.com/v2/agreement/apply/list`。
-- 官方来源：[电子合同列表查询](https://paas.huifu.com/partners/api/doc/shgl/fp/api_fp_dzhtsqlbcx.md)；快照 `2026-10-08`；SHA-256 `2a774b8820cdb4e5e4dc1364f1be9bcdcfc273b7b86e064aa3c631c97e8d397b`。
+- 官方来源：[电子合同列表查询](https://paas.huifu.com/partners/api/doc/shgl/fp/api_fp_dzhtsqlbcx.md)；快照 `2026-10-25`；SHA-256 `2a774b8820cdb4e5e4dc1364f1be9bcdcfc273b7b86e064aa3c631c97e8d397b`。
 - 共40个路径：请求16、同步响应24、无异步。请求必填 `req_date/req_seq_id/huifu_id/agreement_type/page_num/page_size`。
 - `result_list:String/jsonArray` 按一层 String(JSON Array) 解码；列表项完整字段见机械目录。
 

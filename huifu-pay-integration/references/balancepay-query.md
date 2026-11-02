@@ -1,6 +1,6 @@
 # 余额支付查询
 
-官方来源：<https://paas.huifu.com/partners/api/doc/yuer/api_acctpaycx.md>；快照 `2026-10-10`，官网更新时间 `2026-09-21`。
+官方来源：<https://paas.huifu.com/partners/api/doc/yuer/api_acctpaycx.md>；快照 `2026-10-25`，官网更新时间 `2026-09-21`。
 
 接口：`POST /v2/trade/acctpayment/pay/query`。查询单笔余额支付的状态及明细；完整36个字段路径见 `payment-complete-field-catalog.md` 的“余额支付查询”，联读 `balancepay-field-contracts.md`。
 

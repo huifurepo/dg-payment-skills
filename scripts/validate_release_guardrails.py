@@ -533,7 +533,8 @@ def validate_reproducible_provenance() -> None:
         )
         require(
             set(payload["source_locks"])
-            == {payment_spec["source_lock"], payment_spec["sdk_source_lock"]},
+            == {payment_spec["source_lock"], payment_spec["sdk_source_lock"],
+                payment_spec["additional_source_lock"]},
             "payment source lock was not bound to provenance",
         )
         tampered_refresh = json.loads(json.dumps(payload))

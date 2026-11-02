@@ -7,7 +7,7 @@
 ## 接口与字段面
 
 - Endpoint：`POST https://api.huifu.com/v2/user/basicdata/indv`。
-- 快照更新时间：官网 `2026-09-04`，本地冻结 `2026-10-08`；原文 SHA-256：`e12fd6d81d185b6f9467ed837cc69f64485461fb12dbc943db487fbc9a751759`。
+- 快照更新时间：官网 `2026-10-21`，本地冻结 `2026-10-25`；原文 SHA-256：`41f9a75dab6ff2d157ff9f02793afa1ada3baec8f0d67664bed8c1ad08e53bf2`。
 - 共34个字段路径：请求27、同步响应7、异步0。完整字段读取 `user-onboarding-complete-field-catalog.md`。
 - 请求业务 `data` 没有 `huifu_id`、`upper_huifu_id` 或异步地址。
 
@@ -32,3 +32,9 @@
 ## SDK 边界
 
 三语言锁定版本均有 `V2UserBasicdataIndvRequest`。生成类对 `cert_nationality/address` 等字段的 required/空串建模不覆盖官方 Y/N/C；三语言联调和生产实现均使用对应官方 SDK，PHP 另受 DEBUG 硬停约束。
+
+## 2026-10-25 官网更新同步
+
+本地当前来源SHA-256：`41f9a75dab6ff2d157ff9f02793afa1ada3baec8f0d67664bed8c1ad08e53bf2`。
+
+新增公共请求字段sys_id的上下级关系说明：sys_id为总部商户时在开户阶段绑定关系，否则在业务入驻阶段按upper_huifu_id绑定。该注记属于request.sys_id，不向开户data添加upper_huifu_id，也不混淆sys_id与用户ID。

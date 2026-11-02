@@ -1,7 +1,7 @@
 # 支付官方接口页来源锁
 
-- 来源快照日期：`2026-10-10`
-- 页面数：`44`
+- 来源快照日期：`2026-10-25`
+- 页面数：`51`（基础44页；本轮新增7页）
 - 用途：复核字段、类型、长度、必填条件和接口边界；普通接入回答仍使用对应原子 reference。
 
 | 页面 | 官方 URL | 本地原子 reference | SHA-256 |
@@ -33,13 +33,13 @@
 | 聚合交易退款 | https://paas.huifu.com/partners/lightning/api/jytk.md | `aggregation-refund.md` | `ed632a82bcc7d5c706c51f651fdede9e63ef7e359d2f6e2d1195c1185f55225e` |
 | 聚合交易退款查询 | https://paas.huifu.com/partners/lightning/api/jytkcx.md | `aggregation-refund-query.md` | `9775730d9b922e856e36dd5dc3cdbc0cb37d3c29fe11049339bb8cfa3bcd7ee1` |
 | 对账单-v2详细API | https://paas.huifu.com/partners/api/doc/jyjs/api_jyjs_wjcx.md | `aggregation-query-reconciliation.md` | `4ca6260c74f5f74820b645dd58935c777bea007795599bf41e974195dc2fc55f` |
-| H5/PC预下单 | https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hosting.md | `hostingpay-preorder-h5-pc.md` | `8292e328bca7a2e6d55c7372afafa2c6ea97caff556786683cf04c9033c9f4ce` |
-| 支付宝小程序预下单 | https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_zfbpreorder.md | `hostingpay-preorder-alipay-mini.md` | `51357c75f1f78b8c7179dcc228e6b30cd39f6686e6584d5e94da8f1e89c8501e` |
-| 微信小程序预下单 | https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_wxpreorder.md | `hostingpay-preorder-wechat-mini.md` | `47d2367f8a9cb3acb551fff22d63bd1b2b0b3b3a4b18b8c5e23568f1b5338dde` |
+| H5/PC预下单 | https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hosting.md | `hostingpay-preorder-h5-pc.md` | `60381ee32ab1529d05b881b2c944f8c3f130de17a7ad35a44977b166a7986eec` |
+| 支付宝小程序预下单 | https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_zfbpreorder.md | `hostingpay-preorder-alipay-mini.md` | `3082194cef49961ec70fde375efd96f8a36f9427d64f9a8cfef325c48a429ef5` |
+| 微信小程序预下单 | https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_wxpreorder.md | `hostingpay-preorder-wechat-mini.md` | `d2d91fb6b25a2f6477b5ca1531d7bc4349b4760f63c4033d6e1b307c31ba48f6` |
 | 抖音直连下单 | https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_dypreorder.md | `hostingpay-preorder-douyin-direct.md` | `2aae00b6db20e91f71720a3e3bbb2c8c424ee1959b3dea4feeac502a9fc5478d` |
-| 托管交易查询 | https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingcx.md | `hostingpay-query-payment-status-query.md` | `be38fc085f09bc84a96654365b48adb4a4be0b12d0c50dbea3bd02c50a6fb8d6` |
-| 托管交易退款 | https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingtk.md | `hostingpay-refund.md` | `47711e53b23b8eec040d73628c8d9126c700118443dddcdcb40e391eddd88d1a` |
-| 托管交易退款查询 | https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingtkcx.md | `hostingpay-refund-query.md` | `db5e1065eabf9f9051f8feea9269d584c1343450e2913d0bdf83227bb878b3ca` |
+| 托管交易查询 | https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingcx.md | `hostingpay-query-payment-status-query.md` | `43a8d643d66e7657ad0de01544a48a2fd6cecc651960f22235ef886c6ca6bc86` |
+| 托管交易退款 | https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingtk.md | `hostingpay-refund.md` | `fe45dca45e8fce7a5caa19eb54196c51715546675abbaa1081984eb768e332cb` |
+| 托管交易退款查询 | https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingtkcx.md | `hostingpay-refund-query.md` | `4b78ba8567f606a870076d9f637fe064b21743f8139382c7a06e9016e5449f0c` |
 | 托管交易关单 | https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostinggd.md | `hostingpay-query-trade-close.md` | `97b61f7e7725b4cf999a8a05ad3eb332a2183cc56100d558c2499ebe57574f51` |
 | 拆单支付订单查询 | https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingcdzf.md | `hostingpay-query-splitpay.md` | `96e61c672ce32f16f4f8f7068d26063b3c8302be7bca5e2b17dce4d309282938` |
 | 交易分账明细查询 | https://paas.huifu.com/partners/api/doc/smzf/api_fzmxcx.md | `trade-split-detail-query.md` | `dcab5eb128a7987742ea339631add74ad771227d3ce557c1154d6d6a27266270` |
@@ -50,6 +50,13 @@
 | 手续费试算 | https://paas.huifu.com/partners/api/doc/sxf/api_sxf_sxfss.md | `balancepay-fee-calc.md` | `e5a3270bbb76fa2a4948b129414568e3b57d41fae1ff080749e1c2b171a9f862` |
 | 付款关系提交 | https://paas.huifu.com/partners/api/doc/yuer/api_acct_fkgxtj.md | `balancepay-pay-relation.md` | `884ca71510e55b1d0bc63fbd01dec4770b667901a324dd743c5af4278a5e7c05` |
 | 余额支付发送短信验证码 | https://paas.huifu.com/partners/api/doc/yuer/api_smscode.md | `balancepay-sms.md` | `2e13d8bbb9c8c4f0f9cf0054388e8d4ae8e85309ab0710192fae87fd28bcf87e` |
+| 交易确认 | https://paas.huifu.com/partners/api/doc/smzf/api_jyqr.md | `delay-confirm.md` | `9fbf6c70cb9be4422fb2b0a724588c7bda363f6a8bb779cba54435a5e86c82fc` |
+| 交易确认查询 | https://paas.huifu.com/partners/api/doc/smzf/api_jyqrcx.md | `delay-confirm-query.md` | `da52b2f0ad6afe88d1487ee5235e6dc31e4411f4e1f3aec1b2de4c3387415526` |
+| 交易确认退款 | https://paas.huifu.com/partners/api/doc/smzf/api_jyqrtk.md | `delay-confirm-refund.md` | `e740c12c8884f7f5ec242f0e1a053530f37ce2cd24418924b3f9f9a819c7f9ad` |
+| 交易确认退款查询 | https://paas.huifu.com/navigator/ossApi/api_jyqrtkcq.json | `delay-confirm-refund-query.md` | `65fa17cd59e7d18637ddb920e3e74a337d91e49821c4f96ad184538e9f9aae46` |
+| 账户余额信息查询 | https://paas.huifu.com/partners/api/doc/jyjs/api_jyjs_yuexxcx.md | `account-balance-query.md` | `4684913f1338f44423f025d72a73b7012e477dd48ec82b3a9216340571f6d39e` |
+| 账务流水查询 | https://paas.huifu.com/partners/api/doc/yuer/api_acctlscx.md | `account-ledger-query.md` | `46295c022efcc9464472d396cfe4c2befd74ba634a8c6f02e183fe1f99dd30c2` |
+| 账务流水汇总结果查询 | https://paas.huifu.com/partners/api/doc/zhy/api_acct_log_summary.md | `account-ledger-summary-query.md` | `d70d62be96cb1c20ba9be2355a57c8890468e8eab20e8adf2a81933e684e771a` |
 
 ## 使用规则
 

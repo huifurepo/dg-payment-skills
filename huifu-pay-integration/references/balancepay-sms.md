@@ -1,6 +1,6 @@
 # 余额支付发送短信验证码
 
-官方来源：<https://paas.huifu.com/partners/api/doc/yuer/api_smscode.md>；快照 `2026-10-10`，官网更新时间 `2025-07-18`。
+官方来源：<https://paas.huifu.com/partners/api/doc/yuer/api_smscode.md>；快照 `2026-10-25`，官网更新时间 `2025-07-18`。
 
 接口：`POST /v2/trade/sms/verifycode/send`。用于已开通余额支付功能、操作前需要短信核验的商户；完整14个字段路径见 `payment-complete-field-catalog.md` 的“余额支付发送短信验证码”。
 

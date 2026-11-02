@@ -164,3 +164,7 @@
 官方新增 `request.data.alipay_data.fq_mer_discount_flag`：String(1)，N，商户贴息标记，Y 为商家全部贴息，P 为商家部分贴息；选 P 时必须在 `ali_business_params` 传入支付宝约定的活动参数。编码位置和完整说明见 `payment-complete-field-catalog.md`，位于一层 String(JSON Object) 的 `alipay_data` 内；不传为非商户贴息（默认），不能放进 `hosting_data`。
 
 2026-10-10官网明确 `request.data.dy_data.coupon_info:String(1024)`，保留JSON格式优惠信息；不把与抖音协商的可选字段设为无条件必填。`dy_data.h5_info`、平台标识及银联收款/服务商信息说明同步完整目录。
+
+## 2026-10-25 合单请求
+
+新增 `request.data.merge_pay_flag:String(1) N` 与 `request.data.sub_orders_request:String(JSON Array) N`，以及子单金额、商户、请求流水、账户、延时标志和备注。必须读取 `hostingpay-preorder-h5-pc.md` 本轮增量与 `payment-complete-field-catalog.md` 对应完整父路径；子单是逐层编码的字符串数组，不能合并为顶层主订单字段。

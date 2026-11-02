@@ -24,11 +24,13 @@ REFERENCE_PATTERN = re.compile(r"`([^`/]+\.md)`")
 
 def main() -> int:
     errors: list[str] = []
+    additions = json.loads((ROOT / "tests/regression/interface-expansion.json").read_text(encoding="utf-8"))
     for suite, reference_dir in SUITES.items():
         available = {path.name for path in reference_dir.glob("*.md")}
         cases = json.loads(
             (ROOT / f"tests/regression/{suite}.json").read_text(encoding="utf-8")
         )
+        cases.extend(case for case in additions if case["suite"] == suite)
         for case in cases:
             required = set(REFERENCE_PATTERN.findall(case["expected"]))
             missing = sorted(required - available)

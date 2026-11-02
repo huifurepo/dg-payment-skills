@@ -1,9 +1,13 @@
 {
   "schema_version": 1,
   "skill": "huifu-merchant-onboarding",
-  "reference_count": 68,
+  "reference_count": 72,
   "references": [
+    "account-subaccount-modify.md",
+    "account-subaccount-open.md",
     "copilot-troubleshooting-playbooks.md",
+    "merchant-account-complete-field-catalog.md",
+    "merchant-account-sdk-matrix.md",
     "merchant-onboarding-alipay-realname-query.md",
     "merchant-onboarding-alipay-realname.md",
     "merchant-onboarding-application-status-query.md",

@@ -1,6 +1,6 @@
 # 余额支付
 
-官方来源：<https://paas.huifu.com/partners/api/doc/yuer/api_acctpayzf.md>；本地快照 `2026-10-10`，官网更新时间 `2026-09-23`。
+官方来源：<https://paas.huifu.com/partners/api/doc/yuer/api_acctpayzf.md>；本地快照 `2026-10-25`，官网更新时间 `2026-09-23`。
 
 接口：`POST /v2/trade/acctpayment/pay`。适用于已开通余额支付功能的商户使用预存金额交易。完整90个字段路径及请求/响应/通知方向见 `payment-complete-field-catalog.md` 的“余额支付”。代码联读 `balancepay-field-contracts.md` 和对应语言 adapter。
 

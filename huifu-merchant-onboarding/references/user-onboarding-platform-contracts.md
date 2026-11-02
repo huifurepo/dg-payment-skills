@@ -99,7 +99,7 @@
 
 序列化和解码必须逐层按表执行，不能把所有 `String` 都当普通文本，也不能把所有带子表的字段都改成原生对象。
 
-## 2026-09-22 新增字段的官方 wire 定义
+## 用户等级与资金配置的当前 wire 定义（10-25复核）
 
 以下是本轮正式字段表新增合同，不追溯冒充 `2026-08-10` 接入方确认。
 
@@ -108,10 +108,12 @@
 | 业务入驻及修改 `request.data.balance_pay_config` | String(JSON Object) |
 | 业务入驻及修改 `request.data.account_recharge_config` | String(JSON Object) |
 | 业务入驻及修改 `request.data.delay_pay_config` | String(JSON Object) |
-| 业务入驻及修改 `async.data.account_info` | 解码异步 data 后的原生 Object |
+| 业务入驻及修改 `async.data.account_info` | 当前String(JSON Object)，解码异步data后再解码该字段；A/U时返回 |
 | 详情 `response.data.balance_pay_config` | 原生 Object |
 | 详情 `response.data.account_recharge_config` | 原生 Object |
 | 详情 `response.data.delay_pay_config` | 原生 Object |
 | 详情 `response.data.account_info` | 原生 Object |
 
-四组查询对象不得套用请求 String(JSON) 编码。余额/充值收费两字段 `Y` 与“至少填写一个”的说明仍冲突；按 `shared-overview.md` 的开发提醒列出对应业务入驻/修改官方文档，建议核对或咨询汇付官方、汇付开发者交流沟通群。继续 DTO/SDK 开发，争议必填策略用 TODO/配置隔离，不猜互斥或同时必填，也不把取得答复作为开发前提。请求 `account_recharge_config` 仅有正式声明的两个子字段，不能倒灌查询响应的 `switch_state/transfer_flag_no/transfer_flag_name`。
+四组查询对象不得套用请求 String(JSON) 编码。余额/充值收费两字段 `Y` 与“至少填写一个”的说明仍冲突；按 `shared-overview.md` 的开发提醒列出对应业务入驻/修改官方文档，建议核对或咨询汇付官方、汇付开发者交流沟通群。继续 DTO/SDK 开发，争议必填策略用 TODO/配置隔离，不猜互斥或同时必填，也不把取得答复作为开发前提。当前请求account_recharge_config除两项费率外新增out_fee_flag、out_fee_huifu_id、out_fee_acct_id，必须按本接口条件填写；仍不能倒灌查询响应的switch_state/transfer_flag_no/transfer_flag_name。
+
+10-25通知分派使用E审核、A业务、U升级、Z电子账户。audit_info在A/E时返回；account_info在A/U时返回并使用String(JSON Object)。新增协议列表为String(JSON Array)。消息业务类型变化不改变已有公共原文验签、HTTP200与RECV_ORD_ID_应答合同。

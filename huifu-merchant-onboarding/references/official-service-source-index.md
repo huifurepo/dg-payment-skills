@@ -10,7 +10,7 @@
 | 个人商户进件 | https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_grshjbxxrz_kyc.md | `09862a3923b114abcf7dbc9e7545798481abc37f88b6eb64911ce7d53f9f5437` |
 | 商户业务开通 | https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_kyc.md | `9c3f2262c295489abc5ce32bf123128cfd7376c4d5e35399c5083e39ff206c5c` |
 | 图片上传 | https://paas.huifu.com/navigator/ossApi/api_shjj_shtpsc.json | `2fcb84dd1cfe0260cfa3d49b79174d2e7b8a287cdf860faa62011bfc1e8472dd` |
-| 商户详情查询 | https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shxxxxcx_kyc.md | `df6014a1fc008bd81dff8de5708432010c60b002d34d0d9602a67145d1ae8806` |
+| 商户详情查询 | https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shxxxxcx_kyc.md | `f8fb851eddda3219a5e4feb037b81cc5eed4697903644489e7cccde4fa72bdde` |
 | 申请状态查询 | https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_sqdztcx.md | `8c39b88e199d2c877267994172fa09de5130c47d38eb5f01147d2d1520c2bef4` |
 | 商户业务开通修改 | https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywktxg_kyc.md | `9e70c875accaecb0d25114f38ab80ee6cbfcc6c0a207c0e0176614ff0d7925bb` |
 | 商户基本信息修改 | https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shjbxxxg_kyc.md | `f2146bc553eb4b1dc8c88d4487eb1b5c721468d6a8eec5be7d0ce9f086db4d6c` |
@@ -20,7 +20,7 @@
 | 商户多费率配置 | https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflpz.md | `e4b23cb9bfaf59e9a88448a890f539d7ee9cbf7002d763a7d078294053aa7473` |
 | 商户多费率配置查询 | https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflcx.md | `e2c0f53e77a1ef00827cc8be28ac688c068e5c8a4dc9f741845b841dcd16881a` |
 
-核验快照：`2026-10-08`。十三接口相对 `2026-09-22` 有两页原文字节变化，完整路径新增0、删除1、同路径属性变化3，总计2,209个字段路径（请求1,276、响应753、异步180）。图片示例顶层file移除、file_url改C及两项switch_state改Y；历史快照保持不可变。
+核验快照：`2026-10-25`。十三接口相对上一活动快照有1页原文字节变化：商户详情新增5个业务开通状态字段，完整路径新增5、删除0、同路径属性变化0，总计2,214个字段路径（请求1,276、响应758、异步180）。历史快照保持不可变。
 
 辅助公共资料（不计入上述13个接口快照）：[基础参数汇总](https://paas.huifu.com/partners/api/doc/csfl/api_csfl.md)、[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)、[名词解释](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_mcjs.md)。它们用于公共编码、返回码全集和术语释义，不能覆盖具体接口页的字段类型、长度、必填性、层级或通知结构。
 
@@ -31,3 +31,12 @@
 3. 字段说明引用外部编码、XLSX、协议或第三方资料时，读取 `merchant-onboarding-external-resources.md`。
 4. 未读取外部正文时明确要求人工核验，不根据文件名猜规则。
 5. 刷新来源时必须记录 URL、获取时间、SHA 和字段 delta。
+
+## 子账户配置来源
+
+当前新增快照：`2026-10-25`；两接口130条路径，读取 `merchant-account-complete-field-catalog.md` 与 `merchant-account-sdk-matrix.md`。
+
+| 接口 | 官方地址 | SHA-256 |
+| --- | --- | --- |
+| 子账户开通配置 | https://paas.huifu.com/partners/api/doc/zhgl/api_zhgl_zhpz_kyc.md | `b496d1493ed0615115e8972272f0a717289a5feab6206080a62c83615ea9eb8b` |
+| 修改子账户配置 | https://paas.huifu.com/partners/api/doc/zhgl/api_zhgl_xgzh_kyc.md | `6c041ff7af41573a97463077062725c6a0ca2815b0d64b64fea6c32e21bd3c05` |

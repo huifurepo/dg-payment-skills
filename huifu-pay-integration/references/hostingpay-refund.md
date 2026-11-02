@@ -303,3 +303,25 @@
 - 需要看退款查询完整返回字段：读 `references/hostingpay-refund-query.md`
 - 还没确认原交易成功：先读 `references/hostingpay-query.md`
 - 前端回调配合问题：再读 `references/checkout-js.md`
+
+## 2026-10-25 官网更新同步
+
+本地当前来源SHA-256：`fe45dca45e8fce7a5caa19eb54196c51715546675abbaa1081984eb768e332cb`。
+
+本轮新增合单/子单请求、查询或通知字段；同名父容器按本接口和方向建模。官网通知中的`sub_trams_amt`拼写原样保留，不更改为其他字段名；split_fee_details的Object/String/数组语义也不得跨接口外推。完整嵌套类型、长度、条件和解码路径见 `payment-complete-field-catalog.md` 对应接口。
+
+| 新增完整合同路径 | 中文名 | 类型 | 长度 | 必填 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| `request.data.sub_orders_request[]` | 子单退款信息列表 | `String` | `—` | `N` | 条件与完整原文见对应完整目录 |
+| `request.data.sub_orders_request[].acct_split_bunch` | 分账对象 | `String` | `2048` | `N` | 条件与完整原文见对应完整目录 |
+| `request.data.sub_orders_request[].acct_split_bunch.acct_infos` | 分账信息列表 | `String` | `2048` | `N` | 条件与完整原文见对应完整目录 |
+| `request.data.sub_orders_request[].acct_split_bunch.acct_infos.div_amt` | 分账金额 | `String` | `14` | `Y` | 条件与完整原文见对应完整目录 |
+| `request.data.sub_orders_request[].acct_split_bunch.acct_infos.huifu_id` | 分账接收方ID | `String` | `32` | `Y` | 条件与完整原文见对应完整目录 |
+| `request.data.sub_orders_request[].org_sub_hf_seq_id` | 原子单交易全局流水号 | `String` | `128` | `N` | 条件与完整原文见对应完整目录 |
+| `request.data.sub_orders_request[].org_sub_req_date` | 原子单交易请求日期 | `String` | `8` | `Y` | 条件与完整原文见对应完整目录 |
+| `request.data.sub_orders_request[].org_sub_req_seq_id` | 原子单交易请求流水号 | `String` | `128` | `N` | 条件与完整原文见对应完整目录 |
+| `request.data.sub_orders_request[].sub_huifu_id` | 子单商户号 | `String` | `32` | `Y` | 条件与完整原文见对应完整目录 |
+| `request.data.sub_orders_request[].sub_ord_amt` | 子单申请退款金额 | `String` | `14` | `Y` | 条件与完整原文见对应完整目录 |
+| `request.data.sub_orders_request[].sub_remark` | 子单备注 | `String` | `84` | `N` | 条件与完整原文见对应完整目录 |
+| `request.data.sub_orders_request[].sub_req_date` | 子单请求日期 | `String` | `8` | `Y` | 条件与完整原文见对应完整目录 |
+| `request.data.sub_orders_request[].sub_req_seq_id` | 子单请求流水号 | `String` | `128` | `Y` | 条件与完整原文见对应完整目录 |

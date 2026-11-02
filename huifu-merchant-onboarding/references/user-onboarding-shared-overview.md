@@ -36,7 +36,7 @@
 
 申请状态查询另有 `apply_status=Y/P/N/F`，其中 `F` 是系统处理失败。不同层次和接口的同字母不能合并为一个通用状态。
 
-`2026-09-22` 新增用户等级 `account_level=LV1/LV2/LV3`，LV3 仅企业。业务入驻及修改的 `balance_pay_config/account_recharge_config/delay_pay_config` 为 String(JSON Object)；详情同名三组和 `account_info` 为原生 Object，异步 `account_info` 也为 Object。等级验证 `trans_status` 是独立第四层状态，不能替代审核或支付终态。具体材料、签约条件和费用冲突读取 `user-onboarding-field-contracts.md`；本轮九接口共611路径。
+用户等级account_level=LV1/LV2/LV3，LV3仅企业。业务入驻及修改的balance_pay_config/account_recharge_config/delay_pay_config为String(JSON Object)；详情同名三组和account_info为原生Object，当前异步account_info已改为String(JSON Object)。等级验证trans_status是独立状态，不能替代审核或支付终态。具体材料、签约条件和费用冲突读取 `user-onboarding-field-contracts.md`；本轮九接口共644路径。
 
 ## 已知文档冲突
 
@@ -61,8 +61,8 @@
 - 用户业务入驻修改的 `elec_receipt_config`、`elec_card_list` 与 `sign_user_info` 已修正为 String(JSON)；同步 `resp_business` 为 Object/jsonArray，异步 `audit_info.resp_business` 为 String/jsonArray。`delay_flag` 与 `async_return_url` 示例也已修正。
 - 用户列表查询的 `user_list_info_list` 当前正式类型为 String/jsonArray格式，子项 `huifu_id/upper_huifu_id` 长度均为18；请求与成功响应示例均包含正式必填的 `sign`，但列表值的原生数组示例与正式 String 类型仍冲突。
 
-官网正式参数表当前有5处空说明，包括业务入驻修改 `async.data`、新增 `account_info` 及充值收款账户字段；已没有长度为空的标量叶字段。机械目录继续对空说明及结构父节点的空长度保留 `—`。原先没有可执行触发条件的两个 `C` 字段已由接入方裁决：所有接受的卡类型要求 `card_name`，e账户卡 `mp` 在 `card_type=1` 时要求、`card_type=0` 时不要求。完整清单读取 `user-onboarding-field-contracts.md`。
+官网正式参数表当前有4处空说明；account_info父对象已新增JSON与通知类型说明。已没有长度为空的标量叶字段。机械目录继续对空说明及结构父节点的空长度保留`—`。原先没有可执行触发条件的两个C字段已由接入方裁决：所有接受的卡类型要求card_name，e账户卡mp在card_type=1时要求、card_type=0时不要求。完整清单读取 `user-onboarding-field-contracts.md`。
 
-参数表外共有7个字段注记绑定：开户企业 `legal_name/legal_cert_no` 的法人实名认证、个人 `file_list[]` 的身份证实名认证，以及企业修改四个法人证件类型/有效期字段的同步填写要求。个人修改页没有新增参数表外字段注记。完整目录必须继续携带这7项注记。
+参数表外当前有9个字段注记绑定：保留既有7项实名认证/法人证件同步填写注记，并新增企业与个人开户request.sys_id的上下级关系说明。完整目录分别绑定请求信封与data字段，不能只按叶名匹配。
 
 原始合同、示例冲突和接入方裁决必须分层保留。未被裁决的冲突继续标记 `[需要官方确认]`；不得把接入决策伪装成官网字段表原文。

@@ -1,6 +1,6 @@
 # 手续费试算
 
-官方来源：<https://paas.huifu.com/partners/api/doc/sxf/api_sxf_sxfss.md>；快照 `2026-10-10`，官网更新时间 `2024-09-01`。
+官方来源：<https://paas.huifu.com/partners/api/doc/sxf/api_sxf_sxfss.md>；快照 `2026-10-25`，官网更新时间 `2024-09-01`。
 
 接口：`POST /v2/trade/feecalc`；完整27个字段路径见 `payment-complete-field-catalog.md` 的“手续费试算”。本接口是通用支付辅助能力，不只服务余额支付，也不授权调用本 Skill 未覆盖的实际资金接口。
 

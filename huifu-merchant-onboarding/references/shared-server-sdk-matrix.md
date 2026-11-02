@@ -14,7 +14,7 @@
 
 ## 版本基线
 
-本轮 SDK 核验日期为 `2026-10-08`，由官方固定Git提交及PyPI制品恢复并锁定源码；API 来源为 `2026-10-08`。Java 读取 SDK 子模块 pom，PHP 读取 `SDK_VERSION`，Python 读取 `DGClient.__version__`。Git源码核验不等于对应Maven/Composer制品已发布；Python2.0.28已核验PyPI制品。源码证据不代表真实网关联调通过。商户进件 skill 保持 1.0.5。
+本轮 SDK 核验日期为 `2026-10-08`，由官方固定Git提交及PyPI制品恢复并锁定源码；API 来源为 `2026-10-25`。Java 读取 SDK 子模块 pom，PHP 读取 `SDK_VERSION`，Python 读取 `DGClient.__version__`。Git源码核验不等于对应Maven/Composer制品已发布；Python2.0.28已核验PyPI制品。源码证据不代表真实网关联调通过。商户进件 skill 为 1.1.0。
 
 Python 当前 SDK 为 `2.0.28`，源码来自官方 PyPI 2.0.28 制品，版本声明为 `dg_client.py` 中的 `DGClient.__version__`。下方构造器、请求头、路由和图片边界已按该源码复核；不代表真实网关联调成功。实际项目使用其他版本时核对对应源码，将未明确差异留 TODO 并继续明确部分；疑问可咨询汇付官方或汇付开发者交流沟通群，不新增开发硬停。
 

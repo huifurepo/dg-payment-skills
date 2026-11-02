@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "refresh_id": "api-refresh-onboarding-online-review-2026-10-25",
+  "requested_at": "2026-10-25",
+  "retrieved_at": "2026-10-26T09:50:13+08:00",
+  "api_source_date": "2026-10-25",
+  "sdk_reviewed_at": "2026-10-08",
+  "sdk_versions": {
+    "java": "3.0.41",
+    "lightning": "1.0.6",
+    "php": "2.0.31",
+    "python": "2.0.28"
+  },
+  "python_sdk": {
+    "target_version": "2.0.28",
+    "verified_source_version": "2.0.28",
+    "target_source_verified": true
+  },
+  "version_state": {
+    "reason": "User-confirmed existing-document synchronization; additional interfaces have independent source evidence.",
+    "huifu-merchant-onboarding": "1.1.0",
+    "huifu-pay-integration": "1.5.0"
+  },
+  "previous_refresh": {
+    "path": "maintainer-contracts/api-refresh-onboarding-1.0.5-2026-10-08.json",
+    "sha256": "bbf5b8813ba051fd3c408625c7375ce4ed85f1457ab467047128e6683659d672",
+    "refresh_id": "api-refresh-onboarding-1.0.5-2026-10-08"
+  },
+  "source_locks": {
+    "merchant_onboarding_current": {
+      "path": "maintainer-contracts/merchant-onboarding-source-lock-2026-10-25.json",
+      "sha256": "b8e66c8985b00b2f883d800db9bf5e56619ae9667fbdc548db44cceaa5394eaa"
+    },
+    "user_onboarding_current": {
+      "path": "maintainer-contracts/user-onboarding-source-lock-2026-10-25.json",
+      "sha256": "8296f75ae1cdb3190177b17e85350f6a04ab4e0021fdc1289a43084c42619de7"
+    },
+    "onboarding_extension_current": {
+      "path": "maintainer-contracts/onboarding-extension-source-lock-2026-10-25.json",
+      "sha256": "9232b0b05651bf0c059980516e48e6a942eb82c984a9ca344c1078b915c6c9c7"
+    },
+    "onboarding_1_1_0": {
+      "path": "maintainer-contracts/merchant-onboarding-1.1.0-source-lock-2026-10-25.json",
+      "sha256": "52d7deae584ac79795b22a8b56c3712ca0c7227a8eadc01a311b52facbb373cf"
+    },
+    "local_sdk_current": {
+      "path": "maintainer-contracts/local-sdk-source-lock-2026-10-08.json",
+      "sha256": "10e15fe7ec03e58ff2ae18e722204e8356e16b7ffd244e62b2919589f7d1b310"
+    }
+  },
+  "catalogs": {
+    "merchant": {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
+      "sha256": "017781a5685214338d2c1540a5ebc050cfe83b06dad69a6b03920b694c0a0ea6",
+      "field_paths": 2214
+    },
+    "user": {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md",
+      "sha256": "4284ddee49c17c88561bee0f5d76a3b40b3714e4028587e4a0a6fb6f64178e42",
+      "field_paths": 644
+    },
+    "extension": {
+      "path": "huifu-merchant-onboarding/references/onboarding-extension-complete-field-catalog.md",
+      "sha256": "d8260de740d3330487adace1f24a7614c4bb435c7fe8907a1949caf59059bba5",
+      "field_paths": 546
+    }
+  },
+  "scope": [
+    "13 merchant, 9 user, 12 extension official APIs",
+    "Reuse independently dated local SDK evidence: java 3.0.41, lightning 1.0.6, php 2.0.31, python 2.0.28"
+  ],
+  "field_delta": {
+    "merchant_paths_added": 5,
+    "merchant_paths_removed": 0,
+    "merchant_paths_changed": 0,
+    "merchant_catalog_total": 2214,
+    "user_paths_added": 33,
+    "user_paths_removed": 0,
+    "user_paths_changed": 8,
+    "user_catalog_total": 644,
+    "extension_paths_added": 0,
+    "extension_paths_removed": 0,
+    "extension_paths_changed": 0,
+    "extension_catalog_total": 546,
+    "combined_total": 3404
+  },
+  "cross_skill_review": {
+    "skill": "huifu-pay-integration",
+    "source_lock": "maintainer-contracts/payment-source-lock-2026-10-25.json",
+    "source_key": "split-detail-query",
+    "online_sha256": "dcab5eb128a7987742ea339631add74ad771227d3ce557c1154d6d6a27266270",
+    "locked_sha256": "dcab5eb128a7987742ea339631add74ad771227d3ce557c1154d6d6a27266270",
+    "changed": false,
+    "version_action": "keep huifu-pay-integration at 1.5.0",
+    "evidence_retrieved_at": "2026-10-08",
+    "evidence_scope": "Carried historical ownership/source comparison, not a new online payment retrieval."
+  },
+  "preserved_boundaries": [
+    "Historical source locks, candidate records, source bytes and frozen assets remain unchanged",
+    "Current Skill versions remain onboarding 1.1.0 and payment 1.5.0",
+    "SDK evidence retains its own verification date; an API refresh does not rerun SDK verification",
+    "Unclear fields and known TLS findings remain non-blocking developer advisories",
+    "No SDK mutation, live business request, real-model run, commit or publication is implied"
+  ],
+  "release_rule": "All 3,404 fields, immutable sources, SDK evidence, regressions and package gates must pass before publishing huifu-merchant-onboarding 1.1.0."
+}

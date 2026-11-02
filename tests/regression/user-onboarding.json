@@ -14,19 +14,19 @@
   {
     "id": 203,
     "prompt": "用户业务入驻要配置结算、取现和中信 e 账户，并接收回调。请用 $huifu-merchant-onboarding 给出状态和通知边界。",
-    "expected": "必须读取 `user-onboarding-business-open.md`、`user-onboarding-field-contracts.md` 和 `user-onboarding-platform-contracts.md`；使用 POST /v2/user/busi/open，说明136个节点、请求96、同步响应11、通知29；upper_huifu_id 必填；个人用户只允许 card_type=1，企业按条件允许0/1/2/4，所有接受类型都要求 card_name；D1 要求 fixed_ratio/constant_amt 两位小数；elec_card_list 为 String(JSON Array)，elec_receipt_config/sign_user_info 为 String(JSON Object)，逐层各编码一次；保留 is_priority_receipt 的条件必填与默认文案冲突；成功响应 data 必有并返回 apply_no，但不代表审核通过；接口通知使用配置类 data，原始 data 免排序 RSA 验签，成功返回HTTP 200与RECV_ORD_ID_+req_seq_id，5秒超时且超时/500-599默认重试3次并做状态感知幂等；不得混用控台Webhook；异步 huifu_id 按汇付客户号映射为用户号；审核Y/P/N、配置S/F、银行S/F分层。 account_level为LV1/LV2/LV3且LV3仅企业；balance_pay_config/account_recharge_config/delay_pay_config请求各为String(JSON Object)，异步account_info为Object；余额收费两字段Y与至少一个的说明冲突需确认，不得将请求out_fee_flag未声明枚举或查询专有字段补入。 逐项标明未确认字段或协议的完整路径与疑点，附对应官方文档；不清楚时可咨询汇付官方或汇付开发者交流沟通群。继续已明确部分的开发，未知项隔离为TODO/待填配置，不要求官方答复作为整体开发前提，不猜默认值、ACK或签验协议。",
+    "expected": "必须读取 `user-onboarding-business-open.md`、`user-onboarding-field-contracts.md` 和 `user-onboarding-platform-contracts.md`；使用 POST /v2/user/busi/open，说明149个节点、请求102、同步响应11、通知36；upper_huifu_id 必填；个人用户只允许 card_type=1，企业按条件允许0/1/2/4，所有接受类型都要求 card_name；D1 要求 fixed_ratio/constant_amt 两位小数；elec_card_list 为 String(JSON Array)，elec_receipt_config/sign_user_info 为 String(JSON Object)，逐层各编码一次；保留 is_priority_receipt 的条件必填与默认文案冲突；成功响应 data 必有并返回 apply_no，但不代表审核通过；接口通知使用配置类 data，原始 data 免排序 RSA 验签，成功返回HTTP 200与RECV_ORD_ID_+req_seq_id，5秒超时且超时/500-599默认重试3次并做状态感知幂等；不得混用控台Webhook；异步 huifu_id 按汇付客户号映射为用户号；审核Y/P/N、配置S/F、银行S/F分层。 account_level为LV1/LV2/LV3且LV3仅企业；balance_pay_config/account_recharge_config/delay_pay_config请求各为String(JSON Object)，异步account_info为Object；余额收费两字段Y与至少一个的说明冲突需确认，不得将请求out_fee_flag未声明枚举或查询专有字段补入。 逐项标明未确认字段或协议的完整路径与疑点，附对应官方文档；不清楚时可咨询汇付官方或汇付开发者交流沟通群。继续已明确部分的开发，未知项隔离为TODO/待填配置，不要求官方答复作为整体开发前提，不猜默认值、ACK或签验协议。",
     "suite": "user-onboarding"
   },
   {
     "id": 204,
     "prompt": "我想查询所有用户开户申请状态，可以直接调用用户申请单状态查询吗？",
-    "expected": "必须读取 `user-onboarding-application-status-query.md` 和 `user-onboarding-platform-contracts.md`；使用 POST /v2/user/apply/query，说明15个节点、请求8、同步响应7、无通知；该接口只查询用户非同名对公结算卡审核；请求区分 req_seq_id 与 apply_no，req_seq_id 在同一商户号当天唯一且不得外推；官网外层 data 及内部 apply_reason/apply_status/huifu_id 必填列均为N，但接入方确认成功响应data必有且三个字段在Y/P/N/F四种状态都返回；异常响应仍允许data缺失。",
+    "expected": "必须读取 `user-onboarding-application-status-query.md` 和 `user-onboarding-platform-contracts.md`；使用 POST /v2/user/apply/query，说明21个节点、请求8、同步响应13、无通知；该接口只查询用户非同名对公结算卡审核；请求区分 req_seq_id 与 apply_no，req_seq_id 在同一商户号当天唯一且不得外推；官网外层 data 及内部 apply_reason/apply_status/huifu_id 必填列均为N，但接入方确认成功响应data必有且三个字段在Y/P/N/F四种状态都返回；异常响应仍允许data缺失。",
     "suite": "user-onboarding"
   },
   {
     "id": 205,
     "prompt": "用户信息查询的 req_seq_id 怎么校验，响应应该解几层 JSON？file_list、elec_card_list 和 resp_code 有哪些官网冲突？",
-    "expected": "必须读取 `user-onboarding-detail-query.md`、`user-onboarding-complete-field-catalog.md` 和 `user-onboarding-platform-contracts.md`；使用 POST /v2/user/basicdata/query，说明165个节点、请求7、同步响应158、无通知；成功response.data必有，异常响应可缺；ent_base_info/indv_base_info/card_info/elec_acct_config/elec_receipt_config/sign_user_info 是 String(JSON Object)，三个配置列表是 String(JSON Array)；两组file_list与elec_card_list都在各自父对象内再解一层 String(JSON Array)，mp在card_type=1时要求、0时不要求；branch_code读取当前正式链接；resp_code已为8位，out_settle_acct_type示例已为01，D1工作日字段已统一为生效；只保留地区示例不可作为默认编码的边界，不复用商户DTO。 新balance_pay_config/account_recharge_config/delay_pay_config/account_info均为原生Object，与请求String(JSON)不同；账户验证状态独立，face_url为不透明敏感值，不臆造未提供的转账验证接口。",
+    "expected": "必须读取 `user-onboarding-detail-query.md`、`user-onboarding-complete-field-catalog.md` 和 `user-onboarding-platform-contracts.md`；使用 POST /v2/user/basicdata/query，说明166个节点、请求7、同步响应159、无通知；成功response.data必有，异常响应可缺；ent_base_info/indv_base_info/card_info/elec_acct_config/elec_receipt_config/sign_user_info 是 String(JSON Object)，三个配置列表是 String(JSON Array)；两组file_list与elec_card_list都在各自父对象内再解一层 String(JSON Array)，mp在card_type=1时要求、0时不要求；branch_code读取当前正式链接；resp_code已为8位，out_settle_acct_type示例已为01，D1工作日字段已统一为生效；只保留地区示例不可作为默认编码的边界，不复用商户DTO。 新balance_pay_config/account_recharge_config/delay_pay_config/account_info均为原生Object，与请求String(JSON)不同；账户验证状态独立，face_url为不透明敏感值，不臆造未提供的转账验证接口。",
     "suite": "user-onboarding"
   },
   {
@@ -50,13 +50,13 @@
   {
     "id": 209,
     "prompt": "请核对用户开户、入驻、查询和四个新增接口的九接口机械字段目录统计，不能只给总数。",
-    "expected": "必须读取 `user-onboarding-complete-field-catalog.md`、`user-onboarding-field-contracts.md` 和 `user-onboarding-platform-contracts.md`；逐项给出43=36+7、34=27+7、136=96+11+29、15=8+7、165=7+158、37=32+5、26=21+5、138=98+11+29、17=8+9；合计611=333请求+220同步响应+58通知，并说明40根表、53扩展表、73父节点、538叶节点；官网九接口外层data必填列均为N且仅业务入驻修改仍为String；新增account_info/account_recharge_config子字段存在空说明，目录保留原文，不猜含义；七个表外注记绑定必须保留。 逐项标明未确认字段或协议的完整路径与疑点，附对应官方文档；不清楚时可咨询汇付官方或汇付开发者交流沟通群。继续已明确部分的开发，未知项隔离为TODO/待填配置，不要求官方答复作为整体开发前提，不猜默认值、ACK或签验协议。",
+    "expected": "必须读取 `user-onboarding-complete-field-catalog.md`、`user-onboarding-field-contracts.md` 和 `user-onboarding-platform-contracts.md`；逐项给出43=36+7、34=27+7、149=102+11+36、21=8+13、166=7+159、37=32+5、26=21+5、151=104+11+36、17=8+9；合计644=345请求+227同步响应+72通知，并说明40根表、58扩展表、78父节点、566叶节点；官网九接口外层data必填列均为N且仅业务入驻修改仍为String；充值账户子字段等4条仍为空说明，account_info父对象说明已补齐，目录保留原文，不猜含义；九个表外注记绑定必须保留。 逐项标明未确认字段或协议的完整路径与疑点，附对应官方文档；不清楚时可咨询汇付官方或汇付开发者交流沟通群。继续已明确部分的开发，未知项隔离为TODO/待填配置，不要求官方答复作为整体开发前提，不猜默认值、ACK或签验协议。",
     "suite": "user-onboarding"
   },
   {
     "id": 210,
     "prompt": "本次只使用商户进件 Skill 的用户开户能力，skill_source 默认值是什么？哪些响应字段不能出现在日志和前端？",
-    "expected": "必须读取 `shared-request-header-policy.md` 和 `user-onboarding-shared-credential-boundary.md`；仅本 Skill 参与时默认 skill_source 为 hfms/1.0.5，显式合同值原样透传；login_password、证件号、银行卡号、手机号、地址、邮箱、token_no 和文件 ID 均须白名单提取与脱敏，不得写日志、前端或回答示例。",
+    "expected": "必须读取 `shared-request-header-policy.md` 和 `user-onboarding-shared-credential-boundary.md`；仅本 Skill 参与时默认 skill_source 为 hfms/1.1.0，显式合同值原样透传；login_password、证件号、银行卡号、手机号、地址、邮箱、token_no 和文件 ID 均须白名单提取与脱敏，不得写日志、前端或回答示例。",
     "suite": "user-onboarding"
   },
   {
@@ -80,7 +80,7 @@
   {
     "id": 214,
     "prompt": "用 Java SDK 修改用户结算、e账户和电子回单配置，可以直接照官网请求示例生成吗？",
-    "expected": "必须读取 `user-onboarding-business-modify.md`、`user-onboarding-complete-field-catalog.md`、`user-onboarding-field-contracts.md` 和 `user-onboarding-shared-server-sdk-matrix.md`；使用 POST /v2/user/busi/modify 和 V2UserBusiModifyRequest；说明138节点=请求98+同步响应11+异步29；说明请求示例是合法JSON且只有一个file_list，但示例不构成默认值或正式合同；settle_config_list/cash_config/file_list/elec_card_list为String(JSON Array)，card_info/elec_acct_config/elec_receipt_config/sign_user_info为String(JSON Object)，逐层各编码一次；扩展拒绝覆盖req_seq_id/req_date/huifu_id/sign_user_info；保留is_priority_receipt条件必填与空值默认文案矛盾、同步response.data冲突；异步data/resp_business/huifu_id及delay_flag/async_return_url按当前正式合同处理；异步仍需验签、正确回包、重试和状态感知幂等。 新account_level等级条件、balance_pay_config/account_recharge_config/delay_pay_config String(JSON)和async.data.account_info:Object必须按完整路径区分；余额收费Y与至少一项冲突不得擅自裁决。 逐项标明未确认字段或协议的完整路径与疑点，附对应官方文档；不清楚时可咨询汇付官方或汇付开发者交流沟通群。继续已明确部分的开发，未知项隔离为TODO/待填配置，不要求官方答复作为整体开发前提，不猜默认值、ACK或签验协议。",
+    "expected": "必须读取 `user-onboarding-business-modify.md`、`user-onboarding-complete-field-catalog.md`、`user-onboarding-field-contracts.md` 和 `user-onboarding-shared-server-sdk-matrix.md`；使用 POST /v2/user/busi/modify 和 V2UserBusiModifyRequest；说明151节点=请求104+同步响应11+异步36；说明请求示例是合法JSON且只有一个file_list，但示例不构成默认值或正式合同；settle_config_list/cash_config/file_list/elec_card_list为String(JSON Array)，card_info/elec_acct_config/elec_receipt_config/sign_user_info为String(JSON Object)，逐层各编码一次；扩展拒绝覆盖req_seq_id/req_date/huifu_id/sign_user_info；保留is_priority_receipt条件必填与空值默认文案矛盾、同步response.data冲突；异步data/resp_business/huifu_id及delay_flag/async_return_url按当前正式合同处理；异步仍需验签、正确回包、重试和状态感知幂等。 新account_level等级条件、balance_pay_config/account_recharge_config/delay_pay_config String(JSON)和async.data.account_info:Object必须按完整路径区分；余额收费Y与至少一项冲突不得擅自裁决。 逐项标明未确认字段或协议的完整路径与疑点，附对应官方文档；不清楚时可咨询汇付官方或汇付开发者交流沟通群。继续已明确部分的开发，未知项隔离为TODO/待填配置，不要求官方答复作为整体开发前提，不猜默认值、ACK或签验协议。",
     "suite": "user-onboarding"
   },
   {

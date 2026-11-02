@@ -1,6 +1,6 @@
 ---
 name: huifu-merchant-onboarding
-description: "汇付支付/斗拱支付（Huifu Payment）商户进件、用户开户与管理。用于企业、个体工商户、小微及无执照个人商户入网、KYC、资料/图片上传，企业/个人用户开户及业务入驻；覆盖业务开通/补开/修改、基本信息与结算配置、详情及申请状态查询、费率/多费率、短信、商户状态、电子合同、统一页面进件、下级商户权限及微信/支付宝配置与实名。支持Java/PHP/Python官方SDK、完整字段/DTO、签名验签和审核/业务/协议通知排障。支付交易、退款、对账、checkout-js及支付终态使用huifu-pay-integration；任务同时涉及开户开通与支付时联用两个skill。"
+description: "汇付支付/斗拱支付（Huifu Payment）商户进件、用户开户与管理。用于企业、个体工商户、小微及无执照个人商户入网、KYC、资料/图片上传，企业/个人用户开户及业务入驻；覆盖业务开通/补开/修改、基本信息与子账户/结算配置、详情及申请状态查询、费率/多费率、短信、商户状态、电子合同、统一页面进件、下级商户权限及微信/支付宝配置与实名。支持Java/PHP/Python官方SDK、完整字段/DTO、签名验签和审核/业务/协议通知排障。支付交易、退款、对账、checkout-js及支付终态使用huifu-pay-integration；任务同时涉及开户开通与支付时联用两个skill。"
 ---
 
 # 汇付商户进件、用户开户与入驻
@@ -55,7 +55,7 @@ description: "汇付支付/斗拱支付（Huifu Payment）商户进件、用户�
 | 微信商户配置或配置查询 | `references/merchant-onboarding-wechat-config.md` 或 `references/merchant-onboarding-wechat-config-query.md` |
 | 微信实名认证或状态查询 | `references/merchant-onboarding-wechat-realname.md` 或 `references/merchant-onboarding-wechat-realname-query.md` |
 | 支付宝实名申请或申请单查询 | `references/merchant-onboarding-alipay-realname.md` 或 `references/merchant-onboarding-alipay-realname-query.md` |
-| 完整商户 DTO、响应或嵌套字段 | 商户原子页、`references/merchant-onboarding-complete-field-catalog.md`、`references/merchant-onboarding-field-contracts.md` |
+| 完整基础十三接口的商户 DTO、响应或嵌套字段 | 商户原子页、`references/merchant-onboarding-complete-field-catalog.md`、`references/merchant-onboarding-field-contracts.md` |
 | 完整用户 DTO、响应或嵌套字段 | 用户原子页、`references/user-onboarding-complete-field-catalog.md`、`references/user-onboarding-field-contracts.md` |
 | 完整扩展接口 DTO、响应或嵌套字段 | 扩展原子页、`references/onboarding-extension-complete-field-catalog.md`、`references/onboarding-extension-field-contracts.md` |
 | 商户字段说明命中网页、编码表、XLSX 或协议 | 商户原子页，补 `references/merchant-onboarding-external-resources.md` |
@@ -75,12 +75,18 @@ description: "汇付支付/斗拱支付（Huifu Payment）商户进件、用户�
 | 错误码 | `references/merchant-onboarding-error-codes.md` |
 | 用户接口错误、权限、状态延迟或补资料排查 | `references/user-onboarding-error-codes.md`、`references/user-onboarding-faq.md`、`references/user-onboarding-copilot-troubleshooting-playbooks.md` |
 | 基础编码、公共参数或名词解释 | `references/merchant-onboarding-external-resources.md`、`references/merchant-onboarding-error-codes.md`；具体字段仍补对应原子接口页 |
+| 商户子账户开通配置 | `references/account-subaccount-open.md` |
+| 修改商户子账户配置 | `references/account-subaccount-modify.md` |
+| 子账户完整DTO、响应、审核通知和SDK | 目标原子页、`references/merchant-account-complete-field-catalog.md`，代码任务补 `references/merchant-account-sdk-matrix.md` 与公共SDK矩阵 |
 | 版本与升级 | `references/skill-version-policy.md` |
 | 用户接口来源 | `references/user-onboarding-official-service-source-index.md` |
 | 扩展能力总览 | `references/onboarding-extension-shared-overview.md`、`references/onboarding-extension-field-contracts.md` |
 | 扩展接口来源与外部资料 | `references/onboarding-extension-official-service-source-index.md`、`references/onboarding-extension-external-resources.md` |
 
 
+子账户配置属于商户管理；开户/绑卡审核/提现结算可用状态分开判断。余额、账务流水及汇总查询交接支付Skill，不能把用户开户ID当商户子账户的商户号。
+
+官网账户管理五接口按当前职责拆分：本 Skill 负责创建子账户及修改结算/绑卡配置；支付 Skill 负责余额与资金流水读取。单纯查账交接支付 Skill，同时开户配置和查账时联用两者。商户详情、申请状态等管理查询仍归本 Skill，不能把所有“查询”一律交给支付。
 
 ## 接口选择与字段边界
 
@@ -114,18 +120,18 @@ Java调试在初始化/任何请求前全局关闭；PHP在加载任何SDK前固
 ## 请求与交付
 
 - 保留调用方日期、流水、申请号及角色ID，扩展不得覆盖声明字段；私钥、身份证、银行卡、手机号和图片使用安全配置/脱敏示例，不进入前端、日志或仓库。
-- 本Skill实际参与时默认 `hfms/1.0.5`；支付也参与时为 `hfps/1.4.0;hfms/1.0.5`，顺序固定、一个英文分号且不加空格。仅安装未参与的不计入；显式合同值原样透传，不追加 `sys_id`，来源头不写业务 `data`。
+- 本Skill实际参与时默认 `hfms/1.1.0`；支付也参与时为 `hfps/1.5.0;hfms/1.1.0`，顺序固定、一个英文分号且不加空格。仅安装未参与的不计入；显式合同值原样透传，不追加 `sys_id`，来源头不写业务 `data`。
 - 直接回答当前问题，列出实际读取的 references。代码交付说明实体与目标接口、方向、配置/TODO和验证结果；只有后续涉及交易时才交接支付Skill。
 
 ## 当前版本
 
 | 项目 | 口径 |
 | --- | --- |
-| Skill 版本 | `1.0.5` |
+| Skill 版本 | `1.1.0` |
 | Java SDK | `3.0.41` |
 | PHP SDK | `2.0.31` |
 | Python SDK | `2.0.28` |
-| 来源 | 2026-10-08，34 API / 3,366字段路径；10-10复核原文不变 |
+| 来源 | 2026-10-25，36 API / 3,534字段路径；基础34 API / 3,404，子账户2 API / 130 |
 | 版本与升级 | `references/skill-version-policy.md` |
 
 本Skill不提供进件沙箱端点。

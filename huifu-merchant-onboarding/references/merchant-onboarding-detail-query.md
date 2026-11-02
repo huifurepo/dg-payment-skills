@@ -7,8 +7,8 @@
 ## 已确认的请求合同
 
 - Endpoint：`POST https://api.huifu.com/v2/merchant/basicdata/query`；顶层使用 `sys_id`、`product_id`、`sign`、`data`。
-- 官网更新时间 `2026-09-20`；本地活动快照 `2026-10-08`；原文 SHA-256：`df6014a1fc008bd81dff8de5708432010c60b002d34d0d9602a67145d1ae8806`。
-- 请求与响应 578 个具名路径（含父容器；请求7、响应571）的类型、长度、Y/N/C 和官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户详细信息查询”；本页的字段白名单策略不能替代完整目录。
+- 官网更新时间 `2026-10-20`；本地活动快照 `2026-10-25`；原文 SHA-256：`f8fb851eddda3219a5e4feb037b81cc5eed4697903644489e7cccde4fa72bdde`。
+- 请求与响应 583 个具名路径（含父容器；请求7、响应576）的类型、长度、Y/N/C 和官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户详细信息查询”；本页的字段白名单策略不能替代完整目录。
 - `data` 必填新的 `req_seq_id:String(32)`（当天同商户唯一）、`req_date:String(8)`（`yyyyMMdd`、北京时间）、目标 `huifu_id:String(18)`；高风险约束见 `merchant-onboarding-field-contracts.md`。
 - 响应可能覆盖主体、证照、图片、结算卡、结算/取现、协议、渠道配置和账户资料；按查询目的字段白名单读取，禁止沉淀完整响应表或完整原文。
 - 若白名单字段说明带 MCC/地区/证件/银行编码表、图片上传文档、签约规则或线上材料 XLSX，必须同时读取 `merchant-onboarding-external-resources.md`，并按响应完整路径单列 `外部资料提示`、给出未经改写的原始地址；不得把响应中的示例/运行时 URL 当资料或请求默认值。
@@ -40,3 +40,17 @@
 ## SDK 证据边界
 
 已核验源码基线 Java `3.0.41`、PHP `2.0.31`、Python `2.0.28` 都有 `V2MerchantBasicdataQueryRequest` 作为可选封装，字段仅定位到 `req_seq_id`、`req_date`、`huifu_id`。调用方必须为本次查询生成新的当天唯一流水；SDK 默认响应验签路径不等于允许保存完整响应。
+
+## 2026-10-25 官网更新同步
+
+本地当前来源SHA-256：`f8fb851eddda3219a5e4feb037b81cc5eed4697903644489e7cccde4fa72bdde`。
+
+新增五项switch_state：支付宝、微信、银行卡、银联和合单业务各自的配置状态。它们只用于详情响应的实际状态判断，不可直接复制为业务开通请求。
+
+| 新增完整合同路径 | 中文名 | 类型 | 长度 | 必填 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| `response.data.combine_pay_config.switch_state` | 功能开关 | `String` | `1` | `Y` | 条件与完整原文见对应完整目录 |
+| `response.data.qry_ali_conf_list[].switch_state` | 功能开关 | `String` | `1` | `Y` | 条件与完整原文见对应完整目录 |
+| `response.data.qry_bank_card_conf.switch_state` | 功能开关 | `String` | `1` | `Y` | 条件与完整原文见对应完整目录 |
+| `response.data.qry_union_conf.switch_state` | 功能开关 | `String` | `1` | `Y` | 条件与完整原文见对应完整目录 |
+| `response.data.qry_wx_conf_list[].switch_state` | 功能开关 | `String` | `1` | `Y` | 条件与完整原文见对应完整目录 |

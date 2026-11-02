@@ -7,7 +7,7 @@
 ## 接口与字段面
 
 - Endpoint：`POST https://api.huifu.com/v2/user/basicdata/ent`。
-- 快照更新时间：官网 `2026-09-21`，本地冻结 `2026-10-08`；原文 SHA-256：`b95f8659579a89b4cda719d63922cd99458cc58351c7505b6e3c2b0c8b0fa674`。
+- 快照更新时间：官网 `2026-10-21`，本地冻结 `2026-10-25`；原文 SHA-256：`9ae70289683601611a7e9e675c382778e8447b48786ded16a345460ab630c476`。
 - 共43个字段路径：请求36、同步响应7、异步0。完整路径、类型、长度、必填性和说明读取 `user-onboarding-complete-field-catalog.md`。
 - 请求业务 `data` 不包含 `huifu_id`、`upper_huifu_id` 或异步地址；不得为请求头或 SDK 填充虚构字段。
 
@@ -34,3 +34,9 @@
 ## SDK 边界
 
 三语言锁定版本均有 `V2UserBasicdataEntRequest`。生成类把若干官方 C/N 字段按必填或空字符串处理时，官方合同优先；不得为通过 SDK 校验写入假值。三语言真实请求均使用对应官方 SDK；PHP 可运行代码仍受 `user-onboarding-shared-server-sdk-matrix.md` 的独立 DEBUG 硬停约束。
+
+## 2026-10-25 官网更新同步
+
+本地当前来源SHA-256：`9ae70289683601611a7e9e675c382778e8447b48786ded16a345460ab630c476`。
+
+新增公共请求字段sys_id的上下级关系说明：sys_id为总部商户时在开户阶段绑定关系，否则在业务入驻阶段按upper_huifu_id绑定。该注记属于request.sys_id，不向开户data添加upper_huifu_id，也不混淆sys_id与用户ID。

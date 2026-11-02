@@ -37,7 +37,7 @@
 | 个人商户进件 | 129 | 7 | 5 |
 | 商户业务开通 | 460 | 54 | 7 |
 | 图片上传 | 8 | 0 | 3 |
-| 商户详细信息查询 | 578 | 65 | 5 |
+| 商户详细信息查询 | 583 | 65 | 5 |
 | 申请单状态查询 | 93 | 8 | 4 |
 | 商户业务开通修改 | 452 | 53 | 8 |
 | 商户基本信息修改 | 199 | 12 | 5 |
@@ -954,7 +954,7 @@
 ## 商户详细信息查询
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shxxxxcx_kyc.md>
-- SHA-256：`df6014a1fc008bd81dff8de5708432010c60b002d34d0d9602a67145d1ae8806`
+- SHA-256：`f8fb851eddda3219a5e4feb037b81cc5eed4697903644489e7cccde4fa72bdde`
 - 说明：下表保留官方字段类型、长度、必填标记和字段说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -1181,6 +1181,7 @@
 | `response.data.qry_wx_conf_list[].out_fee_flag` | 交易手续费外扣标记 | `String` | `1` | `N` | 1：外扣，2：内扣；（默认2内扣）；示例值：2 |
 | `response.data.qry_wx_conf_list[].out_fee_huifu_id` | 交易手续费外扣汇付ID | `String` | `18` | `N` | 开通交易手续费外扣业务时必填，示例值：[官网示例已脱敏]；优先级高于相同名称的公共参数 |
 | `response.data.qry_wx_conf_list[].out_fee_acct_type` | 交易手续费外扣时的账户类型 | `String` | `2` | `N` | 01-基本户（不填默认01），02-现金户，05-充值户，09-营销户，示例值：01；优先级高于相同名称的公共参数 |
+| `response.data.qry_wx_conf_list[].switch_state` | 功能开关 | `String` | `1` | `Y` | 0:关闭 1:开通；示例值：1 |
 | `response.data.qry_ali_conf_list[]` | 支付宝支付配置信息 | `String` | `—` | `N` | jsonArray格式 |
 | `response.data.qry_ali_conf_list[].ali_mer_infos` | 支付宝商户信息 | `Object` | `—` | `N` | — |
 | `response.data.qry_ali_conf_list[].ali_mer_infos.bank_mer_code` | 银联商户号 | `String` | `32` | `N` | 商户在银联开通的支付宝(或微信)商户号；示例值：2234544 |
@@ -1196,6 +1197,7 @@
 | `response.data.qry_ali_conf_list[].out_fee_flag` | 交易手续费外扣标记 | `String` | `1` | `N` | 1：外扣，2：内扣；（默认2内扣）；示例值：2 |
 | `response.data.qry_ali_conf_list[].out_fee_huifu_id` | 交易手续费外扣汇付ID | `String` | `18` | `N` | 开通交易手续费外扣业务时必填，示例值：[官网示例已脱敏]；优先级高于相同名称的公共参数 |
 | `response.data.qry_ali_conf_list[].out_fee_acct_type` | 交易手续费外扣时的账户类型 | `String` | `2` | `N` | 01-基本户（不填默认01），02-现金户，05-充值户，09-营销户，示例值：01；优先级高于相同名称的公共参数 |
+| `response.data.qry_ali_conf_list[].switch_state` | 功能开关 | `String` | `1` | `Y` | 0:关闭 1:开通；示例值：1 |
 | `response.data.qry_bank_card_conf` | 银行卡支付配置信息 | `String` | `—` | `N` | jsonObject格式；只有企业商户有值 |
 | `response.data.qry_bank_card_conf.bank_mer_code` | 银联商户号 | `String` | `18` | `N` | 银联报备生成的银行商户号；示例值：66345234544 |
 | `response.data.qry_bank_card_conf.charge_cate_code` | 银行业务手续费类型 | `String` | `2` | `N` | 01-减免类 02-优惠类 03-标准类（默认）；示例值：03 |
@@ -1203,6 +1205,7 @@
 | `response.data.qry_bank_card_conf.debit_fee_limit` | 借记卡封顶值 | `String` | `4` | `N` | 数字类型，大于0保留2位小数； 示例值：2.00 |
 | `response.data.qry_bank_card_conf.credit_fee_rate` | 贷记卡手续费（%） | `String` | `9` | `Y` | 数字类型，大于0保留2位小数；取值范围（0.00,100.00]；示例值：0.90 |
 | `response.data.qry_bank_card_conf.is_open_cloud_flag` | 是否开通银联手机闪付 | `String` | `1` | `Y` | 选项：0：否 1：是。目前默认开通；示例值：0 |
+| `response.data.qry_bank_card_conf.switch_state` | 功能开关 | `String` | `1` | `Y` | 0:关闭 1:开通；示例值：1 |
 | `response.data.qry_union_conf` | 银联二维码支付配置信息 | `String` | `—` | `N` | jsonObject格式 |
 | `response.data.qry_union_conf.bank_mer_code` | 银联商户号 | `String` | `18` | `N` | 银联报备生成的银行商户号；示例值：66345234544 |
 | `response.data.qry_union_conf.qr_code_info` | 银联小微二维码 | `String` | `64` | `N` | — |
@@ -1212,6 +1215,7 @@
 | `response.data.qry_union_conf.credit_fee_rate_down` | 贷记卡手续费1000及以下（%） | `String` | `9` | `N` | 数字类型，大于0保留2位小数；取值范围（0.00,100.00]；示例值：0.60 |
 | `response.data.qry_union_conf.debit_fee_rate_up` | 借记卡手续费1000以上（%） | `String` | `9` | `N` | 数字类型，大于0保留2位小数；取值范围（0.00,100.00]；示例值：0.60 |
 | `response.data.qry_union_conf.debit_fee_rate_down` | 借记卡手续费1000及以下（%） | `String` | `9` | `N` | 数字类型，大于0保留2位小数；取值范围（0.00,100.00]；示例值：0.60 |
+| `response.data.qry_union_conf.switch_state` | 功能开关 | `String` | `1` | `Y` | 0:关闭 1:开通；示例值：1 |
 | `response.data.out_order_funds_merge` | 全域资金管理配置 | `String` | `—` | `N` | jsonObject字符串 |
 | `response.data.out_order_funds_merge.switch_state` | 开通状态 | `String` | `1` | `Y` | 0:关闭 1:开通；示例值：1 |
 | `response.data.out_order_funds_merge.out_order_auto_acct_flag` | 全域资金自动入账开关 | `String` | `1` | `Y` | 开通、关闭自动入账功能；0:关闭 1:开通；示例值：1；关闭自动入账需要[处理银行来账通知](https://paas.huifu.com/open/doc/api/#/dejy/api_dejy_lztz)，并调用[汇付入账确认接口](https://paas.huifu.com/open/doc/api/#/dejy/api_dejy_yhskfk)来确认入账。 |
@@ -1249,6 +1253,7 @@
 | `response.data.combine_pay_config.out_fee_flag` | 是否交易手续费外扣 | `String` | `1` | `N` | 1:外扣 ，示例值：1 优先级高于相同名称的公共参数 |
 | `response.data.combine_pay_config.out_fee_huifuid` | 交易手续费外扣汇付ID | `String` | `18` | `N` | 开通交易手续费外扣业务时有，示例值：[官网示例已脱敏] 优先级高于相同名称的公共参数 |
 | `response.data.combine_pay_config.out_fee_acct_type` | 交易手续费外扣时的账户类型 | `String` | `2` | `N` | 01-基本户（不填默认01），02-现金户，05-充值户，09-营销户，示例值：01 优先级高于相同名称的公共参数 |
+| `response.data.combine_pay_config.switch_state` | 功能开关 | `String` | `1` | `Y` | 0:关闭 1:开通；示例值：1 |
 | `response.data.wx_zl_conf` | 微信直连配置对象 | `String` | `—` | `N` | jsonObject格式 |
 | `response.data.wx_zl_conf.sub_mch_id` | 微信子商户号 | `String` | `32` | `Y` | 微信支付分配的子商户号；示例值：1632157057 |
 | `response.data.wx_zl_conf.wx_zl_pay_conf_list[]` | 配置集合 | `String` | `512` | `Y` | jsonArray |

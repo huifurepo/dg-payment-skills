@@ -48,7 +48,10 @@
         "apply_type",
         "confirm_url",
         "mobile_no",
-        "verify_type"
+        "verify_type",
+        "account",
+        "acct_type",
+        "merge_pay_flag"
       ],
       "forbidden_implementation_literals": [
         "/v2/merchant/basicdata/ent",
@@ -114,7 +117,11 @@
         "V2MerchantBusiRealnameRequest",
         "V2MerchantBusiRealnameQueryRequest",
         "V2MerchantBusiAliRealnameApplyRequest",
-        "V2MerchantBusiAliRealnameQueryRequest"
+        "V2MerchantBusiAliRealnameQueryRequest",
+        "/v2/merchant/settle/config",
+        "V2MerchantSettleConfigRequest",
+        "/v2/merchant/settle/modify",
+        "V2MerchantSettleModifyRequest"
       ]
     },
     "huifu-merchant-onboarding": {

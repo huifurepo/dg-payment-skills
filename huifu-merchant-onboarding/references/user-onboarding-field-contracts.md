@@ -48,7 +48,7 @@
 
 这些缺口按 `shared-overview.md` 的“文档疑义与开发提醒”处理：指出完整路径及原子页的对应官方文档，不清楚时建议咨询汇付官方或汇付开发者交流沟通群。继续已明确部分，争议约束与序列化用 TODO/待填配置隔离，不等待答复才开始整体开发。
 
-完整目录对官网空白单元格统一保留 `—`，不代表值为空字符串，也不授权从同名字段或 SDK 推断。当前新增account_info及充值账户字段也有空说明；仍不得从查询字段、示例或SDK补齐，详见机械目录；当前已没有长度为空的标量叶字段。对象、数组及 String(JSON) 父节点长度为空是结构字段的正常口径，不得把 `—` 改成 `0` 或空字符串。
+完整目录对官网空白单元格统一保留 `—`，不代表值为空字符串，也不授权从同名字段或 SDK 推断。当前充值账户等字段仍有空说明，account_info父对象说明已补齐；仍不得从查询字段、示例或SDK补齐，详见机械目录；当前已没有长度为空的标量叶字段。对象、数组及 String(JSON) 父节点长度为空是结构字段的正常口径，不得把 `—` 改成 `0` 或空字符串。
 
 官网没有写出两个 `C` 字段的触发条件，接入方现已补充裁决：所有通过主体校验的 `request.data.card_info.card_type` 都条件必填 `card_name`；`response.data.elec_acct_config.elec_card_list[].mp` 在 `card_type=1` 对私法人卡时要求存在，在 `card_type=0` 对公卡时不要求。官网空说明仍在机械目录保留为 `—`，语义校验读取接入决策，不从同名字段推断。
 
@@ -100,13 +100,13 @@
 
 ## 用户业务入驻修改合同
 
-- 使用 `POST /v2/user/busi/modify`；完整目录精确138个节点：请求98、同步响应11、异步29，包含6个根表、16个扩展表。`request.data.huifu_id:String(18) Y` 明确填写开户返回的用户ID，不得替换为商户号。
+- 使用 `POST /v2/user/busi/modify`；完整目录精确151个节点：请求104、同步响应11、异步36，包含6个根表、18个扩展表。`request.data.huifu_id:String(18) Y` 明确填写开户返回的用户ID，不得替换为商户号。
 - `settle_config_list`、`cash_config`、`file_list` 按 String(JSON Array) 发送；`card_info`、`elec_acct_config`、`elec_receipt_config`、`sign_user_info` 按 String(JSON Object) 发送。
 - `request.data.elec_acct_config.elec_card_list` 当前正式类型为 String 且说明为 jsonArray字符串；先序列化子数组，再放入父对象并对父对象序列化一次。
 - `request.data.settle_config_list[].is_priority_receipt` 的必填列为 `C`，说明明确 `settle_pattern=P0` 时必填，但又描述空值默认；按 P0 条件执行必填，默认描述作为官方矛盾保留。当前 `delay_flag` 示例已修正为 `N`，`async_return_url` 示例也已修正为合法 HTTP URL。
 - 官网请求示例是合法 JSON，且只声明一次 `file_list`；示例仍不构成默认值或正式字段合同，不得用示例覆盖参数表。
 - 三语言 `V2UserBusiModifyRequest` 都只声明 `req_seq_id/req_date/huifu_id/sign_user_info`，路由精确为 `/v2/user/busi/modify`。当前官网与 Java 的 String setter 对 `sign_user_info` 已一致，三语言均传一层 JSON Object 字符串。生成类的扩展后合并都能覆盖已声明键，因此扩展必须拒绝 `req_seq_id/req_date/huifu_id/sign_user_info`，并对白名单内其余正式字段逐项放行。
-- 同步公共表把 `response.data` 写成 `String N`，成功示例却返回原生 JSON Object；本接口没有独立 wire 裁决，DTO 需隔离两种形态并容忍异常响应缺失，解析形态通过明确的 TODO/可配置策略隔离，不静默认定任一示例为官方结论；这不阻断其余 SDK/业务实现。异步现在使用29节点配置类通知合同，不能因修改接口而省略验签、回包、重试或状态感知幂等。
+- 同步公共表把 `response.data` 写成 `String N`，成功示例却返回原生 JSON Object；本接口没有独立 wire 裁决，DTO 需隔离两种形态并容忍异常响应缺失，解析形态通过明确的 TODO/可配置策略隔离，不静默认定任一示例为官方结论；这不阻断其余 SDK/业务实现。异步现在使用36节点配置类通知合同，不能因修改接口而省略验签、回包、重试或状态感知幂等。
 
 ## 用户等级与新资金配置（2026-09-22）
 
@@ -115,17 +115,17 @@
 | 完整路径 | 方向与wire | 关键条件 |
 | --- | --- | --- |
 | `request.data.balance_pay_config` | 入驻/修改 String(JSON Object) | fee_rate/fee_fix_amt均String(9) Y，但说明要求至少一项；存在必填列冲突，严格校验策略留 TODO/待填配置，同时继续其余 DTO 与 SDK 开发。两者都有时费用相加。 |
-| `request.data.account_recharge_config` | 入驻/修改 String(JSON Object) | 同上手续费冲突；仅正式fee_rate/fee_fix_amt两个子字段，不能复制查询switch_state或充值账户字段。 |
+| `request.data.account_recharge_config` | 入驻/修改 String(JSON Object) | fee_rate/fee_fix_amt保留既有冲突；本轮新增out_fee_flag=1外扣/2内扣，开通外扣时out_fee_huifu_id与out_fee_acct_id为C必填。不能复制查询独有switch_state等字段。 |
 | `request.data.delay_pay_config` | 入驻/修改 String(JSON Object) | switch_state:String(1) Y，1开通/0关闭。不同于delay_flag Y/N。 |
-| `async.data.account_info` | 入驻/修改原生Object N | account_level/face_url/trans_status/verify_ord_id；入驻页父对象说明为空，修改页写用户升级信息，各自保留原文。 |
+| `async.data.account_info` | 入驻/修改 String(JSON Object) N | notify_type=A/U时返回；account_level/face_url/trans_status/verify_ord_id/fail_msg逐层读取。不能沿用旧Object wire。 |
 | `response.data.account_info/balance_pay_config/account_recharge_config/delay_pay_config` | 用户详情原生Object N | 只解析状态，不能按请求String(JSON)重复解码，或把查询独有字段回填请求。 |
 
-- 余额扣费charge_mode：内扣01/02/03，默认01；外扣10/11/12，默认10。out_fee_acct_type为01/02/05/09，默认01。请求out_fee_flag说明未给枚举，不能把查询的1外扣/2内扣反向提升为请求合同；外扣时out_fee_huifuid条件必填。
+- 余额扣费charge_mode：内扣01/02/03，默认01；外扣10/11/12，默认10。out_fee_acct_type为01/02/05/09，默认01。余额支付配置的请求out_fee_flag说明未给枚举，不能把查询的1外扣/2内扣反向提升为请求合同；外扣时out_fee_huifuid条件必填。
 - LV2企业需营业执照F07，对公结算F08及相应法人证件；LV2个人需对应身份证明。LV3仅企业，另按对公/对私法人提供F08/F13，并提供F22门头、F105收银台、F371办公环境；法定证件材料按完整目录，不能只保留card_type=4规则。
 - 升级LV3并开通取现、余额、充值、延迟支付任一功能时sign_user_info必填，电子回单开通条件继续有效。
 - 对公打款验证trans_status=1打款中/2打款成功验证中/3打款失败/4通过/5失败；法人活体验证只有1/4/5。与审核Y/P/N、配置S/F及支付终态分开。
 - face_url为敏感不透明活体链接，不能回显或写日志。verify_ord_id用于另一个打款验证接口；本次文档未覆盖该接口，不虚构端点、金额或调用实现。
-- 当前用户路径611=请求333+响应220+通知58；来源冻结于2026-10-08，10-10复核原文不变。
+- 当前用户路径644=请求345+响应227+通知72；来源冻结于2026-10-25。新增协议配置、协议结果、外扣账户及升级失败原因；两条开户sys_id关系注记绑定在公共请求信封，非data新增字段。
 
 ## 业务入驻异步合同
 
@@ -133,8 +133,12 @@
 
 | 通知 | 条件与状态 |
 | --- | --- |
-| `notify_type=A` | `audit_info:String(JSON Object)`；`audit_status=Y/P/N`，内含 `apply_no`，配置列表 `code=S/F` |
+| `notify_type=E` | 审核消息；audit_info为String(JSON Object)，audit_status=Y/P/N |
+| `notify_type=A` | 业务消息；来源说明audit_info在A/E时返回，配置列表code=S/F；account_info在A/U时返回 |
+| `notify_type=U` | 用户升级通知；account_info先解码String(JSON Object)，独立判断升级/验证状态 |
 | `notify_type=Z` | `elec_acct_result:String(JSON Object)`；`bank_status=S/F` |
+
+协议结果新增`agreement_info_list:String(JSON Array) N`，其中con_stat为协议状态；协议链接按敏感不透明字符串处理。业务入驻请求的父字段为`agreement_info:String(JSON Object)`，修改请求父字段却正式命名`agreement_type:String(JSON Object)`，其中子字段亦叫agreement_type；完整父路径分别保留，不能自行统一命名。协议类型0电子协议，message_send_type=0发送（默认）/1不发送，触发条件为协议类型电子且业务开通审核通过。
 
 公共异步规范已补齐：汇付以 POST/UTF-8 推送配置类 `data`，默认超时5秒；超时及500-599默认重试3次，不支持重定向，URL 不带查询参数。接收端对原始 `data` 免排序执行 SHA256WithRSA 验签，成功处理后返回 HTTP 200 和 `RECV_ORD_ID_` + `req_seq_id`，并对重复通知做状态感知幂等。完整协议和 Webhook 隔离读取 `user-onboarding-platform-contracts.md`。
 

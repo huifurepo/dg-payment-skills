@@ -530,13 +530,13 @@ def validate_maintainer_contracts(errors: list[str]) -> None:
         if phrase in release:
             error(errors, f"release checklist contains stale phrase: {phrase}")
     for required in (
-        "huifu-pay-integration` | `1.4.0",
-        "huifu-merchant-onboarding` | `1.0.5",
+        "huifu-pay-integration` | `1.5.0",
+        "huifu-merchant-onboarding` | `1.1.0",
         "电子合同、页面进件、下级权限及微信/支付宝 AT 管理",
     ):
         if required not in versioning:
             error(errors, f"versioning policy missing current fact: {required}")
-    for required in ("manifest", "新增模块流程", "当前3,366"):
+    for required in ("manifest", "新增模块流程", "当前3,534"):
         if required not in architecture:
             error(errors, f"Skill family architecture missing: {required}")
 

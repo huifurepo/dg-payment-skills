@@ -7,7 +7,7 @@
 ## 已确认的请求合同
 
 - Endpoint：`POST https://api.huifu.com/v2/merchant/basicdata/indv`；顶层包含 `sys_id`、`product_id`、`sign`、`data`。
-- 官网更新时间 `2026-09-04`；本地活动快照 `2026-10-08`；原文 SHA-256：`09862a3923b114abcf7dbc9e7545798481abc37f88b6eb64911ce7d53f9f5437`。
+- 官网更新时间 `2026-09-04`；本地活动快照 `2026-10-25`；原文 SHA-256：`09862a3923b114abcf7dbc9e7545798481abc37f88b6eb64911ce7d53f9f5437`。
 - 请求、同步响应和审核异步的完整父子路径、类型、长度、Y/N/C 与官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“个人商户进件”；本页不能替代完整字段目录。
 - `data` 使用当日唯一的 `req_seq_id`、`req_date`。`upper_huifu_id:String(18) C`：`sys_id` 主体为渠道商时填写真实渠道商号，总部商户主体时选填；其余资料按负责人、证件、经营信息、联系人、结算卡、结算/取现规则分组校验。
 - `scene_type=OFFLINE` 或 `ALL` 时必须提供经营详细地址。身份证、银行卡和门店图片字段只接收图片上传后的文件标识。

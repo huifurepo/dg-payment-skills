@@ -242,3 +242,41 @@
 - `actual_ref_amt` 在官方成功示例里给的是空字符串，但字段表定义为金额字段；消费方不要只按数值型做强解析。
 - 本页与退款申请异步的 `split_fee_acct_id` 长度均为16，旧跨页长度冲突已关闭；本页Y、退款异步N各自保留。
 - 本页 `org_req_date`、`org_req_seq_id` 指向退款请求本身，不是原支付交易；这是退款查询最容易用错的地方。
+
+## 2026-10-25 官网更新同步
+
+本地当前来源SHA-256：`4b78ba8567f606a870076d9f637fe064b21743f8139382c7a06e9016e5449f0c`。
+
+本轮新增合单/子单请求、查询或通知字段；同名父容器按本接口和方向建模。官网通知中的`sub_trams_amt`拼写原样保留，不更改为其他字段名；split_fee_details的Object/String/数组语义也不得跨接口外推。完整嵌套类型、长度、条件和解码路径见 `payment-complete-field-catalog.md` 对应接口。
+
+| 新增完整合同路径 | 中文名 | 类型 | 长度 | 必填 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| `response.data.sub_orders_response[]` | 退款子单返回信息列表 | `String` | `—` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].acct_split_bunch` | 分账信息 | `String` | `4000` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].acct_split_bunch.acct_infos` | 分账明细 | `String` | `2048` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].acct_split_bunch.acct_infos.div_amt` | 分账金额 | `String` | `14` | `Y` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].acct_split_bunch.acct_infos.huifu_id` | 分账接收方ID | `String` | `32` | `Y` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].acct_split_bunch.fee_amt` | 退款返还手续费 | `String` | `14` | `Y` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].fund_freeze_stat` | 资金冻结状态 | `String` | `16` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].split_fee_info` | 分账手续费信息 | `String` | `—` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_details[]` | 分账手续费明细 | `String` | `—` | `Y` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_details[].split_fee_acct_id` | 分账手续费承担方账号 | `String` | `9` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_details[].split_fee_amt` | 分账手续费金额 | `String` | `14` | `Y` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_details[].split_fee_huifu_id` | 分账手续费承担方商户号 | `String` | `32` | `Y` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_flag` | 分账手续费扣款标志 | `Integer` | `1` | `Y` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].split_fee_info.total_split_fee_amt` | 分账手续费总金额(元) | `String` | `14` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_actual_ref_amt` | 子单实际退款金额 | `String` | `14` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_hf_seq_id` | 退款子单全局流水号 | `String` | `128` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_huifu_id` | 退款子单商户号 | `String` | `32` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_ord_amt` | 子单退款金额 | `String` | `14` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_org_fee_amt` | 原子单交易手续费 | `String` | `14` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_org_ord_amt` | 原子单交易订单金额 | `String` | `14` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_org_req_date` | 原子单交易请求日期 | `String` | `8` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_org_req_seq_id` | 原子单交易请求流水号 | `String` | `128` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_ref_cut` | 子单累计退款次数 | `String` | `14` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_remark` | 子单备注 | `String` | `1500` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_req_date` | 退款子单请求日期 | `String` | `8` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_req_seq_id` | 退款子单请求流水号 | `String` | `128` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_total_ref_amt` | 原子单交易累计退款金额 | `String` | `14` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_total_ref_fee_amt` | 原子单交易累计退款手续费金额 | `String` | `14` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_trans_date` | 子单退款交易发生日期 | `String` | `8` | `N` | 条件与完整原文见对应完整目录 |

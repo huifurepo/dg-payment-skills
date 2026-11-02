@@ -32,25 +32,25 @@
 | --- | ---: | ---: | ---: |
 | 企业用户开户 | 43 | 1 | 4 |
 | 个人用户开户 | 34 | 1 | 4 |
-| 用户业务入驻 | 136 | 16 | 5 |
-| 用户申请单状态查询 | 15 | 0 | 3 |
-| 用户信息查询 | 165 | 16 | 5 |
+| 用户业务入驻 | 149 | 18 | 5 |
+| 用户申请单状态查询 | 21 | 1 | 4 |
+| 用户信息查询 | 166 | 16 | 5 |
 | 企业用户基本信息修改 | 37 | 1 | 4 |
 | 个人用户基本信息修改 | 26 | 1 | 4 |
-| 用户业务入驻修改 | 138 | 16 | 5 |
+| 用户业务入驻修改 | 151 | 18 | 5 |
 | 用户列表查询 | 17 | 1 | 4 |
 
 ## 企业用户开户
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_qyyhjbxxzc.md>
-- SHA-256：`b95f8659579a89b4cda719d63922cd99458cc58351c7505b6e3c2b0c8b0fa674`
+- SHA-256：`9ae70289683601611a7e9e675c382778e8447b48786ded16a345460ab630c476`
 - 说明：完整保留官方类型、长度、必填标记和说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
 
 | 完整字段路径 | 中文名 | 类型 | 长度 | 必填 | 官方说明 |
 | --- | --- | --- | ---: | :---: | --- |
-| `request.sys_id` | 系统号 | `String` | `32` | `Y` | 渠道商/商户的huifu_id ；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为直连商户时，此字段填写商户huifu_id；示例值：[官网示例已脱敏] |
+| `request.sys_id` | 系统号 | `String` | `32` | `Y` | 渠道商/商户的huifu_id ；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为直连商户时，此字段填写商户huifu_id；示例值：[官网示例已脱敏]；官网页内注意：当sys_id为总部商户，开户时会绑定上下级关系，否则业务入驻时根据upper_huifu_id绑定 |
 | `request.product_id` | 产品号 | `String` | `32` | `Y` | 汇付分配的产品号，示例值：MCS |
 | `request.sign` | 加签结果 | `String` | `512` | `Y` | [接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
 | `request.data` | 数据 | `Json` | `—` | `Y` | 业务请求参数，具体值参考API文档 |
@@ -112,14 +112,14 @@
 ## 个人用户开户
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_gryhjbxxzc.md>
-- SHA-256：`e12fd6d81d185b6f9467ed837cc69f64485461fb12dbc943db487fbc9a751759`
+- SHA-256：`41f9a75dab6ff2d157ff9f02793afa1ada3baec8f0d67664bed8c1ad08e53bf2`
 - 说明：完整保留官方类型、长度、必填标记和说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
 
 | 完整字段路径 | 中文名 | 类型 | 长度 | 必填 | 官方说明 |
 | --- | --- | --- | ---: | :---: | --- |
-| `request.sys_id` | 系统号 | `String` | `32` | `Y` | 渠道商/商户的huifu_id ；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为直连商户时，此字段填写商户huifu_id；示例值：[官网示例已脱敏] |
+| `request.sys_id` | 系统号 | `String` | `32` | `Y` | 渠道商/商户的huifu_id ；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为直连商户时，此字段填写商户huifu_id；示例值：[官网示例已脱敏]；官网页内注意：当sys_id为总部商户，开户时会绑定上下级关系，否则业务入驻时根据upper_huifu_id绑定 |
 | `request.product_id` | 产品号 | `String` | `32` | `Y` | 汇付分配的产品号，示例值：MCS |
 | `request.sign` | 加签结果 | `String` | `512` | `Y` | [接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
 | `request.data` | 数据 | `Json` | `—` | `Y` | 业务请求参数，具体值参考API文档 |
@@ -172,7 +172,7 @@
 ## 用户业务入驻
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_ywrz.md>
-- SHA-256：`a0f6f864f7b50312b8bf6757ffa35ca9617a70e53c4e549837d11db3ef7cefda`
+- SHA-256：`bef9e9e82e9e0dfc5f4d0445242abfb711fe32195386dd99618366f3110b1191`
 - 说明：完整保留官方类型、长度、必填标记和说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -285,8 +285,14 @@
 | `request.data.account_recharge_config` | 账户充值配置 | `String` | `—` | `N` | jsonObject格式 账户升级LV3 才能开通 |
 | `request.data.account_recharge_config.fee_rate` | 手续费(%) | `String` | `9` | `Y` | 支持两位小数 fee_rate与fee_fix_amt不能同时为空；示例值：0.50代表费率为0.5% |
 | `request.data.account_recharge_config.fee_fix_amt` | 手续费（固定/元） | `String` | `9` | `Y` | 支持两位小数 fee_rate与fee_fix_amt不能同时为空；示例值：1.50 ； 注：如果fee_fix_amt与fee_rate都填写了则手续费=fee_fix_amt+支付金额*fee_rate |
+| `request.data.account_recharge_config.out_fee_flag` | 交易手续费外扣标记 | `String` | `1` | `N` | 1 外扣 2 内扣 |
+| `request.data.account_recharge_config.out_fee_huifu_id` | 手续费外扣汇付ID | `String` | `18` | `C` | 开通账户充值手续费外扣业务时必填，示例值：[官网示例已脱敏] |
+| `request.data.account_recharge_config.out_fee_acct_id` | 交易手续费外扣账户号 | `String` | `16` | `C` | 开通账户充值手续费外扣业务时必填，示例值：C03540512 |
 | `request.data.delay_pay_config` | 延迟交易配置 | `String` | `—` | `N` | jsonObject格式 账户升级LV3 才能开通 |
 | `request.data.delay_pay_config.switch_state` | 开通状态 | `String` | `1` | `Y` | 1 开通 0关闭 |
+| `request.data.agreement_info` | 协议信息实体 | `String` | `—` | `N` | jsonObject字符串 |
+| `request.data.agreement_info.agreement_type` | 协议类型 | `String` | `1` | `Y` | 0-电子协议 ；示例值：0 |
+| `request.data.agreement_info.message_send_type` | 电子协议签约短信发送标识 | `String` | `1` | `N` | 协议类型为电子，业务开通审核通过后发送协议签约短信； 0：发送，默认； 1：不发送； 示例值：0 |
 
 ### 同步响应 data
 
@@ -320,8 +326,8 @@
 | `async.data.req_seq_id` | 请求流水号 | `String` | `32` | `Y` | 原请求流水号；示例值：rQ[官网示例已脱敏] |
 | `async.data.req_date` | 请求时间 | `String` | `8` | `Y` | 原请求时间YYYYMMDD；示例值：20240123 |
 | `async.data.huifu_id` | 汇付客户号 | `String` | `18` | `Y` | 固定18位 ,汇付分配的汇付客户号；示例值：[官网示例已脱敏] |
-| `async.data.notify_type` | 通知类型 | `String` | `1` | `Y` | A:审核消息，Z：电子账户；示例值：A |
-| `async.data.audit_info` | 审核信息 | `String` | `—` | `N` | jsonObject; notify_type = A时返回; |
+| `async.data.notify_type` | 通知类型 | `String` | `1` | `Y` | E:审核消息，A:业务消息，U：用户升级通知，Z：电子账户；示例值：A |
+| `async.data.audit_info` | 审核信息 | `String` | `—` | `N` | jsonObject; notify_type = A 或 E时返回; |
 | `async.data.audit_info.audit_status` | 审核状态 | `String` | `1` | `Y` | Y:审核通过 P:审核中 N:审核拒绝；示例值：Y |
 | `async.data.audit_info.audit_desc` | 审核意见 | `String` | `512` | `N` | 审核意见 |
 | `async.data.audit_info.apply_no` | 申请单号 | `String` | `18` | `Y` | 示例值：[官网示例已脱敏] |
@@ -335,16 +341,23 @@
 | `async.data.elec_acct_result.bank_status` | 电子账户开通状态 | `String` | `1` | `Y` | S：成功 F：失败；示例值：S |
 | `async.data.elec_acct_result.bank_message` | 银行信息 | `String` | `512` | `N` | 银行信息 |
 | `async.data.elec_acct_result.sign_agreement_id` | 签约协议号 | `String` | `32` | `N` | 商户签约中信E管家协议编号； 签约成功才返回示例值：[官网示例已脱敏] |
-| `async.data.account_info` | 升级信息 | `Object` | `—` | `N` | — |
+| `async.data.account_info` | 升级信息 | `String` | `—` | `N` | jsonObject; notify_type = A 或 U 时返回; |
 | `async.data.account_info.account_level` | 用户等级 | `String` | `6` | `N` | 打款验证成功或活体验证成功后返回用户等级LV2/LV3 |
 | `async.data.account_info.trans_status` | 验证状态 | `String` | `1` | `N` | 对公打款验证：1-打款中，2-打款成功验证中，3-打款失败，4-验证通过，5-验证失败；法人活体验证： 1 验证中 4 验证通过 5 验证失败 |
 | `async.data.account_info.verify_ord_id` | 打款验证流水号 | `String` | `32` | `N` | 对公卡时返回打款流水号，LV2、LV3用户升级绑定对公账户时返回，汇付在用户入驻时向用户对公账户打款，用户需通过打款验证接口上送打款流水号与打款金额完成验证 |
 | `async.data.account_info.face_url` | 人脸活体验证 | `String` | `512` | `N` | 升级LV3，对私验证没有终态时返回 |
+| `async.data.account_info.fail_msg` | 验证失败原因 | `String` | `256` | `N` | 打款失败、人脸验证失败时返回 |
+| `async.data.agreement_info_list[]` | 协议信息列表 | `String` | `—` | `N` | jsonArray格式 notify_type = A 或 E时返回; |
+| `async.data.agreement_info_list[].agreement_id` | 协议编号 | `String` | `64` | `N` | 申请实名且签署电子协议时返回；示例值：[官网示例已脱敏] |
+| `async.data.agreement_info_list[].agreement_name` | 协议名称 | `String` | `256` | `N` | 申请实名且签署电子协议时返回；示例值：斗拱平台用户支付服务协议 |
+| `async.data.agreement_info_list[].agreement_type` | 协议类型 | `String` | `1` | `N` | 0-电子协议 |
+| `async.data.agreement_info_list[].con_stat` | 合同状态 | `String` | `2` | `N` | 电子协议类型会返回以下值：；2：创建合同异常；3：待签约；4：签约中；5：签约完成(电子协议只有签约完成才能做交易)；6：已失效；7：已拒签；8：签约失败；示例值：5 |
+| `async.data.agreement_info_list[].agreement_link` | 协议签署连接 | `String` | `1024` | `N` | 申请实名且签署电子协议时返回；示例值：https://sl.integrationtest.cloudpnr.com/TsK8e649 |
 
 ## 用户申请单状态查询
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhsqdzt.md>
-- SHA-256：`f7894c5e2bc3544a9501922d4e3d5bb8b1f054704a80c36405a51ef2ad768e56`
+- SHA-256：`50ee782a7bec09697018ce22927ab8fed3c7eb1ff8e745ec53c19a4d2d65b053`
 - 说明：完整保留官方类型、长度、必填标记和说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -381,11 +394,17 @@
 | `response.data.apply_reason` | 审核意见 | `String` | `512` | `N` | 审核意见 |
 | `response.data.apply_status` | 申请单审核状态 | `String` | `1` | `N` | Y:审核通过 P:审核中 N审核拒绝 F:系统处理失败；示例值：Y |
 | `response.data.huifu_id` | 用户号 | `String` | `18` | `N` | 汇付分配的用户号；示例值：[官网示例已脱敏] |
+| `response.data.agreement_info_list[]` | 协议信息 | `String` | `—` | `N` | 签署电子协议时返回 jsonArray格式 |
+| `response.data.agreement_info_list[].agreement_id` | 协议编号 | `String` | `64` | `N` | 申请实名且签署电子协议时返回；示例值：[官网示例已脱敏] |
+| `response.data.agreement_info_list[].agreement_name` | 协议名称 | `String` | `256` | `N` | 申请实名且签署电子协议时返回；示例值：斗拱平台用户支付服务协议 |
+| `response.data.agreement_info_list[].con_stat` | 合同状态 | `String` | `2` | `N` | 电子协议类型会返回以下值：；2：创建合同异常；3：待签约；4：签约中；5：签约完成(电子协议只有签约完成才能做交易)；6：已失效；7：已拒签；8：签约失败；示例值：5 |
+| `response.data.agreement_info_list[].agreement_type` | 协议类型 | `String` | `1` | `N` | 0-电子协议 |
+| `response.data.agreement_info_list[].agreement_link` | 协议签署连接 | `String` | `1024` | `N` | 申请实名且签署电子协议时返回；示例值：https://sl.integrationtest.cloudpnr.com/TsK8e649 |
 
 ## 用户信息查询
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhywcx.md>
-- SHA-256：`3b11a53bb0cb52c086a93346fd6788c015ed0e60a3d8ffbd8e9bfb31c73634b6`
+- SHA-256：`3347a35c7706eca63557a8e2c24b7048defd5095540ca5ed32832705c89391ca`
 - 说明：完整保留官方类型、长度、必填标记和说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -556,6 +575,7 @@
 | `response.data.account_info.trans_status` | 验证状态 | `String` | `1` | `N` | 对公打款验证：1-打款中，2-打款成功验证中，3-打款失败，4-验证通过，5-验证失败；法人活体验证： 1 验证中 4 验证通过 5 验证失败 |
 | `response.data.account_info.face_url` | 活体验证URL | `String` | `512` | `N` | 升级LV3，没有对公卡时走活体验证。 |
 | `response.data.account_info.verify_ord_id` | 打款验证流水号 | `String` | `32` | `N` | 对公卡时返回打款流水号，LV2、LV3用户升级绑定对公账户时返回，汇付在用户入驻时向用户对公账户打款，用户需通过打款验证接口上送打款流水号与打款金额完成验证 |
+| `response.data.account_info.fail_msg` | 验证失败原因 | `String` | `256` | `N` | 打款失败、人脸验证失败时返回 |
 | `response.data.balance_pay_config` | 余额支付配置 | `Object` | `—` | `N` | jsonObject格式 |
 | `response.data.balance_pay_config.switch_state` | 开通状态 | `String` | `1` | `N` | 1 开通 0关闭 |
 | `response.data.balance_pay_config.fee_rate` | 手续费(%) | `String` | `9` | `N` | 支持两位小数 fee_rate与fee_fix_amt不能同时为空；示例值：0.50代表费率为0.5% |
@@ -691,7 +711,7 @@
 ## 用户业务入驻修改
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_ywrzxg.md>
-- SHA-256：`ca3c5d4430cba1827c806c87d7dee3417b3f78bd4883ce1e88ea90149e5d9c78`
+- SHA-256：`cea918c6a5d5674cdfe22981ffb1066866f40ab4ea649bb312f36fe1296e0cd2`
 - 说明：完整保留官方类型、长度、必填标记和说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -806,8 +826,14 @@
 | `request.data.account_recharge_config` | 账户充值配置 | `String` | `—` | `N` | jsonObject格式 账户升级LV3 才能开通 |
 | `request.data.account_recharge_config.fee_rate` | 手续费(%) | `String` | `9` | `Y` | 支持两位小数 fee_rate与fee_fix_amt不能同时为空；示例值：0.50代表费率为0.5% |
 | `request.data.account_recharge_config.fee_fix_amt` | 手续费（固定/元） | `String` | `9` | `Y` | 支持两位小数 fee_rate与fee_fix_amt不能同时为空；示例值：1.50 ； 注：如果fee_fix_amt与fee_rate都填写了则手续费=fee_fix_amt+支付金额*fee_rate |
+| `request.data.account_recharge_config.out_fee_flag` | 交易手续费外扣标记 | `String` | `1` | `N` | 1 外扣 2 内扣 |
+| `request.data.account_recharge_config.out_fee_huifu_id` | 手续费外扣汇付ID | `String` | `18` | `C` | 开通账户充值手续费外扣业务时必填，示例值：[官网示例已脱敏] |
+| `request.data.account_recharge_config.out_fee_acct_id` | 交易手续费外扣账户号 | `String` | `16` | `C` | 开通账户充值手续费外扣业务时必填，示例值：C03540512 |
 | `request.data.delay_pay_config` | 延迟交易配置 | `String` | `—` | `N` | jsonObject格式 账户升级LV3 才能开通 |
 | `request.data.delay_pay_config.switch_state` | 开通状态 | `String` | `1` | `Y` | 1 开通 0关闭 |
+| `request.data.agreement_type` | 协议信息实体 | `String` | `—` | `N` | jsonObject字符串 |
+| `request.data.agreement_type.agreement_type` | 协议类型 | `String` | `1` | `Y` | 0-电子协议 ；示例值：0 |
+| `request.data.agreement_type.message_send_type` | 电子协议签约短信发送标识 | `String` | `1` | `N` | 协议类型为电子，业务开通审核通过后发送协议签约短信； 0：发送，默认； 1：不发送； 示例值：0 |
 
 ### 同步响应 data
 
@@ -841,8 +867,8 @@
 | `async.data.req_seq_id` | 请求流水号 | `String` | `32` | `Y` | 原请求流水号；示例值：rQ[官网示例已脱敏] |
 | `async.data.req_date` | 请求时间 | `String` | `8` | `Y` | 原请求时间YYYYMMDD；示例值：20240123 |
 | `async.data.huifu_id` | 汇付客户号 | `String` | `18` | `Y` | 固定18位 ,汇付分配的汇付客户号；示例值：[官网示例已脱敏] |
-| `async.data.notify_type` | 通知类型 | `String` | `1` | `Y` | A:审核消息，Z：电子账户；示例值：A |
-| `async.data.audit_info` | 审核信息 | `String` | `—` | `N` | jsonObject; notify_type = A时返回; |
+| `async.data.notify_type` | 通知类型 | `String` | `1` | `Y` | E:审核消息，A:业务消息，U：用户升级通知，Z：电子账户；示例值：A |
+| `async.data.audit_info` | 审核信息 | `String` | `—` | `N` | jsonObject; notify_type = A 或 E时返回; |
 | `async.data.audit_info.audit_status` | 审核状态 | `String` | `1` | `Y` | Y:审核通过 P:审核中 N:审核拒绝；示例值：Y |
 | `async.data.audit_info.audit_desc` | 审核意见 | `String` | `512` | `N` | 审核意见 |
 | `async.data.audit_info.apply_no` | 申请单号 | `String` | `18` | `Y` | 示例值：[官网示例已脱敏] |
@@ -856,11 +882,18 @@
 | `async.data.elec_acct_result.bank_status` | 电子账户开通状态 | `String` | `1` | `Y` | S：成功 F：失败；示例值：S |
 | `async.data.elec_acct_result.bank_message` | 银行信息 | `String` | `512` | `N` | 银行信息 |
 | `async.data.elec_acct_result.sign_agreement_id` | 签约协议号 | `String` | `32` | `N` | 商户签约中信E管家协议编号； 签约成功才返回示例值：[官网示例已脱敏] |
-| `async.data.account_info` | 升级信息 | `Object` | `—` | `N` | 用户升级信息 |
+| `async.data.account_info` | 升级信息 | `String` | `—` | `N` | jsonObject; notify_type = A 或 U 时返回; |
 | `async.data.account_info.account_level` | 用户等级 | `String` | `6` | `N` | LV1/LV2/LV3，不填默认LV1 |
 | `async.data.account_info.trans_status` | 验证状态 | `String` | `1` | `N` | 验证状态：打款打款验证：1-打款中，2-打款成功验证中，3-打款失败，4-验证通过，5-验证失败；人脸验证： 1 验证中 4 验证通过 5 验证失败 |
 | `async.data.account_info.verify_ord_id` | 打款验证流水号 | `String` | `32` | `N` | 对公卡时返回打款流水号，LV2、LV3用户升级绑定对公账户时返回，汇付在用户入驻时向用户对公账户打款，用户需通过打款验证接口上送打款流水号与打款金额完成验证 |
 | `async.data.account_info.face_url` | 人脸活体验证 | `String` | `512` | `N` | 升级LV3，对私验证没有终态时返回 |
+| `async.data.account_info.fail_msg` | 验证失败原因 | `String` | `256` | `N` | 打款失败、人脸验证失败时返回 |
+| `async.data.agreement_info_list[]` | 协议信息列表 | `String` | `—` | `N` | jsonArray格式 notify_type = A 或 E时返回; |
+| `async.data.agreement_info_list[].agreement_id` | 协议编号 | `String` | `64` | `N` | 申请实名且签署电子协议时返回；示例值：[官网示例已脱敏] |
+| `async.data.agreement_info_list[].agreement_name` | 协议名称 | `String` | `256` | `N` | 申请实名且签署电子协议时返回；示例值：斗拱平台用户支付服务协议 |
+| `async.data.agreement_info_list[].agreement_type` | 协议类型 | `String` | `1` | `N` | 0-电子协议 |
+| `async.data.agreement_info_list[].con_stat` | 合同状态 | `String` | `2` | `N` | 电子协议类型会返回以下值：；2：创建合同异常；3：待签约；4：签约中；5：签约完成(电子协议只有签约完成才能做交易)；6：已失效；7：已拒签；8：签约失败；示例值：5 |
+| `async.data.agreement_info_list[].agreement_link` | 协议签署连接 | `String` | `1024` | `N` | 申请实名且签署电子协议时返回；示例值：https://sl.integrationtest.cloudpnr.com/TsK8e649 |
 
 ## 用户列表查询
 

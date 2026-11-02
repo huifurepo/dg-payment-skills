@@ -29,7 +29,7 @@ EXPECTED_COUNTS = {
     "个人商户进件": 129,
     "商户业务开通": 460,
     "图片上传": 8,
-    "商户详细信息查询": 578,
+    "商户详细信息查询": 583,
     "申请单状态查询": 93,
     "商户业务开通修改": 452,
     "商户基本信息修改": 199,
@@ -143,7 +143,7 @@ def main() -> int:
             line.startswith("| `") for line in section_text(text, title).splitlines()
         )
         assert actual == expected, f"{title}: expected {expected} paths, found {actual}"
-        assert sum(EXPECTED_COUNTS.values()) == 2209
+        assert sum(EXPECTED_COUNTS.values()) == 2214
 
     target = next(
         line

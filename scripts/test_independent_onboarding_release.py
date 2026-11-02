@@ -25,6 +25,8 @@ class IndependentReleaseTests(unittest.TestCase):
                 expected = {spec["source_lock"]}
                 if "sdk_source_lock" in spec:
                     expected.add(spec["sdk_source_lock"])
+                if "additional_source_lock" in spec:
+                    expected.add(spec["additional_source_lock"])
                 self.assertEqual(set(bindings), expected)
                 provenance = {
                     "refresh_contract": spec["refresh_contract"],
@@ -44,6 +46,16 @@ class IndependentReleaseTests(unittest.TestCase):
                             del bad["source_locks"][spec["sdk_source_lock"]]
                         else:
                             bad["source_locks"][spec["sdk_source_lock"]] = "0" * 64
+                        with self.assertRaises(ValueError):
+                            validate_skill_package.validate_refresh_source_bindings(bad, spec)
+                if "additional_source_lock" in spec:
+                    for mutation in ("missing", "wrong"):
+                        bad = copy.deepcopy(provenance)
+                        key = spec["additional_source_lock"]
+                        if mutation == "missing":
+                            del bad["source_locks"][key]
+                        else:
+                            bad["source_locks"][key] = "0" * 64
                         with self.assertRaises(ValueError):
                             validate_skill_package.validate_refresh_source_bindings(bad, spec)
 

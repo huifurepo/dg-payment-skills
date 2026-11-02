@@ -7,8 +7,8 @@
 ## 接口与字段面
 
 - Endpoint：`POST https://api.huifu.com/v2/user/basicdata/query`。
-- 快照更新时间：官网 `2026-09-22`，本地冻结 `2026-10-08`；原文 SHA-256：`3b11a53bb0cb52c086a93346fd6788c015ed0e60a3d8ffbd8e9bfb31c73634b6`。
-- 共165个字段路径：请求7、同步响应158、异步0；4个根表、16个扩展表，最大深度5。
+- 快照更新时间：官网 `2026-10-20`，本地冻结 `2026-10-25`；原文 SHA-256：`3347a35c7706eca63557a8e2c24b7048defd5095540ca5ed32832705c89391ca`。
+- 共166个字段路径：请求7、同步响应159、异步0；4个根表、16个扩展表，最大深度5。
 - 全部请求、响应父子路径、数组层级、类型、长度、Y/N/C 与官方说明读取 `user-onboarding-complete-field-catalog.md`；wire 裁决和官网冲突同时读取 `user-onboarding-field-contracts.md`。
 - 请求 `data.huifu_id` 必须是直属用户 ID，不是商户 ID。
 - 请求 `data.req_seq_id` 必须保持调用方真实值；官网明确要求同一商户号当天唯一，不得自动换流水或把该规则外推到开户、业务入驻接口。
@@ -52,3 +52,13 @@ response.data.account_info、balance_pay_config、account_recharge_config、dela
 - 查询响应中的配置状态用于展示现状，不能直接复制成业务入驻请求。
 
 官网未声明异步通知。三语言专属类为 `V2UserBasicdataQueryRequest`；不得与 `V2MerchantBasicdataQueryRequest` 混用。
+
+## 2026-10-25 官网更新同步
+
+本地当前来源SHA-256：`3347a35c7706eca63557a8e2c24b7048defd5095540ca5ed32832705c89391ca`。
+
+本轮在response.data.account_info中新增fail_msg:String(256) N；详情account_info仍为原生Object，不沿用业务通知改为String(JSON Object)的编码。该失败原因与审核、绑卡、升级和支付终态分别判断。
+
+| 新增完整合同路径 | 中文名 | 类型 | 长度 | 必填 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| `response.data.account_info.fail_msg` | 验证失败原因 | `String` | `256` | `N` | 条件与完整原文见对应完整目录 |

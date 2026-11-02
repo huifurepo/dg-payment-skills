@@ -26,7 +26,7 @@
 
 ## 证据与边界
 
-- 十二接口活动快照为 `2026-10-08`，完整机械目录共546个字段路径：请求340、同步响应161、异步45。
+- 十二接口活动快照为 `2026-10-25`（相对10-08字节未变），完整机械目录共546个字段路径：请求340、同步响应161、异步45。
 - 十二接口与原有九个 `/v2/user/*` 接口使用独立目录和来源锁；电子合同、页面进件及 AT 管理字段不得混入用户开户 DTO。
-- 商户进件 Skill 当前共34个接口、3,366个字段路径。交易分账明细查询仍只归属 `$huifu-pay-integration`；本轮在线 SHA 与支付 Skill 锁定 SHA 一致。
-- 所有正式请求仍须使用 HTTPS、请求签名、响应验签与 `jpt-x-skill-source: hfms/1.0.5`。完整规则见 `onboarding-extension-field-contracts.md` 与 `onboarding-extension-shared-server-sdk-matrix.md`。
+- 商户进件 Skill 当前共36个接口、3,534个字段路径。交易分账明细查询仍只归属 `$huifu-pay-integration`；本轮完整复查已包含其支付来源，接口归属保持不变。
+- 所有正式请求仍须使用 HTTPS、请求签名、响应验签与 `jpt-x-skill-source: hfms/1.1.0`。完整规则见 `onboarding-extension-field-contracts.md` 与 `onboarding-extension-shared-server-sdk-matrix.md`。

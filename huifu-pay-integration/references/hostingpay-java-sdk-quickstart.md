@@ -75,7 +75,7 @@ public class HuifuConfig {
     @Value("${huifu.rsa-public-key}")
     private String rsaPublicKey;
 
-    @Value("${huifu.skill-source:hfps/1.4.0}")
+    @Value("${huifu.skill-source:hfps/1.5.0}")
     private String skillSource;
 
     @PostConstruct
@@ -101,7 +101,7 @@ public class HuifuConfig {
 2. SDK 初始化在 `@PostConstruct` 中执行，应用启动时仅执行**一次**
 3. `BasePay.debug=false` 必须在任何初始化或请求前全局执行一次，不得按请求或线程临时切换
 4. 所有配置通过 `@Value` 从 `application.yml` 读取，配置文件通过环境变量注入
-5. `skillSource` 默认可直接使用 `hfps/1.4.0`；如需覆盖，可通过配置项 `huifu.skill-source` 传入，初始化时按 `<skill_source>` 原样透传
+5. `skillSource` 默认可直接使用 `hfps/1.5.0`；如需覆盖，可通过配置项 `huifu.skill-source` 传入，初始化时按 `<skill_source>` 原样透传
 6. 2026-10-08官方通用 Java 3.0.41源码核验使用默认TLS工厂；真实请求使用官方 Request + `BasePayClient.request()`，不得改写 `HttpClient`、OkHttp 或自实现 HTTP+签名客户端。
 
 ## 步骤 3：验证核心类导入

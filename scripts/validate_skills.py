@@ -548,10 +548,20 @@ def validate_regression_metadata(state: ValidationState) -> None:
             state.ok(f"{suite}: generated regression suite matches canonical prompts")
     cross_file = REPO_ROOT / "tests/regression/cross-route.json"
     cross_cases = json.loads(cross_file.read_text(encoding="utf-8"))
-    if len(cross_cases) != 35 or any(item.get("suite") != "cross-route" for item in cross_cases):
-        state.error("cross-route regression suite must contain 35 tagged cases")
+    if len(cross_cases) != 39 or any(item.get("suite") != "cross-route" for item in cross_cases):
+        state.error("cross-route regression suite must contain 39 tagged cases")
     else:
-        state.ok("cross-route regression suite count OK: 35")
+        state.ok("cross-route regression suite count OK: 39")
+
+    additions = json.loads((REPO_ROOT / "tests/regression/interface-expansion.json").read_text(encoding="utf-8"))
+    addition_ids = {int(item["id"]) for item in additions}
+    addition_counts = {suite: sum(item.get("suite") == suite for item in additions) for suite in ("payment", "onboarding")}
+    if (len(additions) != 9 or addition_ids != set(range(4101, 4110))
+            or addition_counts != {"payment": 7, "onboarding": 2}
+            or not addition_ids.issubset(rule_ids)):
+        state.error("new interface regression cases must cover nine APIs with rules and payment=7/onboarding=2 ownership")
+    else:
+        state.ok("nine new interface regression cases and ownership verified")
 
     user_file = REPO_ROOT / "tests/regression/user-onboarding.json"
     user_cases = json.loads(user_file.read_text(encoding="utf-8"))
@@ -603,8 +613,8 @@ def validate_regression_metadata(state: ValidationState) -> None:
         state.ok("README.md regression claims avoid stale fixed totals")
 
     regression_counts = {
-        "payment": suite_counts["payment"],
-        "onboarding": suite_counts["onboarding"],
+        "payment": suite_counts["payment"] + addition_counts["payment"],
+        "onboarding": suite_counts["onboarding"] + addition_counts["onboarding"],
         "user-onboarding": len(user_cases),
         "cross-route": len(cross_cases),
     }
@@ -716,8 +726,8 @@ def validate_user_onboarding_reference_contract(state: ValidationState) -> None:
         root / "references/user-onboarding-business-modify.md": (
             "/v2/user/busi/modify",
             "V2UserBusiModifyRequest",
-            "共138个字段路径",
-            "请求98、同步响应11、异步29",
+            "共151个字段路径",
+            "请求104、同步响应11、异步36",
             "account_level",
             "balance_pay_config",
             "account_recharge_config",

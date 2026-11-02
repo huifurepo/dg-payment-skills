@@ -91,3 +91,7 @@
 - `jump_url` 是同步返回里最关键的前端拉起字段；拿到之后仍然不能视为支付成功。
 - 2026-10-10官网已明确通知 `trans_finish_time:String(13)` 为毫秒时间戳；`end_time:String(14)` 仍为 `yyyyMMddHHmmss`，分别解析。
 - 渠道扩展对象很多，回调落库时建议把顶层字段和渠道对象分表或按 JSON 列分开存储。
+
+## 2026-10-25 合单通知
+
+本轮在异步通知新增 `async.resp_data.sub_orders_response` 子单信息，及其分账、手续费、延时和金额结构；完整类型与逐层wire以 `payment-complete-field-catalog.md` 为准。官方子单交易金额字段名为 `sub_trams_amt`，不得擅自改拼写；它和请求的 `sub_trans_amt` 分别建模。新增路径清单见 `hostingpay-preorder-h5-pc.md`。

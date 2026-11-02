@@ -26,7 +26,7 @@
   {
     "id": 5,
     "prompt": "我在 PHP 里接托管预下单，本次请求只实际加载并使用 $huifu-pay-integration，虽然仓库也安装了进件 Skill，但它没有参与本次生成，而且没有显式配置 skill_source。默认值应该是什么？如果请求里已经有 huifu_id，要不要额外补别的头？初始化时可以直接复用官方 BsPayDemo/loader.php 或 Composer/BsPayConfig.php 吗？请直接告诉我结论和该看哪些文档。",
-    "expected": "必须读取 shared-server-sdk-matrix.md 和 hostingpay-php-adapter.md。必须明确未显式配置且本次仅支付 Skill 实际参与时，`jpt-x-skill-source` 的确定性默认值只能是 `hfps/1.4.0`；仅安装但未参与的进件 Skill 不计入，不能输出双 Skill 组合值。PHP 侧该值经 `MerConfig.skill_source` 进入强制来源请求头，不再拼接 `sys_id`；如果当前请求 `data.huifu_id` 已存在且非空，还要额外带 `jpt-x-skill-huifu_id`，并把两项都定位为 HTTP 请求头而不是业务报文字段。当前 Skill 包对齐的官方 `huifurepo/dg-php-sdk` 主链路会在 `MerConfig.skill_source` 已配置时自动带出这两个来源头，而不是默认落到 `HostingClient` 或自写 `curl`。不得复用会定义 `DEBUG=true` 的官方 BsPayDemo/loader.php 或 Composer/BsPayConfig.php；必须在加载任何 SDK 文件和调用 BsPay::init 前固定 DEBUG=false，否则日志会泄露含 RSA 私钥的 MerConfig、完整请求和响应。",
+    "expected": "必须读取 shared-server-sdk-matrix.md 和 hostingpay-php-adapter.md。必须明确未显式配置且本次仅支付 Skill 实际参与时，`jpt-x-skill-source` 的确定性默认值只能是 `hfps/1.5.0`；仅安装但未参与的进件 Skill 不计入，不能输出双 Skill 组合值。PHP 侧该值经 `MerConfig.skill_source` 进入强制来源请求头，不再拼接 `sys_id`；如果当前请求 `data.huifu_id` 已存在且非空，还要额外带 `jpt-x-skill-huifu_id`，并把两项都定位为 HTTP 请求头而不是业务报文字段。当前 Skill 包对齐的官方 `huifurepo/dg-php-sdk` 主链路会在 `MerConfig.skill_source` 已配置时自动带出这两个来源头，而不是默认落到 `HostingClient` 或自写 `curl`。不得复用会定义 `DEBUG=true` 的官方 BsPayDemo/loader.php 或 Composer/BsPayConfig.php；必须在加载任何 SDK 文件和调用 BsPay::init 前固定 DEBUG=false，否则日志会泄露含 RSA 私钥的 MerConfig、完整请求和响应。",
     "suite": "payment"
   },
   {
@@ -188,7 +188,7 @@
   {
     "id": 32,
     "prompt": "后续你们 Skill 更新了，我怎么更新本地这个 $huifu-pay-integration？它能不能主动提醒我升级？",
-    "expected": "必须读取 `skill-version-policy.md`；必须说明当前本地 Skill 版本是 1.4.0；必须说明 Skill 不能主动联网检查或推送升级，只能在用户触发版本/升级问题时提示；必须给出 Git 拉取、本地目录整体覆盖或内部发布包替换等更新方式；必须提醒升级后重新加载或重启客户端并确认 SKILL.md 版本事实；不能编造下载地址或假装已经联网确认最新版。",
+    "expected": "必须读取 `skill-version-policy.md`；必须说明当前本地 Skill 版本是 1.5.0；必须说明 Skill 不能主动联网检查或推送升级，只能在用户触发版本/升级问题时提示；必须给出 Git 拉取、本地目录整体覆盖或内部发布包替换等更新方式；必须提醒升级后重新加载或重启客户端并确认 SKILL.md 版本事实；不能编造下载地址或假装已经联网确认最新版。",
     "suite": "payment"
   },
   {

@@ -707,8 +707,8 @@ for case in cases:
         "`sys_id`、`product_id`、`data`、`sign`",
         "`need_sign=True`",
         "不启用自动业务重试",
-        "`hfms/1.0.5`",
-        "`hfps/1.4.0;hfms/1.0.5`",
+        "`hfms/1.1.0`",
+        "`hfps/1.5.0;hfms/1.1.0`",
     )
     problems += require_ordered_text(
         image,
@@ -744,9 +744,9 @@ for case in cases:
     problems += require_text(prompts, '"id": 69', '"id": 70', '"id": 71', '"id": 74', '"id": 87', '"id": 88', '"id": 89', "请求签名保留", "响应验签跳过", "CURLFile", "官方 Demo 同时传入互斥来源", "V2MerchantBasicdataIndvRequest", "V2MerchantBusiMultifeeConfigRequest", "V2MerchantBusiMultifeeQueryRequest", "async_return_url", "notify_url", "Java HttpClient/OkHttp/HttpURLConnection", "PHP Guzzle/curl", "SDK 没有对应接口能力时报告缺口")
     problems += forbid_text(matrix, "`dg_sdk.request_post")
     problems += forbid_text(image, "dg_sdk.request_post")
-    problems += require_text(contracts, f"来源快照核验日期：`{onboarding_source_date()}`", "企业商户进件", "个人商户进件", "商户业务开通", "图片上传", "商户详细信息查询", "申请单状态查询", "商户业务开通修改", "商户基本信息修改", "商户费率信息查询", "商户状态变更", "商户短信发送", "商户多费率配置", "商户多费率配置查询", "fee_sign:String(32) N", "wx_conf_list/ali_conf_list", "响应 `conf_list:String/jsonArray格式`", "按 String(JSON Array) 解码", "agreement_info.agreement_async_return_url", "reg_result_list[].business_stat", "async.agreement.agreement_info_list.con_stat", "data.wx_zl_config.apply_state", "data.ali_zl_config[].apply_status", "RECV_ORD_ID_", "file_url String(512)", "apply_status", "十一个已有专属 Request 类的 JSON 接口", "公共 `AbstractRequest`", "`BasePay.debug` 默认为 `true`", "BasePay.debug = false;", "任何 SDK 请求之前", "不得在并发请求中临时切换", "`BsPayDemo/loader.php`", "`Composer/BsPayConfig.php`", "`DEBUG=false`", "`DEBUG=true`", "`rsa_merch_private_key`", "完整请求体和完整响应", "不得按叶字段名去重", "request.data.card_info.prov_id", "request.data.card_info.area_id", "不能跨接口复用长度", "hfms/1.0.5", "hfps/1.4.0;hfms/1.0.5")
-    problems += require_text(credentials, "进件凭据与敏感资料边界", "RSA 私钥", "禁止写入", "Java 必须", "`BasePay.debug = false`", "PHP 必须", "`BsPay::init`", "`DEBUG=false`", "`DEBUG=true`", "Demo loader", "完整请求、响应", "`hfms/1.0.5`", "`hfps/1.4.0;hfms/1.0.5`")
-    problems += require_text(headers, "默认 `skill_source`", "`hfms/1.0.5`", "`hfps/1.4.0;hfms/1.0.5`", "顺序固定为支付、进件", "英文分号且不加空格", "原样透传")
+    problems += require_text(contracts, f"来源快照核验日期：`{onboarding_source_date()}`", "企业商户进件", "个人商户进件", "商户业务开通", "图片上传", "商户详细信息查询", "申请单状态查询", "商户业务开通修改", "商户基本信息修改", "商户费率信息查询", "商户状态变更", "商户短信发送", "商户多费率配置", "商户多费率配置查询", "fee_sign:String(32) N", "wx_conf_list/ali_conf_list", "响应 `conf_list:String/jsonArray格式`", "按 String(JSON Array) 解码", "agreement_info.agreement_async_return_url", "reg_result_list[].business_stat", "async.agreement.agreement_info_list.con_stat", "data.wx_zl_config.apply_state", "data.ali_zl_config[].apply_status", "RECV_ORD_ID_", "file_url String(512)", "apply_status", "十一个已有专属 Request 类的 JSON 接口", "公共 `AbstractRequest`", "`BasePay.debug` 默认为 `true`", "BasePay.debug = false;", "任何 SDK 请求之前", "不得在并发请求中临时切换", "`BsPayDemo/loader.php`", "`Composer/BsPayConfig.php`", "`DEBUG=false`", "`DEBUG=true`", "`rsa_merch_private_key`", "完整请求体和完整响应", "不得按叶字段名去重", "request.data.card_info.prov_id", "request.data.card_info.area_id", "不能跨接口复用长度", "hfms/1.1.0", "hfps/1.5.0;hfms/1.1.0")
+    problems += require_text(credentials, "进件凭据与敏感资料边界", "RSA 私钥", "禁止写入", "Java 必须", "`BasePay.debug = false`", "PHP 必须", "`BsPay::init`", "`DEBUG=false`", "`DEBUG=true`", "Demo loader", "完整请求、响应", "`hfms/1.1.0`", "`hfps/1.5.0;hfms/1.1.0`")
+    problems += require_text(headers, "默认 `skill_source`", "`hfms/1.1.0`", "`hfps/1.5.0;hfms/1.1.0`", "顺序固定为支付、进件", "英文分号且不加空格", "原样透传")
     for path in (matrix, image, enterprise, individual, contracts, credentials, headers, skill):
         problems += forbid_text(path, "jpt-x-skill-huifu_id", "jpt_x_skill_huifu_id")
     # The entry routes to authoritative contracts; implementation details are
@@ -765,8 +765,8 @@ for case in cases:
         "references/shared-server-sdk-matrix.md",
         "references/merchant-onboarding-image-upload.md",
         "references/merchant-onboarding-field-contracts.md",
-        "`hfms/1.0.5`",
-        "`hfps/1.4.0;hfms/1.0.5`",
+        "`hfms/1.1.0`",
+        "`hfps/1.5.0;hfms/1.1.0`",
     )
     atomic_routes = {
         "企业商户进件": "merchant-onboarding-enterprise.md",

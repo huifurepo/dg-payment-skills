@@ -11,6 +11,7 @@ import subprocess
 import zipfile
 from datetime import datetime, timezone
 from pathlib import Path, PurePosixPath
+from additional_source_bindings import additional_bindings
 
 from validation_runtime import require_assertions_enabled
 
@@ -241,9 +242,11 @@ def validate_refresh_source_bindings(
         source_lock_name: sha256(source_lock_path.read_bytes()),
         sdk_lock_name: sha256(sdk_lock_path.read_bytes()),
     }
+    base_source_locks = dict(expected_source_locks)
+    expected_source_locks.update(additional_bindings(REPO_ROOT, spec))
     if provenance["source_locks"] != expected_source_locks:
         raise ValueError("provenance source-lock map differs from Skill manifest")
-    for name, digest in expected_source_locks.items():
+    for name, digest in base_source_locks.items():
         matching = [item for item in refresh_contract["source_locks"].values() if item["path"] == name]
         if len(matching) != 1:
             raise ValueError(f"refresh contract does not bind the source lock exactly once: {name}")

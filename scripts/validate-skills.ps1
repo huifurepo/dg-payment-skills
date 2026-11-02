@@ -27,6 +27,7 @@ function Invoke-Validation {
 Invoke-Validation @("scripts\validate_skill_split.py")
 Invoke-Validation @("scripts\validate_skills.py")
 Invoke-Validation @("scripts\validate_regression_reference_ownership.py")
+Invoke-Validation @("scripts\run_real_model_regression.py", "--validate-rules-only")
 Invoke-Validation @("scripts\validate_aggregation_payload_contract.py")
 Invoke-Validation @("scripts\validate_request_field_preservation.py")
 # Windows process startup and antivirus scanning can make the 60 PHP lint/run
@@ -41,6 +42,8 @@ Invoke-Validation @("scripts\generate_payment_source_index.py", "--check")
 Invoke-Validation @("scripts\validate_payment_source_contract.py")
 Invoke-Validation @("scripts\validate_payment_review_contract.py")
 Invoke-Validation @("scripts\validate_reference_source_metadata.py")
+Invoke-Validation @("scripts\generate_additional_interface_catalog.py", "--check")
+Invoke-Validation @("scripts\validate_additional_interfaces.py")
 Invoke-Validation @("scripts\generate_payment_field_catalog.py", "--check")
 Invoke-Validation @("scripts\validate_payment_field_catalog.py")
 Invoke-Validation @("scripts\validate_balance_payment_contract.py")
@@ -83,6 +86,7 @@ try {
 }
 
 if ($env:HUIFU_SDK_ROOT) {
+    Invoke-Validation @("scripts\validate_additional_interfaces.py", "--sdk-root", $env:HUIFU_SDK_ROOT)
     Invoke-Validation @("scripts\validate_balance_payment_contract.py", "--sdk-root", $env:HUIFU_SDK_ROOT)
     Invoke-Validation @("scripts\validate_payment_sdk_evidence.py", "--sdk-root", $env:HUIFU_SDK_ROOT)
     Invoke-Validation @("scripts\validate_merchant_onboarding_sdk_evidence.py", "--sdk-root", $env:HUIFU_SDK_ROOT)

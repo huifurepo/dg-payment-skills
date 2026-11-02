@@ -45,4 +45,4 @@ Java 可运行代码仍须在进程初始化、任何 SDK 请求前全局执行�
 
 ## 公共请求头
 
-`jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅支付默认 `hfps/1.4.0`，同时使用支付与进件 Skill 时默认 `hfps/1.4.0;hfms/1.0.5`。
+`jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅支付默认 `hfps/1.5.0`，同时使用支付与进件 Skill 时默认 `hfps/1.5.0;hfms/1.1.0`。

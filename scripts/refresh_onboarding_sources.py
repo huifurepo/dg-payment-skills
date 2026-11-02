@@ -252,7 +252,7 @@ def main() -> int:
         entry["sha256"] = digest(ROOT / entry["path"])
     combined_total = sum(item["field_paths"] for item in catalogs.values())
     write_json(combined_path, {"schema_version": 1, "skill": "huifu-merchant-onboarding", "version": ONBOARDING_SPEC.version,
-                "refresh_revision": args.source_date, "scope": "Review of all 34 official onboarding sources for onboarding 1.0.5.",
+                "refresh_revision": args.source_date, "scope": f"Review of all 34 base onboarding sources for onboarding {ONBOARDING_SPEC.version}; additional APIs are locked separately.",
                 "previous_combined_lock": {"path": str(previous_combined.relative_to(ROOT)), "sha256": digest(previous_combined)},
                 "source_locks": source_links, "catalogs": catalogs, "totals": {"interfaces": 34, "field_paths": combined_total}})
     # Keep the split-query ownership review tied to the active payment snapshot.
@@ -265,7 +265,7 @@ def main() -> int:
     write_json(refresh_path, {"schema_version": 1, "refresh_id": f"api-refresh-onboarding-online-review-{args.source_date}",
                "requested_at": args.source_date, "retrieved_at": verified, "api_source_date": args.source_date,
                **sdk_metadata,
-               "version_state": {"reason": "User-confirmed payment 1.4.0 and onboarding 1.0.5 documentation refresh.",
+               "version_state": {"reason": "User-confirmed existing-document synchronization; additional interfaces have independent source evidence.",
                                  "huifu-merchant-onboarding": ONBOARDING_SPEC.version, "huifu-pay-integration": PAYMENT_SPEC.version},
                "previous_refresh": {"path": str(previous_refresh.relative_to(ROOT)), "sha256": digest(previous_refresh), "refresh_id": old_refresh["refresh_id"]},
                "source_locks": refresh_sources, "catalogs": catalogs,

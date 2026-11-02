@@ -1,6 +1,6 @@
 # 抖音直连下单
 
-> 官方接口更新时间：`2026.10.10`。来源页：`https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_dypreorder.md`。
+> 官方接口更新时间：`2026-10-10`。来源页：`https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_dypreorder.md`。
 > 本接口属于托管支付预下单，和 H5/PC、支付宝小程序、微信小程序预下单共用 `v2/trade/hosting/payment/preorder`，通过 `pre_order_type=4` 区分抖音直连场景。
 
 ## 目录

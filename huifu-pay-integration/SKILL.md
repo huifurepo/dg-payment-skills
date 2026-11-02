@@ -1,6 +1,6 @@
 ---
 name: huifu-pay-integration
-description: "汇付支付/斗拱支付（Huifu Payment）交易接入与排障。用于聚合支付、托管支付、余额支付、checkout-js及各端收银台，覆盖微信、支付宝、银联、抖音等渠道的预下单/下单、查单、关单、退款、合单、拆单/分账查询、对账，以及余额手续费试算、付款关系提交和短信验证码。支持Java/PHP/Python官方SDK、完整字段/DTO、签名验签、异步通知/Webhook、幂等、支付终态、查单补偿、本地沙箱与上线排查。进件、开户及业务开通使用huifu-merchant-onboarding；任务同时涉及开户开通与支付时联用两个skill。"
+description: "汇付支付/斗拱支付（Huifu Payment）交易接入与排障。用于聚合支付、托管支付、余额支付、延时交易确认及退款、checkout-js收银台及微信/支付宝/银联/抖音渠道；覆盖下单、查单、关单、退款、合单/分账、对账、手续费试算、付款关系、短信验证码，以及账户余额、账务流水和异步汇总查询。支持Java/PHP/Python官方SDK、完整字段/DTO、签名验签、异步通知/Webhook、幂等、支付终态、查单补偿、本地沙箱与上线排查。商户进件、开户、子账户配置及业务开通使用huifu-merchant-onboarding；任务跨开户配置与支付账务时联用两个skill。"
 ---
 
 # 汇付支付集成
@@ -14,7 +14,9 @@ description: "汇付支付/斗拱支付（Huifu Payment）交易接入与排障�
 3. 字段输出区分合同定位路径、实际 JSON/解码路径、类型、长度、Y/N/C、枚举与条件。不把官网展示分组当成 wire key；只有官方明确“方便文档展示”或目录已记录接入方裁决时才移除。String(JSON) 按父路径逐层编码/解码，示例不作默认值。
 4. 仅追问会影响当前接口选择或实际调用的缺口；继续不依赖回答的工作。字段、SDK差异或未知通知协议标记 `[需要官方确认]`，附官方来源，争议部分留 TODO/配置；不编造协议，也不要求先取得官方答复才能开发。
 
-商户进件、图片、业务开通、商户详情及申请状态交接给 `$huifu-merchant-onboarding`。余额支付的交易、付款关系、试算和短信属于本 Skill。
+商户进件、图片、业务开通、子账户开通/修改、商户详情及申请状态交接给 `$huifu-merchant-onboarding`。余额支付的交易、付款关系、试算和短信属于本 Skill。
+
+账户能力按操作目的选择：创建商户子账户、修改结算或绑卡配置使用进件 Skill；读取账户余额、资金流水及汇总使用本 Skill，纳入资金账务能力。仅做账务查询时无需同时加载进件 Skill；任务同时要求开户配置与账务查询时联用两者。此划分是两个 Skill 的职责约定，官网仍将这五项列在账户管理下；不能只按“账户”“查询”或 URL 前缀推断归属。
 
 交易报错先按支付接口排障；任务包含商户进件、业务开通、配置变更，或明确要求联合排查时，再联用进件 Skill。
 
@@ -59,10 +61,18 @@ description: "汇付支付/斗拱支付（Huifu Payment）交易接入与排障�
 | Java / PHP / Python SDK | 先读 `references/shared-server-sdk-matrix.md`；再按语言与产品线精确选择 `references/aggregation-java-adapter.md`、`references/hostingpay-java-adapter.md`、`references/aggregation-php-adapter.md`、`references/hostingpay-php-adapter.md`、`references/aggregation-python-adapter.md` 或 `references/hostingpay-python-adapter.md` |
 | 请求头和 `skill_source` | `references/shared-request-header-policy.md` |
 | DTO/Controller 字段保留 | `references/shared-request-field-preservation.md` |
-| 完整 DTO、完整响应、嵌套字段或同名字段核对 | 对应原子接口页、`references/payment-complete-field-catalog.md`；代码任务再补语言 adapter |
+| 完整 DTO、完整响应、嵌套字段或同名字段核对 | 对应原子接口页；基础接口读 `references/payment-complete-field-catalog.md`，新增延时/账户查询读下方新增目录；代码任务再补对应SDK资料 |
 | appid/openid、支付路由、对账或资金运营 FAQ | `references/payment-operations-faq.md`、`references/copilot-troubleshooting-playbooks.md` |
 | 本地沙箱 | `references/shared-local-sandbox.md`，再补通知、查询或上线检查 |
 | 上线前检查 | `references/copilot-go-live-checklist.md`、`references/copilot-existing-system.md` |
+| 延时交易确认 | `references/delay-confirm.md`、`references/payment-extension-complete-field-catalog.md` |
+| 交易确认查询（V3） | `references/delay-confirm-query.md` |
+| 交易确认退款 | `references/delay-confirm-refund.md` |
+| 交易确认退款查询（JSON仅请求） | `references/delay-confirm-refund-query.md` |
+| 账户余额信息查询 | `references/account-balance-query.md` |
+| 账务流水查询、页码/游标 | `references/account-ledger-query.md` |
+| 历史账务流水异步汇总 | `references/account-ledger-summary-query.md` |
+| 上述新增接口的DTO、响应和SDK | 目标原子页、`references/payment-extension-complete-field-catalog.md`，代码任务补 `references/payment-extension-sdk-matrix.md` 与公共SDK矩阵；JSON查询只交付已知请求合同 |
 | 版本与升级 | `references/skill-version-policy.md` |
 
 
@@ -71,6 +81,8 @@ description: "汇付支付/斗拱支付（Huifu Payment）交易接入与排障�
 接口或实体不明确时只暂停依赖该选择的业务实现，问一个最关键问题；SDK安装、安全初始化及接口骨架可继续。缺真实环境、密钥或商户配置时使用服务端配置占位，不称为已可联调；真实调用前必须取得对应配置与授权。
 
 遇到明确非法输入、验签失败、凭据泄露或未经授权的真实操作，停止受影响操作并说明原因；需要提示时用 `🔴 CHECKPOINT · HARD STOP`。不要为了生成代码要求用户证明既有环境已安全；代码本身应包含必要的启动校验。
+
+新增接口按支付/确认/确认退款/账务查询分别定位原单；确认查询固定V3。账务汇总正文异步与同步字段表冲突单独保留，不作为支付终态；通知未知项不套用其他产品协议。
 
 ## 支付终态与通知
 
@@ -83,7 +95,7 @@ description: "汇付支付/斗拱支付（Huifu Payment）交易接入与排障�
 
 - 保留调用方的日期、流水、金额、角色ID和原交易定位键；缺失或非法报错，不重写，扩展不能覆盖已声明字段。细节见 `references/shared-request-field-preservation.md`。
 - 私钥与敏感资料使用服务端安全配置和脱敏示例；不得进入前端、日志或仓库。
-- 按当前请求实际加载并参与生成的 Skill 集合取值：仅本 Skill 使用 `hfps/1.4.0`；两个 Skill 都参与当前请求时使用 `hfps/1.4.0;hfms/1.0.5`。顺序固定为支付、进件，用一个英文分号且不加空格；仅安装未参与的不计入。显式合同值原样透传，不追加 `sys_id`。
+- 按当前请求实际加载并参与生成的 Skill 集合取值：仅本 Skill 使用 `hfps/1.5.0`；两个 Skill 都参与当前请求时使用 `hfps/1.5.0;hfms/1.1.0`。顺序固定为支付、进件，用一个英文分号且不加空格；仅安装未参与的不计入。显式合同值原样透传，不追加 `sys_id`。
 - Java调试在初始化及任何请求前全局关闭，不能并发临时切换。PHP官方 `BsPayDemo/loader.php` 与 `Composer/BsPayConfig.php` 会启用敏感调试日志：在加载任何 SDK 文件前固定 `DEBUG=false`，启动拒绝已启用DEBUG的进程；生成安全loader骨架不需先索取配置证明。
 
 ## 官方 SDK-only 传输规则
@@ -102,6 +114,6 @@ description: "汇付支付/斗拱支付（Huifu Payment）交易接入与排障�
 
 | 项目 | 口径 |
 | --- | --- |
-| Skill 版本 | `1.4.0` |
-| 支付来源 | 2026-10-10，24 API / 2,930字段路径 |
+| Skill 版本 | `1.5.0` |
+| 支付来源 | 2026-10-25，31 API / 3,334字段路径；基础24 API / 3,096，新增7 API / 238 |
 | 版本与升级 | `references/skill-version-policy.md` |

@@ -130,7 +130,7 @@
     "suite": "cross-route",
     "expected_skill": "both",
     "prompt": "新商户还没开户，但本周要完成微信 JSAPI 收款，请给完整交接顺序；两个 Skill 都存在且没有显式配置 skill_source，请同时给出来源头默认值。",
-    "expected": "先用进件 Skill 完成账户和微信业务准备，再用支付 Skill 完成 JSAPI 下单与终态；jpt-x-skill-source 使用 hfps/1.4.0;hfms/1.0.5。"
+    "expected": "先用进件 Skill 完成账户和微信业务准备，再用支付 Skill 完成 JSAPI 下单与终态；jpt-x-skill-source 使用 hfps/1.5.0;hfms/1.1.0。"
   },
   {
     "id": 1020,
@@ -243,5 +243,33 @@
     "expected_skill": "user-onboarding",
     "prompt": "用户业务入驻返回 apply_no 后，要查非同名对公卡审核结果。",
     "expected": "路由到用户申请单状态查询，并保留其仅适用于非同名对公结算卡的范围。"
+  },
+  {
+    "id": 1036,
+    "suite": "cross-route",
+    "expected_skill": "payment",
+    "prompt": "商户账户已经开通，只实现账户余额信息查询，使用哪个Skill？",
+    "expected": "路由到支付Skill的资金账务能力；不需要再执行开户配置。"
+  },
+  {
+    "id": 1037,
+    "suite": "cross-route",
+    "expected_skill": "onboarding",
+    "prompt": "只修改商户子账户结算卡和结算配置，不查账，使用哪个Skill？",
+    "expected": "路由到进件Skill的子账户配置。"
+  },
+  {
+    "id": 1038,
+    "suite": "cross-route",
+    "expected_skill": "both",
+    "prompt": "接入官网账户管理五个接口：子账户开通配置、修改子账户配置、账户余额信息查询、账务流水查询和账务流水汇总结果查询，需要哪个Skill？请按职责分别实现。",
+    "expected": "联用两个Skill：进件负责子账户开通及配置修改，支付负责余额、账务流水及汇总查询。官网账户管理分类与Skill职责映射分别说明，按阶段交接。"
+  },
+  {
+    "id": 1039,
+    "suite": "cross-route",
+    "expected_skill": "payment",
+    "prompt": "已有用户账户，只查用户的资金变动流水，不修改用户资料，用哪个Skill？",
+    "expected": "路由到支付Skill的账务流水能力，保留用户角色ID，不能因出现用户二字改走用户进件。"
   }
 ]

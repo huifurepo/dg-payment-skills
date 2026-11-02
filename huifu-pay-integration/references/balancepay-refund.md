@@ -1,6 +1,6 @@
 # 余额支付退款
 
-官方来源：<https://paas.huifu.com/partners/api/doc/yuer/api_acctpaytk.md>；快照 `2026-10-10`，官网更新时间 `2025-02-25`。
+官方来源：<https://paas.huifu.com/partners/api/doc/yuer/api_acctpaytk.md>；快照 `2026-10-25`，官网更新时间 `2025-02-25`。
 
 接口：`POST /v2/trade/acctpayment/refund`。适用于已开通退款权限的余额支付交易；完整44个字段路径见 `payment-complete-field-catalog.md` 的“余额支付退款”，联读 `balancepay-field-contracts.md`。
 

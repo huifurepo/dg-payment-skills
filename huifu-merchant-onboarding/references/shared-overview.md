@@ -25,6 +25,8 @@
 | 发送或核验商户短信验证码 | `merchant-onboarding-sms-send.md` |
 | 配置或修改微信、支付宝多场景底价 | `merchant-onboarding-multifee-config.md` |
 | 查询多费率配置或按 `fee_sign` 定位 | `merchant-onboarding-multifee-query.md` |
+| 开通商户现金子账户及结算配置 | `account-subaccount-open.md` |
+| 修改商户子账户结算/绑卡配置 | `account-subaccount-modify.md` |
 | 完整字段和嵌套路径 | `merchant-onboarding-complete-field-catalog.md` |
 | 条件、互斥、冲突和 SDK 边界 | `merchant-onboarding-field-contracts.md` |
 | 外部编码、XLSX、协议和第三方资料 | `merchant-onboarding-external-resources.md` |
@@ -41,6 +43,7 @@
 - 业务开通结果必须按逐业务状态判断，不能只看同步受理。
 - 本 Skill 不实现支付下单、退款、对账、checkout-js 或支付终态；这些能力交接给 `$huifu-pay-integration`。
 - 图片传输使用已核验 SDK/专项适配；未知响应或通知协议按下方提醒隔离，不阻断已明确部分的开发。
+- 账户管理中的子账户创建/配置属于本 Skill；余额、账务流水及汇总查询交接支付 Skill。此处按操作目的分工，查询商户资料和进件状态仍由本 Skill 处理。
 
 ## 文档疑义与开发提醒
 
@@ -54,4 +57,4 @@
 
 ## 当前来源
 
-当前商户字段快照为 `2026-10-08`，十三接口共2,209个字段路径。34份进件文档在10-10复核中原始字节均不变。`upper_huifu_id:String(18) C`、门店图片条件和 `material_card_info` 独立父路径继续保留。官网URL用于来源追溯和维护刷新，不计入普通回答的本轮references。
+当前商户字段快照为 `2026-10-25`，十三接口共2,214个字段路径。34份基础进件文档本轮7份变化，另新增2份子账户配置来源。`upper_huifu_id:String(18) C`、门店图片条件和 `material_card_info` 独立父路径继续保留。官网URL用于来源追溯和维护刷新，不计入普通回答的本轮references。

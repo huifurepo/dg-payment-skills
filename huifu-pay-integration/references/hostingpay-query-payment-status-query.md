@@ -410,3 +410,50 @@
 - 查询条件在原文中分散写在各字段说明里，容易误读成 `huifu_id` 单字段可选；实际应按 `(party_order_id) OR (huifu_id + org_req_date + org_req_seq_id)` 理解。
 - `trans_fee_allowance_info.cur_allowance_config_infos` 在本页定义为 `Object`，而前面几个托管支付异步文档中同名字段常见定义为 `Array`；当前以本页官方定义为准，不做静默改写。
 - `request_ip` 长度写为 `15`，明显仅覆盖 IPv4 形式；如果上游后续支持 IPv6，应以真实返回为准而不是在调用方写死长度校验。
+
+## 2026-10-25 官网更新同步
+
+本地当前来源SHA-256：`43a8d643d66e7657ad0de01544a48a2fd6cecc651960f22235ef886c6ca6bc86`。
+
+本轮新增合单/子单请求、查询或通知字段；同名父容器按本接口和方向建模。官网通知中的`sub_trams_amt`拼写原样保留，不更改为其他字段名；split_fee_details的Object/String/数组语义也不得跨接口外推。完整嵌套类型、长度、条件和解码路径见 `payment-complete-field-catalog.md` 对应接口。
+
+| 新增完整合同路径 | 中文名 | 类型 | 长度 | 必填 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| `response.data.sub_orders_response[]` | 子单信息 | `String` | `—` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].acct_date` | 入账时间 | `String` | `8` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].acct_split_bunch` | 分账对象 | `String` | `—` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].acct_split_bunch.acct_infos[]` | 分账明细 | `String` | `—` | `Y` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].acct_split_bunch.acct_infos[].acct_id` | 分账接收方子账户 | `String` | `9` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].acct_split_bunch.acct_infos[].div_amt` | 分账金额 | `String` | `14` | `Y` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].acct_split_bunch.acct_infos[].huifu_id` | 分账接收方ID | `String` | `32` | `Y` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].acct_split_bunch.is_clean_split` | 是否净值分账 | `String` | `1` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].acct_stat` | 账务状态 | `String` | `1` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].confirmed_amt` | 已确认总金额 | `String` | `14` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].delay_acct_flag` | 是否延时交易 | `String` | `1` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].div_flag` | 是否分账交易 | `String` | `1` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].fee_info` | 交易手续费信息 | `String` | `—` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].fee_info.fee_acct_id` | 手续费扣款账户号 | `String` | `9` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].fee_info.fee_amount` | 手续费金额 | `String` | `16` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].fee_info.fee_flag` | 手续费扣款标志 | `Integer` | `1` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].fee_info.fee_formula` | 手续费计算公式 | `String` | `512` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].fee_info.fee_huifu_id` | 手续费扣款商户号 | `String` | `32` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].fee_info.fee_rec_type` | 手续费扣取方式 | `Integer` | `1` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].freeze_time` | 冻结时间 | `String` | `14` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].fund_freeze_stat` | 资金冻结状态 | `String` | `16` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].split_fee_info` | 分账手续费信息 | `String` | `—` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_details` | 分账手续费信息 | `String` | `—` | `Y` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_details.split_fee_acct_id` | 分账手续费承担方账号 | `String` | `9` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_details.split_fee_amt` | 分账手续费金额(元) | `String` | `14` | `Y` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_details.split_fee_huifu_id` | 分账手续费承担方商户号 | `String` | `32` | `Y` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_flag` | 分账手续费扣款标志 | `Integer` | `1` | `Y` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].split_fee_info.total_split_fee_amt` | 分账手续费总金额(元) | `String` | `14` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_acct_id` | 子单账户号 | `String` | `9` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_hf_seq_id` | 子单全局流水号 | `String` | `128` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_huifu_id` | 子单商户号 | `String` | `32` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_remark` | 子单备注信息 | `String` | `—` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_req_seq_id` | 子单请求流水号 | `String` | `128` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_settlement_amt` | 子单结算金额 | `String` | `14` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].sub_trans_amt` | 子单交易金额 | `String` | `14` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].unconfirm_amt` | 待确认总金额 | `String` | `14` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].unfreeze_amt` | 解冻金额 | `String` | `14` | `N` | 条件与完整原文见对应完整目录 |
+| `response.data.sub_orders_response[].unfreeze_time` | 解冻时间 | `String` | `14` | `N` | 条件与完整原文见对应完整目录 |

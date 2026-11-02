@@ -1,6 +1,6 @@
 # 拆单支付订单查询
 
-> 官方接口更新时间：`2026.10.10`。来源页：`https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingcdzf.md`。
+> 官方接口更新时间：`2026-10-10`。来源页：`https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingcdzf.md`。
 > 本接口只用于拆单支付订单查询，不等同于普通托管交易查询 `v2/trade/hosting/payment/queryorderinfo`。
 
 ## 目录

@@ -35,10 +35,14 @@ def source_metadata_errors(header: str, source: dict, lock: dict) -> list[str]:
 def main() -> int:
     errors = []
     checked = 0
+    manifest = json.loads((ROOT / 'skills-manifest.json').read_text())
     for name, locks in (
         ('huifu-pay-integration', (PAYMENT_SOURCE_LOCK,)),
         ('huifu-merchant-onboarding', (ONBOARDING_SOURCE_LOCK, USER_ONBOARDING_SOURCE_LOCK, ONBOARDING_EXTENSION_SOURCE_LOCK)),
     ):
+        additional = manifest['skills'][name].get('additional_source_lock')
+        if additional:
+            locks = (*locks, ROOT / additional)
         sources = [(source, lock) for path in locks for lock in [json.loads(path.read_text())] for source in lock['sources']]
         for path in (ROOT / name / 'references').glob('*.md'):
             header = '\n'.join(path.read_text().splitlines()[:20])
@@ -48,7 +52,6 @@ def main() -> int:
             checked += 1
             for error in source_metadata_errors(header, *matches[0]):
                 errors.append(f'{path.relative_to(ROOT)}: {error}')
-    manifest = json.loads((ROOT / 'skills-manifest.json').read_text())
     payment = manifest['skills']['huifu-pay-integration']['version']
     onboarding = manifest['skills']['huifu-merchant-onboarding']['version']
     payrefs = ROOT / 'huifu-pay-integration/references'

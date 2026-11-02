@@ -12,7 +12,7 @@
 
 ## 适用范围
 
-本文件处理商户进件材料的文件标识获取。官方来源：[图片上传](https://paas.huifu.com/navigator/ossApi/api_shjj_shtpsc.json)；本地活动快照 `2026-10-08`，原文 SHA-256 为 `2fcb84dd1cfe0260cfa3d49b79174d2e7b8a287cdf860faa62011bfc1e8472dd`。当前锁定 SDK 中，只有 Java `dg-java-sdk 3.0.41` 具有与该接口匹配的完整专用实现；PHP `2.0.31` 与 Python `2.0.28` 的专用生成实现不可直接使用，但本接口允许按已核验 Java wire 生成受控通用 POST 或自写 HTTPS multipart 适配器。
+本文件处理商户进件材料的文件标识获取。官方来源：[图片上传](https://paas.huifu.com/navigator/ossApi/api_shjj_shtpsc.json)；本地活动快照 `2026-10-25`，原文 SHA-256 为 `2fcb84dd1cfe0260cfa3d49b79174d2e7b8a287cdf860faa62011bfc1e8472dd`。当前锁定 SDK 中，只有 Java `dg-java-sdk 3.0.41` 具有与该接口匹配的完整专用实现；PHP `2.0.31` 与 Python `2.0.28` 的专用生成实现不可直接使用，但本接口允许按已核验 Java wire 生成受控通用 POST 或自写 HTTPS multipart 适配器。
 
 Python 当前 SDK 为 `2.0.28`，本页缺陷已按该版实际 Request 和底层调用入口重新复核，不是由旧版外推。其他安装版本差异按 `shared-server-sdk-matrix.md` 核对；可继续已明确的 multipart 合同、适配接口和测试，未明确部分留 TODO，不阻断整体开发。
 
@@ -124,7 +124,7 @@ Java 两条图片路径都在 SDK 内完成请求 `data` 加签。SDK 对图片�
 
 ## 公共请求头与安全边界
 
-- Java 使用 Skill 调用时要求 `jpt-x-skill-source: <skill_source>`；未显式配置时，仅进件实际参与当前请求使用 `hfms/1.0.5`，支付与进件都实际参与时使用 `hfps/1.4.0;hfms/1.0.5`，仅安装未参与的不计入。
+- Java 使用 Skill 调用时要求 `jpt-x-skill-source: <skill_source>`；未显式配置时，仅进件实际参与当前请求使用 `hfms/1.1.0`，支付与进件都实际参与时使用 `hfps/1.5.0;hfms/1.1.0`，仅安装未参与的不计入。
 - 其他 SDK 内部请求头由 SDK 自行获取和发送，Skill 不配置、不校验，也不以其生成方式决定图片能力。
 - `file_url` 必须来自受控 HTTPS 对象存储并使用短时授权；业务层校验 scheme、允许 host、有效期和可访问性。URL、材料内容、请求流水、商户号和密钥不得写入代码、日志或测试样例。
 - Python SDK 的连接重试和任一 SDK 的网络行为都不等于图片接口已确认的业务重试语义；调用方不得自行重放上传。

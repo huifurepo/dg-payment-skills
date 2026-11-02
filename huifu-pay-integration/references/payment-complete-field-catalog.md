@@ -1,6 +1,6 @@
 # 支付接口完整字段路径目录
 
-> 生成来源：`payment-source-lock-2026-10-10.json` 锁定的 `2026-10-10` 官方快照；共 24 个 API、2,930 个接口内完整路径。
+> 生成来源：`payment-source-lock-2026-10-25.json` 锁定的 `2026-10-25` 官方快照；共 24 个 API、3,096 个接口内完整路径。
 
 ## 目录
 
@@ -54,13 +54,13 @@
 | 聚合交易退款 | 173 | 25 | 6 |
 | 聚合交易退款查询 | 42 | 5 | 6 |
 | 对账单-v2详细API | 31 | 2 | 4 |
-| H5/PC预下单 | 294 | 41 | 6 |
-| 支付宝小程序预下单 | 161 | 19 | 5 |
-| 微信小程序预下单 | 183 | 23 | 6 |
+| H5/PC预下单 | 333 | 48 | 6 |
+| 支付宝小程序预下单 | 169 | 20 | 5 |
+| 微信小程序预下单 | 222 | 30 | 6 |
 | 抖音直连下单 | 126 | 12 | 6 |
-| 托管交易查询 | 159 | 18 | 6 |
-| 托管交易退款 | 133 | 18 | 5 |
-| 托管交易退款查询 | 58 | 7 | 5 |
+| 托管交易查询 | 197 | 24 | 6 |
+| 托管交易退款 | 146 | 21 | 6 |
+| 托管交易退款查询 | 87 | 12 | 6 |
 | 托管交易关单 | 27 | 0 | 3 |
 | 拆单支付订单查询 | 69 | 7 | 7 |
 | 交易分账明细查询 | 29 | 1 | 4 |
@@ -72,7 +72,7 @@
 | 余额支付发送短信验证码 | 14 | 0 | 3 |
 | 余额支付 | 90 | 7 | 5 |
 
-合计：`2,930` 个接口内完整字段路径。
+合计：`3,096` 个接口内完整字段路径。
 
 ## 聚合支付下单
 
@@ -1707,7 +1707,7 @@
 ## H5/PC预下单
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hosting.md>
-- SHA-256：`8292e328bca7a2e6d55c7372afafa2c6ea97caff556786683cf04c9033c9f4ce`
+- SHA-256：`60381ee32ab1529d05b881b2c944f8c3f130de17a7ad35a44977b166a7986eec`
 
 ### 请求信封
 
@@ -1731,6 +1731,14 @@
 | `request.data.pre_order_type` | `request.data.pre_order_type` | `—（直接 JSON 路径）` | 预下单类型 | `String` | `1` | `Y` | 已确认 | H5/PC预先下单：1；示例值：1 |
 | `request.data.delay_acct_flag` | `request.data.delay_acct_flag` | `—（直接 JSON 路径）` | 是否延迟交易 | `String` | `1` | `N` | 已确认 | Y 为延迟，N为不延迟，不传默认N；示例值：N |
 | `request.data.multi_pay_way_flag` | `request.data.multi_pay_way_flag` | `—（直接 JSON 路径）` | 是否支持切换支付方式 | `String` | `1` | `N` | 已确认 | N：不支持，不允许选择支付方式后切换另一种支付方式；Y：支持，允许选择支付方式后切换另一种支付方式；注：不传时默认N，若需要对接未完成时支持切换支付方式，对账环节需选择如下方式对账；方式1：以支付成功返回的全局流水号作为对账的唯一标记；方式2：以请求流水号作为对账的唯一标记时，解析斗拱的交易账单时，应忽略请求流水号字段中“-”及“-”后的数字信息；示例值：N |
+| `request.data.merge_pay_flag` | `request.data.merge_pay_flag` | `—（直接 JSON 路径）` | 是否合单支付 | `String` | `1` | `N` | 已确认 | Y-合单支付，N-非合单支付，默认N，示例值：N；合单支付，不支持切换支付方式（即multi_pay_way_flag不能为Y） |
+| `request.data.sub_orders_request[]` | `request.data.sub_orders_request` | `—（String(JSON Array) 容器）` | 子单信息列表 | `String` | `—` | `N` | [需要官方确认]：长度 | 合单支付时，该字段必填；jsonArray字符串，最多支持20条，最少2条 |
+| `request.data.sub_orders_request[].sub_req_seq_id` | `request.data.sub_orders_request` | `$[].sub_req_seq_id` | 子单请求流水号 | `String` | `128` | `Y` | 已确认 | 同一合单huifu_id下，当天唯一 |
+| `request.data.sub_orders_request[].sub_huifu_id` | `request.data.sub_orders_request` | `$[].sub_huifu_id` | 子单商户号 | `String` | `32` | `Y` | 已确认 | 渠道与一级代理商的直属商户ID；示例值：[官网示例已脱敏] |
+| `request.data.sub_orders_request[].sub_acct_id` | `request.data.sub_orders_request` | `$[].sub_acct_id` | 子单账户号 | `String` | `9` | `N` | 已确认 | 可指定收款账户号， 仅支持基本户、现金户，不填默认为基本户 |
+| `request.data.sub_orders_request[].sub_trans_amt` | `request.data.sub_orders_request` | `$[].sub_trans_amt` | 子单交易金额 | `String` | `18` | `Y` | 已确认 | 单位元，需保留小数点后两位，示例值：1000.00，最低传入0.01；全部子单交易金额之和等于合单交易金额。 |
+| `request.data.sub_orders_request[].delay_acct_flag` | `request.data.sub_orders_request` | `$[].delay_acct_flag` | 是否延迟交易 | `String` | `1` | `N` | 已确认 | Y 为延迟 N为不延迟，不传默认N；示例值：Y |
+| `request.data.sub_orders_request[].sub_remark` | `request.data.sub_orders_request` | `$[].sub_remark` | 子单备注 | `String` | `255` | `N` | 已确认 | 交易后原样返回；示例值：子单备注 |
 | `request.data.acct_split_bunch` | `request.data.acct_split_bunch` | `—（String(JSON) 容器）` | 分账对象 | `String` | `2000` | `N` | 已确认 | 分账对象，jsonObject字符串 |
 | `request.data.acct_split_bunch.acct_infos[]` | `request.data.acct_split_bunch` | `$.acct_infos[]` | 分账明细 | `Array` | `—` | `N` | N/A：结构字段长度 | 分账明细 |
 | `request.data.acct_split_bunch.acct_infos[].div_amt` | `request.data.acct_split_bunch` | `$.acct_infos[].div_amt` | 分账金额 | `String` | `14` | `N` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00。；支持传入0.00，如果是全额分账，可以分给商户自身0.00元 |
@@ -2027,11 +2035,42 @@
 | `async.resp_data.order_type` | `async.resp_data` | `$.order_type` | 订单类型 | `String` | `1` | `N` | 已确认 | P-支付 R-充值 默认：P-支付；示例值：P |
 | `async.resp_data.devs_id` | `async.resp_data` | `$.devs_id` | 汇付机具号 | `String` | `32` | `Y` | 已确认 | 通过汇付报备的机具必传；示例值：[官网示例已脱敏] |
 | `async.resp_data.request_ip` | `async.resp_data` | `$.request_ip` | 请求IP | `String` | `15` | `N` | 已确认 | 付款方IP,仅在支付成功后返回;示例：192.168.1.1 |
+| `async.resp_data.sub_orders_response[]` | `async.resp_data` | `$.sub_orders_response（String(JSON Array) 容器）` | 子单信息 | `String` | `—` | `N` | [需要官方确认]：长度 | jsonArray格式；子单信息，合单支付的订单返回该字段 |
+| `async.resp_data.sub_orders_response[].sub_req_seq_id` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].sub_req_seq_id` | 子单请求流水号 | `String` | `128` | `Y` | 已确认 | 交易时传入，原样返回；示例值：SUB[官网示例已脱敏] |
+| `async.resp_data.sub_orders_response[].sub_hf_seq_id` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].sub_hf_seq_id` | 子单全局流水号 | `String` | `128` | `Y` | 已确认 | 示例值：00470topo1A221019132207P068ac1362af00001 |
+| `async.resp_data.sub_orders_response[].sub_huifu_id` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].sub_huifu_id` | 子单商户号 | `String` | `32` | `Y` | 已确认 | 示例值：[官网示例已脱敏] |
+| `async.resp_data.sub_orders_response[].sub_acct_id` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].sub_acct_id` | 子单账户号 | `String` | `9` | `Y` | 已确认 | 示例值：A123456 |
+| `async.resp_data.sub_orders_response[].sub_trams_amt` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].sub_trams_amt` | 子单交易金额 | `String` | `14` | `Y` | 已确认 | 位元；示例值：1.00 |
+| `async.resp_data.sub_orders_response[].sub_settlement_amt` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].sub_settlement_amt` | 子单结算金额 | `String` | `14` | `N` | 已确认 | 位元；示例值：1.00 |
+| `async.resp_data.sub_orders_response[].sub_remark` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].sub_remark` | 子单备注信息 | `String` | `255` | `N` | 已确认 | 原样返回；示例值：子单备注 |
+| `async.resp_data.sub_orders_response[].acct_date` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].acct_date` | 子单入账日期 | `String` | `8` | `N` | 已确认 | 格式为yyyyMMdd，示例值：20091225 |
+| `async.resp_data.sub_orders_response[].acct_stat` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].acct_stat` | 子单账务状态 | `String` | `1` | `N` | 已确认 | "I：初始"; "P:处理中"; "S:成功"; "F:失败。示例值：S； 返回“I：初始”状态时，请联系客服确认订单问题 |
+| `async.resp_data.sub_orders_response[].is_div` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].is_div` | 是否分账交易 | `String` | `1` | `N` | 已确认 | 1:分账交易， 0:非分账交易；示例值：1 |
+| `async.resp_data.sub_orders_response[].acct_split_bunch` | `async.resp_data` | `$.sub_orders_response[].acct_split_bunch（String(JSON) 容器）` | 分账对象 | `String` | `—` | `N` | [需要官方确认]：长度 | jsonObject字符串 |
+| `async.resp_data.sub_orders_response[].acct_split_bunch.acct_infos[]` | `async.resp_data` | `$.sub_orders_response[].acct_split_bunch.acct_infos（String(JSON Array) 容器）` | 分账明细 | `String` | `—` | `Y` | [需要官方确认]：长度 | jsonArray分账明细 |
+| `async.resp_data.sub_orders_response[].acct_split_bunch.acct_infos[].div_amt` | `async.resp_data` | `$.sub_orders_response[].acct_split_bunch.acct_infos => JSON decode => $[].div_amt` | 分账金额 | `String` | `14` | `Y` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00 ，最低传入0.01 |
+| `async.resp_data.sub_orders_response[].acct_split_bunch.acct_infos[].huifu_id` | `async.resp_data` | `$.sub_orders_response[].acct_split_bunch.acct_infos => JSON decode => $[].huifu_id` | 分账接收方ID | `String` | `32` | `Y` | 已确认 | 斗拱开户时生成；示例值：[官网示例已脱敏] |
+| `async.resp_data.sub_orders_response[].acct_split_bunch.acct_infos[].acct_id` | `async.resp_data` | `$.sub_orders_response[].acct_split_bunch.acct_infos => JSON decode => $[].acct_id` | 分账接收方账户号 | `String` | `9` | `N` | 已确认 | 示例值：A123456 |
+| `async.resp_data.sub_orders_response[].fee_infos` | `async.resp_data` | `$.sub_orders_response[].fee_infos => [需要官方确认]：String 子表编码` | 交易手续费信息 | `String` | `—` | `N` | [需要官方确认]：长度 | 交易手续费信息 |
+| `async.resp_data.sub_orders_response[].fee_infos.fee_formula` | `async.resp_data` | `$.sub_orders_response[].fee_infos => [需要官方确认]：String 子表编码` | 手续费计算公式 | `String` | `512` | `N` | 已确认 | 示例值：AMT\*0.003 |
+| `async.resp_data.sub_orders_response[].fee_infos.fee_huifu_id` | `async.resp_data` | `$.sub_orders_response[].fee_infos => [需要官方确认]：String 子表编码` | 手续费扣款商户号 | `String` | `32` | `N` | 已确认 | — |
+| `async.resp_data.sub_orders_response[].fee_infos.fee_acct_id` | `async.resp_data` | `$.sub_orders_response[].fee_infos => [需要官方确认]：String 子表编码` | 手续费扣款账户号 | `String` | `9` | `N` | 已确认 | — |
+| `async.resp_data.sub_orders_response[].fee_infos.fee_flag` | `async.resp_data` | `$.sub_orders_response[].fee_infos => [需要官方确认]：String 子表编码` | 手续费扣款标志 | `Integer` | `1` | `N` | 已确认 | 1: 外扣，2: 内扣；示例值：2 |
+| `async.resp_data.sub_orders_response[].fee_infos.fee_rec_type` | `async.resp_data` | `$.sub_orders_response[].fee_infos => [需要官方确认]：String 子表编码` | 手续费扣取方式 | `Integer` | `1` | `N` | 已确认 | 1: 实收，2: 后收；示例值：1 |
+| `async.resp_data.sub_orders_response[].fee_infos.fee_amount` | `async.resp_data` | `$.sub_orders_response[].fee_infos => [需要官方确认]：String 子表编码` | 手续费金额 | `String` | `16` | `N` | 已确认 | 单位元，保留小数点后两位。根据手续费公式计算的手续费小于0.01时，至少收取0.01元。示例值：1.00 |
+| `async.resp_data.sub_orders_response[].split_fee_info` | `async.resp_data` | `$.sub_orders_response[].split_fee_info => [需要官方确认]：String 子表编码` | 分账手续费信息 | `String` | `—` | `N` | [需要官方确认]：长度 | 分账手续费信息 |
+| `async.resp_data.sub_orders_response[].split_fee_info.total_split_fee_amt` | `async.resp_data` | `$.sub_orders_response[].split_fee_info => [需要官方确认]：String 子表编码` | 分账手续费总金额(元) | `String` | `14` | `N` | 已确认 | 示例值：0.10 |
+| `async.resp_data.sub_orders_response[].split_fee_info.split_fee_flag` | `async.resp_data` | `$.sub_orders_response[].split_fee_info => [需要官方确认]：String 子表编码` | 分账手续费扣款标志 | `Integer` | `1` | `Y` | 已确认 | 1: 外扣 2: 内扣；示例值：2 |
+| `async.resp_data.sub_orders_response[].split_fee_info.split_fee_details` | `async.resp_data` | `$.sub_orders_response[].split_fee_info.split_fee_details => [需要官方确认]：String 子表编码` | 分账手续费信息 | `String` | `—` | `Y` | [需要官方确认]：长度 | 分账手续费信息 |
+| `async.resp_data.sub_orders_response[].split_fee_info.split_fee_details.split_fee_amt` | `async.resp_data` | `$.sub_orders_response[].split_fee_info.split_fee_details => [需要官方确认]：String 子表编码` | 分账手续费金额(元) | `String` | `16` | `Y` | 已确认 | 示例值：0.10 |
+| `async.resp_data.sub_orders_response[].split_fee_info.split_fee_details.split_fee_huifu_id` | `async.resp_data` | `$.sub_orders_response[].split_fee_info.split_fee_details => [需要官方确认]：String 子表编码` | 分账手续费承担方商户号 | `String` | `32` | `Y` | 已确认 | 示例值：[官网示例已脱敏] |
+| `async.resp_data.sub_orders_response[].split_fee_info.split_fee_details.split_fee_acct_id` | `async.resp_data` | `$.sub_orders_response[].split_fee_info.split_fee_details => [需要官方确认]：String 子表编码` | 分账手续费承担方账号 | `String` | `9` | `N` | 已确认 | 示例值：F00598600 |
+| `async.resp_data.sub_orders_response[].fund_freeze_stat` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].fund_freeze_stat` | 资金冻结状态 | `String` | `16` | `N` | 已确认 | FREEZE：冻结；UNFREEZE：解冻；示例值：UNFREEZE |
 
 ## 支付宝小程序预下单
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_zfbpreorder.md>
-- SHA-256：`51357c75f1f78b8c7179dcc228e6b30cd39f6686e6584d5e94da8f1e89c8501e`
+- SHA-256：`3082194cef49961ec70fde375efd96f8a36f9427d64f9a8cfef325c48a429ef5`
 
 ### 请求信封
 
@@ -2054,6 +2093,14 @@
 | `request.data.trans_amt` | `request.data.trans_amt` | `—（直接 JSON 路径）` | 交易金额 | `String` | `14` | `Y` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00，最低传入0.01 |
 | `request.data.goods_desc` | `request.data.goods_desc` | `—（直接 JSON 路径）` | 商品描述 | `String` | `40` | `Y` | 已确认 | 示例值：个人电脑 |
 | `request.data.delay_acct_flag` | `request.data.delay_acct_flag` | `—（直接 JSON 路径）` | 是否延迟交易 | `String` | `1` | `N` | 已确认 | Y 为延迟 N为不延迟，不传默认N；示例值：N |
+| `request.data.merge_pay_flag` | `request.data.merge_pay_flag` | `—（直接 JSON 路径）` | 是否合单支付 | `String` | `1` | `N` | 已确认 | Y-合单支付，N-非合单支付，默认N，示例值：N；合单支付，不支持切换支付方式（即multi_pay_way_flag不能为Y） |
+| `request.data.sub_orders_request[]` | `request.data.sub_orders_request` | `—（String(JSON Array) 容器）` | 子单信息列表 | `String` | `—` | `N` | [需要官方确认]：长度 | 合单支付时，该字段必填；jsonArray字符串，最多支持20条，最少2条 |
+| `request.data.sub_orders_request[].sub_req_seq_id` | `request.data.sub_orders_request` | `$[].sub_req_seq_id` | 子单请求流水号 | `String` | `128` | `Y` | 已确认 | 同一合单huifu_id下，当天唯一 |
+| `request.data.sub_orders_request[].sub_huifu_id` | `request.data.sub_orders_request` | `$[].sub_huifu_id` | 子单商户号 | `String` | `32` | `Y` | 已确认 | 渠道与一级代理商的直属商户ID；示例值：[官网示例已脱敏] |
+| `request.data.sub_orders_request[].sub_acct_id` | `request.data.sub_orders_request` | `$[].sub_acct_id` | 子单账户号 | `String` | `9` | `N` | 已确认 | 可指定收款账户号， 仅支持基本户、现金户，不填默认为基本户 |
+| `request.data.sub_orders_request[].sub_trans_amt` | `request.data.sub_orders_request` | `$[].sub_trans_amt` | 子单交易金额 | `String` | `18` | `Y` | 已确认 | 单位元，需保留小数点后两位，示例值：1000.00，最低传入0.01；全部子单交易金额之和等于合单交易金额。 |
+| `request.data.sub_orders_request[].delay_acct_flag` | `request.data.sub_orders_request` | `$[].delay_acct_flag` | 是否延迟交易 | `String` | `1` | `N` | 已确认 | Y 为延迟 N为不延迟，不传默认N；示例值：Y |
+| `request.data.sub_orders_request[].sub_remark` | `request.data.sub_orders_request` | `$[].sub_remark` | 子单备注 | `String` | `255` | `N` | 已确认 | 交易后原样返回；示例值：子单备注 |
 | `request.data.acct_split_bunch` | `request.data.acct_split_bunch` | `—（String(JSON) 容器）` | 分账对象 | `String` | `2000` | `N` | 已确认 | 分账对象，jsonObject字符串 |
 | `request.data.acct_split_bunch.acct_infos[]` | `request.data.acct_split_bunch` | `$.acct_infos[]` | 分账明细 | `Array` | `—` | `N` | N/A：结构字段长度 | 分账明细 |
 | `request.data.acct_split_bunch.acct_infos[].div_amt` | `request.data.acct_split_bunch` | `$.acct_infos[].div_amt` | 分账金额 | `String` | `14` | `N` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00，最低传入0.01 |
@@ -2222,7 +2269,7 @@
 ## 微信小程序预下单
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_wxpreorder.md>
-- SHA-256：`47d2367f8a9cb3acb551fff22d63bd1b2b0b3b3a4b18b8c5e23568f1b5338dde`
+- SHA-256：`d2d91fb6b25a2f6477b5ca1531d7bc4349b4760f63c4033d6e1b307c31ba48f6`
 
 ### 请求信封
 
@@ -2245,6 +2292,14 @@
 | `request.data.trans_amt` | `request.data.trans_amt` | `—（直接 JSON 路径）` | 交易金额 | `String` | `14` | `Y` | 已确认 | 单位元，保留两位小数，示例值：1.00，最低传入0.01 |
 | `request.data.goods_desc` | `request.data.goods_desc` | `—（直接 JSON 路径）` | 商品描述 | `String` | `40` | `Y` | 已确认 | 示例值：个人电脑 |
 | `request.data.delay_acct_flag` | `request.data.delay_acct_flag` | `—（直接 JSON 路径）` | 是否延迟交易 | `String` | `1` | `N` | 已确认 | Y 为延迟 N为不延迟，不传默认N；示例值：N |
+| `request.data.merge_pay_flag` | `request.data.merge_pay_flag` | `—（直接 JSON 路径）` | 是否合单支付 | `String` | `1` | `N` | 已确认 | Y-合单支付，N-非合单支付，默认N，示例值：N；合单支付，不支持切换支付方式（即multi_pay_way_flag不能为Y） |
+| `request.data.sub_orders_request[]` | `request.data.sub_orders_request` | `—（String(JSON Array) 容器）` | 子单信息列表 | `String` | `—` | `N` | [需要官方确认]：长度 | 合单支付时，该字段必填；jsonArray字符串，最多支持20条，最少2条 |
+| `request.data.sub_orders_request[].sub_req_seq_id` | `request.data.sub_orders_request` | `$[].sub_req_seq_id` | 子单请求流水号 | `String` | `128` | `Y` | 已确认 | 同一合单huifu_id下，当天唯一 |
+| `request.data.sub_orders_request[].sub_huifu_id` | `request.data.sub_orders_request` | `$[].sub_huifu_id` | 子单商户号 | `String` | `32` | `Y` | 已确认 | 渠道与一级代理商的直属商户ID；示例值：[官网示例已脱敏] |
+| `request.data.sub_orders_request[].sub_acct_id` | `request.data.sub_orders_request` | `$[].sub_acct_id` | 子单账户号 | `String` | `9` | `N` | 已确认 | 可指定收款账户号， 仅支持基本户、现金户，不填默认为基本户 |
+| `request.data.sub_orders_request[].sub_trans_amt` | `request.data.sub_orders_request` | `$[].sub_trans_amt` | 子单交易金额 | `String` | `18` | `Y` | 已确认 | 单位元，需保留小数点后两位，示例值：1000.00，最低传入0.01；全部子单交易金额之和等于合单交易金额。 |
+| `request.data.sub_orders_request[].delay_acct_flag` | `request.data.sub_orders_request` | `$[].delay_acct_flag` | 是否延迟交易 | `String` | `1` | `N` | 已确认 | Y 为延迟 N为不延迟，不传默认N；示例值：Y |
+| `request.data.sub_orders_request[].sub_remark` | `request.data.sub_orders_request` | `$[].sub_remark` | 子单备注 | `String` | `255` | `N` | 已确认 | 交易后原样返回；示例值：子单备注 |
 | `request.data.split_pay_flag` | `request.data.split_pay_flag` | `—（直接 JSON 路径）` | 是否拆单支付 | `String` | `1` | `N` | 已确认 | 拆单支付标识，Y：拆单支付，N：非拆单支付，不填默认为N。商户需预开通拆单支付权限后方可使用；示例值：N |
 | `request.data.split_pay_data` | `request.data.split_pay_data` | `—（[需要官方确认]：String 子表编码）` | 拆单支付参数集合 | `String` | `2000` | `N` | 已确认 | 拆单支付参数集合 |
 | `request.data.split_pay_data.fq_mer_discount_flag` | `request.data.split_pay_data` | `—（[需要官方确认]：String 子表编码）` | 商户贴息标记 | `String` | `1` | `N` | 已确认 | 花呗分期商户补贴活动，拆单支付时生效，Y：商户全额贴息，P：商户部分贴息，不传为非商户贴息（默认）；示例值：P；选择P：商户部分贴息活动，需同时在【ali_business_params：商户业务信息】中传入支付宝约定的活动参数，参数说明详见分期支付指引文档。 |
@@ -2424,6 +2479,37 @@
 | `async.resp_data.bank_code` | `async.resp_data` | `$.bank_code` | 通道返回码 | `String` | `32` | `N` | 已确认 | 示例值：00 |
 | `async.resp_data.bank_message` | `async.resp_data` | `$.bank_message` | 通道返回描述 | `String` | `200` | `N` | 已确认 | 示例值：成功[0000000] |
 | `async.resp_data.devs_id` | `async.resp_data` | `$.devs_id` | 汇付机具号 | `String` | `32` | `Y` | 已确认 | 通过汇付报备的机具必传；示例值：[官网示例已脱敏] |
+| `async.resp_data.sub_orders_response[]` | `async.resp_data` | `$.sub_orders_response（String(JSON Array) 容器）` | 子单信息 | `String` | `—` | `N` | [需要官方确认]：长度 | jsonArray格式；子单信息，合单支付的订单返回该字段 |
+| `async.resp_data.sub_orders_response[].sub_req_seq_id` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].sub_req_seq_id` | 子单请求流水号 | `String` | `128` | `Y` | 已确认 | 交易时传入，原样返回；示例值：SUB[官网示例已脱敏] |
+| `async.resp_data.sub_orders_response[].sub_hf_seq_id` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].sub_hf_seq_id` | 子单全局流水号 | `String` | `128` | `Y` | 已确认 | 示例值：00470topo1A221019132207P068ac1362af00001 |
+| `async.resp_data.sub_orders_response[].sub_huifu_id` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].sub_huifu_id` | 子单商户号 | `String` | `32` | `Y` | 已确认 | 示例值：[官网示例已脱敏] |
+| `async.resp_data.sub_orders_response[].sub_acct_id` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].sub_acct_id` | 子单账户号 | `String` | `9` | `Y` | 已确认 | 示例值：A123456 |
+| `async.resp_data.sub_orders_response[].sub_trams_amt` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].sub_trams_amt` | 子单交易金额 | `String` | `14` | `Y` | 已确认 | 位元；示例值：1.00 |
+| `async.resp_data.sub_orders_response[].sub_settlement_amt` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].sub_settlement_amt` | 子单结算金额 | `String` | `14` | `N` | 已确认 | 位元；示例值：1.00 |
+| `async.resp_data.sub_orders_response[].sub_remark` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].sub_remark` | 子单备注信息 | `String` | `255` | `N` | 已确认 | 原样返回；示例值：子单备注 |
+| `async.resp_data.sub_orders_response[].acct_date` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].acct_date` | 子单入账日期 | `String` | `8` | `N` | 已确认 | 格式为yyyyMMdd，示例值：20091225 |
+| `async.resp_data.sub_orders_response[].acct_stat` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].acct_stat` | 子单账务状态 | `String` | `1` | `N` | 已确认 | "I：初始"; "P:处理中"; "S:成功"; "F:失败。示例值：S； 返回“I：初始”状态时，请联系客服确认订单问题 |
+| `async.resp_data.sub_orders_response[].is_div` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].is_div` | 是否分账交易 | `String` | `1` | `N` | 已确认 | 1:分账交易， 0:非分账交易；示例值：1 |
+| `async.resp_data.sub_orders_response[].acct_split_bunch` | `async.resp_data` | `$.sub_orders_response[].acct_split_bunch（String(JSON) 容器）` | 分账对象 | `String` | `—` | `N` | [需要官方确认]：长度 | jsonObject字符串 |
+| `async.resp_data.sub_orders_response[].acct_split_bunch.acct_infos[]` | `async.resp_data` | `$.sub_orders_response[].acct_split_bunch.acct_infos（String(JSON Array) 容器）` | 分账明细 | `String` | `—` | `Y` | [需要官方确认]：长度 | jsonArray分账明细 |
+| `async.resp_data.sub_orders_response[].acct_split_bunch.acct_infos[].div_amt` | `async.resp_data` | `$.sub_orders_response[].acct_split_bunch.acct_infos => JSON decode => $[].div_amt` | 分账金额 | `String` | `14` | `Y` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00 ，最低传入0.01 |
+| `async.resp_data.sub_orders_response[].acct_split_bunch.acct_infos[].huifu_id` | `async.resp_data` | `$.sub_orders_response[].acct_split_bunch.acct_infos => JSON decode => $[].huifu_id` | 分账接收方ID | `String` | `32` | `Y` | 已确认 | 斗拱开户时生成；示例值：[官网示例已脱敏] |
+| `async.resp_data.sub_orders_response[].acct_split_bunch.acct_infos[].acct_id` | `async.resp_data` | `$.sub_orders_response[].acct_split_bunch.acct_infos => JSON decode => $[].acct_id` | 分账接收方账户号 | `String` | `9` | `N` | 已确认 | 示例值：A123456 |
+| `async.resp_data.sub_orders_response[].fee_infos` | `async.resp_data` | `$.sub_orders_response[].fee_infos => [需要官方确认]：String 子表编码` | 交易手续费信息 | `String` | `—` | `N` | [需要官方确认]：长度 | 交易手续费信息 |
+| `async.resp_data.sub_orders_response[].fee_infos.fee_formula` | `async.resp_data` | `$.sub_orders_response[].fee_infos => [需要官方确认]：String 子表编码` | 手续费计算公式 | `String` | `512` | `N` | 已确认 | 示例值：AMT\*0.003 |
+| `async.resp_data.sub_orders_response[].fee_infos.fee_huifu_id` | `async.resp_data` | `$.sub_orders_response[].fee_infos => [需要官方确认]：String 子表编码` | 手续费扣款商户号 | `String` | `32` | `N` | 已确认 | — |
+| `async.resp_data.sub_orders_response[].fee_infos.fee_acct_id` | `async.resp_data` | `$.sub_orders_response[].fee_infos => [需要官方确认]：String 子表编码` | 手续费扣款账户号 | `String` | `9` | `N` | 已确认 | — |
+| `async.resp_data.sub_orders_response[].fee_infos.fee_flag` | `async.resp_data` | `$.sub_orders_response[].fee_infos => [需要官方确认]：String 子表编码` | 手续费扣款标志 | `Integer` | `1` | `N` | 已确认 | 1: 外扣，2: 内扣；示例值：2 |
+| `async.resp_data.sub_orders_response[].fee_infos.fee_rec_type` | `async.resp_data` | `$.sub_orders_response[].fee_infos => [需要官方确认]：String 子表编码` | 手续费扣取方式 | `Integer` | `1` | `N` | 已确认 | 1: 实收，2: 后收；示例值：1 |
+| `async.resp_data.sub_orders_response[].fee_infos.fee_amount` | `async.resp_data` | `$.sub_orders_response[].fee_infos => [需要官方确认]：String 子表编码` | 手续费金额 | `String` | `16` | `N` | 已确认 | 单位元，保留小数点后两位。根据手续费公式计算的手续费小于0.01时，至少收取0.01元。示例值：1.00 |
+| `async.resp_data.sub_orders_response[].split_fee_info` | `async.resp_data` | `$.sub_orders_response[].split_fee_info => [需要官方确认]：String 子表编码` | 分账手续费信息 | `String` | `—` | `N` | [需要官方确认]：长度 | 分账手续费信息 |
+| `async.resp_data.sub_orders_response[].split_fee_info.total_split_fee_amt` | `async.resp_data` | `$.sub_orders_response[].split_fee_info => [需要官方确认]：String 子表编码` | 分账手续费总金额(元) | `String` | `14` | `N` | 已确认 | 示例值：0.10 |
+| `async.resp_data.sub_orders_response[].split_fee_info.split_fee_flag` | `async.resp_data` | `$.sub_orders_response[].split_fee_info => [需要官方确认]：String 子表编码` | 分账手续费扣款标志 | `Integer` | `1` | `Y` | 已确认 | 1: 外扣 2: 内扣；示例值：2 |
+| `async.resp_data.sub_orders_response[].split_fee_info.split_fee_details` | `async.resp_data` | `$.sub_orders_response[].split_fee_info.split_fee_details => [需要官方确认]：String 子表编码` | 分账手续费信息 | `String` | `—` | `Y` | [需要官方确认]：长度 | 分账手续费信息 |
+| `async.resp_data.sub_orders_response[].split_fee_info.split_fee_details.split_fee_amt` | `async.resp_data` | `$.sub_orders_response[].split_fee_info.split_fee_details => [需要官方确认]：String 子表编码` | 分账手续费金额(元) | `String` | `16` | `Y` | 已确认 | 示例值：0.10 |
+| `async.resp_data.sub_orders_response[].split_fee_info.split_fee_details.split_fee_huifu_id` | `async.resp_data` | `$.sub_orders_response[].split_fee_info.split_fee_details => [需要官方确认]：String 子表编码` | 分账手续费承担方商户号 | `String` | `32` | `Y` | 已确认 | 示例值：[官网示例已脱敏] |
+| `async.resp_data.sub_orders_response[].split_fee_info.split_fee_details.split_fee_acct_id` | `async.resp_data` | `$.sub_orders_response[].split_fee_info.split_fee_details => [需要官方确认]：String 子表编码` | 分账手续费承担方账号 | `String` | `9` | `N` | 已确认 | 示例值：F00598600 |
+| `async.resp_data.sub_orders_response[].fund_freeze_stat` | `async.resp_data` | `$.sub_orders_response => JSON decode => $[].fund_freeze_stat` | 资金冻结状态 | `String` | `16` | `N` | 已确认 | FREEZE：冻结；UNFREEZE：解冻；示例值：UNFREEZE |
 
 ### 拆单支付异步 resp_data
 
@@ -2596,7 +2682,7 @@
 ## 托管交易查询
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingcx.md>
-- SHA-256：`be38fc085f09bc84a96654365b48adb4a4be0b12d0c50dbea3bd02c50a6fb8d6`
+- SHA-256：`43a8d643d66e7657ad0de01544a48a2fd6cecc651960f22235ef886c6ca6bc86`
 
 ### 请求信封
 
@@ -2776,11 +2862,49 @@
 | `response.data.devs_id` | `response.data.devs_id` | `—（直接 JSON 路径）` | 汇付机具号 | `String` | `32` | `Y` | 已确认 | 通过汇付报备的机具必传；示例值：[官网示例已脱敏] |
 | `response.data.out_trans_id` | `response.data.out_trans_id` | `—（直接 JSON 路径）` | 交易单号 | `String` | `64` | `N` | 已确认 | 用户账单上的交易订单号，示例值：[官网示例已脱敏]；参见[用户账单说明](https://paas.huifu.com/partners/api/#/czsm/api_czsm_yhzd) |
 | `response.data.request_ip` | `response.data.request_ip` | `—（直接 JSON 路径）` | 请求IP | `String` | `15` | `N` | 已确认 | 付款方IP,仅在支付成功后返回;示例：192.168.1.1 |
+| `response.data.sub_orders_response[]` | `response.data.sub_orders_response` | `—（String(JSON Array) 容器）` | 子单信息 | `String` | `—` | `N` | [需要官方确认]：长度 | jsonArray格式；子单信息，合单支付的订单返回该字段 |
+| `response.data.sub_orders_response[].sub_req_seq_id` | `response.data.sub_orders_response` | `$[].sub_req_seq_id` | 子单请求流水号 | `String` | `128` | `N` | 已确认 | 交易时传入，原样返回；示例值：SUB[官网示例已脱敏] |
+| `response.data.sub_orders_response[].sub_hf_seq_id` | `response.data.sub_orders_response` | `$[].sub_hf_seq_id` | 子单全局流水号 | `String` | `128` | `N` | 已确认 | 示例值：00470topo1A221019132207P068ac1362af00001 |
+| `response.data.sub_orders_response[].sub_huifu_id` | `response.data.sub_orders_response` | `$[].sub_huifu_id` | 子单商户号 | `String` | `32` | `N` | 已确认 | 示例值：[官网示例已脱敏] |
+| `response.data.sub_orders_response[].sub_acct_id` | `response.data.sub_orders_response` | `$[].sub_acct_id` | 子单账户号 | `String` | `9` | `N` | 已确认 | 示例值：A123456 |
+| `response.data.sub_orders_response[].sub_trans_amt` | `response.data.sub_orders_response` | `$[].sub_trans_amt` | 子单交易金额 | `String` | `14` | `N` | 已确认 | 位元；示例值：1.00 |
+| `response.data.sub_orders_response[].sub_settlement_amt` | `response.data.sub_orders_response` | `$[].sub_settlement_amt` | 子单结算金额 | `String` | `14` | `N` | 已确认 | 位元；示例值：1.00 |
+| `response.data.sub_orders_response[].sub_remark` | `response.data.sub_orders_response` | `$[].sub_remark` | 子单备注信息 | `String` | `—` | `N` | [需要官方确认]：长度 | 原样返回；示例值：子单备注 |
+| `response.data.sub_orders_response[].acct_date` | `response.data.sub_orders_response` | `$[].acct_date` | 入账时间 | `String` | `8` | `N` | 已确认 | 格式为yyyyMMdd，示例值：20091225 |
+| `response.data.sub_orders_response[].unconfirm_amt` | `response.data.sub_orders_response` | `$[].unconfirm_amt` | 待确认总金额 | `String` | `14` | `N` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00 |
+| `response.data.sub_orders_response[].confirmed_amt` | `response.data.sub_orders_response` | `$[].confirmed_amt` | 已确认总金额 | `String` | `14` | `N` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00 |
+| `response.data.sub_orders_response[].delay_acct_flag` | `response.data.sub_orders_response` | `$[].delay_acct_flag` | 是否延时交易 | `String` | `1` | `N` | 已确认 | Y：延迟， N：不延迟；示例值：Y |
+| `response.data.sub_orders_response[].acct_stat` | `response.data.sub_orders_response` | `$[].acct_stat` | 账务状态 | `String` | `1` | `N` | 已确认 | "I：初始"; "P:处理中"; "S:成功"; "F:失败。示例值：S； 返回“I：初始”状态时，请联系客服确认订单问题 |
+| `response.data.sub_orders_response[].div_flag` | `response.data.sub_orders_response` | `$[].div_flag` | 是否分账交易 | `String` | `1` | `N` | 已确认 | Y：分账交易，N：非分账交易；示例值：Y |
+| `response.data.sub_orders_response[].acct_split_bunch` | `response.data.sub_orders_response` | `$[].acct_split_bunch（String(JSON) 容器）` | 分账对象 | `String` | `—` | `N` | [需要官方确认]：长度 | jsonObject字符串 |
+| `response.data.sub_orders_response[].acct_split_bunch.acct_infos[]` | `response.data.sub_orders_response` | `$[].acct_split_bunch.acct_infos（String(JSON Array) 容器）` | 分账明细 | `String` | `—` | `Y` | [需要官方确认]：长度 | jsonArray分账明细 |
+| `response.data.sub_orders_response[].acct_split_bunch.acct_infos[].huifu_id` | `response.data.sub_orders_response` | `$[].acct_split_bunch.acct_infos => JSON decode => $[].huifu_id` | 分账接收方ID | `String` | `32` | `Y` | 已确认 | 斗拱开户时生成；示例值：[官网示例已脱敏] |
+| `response.data.sub_orders_response[].acct_split_bunch.acct_infos[].acct_id` | `response.data.sub_orders_response` | `$[].acct_split_bunch.acct_infos => JSON decode => $[].acct_id` | 分账接收方子账户 | `String` | `9` | `N` | 已确认 | 示例值：F00598600/font> |
+| `response.data.sub_orders_response[].acct_split_bunch.acct_infos[].div_amt` | `response.data.sub_orders_response` | `$[].acct_split_bunch.acct_infos => JSON decode => $[].div_amt` | 分账金额 | `String` | `14` | `Y` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00 ，最低传入0.01 |
+| `response.data.sub_orders_response[].acct_split_bunch.is_clean_split` | `response.data.sub_orders_response` | `$[].acct_split_bunch => JSON decode => $.is_clean_split` | 是否净值分账 | `String` | `1` | `N` | 已确认 | Y:使用净值分账，仅在percentage_flag=Y时起作用；示例值：Y |
+| `response.data.sub_orders_response[].fee_info` | `response.data.sub_orders_response` | `$[].fee_info => [需要官方确认]：String 子表编码` | 交易手续费信息 | `String` | `—` | `N` | [需要官方确认]：长度 | 交易手续费信息 |
+| `response.data.sub_orders_response[].fee_info.fee_formula` | `response.data.sub_orders_response` | `$[].fee_info => [需要官方确认]：String 子表编码` | 手续费计算公式 | `String` | `512` | `N` | 已确认 | 示例值：AMT\*0.003 |
+| `response.data.sub_orders_response[].fee_info.fee_huifu_id` | `response.data.sub_orders_response` | `$[].fee_info => [需要官方确认]：String 子表编码` | 手续费扣款商户号 | `String` | `32` | `N` | 已确认 | 示例值：[官网示例已脱敏] |
+| `response.data.sub_orders_response[].fee_info.fee_acct_id` | `response.data.sub_orders_response` | `$[].fee_info => [需要官方确认]：String 子表编码` | 手续费扣款账户号 | `String` | `9` | `N` | 已确认 | 示例值：F00598600 |
+| `response.data.sub_orders_response[].fee_info.fee_flag` | `response.data.sub_orders_response` | `$[].fee_info => [需要官方确认]：String 子表编码` | 手续费扣款标志 | `Integer` | `1` | `N` | 已确认 | 1: 外扣，2: 内扣；示例值：2 |
+| `response.data.sub_orders_response[].fee_info.fee_rec_type` | `response.data.sub_orders_response` | `$[].fee_info => [需要官方确认]：String 子表编码` | 手续费扣取方式 | `Integer` | `1` | `N` | 已确认 | 1: 实收，2: 后收；示例值：1 |
+| `response.data.sub_orders_response[].fee_info.fee_amount` | `response.data.sub_orders_response` | `$[].fee_info => [需要官方确认]：String 子表编码` | 手续费金额 | `String` | `16` | `N` | 已确认 | 单位元，保留小数点后两位。根据手续费公式计算的手续费小于0.01时，取0.01。示例值：1.00 |
+| `response.data.sub_orders_response[].split_fee_info` | `response.data.sub_orders_response` | `$[].split_fee_info => [需要官方确认]：String 子表编码` | 分账手续费信息 | `String` | `—` | `N` | [需要官方确认]：长度 | 分账手续费信息 |
+| `response.data.sub_orders_response[].split_fee_info.total_split_fee_amt` | `response.data.sub_orders_response` | `$[].split_fee_info => [需要官方确认]：String 子表编码` | 分账手续费总金额(元) | `String` | `14` | `N` | 已确认 | 示例值：0.10 |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_flag` | `response.data.sub_orders_response` | `$[].split_fee_info => [需要官方确认]：String 子表编码` | 分账手续费扣款标志 | `Integer` | `1` | `Y` | 已确认 | 1: 外扣 2: 内扣；示例值：2 |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_details` | `response.data.sub_orders_response` | `$[].split_fee_info.split_fee_details => [需要官方确认]：String 子表编码` | 分账手续费信息 | `String` | `—` | `Y` | [需要官方确认]：长度 | 分账手续费信息 |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_details.split_fee_amt` | `response.data.sub_orders_response` | `$[].split_fee_info.split_fee_details => [需要官方确认]：String 子表编码` | 分账手续费金额(元) | `String` | `14` | `Y` | 已确认 | 示例值：0.10 |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_details.split_fee_huifu_id` | `response.data.sub_orders_response` | `$[].split_fee_info.split_fee_details => [需要官方确认]：String 子表编码` | 分账手续费承担方商户号 | `String` | `32` | `Y` | 已确认 | 示例值：[官网示例已脱敏] |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_details.split_fee_acct_id` | `response.data.sub_orders_response` | `$[].split_fee_info.split_fee_details => [需要官方确认]：String 子表编码` | 分账手续费承担方账号 | `String` | `9` | `N` | 已确认 | 示例值：F00598600 |
+| `response.data.sub_orders_response[].fund_freeze_stat` | `response.data.sub_orders_response` | `$[].fund_freeze_stat` | 资金冻结状态 | `String` | `16` | `N` | 已确认 | FREEZE：冻结；UNFREEZE：解冻；示例值：UNFREEZE |
+| `response.data.sub_orders_response[].freeze_time` | `response.data.sub_orders_response` | `$[].freeze_time` | 冻结时间 | `String` | `14` | `N` | 已确认 | 格式为yyyyMMddHHMMSS，示例值：20091225091010 |
+| `response.data.sub_orders_response[].unfreeze_amt` | `response.data.sub_orders_response` | `$[].unfreeze_amt` | 解冻金额 | `String` | `14` | `N` | 已确认 | 单元：元。示例值：1.23 |
+| `response.data.sub_orders_response[].unfreeze_time` | `response.data.sub_orders_response` | `$[].unfreeze_time` | 解冻时间 | `String` | `14` | `N` | 已确认 | 格式为yyyyMMddHHMMSS，示例值：20091225091010 |
 
 ## 托管交易退款
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingtk.md>
-- SHA-256：`47711e53b23b8eec040d73628c8d9126c700118443dddcdcb40e391eddd88d1a`
+- SHA-256：`fe45dca45e8fce7a5caa19eb54196c51715546675abbaa1081984eb768e332cb`
 
 ### 请求信封
 
@@ -2835,6 +2959,19 @@
 | `request.data.bank_info_data.card_acct_type` | `request.data.bank_info_data` | `$.card_acct_type` | 付款方账户类型 | `String` | `1` | `N` | 已确认 | 对公:E，对私:P；默认：P，示例值：P |
 | `request.data.dy_data` | `request.data.dy_data` | `—（String(JSON) 容器）` | 抖音拓展参数集合 | `String` | `2048` | `N` | 已确认 | jsonObject字符串 |
 | `request.data.dy_data.refund_desc` | `request.data.dy_data` | `$.refund_desc` | 退款原因 | `String` | `200` | `N` | 已确认 | 会在下发给用户的退款消息中体现退款原因 |
+| `request.data.sub_orders_request[]` | `request.data.sub_orders_request` | `—（String(JSON Array) 容器）` | 子单退款信息列表 | `String` | `—` | `N` | [需要官方确认]：长度 | jsonArray字符串，合单支付的订单该字段必填 |
+| `request.data.sub_orders_request[].sub_req_date` | `request.data.sub_orders_request` | `$[].sub_req_date` | 子单请求日期 | `String` | `8` | `Y` | 已确认 | 格式yyyyMMdd；示例值：20220925 |
+| `request.data.sub_orders_request[].sub_req_seq_id` | `request.data.sub_orders_request` | `$[].sub_req_seq_id` | 子单请求流水号 | `String` | `128` | `Y` | 已确认 | 同一huifu_id下当天唯一；示例值：rQ[官网示例已脱敏] |
+| `request.data.sub_orders_request[].sub_huifu_id` | `request.data.sub_orders_request` | `$[].sub_huifu_id` | 子单商户号 | `String` | `32` | `Y` | 已确认 | 示例值：[官网示例已脱敏] |
+| `request.data.sub_orders_request[].sub_ord_amt` | `request.data.sub_orders_request` | `$[].sub_ord_amt` | 子单申请退款金额 | `String` | `14` | `Y` | 已确认 | 单位元，需保留小数点后两位；示例值：1.00，最低传入0.01；**注意：如果原交易是延时交易，退款金额必须小于等于待确认金额** |
+| `request.data.sub_orders_request[].org_sub_req_date` | `request.data.sub_orders_request` | `$[].org_sub_req_date` | 原子单交易请求日期 | `String` | `8` | `Y` | 已确认 | 格式：yyyyMMdd；示例值：20220925 |
+| `request.data.sub_orders_request[].org_sub_hf_seq_id` | `request.data.sub_orders_request` | `$[].org_sub_hf_seq_id` | 原子单交易全局流水号 | `String` | `128` | `N` | 已确认 | org_sub_hf_seq_id，org_sub_req_seq_id二选一；示例值：0030default220825182711P099ac1f343f00000 |
+| `request.data.sub_orders_request[].org_sub_req_seq_id` | `request.data.sub_orders_request` | `$[].org_sub_req_seq_id` | 原子单交易请求流水号 | `String` | `128` | `N` | 已确认 | org_sub_hf_seq_id，org_sub_req_seq_id二选一；示例值：[官网示例已脱敏] |
+| `request.data.sub_orders_request[].acct_split_bunch` | `request.data.sub_orders_request` | `$[].acct_split_bunch（String(JSON) 容器）` | 分账对象 | `String` | `2048` | `N` | 已确认 | 分账信息，jsonObject字符串 |
+| `request.data.sub_orders_request[].acct_split_bunch.acct_infos` | `request.data.sub_orders_request` | `$[].acct_split_bunch.acct_infos => [需要官方确认]：String 子表编码` | 分账信息列表 | `String` | `2048` | `N` | 已确认 | 分账明细 |
+| `request.data.sub_orders_request[].acct_split_bunch.acct_infos.div_amt` | `request.data.sub_orders_request` | `$[].acct_split_bunch.acct_infos => [需要官方确认]：String 子表编码` | 分账金额 | `String` | `14` | `Y` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00，最低传入0.01 |
+| `request.data.sub_orders_request[].acct_split_bunch.acct_infos.huifu_id` | `request.data.sub_orders_request` | `$[].acct_split_bunch.acct_infos => [需要官方确认]：String 子表编码` | 分账接收方ID | `String` | `32` | `Y` | 已确认 | 斗拱开户时生成；示例值：[官网示例已脱敏] |
+| `request.data.sub_orders_request[].sub_remark` | `request.data.sub_orders_request` | `$[].sub_remark` | 子单备注 | `String` | `84` | `N` | 已确认 | 原样返回；示例值：子单备注 |
 
 ### 同步响应信封
 
@@ -2943,7 +3080,7 @@
 ## 托管交易退款查询
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/cpjs/api_cpjs_hostingtkcx.md>
-- SHA-256：`db5e1065eabf9f9051f8feea9269d584c1343450e2913d0bdf83227bb878b3ca`
+- SHA-256：`4b78ba8567f606a870076d9f637fe064b21743f8139382c7a06e9016e5449f0c`
 
 ### 请求信封
 
@@ -3022,6 +3159,35 @@
 | `response.data.dy_response.out_trans_id` | `response.data.dy_response` | `$.out_trans_id` | 抖音退款单号 | `String` | `32` | `N` | 已确认 | 示例值：6545342375 |
 | `response.data.dy_response.payer_refund` | `response.data.dy_response` | `$.payer_refund` | 用户退款金额 | `String` | `12` | `N` | 已确认 | 退款给用户的金额，不包含所有优惠券金额 ，单位:元；示例值：1.00 |
 | `response.data.trans_finish_time` | `response.data.trans_finish_time` | `—（直接 JSON 路径）` | 退款完成时间 | `String` | `14` | `N` | 已确认 | 格式yyyyMMddHHmmss；示例值：20091225091010 |
+| `response.data.sub_orders_response[]` | `response.data.sub_orders_response` | `—（String(JSON Array) 容器）` | 退款子单返回信息列表 | `String` | `—` | `N` | [需要官方确认]：长度 | jsonArray格式字符串；合单支付的订单返回该字段 |
+| `response.data.sub_orders_response[].sub_huifu_id` | `response.data.sub_orders_response` | `$[].sub_huifu_id` | 退款子单商户号 | `String` | `32` | `N` | 已确认 | 示例值：[官网示例已脱敏] |
+| `response.data.sub_orders_response[].sub_req_date` | `response.data.sub_orders_response` | `$[].sub_req_date` | 退款子单请求日期 | `String` | `8` | `N` | 已确认 | 格式为yyyyMMdd，示例值：20220925 |
+| `response.data.sub_orders_response[].sub_req_seq_id` | `response.data.sub_orders_response` | `$[].sub_req_seq_id` | 退款子单请求流水号 | `String` | `128` | `N` | 已确认 | 示例值：rQ[官网示例已脱敏] |
+| `response.data.sub_orders_response[].sub_hf_seq_id` | `response.data.sub_orders_response` | `$[].sub_hf_seq_id` | 退款子单全局流水号 | `String` | `128` | `N` | 已确认 | 示例值：0030default220825182711P099ac1f343f00000 |
+| `response.data.sub_orders_response[].sub_org_req_date` | `response.data.sub_orders_response` | `$[].sub_org_req_date` | 原子单交易请求日期 | `String` | `8` | `N` | 已确认 | 格式为yyyyMMdd，示例值：20220925 |
+| `response.data.sub_orders_response[].sub_org_req_seq_id` | `response.data.sub_orders_response` | `$[].sub_org_req_seq_id` | 原子单交易请求流水号 | `String` | `128` | `N` | 已确认 | 示例值： |
+| `response.data.sub_orders_response[].sub_org_ord_amt` | `response.data.sub_orders_response` | `$[].sub_org_ord_amt` | 原子单交易订单金额 | `String` | `14` | `N` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00，最低传入0.01 |
+| `response.data.sub_orders_response[].sub_org_fee_amt` | `response.data.sub_orders_response` | `$[].sub_org_fee_amt` | 原子单交易手续费 | `String` | `14` | `N` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00，最低传入0.01 |
+| `response.data.sub_orders_response[].sub_trans_date` | `response.data.sub_orders_response` | `$[].sub_trans_date` | 子单退款交易发生日期 | `String` | `8` | `N` | 已确认 | 格式为yyyyMMdd，示例值：20220925 |
+| `response.data.sub_orders_response[].sub_ord_amt` | `response.data.sub_orders_response` | `$[].sub_ord_amt` | 子单退款金额 | `String` | `14` | `N` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00，最低传入0.01 |
+| `response.data.sub_orders_response[].sub_actual_ref_amt` | `response.data.sub_orders_response` | `$[].sub_actual_ref_amt` | 子单实际退款金额 | `String` | `14` | `N` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00，最低传入0.01 |
+| `response.data.sub_orders_response[].sub_total_ref_amt` | `response.data.sub_orders_response` | `$[].sub_total_ref_amt` | 原子单交易累计退款金额 | `String` | `14` | `N` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00，最低传入0.01 |
+| `response.data.sub_orders_response[].sub_total_ref_fee_amt` | `response.data.sub_orders_response` | `$[].sub_total_ref_fee_amt` | 原子单交易累计退款手续费金额 | `String` | `14` | `N` | 已确认 | 单位元，示例值：1.00；注意：退还手续费规则参见[说明文档](https://paas.huifu.com/open/doc/api/#/api_tksxfsm) |
+| `response.data.sub_orders_response[].sub_ref_cut` | `response.data.sub_orders_response` | `$[].sub_ref_cut` | 子单累计退款次数 | `String` | `14` | `N` | 已确认 | 示例值：1 |
+| `response.data.sub_orders_response[].acct_split_bunch` | `response.data.sub_orders_response` | `$[].acct_split_bunch => [需要官方确认]：String 子表编码` | 分账信息 | `String` | `4000` | `N` | 已确认 | 分账信息 |
+| `response.data.sub_orders_response[].acct_split_bunch.acct_infos` | `response.data.sub_orders_response` | `$[].acct_split_bunch.acct_infos => [需要官方确认]：String 子表编码` | 分账明细 | `String` | `2048` | `N` | 已确认 | 分账明细 |
+| `response.data.sub_orders_response[].acct_split_bunch.acct_infos.div_amt` | `response.data.sub_orders_response` | `$[].acct_split_bunch.acct_infos => [需要官方确认]：String 子表编码` | 分账金额 | `String` | `14` | `Y` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00，最低传入0.01 |
+| `response.data.sub_orders_response[].acct_split_bunch.acct_infos.huifu_id` | `response.data.sub_orders_response` | `$[].acct_split_bunch.acct_infos => [需要官方确认]：String 子表编码` | 分账接收方ID | `String` | `32` | `Y` | 已确认 | 斗拱开户时生成；示例值：[官网示例已脱敏] |
+| `response.data.sub_orders_response[].acct_split_bunch.fee_amt` | `response.data.sub_orders_response` | `$[].acct_split_bunch => [需要官方确认]：String 子表编码` | 退款返还手续费 | `String` | `14` | `Y` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00，最低传入0.01 |
+| `response.data.sub_orders_response[].split_fee_info` | `response.data.sub_orders_response` | `$[].split_fee_info => [需要官方确认]：String 子表编码` | 分账手续费信息 | `String` | `—` | `N` | [需要官方确认]：长度 | 分账手续费信息 |
+| `response.data.sub_orders_response[].split_fee_info.total_split_fee_amt` | `response.data.sub_orders_response` | `$[].split_fee_info => [需要官方确认]：String 子表编码` | 分账手续费总金额(元) | `String` | `14` | `N` | 已确认 | 示例值：0.10 |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_flag` | `response.data.sub_orders_response` | `$[].split_fee_info => [需要官方确认]：String 子表编码` | 分账手续费扣款标志 | `Integer` | `1` | `Y` | 已确认 | 1: 外扣 2: 内扣；示例值：1 |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_details[]` | `response.data.sub_orders_response` | `$[].split_fee_info.split_fee_details（String(JSON Array) 容器）` | 分账手续费明细 | `String` | `—` | `Y` | [需要官方确认]：长度 | jsonArray格式 |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_details[].split_fee_amt` | `response.data.sub_orders_response` | `$[].split_fee_info.split_fee_details => JSON decode => $[].split_fee_amt` | 分账手续费金额 | `String` | `14` | `Y` | 已确认 | 示例值：1.00 |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_details[].split_fee_huifu_id` | `response.data.sub_orders_response` | `$[].split_fee_info.split_fee_details => JSON decode => $[].split_fee_huifu_id` | 分账手续费承担方商户号 | `String` | `32` | `Y` | 已确认 | 示例值：[官网示例已脱敏] |
+| `response.data.sub_orders_response[].split_fee_info.split_fee_details[].split_fee_acct_id` | `response.data.sub_orders_response` | `$[].split_fee_info.split_fee_details => JSON decode => $[].split_fee_acct_id` | 分账手续费承担方账号 | `String` | `9` | `N` | 已确认 | 示例值：F00598600 |
+| `response.data.sub_orders_response[].sub_remark` | `response.data.sub_orders_response` | `$[].sub_remark` | 子单备注 | `String` | `1500` | `N` | 已确认 | 原样返回；示例值：子单备注 |
+| `response.data.sub_orders_response[].fund_freeze_stat` | `response.data.sub_orders_response` | `$[].fund_freeze_stat` | 资金冻结状态 | `String` | `16` | `N` | 已确认 | FREEZE：冻结；UNFREEZE：解冻；示例值：UNFREEZE；退款发生时，对应原交易的资金冻结状态。 |
 
 ## 托管交易关单
 

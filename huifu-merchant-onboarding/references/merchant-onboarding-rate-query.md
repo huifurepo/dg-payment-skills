@@ -2,7 +2,7 @@
 
 ## 适用范围
 
-用于查询指定商户的微信、支付宝、银行卡或银联二维码费率配置。官方来源：[商户费率信息查询](https://paas.huifu.com/partners/api/doc/shgl/shjj/api_merchant_conf_search_cx.md)，官网更新时间 `2026-09-21`，本地活动快照 `2026-10-08`，原文 SHA-256 为 `20a3be9f505c542a716bbdad65da146f9089be05b206850c089c6df4e9ac050e`。
+用于查询指定商户的微信、支付宝、银行卡或银联二维码费率配置。官方来源：[商户费率信息查询](https://paas.huifu.com/partners/api/doc/shgl/shjj/api_merchant_conf_search_cx.md)，官网更新时间 `2026-09-21`，本地活动快照 `2026-10-25`，原文 SHA-256 为 `20a3be9f505c542a716bbdad65da146f9089be05b206850c089c6df4e9ac050e`。
 
 这是进件配置查询，不是支付订单、对账或实际手续费结算结果查询。
 
@@ -24,7 +24,7 @@
 
 ## 公共请求头
 
-- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.5`，双 Skill 默认 `hfps/1.4.0;hfms/1.0.5`。
+- `jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.1.0`，双 Skill 默认 `hfps/1.5.0;hfms/1.1.0`。
 
 ## SDK 证据边界
 

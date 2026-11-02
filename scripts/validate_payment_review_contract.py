@@ -218,8 +218,8 @@ def main() -> int:
         "实际 JSON/解码路径",
         "不把官网展示分组当成 wire key",
         "按当前请求实际加载并参与生成的 Skill 集合取值",
-        "仅本 Skill 使用 `hfps/1.4.0`",
-        "两个 Skill 都参与当前请求时使用 `hfps/1.4.0;hfms/1.0.5`",
+        "仅本 Skill 使用 `hfps/1.5.0`",
+        "两个 Skill 都参与当前请求时使用 `hfps/1.5.0;hfms/1.1.0`",
         "顺序固定为支付、进件",
         "官方 `BsPayDemo/loader.php` 与 `Composer/BsPayConfig.php`",
         "加载任何 SDK 文件前固定 `DEBUG=false`",
@@ -228,8 +228,8 @@ def main() -> int:
     header_policy = read("shared-request-header-policy.md")
     require(
         header_policy,
-        "仅支付：hfps/1.4.0",
-        "支付 + 进件：hfps/1.4.0;hfms/1.0.5",
+        "仅支付：hfps/1.5.0",
+        "支付 + 进件：hfps/1.5.0;hfms/1.1.0",
         "双 Skill 顺序固定为支付、进件",
         "英文分号且不加空格",
         "原样透传该值，不再追加默认值",

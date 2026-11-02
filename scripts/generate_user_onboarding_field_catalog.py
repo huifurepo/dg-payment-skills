@@ -564,7 +564,8 @@ def render_source(spec: SourceSpec, content: bytes) -> tuple[str, dict[str, obje
         for path, field, _depth in flattened:
             description = field.description
             path_leaf = path.removesuffix("[]").rsplit(".", 1)[-1]
-            if path.startswith("request.data.") and path_leaf in page_notes:
+            note_prefix = "request." if path_leaf in {"sys_id", "product_id", "sign"} else "request.data."
+            if path.startswith(note_prefix) and path_leaf in page_notes:
                 description = (
                     f"{description}；官网页内注意：{page_notes[path_leaf]}"
                     if description != "—"

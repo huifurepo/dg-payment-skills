@@ -103,7 +103,7 @@ def main() -> int:
         assert hashlib.sha256(path.read_bytes()).hexdigest() == expected_hash
         validate_snapshot(json.loads(path.read_text()), directory, date)
     release, review = validate_release("huifu-pay-integration")
-    assert review["field_delta"]["catalog_total"] == lock["current_extension"]["catalog_total"] == 2930
+    assert review["field_delta"]["catalog_total"] == lock["current_extension"]["catalog_total"] == 3096
     for metric in ("field_paths_added", "field_paths_removed", "field_paths_changed"):
         assert review["field_delta"][metric] == lock["current_extension"][metric]
     field_review = json.loads((ROOT / review["field_review"]["path"]).read_text())

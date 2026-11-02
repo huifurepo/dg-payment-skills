@@ -2,7 +2,7 @@
 
 ## 适用范围
 
-用于商户成功开通多费率配置后，查询支付功能与场景维度的手续费底价配置。官方来源：[商户多费率配置查询](https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflcx.md)，官网更新时间 `2026-09-20`，本地活动快照 `2026-10-08`，原文 SHA-256 为 `e2c0f53e77a1ef00827cc8be28ac688c068e5c8a4dc9f741845b841dcd16881a`。
+用于商户成功开通多费率配置后，查询支付功能与场景维度的手续费底价配置。官方来源：[商户多费率配置查询](https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_dflcx.md)，官网更新时间 `2026-09-20`，本地活动快照 `2026-10-25`，原文 SHA-256 为 `e2c0f53e77a1ef00827cc8be28ac688c068e5c8a4dc9f741845b841dcd16881a`。
 
 本接口只读取多费率配置，不创建或修改配置，也不返回支付交易的实际手续费结算结果。调用前必须已有真实 `huifu_id`，且商户已成功开通多费率配置；接口存在不证明调用方拥有查询权限。
 
@@ -47,4 +47,4 @@ Java 可运行代码仍须在进程初始化、任何 SDK 请求前全局执行�
 
 ## 公共请求头
 
-`jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.0.5`，同时使用支付与进件 Skill 时默认 `hfps/1.4.0;hfms/1.0.5`。
+`jpt-x-skill-source: <skill_source>` 必须按 `shared-request-header-policy.md` 生成；仅进件默认 `hfms/1.1.0`，同时使用支付与进件 Skill 时默认 `hfps/1.5.0;hfms/1.1.0`。
