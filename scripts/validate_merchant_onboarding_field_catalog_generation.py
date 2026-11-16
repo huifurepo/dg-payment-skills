@@ -27,11 +27,11 @@ SOURCE_DIR = onboarding_source_dir()
 EXPECTED_COUNTS = {
     "企业商户进件": 177,
     "个人商户进件": 129,
-    "商户业务开通": 460,
+    "商户业务开通": 472,
     "图片上传": 8,
-    "商户详细信息查询": 583,
+    "商户详细信息查询": 602,
     "申请单状态查询": 93,
-    "商户业务开通修改": 452,
+    "商户业务开通修改": 465,
     "商户基本信息修改": 199,
     "商户费率信息查询": 35,
     "商户状态变更": 14,
@@ -143,7 +143,7 @@ def main() -> int:
             line.startswith("| `") for line in section_text(text, title).splitlines()
         )
         assert actual == expected, f"{title}: expected {expected} paths, found {actual}"
-        assert sum(EXPECTED_COUNTS.values()) == 2214
+        assert sum(EXPECTED_COUNTS.values()) == 2258
 
     target = next(
         line

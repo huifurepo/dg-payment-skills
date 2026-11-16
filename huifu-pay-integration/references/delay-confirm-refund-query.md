@@ -1,6 +1,6 @@
 # 交易确认退款查询
 
-官方来源：<https://paas.huifu.com/navigator/ossApi/api_jyqrtkcq.json>。来源快照：2026-10-25；SHA-256：`65fa17cd59e7d18637ddb920e3e74a337d91e49821c4f96ad184538e9f9aae46`。
+官方来源：<https://paas.huifu.com/navigator/ossApi/api_jyqrtkcq.json>。来源快照：2026-11-04；SHA-256：`65fa17cd59e7d18637ddb920e3e74a337d91e49821c4f96ad184538e9f9aae46`。
 
 接口：`/v2/trade/payment/delaytrans/confirmrefundquery`。官方JSON未列HTTP方法；官方SDK使用POST。
 

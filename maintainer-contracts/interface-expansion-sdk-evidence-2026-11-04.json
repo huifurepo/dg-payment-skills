@@ -1,0 +1,415 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-11-04",
+  "sdk_versions": {
+    "java": "3.0.41",
+    "php": "2.0.31",
+    "python": "2.0.28"
+  },
+  "sdk_source_lock": "maintainer-contracts/local-sdk-source-lock-2026-10-08.json",
+  "interfaces": [
+    {
+      "key": "delay-confirm",
+      "route": "/v2/trade/payment/delaytrans/confirm",
+      "class": "V2TradePaymentDelaytransConfirmRequest",
+      "python_module": "v2_trade_payment_delaytrans_confirm",
+      "sources": {
+        "java": {
+          "path": "bspay-java-sdk/opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V2TradePaymentDelaytransConfirmRequest.java",
+          "sha256": "4ddfa0f7acc8bbd72c130204a32a676a7468715432f4c7b70dd2ac001675d652"
+        },
+        "php": {
+          "path": "bspay-php-sdk/BsPaySdk/request/V2TradePaymentDelaytransConfirmRequest.php",
+          "sha256": "b5690bd861e80c18eebbd442092c65dc75003aa8ca5bf3876e693d5530f65e20"
+        },
+        "python": {
+          "path": "dg_sdk-2.0.28/dg_sdk/request/v2_trade_payment_delaytrans_confirm_request.py",
+          "sha256": "70e88364fa1501c084d134120851e18d3643605d66639b30ff4bc7f59326b313"
+        }
+      },
+      "declared_fields": [
+        "req_date",
+        "req_seq_id",
+        "huifu_id",
+        "pay_type"
+      ]
+    },
+    {
+      "key": "delay-confirm-query",
+      "route": "/v3/trade/payment/delaytrans/confirmquery",
+      "class": "V3TradePaymentDelaytransConfirmqueryRequest",
+      "python_module": "v3_trade_payment_delaytrans_confirmquery",
+      "sources": {
+        "java": {
+          "path": "bspay-java-sdk/opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V3TradePaymentDelaytransConfirmqueryRequest.java",
+          "sha256": "3fde34e2ed5e79f62fdc822891fe08bcaae242f5e9baf1ccba38742da79b2322"
+        },
+        "php": {
+          "path": "bspay-php-sdk/BsPaySdk/request/V3TradePaymentDelaytransConfirmqueryRequest.php",
+          "sha256": "8dad17484415672a3c3300d03e47f2922f0960d8ecd349866326470c21d66437"
+        },
+        "python": {
+          "path": "dg_sdk-2.0.28/dg_sdk/request/v3_trade_payment_delaytrans_confirmquery_request.py",
+          "sha256": "d94e3cc9e41d8fb81dd60207588e9bc121ad826ac4024f4f967cf48ca7dd22f4"
+        }
+      },
+      "declared_fields": [
+        "org_req_date",
+        "org_req_seq_id",
+        "huifu_id"
+      ]
+    },
+    {
+      "key": "delay-confirm-refund",
+      "route": "/v2/trade/payment/delaytrans/confirmrefund",
+      "class": "V2TradePaymentDelaytransConfirmrefundRequest",
+      "python_module": "v2_trade_payment_delaytrans_confirmrefund",
+      "sources": {
+        "java": {
+          "path": "bspay-java-sdk/opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V2TradePaymentDelaytransConfirmrefundRequest.java",
+          "sha256": "bf8a3d40e3bcc5dfd87d82457675838dfcc7ea66c6d410b60abdadee112930c7"
+        },
+        "php": {
+          "path": "bspay-php-sdk/BsPaySdk/request/V2TradePaymentDelaytransConfirmrefundRequest.php",
+          "sha256": "21eb6155ec62709ef0e13177f1be450d6ecd0408b5967b706cfee1e88ae280ad"
+        },
+        "python": {
+          "path": "dg_sdk-2.0.28/dg_sdk/request/v2_trade_payment_delaytrans_confirmrefund_request.py",
+          "sha256": "cb648501b2261ae1c56129e54f8ad94f2f661dbfd625775fcd7fcd2cacd7b312"
+        }
+      },
+      "declared_fields": [
+        "req_date",
+        "req_seq_id",
+        "huifu_id",
+        "org_req_date",
+        "org_req_seq_id"
+      ]
+    },
+    {
+      "key": "delay-confirm-refund-query",
+      "route": "/v2/trade/payment/delaytrans/confirmrefundquery",
+      "class": "V2TradePaymentDelaytransConfirmrefundqueryRequest",
+      "python_module": "v2_trade_payment_delaytrans_confirmrefundquery",
+      "sources": {
+        "java": {
+          "path": "bspay-java-sdk/opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V2TradePaymentDelaytransConfirmrefundqueryRequest.java",
+          "sha256": "9f9171bb96eec9293065d1e8c266525737b5b563bacf41561432de1af44e9171"
+        },
+        "php": {
+          "path": "bspay-php-sdk/BsPaySdk/request/V2TradePaymentDelaytransConfirmrefundqueryRequest.php",
+          "sha256": "315213ee64c822b2819d6542d35b8051a025a8349d1861a9a4f8973e34c7e28c"
+        },
+        "python": {
+          "path": "dg_sdk-2.0.28/dg_sdk/request/v2_trade_payment_delaytrans_confirmrefundquery_request.py",
+          "sha256": "88159fc8f3087f89db64efc173e6b1497307d60befcb6c8204d6ade82ae6a0e5"
+        }
+      },
+      "declared_fields": [
+        "huifu_id",
+        "org_req_date",
+        "org_req_seq_id",
+        "org_hf_seq_id"
+      ]
+    },
+    {
+      "key": "account-subaccount-open",
+      "route": "/v2/merchant/settle/config",
+      "class": "V2MerchantSettleConfigRequest",
+      "python_module": "v2_merchant_settle_config",
+      "sources": {
+        "java": {
+          "path": "bspay-java-sdk/opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V2MerchantSettleConfigRequest.java",
+          "sha256": "5395ff88607a03010e844cf08dc0aeb647cfbd0530a12ec967985488f8893359"
+        },
+        "php": {
+          "path": "bspay-php-sdk/BsPaySdk/request/V2MerchantSettleConfigRequest.php",
+          "sha256": "da17a396f15545d2519717c39f3f5b782fb73a2f6de9a00930a0890c467bd1aa"
+        },
+        "python": {
+          "path": "dg_sdk-2.0.28/dg_sdk/request/v2_merchant_settle_config_request.py",
+          "sha256": "d3e8e56e065064ca87be78674a96baef051453c173caf7e08c2b04eed8f37a80"
+        }
+      },
+      "declared_fields": [
+        "req_seq_id",
+        "req_date",
+        "huifu_id",
+        "upper_huifu_id",
+        "acct_type",
+        "acct_name",
+        "card_info"
+      ]
+    },
+    {
+      "key": "account-subaccount-modify",
+      "route": "/v2/merchant/settle/modify",
+      "class": "V2MerchantSettleModifyRequest",
+      "python_module": "v2_merchant_settle_modify",
+      "sources": {
+        "java": {
+          "path": "bspay-java-sdk/opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V2MerchantSettleModifyRequest.java",
+          "sha256": "643750796d3b1ad178005a488237f5c5a1fc365714c929665c6743a929b0cdc4"
+        },
+        "php": {
+          "path": "bspay-php-sdk/BsPaySdk/request/V2MerchantSettleModifyRequest.php",
+          "sha256": "88bd32785279c70b3d6e3d30d508f537e0a92747af315d63311015ff7c797c2e"
+        },
+        "python": {
+          "path": "dg_sdk-2.0.28/dg_sdk/request/v2_merchant_settle_modify_request.py",
+          "sha256": "5780786d8582b718b412abd37c2a770d1180fe5f5039710fd0d8c16f84d31608"
+        }
+      },
+      "declared_fields": [
+        "req_seq_id",
+        "req_date",
+        "huifu_id",
+        "upper_huifu_id",
+        "acct_id",
+        "settle_config",
+        "card_info"
+      ]
+    },
+    {
+      "key": "account-balance-query",
+      "route": "/v2/trade/acctpayment/balance/query",
+      "class": "V2TradeAcctpaymentBalanceQueryRequest",
+      "python_module": "v2_trade_acctpayment_balance_query",
+      "sources": {
+        "java": {
+          "path": "bspay-java-sdk/opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V2TradeAcctpaymentBalanceQueryRequest.java",
+          "sha256": "679f1e6743714f59fbe5c878582f149edea81e042056e88044ec1a1a05ef0845"
+        },
+        "php": {
+          "path": "bspay-php-sdk/BsPaySdk/request/V2TradeAcctpaymentBalanceQueryRequest.php",
+          "sha256": "a7cb781d8004d6e90c2796e22b7ea5790a16484770801f2819717f9fe6cf03e6"
+        },
+        "python": {
+          "path": "dg_sdk-2.0.28/dg_sdk/request/v2_trade_acctpayment_balance_query_request.py",
+          "sha256": "4d7ca0ade94a7590fb1d8e24b641a8f80d5890d79603dccfa5219fcf2520c993"
+        }
+      },
+      "declared_fields": [
+        "req_date",
+        "huifu_id"
+      ]
+    },
+    {
+      "key": "account-ledger-query",
+      "route": "/v2/trade/acctpayment/acctlog/query",
+      "class": "V2TradeAcctpaymentAcctlogQueryRequest",
+      "python_module": "v2_trade_acctpayment_acctlog_query",
+      "sources": {
+        "java": {
+          "path": "bspay-java-sdk/opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V2TradeAcctpaymentAcctlogQueryRequest.java",
+          "sha256": "782a13e51aafb5f3c704b96ce579bfa5e54d3d9d77cb36778802d05d69d6d4da"
+        },
+        "php": {
+          "path": "bspay-php-sdk/BsPaySdk/request/V2TradeAcctpaymentAcctlogQueryRequest.php",
+          "sha256": "ab6d26222751b69c4c4c6d6ce54b24517e5128ceb6d3892256a58019d3f60887"
+        },
+        "python": {
+          "path": "dg_sdk-2.0.28/dg_sdk/request/v2_trade_acctpayment_acctlog_query_request.py",
+          "sha256": "623d5a355d3d7bd94b70c45278b64ec433e64c60267e52c111dcaca9b16f68f1"
+        }
+      },
+      "declared_fields": [
+        "req_seq_id",
+        "huifu_id",
+        "acct_date"
+      ]
+    },
+    {
+      "key": "account-ledger-summary-query",
+      "route": "/v2/trade/acctpayment/acctlog/summary",
+      "class": null,
+      "python_module": null,
+      "sources": {},
+      "declared_fields": []
+    },
+    {
+      "key": "payout-withdraw",
+      "route": "/v2/trade/settlement/encashment",
+      "class": "V2TradeSettlementEncashmentRequest",
+      "python_module": "v2_trade_settlement_encashment",
+      "declared_fields": [
+        "req_date",
+        "req_seq_id",
+        "cash_amt",
+        "huifu_id",
+        "into_acct_date_type",
+        "token_no"
+      ],
+      "sources": {
+        "java": {
+          "path": "bspay-java-sdk/opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V2TradeSettlementEncashmentRequest.java",
+          "sha256": "8b311b4de916d8eac1b2bbb4b6c9ec2f326656a163bc1fc8180339ce103ceb54"
+        },
+        "php": {
+          "path": "bspay-php-sdk/BsPaySdk/request/V2TradeSettlementEncashmentRequest.php",
+          "sha256": "74d4a34c8cfab06610d3531b4e4b0c9b257ee03ba22c4217164059985dcc4cea"
+        },
+        "python": {
+          "path": "dg_sdk-2.0.28/dg_sdk/request/v2_trade_settlement_encashment_request.py",
+          "sha256": "c7e36496155d67f0d70b24f990cebcc71493990c1d84534b4859bd325899f8e0"
+        }
+      }
+    },
+    {
+      "key": "payout-transfer",
+      "route": "/v2/trade/settlement/surrogate",
+      "class": "V2TradeSettlementSurrogateRequest",
+      "python_module": "v2_trade_settlement_surrogate",
+      "declared_fields": [
+        "req_seq_id",
+        "req_date",
+        "huifu_id",
+        "cash_amt",
+        "purpose_desc",
+        "province",
+        "area",
+        "bank_code",
+        "correspondent_code",
+        "bank_account_name",
+        "card_acct_type",
+        "bank_card_no_crypt",
+        "certificate_no_crypt",
+        "certificate_type",
+        "into_acct_date_type"
+      ],
+      "sources": {
+        "java": {
+          "path": "bspay-java-sdk/opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V2TradeSettlementSurrogateRequest.java",
+          "sha256": "46fea1240474f103c96a2e2756f53d75883d51de7bf0cf4365b4a07b8be136fb"
+        },
+        "php": {
+          "path": "bspay-php-sdk/BsPaySdk/request/V2TradeSettlementSurrogateRequest.php",
+          "sha256": "316e98af9dc9fbe158a2a95ec6fb26179a0ac34b76ab02ea90bee3408b9092c2"
+        },
+        "python": {
+          "path": "dg_sdk-2.0.28/dg_sdk/request/v2_trade_settlement_surrogate_request.py",
+          "sha256": "3fa8f0889fa96e6374fe408cf5208f01026aec32e7dec8d866658c7a3e1fd48c"
+        }
+      }
+    },
+    {
+      "key": "payout-query",
+      "route": "/v2/trade/settlement/query",
+      "class": "V2TradeSettlementQueryRequest",
+      "python_module": "v2_trade_settlement_query",
+      "declared_fields": [
+        "huifu_id",
+        "org_req_date",
+        "org_hf_seq_id",
+        "org_req_seq_id"
+      ],
+      "sources": {
+        "java": {
+          "path": "bspay-java-sdk/opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V2TradeSettlementQueryRequest.java",
+          "sha256": "294ef3aa41e16670f19a177f232b1963864f278b71b7bf4538fc42dbb51c2e65"
+        },
+        "php": {
+          "path": "bspay-php-sdk/BsPaySdk/request/V2TradeSettlementQueryRequest.php",
+          "sha256": "96e11e504e4d07fd94b0931cddd73177fbb08f6efbc66df5a5c87d159ad328a8"
+        },
+        "python": {
+          "path": "dg_sdk-2.0.28/dg_sdk/request/v2_trade_settlement_query_request.py",
+          "sha256": "abcf54a6627dc5d0f4fd10cee50e1ebf179009851d1ee2582b0e6ff76439e8e1"
+        }
+      }
+    },
+    {
+      "key": "payout-batch-query",
+      "route": "/v2/trade/batchtranslog/query",
+      "class": "V2TradeBatchtranslogQueryRequest",
+      "python_module": "v2_trade_batchtranslog_query",
+      "declared_fields": [
+        "huifu_id",
+        "begin_date",
+        "end_date"
+      ],
+      "sources": {
+        "java": {
+          "path": "bspay-java-sdk/opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V2TradeBatchtranslogQueryRequest.java",
+          "sha256": "1fc87e8e272200ffbab18f8697dfb994c427f0d2d841b1a92699aedb51fe0b90"
+        },
+        "php": {
+          "path": "bspay-php-sdk/BsPaySdk/request/V2TradeBatchtranslogQueryRequest.php",
+          "sha256": "dbc1aadfb42e8516f83fc1812ca6ed6ca3135a5c34e7328f0b42065df2928d02"
+        },
+        "python": {
+          "path": "dg_sdk-2.0.28/dg_sdk/request/v2_trade_batchtranslog_query_request.py",
+          "sha256": "a39fb7f794065da6cfb6f1b65b3840fcc882c799eb240a92d4c79b3f890cf647"
+        }
+      }
+    },
+    {
+      "key": "payout-settlement-query",
+      "route": "/v2/merchant/basicdata/settlement/query",
+      "class": "V2MerchantBasicdataSettlementQueryRequest",
+      "python_module": "v2_merchant_basicdata_settlement_query",
+      "declared_fields": [
+        "req_seq_id",
+        "req_date",
+        "huifu_id",
+        "begin_date",
+        "end_date",
+        "page_size"
+      ],
+      "sources": {
+        "java": {
+          "path": "bspay-java-sdk/opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V2MerchantBasicdataSettlementQueryRequest.java",
+          "sha256": "e6b83b03b87bf5eb950d21b7e37c5c49f1a3179a9fa4884e08013a731ff08208"
+        },
+        "php": {
+          "path": "bspay-php-sdk/BsPaySdk/request/V2MerchantBasicdataSettlementQueryRequest.php",
+          "sha256": "c0c4b204fb55a43c750ecb14b8efe822781dee1f797d76869d4139f81fae55bf"
+        },
+        "python": {
+          "path": "dg_sdk-2.0.28/dg_sdk/request/v2_merchant_basicdata_settlement_query_request.py",
+          "sha256": "60413609ae275a8129439b73e2a373b530231ed9b17dde132995daa2aa1440fe"
+        }
+      }
+    },
+    {
+      "key": "payout-dm-quota-query",
+      "route": "/v2/trade/settlement/enchashment/dmamt/query",
+      "class": "V2TradeSettlementEnchashmentDmamtQueryRequest",
+      "python_module": "v2_trade_settlement_enchashment_dmamt_query",
+      "declared_fields": [
+        "huifu_id"
+      ],
+      "sources": {
+        "java": {
+          "path": "bspay-java-sdk/opps-bspay-java-sdk/src/main/java/com/huifu/bspay/sdk/opps/core/request/V2TradeSettlementEnchashmentDmamtQueryRequest.java",
+          "sha256": "91dd07a697553700bfe8917cac10d6aa5fe197fd3fb11b9ec227f14604e3d6d3"
+        },
+        "php": {
+          "path": "bspay-php-sdk/BsPaySdk/request/V2TradeSettlementEnchashmentDmamtQueryRequest.php",
+          "sha256": "8c2aa2dfc465be7972160048821a31d9c7b8d463e65a98ac0c483d4ca2ec9af4"
+        },
+        "python": {
+          "path": "dg_sdk-2.0.28/dg_sdk/request/v2_trade_settlement_enchashment_dmamt_query_request.py",
+          "sha256": "efc121a9bc2ac8656443a722e0ce2590eb75f8c60a75e72f8024235bec8c57ba"
+        }
+      }
+    }
+  ],
+  "network_calls": 0,
+  "probe_status": "independent-offline-validation-passed",
+  "validation": {
+    "field_paths": 566,
+    "typed_route_language_pairs": 42,
+    "actual_python_serializer_probes": 14,
+    "extension_collision_probes": 14,
+    "field_negative_controls": 2,
+    "payout_final_signed_body_probes": 6,
+    "payout_final_body_collision_probes": 6,
+    "payout_original_locator_branches": 2,
+    "payout_ts_batch_omission_branches": 1,
+    "payout_regular_batch_branches": 1,
+    "payout_rsa_encryption_error_controls": 1,
+    "generic_summary_entry": "source-verified only; no gateway call",
+    "java_php_payload_execution": false
+  }
+}

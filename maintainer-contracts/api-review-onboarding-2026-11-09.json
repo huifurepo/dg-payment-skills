@@ -1,0 +1,273 @@
+{
+  "schema_version": 5,
+  "review_kind": "onboarding-only-refresh",
+  "review_date": "2026-11-09",
+  "snapshot_timezone": "America/Los_Angeles",
+  "skill": "huifu-merchant-onboarding",
+  "version_before": "1.2.0",
+  "version_after": "1.2.0",
+  "previous_api_review": {
+    "path": "maintainer-contracts/api-review-2026-11-04.json",
+    "sha256": "0e3598fb3e14972336b3c6c0daa688d73c6dc0a4350873c1a2b58a084a10d06f"
+  },
+  "previous_refresh": {
+    "path": "maintainer-contracts/api-refresh-onboarding-1.2.0-2026-11-04.json",
+    "sha256": "7200d74395767c5d421d74d230e90923d63d0114f5a59e5f1163e777b176493a"
+  },
+  "baseline_catalogs": {
+    "payment": {
+      "path": "maintainer-contracts/review-baselines/2026-11-04/payment-complete-field-catalog.md",
+      "sha256": "435e19388b11bc4f23b2e7337ca159f5c8b9cbb4e18985fcdc91ef473e1823c0"
+    },
+    "merchant": {
+      "path": "maintainer-contracts/review-baselines/2026-11-04/merchant-onboarding-complete-field-catalog.md",
+      "sha256": "cfee5f2fb304ac22115bee75f8bba7807fa158ccccc39bc295ba73ad6cb7a916"
+    },
+    "user": {
+      "path": "maintainer-contracts/review-baselines/2026-11-04/user-onboarding-complete-field-catalog.md",
+      "sha256": "4284ddee49c17c88561bee0f5d76a3b40b3714e4028587e4a0a6fb6f64178e42"
+    },
+    "extension": {
+      "path": "maintainer-contracts/review-baselines/2026-11-04/onboarding-extension-complete-field-catalog.md",
+      "sha256": "d8260de740d3330487adace1f24a7614c4bb435c7fe8907a1949caf59059bba5"
+    },
+    "payment-additions": {
+      "path": "maintainer-contracts/review-baselines/2026-11-04/payment-extension-complete-field-catalog.md",
+      "sha256": "fe078c30004eaa49ab7a8439af69f3e8d05261139348751501709bf1d3c6f54a"
+    },
+    "merchant-account": {
+      "path": "maintainer-contracts/review-baselines/2026-11-04/merchant-account-complete-field-catalog.md",
+      "sha256": "a1c79003d73020c1bad3bc82473411169c3a43b4a8801a936a1a4a833a595603"
+    }
+  },
+  "current_catalogs": {
+    "merchant": {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
+      "sha256": "623c2d3e5606f04d7b605c04474ec8c4945077609d090419a3a6c20dc1c4c768"
+    },
+    "user": {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md",
+      "sha256": "4284ddee49c17c88561bee0f5d76a3b40b3714e4028587e4a0a6fb6f64178e42"
+    },
+    "extension": {
+      "path": "huifu-merchant-onboarding/references/onboarding-extension-complete-field-catalog.md",
+      "sha256": "d8260de740d3330487adace1f24a7614c4bb435c7fe8907a1949caf59059bba5"
+    },
+    "merchant-account": {
+      "path": "huifu-merchant-onboarding/references/merchant-account-complete-field-catalog.md",
+      "sha256": "c8baac2cb3278e5867600f6dfcb3ac52868799ab4f6d7ba70bdea2649fddaf53"
+    }
+  },
+  "baseline_source_locks": {
+    "payment": {
+      "path": "maintainer-contracts/payment-source-lock-2026-11-04.json",
+      "sha256": "53e90d794e71ee5d5432a854ecb288337209d5c30edc9669b56b56d5a8225294"
+    },
+    "merchant-onboarding": {
+      "path": "maintainer-contracts/merchant-onboarding-source-lock-2026-11-04.json",
+      "sha256": "95ee6f6b04b538890b799846befd42bbf0d909f557dbfa63b6b77a01dd75641d"
+    },
+    "user-onboarding": {
+      "path": "maintainer-contracts/user-onboarding-source-lock-2026-11-04.json",
+      "sha256": "ce254da213b572681d8e9bc174c8f37d2ca2ba006c020a1effa309a60dd05d80"
+    },
+    "onboarding-extension": {
+      "path": "maintainer-contracts/onboarding-extension-source-lock-2026-11-04.json",
+      "sha256": "ba5bf48aa5967a81136379fca6a822c80d58eb482818742dcf7927a328422e39"
+    }
+  },
+  "current_source_locks": {
+    "merchant-onboarding": {
+      "path": "maintainer-contracts/merchant-onboarding-source-lock-2026-11-09.json",
+      "sha256": "7337182cbf5bf6853ee1e69fa5d1aa06230cc464f9d0660a128c5eebe4bc780d"
+    },
+    "user-onboarding": {
+      "path": "maintainer-contracts/user-onboarding-source-lock-2026-11-09.json",
+      "sha256": "16bdf91363987daef04a1e07449907127e5587e511648d9200e610a5178c78c2"
+    },
+    "onboarding-extension": {
+      "path": "maintainer-contracts/onboarding-extension-source-lock-2026-11-09.json",
+      "sha256": "5d5f983549bedeca00919e0c6c1fedabb61bd6c02904d8e08fe268e7382cc054"
+    }
+  },
+  "prior_additional_locks": {
+    "huifu-pay-integration": {
+      "path": "maintainer-contracts/huifu-pay-integration-additional-source-lock-2026-11-04.json",
+      "sha256": "8345366061731266a20911f1b8d13b76a206bb984bd118e73e78098aa6b3d316"
+    },
+    "huifu-merchant-onboarding": {
+      "path": "maintainer-contracts/huifu-merchant-onboarding-additional-source-lock-2026-11-04.json",
+      "sha256": "ac005505af8d9951faf4185d52ce5c0866ea967a20e4f8a0f31621e2ce000a96"
+    }
+  },
+  "current_additional_sources": {
+    "skill": "huifu-merchant-onboarding",
+    "catalog": {
+      "path": "huifu-merchant-onboarding/references/merchant-account-complete-field-catalog.md",
+      "sha256": "c8baac2cb3278e5867600f6dfcb3ac52868799ab4f6d7ba70bdea2649fddaf53"
+    },
+    "sources": [
+      {
+        "key": "account-subaccount-open",
+        "title": "子账户开通配置",
+        "url": "https://paas.huifu.com/partners/api/doc/zhgl/api_zhgl_zhpz_kyc.md",
+        "path": "maintainer-contracts/official-sources/merchant-account/2026-11-09/account-subaccount-open.md",
+        "sha256": "b496d1493ed0615115e8972272f0a717289a5feab6206080a62c83615ea9eb8b",
+        "endpoint": "/v2/merchant/settle/config",
+        "http_method": "POST",
+        "request_class": "V2MerchantSettleConfigRequest",
+        "python_module": "v2_merchant_settle_config",
+        "reference": "account-subaccount-open.md",
+        "fields": 66,
+        "surfaces": {
+          "请求信封": 4,
+          "请求 data": 40,
+          "同步响应信封及 data": 8,
+          "审核异步信封及 data": 14
+        },
+        "root_tables": 4,
+        "nested_tables": 4,
+        "official_page_update": "2025.01.09"
+      },
+      {
+        "key": "account-subaccount-modify",
+        "title": "修改子账户配置",
+        "url": "https://paas.huifu.com/partners/api/doc/zhgl/api_zhgl_xgzh_kyc.md",
+        "path": "maintainer-contracts/official-sources/merchant-account/2026-11-09/account-subaccount-modify.md",
+        "sha256": "6c041ff7af41573a97463077062725c6a0ca2815b0d64b64fea6c32e21bd3c05",
+        "endpoint": "/v2/merchant/settle/modify",
+        "http_method": "POST",
+        "request_class": "V2MerchantSettleModifyRequest",
+        "python_module": "v2_merchant_settle_modify",
+        "reference": "account-subaccount-modify.md",
+        "fields": 64,
+        "surfaces": {
+          "请求信封": 4,
+          "请求 data": 40,
+          "同步响应信封及 data": 6,
+          "审核异步信封及 data": 14
+        },
+        "root_tables": 4,
+        "nested_tables": 4,
+        "official_page_update": "2025.01.09"
+      }
+    ],
+    "totals": {
+      "interfaces": 2,
+      "field_paths": 130
+    }
+  },
+  "source_audit": {
+    "path": "maintainer-contracts/official-document-review-onboarding-2026-11-09.json",
+    "sha256": "02e2aee3f975e6cbf6f0a0b8f1dfc6cb4a47623261b01d60172738c80fd938ac"
+  },
+  "field_comparison": {
+    "merchant": {
+      "before": 2258,
+      "after": 2258,
+      "added": [],
+      "removed": [],
+      "changed": [
+        {
+          "interface": "商户业务开通修改",
+          "path": "request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.sign_start_date",
+          "before": {
+            "name": "签约申请生效日期",
+            "type": "`String`",
+            "length": "`7`",
+            "required": "`C`",
+            "description": "银行名称非平安银行时，需填写；示例：20251219"
+          },
+          "after": {
+            "name": "签约申请生效日期",
+            "type": "`String`",
+            "length": "`8`",
+            "required": "`C`",
+            "description": "银行名称非平安银行时，需填写；示例：20251219"
+          }
+        }
+      ]
+    },
+    "user": {
+      "before": 644,
+      "after": 644,
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "extension": {
+      "before": 546,
+      "after": 546,
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "merchant-account": {
+      "before": 130,
+      "after": 130,
+      "added": [],
+      "removed": [],
+      "changed": []
+    }
+  },
+  "scope": {
+    "official_documents": 36,
+    "changed_documents": 1,
+    "unchanged_documents": 35,
+    "interfaces": 36,
+    "field_paths": 3578,
+    "added": 0,
+    "removed": 0,
+    "changed": 1
+  },
+  "resolved_conflicts": [
+    {
+      "interface": "商户业务开通修改",
+      "path": "request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.sign_start_date",
+      "before_length": "7",
+      "after_length": "8",
+      "type": "String",
+      "required": "C",
+      "reason": "Formal length now agrees with yyyyMMdd example; previously documented 7-versus-8 conflict is resolved."
+    }
+  ],
+  "preserved_skills": {
+    "huifu-pay-integration": {
+      "root": "huifu-pay-integration",
+      "domain": "payment",
+      "version": "1.6.0",
+      "agents_file": "agents/openai.yaml",
+      "reference_manifest": "maintainer-contracts/payment-references.json",
+      "max_reference_mentions": 105,
+      "canonical_regression_count": 14,
+      "regression_suites": [
+        "payment",
+        "cross-route"
+      ],
+      "package_profile": "payment",
+      "source_lock": "maintainer-contracts/payment-source-lock-2026-11-04.json",
+      "refresh_contract": "maintainer-contracts/api-refresh-payment-1.6.0-2026-11-04.json",
+      "sdk_source_lock": "maintainer-contracts/local-sdk-source-lock-2026-10-08.json",
+      "api_review": "maintainer-contracts/api-review-2026-11-04.json",
+      "additional_source_lock": "maintainer-contracts/huifu-pay-integration-additional-source-lock-2026-11-04.json"
+    },
+    "huifu-subscription-pay": {
+      "root": "huifu-subscription-pay",
+      "domain": "subscription",
+      "version": "1.0.0",
+      "skill_source_prefix": "hfss",
+      "agents_file": "agents/openai.yaml",
+      "reference_manifest": "maintainer-contracts/subscription-references.json",
+      "max_reference_mentions": 40,
+      "canonical_regression_count": 0,
+      "regression_suites": [
+        "subscription",
+        "subscription-cross-route"
+      ],
+      "package_profile": "subscription",
+      "source_lock": "maintainer-contracts/subscription-source-lock.json",
+      "refresh_contract": "maintainer-contracts/subscription-refresh.json"
+    }
+  },
+  "hash_graph": "raw/catalogs -> review -> online review -> formal refresh -> additive lock -> package provenance"
+}

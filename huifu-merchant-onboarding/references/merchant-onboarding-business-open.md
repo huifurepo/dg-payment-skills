@@ -7,8 +7,8 @@
 ## 已确认的请求合同
 
 - Endpoint：`POST https://api.huifu.com/v2/merchant/busi/open`；顶层使用 `sys_id`、`product_id`、`sign`、`data`。
-- 官网更新时间 `2026-09-20`；本地活动快照 `2026-10-25`；原文 SHA-256：`9c3f2262c295489abc5ce32bf123128cfd7376c4d5e35399c5083e39ff206c5c`。
-- 完整目录共460个节点（请求395、同步响应9、异步56）和 54 组扩展表；全部父子路径、类型、长度、Y/N/C 与官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户业务开通”，本页不能替代完整字段目录。
+- 官网更新时间 `2026-11-03`；本地活动快照 `2026-11-09`；原文 SHA-256：`42d692619bd409ae11b95b43a0badec25794316e8fa0fc6de3c02c5fa2ae4ddd`。
+- 完整目录共472个节点（请求407、同步响应9、异步56）和 57 组扩展表；全部父子路径、类型、长度、Y/N/C 与官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户业务开通”，本页不能替代完整字段目录。
 - `data` 至少需新的当日唯一 `req_seq_id`、`req_date` 和真实 `huifu_id`。`upper_huifu_id:String(18) C`：`sys_id` 主体为渠道商时填写，总部商户主体时选填。
 - 微信、支付宝、银联、银行卡、线上业务、协议、分账等配置按业务分组条件填写；不能用一个通用模板猜填渠道字段或费率。
 - `async_return_url` 是申请审核结果入口；`busi_async_return_url` 是逐支付业务结果入口；电子协议地址的路径为 `data.agreement_info.agreement_async_return_url`（`agreement_info` 是 String(JSON) 条件对象）。字段合同见 `merchant-onboarding-field-contracts.md`。
@@ -31,7 +31,9 @@
 | `data.withhold_pay_scene` | `withhold_flag=Y` 时必填，仅 `1..6`，具体语义见字段合同。 |
 | `data.online_fee_conf_list[].fee_formula_type` | `String N`；代扣开通时才可传，`01/02/03/04` 分别为百分比无封顶保底、百分比有保底、固定、固定+百分比，空值默认 `04`。 |
 
-捷行付 `data.jxf_conf_info` 必须整组读取：`bank_name:String(8) Y` 仅 `PINGAN/BOC`；`jxf_bank_info.operator_phone/user_name/sign_start_date/sign_end_date` 为 `C`，银行不是平安时必填。`jxf_fee_info:Object N`（说明仍为jsonObject字符串，类型与说明冲突） 下包含 `open_card_fix_fee:String(11) N`、`quota_issue_fee_rate:String(6) N`、`out_fee_flag:String(1) N`、`out_fee_huifuid:String(18) C`、`out_fee_acct_type:String(2) C`；`pay_confirm_flag:String(1) N` 为 `Y/N`，为 `Y` 时 `pay_confirm_req_url:String(256) C` 必填。最新示例已删除未声明的 `jxf_fee_info.fee_charge_type` 并修正费率精度；该字段仍不进入DTO。对Object与字符串说明冲突的路径，不自行选择wire。
+捷行付 `request.data.jxf_conf_info:String(JSON Object)` 已改为分通道配置：`default_channel`、`jxf_bank_pay_info`（银行）、`wx_ent_pay_info`（微信企业码）。银行配置的bank_name、jxf_bank_info、jxf_fee_info和pay_confirm_flag/pay_confirm_req_url均在jxf_bank_pay_info父层下，不再发送旧平铺路径。开通bank_name当前说明仅PINGAN；日期sign_start_date长度8。银行手续费位于 `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info`，微信企业码手续费位于 `request.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info`，不能合并为同一费率对象。
+
+本开通接口正式表没有 `bank_pay_open_flag`、`wx_ent_pay_open_flag`；这两个模式开关属于修改/详情方向，不补入开通DTO。官网开通示例仍有旧平铺结构和表外 `open_flag`，示例未同步迁移，按当前正式字段表构造请求。微信企业码的手续费和条件必填逐路径联读完整目录，不复制修改或查询方向的Y/N/C。嵌套Object与jsonObject字符串描述的冲突分别保留；fee_charge_type未正式声明不进入DTO。
 
 抖音配置当前为 `data.dy_conf_list:String/jsonArray字符串`，保留 `dy_conf_list[]` 及子路径，发送一层 String(JSON Array)。`ali_conf_list[].al_real_name_info` 为 String C，`wx_conf_list[].wx_real_name_info` 为C。`wx_zl_conf.certificate_info/sales_info` 正式Object但说明为jsonObject字符串，属于待确认的wire冲突；新增 `sales_info.fee_rate_file_list.file_id/file_type` 不能遗漏。
 
@@ -69,3 +71,5 @@
 
 - 仅 `busi_async_return_url` 的逐业务通知在存在 `ord_id`（`String(44)`）时，官网规定回包为 `RECV_ORD_ID_` + 该 `ord_id`；不得改用 `req_seq_id`，也不得外推到审核或电子协议通知。
 - 逐业务通知的外层包装仍待官方样本确认；审核和电子协议通知的 ACK 仍为 `[需要官方确认]`。审核、逐业务与电子协议通知的验签原文、HTTP 语义、编码、超时和重试也均为 `[需要官方确认]`。按 `shared-overview.md` 的开发提醒引用本页官方文档，建议开发者核对或咨询汇付官方/交流群；继续回调框架与状态处理，把未知协议留为 TODO/配置，不套用支付 `notify_url` 规则，也不要求先拿到样本才开始开发。
+
+本轮来源复核：2026-11-09；官方最近更新2026-11-03；SHA-256：`42d692619bd409ae11b95b43a0badec25794316e8fa0fc6de3c02c5fa2ae4ddd`；<https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_kyc.md>。

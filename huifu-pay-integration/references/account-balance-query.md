@@ -1,6 +1,6 @@
 # 账户余额信息查询
 
-官方来源：<https://paas.huifu.com/partners/api/doc/jyjs/api_jyjs_yuexxcx.md>。来源快照：2026-10-25；SHA-256：`4684913f1338f44423f025d72a73b7012e477dd48ec82b3a9216340571f6d39e`。
+官方来源：<https://paas.huifu.com/partners/api/doc/jyjs/api_jyjs_yuexxcx.md>。来源快照：2026-11-04；SHA-256：`4684913f1338f44423f025d72a73b7012e477dd48ec82b3a9216340571f6d39e`。
 
 接口：`/v2/trade/acctpayment/balance/query`。方法：POST。
 

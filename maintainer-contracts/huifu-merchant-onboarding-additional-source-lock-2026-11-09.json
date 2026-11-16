@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "skill": "huifu-merchant-onboarding",
+  "version": "1.2.0",
+  "source_date": "2026-11-09",
+  "verified_at": "2026-11-09T19:19:22.089839-08:00",
+  "base_source_lock": {
+    "path": "maintainer-contracts/merchant-onboarding-1.2.0-source-lock-2026-11-09.json",
+    "sha256": "ee5a61c1320e158d2028ef9f9177de59bacb46cc03f5e9371fd9e21d158b2370"
+  },
+  "base_refresh_contract": {
+    "path": "maintainer-contracts/api-refresh-onboarding-1.2.0-2026-11-09.json",
+    "sha256": "8d96642025feca5745874d733e37fc959c9b08e9198427fdbf9a35941cf8f092"
+  },
+  "sdk_source_lock": {
+    "path": "maintainer-contracts/local-sdk-source-lock-2026-10-08.json",
+    "sha256": "10e15fe7ec03e58ff2ae18e722204e8356e16b7ffd244e62b2919589f7d1b310"
+  },
+  "sources": [
+    {
+      "key": "account-subaccount-open",
+      "title": "子账户开通配置",
+      "url": "https://paas.huifu.com/partners/api/doc/zhgl/api_zhgl_zhpz_kyc.md",
+      "path": "maintainer-contracts/official-sources/merchant-account/2026-11-09/account-subaccount-open.md",
+      "sha256": "b496d1493ed0615115e8972272f0a717289a5feab6206080a62c83615ea9eb8b",
+      "endpoint": "/v2/merchant/settle/config",
+      "http_method": "POST",
+      "request_class": "V2MerchantSettleConfigRequest",
+      "python_module": "v2_merchant_settle_config",
+      "reference": "account-subaccount-open.md",
+      "fields": 66,
+      "surfaces": {
+        "请求信封": 4,
+        "请求 data": 40,
+        "同步响应信封及 data": 8,
+        "审核异步信封及 data": 14
+      },
+      "root_tables": 4,
+      "nested_tables": 4,
+      "official_page_update": "2025.01.09"
+    },
+    {
+      "key": "account-subaccount-modify",
+      "title": "修改子账户配置",
+      "url": "https://paas.huifu.com/partners/api/doc/zhgl/api_zhgl_xgzh_kyc.md",
+      "path": "maintainer-contracts/official-sources/merchant-account/2026-11-09/account-subaccount-modify.md",
+      "sha256": "6c041ff7af41573a97463077062725c6a0ca2815b0d64b64fea6c32e21bd3c05",
+      "endpoint": "/v2/merchant/settle/modify",
+      "http_method": "POST",
+      "request_class": "V2MerchantSettleModifyRequest",
+      "python_module": "v2_merchant_settle_modify",
+      "reference": "account-subaccount-modify.md",
+      "fields": 64,
+      "surfaces": {
+        "请求信封": 4,
+        "请求 data": 40,
+        "同步响应信封及 data": 6,
+        "审核异步信封及 data": 14
+      },
+      "root_tables": 4,
+      "nested_tables": 4,
+      "official_page_update": "2025.01.09"
+    }
+  ],
+  "totals": {
+    "interfaces": 2,
+    "field_paths": 130
+  },
+  "catalog": {
+    "path": "huifu-merchant-onboarding/references/merchant-account-complete-field-catalog.md",
+    "sha256": "c8baac2cb3278e5867600f6dfcb3ac52868799ab4f6d7ba70bdea2649fddaf53"
+  },
+  "sdk_evidence": {
+    "path": "maintainer-contracts/interface-expansion-sdk-evidence-2026-11-04.json",
+    "sha256": "eaf6c792c63f99fb126845273805a3558ede4eb99898167c2535f8aad2e20117"
+  },
+  "previous_skill_version": "1.1.0",
+  "snapshot_timezone": "America/Los_Angeles",
+  "new_source_keys": [],
+  "previous_additional_source_lock": {
+    "path": "maintainer-contracts/huifu-merchant-onboarding-additional-source-lock-2026-11-04.json",
+    "sha256": "ac005505af8d9951faf4185d52ce5c0866ea967a20e4f8a0f31621e2ce000a96"
+  }
+}

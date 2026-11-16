@@ -1,0 +1,327 @@
+{
+  "schema_version": 1,
+  "skill": "huifu-pay-integration",
+  "version": "1.6.0",
+  "source_date": "2026-11-04",
+  "verified_at": "2026-11-04T18:01:19.518206-08:00",
+  "base_source_lock": {
+    "path": "maintainer-contracts/payment-source-lock-2026-11-04.json",
+    "sha256": "53e90d794e71ee5d5432a854ecb288337209d5c30edc9669b56b56d5a8225294"
+  },
+  "base_refresh_contract": {
+    "path": "maintainer-contracts/api-refresh-payment-1.6.0-2026-11-04.json",
+    "sha256": "47afcc25193d72ab43806cc1a52abb55808eafd450b9b066ab5d063e09fac09d"
+  },
+  "sdk_source_lock": {
+    "path": "maintainer-contracts/local-sdk-source-lock-2026-10-08.json",
+    "sha256": "10e15fe7ec03e58ff2ae18e722204e8356e16b7ffd244e62b2919589f7d1b310"
+  },
+  "sources": [
+    {
+      "key": "delay-confirm",
+      "title": "交易确认",
+      "url": "https://paas.huifu.com/partners/api/doc/smzf/api_jyqr.md",
+      "path": "maintainer-contracts/official-sources/additional-payment/2026-11-04/delay-confirm.md",
+      "sha256": "9fbf6c70cb9be4422fb2b0a724588c7bda363f6a8bb779cba54435a5e86c82fc",
+      "endpoint": "/v2/trade/payment/delaytrans/confirm",
+      "http_method": "POST",
+      "request_class": "V2TradePaymentDelaytransConfirmRequest",
+      "python_module": "v2_trade_payment_delaytrans_confirm",
+      "reference": "delay-confirm.md",
+      "fields": 72,
+      "surfaces": {
+        "请求信封": 4,
+        "同步响应信封": 2,
+        "请求 data": 24,
+        "同步响应 data": 25,
+        "异步信封": 3,
+        "异步 resp_data": 14
+      },
+      "root_tables": 6,
+      "nested_tables": 7,
+      "official_page_update": "2026.09.21"
+    },
+    {
+      "key": "delay-confirm-query",
+      "title": "交易确认查询",
+      "url": "https://paas.huifu.com/partners/api/doc/smzf/api_jyqrcx.md",
+      "path": "maintainer-contracts/official-sources/additional-payment/2026-11-04/delay-confirm-query.md",
+      "sha256": "da52b2f0ad6afe88d1487ee5235e6dc31e4411f4e1f3aec1b2de4c3387415526",
+      "endpoint": "/v3/trade/payment/delaytrans/confirmquery",
+      "http_method": "POST",
+      "request_class": "V3TradePaymentDelaytransConfirmqueryRequest",
+      "python_module": "v3_trade_payment_delaytrans_confirmquery",
+      "reference": "delay-confirm-query.md",
+      "fields": 26,
+      "surfaces": {
+        "请求信封": 4,
+        "同步响应信封": 2,
+        "请求 data": 3,
+        "同步响应 data": 17
+      },
+      "root_tables": 4,
+      "nested_tables": 2,
+      "official_page_update": "2026.06.10"
+    },
+    {
+      "key": "delay-confirm-refund",
+      "title": "交易确认退款",
+      "url": "https://paas.huifu.com/partners/api/doc/smzf/api_jyqrtk.md",
+      "path": "maintainer-contracts/official-sources/additional-payment/2026-11-04/delay-confirm-refund.md",
+      "sha256": "e740c12c8884f7f5ec242f0e1a053530f37ce2cd24418924b3f9f9a819c7f9ad",
+      "endpoint": "/v2/trade/payment/delaytrans/confirmrefund",
+      "http_method": "POST",
+      "request_class": "V2TradePaymentDelaytransConfirmrefundRequest",
+      "python_module": "v2_trade_payment_delaytrans_confirmrefund",
+      "reference": "delay-confirm-refund.md",
+      "fields": 45,
+      "surfaces": {
+        "请求信封": 4,
+        "同步响应信封": 2,
+        "请求 data": 14,
+        "同步响应 data": 25
+      },
+      "root_tables": 4,
+      "nested_tables": 4,
+      "official_page_update": "2025.03.06"
+    },
+    {
+      "key": "delay-confirm-refund-query",
+      "title": "交易确认退款查询",
+      "url": "https://paas.huifu.com/navigator/ossApi/api_jyqrtkcq.json",
+      "path": "maintainer-contracts/official-sources/additional-payment/2026-11-04/delay-confirm-refund-query.json",
+      "sha256": "65fa17cd59e7d18637ddb920e3e74a337d91e49821c4f96ad184538e9f9aae46",
+      "endpoint": "/v2/trade/payment/delaytrans/confirmrefundquery",
+      "http_method": null,
+      "request_class": "V2TradePaymentDelaytransConfirmrefundqueryRequest",
+      "python_module": "v2_trade_payment_delaytrans_confirmrefundquery",
+      "reference": "delay-confirm-refund-query.md",
+      "fields": 4,
+      "surfaces": {
+        "正式请求 data": 4
+      },
+      "root_tables": 1,
+      "nested_tables": 0,
+      "official_page_update": null
+    },
+    {
+      "key": "account-balance-query",
+      "title": "账户余额信息查询",
+      "url": "https://paas.huifu.com/partners/api/doc/jyjs/api_jyjs_yuexxcx.md",
+      "path": "maintainer-contracts/official-sources/additional-payment/2026-11-04/account-balance-query.md",
+      "sha256": "4684913f1338f44423f025d72a73b7012e477dd48ec82b3a9216340571f6d39e",
+      "endpoint": "/v2/trade/acctpayment/balance/query",
+      "http_method": "POST",
+      "request_class": "V2TradeAcctpaymentBalanceQueryRequest",
+      "python_module": "v2_trade_acctpayment_balance_query",
+      "reference": "account-balance-query.md",
+      "fields": 26,
+      "surfaces": {
+        "请求信封": 4,
+        "请求 data": 4,
+        "同步响应信封及 data": 18
+      },
+      "root_tables": 3,
+      "nested_tables": 2,
+      "official_page_update": "2025.08.12"
+    },
+    {
+      "key": "account-ledger-query",
+      "title": "账务流水查询",
+      "url": "https://paas.huifu.com/partners/api/doc/yuer/api_acctlscx.md",
+      "path": "maintainer-contracts/official-sources/additional-payment/2026-11-04/account-ledger-query.md",
+      "sha256": "46295c022efcc9464472d396cfe4c2befd74ba634a8c6f02e183fe1f99dd30c2",
+      "endpoint": "/v2/trade/acctpayment/acctlog/query",
+      "http_method": "POST",
+      "request_class": "V2TradeAcctpaymentAcctlogQueryRequest",
+      "python_module": "v2_trade_acctpayment_acctlog_query",
+      "reference": "account-ledger-query.md",
+      "fields": 40,
+      "surfaces": {
+        "请求信封": 4,
+        "请求 data": 9,
+        "同步响应信封及 data": 27
+      },
+      "root_tables": 3,
+      "nested_tables": 2,
+      "official_page_update": "2026.08.13"
+    },
+    {
+      "key": "account-ledger-summary-query",
+      "title": "账务流水汇总结果查询",
+      "url": "https://paas.huifu.com/partners/api/doc/zhy/api_acct_log_summary.md",
+      "path": "maintainer-contracts/official-sources/additional-payment/2026-11-04/account-ledger-summary-query.md",
+      "sha256": "d70d62be96cb1c20ba9be2355a57c8890468e8eab20e8adf2a81933e684e771a",
+      "endpoint": "/v2/trade/acctpayment/acctlog/summary",
+      "http_method": "POST",
+      "request_class": null,
+      "python_module": null,
+      "reference": "account-ledger-summary-query.md",
+      "fields": 25,
+      "surfaces": {
+        "请求信封": 4,
+        "请求 data": 7,
+        "同步响应信封及 data": 14
+      },
+      "root_tables": 3,
+      "nested_tables": 2,
+      "official_page_update": "2026.09.22"
+    },
+    {
+      "key": "payout-withdraw",
+      "title": "主动取现",
+      "url": "https://paas.huifu.com/partners/api/doc/jyjs/qx/api_qx.md",
+      "path": "maintainer-contracts/official-sources/additional-payment/2026-11-04/payout-withdraw.md",
+      "sha256": "6f64a96c90c0ece5dce058ad7ffb5248a27fb1a6f81b7222d6344a936e2da06b",
+      "endpoint": "/v2/trade/settlement/encashment",
+      "http_method": "POST",
+      "request_class": "V2TradeSettlementEncashmentRequest",
+      "python_module": "v2_trade_settlement_encashment",
+      "reference": "payout-withdraw.md",
+      "fields": 45,
+      "surfaces": {
+        "请求信封": 4,
+        "同步响应信封": 2,
+        "请求 data": 11,
+        "同步响应 data": 8,
+        "异步通知": 20
+      },
+      "root_tables": 5,
+      "nested_tables": 1,
+      "official_page_update": "2026.07.09"
+    },
+    {
+      "key": "payout-transfer",
+      "title": "资金代发",
+      "url": "https://paas.huifu.com/partners/api/doc/daifa/api_daifa_yhkdf.md",
+      "path": "maintainer-contracts/official-sources/additional-payment/2026-11-04/payout-transfer.md",
+      "sha256": "bc249fe82be276210bad46b40deee9842d8e91989c4a7924e653047acd52bae0",
+      "endpoint": "/v2/trade/settlement/surrogate",
+      "http_method": "POST",
+      "request_class": "V2TradeSettlementSurrogateRequest",
+      "python_module": "v2_trade_settlement_surrogate",
+      "reference": "payout-transfer.md",
+      "fields": 46,
+      "surfaces": {
+        "请求信封": 4,
+        "同步响应信封": 2,
+        "请求 data": 18,
+        "同步响应 data": 6,
+        "异步通知": 16
+      },
+      "root_tables": 5,
+      "nested_tables": 1,
+      "official_page_update": "2026.07.09"
+    },
+    {
+      "key": "payout-query",
+      "title": "出金交易查询",
+      "url": "https://paas.huifu.com/partners/api/doc/jyjs/qx/api_cjjycx.md",
+      "path": "maintainer-contracts/official-sources/additional-payment/2026-11-04/payout-query.md",
+      "sha256": "af155863727a56fe26d8603c02257c444bc434429368fe3711cd2ed4df1c6d34",
+      "endpoint": "/v2/trade/settlement/query",
+      "http_method": "POST",
+      "request_class": "V2TradeSettlementQueryRequest",
+      "python_module": "v2_trade_settlement_query",
+      "reference": "payout-query.md",
+      "fields": 20,
+      "surfaces": {
+        "请求信封": 4,
+        "同步响应信封": 2,
+        "请求 data": 4,
+        "同步响应 data": 10
+      },
+      "root_tables": 4,
+      "nested_tables": 0,
+      "official_page_update": "2026.07.20"
+    },
+    {
+      "key": "payout-batch-query",
+      "title": "批量出金交易查询",
+      "url": "https://paas.huifu.com/partners/api/doc/api_plcjjycx.md",
+      "path": "maintainer-contracts/official-sources/additional-payment/2026-11-04/payout-batch-query.md",
+      "sha256": "99f34f8a7787d4a0c5920df14fe35e70fc715a6719f4c0d78b5cee752e85a458",
+      "endpoint": "/v2/trade/batchtranslog/query",
+      "http_method": "POST",
+      "request_class": "V2TradeBatchtranslogQueryRequest",
+      "python_module": "v2_trade_batchtranslog_query",
+      "reference": "payout-batch-query.md",
+      "fields": 38,
+      "surfaces": {
+        "请求信封": 4,
+        "同步响应信封": 2,
+        "请求 data": 7,
+        "同步响应 data": 25
+      },
+      "root_tables": 4,
+      "nested_tables": 1,
+      "official_page_update": "2026.07.20"
+    },
+    {
+      "key": "payout-settlement-query",
+      "title": "结算记录查询",
+      "url": "https://paas.huifu.com/partners/api/doc/jyjs/qx/api_jsjlfycx.md",
+      "path": "maintainer-contracts/official-sources/additional-payment/2026-11-04/payout-settlement-query.md",
+      "sha256": "d04126694730c33755a50bd8600314c387f807d6ddec44bcbb0854c6411fd4c2",
+      "endpoint": "/v2/merchant/basicdata/settlement/query",
+      "http_method": "POST",
+      "request_class": "V2MerchantBasicdataSettlementQueryRequest",
+      "python_module": "v2_merchant_basicdata_settlement_query",
+      "reference": "payout-settlement-query.md",
+      "fields": 36,
+      "surfaces": {
+        "请求信封": 4,
+        "同步响应信封": 2,
+        "请求 data": 9,
+        "同步响应 data": 21
+      },
+      "root_tables": 4,
+      "nested_tables": 1,
+      "official_page_update": "2026.11.04"
+    },
+    {
+      "key": "payout-dm-quota-query",
+      "title": "DM取现额度查询",
+      "url": "https://paas.huifu.com/partners/api/doc/jyjs/qx/api_DMqxedcx.md",
+      "path": "maintainer-contracts/official-sources/additional-payment/2026-11-04/payout-dm-quota-query.md",
+      "sha256": "494415e9a7aa7f93249845ba587db28cb178224b2b7452280f715315024a2339",
+      "endpoint": "/v2/trade/settlement/enchashment/dmamt/query",
+      "http_method": "POST",
+      "request_class": "V2TradeSettlementEnchashmentDmamtQueryRequest",
+      "python_module": "v2_trade_settlement_enchashment_dmamt_query",
+      "reference": "payout-dm-quota-query.md",
+      "fields": 13,
+      "surfaces": {
+        "请求信封": 4,
+        "同步响应信封": 2,
+        "请求 data": 2,
+        "同步响应 data": 5
+      },
+      "root_tables": 4,
+      "nested_tables": 0,
+      "official_page_update": "2024.12.24"
+    }
+  ],
+  "totals": {
+    "interfaces": 13,
+    "field_paths": 436
+  },
+  "catalog": {
+    "path": "huifu-pay-integration/references/payment-extension-complete-field-catalog.md",
+    "sha256": "fe078c30004eaa49ab7a8439af69f3e8d05261139348751501709bf1d3c6f54a"
+  },
+  "sdk_evidence": {
+    "path": "maintainer-contracts/interface-expansion-sdk-evidence-2026-11-04.json",
+    "sha256": "eaf6c792c63f99fb126845273805a3558ede4eb99898167c2535f8aad2e20117"
+  },
+  "previous_skill_version": "1.5.0",
+  "snapshot_timezone": "America/Los_Angeles",
+  "new_source_keys": [
+    "payout-withdraw",
+    "payout-transfer",
+    "payout-query",
+    "payout-batch-query",
+    "payout-settlement-query",
+    "payout-dm-quota-query"
+  ]
+}

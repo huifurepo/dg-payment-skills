@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-04",
+  "branch": "feature_skills-14",
+  "baseline_commit": "b186c553e011216f40cb94dc06c13a10f3030b12",
+  "plan": {
+    "path": "maintainer-contracts/payout-expansion-2026-11-04-plan.md",
+    "sha256": "2383c046c5c59b05962ccf03b3341abfce5bd1907f8341e37077994ef22c7765"
+  },
+  "status": "approved-for-implementation",
+  "reviews": [
+    {
+      "agent": "/root/plan_contract_review",
+      "scope": "official fields, directions, state and migration",
+      "status": "no-unresolved-blockers",
+      "resolved": [
+        "separate trans_status/acct_status/channel_status/msg_type/re_exchange; B is account return success",
+        "01 then 02 and success then return update cases",
+        "batch/settlement response examples differ from formal types",
+        "three surrogate sample-only keys excluded from formal catalog",
+        "settlement direct-merchant ID constraint"
+      ]
+    },
+    {
+      "agent": "/root/plan_sdk_review",
+      "scope": "SDK source, roles and version",
+      "status": "no-unresolved-blockers",
+      "resolved": [
+        "verify final _build_request_info body after empty-value pruning",
+        "encrypt crypt fields before Request; reject error strings",
+        "reject extension collisions in caller, not claim SDK protects",
+        "SDK data stays object despite String envelope docs",
+        "six precise routes/classes and version proposal verified"
+      ]
+    },
+    {
+      "agent": "/root/plan_evidence_review",
+      "scope": "sources, historical audit, packaging and tests",
+      "status": "no-unresolved-blockers",
+      "resolved": [
+        "catalog baselines anchored to baseline Git blobs",
+        "no hash cycle through current additive lock and refresh field_review",
+        "two legacy parsing diagnostics must be resolved by specialized independent parser",
+        "retain UTC instants and compare LA snapshot date",
+        "185 cases include loaders, rules, controls and both fingerprint declarations"
+      ]
+    }
+  ],
+  "execution_gate": "all three final reviews approved before active Skill, catalog and manifest edits"
+}

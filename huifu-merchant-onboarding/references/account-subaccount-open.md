@@ -1,6 +1,6 @@
 # 子账户开通配置
 
-官方来源：<https://paas.huifu.com/partners/api/doc/zhgl/api_zhgl_zhpz_kyc.md>。来源快照：2026-10-25；SHA-256：`b496d1493ed0615115e8972272f0a717289a5feab6206080a62c83615ea9eb8b`。
+官方来源：<https://paas.huifu.com/partners/api/doc/zhgl/api_zhgl_zhpz_kyc.md>。来源快照：2026-11-09；SHA-256：`b496d1493ed0615115e8972272f0a717289a5feab6206080a62c83615ea9eb8b`。
 
 接口：`/v2/merchant/settle/config`。方法：POST。
 

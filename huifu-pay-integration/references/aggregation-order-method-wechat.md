@@ -163,3 +163,7 @@
 - `promotion_flag=Y` 时，必须同时上传 `detail`。
 - `spbill_create_ip` 是直联模式要求，不属于普通间联场景通用必填。
 - `T_MICROPAY.auth_code` 必须来自扫码设备实时采集，且官方开发指引给出了 18 位数字规则。
+
+## 2026-11-04接入指引复核
+
+公众号、小程序和付款码开发指引的密钥配置入口已改为 `https://paas.huifu.com/docs/start/#/api_kfzn`。公众号示例的多重HTML转义恢复为JavaScript的 `=>`、`&&` 和 `<`，照搬时使用解码后的代码。小程序产品介绍仅标点/空格变化，未据此改变支付能力或请求字段。对应官方来源见本页所列指南和 `official-payment-page-lock.md`。

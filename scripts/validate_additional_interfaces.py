@@ -26,6 +26,13 @@ SCOPES = {
     "account-ledger-summary-query": ("payment", "/v2/trade/acctpayment/acctlog/summary", ("request", "request.data", "response")),
     "account-subaccount-open": ("onboarding", "/v2/merchant/settle/config", ("request", "request.data", "response", "async")),
     "account-subaccount-modify": ("onboarding", "/v2/merchant/settle/modify", ("request", "request.data", "response", "async")),
+    "payout-withdraw": ("payment", "/v2/trade/settlement/encashment", ('request', 'response', 'request.data', 'response.data', 'async')),
+    "payout-transfer": ("payment", "/v2/trade/settlement/surrogate", ('request', 'response', 'request.data', 'response.data', 'async')),
+    "payout-query": ("payment", "/v2/trade/settlement/query", ('request', 'response', 'request.data', 'response.data')),
+    "payout-batch-query": ("payment", "/v2/trade/batchtranslog/query", ('request', 'response', 'request.data', 'response.data')),
+    "payout-settlement-query": ("payment", "/v2/merchant/basicdata/settlement/query", ('request', 'response', 'request.data', 'response.data')),
+    "payout-dm-quota-query": ("payment", "/v2/trade/settlement/enchashment/dmamt/query", ('request', 'response', 'request.data', 'response.data')),
+
 }
 
 
@@ -74,14 +81,16 @@ def raw_records(entry):
     roots, nested = source_tables(text, entry["url"])
     assert len(roots) == len(prefixes), (entry["key"], "root-table mismatch")
     used = set()
-    for prefix, fields in zip(prefixes, roots, strict=True):
+    surfaces = [(prefix, fields, flatten(fields, nested, prefix, used))
+                for prefix, fields in zip(prefixes, roots, strict=True)]
+    all_flat = [row for _prefix, _fields, rows in surfaces for row in rows]
+    for prefix, fields, flat in surfaces:
         if prefix == "request.data":
             declared = [field.name for field in fields]
-        flat = flatten(fields, nested, prefix, used)
         for name, field in flat:
             key = entry["title"], name
             assert key not in expected, key
-            expected[key] = (*expected_transport(name, flat, set(), entry["key"], prefix), field.label, field.kind, field.length, field.required, expected_status(field), expected_description(field.description, entry["url"], entry["key"], name))
+            expected[key] = (*expected_transport(name, all_flat, set(), entry["key"], prefix), field.label, field.kind, field.length, field.required, expected_status(field), expected_description(field.description, entry["url"], entry["key"], name))
     assert set(nested) == used, entry["key"]
     return expected, declared
 
@@ -100,7 +109,9 @@ def sdk_validate(root, entries, expected_request_fields):
     pe = (php / "enums/FunctionCodeEnum.php").read_text()
     py = (python / "request/request_api_urls.py").read_text()
     urls = {}; exec(compile(py, "<official-sdk-routes>", "exec"), urls)
-    evidence = json.loads((ROOT / "maintainer-contracts/interface-expansion-sdk-evidence-2026-10-25.json").read_text())
+    manifest = json.loads((ROOT / "skills-manifest.json").read_text())
+    lock = json.loads((ROOT / manifest["skills"]["huifu-pay-integration"]["additional_source_lock"]).read_text())
+    evidence = json.loads((ROOT / lock["sdk_evidence"]["path"]).read_text())
     typed = 0
     for entry in entries:
         route = SCOPES[entry["key"]][1]
@@ -141,17 +152,18 @@ def sdk_validate(root, entries, expected_request_fields):
         request.post({keys[0]: "collision"})
         assert calls[-1][0][1][keys[0]] == "collision", "SDK extension overwrite behavior changed"
         typed += 1
-    assert typed == 8
-    print("SDK additions verified: 8 × 3 exact typed routes; 8 actual Python serializers and collision probes; official generic summary entry; no network")
+    assert typed == 14
+    print("SDK additions verified: 14 × 3 exact typed routes; 14 actual Python serializers and collision probes; official generic summary entry; no network")
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--sdk-root", type=Path)
     args = parser.parse_args()
+    manifest = json.loads((ROOT / "skills-manifest.json").read_text())
     all_expected, entries, request_fields = {}, [], {}
     for skill in ("huifu-pay-integration", "huifu-merchant-onboarding"):
-        lock = json.loads((ROOT / f"maintainer-contracts/{skill}-additional-source-lock-2026-10-25.json").read_text())
+        lock = json.loads((ROOT / manifest["skills"][skill]["additional_source_lock"]).read_text())
         assert lock["skill"] == skill
         expected = {}
         for entry in lock["sources"]:
@@ -177,7 +189,13 @@ def main():
         assert all_expected[title, container][3] == 'String'
         descendants = [value for (interface, path), value in all_expected.items() if interface == title and path.startswith(container + '.') ]
         assert descendants and all(value[0] == container for value in descendants)
-    assert len(all_expected) == 368
+    # Cross-root tables must preserve formal String(JSON) envelope ancestry.
+    for title in ('主动取现', '出金交易查询', 'DM取现额度查询'):
+        assert all_expected[title, 'request.data'][3] == 'String'
+        children = [value for (interface, path), value in all_expected.items()
+                    if interface == title and path.startswith('request.data.')]
+        assert children and all(row[0] == 'request.data' and row[1].startswith('$.') for row in children)
+    assert len(all_expected) == 566
     # Negative controls reject altered requiredness and invented response fields.
     bad = copy.deepcopy(all_expected)
     key = '修改子账户配置', 'request.data.settle_config'
@@ -189,7 +207,7 @@ def main():
     try: check_equal(all_expected, bad)
     except AssertionError: pass
     else: raise AssertionError('invented response negative control accepted')
-    print("Independent additions field check passed: 9 interfaces, 368 full paths, 2 negative controls")
+    print("Independent additions field check passed: 15 interfaces, 566 full paths, 2 negative controls")
     if args.sdk_root:
         sdk_validate(args.sdk_root, entries, request_fields)
 

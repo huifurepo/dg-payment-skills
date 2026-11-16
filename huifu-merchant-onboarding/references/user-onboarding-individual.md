@@ -7,7 +7,7 @@
 ## 接口与字段面
 
 - Endpoint：`POST https://api.huifu.com/v2/user/basicdata/indv`。
-- 快照更新时间：官网 `2026-10-21`，本地冻结 `2026-10-25`；原文 SHA-256：`41f9a75dab6ff2d157ff9f02793afa1ada3baec8f0d67664bed8c1ad08e53bf2`。
+- 快照更新时间：官网 `2026-10-21`，本地冻结 `2026-11-09`；原文 SHA-256：`41f9a75dab6ff2d157ff9f02793afa1ada3baec8f0d67664bed8c1ad08e53bf2`。
 - 共34个字段路径：请求27、同步响应7、异步0。完整字段读取 `user-onboarding-complete-field-catalog.md`。
 - 请求业务 `data` 没有 `huifu_id`、`upper_huifu_id` 或异步地址。
 

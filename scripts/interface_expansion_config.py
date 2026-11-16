@@ -1,14 +1,16 @@
-"""Reviewed ownership and source positions for the 2026-10-25 API additions."""
+"""Reviewed ownership and source positions for the 2026-11-04 cumulative API additions."""
 from dataclasses import dataclass
 from pathlib import Path
+import json
 
 ROOT = Path(__file__).resolve().parent.parent
-DATE = "2026-10-25"
+_manifest = json.loads((ROOT / "skills-manifest.json").read_text())
+DATE = json.loads((ROOT / _manifest["skills"]["huifu-pay-integration"]["additional_source_lock"]).read_text())["source_date"]
 PAYMENT = "huifu-pay-integration"
 ONBOARDING = "huifu-merchant-onboarding"
-VERSIONS = {PAYMENT: ("1.4.0", "1.5.0"), ONBOARDING: ("1.0.5", "1.1.0")}
+VERSIONS = {PAYMENT: ("1.5.0", "1.6.0"), ONBOARDING: ("1.1.0", "1.2.0")}
 CATALOGS = {PAYMENT: "payment-extension-complete-field-catalog.md", ONBOARDING: "merchant-account-complete-field-catalog.md"}
-LOCKS = {name: f"maintainer-contracts/{name}-additional-source-lock-{DATE}.json" for name in VERSIONS}
+LOCKS = {name: _manifest["skills"][name]["additional_source_lock"] for name in VERSIONS}
 COMMON = (("请求信封", "request"), ("同步响应信封", "response"), ("请求 data", "request.data"), ("同步响应 data", "response.data"))
 ACCOUNT = (("请求信封", "request"), ("请求 data", "request.data"), ("同步响应信封及 data", "response"))
 
@@ -43,4 +45,10 @@ INTERFACES = (
     Interface("account-balance-query", "账户余额信息查询", PAYMENT, "https://paas.huifu.com/partners/api/doc/jyjs/api_jyjs_yuexxcx.md", "/v2/trade/acctpayment/balance/query", ACCOUNT, "V2TradeAcctpaymentBalanceQueryRequest", "v2_trade_acctpayment_balance_query"),
     Interface("account-ledger-query", "账务流水查询", PAYMENT, "https://paas.huifu.com/partners/api/doc/yuer/api_acctlscx.md", "/v2/trade/acctpayment/acctlog/query", ACCOUNT, "V2TradeAcctpaymentAcctlogQueryRequest", "v2_trade_acctpayment_acctlog_query"),
     Interface("account-ledger-summary-query", "账务流水汇总结果查询", PAYMENT, "https://paas.huifu.com/partners/api/doc/zhy/api_acct_log_summary.md", "/v2/trade/acctpayment/acctlog/summary", ACCOUNT, None, None),
+    Interface("payout-withdraw", "主动取现", PAYMENT, "https://paas.huifu.com/partners/api/doc/jyjs/qx/api_qx.md", "/v2/trade/settlement/encashment", COMMON + (("异步通知", "async"),), "V2TradeSettlementEncashmentRequest", "v2_trade_settlement_encashment"),
+    Interface("payout-transfer", "资金代发", PAYMENT, "https://paas.huifu.com/partners/api/doc/daifa/api_daifa_yhkdf.md", "/v2/trade/settlement/surrogate", COMMON + (("异步通知", "async"),), "V2TradeSettlementSurrogateRequest", "v2_trade_settlement_surrogate"),
+    Interface("payout-query", "出金交易查询", PAYMENT, "https://paas.huifu.com/partners/api/doc/jyjs/qx/api_cjjycx.md", "/v2/trade/settlement/query", COMMON, "V2TradeSettlementQueryRequest", "v2_trade_settlement_query"),
+    Interface("payout-batch-query", "批量出金交易查询", PAYMENT, "https://paas.huifu.com/partners/api/doc/api_plcjjycx.md", "/v2/trade/batchtranslog/query", COMMON, "V2TradeBatchtranslogQueryRequest", "v2_trade_batchtranslog_query"),
+    Interface("payout-settlement-query", "结算记录查询", PAYMENT, "https://paas.huifu.com/partners/api/doc/jyjs/qx/api_jsjlfycx.md", "/v2/merchant/basicdata/settlement/query", COMMON, "V2MerchantBasicdataSettlementQueryRequest", "v2_merchant_basicdata_settlement_query"),
+    Interface("payout-dm-quota-query", "DM取现额度查询", PAYMENT, "https://paas.huifu.com/partners/api/doc/jyjs/qx/api_DMqxedcx.md", "/v2/trade/settlement/enchashment/dmamt/query", COMMON, "V2TradeSettlementEnchashmentDmamtQueryRequest", "v2_trade_settlement_enchashment_dmamt_query"),
 )

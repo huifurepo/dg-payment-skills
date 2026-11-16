@@ -1,6 +1,6 @@
 # 新增支付接口完整字段目录
 
-来源日期：2026-10-25。共7个接口、238条完整字段路径。基础目录及其历史锁独立保留。
+来源日期：2026-11-04。共13个接口、436条完整字段路径。基础目录及其历史锁独立保留。
 
 ## 目录
 
@@ -13,6 +13,12 @@
 - 账户余额信息查询
 - 账务流水查询
 - 账务流水汇总结果查询
+- 主动取现
+- 资金代发
+- 出金交易查询
+- 批量出金交易查询
+- 结算记录查询
+- DM取现额度查询
 
 ## 使用规则
 
@@ -31,6 +37,12 @@ JSON退款查询只覆盖正式请求；汇总查询的正式返回表保留官�
 | 账户余额信息查询 | 26 | 3 | 2 |
 | 账务流水查询 | 40 | 3 | 2 |
 | 账务流水汇总结果查询 | 25 | 3 | 2 |
+| 主动取现 | 45 | 5 | 1 |
+| 资金代发 | 46 | 5 | 1 |
+| 出金交易查询 | 20 | 4 | 0 |
+| 批量出金交易查询 | 38 | 4 | 1 |
+| 结算记录查询 | 36 | 4 | 1 |
+| DM取现额度查询 | 13 | 4 | 0 |
 
 ## 交易确认
 
@@ -118,7 +130,7 @@ JSON退款查询只覆盖正式请求；汇总查询的正式返回表保留官�
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `async.resp_code` | `async.resp_code` | `—（直接 JSON 路径）` | 业务返回码 | `string` | `8` | `Y` | 已确认 | [业务返回码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_ywm?id=%e7%ba%bf%e4%b8%8a%e4%ba%a4%e6%98%93%e8%bf%94%e5%9b%9e%e7%a0%81)),示例值：00000000 |
 | `async.resp_desc` | `async.resp_desc` | `—（直接 JSON 路径）` | 业务返回描述 | `string` | `512` | `Y` | 已确认 | [业务返回描述](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_ywm?id=%e7%ba%bf%e4%b8%8a%e4%ba%a4%e6%98%93%e8%bf%94%e5%9b%9e%e7%a0%81))，示例值：交易成功[000] |
-| `async.resp_data` | `async.resp_data` | `—（直接 JSON 路径）` | 业务数据 | `string` | `—` | `Y` | [需要官方确认]：长度 | 业务数据，见resp_data |
+| `async.resp_data` | `async.resp_data` | `—（[需要官方确认]：String 子表编码）` | 业务数据 | `string` | `—` | `Y` | [需要官方确认]：长度 | 业务数据，见resp_data |
 
 ### 异步 resp_data
 
@@ -432,3 +444,367 @@ JSON退款查询只覆盖正式请求；汇总查询的正式返回表保留官�
 | `response.data.summary_list[].acct_trans_type_desc` | `response.data.summary_list` | `$[].acct_trans_type_desc` | 账务类型 | `String` | `32` | `Y` | 已确认 | 账务类型见下文描述；示例值：支付收款 |
 | `response.data.summary_list[].summary_amt` | `response.data.summary_list` | `$[].summary_amt` | 交易汇总金额 | `String` | `14` | `Y` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00 |
 | `response.data.summary_list[].count` | `response.data.summary_list` | `$[].count` | 该账务类型的交易总条数 | `String` | `14` | `Y` | 已确认 | 该账务类型的交易总条数 |
+
+
+## 主动取现
+
+- 官方来源：<https://paas.huifu.com/partners/api/doc/jyjs/qx/api_qx.md>
+- SHA-256：`6f64a96c90c0ece5dce058ad7ffb5248a27fb1a6f81b7222d6344a936e2da06b`
+
+### 请求信封
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `request.sys_id` | `request.sys_id` | `—（直接 JSON 路径）` | 系统号 | `String` | `32` | `Y` | 已确认 | 渠道商/商户的huifu_id ；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为直连商户时，此字段填写商户huifu_id；示例值：[官网示例已脱敏] |
+| `request.sign` | `request.sign` | `—（直接 JSON 路径）` | 加签结果 | `String` | `512` | `Y` | 已确认 | 签名，对报文整体签名 |
+| `request.product_id` | `request.product_id` | `—（直接 JSON 路径）` | 产品号 | `String` | `32` | `Y` | 已确认 | 汇付分配的产品号，示例值：MCS |
+| `request.data` | `request.data` | `—（String(JSON) 容器）` | 数据 | `String` | `—` | `Y` | [需要官方确认]：长度 | JSON格式 |
+
+### 同步响应信封
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `response.sign` | `response.sign` | `—（直接 JSON 路径）` | 签名 | `String` | `512` | `Y` | 已确认 | 签名，对报文整体签名；[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
+| `response.data` | `response.data` | `—（直接 JSON 路径）` | 响应内容体 | `JSON` | `—` | `N` | N/A：结构字段长度 | 业务返回参数 |
+
+### 请求 data
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `request.data.req_date` | `request.data` | `$.req_date` | 请求日期 | `String` | `8` | `Y` | 已确认 | 格式yyyyMMdd；示例值：20210917 |
+| `request.data.req_seq_id` | `request.data` | `$.req_seq_id` | 请求流水号 | `String` | `128` | `Y` | 已确认 | 示例值：[官网示例已脱敏] |
+| `request.data.cash_amt` | `request.data` | `$.cash_amt` | 取现金额 | `String` | `14` | `Y` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00 |
+| `request.data.huifu_id` | `request.data` | `$.huifu_id` | 取现方ID号 | `String` | `32` | `Y` | 已确认 | 提现发起方的汇付ID。支持已配置取现规则的商户、用户。；示例值：[官网示例已脱敏] |
+| `request.data.acct_id` | `request.data` | `$.acct_id` | 账户号 | `String` | `32` | `N` | 已确认 | 可指定账户号，仅支持基本户、现金户，不填默认为基本户；示例值：F00598600 |
+| `request.data.into_acct_date_type` | `request.data` | `$.into_acct_date_type` | 到账日期类型 | `String` | `3` | `Y` | 已确认 | D0：当日到账；当日交易资金当天可取现到账；T1：次工作日到账；D1：次自然日到账；DM：当日到账；到账资金不包括当天的交易资金；示例值：D0 |
+| `request.data.token_no` | `request.data` | `$.token_no` | 取现卡序列号 | `String` | `20` | `Y` | 已确认 | 绑定取现卡后可获取取现卡序列号；示例值：10004053462 |
+| `request.data.enchashment_channel` | `request.data` | `$.enchashment_channel` | 取现渠道 | `String` | `2` | `N` | 已确认 | 00：汇付（为空默认）； 10：中信e账通；示例值：00 |
+| `request.data.fee_type` | `request.data` | `$.fee_type` | 中信e账通手续费承担方 | `String` | `1` | `N` | 已确认 | 1：总部承担；2：自身承担。默认为2。 |
+| `request.data.remark` | `request.data` | `$.remark` | 备注 | `String` | `100` | `N` | 已确认 | 示例值：备注 |
+| `request.data.notify_url` | `request.data` | `$.notify_url` | 异步通知地址 | `String` | `128` | `N` | 已确认 | 示例值：http://service.example.com/to/path |
+
+### 同步响应 data
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `response.data.resp_code` | `response.data.resp_code` | `—（直接 JSON 路径）` | 业务返回码 | `String` | `8` | `Y` | 已确认 | 参见[业务返回码](https://paas.huifu.com/partners/api/doc/jyjs/qx/api_qx.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查），示例值：00000000 |
+| `response.data.resp_desc` | `response.data.resp_desc` | `—（直接 JSON 路径）` | 业务返回描述 | `String` | `512` | `Y` | 已确认 | [业务返回信息](https://paas.huifu.com/partners/api/doc/jyjs/qx/api_qx.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查），示例值：处理成功 |
+| `response.data.req_date` | `response.data.req_date` | `—（直接 JSON 路径）` | 请求日期 | `String` | `8` | `N` | 已确认 | 格式：yyyyMMdd；示例值：20211123 |
+| `response.data.req_seq_id` | `response.data.req_seq_id` | `—（直接 JSON 路径）` | 请求流水号 | `String` | `128` | `N` | 已确认 | 示例值：[官网示例已脱敏] |
+| `response.data.hf_seq_id` | `response.data.hf_seq_id` | `—（直接 JSON 路径）` | 汇付全局流水号 | `String` | `128` | `N` | 已确认 | 示例值：002900TOP3A221112165433P410ac139c1300001 |
+| `response.data.trans_stat` | `response.data.trans_stat` | `—（直接 JSON 路径）` | 交易状态 | `String` | `1` | `Y` | 已确认 | S：成功 F：失败 P：处理中；示例值：S |
+| `response.data.huifu_id` | `response.data.huifu_id` | `—（直接 JSON 路径）` | 商户号/机构号 | `String` | `32` | `N` | 已确认 | 汇付分配的商户号/机构号，示例值：[官网示例已脱敏] |
+| `response.data.acct_id` | `response.data.acct_id` | `—（直接 JSON 路径）` | 账户号 | `String` | `32` | `N` | 已确认 | 可指定账户号，仅支持基本户、现金户，不填默认为基本户；示例值：F00598600 |
+
+### 异步通知
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `async.resp_code` | `async.resp_code` | `—（直接 JSON 路径）` | 业务返回码 | `String` | `8` | `Y` | 已确认 | 固定返回码，示例值：10000 |
+| `async.resp_desc` | `async.resp_desc` | `—（直接 JSON 路径）` | 业务返回描述 | `String` | `512` | `Y` | 已确认 | [业务返回信息](https://paas.huifu.com/partners/api/doc/jyjs/qx/api_qx.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查）；示例值：处理成功 |
+| `async.resp_data` | `async.resp_data` | `—（String(JSON) 容器）` | 业务返回参数 | `String` | `—` | `N` | [需要官方确认]：长度 | json格式 |
+| `async.resp_data.sub_resp_code` | `async.resp_data` | `$.sub_resp_code` | 业务返回码 | `String` | `8` | `Y` | 已确认 | 参见[业务返回码](https://paas.huifu.com/partners/api/doc/jyjs/qx/api_qx.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查），示例值：00000000 |
+| `async.resp_data.sub_resp_desc` | `async.resp_data` | `$.sub_resp_desc` | 业务返回描述 | `String` | `512` | `Y` | 已确认 | [业务返回信息](https://paas.huifu.com/partners/api/doc/jyjs/qx/api_qx.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查），示例值：处理成功 |
+| `async.resp_data.req_seq_id` | `async.resp_data` | `$.req_seq_id` | 业务请求流水号 | `String` | `128` | `Y` | 已确认 | 示例值：[官网示例已脱敏] |
+| `async.resp_data.req_date` | `async.resp_data` | `$.req_date` | 业务请求时间 | `String` | `8` | `Y` | 已确认 | 格式：yyyyMMdd；示例值：20211123 |
+| `async.resp_data.hf_seq_id` | `async.resp_data` | `$.hf_seq_id` | 汇付全局流水号 | `String` | `128` | `N` | 已确认 | 示例值：002900TOP3A221112165433P410ac139c1300001 |
+| `async.resp_data.trans_status` | `async.resp_data` | `$.trans_status` | 交易状态 | `String` | `1` | `N` | 已确认 | S:成功；F:失败；P:处理中；示例值：S |
+| `async.resp_data.acct_status` | `async.resp_data` | `$.acct_status` | 账务状态 | `String` | `1` | `N` | 已确认 | S:成功；F:失败；P:处理中；B:回账成功；示例值：S |
+| `async.resp_data.channel_status` | `async.resp_data` | `$.channel_status` | 通道状态 | `String` | `1` | `N` | 已确认 | S:成功；F:失败；P:处理中；示例值：S |
+| `async.resp_data.fee_amt` | `async.resp_data` | `$.fee_amt` | 手续费 | `String` | `14` | `Y` | 已确认 | 单位：元。示例值：1.23 |
+| `async.resp_data.cash_amt` | `async.resp_data` | `$.cash_amt` | 取现金额 | `String` | `14` | `Y` | 已确认 | 单位：元。示例值：1.23 |
+| `async.resp_data.msg_type` | `async.resp_data` | `$.msg_type` | 消息类型 | `String` | `8` | `N` | 已确认 | 01:通道；02:账务；示例值：01 |
+| `async.resp_data.payment_hf_seq_id` | `async.resp_data` | `$.payment_hf_seq_id` | 原支付全局流水号 | `String` | `128` | `N` | 已确认 | 示例值：0030000topB230316111634P778c0a8314500000 |
+| `async.resp_data.huifu_id` | `async.resp_data` | `$.huifu_id` | 取现方ID号 | `String` | `32` | `N` | 已确认 | 示例值：[官网示例已脱敏] |
+| `async.resp_data.acct_id` | `async.resp_data` | `$.acct_id` | 账户号 | `String` | `32` | `N` | 已确认 | 示例值：F00598600 |
+| `async.resp_data.trans_type` | `async.resp_data` | `$.trans_type` | 交易类型 | `String` | `20` | `N` | 已确认 | ENCHASHMENT-取现、TSENCHASHMENT-TS结算；示例值：ENCHASHMENT |
+| `async.resp_data.re_exchange` | `async.resp_data` | `$.re_exchange` | 退汇状态 | `String` | `1` | `N` | 已确认 | Y-已退汇；默认为空，该字段为Y时代表已退汇 |
+| `async.sign` | `async.sign` | `—（直接 JSON 路径）` | 签名 | `String` | `255` | `Y` | 已确认 | 签名，对报文整体签名 |
+
+
+## 资金代发
+
+- 官方来源：<https://paas.huifu.com/partners/api/doc/daifa/api_daifa_yhkdf.md>
+- SHA-256：`bc249fe82be276210bad46b40deee9842d8e91989c4a7924e653047acd52bae0`
+
+### 请求信封
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `request.sys_id` | `request.sys_id` | `—（直接 JSON 路径）` | 系统号 | `String` | `32` | `Y` | 已确认 | 渠道商/商户的huifu_id ；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为直连商户时，此字段填写商户huifu_id；示例值：[官网示例已脱敏] |
+| `request.product_id` | `request.product_id` | `—（直接 JSON 路径）` | 产品号 | `String` | `32` | `Y` | 已确认 | 汇付分配的产品号，示例值：MCS |
+| `request.sign` | `request.sign` | `—（直接 JSON 路径）` | 加签结果 | `String` | `512` | `Y` | 已确认 | [接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
+| `request.data` | `request.data` | `—（直接 JSON 路径）` | 数据 | `Json` | `—` | `Y` | N/A：结构字段长度 | 业务请求参数，具体值参考API文档 |
+
+### 同步响应信封
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `response.sign` | `response.sign` | `—（直接 JSON 路径）` | 签名 | `String` | `512` | `Y` | 已确认 | [接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
+| `response.data` | `response.data` | `—（直接 JSON 路径）` | 响应内容体 | `Json` | `—` | `N` | N/A：结构字段长度 | 业务返回参数 |
+
+### 请求 data
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `request.data.req_seq_id` | `request.data.req_seq_id` | `—（直接 JSON 路径）` | 请求流水号 | `String` | `128` | `Y` | 已确认 | 示例值：[官网示例已脱敏] |
+| `request.data.req_date` | `request.data.req_date` | `—（直接 JSON 路径）` | 请求日期 | `String` | `8` | `Y` | 已确认 | 格式yyyyMMdd；示例值：20211123 |
+| `request.data.huifu_id` | `request.data.huifu_id` | `—（直接 JSON 路径）` | 商户号 | `String` | `32` | `Y` | 已确认 | 斗拱分配的商户号，示例值：[官网示例已脱敏] |
+| `request.data.acct_id` | `request.data.acct_id` | `—（直接 JSON 路径）` | 账户号 | `String` | `32` | `N` | 已确认 | 可指定账户号，仅支持基本户、现金户，不填默认为基本户，示例值：F00598600 |
+| `request.data.cash_amt` | `request.data.cash_amt` | `—（直接 JSON 路径）` | 代发金额 | `String` | `14` | `Y` | 已确认 | 单位元，需保留小数点后两位，示例值：5.00 |
+| `request.data.purpose_desc` | `request.data.purpose_desc` | `—（直接 JSON 路径）` | 代发用途描述 | `String` | `255` | `Y` | 已确认 | 示例值：退款 |
+| `request.data.province` | `request.data.province` | `—（直接 JSON 路径）` | 省份 | `String` | `4` | `C` | 已确认 | 选填，参见[代发省市地区码](https://cloudpnrcdn.oss-cn-shanghai.aliyuncs.com/opps/api/prod/download_file/area/%E6%96%97%E6%8B%B1%E4%BB%A3%E5%8F%91%E7%9C%81%E4%BB%BD%E5%9C%B0%E5%8C%BA%E7%BC%96%E7%A0%81.xlsx)；示例值：0013；对公代发(省份+地区)与联行号信息二选一填入；对私代发非必填 |
+| `request.data.area` | `request.data.area` | `—（直接 JSON 路径）` | 地区 | `String` | `4` | `C` | 已确认 | 选填，参见[代发省市地区码](https://cloudpnrcdn.oss-cn-shanghai.aliyuncs.com/opps/api/prod/download_file/area/%E6%96%97%E6%8B%B1%E4%BB%A3%E5%8F%91%E7%9C%81%E4%BB%BD%E5%9C%B0%E5%8C%BA%E7%BC%96%E7%A0%81.xlsx)；示例值：1301；对公代发(省份+地区)与联行号信息二选一填入；对私代发非必填 |
+| `request.data.bank_code` | `request.data.bank_code` | `—（直接 JSON 路径）` | 银行编号 | `String` | `8` | `C` | 已确认 | 参考： [银行编码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_yhbm)；选填 ，card_acct_type=E 时必填， 示例值：01040000 |
+| `request.data.correspondent_code` | `request.data.correspondent_code` | `—（直接 JSON 路径）` | 联行号 | `String` | `30` | `C` | 已确认 | 选填，参见：[银行支行编码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_yhzhbm) 示例值：102290026507；对公代发(省份+地区)与联行号信息二选一填入；对私代发非必填 |
+| `request.data.subbranch_bank_name` | `request.data.subbranch_bank_name` | `—（直接 JSON 路径）` | 支行名 | `String` | `60` | `N` | 已确认 | 示例值：中国工商银行股份有限公司上海市中山北路支行 |
+| `request.data.bank_account_name` | `request.data.bank_account_name` | `—（直接 JSON 路径）` | 银行卡用户名 | `String` | `60` | `Y` | 已确认 | 示例值：上海汇付支付服务公司 |
+| `request.data.card_acct_type` | `request.data.card_acct_type` | `—（直接 JSON 路径）` | 对公对私标识 | `String` | `1` | `Y` | 已确认 | 对公:E，对私:P；示例值：E |
+| `request.data.bank_card_no_crypt` | `request.data.bank_card_no_crypt` | `—（直接 JSON 路径）` | 银行账号密文 | `String` | `512` | `Y` | 已确认 | 使用斗拱系统的公钥对银行账号进行RSA加密得到秘文；示例值：b9LE5RccVVLChrHgo9lvp……PhWhjKrWg2NPfbe0mkQ== |
+| `request.data.certificate_no_crypt` | `request.data.certificate_no_crypt` | `—（直接 JSON 路径）` | 证件号密文 | `String` | `512` | `Y` | 已确认 | 使用斗拱系统的公钥对证件号进行RSA加密得到秘文；示例值：b9LE5RccVVLChrHgo9lvp……PhWhjKrWg2NPfbe0mkQ |
+| `request.data.certificate_type` | `request.data.certificate_type` | `—（直接 JSON 路径）` | 证件类型 | `String` | `2` | `C` | 已确认 | 对私必填，类型；01：身份证；03：护照（国内）；09：外国人居留证；15：港澳台居住证；16：回乡证；17：台胞证 |
+| `request.data.into_acct_date_type` | `request.data.into_acct_date_type` | `—（直接 JSON 路径）` | 到账日期类型 | `String` | `3` | `Y` | 已确认 | T0：当日到账； T1：T1次工作日到账； D1：次自然日到账；示例值：T1 |
+| `request.data.notify_url` | `request.data.notify_url` | `—（直接 JSON 路径）` | 异步通知地址 | `String` | `128` | `N` | 已确认 | 接受异步通知的http服务地址，示例值：http://www.service.com/getresp |
+
+### 同步响应 data
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `response.data.hf_seq_id` | `response.data.hf_seq_id` | `—（直接 JSON 路径）` | 全局流水号 | `String` | `128` | `Y` | 已确认 | 示例值：0030default220825182711P099ac1f343f00000 |
+| `response.data.req_date` | `response.data.req_date` | `—（直接 JSON 路径）` | 请求日期 | `String` | `8` | `Y` | 已确认 | 格式yyyyMMdd；示例值：20221023 |
+| `response.data.req_seq_id` | `response.data.req_seq_id` | `—（直接 JSON 路径）` | 请求流水号 | `String` | `128` | `Y` | 已确认 | 示例值：[官网示例已脱敏] |
+| `response.data.resp_code` | `response.data.resp_code` | `—（直接 JSON 路径）` | 业务返回码 | `String` | `8` | `Y` | 已确认 | 参见[业务返回码](https://paas.huifu.com/partners/api/doc/daifa/api_daifa_yhkdf.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查），示例值：00000000 |
+| `response.data.resp_desc` | `response.data.resp_desc` | `—（直接 JSON 路径）` | 业务返回描述 | `String` | `512` | `Y` | 已确认 | [业务返回信息](https://paas.huifu.com/partners/api/doc/daifa/api_daifa_yhkdf.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查），示例值：受理成功 |
+| `response.data.trans_stat` | `response.data.trans_stat` | `—（直接 JSON 路径）` | 交易状态 | `String` | `1` | `Y` | 已确认 | S：成功 F：失败 P：处理中；示例值：P |
+
+### 异步通知
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `async.resp_code` | `async.resp_code` | `—（直接 JSON 路径）` | 业务返回码 | `String` | `8` | `Y` | 已确认 | 固定返回码，示例值：10000 |
+| `async.resp_desc` | `async.resp_desc` | `—（直接 JSON 路径）` | 业务返回描述 | `String` | `512` | `Y` | 已确认 | [业务返回信息](https://paas.huifu.com/partners/api/doc/daifa/api_daifa_yhkdf.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查）；示例值：处理成功 |
+| `async.resp_data` | `async.resp_data` | `—（String(JSON) 容器）` | 业务返回参数 | `String` | `—` | `N` | [需要官方确认]：长度 | json格式 |
+| `async.resp_data.sub_resp_code` | `async.resp_data` | `$.sub_resp_code` | 业务返回码 | `String` | `8` | `Y` | 已确认 | 参见[业务返回码](https://paas.huifu.com/partners/api/doc/daifa/api_daifa_yhkdf.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查），示例值：00000000 |
+| `async.resp_data.sub_resp_desc` | `async.resp_data` | `$.sub_resp_desc` | 业务返回描述 | `String` | `512` | `Y` | 已确认 | [业务返回信息](https://paas.huifu.com/partners/api/doc/daifa/api_daifa_yhkdf.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查），示例值：处理成功 |
+| `async.resp_data.req_seq_id` | `async.resp_data` | `$.req_seq_id` | 业务请求流水号 | `String` | `128` | `Y` | 已确认 | 示例值：[官网示例已脱敏] |
+| `async.resp_data.req_date` | `async.resp_data` | `$.req_date` | 业务请求时间 | `String` | `8` | `Y` | 已确认 | 格式：yyyyMMdd；示例值：20211123 |
+| `async.resp_data.hf_seq_id` | `async.resp_data` | `$.hf_seq_id` | 汇付全局流水号 | `String` | `128` | `N` | 已确认 | 示例值：002900TOP3A221112165433P410ac139c1300001 |
+| `async.resp_data.trans_status` | `async.resp_data` | `$.trans_status` | 交易状态 | `String` | `1` | `N` | 已确认 | S:成功；F:失败；P:处理中；示例值：S |
+| `async.resp_data.acct_status` | `async.resp_data` | `$.acct_status` | 账务状态 | `String` | `1` | `N` | 已确认 | S:成功；F:失败；P:处理中；B:回账成功；示例值：S |
+| `async.resp_data.channel_status` | `async.resp_data` | `$.channel_status` | 通道状态 | `String` | `1` | `N` | 已确认 | S:成功；F:失败；P:处理中；示例值：S |
+| `async.resp_data.fee_amt` | `async.resp_data` | `$.fee_amt` | 手续费 | `String` | `14` | `Y` | 已确认 | 单位：元。示例值：1.23 |
+| `async.resp_data.cash_amt` | `async.resp_data` | `$.cash_amt` | 取现金额 | `String` | `14` | `Y` | 已确认 | 单位：元。示例值：1.23 |
+| `async.resp_data.msg_type` | `async.resp_data` | `$.msg_type` | 消息类型 | `String` | `8` | `N` | 已确认 | 01:通道；02:账务；示例值：01 |
+| `async.resp_data.re_exchange` | `async.resp_data` | `$.re_exchange` | 退汇状态 | `String` | `1` | `N` | 已确认 | Y-已退汇；默认为空，该字段为Y时代表已退汇 |
+| `async.sign` | `async.sign` | `—（直接 JSON 路径）` | 签名 | `String` | `255` | `Y` | 已确认 | 签名，对报文整体签名 |
+
+
+## 出金交易查询
+
+- 官方来源：<https://paas.huifu.com/partners/api/doc/jyjs/qx/api_cjjycx.md>
+- SHA-256：`af155863727a56fe26d8603c02257c444bc434429368fe3711cd2ed4df1c6d34`
+
+### 请求信封
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `request.sys_id` | `request.sys_id` | `—（直接 JSON 路径）` | 系统号 | `String` | `32` | `Y` | 已确认 | 渠道商/商户的huifu_id ；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为直连商户时，此字段填写商户huifu_id；示例值：[官网示例已脱敏] |
+| `request.sign` | `request.sign` | `—（直接 JSON 路径）` | 加签结果 | `String` | `512` | `Y` | 已确认 | 签名，对报文整体签名 |
+| `request.product_id` | `request.product_id` | `—（直接 JSON 路径）` | 产品号 | `String` | `32` | `Y` | 已确认 | 汇付分配的产品号，示例值：MCS |
+| `request.data` | `request.data` | `—（String(JSON) 容器）` | 数据 | `String` | `—` | `Y` | [需要官方确认]：长度 | JSON格式 |
+
+### 同步响应信封
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `response.sign` | `response.sign` | `—（直接 JSON 路径）` | 签名 | `String` | `512` | `Y` | 已确认 | 签名，对报文整体签名；[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
+| `response.data` | `response.data` | `—（直接 JSON 路径）` | 响应内容体 | `JSON` | `—` | `N` | N/A：结构字段长度 | 业务返回参数 |
+
+### 请求 data
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `request.data.huifu_id` | `request.data` | `$.huifu_id` | 汇付客户Id | `String` | `32` | `Y` | 已确认 | 支持渠道商、商户、用户，示例值：[官网示例已脱敏] |
+| `request.data.org_req_date` | `request.data` | `$.org_req_date` | 原交易请求日期 | `String` | `8` | `Y` | 已确认 | 格式：yyyyMMdd；示例值：20210916 |
+| `request.data.org_hf_seq_id` | `request.data` | `$.org_hf_seq_id` | 原交易返回的全局流水号 | `String` | `128` | `C` | 已确认 | 原交易返回的全局流水号、原交易请求流水号二选一必填；示例值：00470topo1A211015160805P090ac132fef00000 |
+| `request.data.org_req_seq_id` | `request.data` | `$.org_req_seq_id` | 原交易请求流水号 | `String` | `128` | `C` | 已确认 | 原交易返回的全局流水号、原交易请求流水号二选一必填；示例值：[官网示例已脱敏] |
+
+### 同步响应 data
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `response.data.resp_code` | `response.data.resp_code` | `—（直接 JSON 路径）` | 业务返回码 | `String` | `8` | `Y` | 已确认 | 参见[业务返回码](https://paas.huifu.com/partners/api/doc/jyjs/qx/api_cjjycx.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查）；示例值：00000000 |
+| `response.data.resp_desc` | `response.data.resp_desc` | `—（直接 JSON 路径）` | 业务返回信息 | `String` | `256` | `Y` | 已确认 | [业务返回信息](https://paas.huifu.com/partners/api/doc/jyjs/qx/api_cjjycx.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查）；示例值：处理成功 |
+| `response.data.org_hf_seq_id` | `response.data.org_hf_seq_id` | `—（直接 JSON 路径）` | 原交易返回的全局流水号 | `String` | `128` | `N` | 已确认 | 示例值：00470topo1A211015160805P090ac132fef00000 |
+| `response.data.org_req_date` | `response.data.org_req_date` | `—（直接 JSON 路径）` | 原交易请求日期 | `String` | `8` | `Y` | 已确认 | 格式：yyyyMMdd；示例值：20210916 |
+| `response.data.trans_status` | `response.data.trans_status` | `—（直接 JSON 路径）` | 交易状态 | `String` | `1` | `Y` | 已确认 | S：成功；F：失败；P：处理中；示例值：S |
+| `response.data.org_req_seq_id` | `response.data.org_req_seq_id` | `—（直接 JSON 路径）` | 原交易请求流水号 | `String` | `128` | `N` | 已确认 | 示例值：[官网示例已脱敏] |
+| `response.data.trans_desc` | `response.data.trans_desc` | `—（直接 JSON 路径）` | 交易描述 | `String` | `256` | `N` | 已确认 | 示例值：结算 |
+| `response.data.cash_amt` | `response.data.cash_amt` | `—（直接 JSON 路径）` | 交易金额 | `String` | `14` | `N` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00 |
+| `response.data.fee_amt` | `response.data.fee_amt` | `—（直接 JSON 路径）` | 手续费金额 | `String` | `14` | `N` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00 |
+| `response.data.re_exchange` | `response.data.re_exchange` | `—（直接 JSON 路径）` | 退汇状态 | `String` | `1` | `N` | 已确认 | Y-已退汇；默认为空，该字段为Y时代表已退汇 |
+
+
+## 批量出金交易查询
+
+- 官方来源：<https://paas.huifu.com/partners/api/doc/api_plcjjycx.md>
+- SHA-256：`99f34f8a7787d4a0c5920df14fe35e70fc715a6719f4c0d78b5cee752e85a458`
+
+### 请求信封
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `request.sys_id` | `request.sys_id` | `—（直接 JSON 路径）` | 系统号 | `String` | `32` | `Y` | 已确认 | 渠道商/商户的huifu_id ；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为直连商户时，此字段填写商户huifu_id；示例值：[官网示例已脱敏] |
+| `request.product_id` | `request.product_id` | `—（直接 JSON 路径）` | 产品号 | `String` | `32` | `Y` | 已确认 | 汇付分配的产品号，示例值：MCS |
+| `request.sign` | `request.sign` | `—（直接 JSON 路径）` | 加签结果 | `String` | `512` | `Y` | 已确认 | [接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
+| `request.data` | `request.data` | `—（直接 JSON 路径）` | 数据 | `Json` | `—` | `Y` | N/A：结构字段长度 | 业务请求参数，具体值参考API文档 |
+
+### 同步响应信封
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `response.sign` | `response.sign` | `—（直接 JSON 路径）` | 签名 | `String` | `512` | `Y` | 已确认 | [接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
+| `response.data` | `response.data` | `—（直接 JSON 路径）` | 响应内容体 | `Json` | `—` | `N` | N/A：结构字段长度 | 业务返回参数 |
+
+### 请求 data
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `request.data.huifu_id` | `request.data.huifu_id` | `—（直接 JSON 路径）` | 商户号 | `String` | `32` | `Y` | 已确认 | 汇付分配的商户号，示例值：[官网示例已脱敏] |
+| `request.data.begin_date` | `request.data.begin_date` | `—（直接 JSON 路径）` | 开始日期 | `String` | `8` | `Y` | 已确认 | 格式:yyyyMMdd；示例值：20221213 |
+| `request.data.end_date` | `request.data.end_date` | `—（直接 JSON 路径）` | 结束日期 | `String` | `8` | `Y` | 已确认 | 格式:yyyyMMdd；示例值：20221213 |
+| `request.data.batch_trans_type` | `request.data.batch_trans_type` | `—（直接 JSON 路径）` | 交易类型 | `String` | `20` | `N` | 已确认 | SURROGATE-银行卡代发；ENCHASHMENT-取现；TSENCHASHMENT-TS结算；不传默认银行卡代发、取现都查； 示例值：ENCHASHMENT |
+| `request.data.page_num` | `request.data.page_num` | `—（直接 JSON 路径）` | 分页页码 | `String` | `—` | `N` | [需要官方确认]：长度 | 默认1；示例值：5 |
+| `request.data.page_size` | `request.data.page_size` | `—（直接 JSON 路径）` | 分页条数 | `String` | `—` | `N` | [需要官方确认]：长度 | 默认10；示例值：10 |
+| `request.data.payment_hf_seq_id` | `request.data.payment_hf_seq_id` | `—（直接 JSON 路径）` | 原支付全局流水号 | `String` | `128` | `N` | 已确认 | TS结算查询使用，对应为原交易的hf_seq_id；该值不为空时，商户号；开始日期；结束日期，非必填。 |
+
+### 同步响应 data
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `response.data.resp_code` | `response.data.resp_code` | `—（直接 JSON 路径）` | 业务响应码 | `String` | `8` | `Y` | 已确认 | [业务返回码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_ywm#业务返回码)；示例值：00000000 |
+| `response.data.resp_desc` | `response.data.resp_desc` | `—（直接 JSON 路径）` | 业务响应信息 | `String` | `512` | `Y` | 已确认 | [业务返回描述](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_ywm#业务返回码)；示例值：成功 |
+| `response.data.page_num` | `response.data.page_num` | `—（直接 JSON 路径）` | 分页页码 | `String` | `4` | `Y` | 已确认 | 示例值：1 |
+| `response.data.page_size` | `response.data.page_size` | `—（直接 JSON 路径）` | 分页条数 | `String` | `4` | `Y` | 已确认 | 示例值：11 |
+| `response.data.result_count` | `response.data.result_count` | `—（直接 JSON 路径）` | 查询结果总条数 | `String` | `—` | `Y` | [需要官方确认]：长度 | 示例值：10 |
+| `response.data.trans_log_result_list[]` | `response.data.trans_log_result_list[]` | `—（直接 JSON 路径）` | 交易信息结果列表 | `Array` | `—` | `N` | N/A：结构字段长度 | — |
+| `response.data.trans_log_result_list[].batch_trans_type` | `response.data.trans_log_result_list[].batch_trans_type` | `—（直接 JSON 路径）` | 交易类型 | `String` | `20` | `N` | 已确认 | SURROGATE-银行卡代发、ENCHASHMENT-取现、TSENCHASHMENT-TS结算；示例值：ENCHASHMENT |
+| `response.data.trans_log_result_list[].cash_amt` | `response.data.trans_log_result_list[].cash_amt` | `—（直接 JSON 路径）` | 交易金额 | `String` | `14` | `Y` | 已确认 | 单位：元；保留两位小数；示例值：1.00 |
+| `response.data.trans_log_result_list[].fee_amt` | `response.data.trans_log_result_list[].fee_amt` | `—（直接 JSON 路径）` | 手续费金额 | `String` | `14` | `Y` | 已确认 | 单位：元；保留两位小数；示例值：1.00 |
+| `response.data.trans_log_result_list[].org_hf_seq_id` | `response.data.trans_log_result_list[].org_hf_seq_id` | `—（直接 JSON 路径）` | 原交易返回的全局流水号 | `String` | `128` | `Y` | 已确认 | 示例值：0030000topB230316111634P778c0a8314500000 |
+| `response.data.trans_log_result_list[].org_req_date` | `response.data.trans_log_result_list[].org_req_date` | `—（直接 JSON 路径）` | 原交易请求日期 | `String` | `8` | `Y` | 已确认 | 格式：yyyyMMdd；示例值：20230301 |
+| `response.data.trans_log_result_list[].org_req_seq_id` | `response.data.trans_log_result_list[].org_req_seq_id` | `—（直接 JSON 路径）` | 原交易请求流水号 | `String` | `128` | `Y` | 已确认 | 示例值：[官网示例已脱敏] |
+| `response.data.trans_log_result_list[].trans_status` | `response.data.trans_log_result_list[].trans_status` | `—（直接 JSON 路径）` | 交易状态 | `String` | `1` | `Y` | 已确认 | S：成功； F：失败； P：处理中；示例值：S |
+| `response.data.trans_log_result_list[].remark` | `response.data.trans_log_result_list[].remark` | `—（直接 JSON 路径）` | 备注 | `String` | `1000` | `N` | 已确认 | 示例值：红包取现 |
+| `response.data.trans_log_result_list[].trans_desc` | `response.data.trans_log_result_list[].trans_desc` | `—（直接 JSON 路径）` | 交易描述 | `String` | `256` | `N` | 已确认 | 示例值：用户取现 |
+| `response.data.trans_log_result_list[].huifu_id` | `response.data.trans_log_result_list[].huifu_id` | `—（直接 JSON 路径）` | 汇付商户号 | `String` | `32` | `N` | 已确认 | 汇付分配的商户号，示例值：[官网示例已脱敏] |
+| `response.data.trans_log_result_list[].acct_id` | `response.data.trans_log_result_list[].acct_id` | `—（直接 JSON 路径）` | 账户号 | `String` | `32` | `N` | 已确认 | 账户号，示例值：F00598600 |
+| `response.data.trans_log_result_list[].bank_name` | `response.data.trans_log_result_list[].bank_name` | `—（直接 JSON 路径）` | 银行名称 | `String` | `60` | `N` | 已确认 | 示例值：中国工商银行 |
+| `response.data.trans_log_result_list[].card_no` | `response.data.trans_log_result_list[].card_no` | `—（直接 JSON 路径）` | 银行卡号 | `String` | `64` | `N` | 已确认 | 示例值：621214*****0146 |
+| `response.data.trans_log_result_list[].card_name` | `response.data.trans_log_result_list[].card_name` | `—（直接 JSON 路径）` | 银行户名 | `String` | `60` | `N` | 已确认 | 示例值：盈盈超市112 |
+| `response.data.trans_log_result_list[].fee_flag` | `response.data.trans_log_result_list[].fee_flag` | `—（直接 JSON 路径）` | 手续费收取方式 | `String` | `1` | `N` | 已确认 | 1外扣，2内扣 |
+| `response.data.trans_log_result_list[].fee_huifu_id` | `response.data.trans_log_result_list[].fee_huifu_id` | `—（直接 JSON 路径）` | 手续费客户号 | `String` | `32` | `N` | 已确认 | 示例值：[官网示例已脱敏] |
+| `response.data.trans_log_result_list[].fee_acct_id` | `response.data.trans_log_result_list[].fee_acct_id` | `—（直接 JSON 路径）` | 手续费账户号 | `String` | `32` | `N` | 已确认 | 示例值：F00598600 |
+| `response.data.trans_log_result_list[].payment_hf_seq_id` | `response.data.trans_log_result_list[].payment_hf_seq_id` | `—（直接 JSON 路径）` | 原支付全局流水号 | `String` | `128` | `N` | 已确认 | 示例值：0030000topB230316111634P778c0a8314500000 |
+| `response.data.trans_log_result_list[].re_exchange` | `response.data.trans_log_result_list[].re_exchange` | `—（直接 JSON 路径）` | 退汇状态 | `String` | `1` | `N` | 已确认 | Y-已退汇；默认为空，该字段为Y时代表已退汇 |
+
+
+## 结算记录查询
+
+- 官方来源：<https://paas.huifu.com/partners/api/doc/jyjs/qx/api_jsjlfycx.md>
+- SHA-256：`d04126694730c33755a50bd8600314c387f807d6ddec44bcbb0854c6411fd4c2`
+
+### 请求信封
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `request.sys_id` | `request.sys_id` | `—（直接 JSON 路径）` | 系统号 | `String` | `32` | `Y` | 已确认 | 渠道商/商户的huifu_id ；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为直连商户时，此字段填写商户huifu_id；示例值：[官网示例已脱敏] |
+| `request.product_id` | `request.product_id` | `—（直接 JSON 路径）` | 产品号 | `String` | `32` | `Y` | 已确认 | 汇付分配的产品号，示例值：YYZY |
+| `request.sign` | `request.sign` | `—（直接 JSON 路径）` | 加签结果 | `String` | `512` | `Y` | 已确认 | 签名，对报文整体签名；[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
+| `request.data` | `request.data` | `—（直接 JSON 路径）` | 请求数据 | `JSON` | `—` | `Y` | N/A：结构字段长度 | 业务请求参数，具体值参考API文档 |
+
+### 同步响应信封
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `response.sign` | `response.sign` | `—（直接 JSON 路径）` | 签名 | `String` | `512` | `Y` | 已确认 | [接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
+| `response.data` | `response.data` | `—（直接 JSON 路径）` | 响应内容体 | `Json` | `—` | `N` | N/A：结构字段长度 | 业务返回参数，具体请参考下方接口返回参数 |
+
+### 请求 data
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `request.data.req_seq_id` | `request.data.req_seq_id` | `—（直接 JSON 路径）` | 请求流水号 | `String` | `32` | `Y` | 已确认 | 业务申请编号，同一商户号当天唯一，；示例值：[官网示例已脱敏] |
+| `request.data.req_date` | `request.data.req_date` | `—（直接 JSON 路径）` | 请求日期 | `String` | `8` | `Y` | 已确认 | 请求时间yyyyMMdd，示例值：20220125 |
+| `request.data.huifu_id` | `request.data.huifu_id` | `—（直接 JSON 路径）` | 汇付客户Id | `String` | `18` | `Y` | 已确认 | 渠道与一级代理商的直属商户ID；示例值：[官网示例已脱敏] |
+| `request.data.begin_date` | `request.data.begin_date` | `—（直接 JSON 路径）` | 结算开始日期 | `String` | `8` | `Y` | 已确认 | 起始日期yyyyMMdd，示例值：20220125 |
+| `request.data.end_date` | `request.data.end_date` | `—（直接 JSON 路径）` | 结算结束日期 | `String` | `8` | `Y` | 已确认 | 结束日期yyyyMMdd，示例值：20220125；注：交易开始和结束日期需小于等于7天 |
+| `request.data.page_size` | `request.data.page_size` | `—（直接 JSON 路径）` | 分页条数 | `String` | `—` | `Y` | [需要官方确认]：长度 | 最大50，最小1；示例值：10 |
+| `request.data.settle_cycle` | `request.data.settle_cycle` | `—（直接 JSON 路径）` | 结算方式 | `String` | `2` | `N` | 已确认 | D1，T1，不传默认查询所有；示例值：T1 |
+| `request.data.page_num` | `request.data.page_num` | `—（直接 JSON 路径）` | 分页页码 | `String` | `—` | `N` | [需要官方确认]：长度 | 不传则默认为第1页；示例值：2 |
+| `request.data.trans_stat` | `request.data.trans_stat` | `—（直接 JSON 路径）` | 交易状态 | `String` | `1` | `N` | 已确认 | I：初始化/处理中，S：成功，F：失败，P：处理中(锁定)；空白则未返回交易状态；示例值：S |
+
+### 同步响应 data
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `response.data.resp_code` | `response.data.resp_code` | `—（直接 JSON 路径）` | 业务响应码 | `String` | `8` | `Y` | 已确认 | [业务返回码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_ywm)；示例值：00000000 |
+| `response.data.resp_desc` | `response.data.resp_desc` | `—（直接 JSON 路径）` | 业务响应信息 | `String` | `512` | `Y` | 已确认 | [业务返回描述](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_ywm)；示例值：成功 |
+| `response.data.result_count` | `response.data.result_count` | `—（直接 JSON 路径）` | 查询结果总条数 | `String` | `—` | `Y` | [需要官方确认]：长度 | 若无则返回0；示例值：100 |
+| `response.data.page_size` | `response.data.page_size` | `—（直接 JSON 路径）` | 分页条数 | `String` | `—` | `Y` | [需要官方确认]：长度 | 示例值：10 |
+| `response.data.page_num` | `response.data.page_num` | `—（直接 JSON 路径）` | 分页页码 | `String` | `—` | `Y` | [需要官方确认]：长度 | 示例值：2 |
+| `response.data.trans_log_result_list[]` | `response.data.trans_log_result_list` | `—（String(JSON Array) 容器）` | 结算信息结果列表 | `String` | `—` | `N` | [需要官方确认]：长度 | jsonArray字符串 |
+| `response.data.trans_log_result_list[].trans_id` | `response.data.trans_log_result_list` | `$[].trans_id` | 结算流水编号 | `String` | `16` | `Y` | 已确认 | 当天唯一，示例值：[官网示例已脱敏] |
+| `response.data.trans_log_result_list[].trans_date` | `response.data.trans_log_result_list` | `$[].trans_date` | 结算日期 | `String` | `8` | `Y` | 已确认 | 结算日期yyyyMMdd，示例值：20220125 |
+| `response.data.trans_log_result_list[].huifu_id` | `response.data.trans_log_result_list` | `$[].huifu_id` | 结算汇付商户号 | `String` | `18` | `N` | 已确认 | 该笔结算对应的汇付商户号；示例值：[官网示例已脱敏] |
+| `response.data.trans_log_result_list[].settle_cycle` | `response.data.trans_log_result_list` | `$[].settle_cycle` | 结算方式 | `String` | `2` | `N` | 已确认 | D1，T1，默认查询所有；示例值：T1 |
+| `response.data.trans_log_result_list[].card_no` | `response.data.trans_log_result_list` | `$[].card_no` | 银行卡号(掩码) | `String` | `64` | `N` | 已确认 | 示例值：622262*********8994 |
+| `response.data.trans_log_result_list[].card_name` | `response.data.trans_log_result_list` | `$[].card_name` | 银行户名 | `String` | `64` | `N` | 已确认 | 示例值：张三 |
+| `response.data.trans_log_result_list[].bank_code` | `response.data.trans_log_result_list` | `$[].bank_code` | 银行编码 | `String` | `10` | `N` | 已确认 | [银行编码](https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_yhbm)；示例值：01040000 |
+| `response.data.trans_log_result_list[].trans_amt` | `response.data.trans_log_result_list` | `$[].trans_amt` | 交易金额（元） | `String` | `16` | `N` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00，最低传入0.00，最大16位有效数字 |
+| `response.data.trans_log_result_list[].fee_amt` | `response.data.trans_log_result_list` | `$[].fee_amt` | 结算手续费（元） | `String` | `16` | `N` | 已确认 | 单位元，需保留小数点后两位，示例值：1.00，最低传入0.00，最大16位有效数字 |
+| `response.data.trans_log_result_list[].fee_cust_id` | `response.data.trans_log_result_list` | `$[].fee_cust_id` | 手续费汇付商户号 | `String` | `16` | `N` | 已确认 | 该笔结算手续费扣除对应的汇付商户号；示例值：[官网示例已脱敏] |
+| `response.data.trans_log_result_list[].trans_stat` | `response.data.trans_log_result_list` | `$[].trans_stat` | 结算状态 | `String` | `1` | `N` | 已确认 | I:处理中 F:结算失败 S:结算成功，为空则未返回结算状态；示例值：S |
+| `response.data.trans_log_result_list[].settle_type` | `response.data.trans_log_result_list` | `$[].settle_type` | 结算类型 | `String` | `1` | `N` | 已确认 | 0:对公结算 1:对私法人结算 2:对私非法人结算 3:虚拟户结算；示例值：0 |
+| `response.data.trans_log_result_list[].settle_abstract` | `response.data.trans_log_result_list` | `$[].settle_abstract` | 结算摘要 | `String` | `128` | `N` | 已确认 | 商户在基本信息入驻时编辑的结算摘要；示例值：货款 |
+| `response.data.trans_log_result_list[].settle_batch_no` | `response.data.trans_log_result_list` | `$[].settle_batch_no` | 结算批次号 | `String` | `12` | `N` | 已确认 | 0：0点昨日余额结算批次，非优先到账批则预计到账时间10:30；100：1点余额结算批次，优先到账则预计到账时间06:50，非优先到账批则预计到账时间10:30；200：2点余额结算批次，优先到账则预计到账时间06:50，非优先到账批则预计到账时间10:30；300：3点余额结算批次，优先到账则预计到账时间06:50，非优先到账批则预计到账时间10:30；400：4点余额结算批次，优先到账则预计到账时间06:50，非优先到账批则预计到账时间10:30；500：5点余额结算批次，优先到账则预计到账时间06:50，非优先到账批则预计到账时间10:30；600：6点余额结算批次，预计到账时间10:30；700：7点余额结算批次，预计到账时间10:30；800：8点余额结算批次，预计到账时间10:30；900：9点余额结算批次，预计到账时间10:30；1000：10点余额结算批次，预计到账时间14:00；1100：11点余额结算批次，预计到账时间14:00；1200：12点余额结算批次，预计到账时间14:00；无值则结算昨日全部余额；示例值：100 |
+| `response.data.trans_log_result_list[].settle_desc` | `response.data.trans_log_result_list` | `$[].settle_desc` | 结算信息 | `String` | `255` | `N` | 已确认 | 结算失败原因；示例值： |
+
+
+## DM取现额度查询
+
+- 官方来源：<https://paas.huifu.com/partners/api/doc/jyjs/qx/api_DMqxedcx.md>
+- SHA-256：`494415e9a7aa7f93249845ba587db28cb178224b2b7452280f715315024a2339`
+
+### 请求信封
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `request.sys_id` | `request.sys_id` | `—（直接 JSON 路径）` | 系统号 | `String` | `32` | `Y` | 已确认 | 渠道商/商户的huifu_id ；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为直连商户时，此字段填写商户huifu_id；示例值：[官网示例已脱敏] |
+| `request.sign` | `request.sign` | `—（直接 JSON 路径）` | 加签结果 | `String` | `512` | `Y` | 已确认 | 签名，对报文整体签名 |
+| `request.product_id` | `request.product_id` | `—（直接 JSON 路径）` | 产品号 | `String` | `32` | `Y` | 已确认 | 汇付分配的产品号，示例值：MCS |
+| `request.data` | `request.data` | `—（String(JSON) 容器）` | 数据 | `String` | `—` | `Y` | [需要官方确认]：长度 | JSON格式 |
+
+### 同步响应信封
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `response.sign` | `response.sign` | `—（直接 JSON 路径）` | 签名 | `String` | `512` | `Y` | 已确认 | 签名，对报文整体签名；[接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
+| `response.data` | `response.data` | `—（直接 JSON 路径）` | 响应内容体 | `JSON` | `—` | `N` | N/A：结构字段长度 | 业务返回参数 |
+
+### 请求 data
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `request.data.huifu_id` | `request.data` | `$.huifu_id` | 商户号 | `String` | `32` | `Y` | 已确认 | 汇付分配的商户号，示例值：[官网示例已脱敏] |
+| `request.data.acct_id` | `request.data` | `$.acct_id` | 账户号 | `String` | `32` | `N` | 已确认 | 只有基本户与现金户类型支持DM取现。为空默认取基本户账号。示例值：F00598600 |
+
+### 同步响应 data
+
+| 合同定位路径 | wire路径 | String(JSON)解码后路径 | 中文名 | 类型 | 长度 | 必填 | 确认状态 | 官方说明 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `response.data.resp_code` | `response.data.resp_code` | `—（直接 JSON 路径）` | 业务返回码 | `String` | `8` | `Y` | 已确认 | 参见[业务返回码](https://paas.huifu.com/partners/api/doc/jyjs/qx/api_DMqxedcx.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查），示例值：00000000 |
+| `response.data.resp_desc` | `response.data.resp_desc` | `—（直接 JSON 路径）` | 业务返回描述 | `String` | `512` | `Y` | 已确认 | [业务返回信息](https://paas.huifu.com/partners/api/doc/jyjs/qx/api_DMqxedcx.md#业务返回码)（官网相对地址原文：`#业务返回码`）（公共返回码全集：[返回码](https://paas.huifu.com/partners/api/doc/csfl/api_csfl_ywm.md)；接口页专属码与公共码需合并排查），示例值：处理成功 |
+| `response.data.huifu_id` | `response.data.huifu_id` | `—（直接 JSON 路径）` | 商户号 | `String` | `32` | `Y` | 已确认 | 汇付分配的商户号，示例值：[官网示例已脱敏] |
+| `response.data.acct_id` | `response.data.acct_id` | `—（直接 JSON 路径）` | 账户号 | `String` | `32` | `N` | 已确认 | 示例值：F00598600 |
+| `response.data.dm_amt` | `response.data.dm_amt` | `—（直接 JSON 路径）` | 剩余dm取现额度 | `String` | `16` | `N` | 已确认 | 剩余dm取现额度，单位：元。示例值：1.23 |

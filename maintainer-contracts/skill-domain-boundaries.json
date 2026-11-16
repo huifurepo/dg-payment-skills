@@ -51,7 +51,15 @@
         "verify_type",
         "account",
         "acct_type",
-        "merge_pay_flag"
+        "merge_pay_flag",
+        "card_name",
+        "settle_abstract",
+        "settle_batch_no",
+        "settle_cycle",
+        "settle_type",
+        "sub_resp_code",
+        "sub_resp_desc",
+        "token_no"
       ],
       "forbidden_implementation_literals": [
         "/v2/merchant/basicdata/ent",
@@ -136,5 +144,10 @@
         "V2TradeHostingPayment"
       ]
     }
+  },
+  "reviewed_payment_overlap": {
+    "source_date": "2026-11-04",
+    "source_lock": "maintainer-contracts/huifu-pay-integration-additional-source-lock-2026-11-04.json",
+    "reason": "Exact formally declared payout/settlement response fields and bound-card token; merchant configuration routes remain forbidden."
   }
 }

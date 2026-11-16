@@ -530,13 +530,13 @@ def validate_maintainer_contracts(errors: list[str]) -> None:
         if phrase in release:
             error(errors, f"release checklist contains stale phrase: {phrase}")
     for required in (
-        "huifu-pay-integration` | `1.5.0",
-        "huifu-merchant-onboarding` | `1.1.0",
+        "huifu-pay-integration` | `1.6.0",
+        "huifu-merchant-onboarding` | `1.2.0",
         "电子合同、页面进件、下级权限及微信/支付宝 AT 管理",
     ):
         if required not in versioning:
             error(errors, f"versioning policy missing current fact: {required}")
-    for required in ("manifest", "新增模块流程", "当前3,534"):
+    for required in ("manifest", "新增模块流程", "当前3,578"):
         if required not in architecture:
             error(errors, f"Skill family architecture missing: {required}")
 
@@ -596,7 +596,7 @@ def load_domain_boundaries() -> dict[str, dict[str, tuple[str, ...]]]:
         if part not in {"request", "response", "async", "data"}
     }
     skills = payload.get("skills")
-    if not isinstance(skills, dict) or set(skills) != EXPECTED_SKILLS:
+    if not isinstance(skills, dict) or set(skills) != set(json.loads(MANIFEST.read_text(encoding="utf-8"))["skills"]):
         raise ValueError("skill domain boundary contract must cover all manifest skills")
     result: dict[str, dict[str, tuple[str, ...]]] = {}
     for skill_id, spec in skills.items():

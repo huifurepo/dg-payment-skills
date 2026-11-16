@@ -25,6 +25,7 @@ REFERENCE_PATTERN = re.compile(r"`([^`/]+\.md)`")
 def main() -> int:
     errors: list[str] = []
     additions = json.loads((ROOT / "tests/regression/interface-expansion.json").read_text(encoding="utf-8"))
+    additions.extend(json.loads((ROOT / "tests/regression/payout-expansion.json").read_text(encoding="utf-8")))
     for suite, reference_dir in SUITES.items():
         available = {path.name for path in reference_dir.glob("*.md")}
         cases = json.loads(

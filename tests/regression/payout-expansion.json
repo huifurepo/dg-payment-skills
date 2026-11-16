@@ -1,0 +1,56 @@
+[
+  {
+    "id": 4201,
+    "suite": "payment",
+    "prompt": "用户已绑卡，主动取现的token_no、到账类型、通知01/02及成功后退汇怎么处理？",
+    "expected": "本轮实际使用 references：`payout-withdraw.md`、`payment-extension-complete-field-catalog.md`。取现用/v2/trade/settlement/encashment；token_no是已绑定卡序列号，D0/T1/D1/DM，DM不含当日交易。同步trans_stat与通知trans_status不同；acct_status、channel_status独立，msg_type=01后02均更新，re_exchange=Y后退汇仍更新，B为回账成功。未知签名原文/ACK留TODO，不按流水永久去重，不以单个S判断到账。正式异步外层sign:String(255) Y，签名字段位置已知；未知的是待验签原文构造与传输/ACK。"
+  },
+  {
+    "id": 4202,
+    "suite": "payment",
+    "prompt": "银行卡资金代发怎样处理到账枚举、收款资料加密、示例额外字段和重复请求？",
+    "expected": "本轮实际使用 references：`payout-transfer.md`、`payment-extension-complete-field-catalog.md`。用/v2/trade/settlement/surrogate，到账T0/T1/D1；bank_card_no_crypt和certificate_no_crypt先用汇付系统公钥RSA加密，SDK不会自动加密，Python非空错误字符串必须拒绝。bank_acct_three_in_one、mobile_no_crypt、risk_check_data示例独有，正式DTO不补，用户明确输入则留TODO确认而不丢弃。通知01/02与退汇分开更新，查单补偿不重新代发。"
+  },
+  {
+    "id": 4203,
+    "suite": "payment",
+    "prompt": "出金超时后如何按原单查单，SDK的data到底对象还是字符串？",
+    "expected": "本轮实际使用 references：`payout-query.md`、`payment-extension-complete-field-catalog.md`。用/v2/trade/settlement/query；org_req_date必传，org_hf_seq_id和org_req_seq_id二选一，无新req_seq_id，不再次出金。data正式表String(JSON)，SDK最终对象data，不二次JSON编码；响应trans_status和re_exchange独立核对。"
+  },
+  {
+    "id": 4204,
+    "suite": "payment",
+    "prompt": "批量出金按TS原流水查询能否省商户日期？列表和页大小按哪个合同？",
+    "expected": "本轮实际使用 references：`payout-batch-query.md`、`payment-extension-complete-field-catalog.md`。用/v2/trade/batchtranslog/query；payment_hf_seq_id非空时正文称商户及日期可省，与正式Y冲突，条件确认后处理。page_size默认10，最大值未公布。trans_log_result_list正式Array，示例JSON字符串，保留冲突；分页计数正式String而示例数字。"
+  },
+  {
+    "id": 4205,
+    "suite": "payment",
+    "prompt": "结算记录查询的merchant类归哪个skill？直属商户、窗口、响应类型与状态怎么判断？",
+    "expected": "本轮实际使用 references：`payout-settlement-query.md`、`payment-extension-complete-field-catalog.md`。由支付Skill用/v2/merchant/basicdata/settlement/query，huifu_id为渠道或一级代理商的直属商户ID。单次日期7天与历史100天含义待确认，page_size为1..50。列表正式String(JSON Array)但示例原生数组；请求过滤I/S/F/P，响应仅I/F/S，不补P。结算完成后有statement.day控台Webhook事件线索，当前36条查询字段不含该事件payload合同。"
+  },
+  {
+    "id": 4206,
+    "suite": "payment",
+    "prompt": "DM取现额度是否就是总余额？路由的enchashment要修正吗？",
+    "expected": "本轮实际使用 references：`payout-dm-quota-query.md`、`payment-extension-complete-field-catalog.md`。用V2TradeSettlementEnchashmentDmamtQueryRequest和/v2/trade/settlement/enchashment/dmamt/query，保留enchashment。DM不含当天交易资金，不等于总余额，查询不发起取现。基本户和现金户可用，acct_id空默认基本户。须开通DM权限；响应dm_amt:String(16) N，单位元，缺失不默认0。"
+  },
+  {
+    "id": 4211,
+    "suite": "onboarding",
+    "prompt": "商户业务开通捷行付增加微信企业码后旧平铺银行字段怎么改？",
+    "expected": "本轮实际使用 references：`merchant-onboarding-business-open.md`、`merchant-onboarding-complete-field-catalog.md`。request.data.jxf_conf_info是String(JSON Object)，下有default_channel、jxf_bank_pay_info和wx_ent_pay_info。银行字段与银行费率移入jxf_bank_pay_info；开通bank_name当前仅PINGAN，开通sign_start_date长度8；不复制修改和响应的条件。银行手续费位于request.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info，微信企业码手续费位于request.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info。开通正式表无bank_pay_open_flag/wx_ent_pay_open_flag，不能补入；旧示例平铺与open_flag不用作正式字段。"
+  },
+  {
+    "id": 4212,
+    "suite": "onboarding",
+    "prompt": "官网已修复商户业务开通修改的捷行付签约开始日期长度，现在应如何定义和校验？",
+    "expected": "本轮实际使用 references：`merchant-onboarding-business-open-modify.md`、`merchant-onboarding-complete-field-catalog.md`。request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.sign_start_date正式长度8、示例8，String且条件必填C；2026-11-09官网已修正旧长度7，日期长度冲突已解决，不截断日期。银行名称非平安时需填写，wx_ent_pay_info与银行分别构建，修改条件不套开通。"
+  },
+  {
+    "id": 4213,
+    "suite": "onboarding",
+    "prompt": "商户详情查询捷行付与合单字段是否直接复制为开通DTO？",
+    "expected": "本轮实际使用 references：`merchant-onboarding-detail-query.md`、`merchant-onboarding-complete-field-catalog.md`。response.data.jxf_conf_info.jxf_bank_pay_info与wx_ent_pay_info按响应方向保留类型/长度/Y/N/C，不能复制成请求DTO。开通merge_pay_config中文标签误写请求流水号，保留英文键，不改req_seq_id。"
+  }
+]

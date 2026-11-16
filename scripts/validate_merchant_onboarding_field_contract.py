@@ -58,7 +58,7 @@ EXTERNAL_RESOURCE_REQUIRED = (
     "response.data.wx_fee_rate_list[].pay_scene",
     "request.data.material_card_info.prov_id/area_id",
     "request.data.material_card_info.branch_code",
-    "十三个接口中的十二个 Markdown JSON 接口顶层 `sign`（不含图片上传）",
+    "其余九个Markdown接口顶层 `sign`",
 )
 
 EXTERNAL_RESOURCE_FORBIDDEN = (
@@ -100,7 +100,7 @@ REQUIRED = {
         "详情响应 `sms_send_flag=Y/N`",
     ),
     "status": ("申请单状态查询", "apply_no String(18) Y", "data.apply_status", "data.reg_status", "bank_card_conf_status", "bind_card_status", "cash_status", "settle_status", "union_conf_status", "out_order_funds_status", "均为 `String(1)`：`P/S/F`", "`P=处理中`、`S=成功`、`F=失败`", "data.wx_zl_config.apply_state", "`String(32)`：`S/P/N/F/C`", "data.ali_zl_config[].apply_status"),
-    "business-modify": ("商户业务开通修改", "req_seq_id String(32) Y", "huifu_id String(18) Y", "53 组嵌套配置", "async.business.ord_id", "async.business.reg_result_list[]", "`josnArray`", "禁止采用该示例"),
+    "business-modify": ("商户业务开通修改", "req_seq_id String(32) Y", "huifu_id String(18) Y", "56 组嵌套配置", "async.business.ord_id", "async.business.reg_result_list[]", "`josnArray`", "禁止采用该示例"),
     "basic-modify": ("商户基本信息修改", "upper_huifu_id String(18) C", "资料对象和条件", "审核异步", "基本信息修改 `data.card_info.area_id`", "`String(8) Y`"),
     "rate-query": ("商户费率信息查询", "fee_rate_type Array<string>(117) N", "`huifu_id String(18) Y`", "原生", "没有专属 Request 类"),
     "status-change": ("商户状态变更", "upd_status_reason String(512) Y", "官方多行注释中的 `file_list` 已废弃", "仅字符串 `1/0`"),
@@ -122,7 +122,7 @@ REQUIRED = {
         "按 String(JSON Array) 解码",
     ),
     "callbacks": ("reg_result_list[].business_stat", "zl_async_info.apply_state", "async.agreement.agreement_info_list.con_stat", "没有 `Array/jsonArray`", "ord_id:String(44)", "RECV_ORD_ID_", "[需要官方确认]", "逐业务通知外层包装待官方样本确认"),
-    "headers": ("jpt-x-skill-source: <skill_source>", "Java、PHP、Python SDK 主链路", "hfms/1.1.0", "hfps/1.5.0;hfms/1.1.0", "其他 SDK 内部请求头由 SDK 自行处理"),
+    "headers": ("jpt-x-skill-source: <skill_source>", "Java、PHP、Python SDK 主链路", "hfms/1.2.0", "hfps/1.6.0;hfms/1.2.0", "其他 SDK 内部请求头由 SDK 自行处理"),
     "same-leaf-paths": (
         "不得按叶字段名去重",
         "request.data.prov_id",
@@ -143,8 +143,8 @@ REQUIRED = {
         "material_card_info",
         "activated_products",
         "01=一体化收款产品",
-        "10个目录节点的说明单元为空",
-        "4个 String 标量叶字段的长度单元为空",
+        "14个目录节点的说明单元为空",
+        "41个 String 标量叶字段的长度单元为空",
         "sys_id",
         "渠道商",
         "总部商户",
@@ -195,13 +195,13 @@ ATOMIC_CONTRACT_TERMS = {
         "顶层 `file`",
         "不支持填写企业/个人用户开户返回的用户号",
     ),
-    "merchant-onboarding-detail-query.md": ("583 个具名路径", "req_seq_id:String(32)", "req_date:String(8)", "huifu_id:String(18)", "`1=开通`、`0=未开通`、空=未配置", "禁止把查询响应直接复制为开通请求", "`response.data.service_phone:String(32)`", "`response.data.material_card_info:String(JSON Object) N`", "先严格反序列化", "`card_type/card_name/card_no/prov_id/area_id/branch_code`"),
+    "merchant-onboarding-detail-query.md": ("602 个具名路径", "req_seq_id:String(32)", "req_date:String(8)", "huifu_id:String(18)", "`1=开通`、`0=未开通`、空=未配置", "禁止把查询响应直接复制为开通请求", "`response.data.service_phone:String(32)`", "`response.data.material_card_info:String(JSON Object) N`", "先严格反序列化", "`card_type/card_name/card_no/prov_id/area_id/branch_code`"),
     "merchant-onboarding-application-status-query.md": ("data.bank_card_conf_status:String(1)", "data.bind_card_status:String(1)", "data.cash_status:String(1)", "data.settle_status:String(1)", "data.union_conf_status:String(1)", "data.out_order_funds_status:String(1)", "`P=处理中`、`S=成功`、`F=失败`", "data.wx_zl_config.apply_state:String(32)", "data.ali_zl_config[].apply_status:String(1)", "data.agreement_info_list[].con_stat:String(2)", "`wx_config_list[].config_type`", "String(2)"),
 }
 NEW_ATOMIC_CONTRACT_TERMS = {
     "merchant-onboarding-business-open-modify.md": (
-        "452 个节点",
-        "请求 390、同步响应 6、异步通知 56",
+        "465 个节点",
+        "请求 403、同步响应 6、异步通知 56",
         "V2MerchantBusiModifyRequest",
         "async.business.ord_id:String(44)",
         "async.business.reg_result_list[]",
@@ -382,9 +382,9 @@ def main() -> int:
     skill_text = ONBOARDING_SKILL.read_text(encoding="utf-8") if ONBOARDING_SKILL.is_file() else ""
     missing = [f"{section}: {term}" for section, terms in REQUIRED.items() for term in terms if not contains_contract(text, term)]
     for term in (
-        "仅 `huifu-merchant-onboarding 1.1.0`",
-        "`hfms/1.1.0`",
-        "`hfps/1.5.0;hfms/1.1.0`",
+        "仅 `huifu-merchant-onboarding 1.2.0`",
+        "`hfms/1.2.0`",
+        "`hfps/1.6.0;hfms/1.2.0`",
         "顺序固定为支付、进件",
         "英文分号且不加空格",
         "显式提供经确认的合同值时原样透传",
@@ -396,16 +396,16 @@ def main() -> int:
         "`request.data.card_info.prov_id/area_id`",
         "`request.data.material_card_info.prov_id/area_id`",
         "`card_info` 与 `material_card_info` 都按 String(JSON Object)",
-        "请求1,276、同步响应758、通知180",
-        "当前十三页仍有10个目录节点的说明单元为空、4个 String 标量叶字段的长度单元为空",
+        "请求1,301、同步响应777、通知180",
+        "当前十三页仍有14个目录节点的说明单元为空、41个 String 标量叶字段的长度单元为空",
     ):
         if term not in text:
             missing.append(f"merchant-onboarding-field-contracts.md: {term}")
     for term in (
         "references/merchant-onboarding-complete-field-catalog.md",
         "references/merchant-onboarding-field-contracts.md",
-        "`hfms/1.1.0`",
-        "`hfps/1.5.0;hfms/1.1.0`",
+        "`hfms/1.2.0`",
+        "`hfps/1.6.0;hfms/1.2.0`",
     ):
         if term not in skill_text:
             missing.append(f"SKILL.md: {term}")
@@ -489,15 +489,15 @@ def main() -> int:
             for child in catalog_rows
         )
     ]
-    if len(blank_descriptions) != 10:
+    if len(blank_descriptions) != 14:
         missing.append(
             "complete catalog official blank descriptions: "
-            f"expected=10, actual={len(blank_descriptions)}"
+            f"expected=14, actual={len(blank_descriptions)}"
         )
-    if len(string_leaf_blank_lengths) != 4:
+    if len(string_leaf_blank_lengths) != 41:
         missing.append(
             "complete catalog official blank String leaf lengths: "
-            f"expected=4, actual={len(string_leaf_blank_lengths)}"
+            f"expected=41, actual={len(string_leaf_blank_lengths)}"
         )
     try:
         source_dates = locked_source_update_dates()
@@ -507,14 +507,14 @@ def main() -> int:
         expected_date_clauses = (
             (
                 "refreshed source dates",
-                "来源快照核验日期：`2026-10-25`",
+                f"来源快照核验日期：`{onboarding_source_date()}`",
                 source_dates["enterprise"] == "2026-09-18"
                 and source_dates["individual"] == "2026-09-04"
                 and source_dates["basic_info_modify"] == "2026-09-20",
             ),
             (
                 "current field refresh",
-                "相对上一快照新增5、删除0、修改0",
+                "相对11-04快照新增0、删除0、同路径修改1",
                 True,
             ),
             (
@@ -601,8 +601,8 @@ def main() -> int:
             for term in (
                 "## 公共请求头",
                 "`jpt-x-skill-source: <skill_source>`",
-                "`hfms/1.1.0`",
-                "`hfps/1.5.0;hfms/1.1.0`",
+                "`hfms/1.2.0`",
+                "`hfps/1.6.0;hfms/1.2.0`",
             )
             if term not in page_text
         )

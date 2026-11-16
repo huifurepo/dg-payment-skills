@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-11-04",
+  "completed_at": "2026-11-05T02:56:38.527642+00:00",
+  "branch": "feature_skills-14",
+  "baseline_commit": "b186c553e011216f40cb94dc06c13a10f3030b12",
+  "status": "no-unresolved-blockers",
+  "plan_review": {
+    "path": "maintainer-contracts/payout-expansion-plan-review-2026-11-04.json",
+    "sha256": "f60ca38f8faa1e047feb40b3f2a787d41f4e765f9dab0270bc10f54dc8855794"
+  },
+  "api_review": {
+    "path": "maintainer-contracts/api-review-2026-11-04.json",
+    "sha256": "0e3598fb3e14972336b3c6c0daa688d73c6dc0a4350873c1a2b58a084a10d06f"
+  },
+  "reviews": [
+    {
+      "agent": "/root/plan_contract_review",
+      "status": "passed",
+      "resolved": [
+        "17 cross-root String(JSON) child wire paths and independent assertions",
+        "DM envelope conflict",
+        "merchant dates/counts and historical SHA labels"
+      ]
+    },
+    {
+      "agent": "/root/plan_sdk_review",
+      "status": "passed",
+      "resolved": [
+        "two original-locator final-body branches",
+        "regular and TS batch final-body branches",
+        "six distinct declared huifu_id collisions",
+        "Content-Type/signType/sdk headers and matrix table"
+      ]
+    },
+    {
+      "agent": "/root/plan_evidence_review",
+      "status": "passed",
+      "resolved": [
+        "unsafe full-response assertions rejected even with correct keywords",
+        "manifest-selected active evidence",
+        "PowerShell gate entry",
+        "refresh version statements",
+        "all active overview dates/counts; historical statements retained"
+      ]
+    }
+  ],
+  "validation": {
+    "command": "bash scripts/validate-skills.sh",
+    "exit_code": 0,
+    "environment": {
+      "HUIFU_SDK_ROOT": ".tmp/sdk-evidence/onboarding",
+      "REQUIRE_SDK_EVIDENCE": "1",
+      "RUN_REAL_MODEL_REGRESSION": "0",
+      "runtimes": "local Java/PHP/Go and existing Python dependency environment"
+    },
+    "log": {
+      "path": ".tmp/skills14-20261104/final-validation.log",
+      "sha256": "75f9508d7ef2b133fa684e13318bdad896eb4c42b9c2c1e7eb98ac5be5e66e5c"
+    },
+    "regression_cases": 185,
+    "suite_counts": {
+      "payment": 78,
+      "onboarding": 49,
+      "user-onboarding": 15,
+      "cross-route": 43
+    },
+    "scope": [
+      "all 93 source hashes and eight diffs",
+      "7110 independently validated field paths",
+      "all historical audit chains and six Git-anchored baselines",
+      "42 typed language-route pairs and 14 Python serializers",
+      "six Python final signed body chains with locator and batch branches",
+      "code examples and sensitive-data detector",
+      "package/provenance guards and independent release checks",
+      "Go sandbox and SDK golden vectors"
+    ],
+    "not_executed": [
+      "live model regression",
+      "real gateway/payment/payout/SMS/notification",
+      "Windows gate runtime",
+      "Java/PHP payout payload execution"
+    ]
+  },
+  "reviewed_code": {
+    "scripts/generate_additional_interface_catalog.py": "a1e3cadc0b51e62581c687b9e86dad15b3816c0def6b46aa622b3603134b1ec9",
+    "scripts/validate_additional_interfaces.py": "4779c08f0b96986e1d77fe74ecd2d14c3e96256e410638de46cb010c2b8b9bf9",
+    "scripts/validate_payout_sdk_transport.py": "3437d5473215aa5060e45773baf03807990d2edd1459f90770099eb08ba49664",
+    "scripts/validate_api_review.py": "746dbeb60b9fdc2ae535d5cecd7a7eaa425097183e59a0f2c9a080b02d99ae9a",
+    "scripts/run_real_model_regression.py": "e38a480939ee0a2b2a3178f5bc20638dfc74077e0fdae5c3eb800597bcfb5813",
+    "scripts/validate-skills.sh": "11c26d4827bac43675d9b47333b84f2687e1ee0c872ef8e2cd502dece803a0a4",
+    "scripts/validate-skills.ps1": "4243c82659438e8e008560e0bfd1e52cb50d508f0bdb70e4dd9888d28b12533a"
+  },
+  "versions": {
+    "huifu-pay-integration": "1.6.0",
+    "huifu-merchant-onboarding": "1.2.0"
+  },
+  "sdk_evidence_date": "2026-10-08",
+  "api_source_date": "2026-11-04",
+  "artifacts": "dist candidates; dirty provenance; no platform publication"
+}

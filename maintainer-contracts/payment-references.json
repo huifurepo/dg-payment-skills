@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "skill": "huifu-pay-integration",
-  "reference_count": 119,
+  "reference_count": 125,
   "references": [
     "account-balance-query.md",
     "account-ledger-query.md",
@@ -109,6 +109,12 @@
     "payment-extension-complete-field-catalog.md",
     "payment-extension-sdk-matrix.md",
     "payment-operations-faq.md",
+    "payout-batch-query.md",
+    "payout-dm-quota-query.md",
+    "payout-query.md",
+    "payout-settlement-query.md",
+    "payout-transfer.md",
+    "payout-withdraw.md",
     "shared-async-notify.md",
     "shared-copyright-notice.md",
     "shared-credential-boundary.md",

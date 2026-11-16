@@ -38,7 +38,7 @@ def main() -> int:
         "# 支付官方接口页来源锁",
         "",
         f"- 来源快照日期：`{lock['source_date']}`",
-        f"- 页面数：`{len(sources)}`（基础{lock['source_count']}页；本轮新增{len(sources)-lock['source_count']}页）",
+        f"- 页面数：`{len(sources)}`（基础{lock['source_count']}页；累计追加{len(sources)-lock['source_count']}页，本轮新增{len(additions.get('new_source_keys', [])) if additions_name else 0}页）",
         "- 用途：复核字段、类型、长度、必填条件和接口边界；普通接入回答仍使用对应原子 reference。",
         "",
         "| 页面 | 官方 URL | 本地原子 reference | SHA-256 |",

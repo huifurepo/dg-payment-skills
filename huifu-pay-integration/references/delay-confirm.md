@@ -1,6 +1,6 @@
 # 交易确认
 
-官方来源：<https://paas.huifu.com/partners/api/doc/smzf/api_jyqr.md>。来源快照：2026-10-25；SHA-256：`9fbf6c70cb9be4422fb2b0a724588c7bda363f6a8bb779cba54435a5e86c82fc`。
+官方来源：<https://paas.huifu.com/partners/api/doc/smzf/api_jyqr.md>。来源快照：2026-11-04；SHA-256：`9fbf6c70cb9be4422fb2b0a724588c7bda363f6a8bb779cba54435a5e86c82fc`。
 
 接口：`/v2/trade/payment/delaytrans/confirm`。方法：POST。
 

@@ -113,3 +113,7 @@
 - `U_NATIVE` 与 `U_JSAPI` 使用同一批扩展结构，但并不是每次都要求把所有字段传满。
 - `U_MICROPAY` 的 `pid_info` 属于银联反扫独有扩展，不要混到 JS / 正扫请求里。
 - `U_MICROPAY.auth_code` 必须来自扫码设备实时采集。
+
+## 2026-11-04接入指引复核
+
+银联JS开发指引修正示例URL的多重HTML转义：参数分隔符恢复为 `&`。本轮未改变API字段或SDK版本；生成示例时不能发送 `&amp;amp;amp;` 作为真实参数分隔符，来源见 `official-payment-page-lock.md` 中银联JS开发指引。

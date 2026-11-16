@@ -42,4 +42,4 @@
 
 ## 来源
 
-七份官方接口原文冻结于 `2026-10-08`，逐页 URL/SHA 见 `official-payment-page-lock.md`；七接口共266个完整字段路径，父节点计入。
+七份官方接口原文冻结于 `2026-11-04`，逐页 URL/SHA 见 `official-payment-page-lock.md`；七接口共266个完整字段路径，父节点计入。

@@ -111,11 +111,11 @@ R2_SOURCE_DIR = (
 EXPECTED_COUNTS = {
     "企业商户进件": 177,
     "个人商户进件": 129,
-    "商户业务开通": 460,
+    "商户业务开通": 472,
     "图片上传": 8,
-    "商户详细信息查询": 583,
+    "商户详细信息查询": 602,
     "申请单状态查询": 93,
-    "商户业务开通修改": 452,
+    "商户业务开通修改": 465,
     "商户基本信息修改": 199,
     "商户费率信息查询": 35,
     "商户状态变更": 14,
@@ -434,7 +434,8 @@ def main() -> int:
             field_path in line and url in line
             for line in external_lines
         ), f"missing exact external-resource binding: {field_path} -> {url}"
-    assert "十三个接口中的十二个 Markdown JSON 接口顶层 `sign`（不含图片上传）" in external_text
+    assert "其余九个Markdown接口顶层 `sign`" in external_text
+    assert "六处链接" in external_text and "https://paas.huifu.com/docs/start/#/api_v2jqyq" in external_text
     for url in runtime_examples:
         assert url not in external_text, f"runtime example must not be promoted to a resource: {url}"
     print(

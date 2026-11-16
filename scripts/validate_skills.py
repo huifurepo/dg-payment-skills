@@ -548,10 +548,10 @@ def validate_regression_metadata(state: ValidationState) -> None:
             state.ok(f"{suite}: generated regression suite matches canonical prompts")
     cross_file = REPO_ROOT / "tests/regression/cross-route.json"
     cross_cases = json.loads(cross_file.read_text(encoding="utf-8"))
-    if len(cross_cases) != 39 or any(item.get("suite") != "cross-route" for item in cross_cases):
-        state.error("cross-route regression suite must contain 39 tagged cases")
+    if len(cross_cases) != 43 or any(item.get("suite") != "cross-route" for item in cross_cases):
+        state.error("cross-route regression suite must contain 43 tagged cases")
     else:
-        state.ok("cross-route regression suite count OK: 39")
+        state.ok("cross-route regression suite count OK: 43")
 
     additions = json.loads((REPO_ROOT / "tests/regression/interface-expansion.json").read_text(encoding="utf-8"))
     addition_ids = {int(item["id"]) for item in additions}
@@ -562,6 +562,16 @@ def validate_regression_metadata(state: ValidationState) -> None:
         state.error("new interface regression cases must cover nine APIs with rules and payment=7/onboarding=2 ownership")
     else:
         state.ok("nine new interface regression cases and ownership verified")
+
+    payout = json.loads((REPO_ROOT / "tests/regression/payout-expansion.json").read_text())
+    payout_ids = {int(item["id"]) for item in payout}
+    if (len(payout) != 9 or payout_ids != set(range(4201,4207)) | set(range(4211,4214))
+            or sum(row["suite"] == "payment" for row in payout) != 6
+            or sum(row["suite"] == "onboarding" for row in payout) != 3
+            or not payout_ids.issubset(rule_ids)):
+        state.error("payout and JXF regressions require six payment and three onboarding cases with rules")
+    else:
+        state.ok("payout/JXF ownership and nine regression rules verified")
 
     user_file = REPO_ROOT / "tests/regression/user-onboarding.json"
     user_cases = json.loads(user_file.read_text(encoding="utf-8"))
@@ -613,8 +623,8 @@ def validate_regression_metadata(state: ValidationState) -> None:
         state.ok("README.md regression claims avoid stale fixed totals")
 
     regression_counts = {
-        "payment": suite_counts["payment"] + addition_counts["payment"],
-        "onboarding": suite_counts["onboarding"] + addition_counts["onboarding"],
+        "payment": suite_counts["payment"] + addition_counts["payment"] + sum(row["suite"] == "payment" for row in payout),
+        "onboarding": suite_counts["onboarding"] + addition_counts["onboarding"] + sum(row["suite"] == "onboarding" for row in payout),
         "user-onboarding": len(user_cases),
         "cross-route": len(cross_cases),
     }

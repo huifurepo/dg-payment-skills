@@ -1,6 +1,6 @@
 # 账务流水汇总结果查询
 
-官方来源：<https://paas.huifu.com/partners/api/doc/zhy/api_acct_log_summary.md>。来源快照：2026-10-25；SHA-256：`d70d62be96cb1c20ba9be2355a57c8890468e8eab20e8adf2a81933e684e771a`。
+官方来源：<https://paas.huifu.com/partners/api/doc/zhy/api_acct_log_summary.md>。来源快照：2026-11-04；SHA-256：`d70d62be96cb1c20ba9be2355a57c8890468e8eab20e8adf2a81933e684e771a`。
 
 接口：`/v2/trade/acctpayment/acctlog/summary`。方法：POST。
 

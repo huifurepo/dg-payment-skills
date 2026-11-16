@@ -130,7 +130,7 @@
     "suite": "cross-route",
     "expected_skill": "both",
     "prompt": "新商户还没开户，但本周要完成微信 JSAPI 收款，请给完整交接顺序；两个 Skill 都存在且没有显式配置 skill_source，请同时给出来源头默认值。",
-    "expected": "先用进件 Skill 完成账户和微信业务准备，再用支付 Skill 完成 JSAPI 下单与终态；jpt-x-skill-source 使用 hfps/1.5.0;hfms/1.1.0。"
+    "expected": "先用进件 Skill 完成账户和微信业务准备，再用支付 Skill 完成 JSAPI 下单与终态；jpt-x-skill-source 使用 hfps/1.6.0;hfms/1.2.0。"
   },
   {
     "id": 1020,
@@ -271,5 +271,33 @@
     "expected_skill": "payment",
     "prompt": "已有用户账户，只查用户的资金变动流水，不修改用户资料，用哪个Skill？",
     "expected": "路由到支付Skill的账务流水能力，保留用户角色ID，不能因出现用户二字改走用户进件。"
+  },
+  {
+    "id": 1040,
+    "suite": "cross-route",
+    "expected_skill": "payment",
+    "prompt": "用户已完成绑卡和取现规则配置，现在调用主动取现，应加载哪个Skill？",
+    "expected": "取现属于支付Skill，保留用户角色和token_no，不重新开户。"
+  },
+  {
+    "id": 1041,
+    "suite": "cross-route",
+    "expected_skill": "payment",
+    "prompt": "结算记录查询路由带merchant，是进件还是支付？",
+    "expected": "按资金查询目的属于支付Skill，不按merchant前缀推断。"
+  },
+  {
+    "id": 1042,
+    "suite": "cross-route",
+    "expected_skill": "both",
+    "prompt": "先开商户现金子账户配置取现卡，再发起DM取现，怎么组合？",
+    "expected": "先由进件Skill配置商户子账户和取现卡，再支付Skill按token_no发起DM取现。"
+  },
+  {
+    "id": 1043,
+    "suite": "cross-route",
+    "expected_skill": "onboarding",
+    "prompt": "只开通捷行付微信企业码和银行业务，尚不发起交易，加载什么？",
+    "expected": "开通业务使用进件Skill，wx_ent_pay_info和jxf_bank_pay_info按开通合同配置。"
   }
 ]

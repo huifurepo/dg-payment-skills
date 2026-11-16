@@ -4,8 +4,8 @@
 
 | Skill | 版本 | 使用场景 |
 | --- | --- | --- |
-| `huifu-pay-integration` | `1.5.0` | 延时交易、账户余额与账务查询、余额支付、聚合支付、托管支付、checkout-js、下单、查单、关单、退款、对账、支付通知、本地沙箱和支付上线 |
-| `huifu-merchant-onboarding` | `1.1.0` | 企业/个人商户进件、用户开户、子账户开通/修改、电子合同、统一页面进件、下级权限及微信/支付宝 AT 管理 |
+| `huifu-pay-integration` | `1.6.0` | 出金、结算/DM额度查询、延时交易、账户余额与账务查询、余额支付、聚合支付、托管支付、checkout-js、下单、查单、关单、退款、对账、支付通知、本地沙箱和支付上线 |
+| `huifu-merchant-onboarding` | `1.2.0` | 企业/个人商户进件、用户开户、子账户开通/修改、电子合同、统一页面进件、下级权限及微信/支付宝 AT 管理 |
 
 用户只需加载当前任务相关的 Skill。商户进件与分账/结算用户开户由进件 Skill 处理，余额与账务查询由支付 Skill 处理；同时涉及开户配置与支付或账务时组合加载两个 Skill。
 
@@ -22,7 +22,21 @@
 两个 Skill 之间没有运行时文件依赖，也不会通过相对路径读取对方的 references。
 
 
-## 当前版本更新（2026-10-25）
+## 商户进件文档维护（2026-11-09，版本仍为1.2.0）
+
+重新比对商户Skill的36份官方文档：1份更新、35份未变。业务开通修改的 `jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.sign_start_date` 正式长度由7修正为8，与8位日期示例一致；String、C及条件未变。接口与字段数量仍为36 API / 3,578路径；来源快照更新为11-09，SDK证据日期保持10-08，支付Skill文件不变。详见[本次维护记录](maintainer-contracts/onboarding-refresh-2026-11-09.md)。
+
+## 当前版本更新（2026-11-04）
+
+支付1.6.0新增主动取现、资金代发、出金交易查询、批量出金交易查询、结算记录查询、DM取现额度查询六接口，均按资金交易目的归支付Skill。进件1.2.0同步捷行付银行配置层级与微信企业码配置，开通/修改/详情按方向保留独立合同。支付覆盖37 API / 3,532字段路径，进件36 API / 3,578字段路径。
+
+重新获取93份官方文档：87份已有中8份变化、79份不变，6份新增。三份商户正式表累计新增106、删除62、同路径改7，净增44；六个出金API新增198路径。五份支付指南的配置链接、示例转义和标点变化全部记录。通知的通道、账务、回账和退汇分别处理；列表类型、日期长度及示例冲突保留待确认项。
+
+SDK沿用10-08核验版本；追加接口14个专属类的三语言入口和字段已有独立源码核验，另以六条真实Python链离线检查最终签名body/来源头、原单定位、TS批量条件省略、空值清理和声明键碰撞。185例规则与完整回答正反例纳入统一门禁。Windows脚本同步接入，但不称为已执行Windows、真实模型或资金网关联调。
+
+[执行方案](maintainer-contracts/payout-expansion-2026-11-04-plan.md)已经三位agent复审后实施；[逐页检查](maintainer-contracts/official-document-review-2026-11-04.json)保留全部差异，[字段审计](maintainer-contracts/api-review-2026-11-04.json)绑定六份Git基线与历史不可变证据。[实现复核](maintainer-contracts/payout-expansion-2026-11-04.md)记录接口分工、冲突和门禁范围。候选包按本地门禁结果交付，不代表已发布。
+
+## 上一轮版本更新（2026-10-25）
 
 支付1.5.0新增交易确认、V3确认查询、确认退款、确认退款查询，以及账户余额、账务流水和汇总结果查询；进件1.1.0新增商户子账户开通与修改。九接口按支付7、进件2独立路由。支付当前31 API / 3,334字段路径，进件36 API / 3,534字段路径。
 
@@ -56,7 +70,7 @@
 huifu-pay-integration/
 ├── SKILL.md
 ├── agents/openai.yaml
-└── references/                  # 支付专属，119 份
+└── references/                  # 支付专属，125 份
 
 huifu-merchant-onboarding/
 ├── SKILL.md
@@ -225,7 +239,7 @@ tests/regression/
 - 用户业务入驻修改：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_ywrzxg.md>
 - 用户列表查询：<https://paas.huifu.com/partners/api/doc/yhgl/api_yhgl_yhlbcx.md>
 
-新增十二接口的官方地址及 SHA 见 `onboarding-extension-official-service-source-index.md`。原始字节和 SHA 锁保存在 `maintainer-contracts/official-sources/`、三个子域来源锁及当前 `merchant-onboarding-1.1.0-source-lock-2026-10-25.json`，不会进入 Skill ZIP。用户列出的交易分账明细查询仍归支付 Skill；本轮在线SHA保持一致，仍只由支付skill负责；支付本轮升级1.5.0并新增延时交易四接口与账户查询三接口。
+新增十二接口的官方地址及 SHA 见 `onboarding-extension-official-service-source-index.md`。原始字节和 SHA 锁保存在 `maintainer-contracts/official-sources/`、三个子域来源锁及当前 `merchant-onboarding-1.2.0-source-lock-2026-11-09.json`，不会进入 Skill ZIP。用户列出的交易分账明细查询仍归支付 Skill；本轮在线SHA保持一致，仍只由支付skill负责；支付1.5.0已新增延时交易四接口与账户查询三接口，本轮1.6.0再新增六个出金接口。
 
 ## 安装与更新
 
@@ -252,11 +266,11 @@ Codex 会从仓库级 `.agents/skills/` 和用户级 `~/.agents/skills/` 发现 
 
 升级和回滚按 Skill 独立进行：
 
-- 支付 `1.5.0` 可以单独回滚到旧支付包。
-- 进件 `1.1.0` 可以整体回滚到 `1.0.4`、`1.0.3` 或更早包。
+- 支付 `1.6.0` 可以单独回滚到旧支付包。
+- 进件 `1.2.0` 可以整体回滚到 `1.0.4`、`1.0.3` 或更早包。
 - 旧 `1.3.2` 作为归档回退，不继续作为长期路由 Skill。
 
-`skill_source` 优先使用显式合同值。未配置时，支付使用 `hfps/1.5.0`；商户、用户和扩展接口均使用 `hfms/1.1.0`；两 Skill 同时参与时使用 `hfps/1.5.0;hfms/1.1.0`。
+`skill_source` 优先使用显式合同值。未配置时，支付使用 `hfps/1.6.0`；商户、用户和扩展接口均使用 `hfms/1.2.0`；两 Skill 同时参与时使用 `hfps/1.6.0;hfms/1.2.0`。
 
 ## 本地沙箱
 
@@ -306,7 +320,7 @@ RELEASE_OUTPUT_DIR=/path/to/new/release-directory \
 scripts/validate-release.sh
 ```
 
-发布门禁会分别以 `payment-only`、`onboarding-only`、`user-onboarding-only` 和 `all-skills` 加载模式执行72、46、15、39个真实模型案例；证据根目录必须在命令启动前不存在，脚本会原子创建它并拒绝复用旧输出。`RELEASE_OUTPUT_DIR` 也必须在命令启动前不存在，脚本最终在该目录保留并校验两个正式 ZIP、SHA 和 provenance。四个 suite 的 `run-manifest.json` 与 `summary.json` 会先被独立重放校验，再把摘要写入正式发布包的 provenance。
+发布门禁会分别以 `payment-only`、`onboarding-only`、`user-onboarding-only` 和 `all-skills` 加载模式执行78、49、15、43个真实模型案例；证据根目录必须在命令启动前不存在，脚本会原子创建它并拒绝复用旧输出。`RELEASE_OUTPUT_DIR` 也必须在命令启动前不存在，脚本最终在该目录保留并校验两个正式 ZIP、SHA 和 provenance。四个 suite 的 `run-manifest.json` 与 `summary.json` 会先被独立重放校验，再把摘要写入正式发布包的 provenance。
 
 ## 回归测试
 
@@ -332,7 +346,7 @@ python3 scripts/run_real_model_regression.py \
   --suite cross-route --load-mode all-skills --timeout 300
 ```
 
-当前共172个真实模型案例：支付72、商户进件46、用户开户15、跨域路由39。用户开户套件仍单独运行，但加载的是同一个 `huifu-merchant-onboarding` Skill；商户进件套件已纳入新增十二接口的逐接口场景。本轮另补九个延时/账户接口案例及四个账户跨域路由案例；它们接入运行器与来源指纹，本轮仅执行规则及正反例自检。
+当前共185个真实模型案例：支付78、商户进件49、用户开户15、跨域路由43。用户开户套件仍单独运行，但加载的是同一个 `huifu-merchant-onboarding` Skill；商户进件套件已纳入新增十二接口的逐接口场景。10-25已补九个延时/账户接口案例，本轮再补六个出金和三个捷行付案例、四个出金跨域路由案例；它们接入运行器与来源指纹，本轮仅执行规则及正反例自检。
 
 ## 打包
 

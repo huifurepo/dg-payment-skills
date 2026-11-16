@@ -67,7 +67,8 @@
 
 | 命中接口与字段路径 | 资料 / 用途 | 原始地址 |
 | --- | --- | --- |
-| 十三个接口中的十二个 Markdown JSON 接口顶层 `sign`（不含图片上传） | 接口加签验签说明 | `https://paas.huifu.com/open/doc/guide/#/api_v2jqyq` |
+| 其余九个Markdown接口顶层 `sign`（不含图片上传；三份捷行付变更页见下一行） | 接口加签验签说明 | `https://paas.huifu.com/open/doc/guide/#/api_v2jqyq` |
+| 业务开通、开通修改、详情查询的请求/响应 `sign`（六处链接） | 接口加签验签说明（2026-11-03更新） | `https://paas.huifu.com/docs/start/#/api_v2jqyq` |
 | 企业 `data.mcc`；个人 `data.mcc` | 汇付 MCC 编码 | `https://paas.huifu.com/open/doc/api/#/csfl/api_csfl_hfmccbm` |
 | 企业 `data.license_pic/legal_cert_back_pic/legal_cert_front_pic/reg_acct_pic/settle_card_front_pic/settle_cert_back_pic/settle_cert_front_pic/auth_entrust_pic/store_header_pic/store_indoor_pic/store_cashier_desk_pic/extended_material_list[].file_id`；个人的图片材料与 `extended_material_list[].file_id`；业务开通 `data.online_media_info_list[].media_front_page/media_service_page/media_order_page/media_pay_page/other_material`、`data.extended_material_list[].file_id`；详情响应图片材料；图片上传前置 | 商户图片上传接口 | `https://paas.huifu.com/open/doc/api/#/shgl/shjj/api_shjj_shtpsc` |
 | 企业 `data.license_type`；详情响应 `data.license_type` | 机构证照类型 | `https://paas.huifu.com/open/doc/api/#/api_ggcsbm?id=%E6%9C%BA%E6%9E%84%E8%AF%81%E7%85%A7%E7%B1%BB%E5%9E%8B` |

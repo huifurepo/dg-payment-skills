@@ -87,6 +87,7 @@ try {
 
 if ($env:HUIFU_SDK_ROOT) {
     Invoke-Validation @("scripts\validate_additional_interfaces.py", "--sdk-root", $env:HUIFU_SDK_ROOT)
+    Invoke-Validation @("scripts\validate_payout_sdk_transport.py", "--sdk-root", $env:HUIFU_SDK_ROOT)
     Invoke-Validation @("scripts\validate_balance_payment_contract.py", "--sdk-root", $env:HUIFU_SDK_ROOT)
     Invoke-Validation @("scripts\validate_payment_sdk_evidence.py", "--sdk-root", $env:HUIFU_SDK_ROOT)
     Invoke-Validation @("scripts\validate_merchant_onboarding_sdk_evidence.py", "--sdk-root", $env:HUIFU_SDK_ROOT)

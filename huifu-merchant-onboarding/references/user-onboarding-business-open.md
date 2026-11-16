@@ -7,7 +7,7 @@
 ## 接口与字段面
 
 - Endpoint：`POST https://api.huifu.com/v2/user/busi/open`。
-- 快照更新时间：官网 `2026-10-20`，本地冻结 `2026-10-25`；原文 SHA-256：`bef9e9e82e9e0dfc5f4d0445242abfb711fe32195386dd99618366f3110b1191`。
+- 快照更新时间：官网 `2026-10-20`，本地冻结 `2026-11-09`；原文 SHA-256：`bef9e9e82e9e0dfc5f4d0445242abfb711fe32195386dd99618366f3110b1191`。
 - 共149个字段路径：请求102、同步响应11、异步36；与用户业务入驻修改同为当前九接口中声明异步通知的两个接口。
 - 全部请求、同步响应和异步通知的完整父子路径、类型、长度、Y/N/C 与官方说明读取 `user-onboarding-complete-field-catalog.md`；String(JSON)、条件字段和官网冲突同时读取 `user-onboarding-field-contracts.md`。
 - `data.huifu_id:String(18) Y` 是开户返回的用户号；`data.upper_huifu_id:String(18) Y` 是真实渠道商/商户号。两个角色不得交换。

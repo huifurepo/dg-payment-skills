@@ -35,11 +35,11 @@
 | --- | ---: | ---: | ---: |
 | 企业商户进件 | 177 | 10 | 5 |
 | 个人商户进件 | 129 | 7 | 5 |
-| 商户业务开通 | 460 | 54 | 7 |
+| 商户业务开通 | 472 | 57 | 7 |
 | 图片上传 | 8 | 0 | 3 |
-| 商户详细信息查询 | 583 | 65 | 5 |
+| 商户详细信息查询 | 602 | 69 | 6 |
 | 申请单状态查询 | 93 | 8 | 4 |
-| 商户业务开通修改 | 452 | 53 | 8 |
+| 商户业务开通修改 | 465 | 56 | 8 |
 | 商户基本信息修改 | 199 | 12 | 5 |
 | 商户费率信息查询 | 35 | 4 | 4 |
 | 商户状态变更 | 14 | 0 | 3 |
@@ -428,7 +428,7 @@
 ## 商户业务开通
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywkt_kyc.md>
-- SHA-256：`9c3f2262c295489abc5ce32bf123128cfd7376c4d5e35399c5083e39ff206c5c`
+- SHA-256：`42d692619bd409ae11b95b43a0badec25794316e8fa0fc6de3c02c5fa2ae4ddd`
 - 说明：下表保留官方字段类型、长度、必填标记和字段说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -437,14 +437,14 @@
 | --- | --- | --- | ---: | :---: | --- |
 | `request.sys_id` | 系统号 | `String` | `32` | `Y` | 渠道商或商户的huifu_id；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为总部商户时，此字段填写商户huifu_id |
 | `request.product_id` | 产品号 | `String` | `32` | `Y` | 汇付分配的产品号，示例值：YYZY |
-| `request.sign` | 加签结果 | `String` | `512` | `Y` | [接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
+| `request.sign` | 加签结果 | `String` | `512` | `Y` | [接口加签验签说明](https://paas.huifu.com/docs/start/#/api_v2jqyq) |
 | `request.data` | 数据 | `Json` | `—` | `Y` | 业务请求参数，具体值参考API文档 |
 
 ### 响应信封
 
 | 完整字段路径 | 中文名 | 类型 | 长度 | 必填 | 官方说明 |
 | --- | --- | --- | ---: | :---: | --- |
-| `response.sign` | 签名 | `String` | `512` | `Y` | [接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
+| `response.sign` | 签名 | `String` | `512` | `Y` | [接口加签验签说明](https://paas.huifu.com/docs/start/#/api_v2jqyq) |
 | `response.data` | 响应内容体 | `Json` | `—` | `N` | 业务返回参数 |
 
 ### 请求 data
@@ -807,31 +807,43 @@
 | `request.data.online_recharge_flag` | 商户开通网银充值开关 | `String` | `1` | `N` | Y:是 N:否 ；示例值：Y |
 | `request.data.refund_mend_open_flag` | 是否开通垫资退款 | `String` | `1` | `N` | Y:是 N:否 ；示例值：Y |
 | `request.data.jxf_conf_info` | 捷行付配置 | `String` | `—` | `N` | jsonObject字符串 |
-| `request.data.jxf_conf_info.acct_type` | 账户类型 | `String` | `1` | `Y` | 2:银行账户 |
-| `request.data.jxf_conf_info.bank_name` | 银行名称 | `String` | `8` | `Y` | PINGAN-平安银行 BOC-中国银行；示例值：PINGAN |
-| `request.data.jxf_conf_info.jxf_bank_info` | 银行账户信息 | `String` | `—` | `C` | 当账户类型为银行账户时必填 |
-| `request.data.jxf_conf_info.jxf_bank_info.user_name` | 操作人姓名 | `String` | `16` | `C` | 银行名称非平安银行时，需填写；示例：张三 |
-| `request.data.jxf_conf_info.jxf_bank_info.operator_phone` | 操作人手机号 | `String` | `11` | `C` | 银行名称非平安银行时，需填写；示例：[官网示例已脱敏] |
-| `request.data.jxf_conf_info.jxf_bank_info.acct_type` | 付款方账户类型 | `String` | `2` | `N` | 00：单位结算卡，不填默认单位结算卡 |
-| `request.data.jxf_conf_info.jxf_bank_info.acct_no` | 付款方账号 | `String` | `50` | `Y` | 示例：[官网示例已脱敏] |
-| `request.data.jxf_conf_info.jxf_bank_info.acct_name` | 付款方账户名称 | `String` | `25` | `Y` | 示例：上海汇付支付有限公司 |
-| `request.data.jxf_conf_info.jxf_bank_info.bank_branch_code` | 开户行联行号 | `String` | `50` | `Y` | 示例：991290000099 |
-| `request.data.jxf_conf_info.jxf_bank_info.bank_branch_name` | 开户行行名 | `String` | `25` | `Y` | 示例：中国银行 |
-| `request.data.jxf_conf_info.jxf_bank_info.sign_start_date` | 签约申请生效日期 | `String` | `8` | `C` | 银行名称非平安银行时，需填写；示例：20251219 |
-| `request.data.jxf_conf_info.jxf_bank_info.sign_end_date` | 签约申请失效日期 | `String` | `8` | `C` | 银行名称非平安银行时，需填写；示例：20261219 |
-| `request.data.jxf_conf_info.jxf_bank_info.remark` | 附言 | `String` | `128` | `N` | 示例：附言 |
-| `request.data.jxf_conf_info.jxf_bank_info.org_code` | 机构编码 | `String` | `64` | `Y` | 示例：12133 |
-| `request.data.jxf_conf_info.jxf_fee_info` | 手续费信息 | `Object` | `—` | `N` | jsonObject字符串 |
-| `request.data.jxf_conf_info.jxf_fee_info.open_card_fix_fee` | 虚拟卡开卡手续费（元） | `String` | `11` | `N` | 单位元，支持小数点后两位；示例值：1.00 虚拟卡开卡手续费收取方式为发放数量*固定手续费 |
-| `request.data.jxf_conf_info.jxf_fee_info.quota_issue_fee_rate` | 虚拟卡额度发放手续费（%） | `String` | `6` | `N` | 百分比，支持两位小数；示例值：1.00 虚拟卡发放额度手续费收取方式为交易金额*费率手续费 |
-| `request.data.jxf_conf_info.jxf_fee_info.out_fee_flag` | 捷行付手续费内外扣标记 | `String` | `1` | `N` | 捷行付手续费只支持外扣；1:外扣；示例值：1 |
-| `request.data.jxf_conf_info.jxf_fee_info.out_fee_huifuid` | 捷行付手续费外扣汇付ID | `String` | `18` | `C` | 捷行付设置手续费时必填；示例值：[官网示例已脱敏] |
-| `request.data.jxf_conf_info.jxf_fee_info.out_fee_acct_type` | 捷行付手续费扣款账户类型 | `String` | `2` | `C` | 捷行付手续费外扣时必填；01-基本户(默认)，05-充值户；示例值：01 |
-| `request.data.jxf_conf_info.pay_confirm_flag` | 付款确认标识 | `String` | `1` | `N` | Y:是 N:否 ；示例值：Y |
-| `request.data.jxf_conf_info.pay_confirm_req_url` | 付款确认请求URL | `String` | `256` | `C` | 付款确认标识为Y时，该字段必填 |
+| `request.data.jxf_conf_info.default_channel` | 默认通道 | `String` | `—` | `C` | 1-银行通道 2-微信企业码 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info` | 银行模式配置 | `Object` | `—` | `C` | 银行模式专属配置 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.acct_type` | 账户类型 | `String` | `1` | `Y` | 2:银行账户 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.bank_name` | 银行名称 | `String` | `8` | `Y` | PINGAN-平安银行；示例值：PINGAN |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info` | 银行账户信息 | `Object` | `—` | `C` | 当账户类型为银行账户时必填 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.user_name` | 操作人姓名 | `String` | `16` | `C` | 银行名称非平安银行时，需填写；示例：张三 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.operator_phone` | 操作人手机号 | `String` | `11` | `C` | 银行名称非平安银行时，需填写；示例：[官网示例已脱敏] |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.acct_type` | 付款方账户类型 | `String` | `2` | `N` | 00：单位结算卡，不填默认单位结算卡 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.acct_no` | 付款方账号 | `String` | `50` | `Y` | 示例：[官网示例已脱敏] |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.acct_name` | 付款方账户名称 | `String` | `25` | `Y` | 示例：上海汇付支付有限公司 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.bank_branch_code` | 开户行联行号 | `String` | `50` | `Y` | 示例：991290000099 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.bank_branch_name` | 开户行行名 | `String` | `25` | `Y` | 示例：中国银行 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.sign_start_date` | 签约申请生效日期 | `String` | `8` | `C` | 银行名称非平安银行时，需填写；示例：20251219 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.sign_end_date` | 签约申请失效日期 | `String` | `8` | `C` | 银行名称非平安银行时，需填写；示例：20261219 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.remark` | 附言 | `String` | `128` | `N` | 示例：附言 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.org_code` | 机构编码 | `String` | `64` | `Y` | 示例：12133 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info` | 手续费信息 | `Object` | `—` | `N` | jsonObject字符串 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info.open_card_fix_fee` | 虚拟卡开卡手续费（元） | `String` | `11` | `N` | 单位元，支持小数点后两位；示例值：1.00 虚拟卡开卡手续费收取方式为发放数量*固定手续费 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info.quota_issue_fee_rate` | 虚拟卡额度发放手续费（%） | `String` | `6` | `N` | 百分比，支持两位小数；示例值：1.00 虚拟卡发放额度手续费收取方式为交易金额*费率手续费 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info.out_fee_flag` | 捷行付手续费内外扣标记 | `String` | `1` | `N` | 捷行付手续费只支持外扣；1:外扣；示例值：1 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info.out_fee_huifuid` | 捷行付手续费外扣汇付ID | `String` | `18` | `C` | 捷行付设置手续费时必填；示例值：[官网示例已脱敏] |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info.out_fee_acct_type` | 捷行付手续费扣款账户类型 | `String` | `2` | `C` | 捷行付手续费外扣时必填；01-基本户(默认)，05-充值户；示例值：01 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.pay_confirm_flag` | 付款确认标识 | `String` | `1` | `N` | Y:是 N:否 ；示例值：Y |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.pay_confirm_req_url` | 付款确认请求URL | `String` | `256` | `C` | 付款确认标识为Y时，该字段必填 |
+| `request.data.jxf_conf_info.wx_ent_pay_info` | 微信企业码模式配置 | `Object` | `—` | `C` | 微信企业码模式配置 |
+| `request.data.jxf_conf_info.wx_ent_pay_info.payment_background` | 付款背景介绍 | `String` | `512` | `Y` | 付款背景介绍 |
+| `request.data.jxf_conf_info.wx_ent_pay_info.apply_scenes` | 适用场景 | `String` | `25` | `Y` | 适用场景，多选逗号分隔 1-企业差旅 2-因公宴请 3-会员积分 4-小额采购 5-商报直付 |
+| `request.data.jxf_conf_info.wx_ent_pay_info.sub_mch_id` | 微信商户号 | `String` | `32` | `N` | 微信商户号（出资子商户号） |
+| `request.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info` | 微信企业码手续费信息 | `Object` | `—` | `Y` | 微信企业码手续费信息 |
+| `request.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info.open_card_fix_fee` | 虚拟卡开卡手续费（元） | `String` | `11` | `N` | 单位元，支持小数点后两位；示例值：1.00 虚拟卡开卡手续费收取方式为发放数量*固定手续费 |
+| `request.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info.quota_issue_fee_rate` | 虚拟卡额度发放手续费（%） | `String` | `6` | `N` | 百分比，支持两位小数；示例值：1.00 虚拟卡发放额度手续费收取方式为交易金额*费率手续费 |
+| `request.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info.out_fee_flag` | 捷行付手续费内外扣标记 | `String` | `1` | `N` | 捷行付手续费只支持外扣；1:外扣；示例值：1 |
+| `request.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info.out_fee_huifuid` | 捷行付手续费外扣汇付ID | `String` | `18` | `C` | 捷行付设置手续费时必填；示例值：[官网示例已脱敏] |
+| `request.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info.out_fee_acct_type` | 捷行付手续费扣款账户类型 | `String` | `2` | `C` | 捷行付手续费外扣时必填；01-基本户(默认)，05-充值户；示例值：01 |
 | `request.data.merge_pay_config_info` | 合单支付配置信息 | `String` | `—` | `N` | jsonObject字符串 |
 | `request.data.merge_pay_config_info.merge_pay_flag` | 合单支付开关 | `String` | `1` | `Y` | 合单支付开关 Y：开通 N：关闭 |
-| `request.data.merge_pay_config_info.merge_pay_config` | 合单支付配置 | `Object` | `—` | `C` | 合单支付配置 （当合单支付开关为开时必填） |
+| `request.data.merge_pay_config_info.merge_pay_config` | 请求流水号 | `Object` | `—` | `C` | 合单支付配置 （当合单支付开关为开时必填） |
 | `request.data.merge_pay_config_info.merge_pay_config.merge_pay_mode` | 合单支付模式 | `String` | `1` | `Y` | 1:电商 2:加油站 3:停车场 4:物业 5:休闲娱乐（不同模式需上传不同材料信息，调用图片上传接口；若选择电商，需上传文件F673《电商平台商家入驻协议》、F674《商家入驻截图》，以及填写线上业务类型编码及运营媒介字段信息；若选择加油站，需上传文件F676《加油站与任一合单参与方合作协议》、F675《任一合单参与方经营照片》；若选择停车场，需上传文件F677《停车场与任一合单参与方合作协议》、F675《任一合单参与方经营照片》；若选择物业需上传文件F678《物业与任一合单参与方合作协议》、F675《任一合单参与方经营照片》；若选择休闲娱乐需上传文件F679《休娱与任一合单参与方合作协议》、F675《任一合单参与方经营照片》） |
 | `request.data.bill_payment_flag` | 是否开通账单支付 | `String` | `1` | `N` | Y:是 N:否 ；示例值：Y |
 | `request.data.withhold_pay_scene` | 代扣场景 | `String` | `1` | `C` | withhold_flag开通需填写 1:权益投流(订阅),2:非权益投流(订阅),3:保险缴纳,4:道路通行费(ETC),5:公共事业(水电煤)缴费,6:物业缴费 |
@@ -954,7 +966,7 @@
 ## 商户详细信息查询
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shxxxxcx_kyc.md>
-- SHA-256：`f8fb851eddda3219a5e4feb037b81cc5eed4697903644489e7cccde4fa72bdde`
+- SHA-256：`3fb7115e030937181c3040f8d57c16ce8b44aa75fb78849d950af8816fc0a918`
 - 说明：下表保留官方字段类型、长度、必填标记和字段说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -963,14 +975,14 @@
 | --- | --- | --- | ---: | :---: | --- |
 | `request.sys_id` | 系统号 | `String` | `32` | `Y` | 渠道商或商户的huifu_id；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为总部商户时，此字段填写商户huifu_id |
 | `request.product_id` | 产品号 | `String` | `32` | `Y` | 汇付分配的产品号，示例值：YYZY |
-| `request.sign` | 加签结果 | `String` | `512` | `Y` | [接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
+| `request.sign` | 加签结果 | `String` | `512` | `Y` | [接口加签验签说明](https://paas.huifu.com/docs/start/#/api_v2jqyq) |
 | `request.data` | 数据 | `Json` | `—` | `Y` | 业务请求参数，具体值参考API文档 |
 
 ### 响应信封
 
 | 完整字段路径 | 中文名 | 类型 | 长度 | 必填 | 官方说明 |
 | --- | --- | --- | ---: | :---: | --- |
-| `response.sign` | 签名 | `String` | `512` | `Y` | [接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
+| `response.sign` | 签名 | `String` | `512` | `Y` | [接口加签验签说明](https://paas.huifu.com/docs/start/#/api_v2jqyq) |
 | `response.data` | 响应内容体 | `Json` | `—` | `N` | 业务返回参数 |
 
 ### 请求 data
@@ -1516,23 +1528,42 @@
 | `response.data.lla_withhold_config.lla_withhold_flag` | 本地生活配置开关 | `String` | `1` | `Y` | Y:开通,N:关闭；示例值：N |
 | `response.data.refund_mend_open_flag` | 是否开通垫资退款 | `String` | `1` | `N` | Y:是 N:否 ；示例值：Y |
 | `response.data.jxf_conf_info` | 捷行付配置 | `String` | `—` | `N` | jsonObject字符串 |
-| `response.data.jxf_conf_info.acct_type` | 账户类型 | `String` | `1` | `N` | 2:银行账户 |
-| `response.data.jxf_conf_info.bank_name` | 银行名称 | `String` | `8` | `N` | PINGAN-平安银行 BOC-中国银行；示例值：PINGAN |
-| `response.data.jxf_conf_info.jxf_bank_info` | 银行账户信息 | `String` | `—` | `N` | jsonObject字符串 |
-| `response.data.jxf_conf_info.jxf_bank_info.user_name` | 操作人姓名 | `String` | `16` | `N` | 示例：张三 |
-| `response.data.jxf_conf_info.jxf_bank_info.operator_phone` | 操作人手机号 | `String` | `11` | `N` | 示例：[官网示例已脱敏] |
-| `response.data.jxf_conf_info.jxf_bank_info.acct_type` | 付款方账户类型 | `String` | `2` | `N` | 00：单位结算卡，不填默认单位结算卡 |
-| `response.data.jxf_conf_info.jxf_bank_info.acct_no` | 付款方账号 | `String` | `50` | `N` | 示例：[官网示例已脱敏] |
-| `response.data.jxf_conf_info.jxf_bank_info.acct_name` | 付款方账户名称 | `String` | `25` | `N` | 示例：上海汇付支付有限公司 |
-| `response.data.jxf_conf_info.jxf_bank_info.bank_branch_code` | 开户行联行号 | `String` | `50` | `N` | 示例：991290000099 |
-| `response.data.jxf_conf_info.jxf_bank_info.bank_branch_name` | 开户行行名 | `String` | `25` | `N` | 示例：中国银行 |
-| `response.data.jxf_conf_info.jxf_bank_info.sign_start_date` | 签约申请生效日期 | `String` | `8` | `N` | 示例：20251219 |
-| `response.data.jxf_conf_info.jxf_bank_info.sign_end_date` | 签约申请失效日期 | `String` | `8` | `N` | 示例：20261219 |
-| `response.data.jxf_conf_info.jxf_bank_info.remark` | 附言 | `String` | `128` | `N` | 示例：附言 |
-| `response.data.jxf_conf_info.jxf_bank_info.org_code` | 机构编码 | `String` | `64` | `N` | 示例：12133 |
-| `response.data.jxf_conf_info.bank_resp_desc` | 通道返回描述 | `String` | `128` | `N` | 示例：成功 |
-| `response.data.jxf_conf_info.bank_status` | 业务开通状态 | `String` | `1` | `N` | S：成功 P:处理中 F:失败 |
-| `response.data.jxf_conf_info.open_flag` | 开通状态 | `String` | `1` | `N` | N-关闭 Y-开通 |
+| `response.data.jxf_conf_info.bank_pay_open_flag` | 银行模式开关 | `String` | `—` | `N` | Y-开通 N-关闭 |
+| `response.data.jxf_conf_info.jxf_bank_pay_info` | 银行模式配置 | `Object` | `—` | `N` | 银行模式配置 |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.acct_type` | 账户类型 | `String` | `—` | `N` | 2:银行账户 |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.bank_name` | 银行名称 | `String` | `—` | `N` | PINGAN-平安银行 BOC-中国银行；示例值：PINGAN |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info` | 银行账户信息 | `Object` | `—` | `N` | — |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.user_name` | 操作人姓名 | `String` | `—` | `N` | 示例：张三 |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.operator_phone` | 操作人手机号 | `String` | `—` | `N` | 示例：[官网示例已脱敏] |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.acct_type` | 付款方账户类型 | `String` | `—` | `N` | 00：单位结算卡，不填默认单位结算卡 |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.acct_no` | 付款方账号 | `String` | `—` | `N` | 示例：[官网示例已脱敏] |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.acct_name` | 付款方账户名称 | `String` | `—` | `N` | 示例：上海汇付支付有限公司 |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.bank_branch_code` | 开户行联行号 | `String` | `—` | `N` | 示例：991290000099 |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.bank_branch_name` | 开户行行名 | `String` | `—` | `N` | 示例：中国银行 |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.sign_start_date` | 签约申请生效日期 | `String` | `—` | `N` | 示例：20261219 |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.sign_end_date` | 签约申请失效日期 | `String` | `—` | `N` | 示例：20261219 |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.remark` | 附言 | `String` | `—` | `N` | 示例：附言 |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.org_code` | 机构编码 | `String` | `—` | `N` | 示例：12133 |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info` | 手续费信息 | `Object` | `—` | `N` | — |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info.open_card_fix_fee` | 虚拟卡开卡手续费（元） | `String` | `—` | `N` | 单位元，支持小数点后两位；示例值：1.00 虚拟卡开卡手续费收取方式为发放数量*固定手续费 |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info.quota_issue_fee_rate` | 虚拟卡额度发放手续费（%） | `String` | `—` | `N` | 百分比，支持两位小数；示例值：1.00 虚拟卡发放额度手续费收取方式为交易金额*费率手续费 |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info.out_fee_flag` | 捷行付手续费内外扣标记 | `String` | `—` | `N` | 1外扣 |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info.out_fee_huifuid` | 捷行付手续费外扣汇付ID | `String` | `—` | `N` | 捷行付手续费外扣汇付ID |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info.out_fee_acct_type` | 捷行付手续费扣款账户类型 | `String` | `—` | `N` | 捷行付手续费扣款账户类型 |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.bank_resp_desc` | 业务开通状态 | `String` | `—` | `N` | S：成功 P:处理中 F:失败 |
+| `response.data.jxf_conf_info.jxf_bank_pay_info.bank_status` | 业务开通状态 | `String` | `—` | `N` | S：成功 P:处理中 F:失败 |
+| `response.data.jxf_conf_info.wx_ent_pay_open_flag` | 微信企业码模式开关 | `String` | `—` | `N` | Y-开通 N-关闭 |
+| `response.data.jxf_conf_info.wx_ent_pay_info` | 微信企业码模式配置 | `Object` | `—` | `N` | — |
+| `response.data.jxf_conf_info.wx_ent_pay_info.payment_background` | 付款背景介绍 | `String` | `—` | `N` | — |
+| `response.data.jxf_conf_info.wx_ent_pay_info.apply_scenes` | 适用场景 | `String` | `—` | `N` | 1-企业差旅 2-因公宴请 3-会员积分 4-小额采购 5-商报直付 |
+| `response.data.jxf_conf_info.wx_ent_pay_info.sub_mch_id` | 微信商户号 | `String` | `—` | `N` | 微信商户号 |
+| `response.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info` | 微信企业码手续费信息 | `Object` | `—` | `N` | 微信企业码手续费信息 |
+| `response.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info.open_card_fix_fee` | 虚拟卡开卡手续费（元） | `String` | `—` | `N` | 虚拟卡开卡手续费（元） |
+| `response.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info.quota_issue_fee_rate` | 虚拟卡额度发放手续费（%） | `String` | `—` | `N` | 虚拟卡额度发放手续费（%） |
+| `response.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info.out_fee_flag` | 捷行付手续费内外扣标记 | `String` | `—` | `N` | 1外扣 |
+| `response.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info.out_fee_huifuid` | 捷行付手续费外扣汇付ID | `String` | `—` | `N` | 捷行付手续费外扣汇付ID |
+| `response.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info.out_fee_acct_type` | 捷行付手续费扣款账户类型 | `String` | `—` | `N` | 捷行付手续费扣款账户类型 |
+| `response.data.jxf_conf_info.default_channel` | 默认通道 | `String` | `—` | `N` | 1-银行通道 2-微信企业码 |
 | `response.data.merge_pay_config_info` | 合单支付配置信息 | `String` | `—` | `N` | jsonObject字符串 |
 | `response.data.merge_pay_config_info.merge_pay_flag` | 合单支付开关 | `String` | `1` | `Y` | 合单支付开关 Y：开通 N：关闭 |
 | `response.data.merge_pay_config_info.merge_pay_config` | 合单支付配置 | `Object` | `—` | `C` | 合单支付配置 （当合单支付开关为开时必填） |
@@ -1682,7 +1713,7 @@
 ## 商户业务开通修改
 
 - 原始地址：<https://paas.huifu.com/partners/api/doc/shgl/shywkt/api_shjj_shywktxg_kyc.md>
-- SHA-256：`9e70c875accaecb0d25114f38ab80ee6cbfcc6c0a207c0e0176614ff0d7925bb`
+- SHA-256：`3f9e0e6b302807646b4a7a02830ef50ae4c6b90f5fab1ddea9eaeb72d12c5cf4`
 - 说明：下表保留官方字段类型、长度、必填标记和字段说明；数组父路径以 `[]` 标记。
 
 ### 请求信封
@@ -1691,14 +1722,14 @@
 | --- | --- | --- | ---: | :---: | --- |
 | `request.sys_id` | 系统号 | `String` | `32` | `Y` | 渠道商或商户的huifu_id；（1）当主体为渠道商时，此字段填写渠道商huifu_id；（2）当主体为总部商户时，此字段填写商户huifu_id |
 | `request.product_id` | 产品号 | `String` | `32` | `Y` | 汇付分配的产品号，示例值：YYZY |
-| `request.sign` | 加签结果 | `String` | `512` | `Y` | [接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
+| `request.sign` | 加签结果 | `String` | `512` | `Y` | [接口加签验签说明](https://paas.huifu.com/docs/start/#/api_v2jqyq) |
 | `request.data` | 数据 | `Json` | `—` | `Y` | 业务请求参数，具体值参考API文档 |
 
 ### 响应信封
 
 | 完整字段路径 | 中文名 | 类型 | 长度 | 必填 | 官方说明 |
 | --- | --- | --- | ---: | :---: | --- |
-| `response.sign` | 签名 | `String` | `512` | `Y` | [接口加签验签说明](https://paas.huifu.com/open/doc/guide/#/api_v2jqyq) |
+| `response.sign` | 签名 | `String` | `512` | `Y` | [接口加签验签说明](https://paas.huifu.com/docs/start/#/api_v2jqyq) |
 | `response.data` | 响应内容体 | `Json` | `—` | `N` | 业务返回参数 |
 
 ### 请求 data
@@ -2055,29 +2086,42 @@
 | `request.data.online_recharge_flag` | 商户开通网银充值开关 | `String` | `1` | `N` | Y:是 N:否；示例值：Y |
 | `request.data.refund_mend_open_flag` | 是否开通垫资退款 | `String` | `1` | `N` | Y:是 N:否 ；示例值：Y |
 | `request.data.jxf_conf_info` | 捷行付配置 | `String` | `—` | `N` | jsonObject字符串 |
-| `request.data.jxf_conf_info.acct_type` | 账户类型 | `String` | `1` | `Y` | 2:银行账户 |
-| `request.data.jxf_conf_info.open_flag` | 开通状态 | `String` | `1` | `Y` | Y:开 N:关 |
-| `request.data.jxf_conf_info.bank_name` | 银行名称 | `String` | `8` | `Y` | PINGAN-平安银行 BOC-中国银行；示例值：PINGAN |
-| `request.data.jxf_conf_info.jxf_bank_info` | 银行账户信息 | `String` | `—` | `C` | 当账户类型为银行账户时必填 |
-| `request.data.jxf_conf_info.jxf_bank_info.user_name` | 操作人姓名 | `String` | `16` | `C` | 银行名称非平安银行时，需填写；示例：张三 |
-| `request.data.jxf_conf_info.jxf_bank_info.operator_phone` | 操作人手机号 | `String` | `11` | `C` | 银行名称非平安银行时，需填写；示例：[官网示例已脱敏] |
-| `request.data.jxf_conf_info.jxf_bank_info.acct_type` | 付款方账户类型 | `String` | `2` | `N` | 00：单位结算卡，不填默认单位结算卡 |
-| `request.data.jxf_conf_info.jxf_bank_info.acct_no` | 付款方账号 | `String` | `50` | `Y` | 示例：[官网示例已脱敏] |
-| `request.data.jxf_conf_info.jxf_bank_info.acct_name` | 付款方账户名称 | `String` | `25` | `Y` | 示例：上海汇付支付有限公司 |
-| `request.data.jxf_conf_info.jxf_bank_info.bank_branch_code` | 开户行联行号 | `String` | `50` | `Y` | 示例：991290000099 |
-| `request.data.jxf_conf_info.jxf_bank_info.bank_branch_name` | 开户行行名 | `String` | `25` | `Y` | 示例：中国银行 |
-| `request.data.jxf_conf_info.jxf_bank_info.sign_start_date` | 签约申请生效日期 | `String` | `8` | `C` | 银行名称非平安银行时，需填写；示例：20251219 |
-| `request.data.jxf_conf_info.jxf_bank_info.sign_end_date` | 签约申请失效日期 | `String` | `8` | `C` | 银行名称非平安银行时，需填写；示例：20261219 |
-| `request.data.jxf_conf_info.jxf_bank_info.remark` | 附言 | `String` | `128` | `N` | 示例：附言 |
-| `request.data.jxf_conf_info.jxf_bank_info.org_code` | 机构编码 | `String` | `64` | `Y` | 示例：12133 |
-| `request.data.jxf_conf_info.jxf_fee_info` | 手续费信息 | `Object` | `—` | `N` | jsonObject字符串 |
-| `request.data.jxf_conf_info.jxf_fee_info.open_card_fix_fee` | 虚拟卡开卡手续费（元） | `String` | `11` | `N` | 单位元，支持小数点后两位；示例值：1.00 虚拟卡开卡手续费收取方式为发放数量*固定手续费 |
-| `request.data.jxf_conf_info.jxf_fee_info.quota_issue_fee_rate` | 虚拟卡额度发放手续费（%） | `String` | `6` | `N` | 百分比，支持两位小数；示例值：1.00 虚拟卡发放额度手续费收取方式为交易金额*费率手续费 |
-| `request.data.jxf_conf_info.jxf_fee_info.out_fee_flag` | 捷行付手续费内外扣标记 | `String` | `1` | `N` | 捷行付手续费只支持外扣；1:外扣；示例值：1 |
-| `request.data.jxf_conf_info.jxf_fee_info.out_fee_huifuid` | 捷行付手续费外扣汇付ID | `String` | `18` | `C` | 捷行付设置手续费时必填；示例值：[官网示例已脱敏] |
-| `request.data.jxf_conf_info.jxf_fee_info.out_fee_acct_type` | 捷行付手续费扣款账户类型 | `String` | `2` | `C` | 捷行付手续费外扣时必填；01-基本户(默认)，05-充值户；示例值：01 |
-| `request.data.jxf_conf_info.pay_confirm_flag` | 付款确认标识 | `String` | `1` | `N` | Y:是 N:否 ；示例值：Y |
-| `request.data.jxf_conf_info.pay_confirm_req_url` | 付款确认请求URL | `String` | `256` | `C` | 付款确认标识为Y时，该字段必填 |
+| `request.data.jxf_conf_info.bank_pay_open_flag` | 银行模式开关 | `String` | `—` | `N` | Y-开通 N-关闭 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info` | 银行模式配置 | `Object` | `—` | `C` | 当开通bank_pay_open_flag时必填 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.acct_type` | 账户类型 | `String` | `1` | `Y` | 2:银行账户 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.bank_name` | 银行名称 | `String` | `8` | `Y` | PINGAN-平安银行 BOC-中国银行；示例值：PINGAN |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info` | 银行账户信息 | `Object` | `—` | `C` | 当账户类型为银行账户时必填 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.user_name` | 操作人姓名 | `String` | `16` | `C` | 银行名称非平安银行时，需填写；示例：张三 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.operator_phone` | 操作人手机号 | `String` | `11` | `C` | 银行名称非平安银行时，需填写；示例：[官网示例已脱敏] |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.acct_type` | 付款方账户类型 | `String` | `2` | `N` | 00：单位结算卡，不填默认单位结算卡 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.acct_no` | 付款方账号 | `String` | `50` | `Y` | 示例：[官网示例已脱敏] |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.acct_name` | 付款方账户名称 | `String` | `25` | `Y` | 示例：上海汇付支付有限公司 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.bank_branch_code` | 开户行联行号 | `String` | `50` | `Y` | 示例：991290000099 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.bank_branch_name` | 开户行行名 | `String` | `25` | `Y` | 示例：中国银行 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.sign_start_date` | 签约申请生效日期 | `String` | `8` | `C` | 银行名称非平安银行时，需填写；示例：20251219 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.sign_end_date` | 签约申请失效日期 | `String` | `8` | `C` | 银行名称非平安银行时，需填写；示例：20261219 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.remark` | 附言 | `String` | `128` | `N` | 示例：附言 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.org_code` | 机构编码 | `String` | `64` | `Y` | 示例：12133 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info` | 手续费信息 | `Object` | `—` | `N` | jsonObject字符串 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info.open_card_fix_fee` | 虚拟卡开卡手续费（元） | `String` | `11` | `N` | 单位元，支持小数点后两位；示例值：1.00 虚拟卡开卡手续费收取方式为发放数量*固定手续费 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info.quota_issue_fee_rate` | 虚拟卡额度发放手续费（%） | `String` | `6` | `N` | 百分比，支持两位小数；示例值：1.00 虚拟卡发放额度手续费收取方式为交易金额*费率手续费 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info.out_fee_flag` | 捷行付手续费内外扣标记 | `String` | `1` | `N` | 捷行付手续费只支持外扣；1:外扣；示例值：1 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info.out_fee_huifuid` | 捷行付手续费外扣汇付ID | `String` | `18` | `C` | 捷行付设置手续费时必填；示例值：[官网示例已脱敏] |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.jxf_fee_info.out_fee_acct_type` | 捷行付手续费扣款账户类型 | `String` | `2` | `C` | 捷行付手续费外扣时必填；01-基本户(默认)，05-充值户；示例值：01 |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.pay_confirm_flag` | 付款确认标识 | `String` | `1` | `N` | Y:是 N:否 ；示例值：Y |
+| `request.data.jxf_conf_info.jxf_bank_pay_info.pay_confirm_req_url` | 付款确认请求URL | `String` | `256` | `C` | 付款确认标识为Y时，该字段必填 |
+| `request.data.jxf_conf_info.wx_ent_pay_open_flag` | 微信企业码模式开关 | `String` | `—` | `N` | Y-是 N-否 |
+| `request.data.jxf_conf_info.wx_ent_pay_info` | 微信企业码模式配置 | `Object` | `—` | `N` | 当开通wx_ent_pay_open_flag时必填 |
+| `request.data.jxf_conf_info.wx_ent_pay_info.payment_background` | 付款背景介绍 | `String` | `512` | `N` | 付款背景介绍 |
+| `request.data.jxf_conf_info.wx_ent_pay_info.apply_scenes` | 适用场景，多选逗号分隔 | `String` | `—` | `N` | 1-企业差旅 2-因公宴请 3-会员积分 4-小额采购 5-商报直付 |
+| `request.data.jxf_conf_info.wx_ent_pay_info.sub_mch_id` | 微信商户号 | `String` | `—` | `N` | 微信商户号（出资子商户号） |
+| `request.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info` | 微信企业码手续费信息 | `Object` | `—` | `N` | 微信企业码手续费信息 |
+| `request.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info.open_card_fix_fee` | 虚拟卡开卡手续费（元） | `String` | `11` | `N` | 单位元，支持小数点后两位；示例值：1.00 虚拟卡开卡手续费收取方式为发放数量*固定手续费 |
+| `request.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info.quota_issue_fee_rate` | 虚拟卡额度发放手续费（%） | `String` | `6` | `N` | 百分比，支持两位小数；示例值：1.00 虚拟卡发放额度手续费收取方式为交易金额*费率手续费 |
+| `request.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info.out_fee_flag` | 捷行付手续费内外扣标记 | `String` | `1` | `N` | 捷行付手续费只支持外扣；1:外扣；示例值：1 |
+| `request.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info.out_fee_huifuid` | 捷行付手续费外扣汇付ID | `String` | `18` | `C` | 捷行付设置手续费时必填；示例值：[官网示例已脱敏] |
+| `request.data.jxf_conf_info.wx_ent_pay_info.jxf_fee_info.out_fee_acct_type` | 捷行付手续费扣款账户类型 | `String` | `2` | `N` | 捷行付手续费外扣时必填；01-基本户(默认)，05-充值户；示例值：01 |
+| `request.data.jxf_conf_info.default_channel` | 默认通道 | `String` | `—` | `C` | 当开通bank_pay_open_flag或wx_ent_pay_open_flag时必填。1-银行通道 2-微信企业码 |
 | `request.data.merge_pay_config_info` | 合单支付配置信息 | `String` | `—` | `N` | jsonObject字符串 |
 | `request.data.merge_pay_config_info.merge_pay_flag` | 合单支付开关 | `String` | `1` | `Y` | 合单支付开关 Y：开通 N：关闭 |
 | `request.data.merge_pay_config_info.merge_pay_config` | 合单支付配置 | `String` | `—` | `C` | 合单支付配置 （当合单支付开关为开时必填） |

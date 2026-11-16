@@ -7,7 +7,7 @@
 ## 接口与字段面
 
 - Endpoint：`POST https://api.huifu.com/v2/user/basicdata/query`。
-- 快照更新时间：官网 `2026-10-20`，本地冻结 `2026-10-25`；原文 SHA-256：`3347a35c7706eca63557a8e2c24b7048defd5095540ca5ed32832705c89391ca`。
+- 快照更新时间：官网 `2026-10-20`，本地冻结 `2026-11-09`；原文 SHA-256：`3347a35c7706eca63557a8e2c24b7048defd5095540ca5ed32832705c89391ca`。
 - 共166个字段路径：请求7、同步响应159、异步0；4个根表、16个扩展表，最大深度5。
 - 全部请求、响应父子路径、数组层级、类型、长度、Y/N/C 与官方说明读取 `user-onboarding-complete-field-catalog.md`；wire 裁决和官网冲突同时读取 `user-onboarding-field-contracts.md`。
 - 请求 `data.huifu_id` 必须是直属用户 ID，不是商户 ID。

@@ -1,6 +1,6 @@
 # 交易确认退款
 
-官方来源：<https://paas.huifu.com/partners/api/doc/smzf/api_jyqrtk.md>。来源快照：2026-10-25；SHA-256：`e740c12c8884f7f5ec242f0e1a053530f37ce2cd24418924b3f9f9a819c7f9ad`。
+官方来源：<https://paas.huifu.com/partners/api/doc/smzf/api_jyqrtk.md>。来源快照：2026-11-04；SHA-256：`e740c12c8884f7f5ec242f0e1a053530f37ce2cd24418924b3f9f9a819c7f9ad`。
 
 接口：`/v2/trade/payment/delaytrans/confirmrefund`。方法：POST。
 

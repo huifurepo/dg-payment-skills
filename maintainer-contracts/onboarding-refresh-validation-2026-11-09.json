@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "completed_at": "2026-11-10T03:37:13.758897+00:00",
+  "skill": "huifu-merchant-onboarding",
+  "version_before": "1.2.0",
+  "version_after": "1.2.0",
+  "source_date": "2026-11-09",
+  "sdk_evidence_date": "2026-10-08",
+  "official_sources": 36,
+  "changed_documents": 1,
+  "unchanged_documents": 35,
+  "changed_field": {
+    "interface": "商户业务开通修改",
+    "path": "request.data.jxf_conf_info.jxf_bank_pay_info.jxf_bank_info.sign_start_date",
+    "type": "String",
+    "length_before": "7",
+    "length_after": "8",
+    "required": "C",
+    "condition": "银行名称非平安银行时需填写"
+  },
+  "interfaces": 36,
+  "field_paths": 3578,
+  "api_review": {
+    "path": "maintainer-contracts/api-review-onboarding-2026-11-09.json",
+    "sha256": "807ba1aa5f4de1445d735a0d642bb0c8c96df3d2810496bd63790efe12d491b3"
+  },
+  "source_audit": {
+    "path": "maintainer-contracts/official-document-review-onboarding-2026-11-09.json",
+    "sha256": "02e2aee3f975e6cbf6f0a0b8f1dfc6cb4a47623261b01d60172738c80fd938ac"
+  },
+  "validation": {
+    "result": "passed",
+    "scope": [
+      "all 36 source bodies and SHA comparisons",
+      "three base catalogs and two account interfaces; exact paths/types/lengths/conditions",
+      "full historical review chain with immutable 11-04 baselines",
+      "185 regression rule/boundary cases",
+      "metadata and domain isolation",
+      "merchant/user SDK source proofs and Python serializers",
+      "independent onboarding release checks",
+      "sensitive examples detector",
+      "git diff --check"
+    ],
+    "independent_upgrade_control": "Passed in-memory test: advancing the subscription Skill version does not invalidate this merchant-only audit; no filesystem mutation.",
+    "not_executed": [
+      "live model regression",
+      "live gateway or money operations",
+      "Windows gate"
+    ],
+    "logs": [
+      {
+        "path": ".tmp/onboarding-refresh-20261109/metadata-validation.log",
+        "sha256": "bcfbf524efbfec190c2cd7857176d07dbd3980eca76c139b83727e050e424567"
+      },
+      {
+        "path": ".tmp/onboarding-refresh-20261109/boundary-validation.log",
+        "sha256": "a9c74d985b8870371737c8d76b6ab46f766ed2b9c37455545d607180c769e6f8"
+      },
+      {
+        "path": ".tmp/onboarding-refresh-20261109/api-review-validation.log",
+        "sha256": "8ea62496dedb9dd9c1b21543e0f167624b85f20de822a45f223ad8e14e409b14"
+      },
+      {
+        "path": ".tmp/onboarding-refresh-20261109/regression.log",
+        "sha256": "2ca42017f66812a91efbe2e4785dc37c91e6750ae9b76067d7a08bf0ec4735ef"
+      },
+      {
+        "path": ".tmp/onboarding-refresh-20261109/merchant-sdk.log",
+        "sha256": "242c31c95506dff17ea0f63e27cf36e9819df31aeceb0bbbb962cc880ed340bb"
+      },
+      {
+        "path": ".tmp/onboarding-refresh-20261109/user-sdk.log",
+        "sha256": "1d3ec289ac655fed4463fb8736613fc77f40d675f7657429088af2f0f44579ec"
+      },
+      {
+        "path": ".tmp/onboarding-refresh-20261109/additional-sdk.log",
+        "sha256": "d2b250a061b2ddac716b88cff1b520df2ff7ffae954818f978db6f415ecdc57a"
+      },
+      {
+        "path": ".tmp/onboarding-refresh-20261109/release-isolation.log",
+        "sha256": "8fb7c0050b03ef803e8819d7a13002f014f5486222a6e1735d7415084264e70e"
+      },
+      {
+        "path": ".tmp/onboarding-refresh-20261109/sensitive.log",
+        "sha256": "06ff41210a0a0caf23c290e6857eac5b8a7b18255d65127880140a76d68037a7"
+      },
+      {
+        "path": ".tmp/onboarding-refresh-20261109/merchant-generation.log",
+        "sha256": "f31b88e69ece7557c6572440513caa898121d112aaaa8c6de9911b1d63150a83"
+      },
+      {
+        "path": ".tmp/onboarding-refresh-20261109/user-generation.log",
+        "sha256": "b4997eec3323a2355fb6539978a59400cc5832883d1675d8bf735402a0201f52"
+      },
+      {
+        "path": ".tmp/onboarding-refresh-20261109/extension-generation.log",
+        "sha256": "8502fb46a59eacc366f16180a88ddefc0d9a1cb80e23422eb24f681ac63ab7e9"
+      }
+    ]
+  },
+  "preserved_other_areas": {
+    "file_count": 237,
+    "all_byte_identical": true,
+    "areas": [
+      "huifu-pay-integration",
+      "huifu-subscription-pay",
+      "demos",
+      "subscription official sources"
+    ]
+  },
+  "reviewed_code": {
+    "scripts/generate_additional_interface_catalog.py": "21da3d0b4d411e2f07fa7f7cc70ebc538e2f0e2df3afda0dbba15521555a94d8",
+    "scripts/validate_api_review.py": "150fa35aa37bcf6cb01b28101073e2a5e239051668b29ee119e2f7f9ff8d1583",
+    "scripts/validate_merchant_onboarding_field_contract.py": "1f03fc62298229d29108b2555dd9c07f7b8f8b77bbbf52cbf20b356e3b1d787e",
+    "scripts/run_real_model_regression.py": "45e89794d25e0d80fdd52b82bce6061dd10aff3165e9bd2748d10c2cfeddd6c8",
+    "tests/regression/payout-expansion.json": "b5928a910871094c03a24a33ea724fd98431c783da8c005fb8c3ad072183e335"
+  },
+  "packaging": "workspace candidate; version unchanged; official publication requires the normal clean-commit release workflow",
+  "artifacts": [
+    {
+      "path": "dist/huifu-merchant-onboarding-1.2.0.zip",
+      "sha256": "0237bfcb625d2a046f23e1c3c68e2c102a3f5767ff5b99bfe409002dac61cca6"
+    },
+    {
+      "path": "dist/huifu-merchant-onboarding-1.2.0.zip.sha256",
+      "sha256": "064a96ba3015b3774130e73e74d4246f3ff93fbc2285df5ea87142c6006a171f"
+    },
+    {
+      "path": "dist/huifu-merchant-onboarding-1.2.0.provenance.json",
+      "sha256": "de3b5788de12ba827272024456b96df07b25f5987d8ea098b5f4e9febf05b098"
+    }
+  ],
+  "package_validation": {
+    "result": "passed",
+    "published_skill_files": 74,
+    "source_dirty": true,
+    "command": "python3 scripts/validate_skill_package.py --skill huifu-merchant-onboarding --archive dist/huifu-merchant-onboarding-1.2.0.zip --allow-dirty-provenance"
+  },
+  "package_field_check": "Confirmed the packed merchant modification field has length 8 and current source date 2026-11-09."
+}

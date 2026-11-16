@@ -1,6 +1,6 @@
 # 修改子账户配置
 
-官方来源：<https://paas.huifu.com/partners/api/doc/zhgl/api_zhgl_xgzh_kyc.md>。来源快照：2026-10-25；SHA-256：`6c041ff7af41573a97463077062725c6a0ca2815b0d64b64fea6c32e21bd3c05`。
+官方来源：<https://paas.huifu.com/partners/api/doc/zhgl/api_zhgl_xgzh_kyc.md>。来源快照：2026-11-09；SHA-256：`6c041ff7af41573a97463077062725c6a0ca2815b0d64b64fea6c32e21bd3c05`。
 
 接口：`/v2/merchant/settle/modify`。方法：POST。
 

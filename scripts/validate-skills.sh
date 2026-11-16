@@ -56,6 +56,7 @@ python3 -B scripts/validate_skill_packages.py --allow-dirty
 
 if [[ -n "${HUIFU_SDK_ROOT:-}" ]]; then
   python3 -B scripts/validate_additional_interfaces.py --sdk-root "$HUIFU_SDK_ROOT"
+  python3 -B scripts/validate_payout_sdk_transport.py --sdk-root "$HUIFU_SDK_ROOT"
   python3 -B scripts/validate_balance_payment_contract.py --sdk-root "$HUIFU_SDK_ROOT"
   python3 -B scripts/validate_payment_sdk_evidence.py --sdk-root "$HUIFU_SDK_ROOT"
   python3 -B scripts/validate_merchant_onboarding_sdk_evidence.py --sdk-root "$HUIFU_SDK_ROOT"

@@ -1,0 +1,283 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-11-04",
+  "completed_at": "2026-11-05T03:25:15.360124+00:00",
+  "branch": "feature_skills-14",
+  "status": "no-unresolved-review-findings",
+  "basis": "Frozen official source snapshot 2026-11-04; no new source download or live business call",
+  "previous_implementation_review": {
+    "path": "maintainer-contracts/payout-expansion-implementation-review-2026-11-04.json",
+    "sha256": "ba146f8aa03fb0ccbb224ba46e8e8581b3b7ff1a8735d65b646d2d82b868869f"
+  },
+  "api_review": {
+    "path": "maintainer-contracts/api-review-2026-11-04.json",
+    "sha256": "0e3598fb3e14972336b3c6c0daa688d73c6dc0a4350873c1a2b58a084a10d06f"
+  },
+  "formal_field_check": {
+    "new_payout_paths": 198,
+    "missing": 0,
+    "extra": 0,
+    "attribute_mismatches": 0,
+    "interfaces": [
+      {
+        "key": "payout-withdraw",
+        "title": "主动取现",
+        "field_paths": 45,
+        "top_request_fields": [
+          "req_date",
+          "req_seq_id",
+          "cash_amt",
+          "huifu_id",
+          "acct_id",
+          "into_acct_date_type",
+          "token_no",
+          "enchashment_channel",
+          "fee_type",
+          "remark",
+          "notify_url"
+        ],
+        "directions_including_nested_fields": {
+          "request.data": 11,
+          "response.data": 8,
+          "async": 20
+        },
+        "missing": [],
+        "extra": [],
+        "attribute_mismatches": []
+      },
+      {
+        "key": "payout-transfer",
+        "title": "资金代发",
+        "field_paths": 46,
+        "top_request_fields": [
+          "req_seq_id",
+          "req_date",
+          "huifu_id",
+          "acct_id",
+          "cash_amt",
+          "purpose_desc",
+          "province",
+          "area",
+          "bank_code",
+          "correspondent_code",
+          "subbranch_bank_name",
+          "bank_account_name",
+          "card_acct_type",
+          "bank_card_no_crypt",
+          "certificate_no_crypt",
+          "certificate_type",
+          "into_acct_date_type",
+          "notify_url"
+        ],
+        "directions_including_nested_fields": {
+          "request.data": 18,
+          "response.data": 6,
+          "async": 16
+        },
+        "missing": [],
+        "extra": [],
+        "attribute_mismatches": []
+      },
+      {
+        "key": "payout-query",
+        "title": "出金交易查询",
+        "field_paths": 20,
+        "top_request_fields": [
+          "huifu_id",
+          "org_req_date",
+          "org_hf_seq_id",
+          "org_req_seq_id"
+        ],
+        "directions_including_nested_fields": {
+          "request.data": 4,
+          "response.data": 10,
+          "async": 0
+        },
+        "missing": [],
+        "extra": [],
+        "attribute_mismatches": []
+      },
+      {
+        "key": "payout-batch-query",
+        "title": "批量出金交易查询",
+        "field_paths": 38,
+        "top_request_fields": [
+          "huifu_id",
+          "begin_date",
+          "end_date",
+          "batch_trans_type",
+          "page_num",
+          "page_size",
+          "payment_hf_seq_id"
+        ],
+        "directions_including_nested_fields": {
+          "request.data": 7,
+          "response.data": 25,
+          "async": 0
+        },
+        "missing": [],
+        "extra": [],
+        "attribute_mismatches": []
+      },
+      {
+        "key": "payout-settlement-query",
+        "title": "结算记录查询",
+        "field_paths": 36,
+        "top_request_fields": [
+          "req_seq_id",
+          "req_date",
+          "huifu_id",
+          "begin_date",
+          "end_date",
+          "page_size",
+          "settle_cycle",
+          "page_num",
+          "trans_stat"
+        ],
+        "directions_including_nested_fields": {
+          "request.data": 9,
+          "response.data": 21,
+          "async": 0
+        },
+        "missing": [],
+        "extra": [],
+        "attribute_mismatches": []
+      },
+      {
+        "key": "payout-dm-quota-query",
+        "title": "DM取现额度查询",
+        "field_paths": 13,
+        "top_request_fields": [
+          "huifu_id",
+          "acct_id"
+        ],
+        "directions_including_nested_fields": {
+          "request.data": 2,
+          "response.data": 5,
+          "async": 0
+        },
+        "missing": [],
+        "extra": [],
+        "attribute_mismatches": []
+      }
+    ],
+    "merchant_independent_review_paths": 1539,
+    "merchant_new_paths_independently_checked": 106,
+    "merchant_missing_or_mismatched": 0,
+    "checked_attributes": [
+      "interface",
+      "direction",
+      "parent path",
+      "name",
+      "type",
+      "length",
+      "Y/N/C",
+      "description, enums and conditions"
+    ]
+  },
+  "description_lengths": {
+    "huifu-pay-integration": 256,
+    "huifu-merchant-onboarding": 270
+  },
+  "new_interface_allocation": {
+    "huifu-pay-integration": [
+      "主动取现",
+      "资金代发",
+      "出金交易查询",
+      "批量出金交易查询",
+      "结算记录查询",
+      "DM取现额度查询"
+    ],
+    "huifu-merchant-onboarding": [],
+    "existing_merchant_interfaces_updated": [
+      "商户业务开通",
+      "商户业务开通修改",
+      "商户详细信息查询"
+    ],
+    "rule": "Funds operations/results belong to payment; onboarding, permissions, subaccount/card/settlement configuration belong to onboarding."
+  },
+  "reviewers": [
+    {
+      "agent": "/root/second_fields_review",
+      "status": "all findings fixed and rechecked",
+      "findings": [
+        "separate bank and WeChat enterprise jxf_fee_info paths",
+        "first business open lacks the two mode switches; old sample not a formal DTO",
+        "sign links refer to signing/verification, not agreement signing"
+      ]
+    },
+    {
+      "agent": "/root/second_description_review",
+      "status": "all findings fixed and rechecked",
+      "findings": [
+        "known async sign position must be retained",
+        "settlement statement.day event pointer and query-only payload scope",
+        "payout navigation and coverage matrix placement"
+      ]
+    }
+  ],
+  "additional_clarifications": [
+    "permissions and caller/target roles",
+    "dm_amt is optional; missing does not mean zero",
+    "single-field lookup routes to the exact catalog section",
+    "query-only footers do not imply notification DTOs"
+  ],
+  "validation": {
+    "targeted_checks": "passed",
+    "regression_rule_and_boundary_cases": 185,
+    "checks": [
+      "validate_additional_interfaces.py",
+      "validate_merchant_onboarding_source_contract.py",
+      "validate_merchant_onboarding_field_contract.py",
+      "validate_api_review.py",
+      "validate_reference_source_metadata.py",
+      "validate_regression_reference_ownership.py",
+      "run_real_model_regression.py --validate-rules-only",
+      "scan_sensitive_examples.py",
+      "validate_skills.py with local SDK evidence",
+      "validate_skill_split.py",
+      "git diff --check"
+    ],
+    "logs": [
+      {
+        "path": ".tmp/skills14-second-review/rules.log",
+        "sha256": "2ca42017f66812a91efbe2e4785dc37c91e6750ae9b76067d7a08bf0ec4735ef"
+      },
+      {
+        "path": ".tmp/skills14-second-review/metadata.log",
+        "sha256": "46e13f0f6c7895552abcea32ae299e2c8f3b9e69b7bd13e1c26aaf63f3f951f0"
+      },
+      {
+        "path": ".tmp/skills14-second-review/boundaries.log",
+        "sha256": "a9c74d985b8870371737c8d76b6ab46f766ed2b9c37455545d607180c769e6f8"
+      }
+    ],
+    "full_gate": "The preceding full gate remains recorded in previous_implementation_review. This round reran checks relevant to documentation and regression changes.",
+    "not_executed": [
+      "new live model run",
+      "live gateway/financial operation",
+      "Windows runtime"
+    ],
+    "new_boundary_checks": "Published signature position, statement.day query scope, optional dm_amt and merchant mode fields; unsafe conclusions rejected and correct negations accepted."
+  },
+  "reviewed_files": {
+    "huifu-pay-integration/references/payout-withdraw.md": "fae0b83b37477469cbb5e5ad03e9979757ee44b2f9260dd7fffba6e7650d634a",
+    "huifu-pay-integration/references/payout-transfer.md": "c37ca8389c69d23ccd3f05f8abdc27e5f0b2e2dbe129108b53874e8ba8e009dc",
+    "huifu-pay-integration/references/payout-query.md": "cf4f8d18e932fa95e80605ee902469d19f30bd7f17d494beaf6420a276b85ccf",
+    "huifu-pay-integration/references/payout-batch-query.md": "a5617c93b18aa36dfc3f107bf420b51bb03e296512b3210bee879dd89dd0b617",
+    "huifu-pay-integration/references/payout-settlement-query.md": "6c2702e71a0e38febd02a02628b91e33fae7628d5e2c366943d7610e8cc6b076",
+    "huifu-pay-integration/references/payout-dm-quota-query.md": "5c2372727658c5b4771bac14162fdf6f549847c7cfbe469f7cedbbfbd423de09",
+    "huifu-pay-integration/references/shared-overview.md": "9c5714c5f7221b21552d5310898d494ccf0c789e02f258d081bce255fa14ddcf",
+    "huifu-pay-integration/references/official-service-source-index.md": "8dce8e93a510fa46759c0c6aad64d93f68c20283d1e73214259472bb20912a33",
+    "huifu-merchant-onboarding/references/merchant-onboarding-business-open.md": "4fe8a93a8b77dd8a535ef116e7dfadb84da57fb9c6bbf25c35aa96c1d00d5075",
+    "huifu-merchant-onboarding/references/merchant-onboarding-business-open-modify.md": "13054c6d6c2791d86de034ea4a4d42f883f02e2522b580bc1cb611b8ff79d776",
+    "huifu-merchant-onboarding/references/merchant-onboarding-field-contracts.md": "1d17411a1216ce4b030f76cac339ca48faa7e988f93e0fb41cb6e8428ed46cdb",
+    "scripts/run_real_model_regression.py": "9a238f98ded025ae7b65b2eb45f22e8aee90407a1c7124c83c7405916a3f0393",
+    "tests/regression/payout-expansion.json": "5af646377139d43044f2aca4fbc7ab6bd4d9ee3d1a4400b88b937de3ac93df0a"
+  },
+  "versions": {
+    "huifu-pay-integration": "1.6.0",
+    "huifu-merchant-onboarding": "1.2.0"
+  },
+  "artifacts": "dist candidate ZIP/SHA/provenance refreshed and independently validated after this record"
+}

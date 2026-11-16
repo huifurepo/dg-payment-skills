@@ -1,7 +1,7 @@
 # 支付官方接口页来源锁
 
-- 来源快照日期：`2026-10-25`
-- 页面数：`51`（基础44页；本轮新增7页）
+- 来源快照日期：`2026-11-04`
+- 页面数：`57`（基础44页；累计追加13页，本轮新增6页）
 - 用途：复核字段、类型、长度、必填条件和接口边界；普通接入回答仍使用对应原子 reference。
 
 | 页面 | 官方 URL | 本地原子 reference | SHA-256 |
@@ -9,11 +9,11 @@
 | 极速版介绍 | https://paas.huifu.com/partners/lightning/jsb/jsbjs.md | `aggregation-base.md` | `a9d31276659a2396ef70f920dd11dc4ba4fb1e954b6b6bdbb2b9b41c4508f4f9` |
 | 极速版快速开始 | https://paas.huifu.com/partners/lightning/jsb/ksks.md | `aggregation-quickstart.md` | `07686d8481661ecfa318a769c219c223d54ede76077afedae78d38731c84b06b` |
 | 微信公众号支付-产品介绍 | https://paas.huifu.com/partners/lightning/jsb/zf/wx_gzh_intro.md | `aggregation-order-method-wechat.md` | `c969e19cbef6e0744888c4a8e3a74b9d3aaf06e6196b1be0c8bae259c0db963e` |
-| 微信公众号支付-开发指引 | https://paas.huifu.com/partners/lightning/jsb/zf/wx_gzh_kfzy.md | `aggregation-order-method-wechat.md` | `4dc7474e5f9568e612e088a89100b63631b54a70491fe3d5ed3ab601fad1bb86` |
-| 微信小程序支付-产品介绍 | https://paas.huifu.com/partners/lightning/jsb/zf/wx_xcx_intro.md | `aggregation-order-method-wechat.md` | `e8b62b2cc432f2a525255d9ca6fd7526d88e1d77e03a9cdcd8e059b1f9cafe3b` |
-| 微信小程序支付-开发指引 | https://paas.huifu.com/partners/lightning/jsb/zf/wx_xcx_kfzy.md | `aggregation-order-method-wechat.md` | `4fa3b7b19f6e4a8ea09a2629314756e5365a598307bac552ebc8714747a90a97` |
+| 微信公众号支付-开发指引 | https://paas.huifu.com/partners/lightning/jsb/zf/wx_gzh_kfzy.md | `aggregation-order-method-wechat.md` | `0554ad85bdf58ee94e92d0c0dcadfbf8f6f5b9e6f21d87dcbd72a02823e49a24` |
+| 微信小程序支付-产品介绍 | https://paas.huifu.com/partners/lightning/jsb/zf/wx_xcx_intro.md | `aggregation-order-method-wechat.md` | `eb584c1282fd52127f0f650a8d11ae55a2c5272352f51a41c29bc9302a69235b` |
+| 微信小程序支付-开发指引 | https://paas.huifu.com/partners/lightning/jsb/zf/wx_xcx_kfzy.md | `aggregation-order-method-wechat.md` | `d1417b7f08b3a735a73d32bc7f42d6bdab6012ab4e9f67e8bb5d4981c409e28e` |
 | 微信付款码支付-产品介绍 | https://paas.huifu.com/partners/lightning/jsb/zf/wx_fkm_intro.md | `aggregation-order-method-wechat.md` | `33d05ad1e374c346cdb1fb623ae347fbf76c9987ac446890ac187337a24f2d4d` |
-| 微信付款码支付-开发指引 | https://paas.huifu.com/partners/lightning/jsb/zf/wx_fkm_kfzy.md | `aggregation-order-method-wechat.md` | `6cb6ed61dde8e55234d4ef40a4020944ab4be084b08a31a962cd3efc15343e3d` |
+| 微信付款码支付-开发指引 | https://paas.huifu.com/partners/lightning/jsb/zf/wx_fkm_kfzy.md | `aggregation-order-method-wechat.md` | `cfa0a3157b1892894321043a18a5e884e4590224beaff7879ff8eaa4cf9b2ce8` |
 | 支付宝JS支付-产品介绍 | https://paas.huifu.com/partners/lightning/jsb/zf/zfb_js_intro.md | `aggregation-order-method-alipay.md` | `33ea95ef68e0ff267c3d3713b260c30d77f50ebe518ed2f1f1ba544695844d9f` |
 | 支付宝JS支付-开发指引 | https://paas.huifu.com/partners/lightning/jsb/zf/zfb_js_kfzy.md | `aggregation-order-method-alipay.md` | `0bb46e538061309c60ab55656d78f00814daf1f3fb913dde7b77af553af7023d` |
 | 支付宝正扫支付-产品介绍 | https://paas.huifu.com/partners/lightning/jsb/zf/zfb_zs_intro.md | `aggregation-order-method-alipay.md` | `9cf564f226821fae08e8b38452cf23a91aa97d01047060d2bad9dca0393e657f` |
@@ -21,7 +21,7 @@
 | 支付宝付款码支付-产品介绍 | https://paas.huifu.com/partners/lightning/jsb/zf/zfb_fkm_intro.md | `aggregation-order-method-alipay.md` | `e59ebefa25e7154c281405a366bb9aab6ff7ebfdb13dd1c2b3d776c5553dbcbd` |
 | 支付宝付款码支付-开发指引 | https://paas.huifu.com/partners/lightning/jsb/zf/zfb_fkm_kfzy.md | `aggregation-order-method-alipay.md` | `96c83e68b38beb7913b4d503e3e536e00e0952e31221055068b663a3ae8f0011` |
 | 银联JS支付-产品介绍 | https://paas.huifu.com/partners/lightning/jsb/zf/yl_js_intro.md | `aggregation-order-method-unionpay.md` | `2433c10e107cc337515720c8b21ec23e30794fd23582b7b1c5adf0ccc2b9a968` |
-| 银联JS支付-开发指引 | https://paas.huifu.com/partners/lightning/jsb/zf/yl_js_kfzy.md | `aggregation-order-method-unionpay.md` | `5a3d29611f3b341295a9166a83ccedfad92c89e8b0e306d3562a1b733fc8ddd1` |
+| 银联JS支付-开发指引 | https://paas.huifu.com/partners/lightning/jsb/zf/yl_js_kfzy.md | `aggregation-order-method-unionpay.md` | `6c05cce4bb8ac133ee10a09df3d9838bf3d46d431200cf20fcc2d14dcb9cd5b5` |
 | 银联正扫支付-产品介绍 | https://paas.huifu.com/partners/lightning/jsb/zf/yl_zs_intro.md | `aggregation-order-method-unionpay.md` | `00758a10b66a00b907c003a61c6dfb0be8b660a91b5478f6e7563f8bec3f022d` |
 | 银联正扫支付-开发指引 | https://paas.huifu.com/partners/lightning/jsb/zf/yl_zs_kfzy.md | `aggregation-order-method-unionpay.md` | `f81ea381a8b12343a3f83ff784b4153ea93d4d39c202a3b4b9960beb9cbeef06` |
 | 银联付款码支付-产品介绍 | https://paas.huifu.com/partners/lightning/jsb/zf/yl_fkm_intro.md | `aggregation-order-method-unionpay.md` | `e29f34244e3e862a6f97817eac7826a4eca880563c1dd592ccd3f4dd84f379be` |
@@ -57,6 +57,12 @@
 | 账户余额信息查询 | https://paas.huifu.com/partners/api/doc/jyjs/api_jyjs_yuexxcx.md | `account-balance-query.md` | `4684913f1338f44423f025d72a73b7012e477dd48ec82b3a9216340571f6d39e` |
 | 账务流水查询 | https://paas.huifu.com/partners/api/doc/yuer/api_acctlscx.md | `account-ledger-query.md` | `46295c022efcc9464472d396cfe4c2befd74ba634a8c6f02e183fe1f99dd30c2` |
 | 账务流水汇总结果查询 | https://paas.huifu.com/partners/api/doc/zhy/api_acct_log_summary.md | `account-ledger-summary-query.md` | `d70d62be96cb1c20ba9be2355a57c8890468e8eab20e8adf2a81933e684e771a` |
+| 主动取现 | https://paas.huifu.com/partners/api/doc/jyjs/qx/api_qx.md | `payout-withdraw.md` | `6f64a96c90c0ece5dce058ad7ffb5248a27fb1a6f81b7222d6344a936e2da06b` |
+| 资金代发 | https://paas.huifu.com/partners/api/doc/daifa/api_daifa_yhkdf.md | `payout-transfer.md` | `bc249fe82be276210bad46b40deee9842d8e91989c4a7924e653047acd52bae0` |
+| 出金交易查询 | https://paas.huifu.com/partners/api/doc/jyjs/qx/api_cjjycx.md | `payout-query.md` | `af155863727a56fe26d8603c02257c444bc434429368fe3711cd2ed4df1c6d34` |
+| 批量出金交易查询 | https://paas.huifu.com/partners/api/doc/api_plcjjycx.md | `payout-batch-query.md` | `99f34f8a7787d4a0c5920df14fe35e70fc715a6719f4c0d78b5cee752e85a458` |
+| 结算记录查询 | https://paas.huifu.com/partners/api/doc/jyjs/qx/api_jsjlfycx.md | `payout-settlement-query.md` | `d04126694730c33755a50bd8600314c387f807d6ddec44bcbb0854c6411fd4c2` |
+| DM取现额度查询 | https://paas.huifu.com/partners/api/doc/jyjs/qx/api_DMqxedcx.md | `payout-dm-quota-query.md` | `494415e9a7aa7f93249845ba587db28cb178224b2b7452280f715315024a2339` |
 
 ## 使用规则
 

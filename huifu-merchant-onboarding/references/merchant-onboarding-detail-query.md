@@ -7,8 +7,8 @@
 ## 已确认的请求合同
 
 - Endpoint：`POST https://api.huifu.com/v2/merchant/basicdata/query`；顶层使用 `sys_id`、`product_id`、`sign`、`data`。
-- 官网更新时间 `2026-10-20`；本地活动快照 `2026-10-25`；原文 SHA-256：`f8fb851eddda3219a5e4feb037b81cc5eed4697903644489e7cccde4fa72bdde`。
-- 请求与响应 583 个具名路径（含父容器；请求7、响应576）的类型、长度、Y/N/C 和官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户详细信息查询”；本页的字段白名单策略不能替代完整目录。
+- 官网更新时间 `2026-11-03`；本地活动快照 `2026-11-09`；原文 SHA-256：`3fb7115e030937181c3040f8d57c16ce8b44aa75fb78849d950af8816fc0a918`。
+- 请求与响应 602 个具名路径（含父容器；请求7、响应595）的类型、长度、Y/N/C 和官方说明见 `merchant-onboarding-complete-field-catalog.md` 的“商户详细信息查询”；本页的字段白名单策略不能替代完整目录。
 - `data` 必填新的 `req_seq_id:String(32)`（当天同商户唯一）、`req_date:String(8)`（`yyyyMMdd`、北京时间）、目标 `huifu_id:String(18)`；高风险约束见 `merchant-onboarding-field-contracts.md`。
 - 响应可能覆盖主体、证照、图片、结算卡、结算/取现、协议、渠道配置和账户资料；按查询目的字段白名单读取，禁止沉淀完整响应表或完整原文。
 - 若白名单字段说明带 MCC/地区/证件/银行编码表、图片上传文档、签约规则或线上材料 XLSX，必须同时读取 `merchant-onboarding-external-resources.md`，并按响应完整路径单列 `外部资料提示`、给出未经改写的原始地址；不得把响应中的示例/运行时 URL 当资料或请求默认值。
@@ -24,7 +24,7 @@
 - 请求与响应 DTO 分开建模。企业请求 `reg_name:String(64)`、个人请求 `reg_name:String(32)`，本接口响应 `reg_name:String(128)`，不得共享同一长度校验。
 - `response.data.material_card_info:String(JSON Object) N` 是独立的对公卡信息；先严格反序列化，再读取 `card_type/card_name/card_no/prov_id/area_id/branch_code` 六个子字段，其中省市不得与响应顶层或其他卡对象的同名字段合并。
 - 当前 `response.data.service_phone:String(32)` 已修正旧11位冲突。正式表已删除 `response.data.share_holder_info_list[].cert_no`，不得从请求股东DTO补回。material_card_info.branch_code响应长度12，不得套用企业请求的8位。
-- 捷行付响应保留 `response.data.jxf_conf_info.bank_name:String(8) N`；线上费率保留 `response.data.online_fee_conf_list[].fee_formula_type:String N`。支付宝、微信配置各自的外扣字段必须按父数组隔离，不能与顶层公共外扣字段合并；抖音 `response.data.qry_dy_conf_list[]` 当前为原生Array，其dy_mer_infos为String(JSON)；`split_bill_result[].acct_split_bunch_list[]` 当前为String(JSON Array)。`merge_pay_config_info.merge_pay_config`正式Object与字符串说明冲突须确认。
+- 捷行付响应保留 `response.data.jxf_conf_info.jxf_bank_pay_info.bank_name`，以及独立的default_channel与wx_ent_pay_info，按响应方向类型和N/C保留；线上费率保留 `response.data.online_fee_conf_list[].fee_formula_type:String N`。支付宝、微信配置各自的外扣字段必须按父数组隔离，不能与顶层公共外扣字段合并；抖音 `response.data.qry_dy_conf_list[]` 当前为原生Array，其dy_mer_infos为String(JSON)；`split_bill_result[].acct_split_bunch_list[]` 当前为String(JSON Array)。`merge_pay_config_info.merge_pay_config`正式Object与字符串说明冲突须确认。
 - `response.data.qry_cash_config_list[].weekday_fix_amt` 与 `weekday_fee_rate` 的官网说明已统一为 `cash_type=D1` 时生效，并用于 D1 工作日结算；旧版“不生效/生效”冲突已关闭，不再触发硬停。
 
 ## 公共请求头
@@ -43,7 +43,7 @@
 
 ## 2026-10-25 官网更新同步
 
-本地当前来源SHA-256：`f8fb851eddda3219a5e4feb037b81cc5eed4697903644489e7cccde4fa72bdde`。
+2026-10-25历史来源SHA-256：`f8fb851eddda3219a5e4feb037b81cc5eed4697903644489e7cccde4fa72bdde`。
 
 新增五项switch_state：支付宝、微信、银行卡、银联和合单业务各自的配置状态。它们只用于详情响应的实际状态判断，不可直接复制为业务开通请求。
 
@@ -54,3 +54,5 @@
 | `response.data.qry_bank_card_conf.switch_state` | 功能开关 | `String` | `1` | `Y` | 条件与完整原文见对应完整目录 |
 | `response.data.qry_union_conf.switch_state` | 功能开关 | `String` | `1` | `Y` | 条件与完整原文见对应完整目录 |
 | `response.data.qry_wx_conf_list[].switch_state` | 功能开关 | `String` | `1` | `Y` | 条件与完整原文见对应完整目录 |
+
+本轮来源复核：2026-11-09；官方最近更新2026-11-03；SHA-256：`3fb7115e030937181c3040f8d57c16ce8b44aa75fb78849d950af8816fc0a918`；<https://paas.huifu.com/partners/api/doc/shgl/shjj/api_shjj_shxxxxcx_kyc.md>。

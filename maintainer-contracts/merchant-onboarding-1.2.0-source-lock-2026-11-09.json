@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "skill": "huifu-merchant-onboarding",
+  "version": "1.2.0",
+  "refresh_revision": "2026-11-09",
+  "scope": "Review of all 34 base onboarding sources for onboarding 1.2.0; additional APIs are locked separately.",
+  "previous_combined_lock": {
+    "path": "maintainer-contracts/merchant-onboarding-1.2.0-source-lock-2026-11-04.json",
+    "sha256": "a6f4ffcab58eafcfd9b28bea953a8b226d2b66a49596fa1a9acfad312c87e7be"
+  },
+  "source_locks": {
+    "merchant_onboarding": {
+      "path": "maintainer-contracts/merchant-onboarding-source-lock-2026-11-09.json",
+      "field_paths": 2258,
+      "sha256": "7337182cbf5bf6853ee1e69fa5d1aa06230cc464f9d0660a128c5eebe4bc780d"
+    },
+    "user_onboarding": {
+      "path": "maintainer-contracts/user-onboarding-source-lock-2026-11-09.json",
+      "field_paths": 644,
+      "sha256": "16bdf91363987daef04a1e07449907127e5587e511648d9200e610a5178c78c2"
+    },
+    "onboarding_extension": {
+      "path": "maintainer-contracts/onboarding-extension-source-lock-2026-11-09.json",
+      "field_paths": 546,
+      "sha256": "5d5f983549bedeca00919e0c6c1fedabb61bd6c02904d8e08fe268e7382cc054"
+    }
+  },
+  "catalogs": {
+    "merchant": {
+      "path": "huifu-merchant-onboarding/references/merchant-onboarding-complete-field-catalog.md",
+      "sha256": "623c2d3e5606f04d7b605c04474ec8c4945077609d090419a3a6c20dc1c4c768",
+      "field_paths": 2258
+    },
+    "user": {
+      "path": "huifu-merchant-onboarding/references/user-onboarding-complete-field-catalog.md",
+      "sha256": "4284ddee49c17c88561bee0f5d76a3b40b3714e4028587e4a0a6fb6f64178e42",
+      "field_paths": 644
+    },
+    "extension": {
+      "path": "huifu-merchant-onboarding/references/onboarding-extension-complete-field-catalog.md",
+      "sha256": "d8260de740d3330487adace1f24a7614c4bb435c7fe8907a1949caf59059bba5",
+      "field_paths": 546
+    }
+  },
+  "totals": {
+    "interfaces": 34,
+    "field_paths": 3448
+  }
+}
